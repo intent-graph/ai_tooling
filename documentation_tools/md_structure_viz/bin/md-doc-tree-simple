@@ -1,0 +1,236 @@
+#!/bin/zsh
+
+# md-doc-tree-simple: Fast, pure zsh markdown file lister
+# Lists all .md files in a directory tree as JSON or tree format
+
+# Configuration
+ROOT_DIR="${1:-.}"
+FORMAT="tree"
+IGNORE_DEFAULT=true
+RESPECT_GITIGNORE=false
+
+# Help text
+show_help() {
+    cat <<'HELP'
+Usage: md-doc-tree-simple [OPTIONS] [PATH]
+
+List all .md files in a directory tree (simple tree or JSON).
+
+Arguments:
+  PATH                    Root documentation directory (default: .)
+
+Options:
+  -h, --help              Show this help message and exit
+  --format tree|json      Output format (default: tree)
+  --no-ignore-default     Include files in venv, node_modules, .git, etc.
+  --respect-gitignore     Additionally filter files ignored by .gitignore
+HELP
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        --format)
+            FORMAT="$2"
+            shift 2
+            ;;
+        --ignore-default)
+            IGNORE_DEFAULT=true
+            shift
+            ;;
+        --no-ignore-default)
+            IGNORE_DEFAULT=false
+            shift
+            ;;
+        --respect-gitignore)
+            RESPECT_GITIGNORE=true
+            shift
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            echo "Run 'md-doc-tree-simple --help' for usage." >&2
+            exit 1
+            ;;
+        *)
+            ROOT_DIR="$1"
+            shift
+            ;;
+    esac
+done
+
+# Validate directory
+if [[ ! -d "$ROOT_DIR" ]]; then
+    echo "Error: Directory not found: $ROOT_DIR" >&2
+    exit 1
+fi
+
+# Normalize to absolute path for consistent path operations
+ROOT_DIR=$(cd "$ROOT_DIR" && pwd)
+
+# Find all markdown files, optionally excluding common noise patterns
+find_md_files() {
+    local search_dir="$1"
+    local use_ignore_default="$2"
+    local use_gitignore="$3"
+
+    local find_cmd="find \"$search_dir\" -type f -name \"*.md\""
+
+    # Apply default ignore patterns if enabled
+    if [[ "$use_ignore_default" == "true" ]]; then
+        find_cmd="$find_cmd \
+            -not -path \"*venv*/lib/python*\" \
+            -not -path \"*/.venv/*\" \
+            -not -path \"*/virtualenv/*\" \
+            -not -path \"*/site-packages/*\" \
+            -not -path \"*/__pycache__/*\" \
+            -not -path \"*/.pytest_cache/*\" \
+            -not -path \"*/.tox/*\" \
+            -not -path \"*/eggs/*\" \
+            -not -path \"*/.eggs/*\" \
+            -not -path \"*/node_modules/*\" \
+            -not -path \"*/.git/*\" \
+            -not -path \"*/dist/*\" \
+            -not -path \"*/build/*\" \
+            -not -path \"*/.build/*\" \
+            -not -path \"*/.idea/*\" \
+            -not -path \"*/.vscode/*\" \
+            -not -path \"*/_implementation__LEGACY/*\" \
+            -not -path \"*/t1_distill*/*\" \
+            -not -path \"*/test_generating_dbfuncsync/*\""
+    fi
+
+    find_cmd="$find_cmd 2>/dev/null"
+
+    local files=$(eval "$find_cmd | sort")
+
+    # Filter git-ignored files if enabled
+    if [[ "$use_gitignore" == "true" ]]; then
+        # Only filter if .git directory exists
+        if [[ -d "$search_dir/.git" ]]; then
+            local filtered=""
+            while IFS= read -r file; do
+                if ! git -C "$search_dir" check-ignore -q "$file" 2>/dev/null; then
+                    filtered="$filtered$file"$'\n'
+                fi
+            done <<< "$files"
+            echo "$filtered" | sed '/^$/d'
+        else
+            echo "$files"
+        fi
+    else
+        echo "$files"
+    fi
+}
+
+render_tree_format() {
+    local root_dir="$1"
+    shift
+    local -a files=("$@")
+
+    if (( ${#files[@]} == 0 )); then
+        echo "No .md files found"
+        return
+    fi
+
+    # Display only the directory name, not the full path
+    local display_name=$(basename "$root_dir")
+    echo "$display_name/"
+
+    # Build a proper tree by tracking which directories we've printed
+    local -A printed_dirs
+
+    for file in "${files[@]}"; do
+        local dir=$(dirname "$file")
+        local filename=$(basename "$file")
+        local rel_dir="${dir#$root_dir/}"
+
+        # Handle files in root directory
+        if [[ "$rel_dir" == "$root_dir" ]] || [[ -z "$rel_dir" ]]; then
+            echo "├── $filename"
+            continue
+        fi
+
+        # Process each directory level in the path
+        local current_path=""
+        while IFS= read -r part; do
+            if [[ -z "$part" ]]; then
+                continue
+            fi
+
+            if [[ -z "$current_path" ]]; then
+                current_path="$part"
+            else
+                current_path="$current_path/$part"
+            fi
+
+            # Print directory if not already printed
+            if [[ -z "${printed_dirs[$current_path]}" ]]; then
+                # Count slashes to determine depth
+                local depth=$(echo "$current_path" | grep -o "/" | wc -l)
+                local indent=""
+                for (( j=0; j<depth; j++ )); do
+                    indent="${indent}│   "
+                done
+
+                echo "${indent}├── $(basename "$current_path")/"
+                printed_dirs[$current_path]=1
+            fi
+        done < <(echo "$rel_dir" | tr '/' '\n')
+
+        # Print the file with proper indentation
+        local depth=$(echo "$rel_dir" | grep -o "/" | wc -l)
+        local depth=$((depth + 1))
+        local file_indent=""
+        for (( j=0; j<depth; j++ )); do
+            file_indent="${file_indent}│   "
+        done
+
+        echo "${file_indent}├── $filename"
+    done
+}
+
+render_json_format() {
+    local root_dir="$1"
+    shift
+    local -a files=("$@")
+    local count=${#files[@]}
+
+    echo "{"
+    echo "  \"root\": \"$root_dir\","
+    echo "  \"file_count\": $count,"
+    echo "  \"files\": ["
+
+    for (( i=1; i<=count; i++ )); do
+        local file="${files[$i]}"
+        echo -n "    \"$file\""
+        if (( i < count )); then
+            echo ","
+        else
+            echo ""
+        fi
+    done
+
+    echo "  ]"
+    echo "}"
+}
+
+# Main execution
+local -a md_files
+md_files=( "${(@f)$(find_md_files "$ROOT_DIR" "$IGNORE_DEFAULT" "$RESPECT_GITIGNORE")}" )
+
+case "$FORMAT" in
+    tree)
+        render_tree_format "$ROOT_DIR" "${md_files[@]}"
+        ;;
+    json)
+        render_json_format "$ROOT_DIR" "${md_files[@]}"
+        ;;
+    *)
+        echo "Unknown format: $FORMAT" >&2
+        exit 1
+        ;;
+esac

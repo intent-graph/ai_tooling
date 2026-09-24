@@ -1,0 +1,32 @@
+# ------------------------------------------------------------------------------
+# intent_resources.yaml — Project resources (IntentGraph framework).
+# Read this first:
+#   product: list of product IntentGraphs (WHAT/WHY). Each entry: id, name, file.
+#   projection_by_target: map from target (e.g. python) to list of projection
+#     graphs (HOW). Same entry shape: id, name, file.
+#   resources: where projection outputs live. gui = Obsidian vault root;
+#     one folder per IG under obsidian_export/ (philosophy, python_defaults).
+# Paths are relative to this file.
+# ------------------------------------------------------------------------------
+
+name: "Python KB Intent Graphs"
+description: "Philosophy (product) + Python guidelines/style (projection) for the Python Development Guidelines KB."
+
+product:
+  - id: python-kb-philosophy
+    name: "Python KB Philosophy"
+    description: "Eight foundational principles (LOD_0); the why behind all guidelines."
+    file: "python_kb_philosophy.yaml"
+
+projection_by_target:
+  python:
+    - id: pig-py-defaults
+      name: "Python defaults"
+      description: "Default rendering decisions for Python code (PIG-PY.*)."
+      file: "python_defaults.ig.yaml"
+
+resources:
+  gui:
+    - id: obsidian
+      path: "obsidian_export"
+      description: "Obsidian vault root. One folder per IG: philosophy/, python_defaults/."

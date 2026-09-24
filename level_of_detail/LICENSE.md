@@ -1,0 +1,10 @@
+# License
+
+Copyright 2026 Rémi Cura.
+
+The content of this folder is licensed under the
+[Creative Commons Attribution 4.0 International License (CC BY 4.0)](../LICENSE-CC-BY-4.0.txt)
+(<https://creativecommons.org/licenses/by/4.0/>).
+
+You may share and adapt it for any purpose, including commercially, provided you give
+appropriate credit, link to the license, and indicate if changes were made.

@@ -1,0 +1,181 @@
+# Python KB — Philosophy IntentGraph
+# Represents LOD_0 of the Python Development Guidelines KB: the 8 foundational
+# principles that govern all downstream decisions. Source: LOD_0_philosophy/
+#
+# This is a product-style graph (what we believe and why). The guidelines/style
+# graph is python_defaults.ig.yaml in this directory (intent_graphs/).
+
+meta:
+  name: "Python KB Philosophy"
+  description: >
+    First principles governing Python development decisions. Immutable axioms;
+    all LOD_1–LOD_5 guidelines trace back to one or more of these. Source: LOD_0_philosophy.
+
+nodes:
+  - uid: ROOT
+    name: "Python KB Philosophy"
+    intent: >
+      Foundational principles that govern all Python development decisions.
+      Every artifact and guideline in the KB traces back to one or more of these axioms.
+    epistemic_state: "known"
+    impl_pointers: "LOD_0_philosophy/0_index.md"
+
+  - uid: INTENTIONALITY
+    name: "Intentionality"
+    intent: >
+      Every artifact—name, structure, line of code—exists for a reason that can be articulated.
+      No accidental decisions; choices are deliberate and defensible.
+    epistemic_state: "known"
+    constraints:
+      - "A decision is intentional if you can answer: Why this and not something else?"
+    design_notes: "Meta-principle; governs all others. Drives requirements and naming (Stages 1, 3)."
+    impl_pointers: "LOD_0_philosophy/0.1_intentionality.md"
+
+  - uid: STRUCTURE
+    name: "Structure Primacy"
+    intent: >
+      Structure precedes implementation. The organization of a system matters more than
+      implementation details; if structure is wrong, no amount of clever code can save it.
+    epistemic_state: "known"
+    constraints:
+      - "Design sequence: structure before code"
+      - "Data structure, module structure, interface structure, control flow structure"
+    design_notes: "Drives design and project structure (Stages 1, 2). Interlocks with Data-Centricity."
+    impl_pointers: "LOD_0_philosophy/0.2_structure_primacy.md"
+
+  - uid: ROUGHTOFINE
+    name: "Rough-to-Fine"
+    intent: >
+      Derive solutions top-down: from abstract goals to concrete implementation.
+      Navigate the KB and make decisions at the right level of detail; stop when sufficient.
+    epistemic_state: "known"
+    constraints:
+      - "Derivation pipeline: functional scenario → data flow → data architecture → system design → implementation → code"
+      - "Never start at LOD_5; drill down only when needed"
+    design_notes: "Drives derivation and iteration (Stages 1, 6). Interlocks with Polyglot Pragmatism."
+    impl_pointers: "LOD_0_philosophy/0.3_rough_to_fine.md"
+
+  - uid: DATACENTRICITY
+    name: "Data-Centric Thinking"
+    intent: >
+      Data is the enduring artifact; code is the transient mechanism. Design for data
+      stability; make invalid states unrepresentable; validate at boundaries.
+    epistemic_state: "known"
+    constraints:
+      - "Data outlives code; schema as constraint"
+      - "Think query-first; vectorized thinking over N+1"
+    design_notes: "Drives data modeling and typing (Stages 1, 3). Interlocks with Structure Primacy."
+    impl_pointers: "LOD_0_philosophy/0.4_data_centricity.md"
+
+  - uid: COMMUNICATION
+    name: "Communication as UX"
+    intent: >
+      Every name, docstring, and interface is a user experience decision. The reader
+      is the user; naming and docs are UX. Error messages are UI.
+    epistemic_state: "known"
+    constraints:
+      - "20-Minute Rule for names; Hallway Test"
+      - "Progressive disclosure; pit of success; consistency over cleverness"
+    design_notes: "Drives naming and documentation (Stage 3). Interlocks with Defensive Design."
+    impl_pointers: "LOD_0_philosophy/0.5_communication_ux.md"
+
+  - uid: REPRODUCIBILITY
+    name: "Reproducibility"
+    intent: >
+      Same inputs, same process, same outputs—always. Determinism, environment
+      isolation, version pinning, and traceability enable reproducible outcomes.
+    epistemic_state: "known"
+    constraints:
+      - "Virtual envs and lockfiles for applications"
+      - "Version pinning; git as audit trail; blame test"
+    design_notes: "Drives environments and versioning (Stages 2, 4, 6). Integrates other principles."
+    impl_pointers: "LOD_0_philosophy/0.6_reproducibility.md"
+
+  - uid: POLYGLOT
+    name: "Polyglot Pragmatism"
+    intent: >
+      No paradigm is sacred. Use OOP, FP, or imperative as the problem demands.
+      Paradigms are tools; choose the one that fits the problem.
+    epistemic_state: "known"
+    constraints:
+      - "OOP for taxonomies and state with identity; FP for transforms; imperative for control flow"
+      - "Dataclasses for data containers; avoid paradigm dogma"
+    design_notes: "Drives paradigm selection (Stages 1, 3). Interlocks with Rough-to-Fine."
+    impl_pointers: "LOD_0_philosophy/0.7_polyglot_pragmatism.md"
+
+  - uid: DEFENSIVE
+    name: "Defensive Design"
+    intent: >
+      Assume failure. Design for clarity. Make errors visible early. Explicit over
+      implicit; fail-fast; validate at boundaries; trust after validation.
+    epistemic_state: "known"
+    constraints:
+      - "Fail-fast; boundary validation; guard clauses; no silent swallowing"
+      - "Principle of least surprise"
+    design_notes: "Drives error strategy and security (Stages 1, 5). Interlocks with Communication."
+    impl_pointers: "LOD_0_philosophy/0.8_defensive_design.md"
+
+treearcs:
+  - parent: ROOT
+    child: INTENTIONALITY
+  - parent: ROOT
+    child: STRUCTURE
+  - parent: ROOT
+    child: ROUGHTOFINE
+  - parent: ROOT
+    child: DATACENTRICITY
+  - parent: ROOT
+    child: COMMUNICATION
+  - parent: ROOT
+    child: REPRODUCIBILITY
+  - parent: ROOT
+    child: POLYGLOT
+  - parent: ROOT
+    child: DEFENSIVE
+
+# Interdependencies from LOD_0_philosophy/0_index.md (Philosophy → Stage impact and diagram)
+intentlinks:
+  - uid: INTENTIONALITY_STRUCTURE
+    src: INTENTIONALITY
+    dst: STRUCTURE
+    intent: "Intentionality is the meta-principle; Structure Primacy is the first applied design principle."
+  - uid: STRUCTURE_DATACENTRICITY
+    src: STRUCTURE
+    dst: DATACENTRICITY
+    intent: "Structure and data modeling are mutually reinforcing; both govern enduring shape."
+  - uid: DATACENTRICITY_STRUCTURE
+    src: DATACENTRICITY
+    dst: STRUCTURE
+    intent: "Data-centric design informs module and interface structure."
+  - uid: ROUGHTOFINE_POLYGLOT
+    src: ROUGHTOFINE
+    dst: POLYGLOT
+    intent: "Derivation process and paradigm choice are coordinated; refine then select paradigm."
+  - uid: POLYGLOT_ROUGHTOFINE
+    src: POLYGLOT
+    dst: ROUGHTOFINE
+    intent: "Paradigm selection is part of the derivation pipeline."
+  - uid: COMMUNICATION_DEFENSIVE
+    src: COMMUNICATION
+    dst: DEFENSIVE
+    intent: "Clear communication of errors and API ergonomics support defensive fail-fast and boundaries."
+  - uid: DEFENSIVE_COMMUNICATION
+    src: DEFENSIVE
+    dst: COMMUNICATION
+    intent: "Defensive design (error messages, validation) is a communication concern."
+  - uid: REPRODUCIBILITY_INTENTIONALITY
+    src: REPRODUCIBILITY
+    dst: INTENTIONALITY
+    intent: "Reproducibility (env, pinning, traceability) supports intentional, auditable decisions."
+
+frontiers:
+  - name: "principles"
+    nodes:
+      - INTENTIONALITY
+      - STRUCTURE
+      - ROUGHTOFINE
+      - DATACENTRICITY
+      - COMMUNICATION
+      - REPRODUCIBILITY
+      - POLYGLOT
+      - DEFENSIVE

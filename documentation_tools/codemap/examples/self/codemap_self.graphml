@@ -1,0 +1,4791 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java"
+         xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0"
+         xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:y="http://www.yworks.com/xml/graphml"
+         xmlns:yed="http://www.yworks.com/xml/yed/3"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+           http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <key attr.name="depth" attr.type="int" for="node" id="d_depth"/>
+  <key attr.name="kind" attr.type="string" for="node" id="d_kind"/>
+  <key attr.name="qualified_name" attr.type="string" for="node" id="d_qname"/>
+
+  <graph edgedefault="directed" id="G">
+<node id="codemap">
+  <data key="d_depth">0</data>
+  <data key="d_kind">package</data>
+  <data key="d_qname">codemap</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8EAF6" transparent="false"/>
+      <y:BorderStyle color="#5C6BC0" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.api</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">api</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.api.CodeMap</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">CodeMap</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap____init__">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.__init__</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">__init__</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap___focus_qname">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap._focus_qname</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_focus_qname</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap___focus_qname__DetailLevel">
+  <data key="d_depth">4</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.api.CodeMap._focus_qname.DetailLevel</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap._focus_qname.DetailLevel</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap___require_view">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap._require_view</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_require_view</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap___resolve_path">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap._resolve_path</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_resolve_path</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__build">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.build</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">build</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__collapse">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.collapse</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.collapse</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__context">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.context</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">context</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__exclude">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.exclude</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.exclude</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__expand">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.expand</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.expand</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__export_yed">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.export_yed</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.export_yed</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__graph">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.graph</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.graph</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__include">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.include</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.api.CodeMap.include</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__neighbors">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.neighbors</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">neighbors</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__overview">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.overview</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">overview</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__search">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.search</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">search</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__api__CodeMap__source">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.api.CodeMap.source</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">source</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__cli">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.cli</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">cli</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__cli___build_parser">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.cli._build_parser</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_parser</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__cli__main">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.cli.main</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">main</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__errors">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.errors</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">errors</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__errors__CodeMapError">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.errors.CodeMapError</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">CodeMapError</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__errors__NodeNotFoundError">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.errors.NodeNotFoundError</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">NodeNotFoundError</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__errors__ParseError">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.errors.ParseError</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">ParseError</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.export_yed</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.export_yed</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___build_children_map">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._build_children_map</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_children_map</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___build_display_labels">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._build_display_labels</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_display_labels</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___build_node_tree">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._build_node_tree</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_node_tree</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___edge_xml">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._edge_xml</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_edge_xml</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___find_groups">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._find_groups</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_find_groups</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___find_top_level">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._find_top_level</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_find_top_level</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___group_node_xml">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._group_node_xml</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_group_node_xml</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___leaf_node_xml">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._leaf_node_xml</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_leaf_node_xml</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___node_depth">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._node_depth</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_node_depth</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed___safe_id">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed._safe_id</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_safe_id</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__export_yed__export_graphml">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.export_yed.export_graphml</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">export_graphml</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.graph</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.graph</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeEdge">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.graph.CodeEdge</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">CodeEdge</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.graph.CodeGraph</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">CodeGraph</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph____post_init__">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.__post_init__</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">__post_init__</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__ancestors_of">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.ancestors_of</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">ancestors_of</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__children_of">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.children_of</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">children_of</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__edges_from">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.edges_from</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">edges_from</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__edges_to">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.edges_to</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">edges_to</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__rebuild_indexes">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.rebuild_indexes</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">rebuild_indexes</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeGraph__top_level_nodes">
+  <data key="d_depth">3</data>
+  <data key="d_kind">method</data>
+  <data key="d_qname">codemap.graph.CodeGraph.top_level_nodes</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E0F2F1" transparent="false"/>
+      <y:BorderStyle color="#00897B" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">top_level_nodes</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__CodeNode">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.graph.CodeNode</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">CodeNode</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__EdgeKind">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.graph.EdgeKind</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">EdgeKind</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__graph__NodeKind">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.graph.NodeKind</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">NodeKind</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.parser</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">parser</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser__PendingCall">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.parser.PendingCall</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">PendingCall</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___add_contains_edge">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._add_contains_edge</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_add_contains_edge</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___add_directory_nodes">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._add_directory_nodes</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_add_directory_nodes</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___add_package_containment">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._add_package_containment</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_add_package_containment</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___add_package_nodes">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._add_package_nodes</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_add_package_nodes</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___add_sqlite_nodes">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._add_sqlite_nodes</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_add_sqlite_nodes</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___build_parent_qname">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._build_parent_qname</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_parent_qname</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___build_qualified_name">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._build_qualified_name</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_qualified_name</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___classify_node">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._classify_node</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_classify_node</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___db_qname_for_file">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._db_qname_for_file</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_db_qname_for_file</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___ensure_parent_qname_for_file">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._ensure_parent_qname_for_file</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_ensure_parent_qname_for_file</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_calls">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_calls</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_calls</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_docstring">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_docstring</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_docstring</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_imports">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_imports</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_imports</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_inheritance">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_inheritance</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_inheritance</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_module_docstring">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_module_docstring</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_module_docstring</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___extract_signature">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._extract_signature</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_extract_signature</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___find_containing_function">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._find_containing_function</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_find_containing_function</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___get_end_line">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._get_end_line</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_get_end_line</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___is_imported_name">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._is_imported_name</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_is_imported_name</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___is_within_project">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._is_within_project</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_is_within_project</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___parent_package_qname">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._parent_package_qname</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_parent_package_qname</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___path_to_qualified_name">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._path_to_qualified_name</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_path_to_qualified_name</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___quote_sqlite_identifier">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._quote_sqlite_identifier</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_quote_sqlite_identifier</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___read_sqlite_catalog">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._read_sqlite_catalog</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_read_sqlite_catalog</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___resolve_cross_file_qname">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._resolve_cross_file_qname</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_resolve_cross_file_qname</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___resolve_pending_calls">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._resolve_pending_calls</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_resolve_pending_calls</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___resolve_target_qname">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._resolve_target_qname</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_resolve_target_qname</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___sanitize_qname_part">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._sanitize_qname_part</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_sanitize_qname_part</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser___walk_tree">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser._walk_tree</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_walk_tree</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser__parse_file">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser.parse_file</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">parse_file</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__parser__parse_project">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.parser.parse_project</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">parse_project</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view">
+  <data key="d_depth">1</data>
+  <data key="d_kind">module</data>
+  <data key="d_qname">codemap.view</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E3F2FD" transparent="false"/>
+      <y:BorderStyle color="#1E88E5" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">view</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__DetailLevel">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.view.DetailLevel</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.view.DetailLevel</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__ViewState">
+  <data key="d_depth">2</data>
+  <data key="d_kind">class</data>
+  <data key="d_qname">codemap.view.ViewState</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#FFF8E1" transparent="false"/>
+      <y:BorderStyle color="#FFA000" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">ViewState</y:NodeLabel>
+      <y:Shape type="rectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view___collect_descendants">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view._collect_descendants</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_collect_descendants</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view___render_node">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view._render_node</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_render_node</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__build_context">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.build_context</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">build_context</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__collapse">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.collapse</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.view.collapse</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__exclude">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.exclude</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.view.exclude</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__expand">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.expand</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.view.expand</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__include">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.include</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">codemap.view.include</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__render_context">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.render_context</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">render_context</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__render_overview">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.render_overview</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">render_overview</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__render_overview___build_tree">
+  <data key="d_depth">3</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.render_overview._build_tree</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_build_tree</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__render_tree">
+  <data key="d_depth">2</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.render_tree</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">render_tree</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<node id="codemap__view__render_tree___render_subtree">
+  <data key="d_depth">3</data>
+  <data key="d_kind">function</data>
+  <data key="d_qname">codemap.view.render_tree._render_subtree</data>
+  <data key="d6">
+    <y:ShapeNode>
+      <y:Geometry height="30.0" width="120.0" x="0.0" y="0.0"/>
+      <y:Fill color="#E8F5E9" transparent="false"/>
+      <y:BorderStyle color="#43A047" type="line" width="1.0"/>
+      <y:NodeLabel alignment="center" autoSizePolicy="content"
+        fontFamily="Dialog" fontSize="12" fontStyle="plain"
+        hasBackgroundColor="false" hasLineColor="false"
+        modelName="internal" modelPosition="c"
+        textColor="#333333">_render_subtree</y:NodeLabel>
+      <y:Shape type="roundrectangle"/>
+    </y:ShapeNode>
+  </data>
+</node>
+<edge id="e0" source="codemap__api" target="codemap__api__CodeMap">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e1" source="codemap__api__CodeMap" target="codemap__api__CodeMap____init__">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e2" source="codemap__api__CodeMap" target="codemap__api__CodeMap__build">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e3" source="codemap__api__CodeMap" target="codemap__api__CodeMap__overview">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e4" source="codemap__api__CodeMap" target="codemap__api__CodeMap__search">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e5" source="codemap__api__CodeMap" target="codemap__api__CodeMap__context">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e6" source="codemap__api__CodeMap" target="codemap__api__CodeMap__neighbors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e7" source="codemap__api__CodeMap" target="codemap__api__CodeMap__expand">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e8" source="codemap__api__CodeMap" target="codemap__api__CodeMap__collapse">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e9" source="codemap__api__CodeMap" target="codemap__api__CodeMap__include">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e10" source="codemap__api__CodeMap" target="codemap__api__CodeMap__exclude">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e11" source="codemap__api__CodeMap" target="codemap__api__CodeMap__source">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e12" source="codemap__api__CodeMap" target="codemap__api__CodeMap__export_yed">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e13" source="codemap__api__CodeMap" target="codemap__api__CodeMap___require_view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e14" source="codemap__api__CodeMap" target="codemap__api__CodeMap___focus_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e15" source="codemap__api__CodeMap___focus_qname" target="codemap__api__CodeMap___focus_qname__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e16" source="codemap__api__CodeMap" target="codemap__api__CodeMap___resolve_path">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e17" source="codemap__api__CodeMap" target="codemap__api__CodeMap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e18" source="codemap__api" target="codemap__errors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e19" source="codemap__api" target="codemap__export_yed">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e20" source="codemap__api" target="codemap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e21" source="codemap__api" target="codemap__parser">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e22" source="codemap__api" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e23" source="codemap__api" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e24" source="codemap__api" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e25" source="codemap__api" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e26" source="codemap__api" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e27" source="codemap__api__CodeMap__build" target="codemap__api__CodeMap">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e28" source="codemap__api__CodeMap__expand" target="codemap__api__CodeMap___require_view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e29" source="codemap__api__CodeMap__expand" target="codemap__api__CodeMap___focus_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e30" source="codemap__api__CodeMap__collapse" target="codemap__api__CodeMap___require_view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e31" source="codemap__api__CodeMap__collapse" target="codemap__api__CodeMap___focus_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e32" source="codemap__api__CodeMap__include" target="codemap__api__CodeMap___require_view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e33" source="codemap__api__CodeMap__include" target="codemap__api__CodeMap___focus_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e34" source="codemap__api__CodeMap__exclude" target="codemap__api__CodeMap___require_view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e35" source="codemap__api__CodeMap__exclude" target="codemap__api__CodeMap___focus_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e36" source="codemap__api__CodeMap__source" target="codemap__api__CodeMap___resolve_path">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e37" source="codemap__cli" target="codemap__cli___build_parser">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e38" source="codemap__cli" target="codemap__cli__main">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e39" source="codemap__cli" target="codemap__api">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e40" source="codemap__cli" target="codemap__errors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e41" source="codemap__cli__main" target="codemap__cli___build_parser">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e42" source="codemap__errors" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e43" source="codemap__errors" target="codemap__errors__ParseError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e44" source="codemap__errors" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e45" source="codemap__errors__ParseError" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#C62828" type="line" width="2.0"/>
+      <y:Arrows source="none" target="white_delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e46" source="codemap__errors__NodeNotFoundError" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#C62828" type="line" width="2.0"/>
+      <y:Arrows source="none" target="white_delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e47" source="codemap__export_yed" target="codemap__export_yed__export_graphml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e48" source="codemap__export_yed" target="codemap__export_yed___build_node_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e49" source="codemap__export_yed" target="codemap__export_yed___leaf_node_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e50" source="codemap__export_yed" target="codemap__export_yed___group_node_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e51" source="codemap__export_yed" target="codemap__export_yed___edge_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e52" source="codemap__export_yed" target="codemap__export_yed___safe_id">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e53" source="codemap__export_yed" target="codemap__export_yed___build_display_labels">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e54" source="codemap__export_yed" target="codemap__export_yed___node_depth">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e55" source="codemap__export_yed" target="codemap__export_yed___build_children_map">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e56" source="codemap__export_yed" target="codemap__export_yed___find_groups">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e57" source="codemap__export_yed" target="codemap__export_yed___find_top_level">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e58" source="codemap__export_yed" target="codemap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e59" source="codemap__export_yed__export_graphml" target="codemap__export_yed___build_display_labels">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e60" source="codemap__export_yed__export_graphml" target="codemap__export_yed___leaf_node_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e61" source="codemap__export_yed__export_graphml" target="codemap__export_yed___node_depth">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e62" source="codemap__export_yed__export_graphml" target="codemap__export_yed___build_children_map">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e63" source="codemap__export_yed__export_graphml" target="codemap__export_yed___find_groups">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e64" source="codemap__export_yed__export_graphml" target="codemap__export_yed___find_top_level">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e65" source="codemap__export_yed__export_graphml" target="codemap__export_yed___build_node_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e66" source="codemap__export_yed__export_graphml" target="codemap__export_yed___edge_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e67" source="codemap__export_yed___build_node_tree" target="codemap__export_yed___node_depth">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e68" source="codemap__export_yed___build_node_tree" target="codemap__export_yed___group_node_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e69" source="codemap__export_yed___build_node_tree" target="codemap__export_yed___leaf_node_xml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e70" source="codemap__export_yed___leaf_node_xml" target="codemap__export_yed___safe_id">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e71" source="codemap__export_yed___group_node_xml" target="codemap__export_yed___safe_id">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e72" source="codemap__export_yed___edge_xml" target="codemap__export_yed___safe_id">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e73" source="codemap__graph" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e74" source="codemap__graph" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e75" source="codemap__graph" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e76" source="codemap__graph" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e77" source="codemap__graph" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e78" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph____post_init__">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e79" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__rebuild_indexes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e80" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e81" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__edges_from">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e82" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__edges_to">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e83" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__ancestors_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e84" source="codemap__graph__CodeGraph" target="codemap__graph__CodeGraph__top_level_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e85" source="codemap__graph__CodeGraph____post_init__" target="codemap__graph__CodeGraph__rebuild_indexes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e86" source="codemap__graph__CodeGraph__children_of" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e87" source="codemap__graph__CodeGraph__edges_from" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e88" source="codemap__graph__CodeGraph__edges_to" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e89" source="codemap__graph__CodeGraph__ancestors_of" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e90" source="codemap__graph__CodeGraph__top_level_nodes" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e91" source="codemap__parser" target="codemap__parser__PendingCall">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e92" source="codemap__parser" target="codemap__parser__parse_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e93" source="codemap__parser" target="codemap__parser__parse_project">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e94" source="codemap__parser" target="codemap__parser___is_imported_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e95" source="codemap__parser" target="codemap__parser___path_to_qualified_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e96" source="codemap__parser" target="codemap__parser___parent_package_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e97" source="codemap__parser" target="codemap__parser___build_qualified_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e98" source="codemap__parser" target="codemap__parser___build_parent_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e99" source="codemap__parser" target="codemap__parser___classify_node">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e100" source="codemap__parser" target="codemap__parser___get_end_line">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e101" source="codemap__parser" target="codemap__parser___extract_signature">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e102" source="codemap__parser" target="codemap__parser___extract_docstring">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e103" source="codemap__parser" target="codemap__parser___extract_module_docstring">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e104" source="codemap__parser" target="codemap__parser___extract_inheritance">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e105" source="codemap__parser" target="codemap__parser___extract_imports">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e106" source="codemap__parser" target="codemap__parser___extract_calls">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e107" source="codemap__parser" target="codemap__parser___find_containing_function">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e108" source="codemap__parser" target="codemap__parser___resolve_target_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e109" source="codemap__parser" target="codemap__parser___is_within_project">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e110" source="codemap__parser" target="codemap__parser___resolve_pending_calls">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e111" source="codemap__parser" target="codemap__parser___resolve_cross_file_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e112" source="codemap__parser" target="codemap__parser___add_package_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e113" source="codemap__parser" target="codemap__parser___add_directory_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e114" source="codemap__parser" target="codemap__parser___add_package_containment">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e115" source="codemap__parser" target="codemap__parser___walk_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e116" source="codemap__parser" target="codemap__parser___add_sqlite_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e117" source="codemap__parser" target="codemap__parser___read_sqlite_catalog">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e118" source="codemap__parser" target="codemap__parser___quote_sqlite_identifier">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e119" source="codemap__parser" target="codemap__parser___sanitize_qname_part">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e120" source="codemap__parser" target="codemap__parser___db_qname_for_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e121" source="codemap__parser" target="codemap__parser___ensure_parent_qname_for_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e122" source="codemap__parser" target="codemap__parser___add_contains_edge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e123" source="codemap__parser" target="codemap__errors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e124" source="codemap__parser" target="codemap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e125" source="codemap__parser__parse_file" target="codemap__parser__PendingCall">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e126" source="codemap__parser__parse_file" target="codemap__parser___path_to_qualified_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e127" source="codemap__parser__parse_file" target="codemap__parser___extract_module_docstring">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e128" source="codemap__parser__parse_file" target="codemap__parser___parent_package_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e129" source="codemap__parser__parse_file" target="codemap__parser___is_imported_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e130" source="codemap__parser__parse_file" target="codemap__parser___build_qualified_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e131" source="codemap__parser__parse_file" target="codemap__parser___build_parent_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e132" source="codemap__parser__parse_file" target="codemap__parser___classify_node">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e133" source="codemap__parser__parse_file" target="codemap__parser___get_end_line">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e134" source="codemap__parser__parse_file" target="codemap__parser___extract_signature">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e135" source="codemap__parser__parse_file" target="codemap__parser___extract_docstring">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e136" source="codemap__parser__parse_file" target="codemap__parser___extract_inheritance">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e137" source="codemap__parser__parse_file" target="codemap__parser___extract_imports">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e138" source="codemap__parser__parse_file" target="codemap__parser___extract_calls">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e139" source="codemap__parser__parse_project" target="codemap__parser__PendingCall">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e140" source="codemap__parser__parse_project" target="codemap__parser___add_package_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e141" source="codemap__parser__parse_project" target="codemap__parser__parse_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e142" source="codemap__parser__parse_project" target="codemap__parser___add_directory_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e143" source="codemap__parser__parse_project" target="codemap__parser___add_package_containment">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e144" source="codemap__parser__parse_project" target="codemap__parser___add_sqlite_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e145" source="codemap__parser__parse_project" target="codemap__parser___resolve_pending_calls">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e146" source="codemap__parser___extract_inheritance" target="codemap__parser___walk_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e147" source="codemap__parser___extract_calls" target="codemap__parser__PendingCall">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e148" source="codemap__parser___extract_calls" target="codemap__parser___find_containing_function">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e149" source="codemap__parser___extract_calls" target="codemap__parser___resolve_target_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e150" source="codemap__parser___extract_calls" target="codemap__parser___is_within_project">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e151" source="codemap__parser___resolve_pending_calls" target="codemap__parser__PendingCall">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e152" source="codemap__parser___resolve_pending_calls" target="codemap__parser___path_to_qualified_name">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e153" source="codemap__parser___resolve_pending_calls" target="codemap__parser___resolve_cross_file_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e154" source="codemap__parser___add_package_nodes" target="codemap__parser___parent_package_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e155" source="codemap__parser___add_package_nodes" target="codemap__parser___extract_module_docstring">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e156" source="codemap__parser___add_directory_nodes" target="codemap__parser___parent_package_qname">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e157" source="codemap__parser___add_sqlite_nodes" target="codemap__parser___read_sqlite_catalog">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e158" source="codemap__parser___add_sqlite_nodes" target="codemap__parser___ensure_parent_qname_for_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e159" source="codemap__parser___add_sqlite_nodes" target="codemap__parser___db_qname_for_file">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e160" source="codemap__parser___add_sqlite_nodes" target="codemap__parser___add_contains_edge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e161" source="codemap__parser___add_sqlite_nodes" target="codemap__parser___sanitize_qname_part">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e162" source="codemap__parser___read_sqlite_catalog" target="codemap__parser___quote_sqlite_identifier">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e163" source="codemap__parser___db_qname_for_file" target="codemap__parser___sanitize_qname_part">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e164" source="codemap__parser___ensure_parent_qname_for_file" target="codemap__parser___sanitize_qname_part">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e165" source="codemap__view" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e166" source="codemap__view" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e167" source="codemap__view" target="codemap__view__build_context">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e168" source="codemap__view" target="codemap__view__expand">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e169" source="codemap__view" target="codemap__view__collapse">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e170" source="codemap__view" target="codemap__view__include">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e171" source="codemap__view" target="codemap__view__exclude">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e172" source="codemap__view" target="codemap__view__render_overview">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e173" source="codemap__view__render_overview" target="codemap__view__render_overview___build_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e174" source="codemap__view" target="codemap__view__render_context">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e175" source="codemap__view" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e176" source="codemap__view__render_tree" target="codemap__view__render_tree___render_subtree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e177" source="codemap__view" target="codemap__view___render_node">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e178" source="codemap__view" target="codemap__view___collect_descendants">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e179" source="codemap__view" target="codemap__errors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e180" source="codemap__view" target="codemap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#7B1FA2" type="dotted" width="1.0"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e181" source="codemap__view__build_context" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e182" source="codemap__view__build_context" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e183" source="codemap__view__expand" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e184" source="codemap__view__expand" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e185" source="codemap__view__collapse" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e186" source="codemap__view__collapse" target="codemap__view___collect_descendants">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e187" source="codemap__view__collapse" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e188" source="codemap__view__include" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e189" source="codemap__view__include" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e190" source="codemap__view__exclude" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e191" source="codemap__view__exclude" target="codemap__view___collect_descendants">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e192" source="codemap__view__render_overview" target="codemap__view__render_overview___build_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e193" source="codemap__view__render_context" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e194" source="codemap__view__render_context" target="codemap__view___render_node">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e195" source="codemap__view__render_context" target="codemap__view___collect_descendants">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e196" source="codemap__view__render_tree" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e197" source="codemap__view__render_tree" target="codemap__view___collect_descendants">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e198" source="codemap__view__render_tree___render_subtree" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e199" source="codemap__view__render_tree" target="codemap__view__render_tree___render_subtree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e200" source="codemap__view___render_node" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e201" source="codemap__view___render_node" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e202" source="codemap" target="codemap__api">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e203" source="codemap" target="codemap__cli">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e204" source="codemap" target="codemap__errors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e205" source="codemap" target="codemap__export_yed">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e206" source="codemap" target="codemap__graph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e207" source="codemap" target="codemap__parser">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e208" source="codemap" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#BDBDBD" type="dashed" width="1.0"/>
+      <y:Arrows source="none" target="delta"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e209" source="codemap__api__CodeMap____init__" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e210" source="codemap__api__CodeMap____init__" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e211" source="codemap__api__CodeMap__build" target="codemap__parser__parse_project">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e212" source="codemap__api__CodeMap__overview" target="codemap__view__render_overview">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e213" source="codemap__api__CodeMap__context" target="codemap__view__build_context">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e214" source="codemap__api__CodeMap__context" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e215" source="codemap__api__CodeMap__neighbors" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e216" source="codemap__api__CodeMap__neighbors" target="codemap__graph__CodeGraph__edges_from">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e217" source="codemap__api__CodeMap__neighbors" target="codemap__graph__CodeGraph__edges_to">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e218" source="codemap__api__CodeMap__expand" target="codemap__view__expand">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e219" source="codemap__api__CodeMap__expand" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e220" source="codemap__api__CodeMap__collapse" target="codemap__view__collapse">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e221" source="codemap__api__CodeMap__collapse" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e222" source="codemap__api__CodeMap__include" target="codemap__view__include">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e223" source="codemap__api__CodeMap__include" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e224" source="codemap__api__CodeMap__exclude" target="codemap__view__exclude">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e225" source="codemap__api__CodeMap__exclude" target="codemap__view__render_tree">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e226" source="codemap__api__CodeMap__source" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e227" source="codemap__api__CodeMap__source" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e228" source="codemap__api__CodeMap__export_yed" target="codemap__export_yed__export_graphml">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e229" source="codemap__api__CodeMap___require_view" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e230" source="codemap__api__CodeMap___require_view" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e231" source="codemap__api__CodeMap___focus_qname" target="codemap__view__ViewState">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e232" source="codemap__api__CodeMap___focus_qname" target="codemap">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e233" source="codemap__api__CodeMap___focus_qname" target="codemap__view">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e234" source="codemap__api__CodeMap___focus_qname" target="codemap__view__DetailLevel">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e235" source="codemap__api__CodeMap___resolve_path" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e236" source="codemap__api__CodeMap___resolve_path" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e237" source="codemap__api__CodeMap__graph" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e238" source="codemap__cli__main" target="codemap__api__CodeMap">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e239" source="codemap__cli__main" target="codemap__api__CodeMap__build">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e240" source="codemap__cli__main" target="codemap__api__CodeMap__overview">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e241" source="codemap__cli__main" target="codemap__api__CodeMap__search">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e242" source="codemap__cli__main" target="codemap__api__CodeMap__context">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e243" source="codemap__cli__main" target="codemap__api__CodeMap__neighbors">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e244" source="codemap__cli__main" target="codemap__api__CodeMap__source">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e245" source="codemap__cli__main" target="codemap__api__CodeMap__export_yed">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e246" source="codemap__cli__main" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e247" source="codemap__cli__main" target="codemap__errors__CodeMapError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e248" source="codemap__export_yed__export_graphml" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e249" source="codemap__export_yed___build_node_tree" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e250" source="codemap__export_yed___build_node_tree" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e251" source="codemap__export_yed___leaf_node_xml" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e252" source="codemap__export_yed___group_node_xml" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e253" source="codemap__export_yed___build_display_labels" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e254" source="codemap__export_yed___node_depth" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e255" source="codemap__export_yed___node_depth" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e256" source="codemap__export_yed___node_depth" target="codemap__graph__CodeGraph__ancestors_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e257" source="codemap__export_yed___build_children_map" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e258" source="codemap__export_yed___build_children_map" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e259" source="codemap__export_yed___find_groups" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e260" source="codemap__export_yed___find_groups" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e261" source="codemap__export_yed___find_top_level" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e262" source="codemap__export_yed___find_top_level" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e263" source="codemap__parser__parse_file" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e264" source="codemap__parser__parse_file" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e265" source="codemap__parser__parse_file" target="codemap__errors__ParseError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e266" source="codemap__parser__parse_file" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e267" source="codemap__parser__parse_file" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e268" source="codemap__parser__parse_project" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e269" source="codemap__parser__parse_project" target="codemap__errors__ParseError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e270" source="codemap__parser__parse_project" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e271" source="codemap__parser__parse_project" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e272" source="codemap__parser___classify_node" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e273" source="codemap__parser___extract_signature" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e274" source="codemap__parser___extract_inheritance" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e275" source="codemap__parser___extract_inheritance" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e276" source="codemap__parser___extract_imports" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e277" source="codemap__parser___extract_imports" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e278" source="codemap__parser___extract_calls" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e279" source="codemap__parser___extract_calls" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e280" source="codemap__parser___extract_calls" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e281" source="codemap__parser___extract_calls" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e282" source="codemap__parser___find_containing_function" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e283" source="codemap__parser___resolve_pending_calls" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e284" source="codemap__parser___resolve_pending_calls" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e285" source="codemap__parser___resolve_pending_calls" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e286" source="codemap__parser___add_package_nodes" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e287" source="codemap__parser___add_package_nodes" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e288" source="codemap__parser___add_directory_nodes" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e289" source="codemap__parser___add_directory_nodes" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e290" source="codemap__parser___add_package_containment" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e291" source="codemap__parser___add_package_containment" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e292" source="codemap__parser___add_package_containment" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e293" source="codemap__parser___add_sqlite_nodes" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e294" source="codemap__parser___add_sqlite_nodes" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e295" source="codemap__parser___add_sqlite_nodes" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e296" source="codemap__parser___ensure_parent_qname_for_file" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e297" source="codemap__parser___ensure_parent_qname_for_file" target="codemap__graph__NodeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e298" source="codemap__parser___add_contains_edge" target="codemap__graph__CodeEdge">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e299" source="codemap__parser___add_contains_edge" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e300" source="codemap__view__build_context" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e301" source="codemap__view__build_context" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e302" source="codemap__view__build_context" target="codemap__graph__CodeGraph__top_level_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e303" source="codemap__view__build_context" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e304" source="codemap__view__build_context" target="codemap__graph__CodeGraph__ancestors_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e305" source="codemap__view__build_context" target="codemap__graph__CodeGraph__edges_from">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e306" source="codemap__view__build_context" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e307" source="codemap__view__build_context" target="codemap__graph__CodeGraph__edges_to">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e308" source="codemap__view__expand" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e309" source="codemap__view__expand" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e310" source="codemap__view__collapse" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e311" source="codemap__view__include" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e312" source="codemap__view__exclude" target="codemap__errors__NodeNotFoundError">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e313" source="codemap__view__render_overview" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e314" source="codemap__view__render_overview" target="codemap__graph__CodeGraph__top_level_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e315" source="codemap__view__render_overview___build_tree" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e316" source="codemap__view__render_overview___build_tree" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e317" source="codemap__view__render_context" target="codemap__graph__CodeGraph__top_level_nodes">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e318" source="codemap__view__render_context" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e319" source="codemap__view__render_context" target="codemap__graph__CodeGraph__ancestors_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e320" source="codemap__view__render_context" target="codemap__graph__CodeGraph__edges_from">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e321" source="codemap__view__render_context" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e322" source="codemap__view__render_context" target="codemap__graph__CodeGraph__edges_to">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e323" source="codemap__view__render_tree" target="codemap__graph__EdgeKind">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e324" source="codemap__view__render_tree___render_subtree" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e325" source="codemap__view__render_tree___render_subtree" target="codemap__graph__CodeGraph__edges_from">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e326" source="codemap__view__render_tree___render_subtree" target="codemap__graph__CodeGraph__edges_to">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e327" source="codemap__view___render_node" target="codemap__graph__CodeNode">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e328" source="codemap__view___collect_descendants" target="codemap__graph__CodeGraph">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+<edge id="e329" source="codemap__view___collect_descendants" target="codemap__graph__CodeGraph__children_of">
+  <data key="d10">
+    <y:PolyLineEdge>
+      <y:LineStyle color="#1565C0" type="line" width="1.5"/>
+      <y:Arrows source="none" target="standard"/>
+      <y:BendStyle smoothed="true"/>
+    </y:PolyLineEdge>
+  </data>
+</edge>
+  </graph>
+
+</graphml>

@@ -1,0 +1,10 @@
+focus: demo.data.app.users
+
+demo:  # package  demo:1-1
+  data:  # package  demo/data:1-1
+    app:  # database  demo/data/app.db:1-1
+      users:  # [FOCUS]  db_table  demo/data/app.db:1-1
+        ~columns:
+          - id
+          - email
+          - created_at

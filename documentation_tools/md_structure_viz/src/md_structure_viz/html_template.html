@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Structure Viewer</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .header-stats {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 200px;
+        }
+
+        select {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            background: white;
+        }
+
+        button {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        aside#tree {
+            width: 25%;
+            min-width: 250px;
+            border-right: 1px solid #ddd;
+            background: white;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        section#graph {
+            flex: 1;
+            background: white;
+            position: relative;
+        }
+
+        aside#inspector {
+            width: 25%;
+            min-width: 250px;
+            border-left: 1px solid #ddd;
+            background: white;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tree styling */
+        .tree-item {
+            padding: 4px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .tree-folder {
+            font-weight: 500;
+            color: #0066cc;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tree-folder:hover {
+            color: #0052a3;
+        }
+
+        .tree-folder.expanded::before {
+            content: "▼";
+            display: inline-block;
+            width: 16px;
+            transform: rotate(-90deg);
+        }
+
+        .tree-folder:not(.expanded)::before {
+            content: "▼";
+            display: inline-block;
+            width: 16px;
+        }
+
+        .tree-file {
+            padding-left: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            border-radius: 3px;
+            padding: 4px 6px;
+            margin: 2px 0;
+            transition: background 0.15s;
+        }
+
+        .tree-file:hover {
+            background: #f0f0f0;
+        }
+
+        .tree-file.selected {
+            background: #fff3cd;
+            font-weight: 500;
+            border: 1px solid #ffc107;
+        }
+
+        .tree-file.hub {
+            color: #ff7700;
+            font-weight: 500;
+        }
+
+        .tree-file.orphan {
+            color: #999;
+            font-style: italic;
+        }
+
+        .tree-file-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tree-file-meta {
+            font-size: 11px;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        /* Graph styling */
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .node {
+            cursor: pointer;
+            stroke-width: 2px;
+            stroke: #fff;
+        }
+
+        .node.hub {
+            fill: #ff7700;
+        }
+
+        .node.normal {
+            fill: #0066cc;
+        }
+
+        .node.orphan {
+            fill: #ddd;
+        }
+
+        .node.selected {
+            stroke: #ffdd00;
+            stroke-width: 3px;
+            filter: drop-shadow(0 0 3px rgba(255, 221, 0, 0.5));
+        }
+
+        .node:hover {
+            stroke: #00ddff;
+            filter: drop-shadow(0 0 2px rgba(0, 221, 255, 0.5));
+        }
+
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            pointer-events: none;
+            stroke-width: 1px;
+            marker-end: url(#arrowhead);
+        }
+
+        .link.related {
+            stroke: #0088ff;
+            stroke-opacity: 1;
+            stroke-width: 2px;
+        }
+
+        .node-label {
+            font-size: 11px;
+            pointer-events: none;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .node:hover + .node-label {
+            opacity: 1;
+        }
+
+        /* Inspector styling */
+        .inspector-section {
+            margin-bottom: 20px;
+        }
+
+        .inspector-section-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #0066cc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-path {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 3px;
+            word-break: break-all;
+            margin-bottom: 8px;
+        }
+
+        .file-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 11px;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 16px;
+            color: #0066cc;
+        }
+
+        .ref-list {
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .ref-item {
+            padding: 4px;
+            margin: 2px 0;
+            background: #f5f5f5;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .ref-item:hover {
+            background: #e8f4f8;
+            color: #0066cc;
+        }
+
+        .ref-count {
+            float: right;
+            color: #999;
+            font-size: 11px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            aside#inspector {
+                width: 20%;
+                min-width: 200px;
+            }
+
+            aside#tree {
+                width: 20%;
+            }
+
+            section#graph {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            aside#tree {
+                width: 30%;
+            }
+
+            aside#inspector {
+                display: none;
+            }
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="header-title">📚 Documentation Structure</div>
+            <div class="header-stats" id="stats">
+                Loading...
+            </div>
+        </div>
+        <div class="header-controls">
+            <input type="text" id="searchBox" placeholder="Search files...">
+            <select id="filterSelect">
+                <option value="all">All Files</option>
+                <option value="hubs">Hubs Only (5+)</option>
+                <option value="orphans">Orphans (0 refs)</option>
+            </select>
+            <button id="resetBtn">Reset View</button>
+        </div>
+    </header>
+
+    <main>
+        <aside id="tree">
+            <div id="treeContent" class="empty-state">
+                <div class="empty-state-icon">📁</div>
+                <div class="empty-state-text">Loading tree...</div>
+            </div>
+        </aside>
+
+        <section id="graph">
+            <div class="empty-state">
+                <div class="empty-state-icon">🔗</div>
+                <div class="empty-state-text">Graph will render here</div>
+            </div>
+        </section>
+
+        <aside id="inspector">
+            <div id="inspectorContent" class="empty-state">
+                <div class="empty-state-icon">ℹ️</div>
+                <div class="empty-state-text">Select a file to inspect</div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // ============================================================================
+        // TREE DATA PLACEHOLDER
+        // ============================================================================
+        // __TREE_DATA_PLACEHOLDER__
+
+        // ============================================================================
+        // STATE MANAGEMENT
+        // ============================================================================
+
+        let state = {
+            selectedNodeId: null,
+            hoveredNodeId: null,
+            searchTerm: "",
+            filter: "all",
+            expandedFolders: new Set()
+        };
+
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+
+        function getNodeClassification(node) {
+            if (node.incomingRefs >= 5) return "hub";
+            if (node.incomingRefs === 0) return "orphan";
+            return "normal";
+        }
+
+        function formatPath(path) {
+            return path.length > 40 ? "..." + path.slice(-37) : path;
+        }
+
+        // ============================================================================
+        // TREE RENDERING
+        // ============================================================================
+
+        function renderTree() {
+            const container = document.getElementById("treeContent");
+            container.innerHTML = "";
+
+            // Reset rendered folders tracker
+            renderedFolders.clear();
+
+            // Build tree structure from flat data
+            const rootFolder = treeData.folders.find(f => f.path === "");
+            if (!rootFolder) {
+                console.error("Root folder not found");
+                container.innerHTML = "<div class='empty-state'>No root folder found</div>";
+                return;
+            }
+            renderFolderTree(rootFolder, "", container, 0);
+        }
+
+        const renderedFolders = new Set(); // Track rendered folders to prevent infinite recursion
+
+        function renderFolderTree(folder, indent, container, depth) {
+            // Prevent infinite recursion and stack overflow
+            if (depth > 20) {
+                console.warn("Max tree depth reached");
+                return;
+            }
+
+            // Prevent rendering same folder twice
+            const folderId = `${folder.path || 'root'}`;
+            if (renderedFolders.has(folderId)) {
+                console.warn(`Folder already rendered: ${folderId}`);
+                return;
+            }
+            renderedFolders.add(folderId);
+
+            const folderDiv = document.createElement("div");
+            folderDiv.className = "tree-item";
+            folderDiv.style.paddingLeft = (depth * 16) + "px";
+
+            const folderLabel = document.createElement("div");
+            // Check if this folder should be expanded
+            const isExpanded = state.expandedFolders.has(folder.path);
+            folderLabel.className = isExpanded ? "tree-folder expanded" : "tree-folder";
+            folderLabel.textContent = folder.name || "root";
+
+            folderLabel.addEventListener("click", () => {
+                folderLabel.classList.toggle("expanded");
+                const content = folderDiv.querySelector(".tree-folder-content");
+                if (content) {
+                    content.style.display = content.style.display === "none" ? "block" : "none";
+                }
+                // Track expanded state
+                if (folderLabel.classList.contains("expanded")) {
+                    state.expandedFolders.add(folder.path);
+                } else {
+                    state.expandedFolders.delete(folder.path);
+                }
+            });
+
+            folderDiv.appendChild(folderLabel);
+
+            const folderContent = document.createElement("div");
+            folderContent.className = "tree-folder-content";
+            folderContent.style.display = isExpanded ? "block" : "none";  // Show if expanded
+
+            // Add files in this folder
+            const filesInFolder = treeData.nodes.filter(n => n.folder === folder.path);
+            filesInFolder.forEach(node => {
+                const fileDiv = document.createElement("div");
+                fileDiv.className = `tree-file ${getNodeClassification(node)}`;
+                if (state.selectedNodeId === node.id) {
+                    fileDiv.classList.add("selected");
+                }
+
+                const fileName = document.createElement("span");
+                fileName.className = "tree-file-name";
+                fileName.textContent = node.name;
+
+                const fileMeta = document.createElement("span");
+                fileMeta.className = "tree-file-meta";
+                fileMeta.textContent = `[${node.sections}s] [${node.incomingRefs}↓]`;
+
+                fileDiv.appendChild(fileName);
+                fileDiv.appendChild(fileMeta);
+
+                fileDiv.addEventListener("click", () => {
+                    selectNode(node.id);
+                });
+
+                folderContent.appendChild(fileDiv);
+            });
+
+            // Add subfolders (with safety checks)
+            const subfolders = treeData.folders.filter(f =>
+                f.parent === folder.path &&  // Direct children only
+                f.path !== folder.path &&    // Not self-referential
+                !renderedFolders.has(f.path) // Not already rendered
+            );
+            subfolders.forEach(subfolder => {
+                renderFolderTree(subfolder, indent + "  ", folderContent, depth + 1);
+            });
+
+            folderDiv.appendChild(folderContent);
+            container.appendChild(folderDiv);
+        }
+
+        // ============================================================================
+        // INSPECTOR RENDERING
+        // ============================================================================
+
+        function renderInspector(nodeId) {
+            const node = treeData.nodes.find(n => n.id === nodeId);
+            if (!node) {
+                document.getElementById("inspectorContent").innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">ℹ️</div>
+                        <div class="empty-state-text">No file selected</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const incomingRefs = treeData.nodes.filter(n =>
+                n.outgoing && n.outgoing.includes(nodeId)
+            );
+
+            const outgoingRefs = [];
+
+            document.getElementById("inspectorContent").innerHTML = `
+                <div>
+                    <div class="inspector-section">
+                        <div class="file-title">${node.title}</div>
+                        <div class="file-path">${node.path}</div>
+                    </div>
+
+                    <div class="inspector-section">
+                        <div class="inspector-section-title">Metrics</div>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-label">Sections</div>
+                                <div class="metric-value">${node.sections}</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">In Refs</div>
+                                <div class="metric-value">${node.incomingRefs}</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Out Refs</div>
+                                <div class="metric-value">${node.outgoingRefs}</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Depth</div>
+                                <div class="metric-value">${node.depth}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inspector-section">
+                        <div class="inspector-section-title">Classification</div>
+                        <div style="font-size: 12px; color: #666; padding: 8px; background: #f5f5f5; border-radius: 3px;">
+                            ${getNodeClassification(node).toUpperCase()}
+                        </div>
+                    </div>
+
+                    <div class="inspector-section">
+                        <button style="width: 100%; margin-bottom: 8px;">Copy Path</button>
+                        <button style="width: 100%;">Show in Finder</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================================
+        // GRAPH RENDERING (D3.js)
+        // ============================================================================
+
+        function renderGraph() {
+            const container = document.getElementById("graph");
+            container.innerHTML = "";
+
+            // Get dimensions before creating SVG
+            const width = container.clientWidth || 800;
+            const height = container.clientHeight || 600;
+
+            console.log("Graph dimensions:", width, height);
+            console.log("Nodes:", treeData.nodes.length, "Edges:", treeData.edges.length);
+
+            // Transform edges: convert from/to to source/target for D3
+            const edges = treeData.edges.map(e => ({
+                source: e.from,
+                target: e.to,
+                weight: e.weight
+            }));
+
+            const svg = d3.select("#graph").append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .style("position", "absolute")
+                .style("top", "0")
+                .style("left", "0");
+
+            // Add defs for arrow marker
+            svg.append("defs").append("marker")
+                .attr("id", "arrowhead")
+                .attr("markerWidth", 10)
+                .attr("markerHeight", 10)
+                .attr("refX", 9)
+                .attr("refY", 3)
+                .attr("orient", "auto")
+                .append("polygon")
+                .attr("points", "0 0, 10 3, 0 6")
+                .attr("fill", "#999");
+
+            // Create force simulation
+            const simulation = d3.forceSimulation(treeData.nodes)
+                .force("link", d3.forceLink(edges)
+                    .id(d => d.id)
+                    .distance(100))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collision", d3.forceCollide().radius(30));
+
+            // Create links
+            const link = svg.selectAll("line")
+                .data(edges)
+                .enter()
+                .append("line")
+                .attr("class", "link")
+                .attr("stroke-dasharray", 0)
+                .attr("marker-end", "url(#arrowhead)");
+
+            // Create nodes
+            const node = svg.selectAll("circle")
+                .data(treeData.nodes)
+                .enter()
+                .append("circle")
+                .attr("class", d => `node ${getNodeClassification(d)}`)
+                .attr("r", d => 5 + (d.incomingRefs / 2))
+                .call(d3.drag()
+                    .on("start", dragStarted)
+                    .on("drag", dragged)
+                    .on("end", dragEnded));
+
+            node.on("click", (event, d) => {
+                event.stopPropagation();
+                selectNode(d.id);
+            });
+
+            // Add labels
+            const labels = svg.selectAll("text")
+                .data(treeData.nodes)
+                .enter()
+                .append("text")
+                .attr("class", "node-label")
+                .attr("text-anchor", "middle")
+                .text(d => d.name);
+
+            // Update positions on simulation tick
+            simulation.on("tick", () => {
+                link.attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node.attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+
+                labels.attr("x", d => d.x)
+                    .attr("y", d => d.y - 15);
+            });
+
+            // Drag functions
+            function dragStarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragEnded(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+
+        // ============================================================================
+        // INTERACTION HANDLERS
+        // ============================================================================
+
+        function selectNode(nodeId) {
+            state.selectedNodeId = nodeId;
+
+            // Find the node to get its folder path
+            const node = treeData.nodes.find(n => n.id === nodeId);
+            if (node) {
+                // Expand all parent folders of this file
+                let parentPath = node.folder;
+                while (parentPath) {
+                    state.expandedFolders.add(parentPath);
+                    // Find parent folder's parent
+                    const parentFolder = treeData.folders.find(f => f.path === parentPath);
+                    if (parentFolder && parentFolder.parent) {
+                        parentPath = parentFolder.parent;
+                    } else {
+                        break;
+                    }
+                }
+                // Also expand the file's immediate folder
+                if (node.folder) {
+                    state.expandedFolders.add(node.folder);
+                }
+            }
+
+            renderTree();
+            renderInspector(nodeId);
+
+            // Highlight in graph
+            d3.selectAll(".node")
+                .classed("selected", d => d.id === nodeId);
+
+            d3.selectAll(".link")
+                .classed("related", d =>
+                    d.source.id === nodeId || d.target.id === nodeId
+                );
+        }
+
+        // ============================================================================
+        // INIT & EVENT LISTENERS
+        // ============================================================================
+
+        function init() {
+            // Update stats
+            document.getElementById("stats").textContent =
+                `${treeData.metadata.totalFiles} files • ${treeData.metadata.totalSections} sections • ${treeData.metadata.totalRefs} refs`;
+
+            // Render views
+            renderTree();
+            renderGraph();
+
+            // Event listeners
+            document.getElementById("searchBox").addEventListener("input", (e) => {
+                state.searchTerm = e.target.value.toLowerCase();
+                renderTree();
+            });
+
+            document.getElementById("filterSelect").addEventListener("change", (e) => {
+                state.filter = e.target.value;
+                renderTree();
+                renderGraph();
+            });
+
+            document.getElementById("resetBtn").addEventListener("click", () => {
+                state.selectedNodeId = null;
+                state.searchTerm = "";
+                document.getElementById("searchBox").value = "";
+                renderTree();
+                renderInspector(null);
+                d3.selectAll(".node").classed("selected", false);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>

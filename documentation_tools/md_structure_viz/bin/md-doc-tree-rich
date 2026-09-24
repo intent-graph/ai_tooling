@@ -1,0 +1,293 @@
+#!/bin/zsh
+
+# md-doc-tree-rich: Enhanced markdown tree with titles and section counts
+# Reuses the simple mode tree logic and adds metadata extraction
+
+ROOT_DIR="${1:-.}"
+IGNORE_DEFAULT=true
+RESPECT_GITIGNORE=false
+
+# Help text
+show_help() {
+    cat <<'HELP'
+Usage: md-doc-tree-rich [OPTIONS] [PATH]
+
+List all .md files in a directory tree with metadata (title, lines, words, sections, TOC).
+
+Arguments:
+  PATH                    Root documentation directory (default: .)
+
+Options:
+  -h, --help              Show this help message and exit
+  --no-ignore-default     Include files in venv, node_modules, .git, etc.
+  --respect-gitignore     Additionally filter files ignored by .gitignore
+HELP
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        --ignore-default)
+            IGNORE_DEFAULT=true
+            shift
+            ;;
+        --no-ignore-default)
+            IGNORE_DEFAULT=false
+            shift
+            ;;
+        --respect-gitignore)
+            RESPECT_GITIGNORE=true
+            shift
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            echo "Run 'md-doc-tree-rich --help' for usage." >&2
+            exit 1
+            ;;
+        *)
+            ROOT_DIR="$1"
+            shift
+            ;;
+    esac
+done
+
+if [[ ! -d "$ROOT_DIR" ]]; then
+    echo "Error: Directory not found: $ROOT_DIR" >&2
+    exit 1
+fi
+
+# Normalize to absolute path
+ROOT_DIR=$(cd "$ROOT_DIR" && pwd)
+
+# Find all markdown files, optionally excluding common noise patterns
+find_md_files() {
+    local search_dir="$1"
+    local use_ignore_default="$2"
+    local use_gitignore="$3"
+
+    local find_cmd="find \"$search_dir\" -type f -name \"*.md\""
+
+    # Apply default ignore patterns if enabled
+    if [[ "$use_ignore_default" == "true" ]]; then
+        find_cmd="$find_cmd \
+            -not -path \"*venv*/lib/python*\" \
+            -not -path \"*/.venv/*\" \
+            -not -path \"*/virtualenv/*\" \
+            -not -path \"*/site-packages/*\" \
+            -not -path \"*/__pycache__/*\" \
+            -not -path \"*/.pytest_cache/*\" \
+            -not -path \"*/.tox/*\" \
+            -not -path \"*/eggs/*\" \
+            -not -path \"*/.eggs/*\" \
+            -not -path \"*/node_modules/*\" \
+            -not -path \"*/.git/*\" \
+            -not -path \"*/dist/*\" \
+            -not -path \"*/build/*\" \
+            -not -path \"*/.build/*\" \
+            -not -path \"*/.idea/*\" \
+            -not -path \"*/.vscode/*\" \
+            -not -path \"*/_implementation__LEGACY/*\" \
+            -not -path \"*/t1_distill*/*\" \
+            -not -path \"*/test_generating_dbfuncsync/*\""
+    fi
+
+    find_cmd="$find_cmd 2>/dev/null"
+
+    local files=$(eval "$find_cmd | sort")
+
+    # Filter git-ignored files if enabled
+    if [[ "$use_gitignore" == "true" ]]; then
+        if [[ -d "$search_dir/.git" ]]; then
+            local filtered=""
+            while IFS= read -r file; do
+                if ! git -C "$search_dir" check-ignore -q "$file" 2>/dev/null; then
+                    filtered="$filtered$file"$'\n'
+                fi
+            done <<< "$files"
+            echo "$filtered" | sed '/^$/d'
+        else
+            echo "$files"
+        fi
+    else
+        echo "$files"
+    fi
+}
+
+# Extract title, line count, word count, section count, and TOC presence from a markdown file
+get_file_metadata() {
+    local file="$1"
+
+    # Extract title (first # heading)
+    local title=$(grep -m1 '^# ' "$file" 2>/dev/null | sed 's/^# //' | sed 's/[[:space:]]*$//')
+
+    # Count lines and words in file (strip leading spaces from wc output)
+    local lines=$(wc -l < "$file" 2>/dev/null | tr -d ' ' || echo 0)
+    local words=$(wc -w < "$file" 2>/dev/null | tr -d ' ' || echo 0)
+
+    # Count sections (# and ## headings only, not sub-headings)
+    local sections=$(grep -E '^#{1,2} ' "$file" 2>/dev/null | wc -l | tr -d ' ')
+
+    # Check for TOC in first 100 lines (only if file has enough content)
+    local has_toc=0
+    if [[ $lines -gt 100 && $sections -gt 3 ]]; then
+        # Look for "## Table of Contents" followed by numbered list with line ranges
+        if head -100 "$file" 2>/dev/null | grep -q "^## Table of Contents" && \
+           head -100 "$file" 2>/dev/null | grep -q "^[0-9]*\. \[.*\](.*) _(Lines"; then
+            has_toc=1
+        fi
+    fi
+
+    echo "$title|$lines|$words|$sections|$has_toc"
+}
+
+# Format file entry with metadata (compact, no extra spaces)
+format_file_entry() {
+    local filename="$1"
+    local metadata="$2"
+
+    IFS='|' read -r title lines words sections has_toc <<< "$metadata"
+
+    local info_parts=""
+
+    # Add line count
+    if [[ "$lines" != "0" ]]; then
+        info_parts="${lines}L"
+    fi
+
+    # Add word count
+    if [[ "$words" != "0" ]]; then
+        if [[ -n "$info_parts" ]]; then
+            info_parts="${info_parts}, ${words}W"
+        else
+            info_parts="${words}W"
+        fi
+    fi
+
+    # Add section count
+    if [[ "$sections" != "0" ]]; then
+        if [[ -n "$info_parts" ]]; then
+            info_parts="${info_parts}, ${sections}S"
+        else
+            info_parts="${sections}S"
+        fi
+    fi
+
+    # Add TOC indicator (only if present)
+    if [[ "$has_toc" == "1" ]]; then
+        if [[ -n "$info_parts" ]]; then
+            info_parts="${info_parts}, TOC"
+        else
+            info_parts="TOC"
+        fi
+    fi
+
+    local info_str=""
+    if [[ -n "$info_parts" ]]; then
+        # Use markdown backticks for code block styling (distinct background in VS Code)
+        info_str="  \`[${info_parts}]\`  "
+    fi
+
+    # Format output: filename  `[stats]`  "title"
+    if [[ -n "$title" && "$title" != "$filename" ]]; then
+        echo "${filename}${info_str}: \"${title}\""
+    else
+        echo "${filename}${info_str}"
+    fi
+}
+
+# Render tree format with rich metadata
+render_tree_format_rich() {
+    local root_dir="$1"
+    shift
+    local -a files=("$@")
+
+    if (( ${#files[@]} == 0 )); then
+        echo "No .md files found"
+        return
+    fi
+
+    # Display root directory
+    local display_name=$(basename "$root_dir")
+    echo "$display_name/"
+
+    # Build tree by tracking which directories we've printed
+    local -A printed_dirs
+    local total_files=0
+    local total_lines=0
+    local total_words=0
+    local total_sections=0
+
+    for file in "${files[@]}"; do
+        local dir=$(dirname "$file")
+        local filename=$(basename "$file")
+        local rel_dir="${dir#$root_dir/}"
+
+        # Get metadata for this file
+        local metadata=$(get_file_metadata "$file")
+        IFS='|' read -r title lines words sections has_toc <<< "$metadata"
+
+        # Track totals
+        total_files=$((total_files + 1))
+        total_lines=$((total_lines + lines))
+        total_words=$((total_words + words))
+        total_sections=$((total_sections + sections))
+
+        # Handle files in root directory
+        if [[ "$rel_dir" == "$root_dir" ]] || [[ -z "$rel_dir" ]]; then
+            local entry=$(format_file_entry "$filename" "$metadata")
+            echo "├── $entry"
+            continue
+        fi
+
+        # Process each directory level in the path
+        local current_path=""
+        while IFS= read -r part; do
+            if [[ -z "$part" ]]; then
+                continue
+            fi
+
+            if [[ -z "$current_path" ]]; then
+                current_path="$part"
+            else
+                current_path="$current_path/$part"
+            fi
+
+            # Print directory if not already printed
+            if [[ -z "${printed_dirs[$current_path]}" ]]; then
+                # Count slashes to determine depth
+                local depth=$(echo "$current_path" | grep -o "/" | wc -l)
+                local indent=""
+                for (( j=0; j<depth; j++ )); do
+                    indent="${indent}│   "
+                done
+
+                echo "${indent}├── $(basename "$current_path")/"
+                printed_dirs[$current_path]=1
+            fi
+        done < <(echo "$rel_dir" | tr '/' '\n')
+
+        # Print the file with proper indentation and metadata
+        local depth=$(echo "$rel_dir" | grep -o "/" | wc -l)
+        local depth=$((depth + 1))
+        local file_indent=""
+        for (( j=0; j<depth; j++ )); do
+            file_indent="${file_indent}│   "
+        done
+
+        local entry=$(format_file_entry "$filename" "$metadata")
+        echo "${file_indent}├── $entry"
+    done
+
+    echo ""
+    echo "Total: $total_files files | $total_lines lines | $total_words words | $total_sections sections"
+}
+
+# Main execution
+local -a md_files
+md_files=( "${(@f)$(find_md_files "$ROOT_DIR" "$IGNORE_DEFAULT" "$RESPECT_GITIGNORE")}" )
+
+render_tree_format_rich "$ROOT_DIR" "${md_files[@]}"

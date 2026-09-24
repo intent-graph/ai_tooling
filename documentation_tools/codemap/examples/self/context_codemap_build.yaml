@@ -1,0 +1,23 @@
+focus: codemap.api.CodeMap.build
+
+codemap:  # package  codemap:1-1
+  api:  # module  codemap/api.py:1-243
+    CodeMap:  # class  class CodeMap  codemap/api.py:36-242
+      build:  # [FOCUS]  method  def build(path: str | Path, *, include_sqlite: bool=True) -> CodeMap  "Parse a Python project into a navigable code map."  codemap/api.py:53-61
+        ~called_by:
+          - codemap.cli.main
+        ~calls:
+          - codemap.api.CodeMap
+          - codemap.parser.parse_project
+  cli:  # module  codemap/cli.py:1-168
+    main:  # function  def main() -> None  codemap/cli.py:115-163
+      ~calls:
+        - codemap.api.CodeMap
+        - codemap.api.CodeMap.build
+  errors:  # module  codemap/errors.py:1-17
+  export_yed:  # module  codemap/export_yed.py:1-323
+  graph:  # module  codemap/graph.py:1-149
+  parser:  # module  codemap/parser.py:1-897
+    parse_project:  # function  def parse_project(project_path: str | Path, *, include_sqlite: bool=True) -> CodeGraph  codemap/parser.py:147-202
+  view:  # module  codemap/view.py:1-426
+
