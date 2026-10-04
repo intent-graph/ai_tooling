@@ -12,6 +12,8 @@ base here documents itself:
 - `dev_guidelines/{python_guidelines,cli_guidelines}/`
 - `level_of_detail/` — read `README.md` and `CLAUDE.md` before touching `LOD_CORE.md`,
   `drill_down/`, or `build/`.
+- `global_skills/` — user-wide skills; read its `CLAUDE.md` (self-contained folders, no
+  links leaving a skill folder).
 - `diagrams_for_humans/`, `howto/`, `ai_evolution/`
 
 ## Agents and skills (`.claude/`)
