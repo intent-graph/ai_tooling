@@ -1,0 +1,1370 @@
+operations:
+- op: node.create
+  uid: ALLOCATION
+  name: python-kb-philosophy:POLYGLOT
+  intent: 'Every responsibility of the application is placed before any tier is designed: its placement record names the one tier that is its authority, the copies other tiers may hold and why, the tiers forbidden to hold it, and the context that would move it. By default the database is the authority for the truth of stored data and for everything that must hold whoever touches it, each backend for product policy not stored in the data, its users'' identity and its workflows, and browsers and agent clients for nothing durable.'
+  parent: ROOT
+  epistemic_state: 'known | unvalidated: the record format is a synthesis (L610 inferred)'
+  constraints:
+  - 'Every responsibility has one placement record: authority, permitted copies with their purpose, forbidden tiers, moving context.'
+  - Decide placements before designing any tier; tier branches realize a placement and never re-decide it.
+  - Exactly one tier is the authority for each responsibility; every other tier holds at most a copy.
+  - Browsers and agent clients decide nothing durable.
+  design_notes: |-
+    Positions: one. L610: each placement records its authority, permitted copies and forbidden tiers, because a rule can legitimately exist in three tiers (feedback, decision, last guard) and only one decides.
+
+    Forces: correctness (one decider), changeability (the record makes the decision reviewable).
+
+    Decision: every responsibility gets one placement record (authority, permitted copies with their purpose, forbidden tiers, moving context), decided before any tier is designed. Roll-up of the 26 placements for the default context:
+      - Postgres is the authority for the truth of stored data and for everything that must hold whoever touches it: system of record, invariants, multi-table operations and state transitions behind the function API (one call, one transaction), per-user write rules decidable from the row and the actor, per-role privileges, concurrency detection, derived data, audit with role and claimed actor (MD-03; R1-1, R1-3, R1-4).
+      - Each backend is the authority for decisions about its users and its workflow: validation at entry, authorization for product policy not stored in the data and for identity (MD-01; per-user write rules decidable from the row belong to the writer functions, R1-1), sessions, orchestration across operations, side-effect delivery, deferred work, HTML rendering.
+      - Browsers and agent clients are the authority for nothing durable: they hold the view, ephemeral state and copies for feedback and latency.
+
+    Rejected: none (no competing position).
+
+    Changed (R1): the database half widened to operations, privileges and audit (MD-03).
+
+    Changed (R2): per-user write rules moved to the database half (R1-1).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION
+  - build/research/18_allocation/result.md::ALLOC-C05
+- op: node.create
+  uid: ALLOCATION.FORCES
+  name: Allocation Forces
+  intent: 'The forces act in order, not on one scale: correctness and security are vetoes that decide which tiers may be the authority; among the admissible tiers, the force whose loss is hardest to repair later wins (changeability of the rule''s location, then performance, then scalability); latency and performance justify copies in other tiers, never a move of authority.'
+  parent: ALLOCATION
+  epistemic_state: 'known | unvalidated: the order and the repairability criterion are my synthesis of L606-L609, L019, L097, L125'
+  constraints:
+  - Correctness and security veto a tier before any other force is weighed.
+  - Among admissible tiers, the force whose loss is hardest to repair later decides.
+  - Latency and performance justify copies, never a move of authority.
+  - Each placement settled among the choosing forces names the force it preferred.
+  - Never reduce the forces to a weighted sum per placement.
+  design_notes: |-
+    Positions: no row; roll-up of the six forces.
+
+    Decision: the forces act in order, not on one scale.
+      1. Correctness and security decide which tiers may be the authority; a tier that cannot see every writer, or that the requester controls, is vetoed (L606, L608, L019).
+      2. Among admissible tiers, the force whose loss is hardest to repair later wins (F10). In the default context that orders them: changeability of the contract and of the rule's location (a rule placed in the wrong tier, or copied across consumers, needs every consumer changed to repair) before performance (repairable later by a measured move, L097, L215) before scalability (repairable at a measured limit, L125).
+      3. Latency and performance justify copies in other tiers, never a move of authority (L607, L609, L012).
+      Each placement settled at step 2 names the force it preferred.
+
+    Rejected: a weighted sum of forces per placement: it is the average the maintainer rejected; it wins never as a rule.
+
+    Changed (R1): criterion among the choosing forces added (F10).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES
+  - build/research/03_contract/result.md::API-C02
+  - build/research/04_presentation/result.md::UI-C18
+  - build/research/05_identity_security/result.md::SEC-C01
+  - build/research/06_operations/result.md::OPS-C19
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+  - build/research/13_web_principles/result.md::WEB-C13
+  - build/research/14_thin_spots/result.md::THIN-C27
+  - build/research/18_allocation/result.md::ALLOC-C01
+  - build/research/18_allocation/result.md::ALLOC-C02
+  - build/research/18_allocation/result.md::ALLOC-C03
+  - build/research/18_allocation/result.md::ALLOC-C04
+  - build/research/18_allocation/result.md::ALLOC-C06
+  - build/research/18_allocation/result.md::ALLOC-C12
+  - build/research/18_allocation/result.md::ALLOC-C24
+- op: node.create
+  uid: ALLOCATION.CONTEXT
+  name: Allocation Context
+  intent: 'Project variables move a placement in a stated direction, and the default context fixes their values: a classic website (documents, forms, CRUD), one team, single tenant, humans and agents as users, and a database shared by several backends and by reporting, admin consoles and scripts. With several consumers, rules that must hold for all of them belong in the database behind a function API.'
+  parent: ALLOCATION
+  epistemic_state: 'known | unvalidated: the directions for write load and DBMS commitment are inferred (L615, L042)'
+  constraints:
+  - Assume several database consumers by default; a single consumer is a context change that moves placements.
+  - 'Give every consumer its own role: each backend, a read-only reporting role, an operator role, an owner role for migrations, and none for browsers and agents.'
+  - The database verifies the consumer's role only; the acting user is the consumer's claim, and each role may assert only its own kind of actor.
+  - Record the interface origin (description first or code first) per project, by the criteria of RECORD.3; neither is the residual default.
+  - A change of a variable moves only the placements its table row lists, in the stated direction.
+  design_notes: |-
+    Positions: L621 (the number of consumers moves allocation; agreed as a variable, contested on the answer); L041 (team skill is a legitimate input).
+
+    Decision: the variables below move placements in the stated direction; the default context (above, MD-03) fixes their values. MD-03 settles L621's contested answer for this guideline: with several consumers, rules that must hold for all of them belong in the database, behind the function API.
+
+      | variable | moves toward | placements |
+      |---|---|---|
+      | database consumers: several (default, MD-03) / one only | database function API / rules may live in that one backend | RECORD.2, ACT.1, DB_API |
+      | access paths and their roles (backends, BI, consoles, scripts, owner) | per-role privileges and function grants | GUARD.3, RECORD.2 |
+      | per-user rules every consumer must respect | writes: the writer function (R1-1); read visibility: Q1 | GUARD.3, ACT.1 |
+      | which consumer may assert which actor | trusted-actor pairing checked by functions and audit triggers | GUARD.3, ACT.4 (R1-3) |
+      | client kind: same-site browser / mobile, third-party, agent | server session / bearer tokens with server-held revocation | GUARD.4 |
+      | automated callers (agents) | required idempotency keys, audit with delegation | GUARD.6, ACT.4 |
+      | offline need, user-owned data | client replica (local-first) | RECORD.1, PRESENT.3, GUARD.5 |
+      | latency budget | copies near the user | RULES.1, DERIVE.3 |
+      | data volume against result size | the database | DERIVE.2 |
+      | write load near the primary's limit | computation and backing roles off the database | FORCES.5, POSTGRES_FIRST |
+      | team SQL skill: low | application (L041); conflicts with MD-03, which presupposes the skill | ACT.1 |
+      | policy change cadence: fast | backend, for product policy not stored in the data | GUARD.3 |
+      | domain complexity | domain model and use cases in the backend for workflow | ACT.1 (L226) |
+      | DBMS commitment | portability cost sunk | ACT.1, DB_API (L042) |
+      | conflict rate, data shape, edit length | concurrency policy | GUARD.5 |
+      | effect losable; crosses a service with its own database | post-commit hook; saga | ACT.2 |
+      | staleness tolerance | cache tier and lifetime | DERIVE.1, DERIVE.3 |
+      | UI interdependence, update frequency, crawlability | client rendering, JavaScript server | PRESENT.1, JS_SERVER |
+      | consumer outside the owning team | function API published as a contract, or that team's service | RECORD.2 (L622) |
+      | project type | description or code as the interface origin, recorded per project by RECORD.3's criteria; in the default context agents read the description and are often hosts the team does not control, which points to description first, but the project records the choice | RECORD.3, TYPE_CHAIN (MD-02) |
+
+    Changed (R1): default per MD-03; access paths, per-user rules and project type added (F5, MD-02).
+
+    Changed (R2): per-user rules split into writes (writer function) and reads (Q1) (R1-1, R1-2); actor pairing added (R1-3); project-type row reworded so neither origin is the residual default (R1-8).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.CONTEXT
+  - build/research/02_app_tier/result.md::APP-C04
+  - build/research/14_thin_spots/result.md::THIN-C28
+  - build/research/14_thin_spots/result.md::THIN-C29
+  - build/research/18_allocation/result.md::ALLOC-C13
+  - build/research/18_allocation/result.md::ALLOC-C21
+  - build/research/18_allocation/result.md::ALLOC-C22
+  - build/research/18_allocation/result.md::ALLOC-C23
+  - build/research/18_allocation/result.md::ALLOC-C33
+- op: node.create
+  uid: ALLOCATION.RULES
+  name: Allocation Rules
+  intent: 'Five rules turn forces and context into a placement and apply to every responsibility in the same order: who may decide at all (trust boundary), which end can complete it (end-to-end), one authority with safe copies, one core for every client, and atomicity ending at the transaction. The first two are the security and correctness vetoes of the forces.'
+  parent: ALLOCATION
+  epistemic_state: 'known | unvalidated: the order is mine'
+  constraints:
+  - 'Apply the rules in order: RULES.3, RULES.2, RULES.1, RULES.4, RULES.5.'
+  design_notes: 'Decision: roll-up. The rules apply to every placement in this order: RULES.3 (who may decide at all) → RULES.2 (which end can complete it) → RULES.1 (one authority; copies carry staleness) → RULES.4 (one core for every client) → RULES.5 (atomicity ends at the transaction). The first two are the security and correctness vetoes of FORCES.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES
+- op: node.create
+  uid: ALLOCATION.RECORD
+  name: Data Authority Placements
+  intent: The server database is the one system of record; consumers reach it through the function API and their own roles; each fact has one origin, and every interface description consumers read is kept in sync with the implementation by process.
+  parent: ALLOCATION
+  epistemic_state: known
+  constraints:
+  - One system of record.
+  - One origin per fact.
+  design_notes: |-
+    Decision: roll-up. The server database is the one system of record; consumers reach it through the function API and their own roles; each fact has one origin and the interface description is always in sync with the implementation (MD-02).
+
+    Changed (R1): function API default (MD-03); one origin per fact (F3); sync by process (MD-02).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RECORD
+- op: node.create
+  uid: ALLOCATION.GUARD
+  name: Guarding Placements
+  intent: Deciding checks run in the database for rules about stored data, multi-table operations and per-role access, and in the backend for meaning and access that need the end user's identity, policy or request context, and for sessions. Browsers and agent clients only echo checks, for feedback; one clause, read visibility of rows with per-user rules, awaits the maintainer.
+  parent: ALLOCATION
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (GUARD.3, Q1)'
+  constraints:
+  - Browsers and agent clients echo checks only; they never decide.
+  design_notes: 'Decision: roll-up. Deciding checks run in the database for rules about stored data, for multi-table operations and for per-role access; in the backend for meaning and access that need the end user''s identity, policy or request context, and for sessions. Browsers and agent clients only echo checks, for feedback.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD
+- op: node.create
+  uid: ALLOCATION.ACT
+  name: Acting Placements
+  intent: The database carries the business operations that change data (functions behind the API, one writer per state column), the invariants, the staged intent of side effects and deferred work, and the history; the backends orchestrate operations into workflows, call the outside world and decide what to defer.
+  parent: ALLOCATION
+  epistemic_state: known
+  constraints:
+  - Operations and their state transitions live in the database; workflow orchestration and external calls live in the backends.
+  design_notes: |-
+    Decision: roll-up. The database carries the business operations that change data (functions behind the API, one writer per state column), the invariants, the staged intent of side effects and deferred work, and history (MD-03). The backends orchestrate operations into workflows, call the outside world and decide what to defer.
+
+    Changed (R1): operations moved to the database (MD-03).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT
+- op: node.create
+  uid: ALLOCATION.DERIVE
+  name: Derivation Placements
+  intent: Derived data is computed where its source is, as close to the source transaction as its freshness requires; queries reduce data where it lives, with the database's collation; every derived copy states its staleness.
+  parent: ALLOCATION
+  epistemic_state: known
+  constraints:
+  - Every derived copy states its staleness.
+  design_notes: 'Decision: roll-up. Derived data is computed where its source is, as close to the source transaction as its freshness requires; queries reduce data where it lives, with the database''s collation; every derived copy states its staleness.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.DERIVE
+- op: node.create
+  uid: ALLOCATION.PRESENT
+  name: Presentation Placements
+  intent: Backends render HTML and format what they render; the browser enhances, holds ephemeral and in-progress state and formats what it renders itself; durable and shared state stays in the database.
+  parent: ALLOCATION
+  epistemic_state: known
+  constraints:
+  - Durable and shared state stays in the database.
+  design_notes: 'Decision: roll-up. Backends render HTML and format what they render; the browser enhances, holds ephemeral and in-progress state and formats what it renders itself; durable and shared state stays in the database.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.PRESENT
+- op: node.create
+  uid: ALLOCATION.FORCES.1
+  name: Correctness
+  intent: Correctness demands that the deciding tier sees every writer and every fact the decision needs, and completes the decision atomically with the data it guards. With several consumers writing, rules about stored data and operations spanning tables go to the database; rules that need the end user's identity or the request go to the backend.
+  parent: ALLOCATION.FORCES
+  epistemic_state: 'known: demand stated by L606, L608, L628 | gap: owns no row'
+  constraints:
+  - The deciding tier must see every writer of the data it decides about.
+  - The decision completes atomically with the data it guards.
+  - 'Correctness is a veto force: a tier that cannot meet it cannot be the authority.'
+  design_notes: |-
+    Positions: no row of its own (skeleton gap 1). The demand is stated by rows owned elsewhere: L606 (the tier with knowledge and finality), L608 (the data store is an end for rules about stored data), L628 (the tier that sees every writer), L473 (check-then-write fails below serializable isolation), L623 (atomicity only inside one transaction).
+
+    Decision: correctness demands that the deciding tier sees every writer and every fact the decision needs, and completes the decision atomically with the data it guards. In the default context several consumers write, so rules about stored data and operations that span tables go to the database (MD-03); rules that need the end user's identity or the request go to the backend. Veto force (FORCES).
+
+    Gap handling: judged as the roll-up of the rule rows that state it; no row invented, no research launched.
+
+    Changed (R1): default context per MD-03.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.1
+  - build/research/16_consistency_ordering/result.md::CONS-C09
+  - build/research/18_allocation/result.md::ALLOC-C01
+  - build/research/18_allocation/result.md::ALLOC-C03
+  - build/research/18_allocation/result.md::ALLOC-C25
+  - build/research/18_allocation/result.md::ALLOC-C31
+- op: node.create
+  uid: ALLOCATION.FORCES.2
+  name: Security
+  intent: Security demands that a decision that grants access or protects integrity runs in a tier the requester cannot modify, on every access path; model output and client hints are input, never a decision. With several consumers, each is bounded by its own database role.
+  parent: ALLOCATION.FORCES
+  epistemic_state: 'known: demand stated by L019, L644, L650 | gap: owns no row'
+  constraints:
+  - Decisions that grant access or protect integrity run only in a tier the requester cannot modify.
+  - Model output is never an authorization decision; client hints never enforce.
+  - Every consumer is bounded by its own database role.
+  - Security is a veto force.
+  design_notes: |-
+    Positions: no row of its own (skeleton gap 1). Demand stated by L019 (a check that grants access or protects integrity runs in a tier the requester cannot modify), L644 (model output is never an authorization decision), L650 (client hints never enforce), L622 (no schema across a trust boundary), L468 (database permissions cannot be bypassed by ad-hoc SQL).
+
+    Decision: a decision that grants access or protects integrity runs in a tier the requester cannot modify (backend or database), on every access path; model output and client hints are input, never a decision. With several consumers, every consumer is bounded by its own database role (MD-01, MD-03). Veto force.
+
+    Changed (R1): per-consumer roles added (MD-01, MD-03).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.2
+  - build/research/03_contract/result.md::API-C02
+  - build/research/04_presentation/result.md::UI-C18
+  - build/research/05_identity_security/result.md::SEC-C01
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C70
+  - build/research/18_allocation/result.md::ALLOC-C06
+  - build/research/18_allocation/result.md::ALLOC-C22
+  - build/research/19_agent_users/result.md::AGENT-C14
+  - build/research/19_agent_users/result.md::AGENT-C20
+- op: node.create
+  uid: ALLOCATION.FORCES.3
+  name: Performance
+  intent: Data reduction (filter, aggregate, sort, page) is placed with the data by design, because that is a placement and not an optimisation; every other performance-driven move or copy waits for a measurement that identifies the path.
+  parent: ALLOCATION.FORCES
+  epistemic_state: known
+  constraints:
+  - Place data reduction with the data by design.
+  - Make no other performance-driven move or copy without a measurement that identifies the path.
+  - Never optimise up front.
+  design_notes: |-
+    Positions: P1 measure before optimising (L097); P2 place set work with its data by design (L613, L614).
+
+    Decision: both, by kind. Data reduction (filter, aggregate, sort, page) is placed with the data by design, because that is a placement, not an optimisation (L613). Every other performance-driven move or copy waits for a measurement that identifies the path (L097, L607).
+
+    Rejected: optimising up front; wins never (L097).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.3
+  - build/research/06_operations/result.md::OPS-C19
+  - build/research/18_allocation/result.md::ALLOC-C02
+  - build/research/18_allocation/result.md::ALLOC-C10
+  - build/research/18_allocation/result.md::ALLOC-C11
+- op: node.create
+  uid: ALLOCATION.FORCES.4
+  name: Latency
+  intent: 'Latency is a design criterion from the start: count the round trips per interaction, browser to server and backend to database, and budget them against about 0.1 s, 1 s and 10 s and the field vitals targets. Latency justifies copies near the user, never authority; micro-optimisation waits for measurement.'
+  parent: ALLOCATION.FORCES
+  epistemic_state: known
+  constraints:
+  - Count round trips per interaction, browser to server and backend to database, at design time.
+  - Budget interactions against about 0.1 s, 1 s and 10 s and the field vitals targets.
+  - Latency justifies copies under RULES.1, never a move of authority.
+  design_notes: |-
+    Positions: one (L012, L013).
+
+    Decision: latency is a design criterion from the start (L012). Count round trips per interaction, browser to server and backend to database (L614), and budget them against 0.1 s, 1 s and 10 s and the Web Vitals targets (L013). Latency justifies copies near the user under RULES.1, never authority. The round-trip structure is designed in; micro-optimisation waits for measurement.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.4
+  - build/research/13_web_principles/result.md::WEB-C13
+  - build/research/13_web_principles/result.md::WEB-C14
+  - build/research/18_allocation/result.md::ALLOC-C11
+- op: node.create
+  uid: ALLOCATION.FORCES.5
+  name: Scalability
+  intent: Scalability weighs each placement against the single write primary, the tier hardest to scale out; set-based reductions that return small results, and database functions that replace several round trips by one, are exempt. It moves a placement only when a measured write or connection load approaches the primary's limit, and is otherwise a tie-breaker.
+  parent: ALLOCATION.FORCES
+  epistemic_state: 'speculative: the premise lacks a read primary source (L615) | gap: no measured comparison of placements in any source'
+  constraints:
+  - Do not place logic off the database pre-emptively.
+  - Move a placement for scalability only on measured write or connection load near the primary's limit.
+  - Treat the premise as speculative until a primary source or a measurement exists.
+  design_notes: |-
+    Positions: P1 keep per-request computation off the database, because writes scale only through one primary (L615, inferred, no primary source); P2 one Postgres until a measured limit (L125).
+
+    Decision: weigh each placement against the single write primary. Set-based reductions that return small results are exempt (L615's own exception), and so are the database functions MD-03 places there: they replace several round trips by one and do not add work the backend would not send anyway (inferred). Scalability moves a placement only when a measured write or connection load approaches the primary's limit (L125, L097).
+
+    Rejected: placing logic off the database pre-emptively; wins when measured write load is the limit (L615).
+
+    Changed (R1): database functions under MD-03 weighed against L615.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.5
+  - build/research/06_operations/result.md::OPS-C19
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+  - build/research/18_allocation/result.md::ALLOC-C13
+- op: node.create
+  uid: ALLOCATION.FORCES.6
+  name: Changeability
+  intent: 'The costs of database logic are explicit inputs to every placement: testing needs a live database, tooling and debugging are poor, the onboarding skill floor is higher and expressiveness is limited; portability is a sunk cost when the DBMS is a long-term commitment. Where the database holds what must hold for every consumer these costs are accepted and paid for with tooling.'
+  parent: ALLOCATION.FORCES
+  epistemic_state: known
+  constraints:
+  - State the costs of database logic as inputs to every placement.
+  - Keep database logic in versioned migrations and test it against a live database in CI.
+  design_notes: |-
+    Positions: one, research and doctrine agreeing (L042, L472 MAINT, L041).
+
+    Decision: the costs of database logic are explicit inputs to every placement: testing needs a live database, tooling and debugging are poor, the onboarding floor is higher, expressiveness is limited (L472, L042). Portability is sunk when the DBMS is a long-term commitment (L042). Under MD-03 these costs are accepted for what must hold for every consumer, and must be paid for with tooling: functions in versioned migrations, tested against a live database in CI. L472 (MAINT) is the max choice.
+
+    Changed (R1): costs accepted under MD-03, with their tooling.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.FORCES.6
+  - build/research/14_thin_spots/result.md::THIN-C28
+  - build/research/14_thin_spots/result.md::THIN-C29
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C45
+  - build/research/18_allocation/result.md::ALLOC-C23
+- op: node.create
+  uid: ALLOCATION.RULES.1
+  name: python-kb-philosophy:DATACENTRICITY
+  intent: Exactly one tier is the authority for each responsibility; every other copy is a snapshot that may be stale without breaking correctness, carries a version or timestamp that detects staleness, and never decides. A copy that rejects input early, such as a validator, is admitted only when generated from or tested against the authority.
+  parent: ALLOCATION.RULES
+  epistemic_state: 'known | unvalidated: the rule on rejecting copies is inferred (F3)'
+  constraints:
+  - Exactly one authority per responsibility.
+  - Every copy carries a version or timestamp that detects staleness and never decides.
+  - Rejecting copies are generated from or tested against the authority; never hand-maintained.
+  - Store the minimum and derive the rest.
+  - Where a second copy exists, show the pending state from the status resource or the optimistic local value after an asynchronous step.
+  design_notes: |-
+    Positions: one (L609, L072, L481).
+
+    Decision: exactly one tier is the authority for each responsibility. Every other copy is a snapshot (L609): it may be stale without breaking correctness, carries a version or timestamp that detects staleness, and never decides. A copy that rejects input early (a validator) is admitted only when generated from or tested against the authority, so it can never refuse what the authority accepts (F3). Store the minimum and derive the rest (L072). Read-your-writes is a per-operation requirement where a second copy exists: after an asynchronous step, show the pending state from the status resource or the optimistic local value (L481).
+
+    Rejected: copies without a staleness marker, or hand-maintained rejecting copies; win never.
+
+    Changed (R1): rejecting copies must be generated or tested (F3).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES.1
+  - build/research/04_presentation/result.md::UI-C15
+  - build/research/16_consistency_ordering/result.md::CONS-C35
+  - build/research/18_allocation/result.md::ALLOC-C04
+  - build/research/18_allocation/result.md::ALLOC-C24
+- op: node.create
+  uid: ALLOCATION.RULES.2
+  name: End-to-End Placement
+  intent: 'Place a function at the end that has the knowledge and finality to complete it, after identifying the ends: every writer converges on the database, so the database is an end for rules about stored data, and the user is the end for feedback. A partial copy elsewhere exists only to improve performance or latency.'
+  parent: ALLOCATION.RULES
+  epistemic_state: 'known | unvalidated: the data store as an end is inferred (L608)'
+  constraints:
+  - Identify the ends before placing a function.
+  - A partial copy in another tier exists only for performance or latency.
+  - A rule in a shared lower tier needs measured performance, unless every consumer needs the same rule (the default under several consumers).
+  design_notes: |-
+    Positions: one (L606-L608).
+
+    Decision: place a function at the end that has the knowledge and finality to complete it (L606). Identify the ends first (L608): every writer converges on the database, so the database is an end for rules about stored data; the user is the end for feedback. A partial copy elsewhere exists only to improve performance or latency (L606). A rule in a shared lower tier needs measured performance, because every client pays for it, unless every consumer needs the same rule (L607's own condition), which is the MD-03 default for what must hold whoever touches the data.
+
+    Changed (R1): L607's exception tied to MD-03.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES.2
+  - build/research/18_allocation/result.md::ALLOC-C01
+  - build/research/18_allocation/result.md::ALLOC-C02
+  - build/research/18_allocation/result.md::ALLOC-C03
+- op: node.create
+  uid: ALLOCATION.RULES.3
+  name: python-kb-philosophy:DEFENSIVE
+  intent: Any check that grants access or protects integrity runs in a tier the requester cannot modify, the backend or the database. The browser, agent clients, model output and client-supplied hints never decide; browser checks are feedback.
+  parent: ALLOCATION.RULES
+  epistemic_state: known
+  constraints:
+  - Deciding checks run only in the backend or the database.
+  - Re-check every submitted value on the server.
+  - Never let the browser, an agent client, model output or a client-supplied hint decide.
+  design_notes: |-
+    Positions: one (L019).
+
+    Decision: any check that grants access or protects integrity runs in a tier the requester cannot modify, the backend or the database. The browser, agent clients, model output and client-supplied hints never decide (L019, L644, L650). Browser checks are feedback; every submitted value is re-checked on the server.
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES.3
+  - build/research/03_contract/result.md::API-C02
+  - build/research/04_presentation/result.md::UI-C18
+  - build/research/05_identity_security/result.md::SEC-C01
+  - build/research/18_allocation/result.md::ALLOC-C06
+  - build/research/19_agent_users/result.md::AGENT-C14
+  - build/research/19_agent_users/result.md::AGENT-C20
+- op: node.create
+  uid: ALLOCATION.RULES.4
+  name: One Core for Every Client
+  intent: 'Every client drives the same core through adapters that translate and shape only. With several database consumers the core has two levels: the database function API for what must hold for every consumer, and each backend''s use cases for its own workflow and product policy; browsers and agents are adapters to a backend.'
+  parent: ALLOCATION.RULES
+  epistemic_state: 'known | conflict: per-user read visibility across backends (Q1)'
+  constraints:
+  - Rules, validation, authorization and state transitions exist once; never in an adapter or a prompt.
+  - The function API is the core for what must hold for every consumer; each backend's use cases are the core for its own workflow and product policy.
+  - Per-user read visibility across backends is the one open point where this rule and the ban on default row security pull apart (Q1).
+  design_notes: |-
+    Positions: one (L633).
+
+    Decision: every client drives the same core through adapters that translate and shape only; rules, validation, authorization and state transitions exist once and never in an adapter or a prompt (L633). With several consumers (MD-03) the core has two levels: the database function API is the one core for what must hold for every consumer (operations, transitions with their single writer function, L596, and per-user write rules decidable from the row and the actor, R1-1); each backend's use cases are the core for its own workflow and product policy, and browsers and agents are adapters to a backend. Per-user read visibility is the one place where this rule and MD-01 pull apart (Q1).
+
+    Changed (R1): two-level core under MD-03; Q1 named.
+
+    Changed (R2): per-user write rules placed in the function API (R1-1); Q1 narrowed to reads (R1-2).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES.4
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/19_agent_users/result.md::AGENT-C01
+  - build/research/19_agent_users/result.md::AGENT-C02
+- op: node.create
+  uid: ALLOCATION.RULES.5
+  name: Atomicity Ends at the Transaction
+  intent: Atomicity exists only inside one database transaction. One business operation is one function call in its own transaction and a backend never wraps several calls; a step that must be atomic with another becomes a new function, and anything that spans an external system is reconciled, never committed in a distributed way.
+  parent: ALLOCATION.RULES
+  epistemic_state: 'known | unvalidated: the single-Postgres reading of Helland is inferred; the no-wrapping rule is inferred from L066, L584, L623'
+  constraints:
+  - One business operation is one function call in its own transaction; a backend never opens a transaction around several API calls.
+  - A step that must be atomic with another is a new business operation, hence a new function.
+  - A function may call other domains' published functions in the same transaction; direct access to another domain's tables is forbidden.
+  - Workflows across operations advance through state columns and the outbox, with idempotent steps.
+  - Anything spanning the database and an external system is reconciled (outbox, idempotency keys), never a distributed commit.
+  - Keep aggregates addressable by key so that a later split stays possible.
+  design_notes: |-
+    Positions: P1 atomicity scoped to one entity, messages across entities (Helland, L477); P2 full cross-table transactions inside one Postgres (L477's single-database reading, L125, L590).
+
+    Decision: atomicity exists only inside one database transaction (L623). Within one Postgres, use cross-table transactions, which the function API makes one call (MD-03, L584). One business operation is one function call in its own transaction; a backend never opens a transaction around several API calls (R1-4; L066, L584). A step that must be atomic with another step is a new business operation, hence a new function; that function may call another domain's published functions inside the same transaction, so composition across domains happens in the database (X3). What is forbidden across domains is direct access to another domain's tables, not calling its published functions. Workflows across operations advance through state columns and the outbox (ACT.2), with idempotent steps (GUARD.6). Anything that spans the database and an external system is a request to reconcile (outbox, idempotency keys), never a distributed commit. Keep aggregates addressable by key so that a later split stays possible.
+
+    Rejected: P1 as a constraint today; wins when a split of the data across nodes or services is planned (L477). Backend transactions wrapping several API calls: the boundary would have two owners (L066 against L584), and the backend would compose a multi-table write after all; wins never in the MD-03 default.
+
+    Changed (R2): one operation, one call, one transaction; workflows through state columns and the outbox (R1-4).
+
+    Changed (R3): cross-domain composition through published functions in the same transaction (X3).
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RULES.5
+  - build/research/02_app_tier/result.md::APP-C09
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/16_consistency_ordering/result.md::CONS-C23
+  - build/research/16_consistency_ordering/result.md::CONS-C30
+  - build/research/18_allocation/result.md::ALLOC-C25
+- op: node.create
+  uid: ALLOCATION.RECORD.1
+  name: System of Record
+  intent: The server database is the single system of record for governed business data. Caches, search indexes, browser state, messages and history derive from it in transaction order, because only one global order lets rules such as uniqueness, balances and authorization hold for every write.
+  parent: ALLOCATION.RECORD
+  epistemic_state: known
+  constraints:
+  - 'Authority: database'
+  - 'Copies: browser server-state cache (versioned, for latency), HTTP caches, cache tables, search index, reporting copy, browser drafts of unsent input'
+  - 'Forbidden: any copy acting as authority; dual writes from any consumer'
+  - No consumer writes two stores for one fact.
+  design_notes: |-
+    Positions: P1 server database as the single system of record (L045, L609, L482, L071); P2 client replica primary, local-first (L302); P3 ordered log as the truth (L626).
+
+    Forces: P1 serves correctness: rules that need one global order (uniqueness, balances, authorization) hold. P2 serves latency, offline availability and user ownership; every replica is an authority (L302) and peers cannot enforce server rules (L680). P3 serves correctness of many derived stores and scalability, at the cost of stream infrastructure.
+
+    Decision: P1. Postgres is the single system of record for governed business data. Caches, search indexes, browser state, messages and history derive from it in transaction order; no consumer writes two stores (L045, L609). It is the only position under which the rules hold for every write, which MD-03's several consumers make decisive.
+
+    Rejected: P2: wins when offline use, multi-device sync or user ownership matter more than central enforcement and the data is user-owned (L302). P3: wins with many derived stores outside the database at high write rate and a team able to run stream infrastructure (L626); in the default, Postgres plus an outbox table plays that role (inferred).
+
+    Would move it: offline need with user-owned data; many external derived stores at high write rate
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RECORD.1
+  - build/research/04_presentation/result.md::UI-C13
+  - build/research/12_counter_voices/result.md::CV-C08
+  - build/research/12_counter_voices/result.md::CV-C22
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C59
+  - build/research/18_allocation/result.md::ALLOC-C04
+  - build/research/18_allocation/result.md::ALLOC-C24
+  - build/research/18_allocation/result.md::ALLOC-C28
+  - build/research/18_allocation/result.md::ALLOC-C38
+  - build/research/20_collaboration/result.md::C20
+  - build/research/20_collaboration/result.md::C21
+- op: node.create
+  uid: ALLOCATION.RECORD.2
+  name: Data Access Interface
+  intent: 'Every consumer reaches the data through a database function API owned by the database owner, with one role per consumer: writes go through functions, simple reads may query base tables under grants, and browsers and agents never connect to the database. The interface is a published contract that evolves additively.'
+  parent: ALLOCATION.RECORD
+  epistemic_state: 'known: MD-03 | conflict: L044 and L622 (research) against the shared database and BI reading base tables'
+  constraints:
+  - 'Authority: database function API, owned by the database owner'
+  - 'Copies: replica or reporting copy for BI'
+  - 'Forbidden: direct writes by consumers to tables with state columns or multi-table effects; database connections from browsers or agents; views as contract'
+  - Every consumer has its own role.
+  - Backends, consoles and scripts write through API functions; at most SELECT on base tables for simple reads.
+  - 'One direct-write exception: a single-table write grant for a table that only one consumer writes and that has no state column or multi-table effect.'
+  - Reporting reads through a read-only role with table and column grants, on a replica or reporting copy when its load matters.
+  - Evolution is additive; breaking changes are coordinated with every consumer; 'deployed together' holds only when every consumer of the changed object ships in the same deployment as the migration, otherwise expand, migrate, contract.
+  - A consumer outside the owning team gets the function API as a published contract.
+  design_notes: |-
+    Positions: P1 one application owns the database; others go through its service or a read-only reporting copy (L044, L622, L621); P2 shared database behind a database function API owned by the database owner (L515 MAINT, L517, L617, L616); P3 the schema is the API, views and functions (L518, L618, L187); P4 base tables through the ORM (L187, L516).
+
+    Forces: changeability (coupling, deploy autonomy) against correctness (one rule for every consumer) and security (per-consumer grants).
+
+    Decision: P2 is the default contract (MD-03; L515, L517; MAINT, max).
+      - Every consumer has its own role (access paths table above). Backends, consoles and scripts write through the API functions; consumer roles get EXECUTE on the API schema, and on base tables at most SELECT for simple reads (L516). One exception, as in DB_API (R1-5): a direct single-table write grant for a table that only one consumer writes and that has no state column or multi-table effect.
+      - BI and reporting read through a read-only role with table and column grants, on a replica or reporting copy when its load matters. Reports bind to table shapes; the coupling is accepted because reports are not part of the operational contract and break visibly (inferred; tension with L622 recorded).
+      - Evolution is additive; breaking changes are coordinated with every consumer (L517). "Deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract (X2; this departure from L517 is counted once, at PIG-WEB-DATA.INTERFACE.1).
+      - Browsers and agents never connect; they reach data through a backend.
+      - A consumer outside the owning team gets the function API as a published contract under L517's rules; a service interface wins where that team needs independent deploys from the database (L622, L044).
+
+    Rejected:
+      - P1: wins when one backend is truly the only consumer and the team wants no SQL interface (L044, research consensus). Tension recorded: MD-03 sets the shared database as the default against L044 and SRC-216; the doctrine mitigates with the function contract, constraints and roles (L515).
+      - P3: views bind consumers to a name and exact shape with nothing to absorb change (L516). Wins when a CRUD-dominant application is served by a database-as-API server with a strong Postgres team (L618).
+      - P4 for writes by any consumer: bypasses the operations MD-03 places in the database.
+
+    Changed (R1): function API is the default, not the two-backend exception (MD-03); reporting resolved (F5).
+
+    Changed (R2): direct-write exception aligned with DB_API (R1-5).
+
+    Changed (R3): breaking-change condition per X2, departure counted at PIG-WEB-DATA.INTERFACE.1.
+
+    Would move it: a single consumer (P1 possible); a consumer outside the team needing independent deploys (service interface); team SQL skill
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RECORD.2
+  - build/research/01_data_tier/result.md::DATA-C01
+  - build/research/01_data_tier/result.md::DATA-C20
+  - build/research/07_architecture_styles/result.md::ARCH-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C41
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/17_data_contracts/result.md::DCON-C22
+  - build/research/18_allocation/result.md::ALLOC-C14
+  - build/research/18_allocation/result.md::ALLOC-C15
+  - build/research/18_allocation/result.md::ALLOC-C17
+  - build/research/18_allocation/result.md::ALLOC-C20
+  - build/research/18_allocation/result.md::ALLOC-C21
+  - build/research/18_allocation/result.md::ALLOC-C22
+- op: node.create
+  uid: ALLOCATION.RECORD.3
+  name: Type and Contract Definitions
+  intent: 'Every fact has one origin: facts about stored data originate in the database schema and the function API''s contract is its signatures, while the interface description consumers read is always in sync with the implementation by process. Which side originates an interface-only fact, description or code, is decided per project with recorded criteria.'
+  parent: ALLOCATION.RECORD
+  epistemic_state: 'known: MD-02 | unvalidated: generators for persistence models and interface fields not read'
+  constraints:
+  - 'Authority: database for every stored fact and for the function API''s contract; the project''s recorded origin for interface-only facts'
+  - 'Copies: generated persistence models, generated or checked interface models and description, generated browser types (build-time only)'
+  - 'Forbidden: hand-copied types without a CI comparison; drift between description and implementation; the browser as an origin'
+  - One origin per fact; a fact about stored data (type, nullability, enum values, ranges, lengths) originates in the database schema, in versioned migrations.
+  - Persistence models are generated from the live schema; interface fields echoing a stored fact are generated from the catalogue or checked against it in CI.
+  - Every interface description consumers read (HTTP description, function API catalogue, agent tool surface) is always in sync with the implementation.
+  - 'Sync is guaranteed by process: one origin per fact, the other side generated or conformance-checked, review rules on contract diffs, a CI/CD gate that fails on drift.'
+  - A catalogue diff in CI fails on a removed function or an incompatible signature unless every consumer of the changed object ships in the same deployment; otherwise expand, migrate, contract.
+  - 'Record the origin direction per project with its criteria: description first for independent consumers, several implementations or a contract agreed before code; code first when every consumer is code the team ships together.'
+  design_notes: |-
+    Positions: P1 database schema first (L474 MAINT, L485, L549); P2 application models first, code-first (L548, L549); P3 interface description first, design-first (L272, L634); P4 readers take only what they use (L556).
+
+    Forces: correctness (no drift between tiers) against changeability (who can change a shape, and how fast).
+
+    Decision:
+      - One origin per fact (L486; F3). A fact about stored data (type, nullability, enum values, ranges, lengths) originates in the database schema, in versioned migrations; the live database is the truth for structure (L474, MAINT, max). Persistence models are generated from the live schema; interface fields that echo a stored fact are generated from the catalogue or checked against it in CI. Which generator: open (none read). A hand-written mirror with a CI comparison is acceptable only when no generator fits.
+      - The database function API's contract is the function signatures; its documentation is generated from the live database (L474). MD-02's process applies to it too (R1-7): a catalogue diff in CI fails on a removed function or an incompatible signature unless every consumer of the changed object ships in the same deployment as the migration; otherwise the change goes expand, migrate, contract (L517, X2); the backends' typed wrappers are generated from the same catalogue (TYPE_CHAIN).
+      - Every interface description consumers read is always in sync with the implementation (MD-02, X7): the HTTP description (OpenAPI or equivalent), the database function API catalogue, and the agent tool surface (for example an MCP server's tool list and schemas). This is guaranteed by process: one origin per fact; the other side generated or conformance-checked; review rules on contract diffs; a CI/CD gate that fails on drift.
+      - The origin direction of the interface is a per-project decision, recorded with its criteria (MD-02):
+        - description first when consumers are independent of the producing team (third parties, other teams, agent hosts the team does not control: L634, L635), when several implementations must agree, or when the contract must be agreed before the code (L272; SRC-241 says code-first descriptions are incomplete);
+        - code first when every consumer is code the team builds and ships together and the description is a by-product of typed models (L548).
+
+    Rejected: P1 for the interface (one class for table and API): acceptable when the API shape equals the storage shape, as in simple CRUD (L549); otherwise fields leak (L553). P4 is a reading discipline for independent consumers (L556), not an origin. The judge's former code-first default and the review's design-first default (F2) are both replaced by MD-02.
+
+    Changed (R1): origin per fact (F3); sync by process and per-project direction (MD-02, F2).
+
+    Changed (R2): drift gate on the function API's signatures (R1-7).
+
+    Changed (R3): every interface description consumers read, agent tool surface included (X7); drift gate condition per X2.
+
+    Would move it: project type (MD-02 criteria)
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.RECORD.3
+  - build/research/03_contract/result.md::API-C12
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C74
+  - build/research/17_data_contracts/result.md::DCON-C06
+  - build/research/17_data_contracts/result.md::DCON-C07
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/17_data_contracts/result.md::DCON-C11
+  - build/research/17_data_contracts/result.md::DCON-C12
+  - build/research/17_data_contracts/result.md::DCON-C14
+  - build/research/19_agent_users/result.md::AGENT-C03
+  - build/research/19_agent_users/result.md::AGENT-C04
+- op: node.create
+  uid: ALLOCATION.GUARD.1
+  name: python-kb-philosophy:DEFENSIVE
+  intent: Input is parsed into the most precise type once, at every point where data enters a process from outside its type system, and trusted inside that process; meaning is checked by the tier that holds the state. At the function API the parameter types and domains are the precise types, so every consumer's input is checked by the database.
+  parent: ALLOCATION.GUARD
+  epistemic_state: 'known | unvalidated: the reconciliation of P1 and P2 is mine'
+  constraints:
+  - 'Authority: backend (parsing, request-level meaning) and database (function parameters, meaning about stored data)'
+  - 'Copies: browser checks, for feedback'
+  - 'Forbidden: browser, agent client or model output as the deciding check'
+  - 'Parse at every entry: browser to backend, agent to backend, queue or stored payload to worker, any consumer to a database function.'
+  - 'Meaning sits with the tier that holds the state: constraints and functions for stored rows, the backend for rules needing the end user or policy.'
+  - Checks in the browser or an agent client are feedback copies, generated from or tested against the authority.
+  design_notes: |-
+    Positions: P1 re-validate at every trust crossing, internal transports and stored records included (L612, OWASP); P2 parse once at the boundary into a precise type and trust it after (L484); P3 split by kind: syntax at the edge, meaning with the state (L611).
+
+    Forces: security and correctness against latency of feedback and changeability.
+
+    Decision: parse at every point where data enters a process from outside its type system (browser to backend, agent to backend, queue or stored payload to worker, any consumer to a database function) into the most precise type, once, and trust the type inside that process (L484; L612). At the function API the precise types are the parameter types and domains, so every consumer's input is checked by the database (MD-03, L485). Meaning sits with the tier that holds the state: database constraints and functions decide rules about stored rows (GUARD.2), the backend decides rules that need the end user or policy (L611). Checks in the browser or an agent client are feedback copies, generated from or tested against the authority (L019, RULES.1).
+
+    Reconciliation: P1 and P2 disagree only on what a boundary is; taking every deserialisation point as a boundary gives both.
+
+    Changed (R1): function API as a crossing (MD-03); label inferred in the matrix (F6).
+
+    Would move it: tiers with different owners or trust levels (more crossings)
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.1
+  - build/research/03_contract/result.md::API-C02
+  - build/research/04_presentation/result.md::UI-C18
+  - build/research/05_identity_security/result.md::SEC-C01
+  - build/research/17_data_contracts/result.md::DCON-C09
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/18_allocation/result.md::ALLOC-C06
+  - build/research/18_allocation/result.md::ALLOC-C08
+  - build/research/18_allocation/result.md::ALLOC-C09
+- op: node.create
+  uid: ALLOCATION.GUARD.2
+  name: python-kb-philosophy:DEFENSIVE
+  intent: 'Rules that must hold whatever writes the data are enforced by the database: declarative constraints for every rule they can express, and, beyond them, procedural checks run under serializable isolation with retry or after locking the governing row. Only declarative constraints bind every writer, owner-run migrations included.'
+  parent: ALLOCATION.GUARD
+  epistemic_state: 'known | conflict: against L471 (MAINT) on optional CHECK constraints | unvalidated: default isolation level belongs to the DATA judge'
+  constraints:
+  - 'Authority: database'
+  - 'Copies: generated or tested backend validators and types, browser feedback'
+  - 'Forbidden: application-only enforcement of any rule that must hold for every writer; a procedural check under Read Committed without a lock'
+  - Declarative constraints (NOT NULL, CHECK, UNIQUE, foreign keys, domains) are required for every rule they can express; CHECK constraints are not optional.
+  - Cross-row rules use a partial unique index or an exclusion constraint first.
+  - Other multi-row rules (including legal state transitions) run in a constraint trigger or the writer function under serializable isolation with retry, or after locking the governing row; the trigger asserts the isolation level it needs.
+  - Read Committed alone admits violations and Repeatable Read admits write skew; never a procedural check under Read Committed without a lock.
+  - Set the default isolation per consumer role; writer functions assert their isolation level; reports on a replica accept snapshot anomalies.
+  - Backend and browser validators are generated from or tested against the constraints; named constraints map violations to stable errors.
+  - Never rely on application-only enforcement of a rule that must hold for every writer.
+  design_notes: |-
+    Positions: P1 declare in the database (L040, L473, L471 MAINT); P2 application-only validation (common practice, rejected by L473 for uniqueness); P3 database functions and triggers for multi-row rules (L528 MAINT, L471).
+
+    Forces: correctness against changeability (testing needs a live database, tooling).
+
+    Decision: rules that must hold whatever writes the data are enforced by the database (MD-03).
+      - Declarative constraints (NOT NULL, CHECK, UNIQUE, foreign keys, domains) for every rule they can express: required. For cross-row rules, a partial unique index or an exclusion constraint first (L174, L175); these are safe under concurrent writers at any isolation level and bind every writer, owner-run migrations included.
+      - Rules beyond them (other multi-row rules, legal state transitions): a constraint trigger or the writer function, run under Serializable isolation with retry, or after locking the governing row; the trigger asserts the isolation level it needs (F4; L569, L577, SRC-331). Read Committed alone admits violations, and Repeatable Read admits write skew (L577).
+      - The default isolation is handed to the DATA judge (PIG-WEB-DATA.CONCURRENCY.1) with this constraint; the review recommends L568 (a), Serializable with retry as the default (L569), and I concur (inferred). Hand-off conditions (R1-9; L573): set the default isolation per consumer role, because a lower-isolation transaction from any writing role voids the Serializable guarantee; writer functions assert the isolation level, as triggers do; reports on a replica cannot be Serializable and accept snapshot anomalies.
+      - Backend and browser validators are generated from or tested against the constraints (F3, RULES.1); named constraints map violations to stable errors (L495).
+
+    MAINT: L471 adopted on authority. Against L471 on "triggers and CHECK constraints optional as defence in depth": procedural checks, inside a function or a trigger, need serializable isolation or a lock to be correct (L473, L577), and only declarative constraints bind every writer, owner-run migrations and human-run jobs included; the function API's privilege wall does not cover the owner role.
+
+    Rejected: P2 for any rule that must hold for every writer; wins never.
+
+    Changed (R1): multi-row branch under Serializable or a lock (F4); ground against L471 narrowed (F4); copies generated or tested (F3); several writers per MD-03 (F5).
+
+    Changed (R2): isolation bound per consumer role; writer functions assert it; replica reports accept snapshot anomalies (R1-9, L573).
+
+    Would move it: nothing in the default
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.2
+  - build/research/01_data_tier/result.md::DATA-C07
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/01_data_tier/result.md::DATA-C13
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C39
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C44
+  - build/research/16_consistency_ordering/result.md::CONS-C03
+  - build/research/16_consistency_ordering/result.md::CONS-C04
+  - build/research/16_consistency_ordering/result.md::CONS-C05
+  - build/research/16_consistency_ordering/result.md::CONS-C09
+  - build/research/16_consistency_ordering/result.md::CONS-C15
+  - build/research/17_data_contracts/result.md::DCON-C23
+- op: node.create
+  uid: ALLOCATION.GUARD.3
+  name: Authorization
+  intent: 'Authorization has two layers divided by where the rule''s facts live: the database function that writes a column decides per-user write rules decidable from the stored row and the acting user; each backend decides product policy not stored in the data and who the user is; the database bounds every consumer by role. Row-level security is not used by default; read visibility of rows with per-user rules across several backends awaits the maintainer.'
+  parent: ALLOCATION.GUARD
+  epistemic_state: 'undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | known: two layers per MD-01; write rules in writer functions (MD-03) | conflict: L619, L688 favour row security when several consumers share the database (MD-03)'
+  constraints:
+  - 'Authority: writer function for per-user write rules decidable from the row and the actor; backend for product policy not stored in the data and for identity; database per consumer role'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested, early feedback); the browser hides controls the user may not use (cosmetic)'
+  - 'Forbidden: browser, agent client, model output, client hints; row security by default (MD-01); any consumer role owning tables or bypassing grants; a write without an actor, or with an actor its role may not assert'
+  - Per-user write rules decidable from the stored row and the acting user are decided by the column's writer function; a backend's identical check is a generated or tested copy for early feedback.
+  - 'Each backend decides product policy not stored in the data (product roles, plan limits, feature flags, workflow steps) and identity: one central mechanism, deny by default, object level, on every request from every client.'
+  - Each consumer has its own role, neither owner nor superuser; grants say which API functions it may execute and which tables and columns it may select; state columns are revoked from UPDATE so the writer function is the only path.
+  - Functions read the acting user from a transaction-local setting, refuse a write without an actor, check that the session role may assert that kind of actor (a backend an end user, an operator or owner role only itself), and record both the session role and the claimed actor.
+  - No row-level security by default; acceptable only when the data model is simple, the scoping key leads the composite primary key of every table the policy covers, and no all-powerful administrator role must read or write across scopes.
+  - Roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted.
+  - 'Recorded default for the open clause: each backend filters per-user reads from one shared written specification with a shared denial-test suite; fallback: database read functions that receive the verified actor, acceptable when a per-user read rule must hold for two or more backends.'
+  design_notes: |-
+    Positions: P1 backend only (L020, L620, L305, L306); P2 the database enforces through roles and row-level security (L619, L620, L688); P3 two layers: database permissions limit objects, application permissions decide business actions (L468 MAINT, L620, L128).
+
+    Forces: security against changeability of policy.
+
+    Decision: P3, two layers (MD-01; L468, MAINT, max). With several consumers the work divides by where the rule's facts live (R1-1; inferred from MD-03 and L608).
+      - The writer function decides per-user write rules that can be decided from the stored row and the acting user (author, owner, assignee: "only the assignee may close a task") and that must hold for every consumer (MD-03, L596, ACT.1). A backend's identical check is a copy for early feedback, generated or tested under RULES.1.
+      - Each backend decides product policy that is not stored in the data: product roles, plan limits, feature flags, workflow steps; and who the human or agent is. One central mechanism per backend, deny by default, object level, on every request from every client (L020, L305, L306, L644).
+      - The database decides per consumer: each consumer has its own role, neither owner nor superuser. Grants say which API functions it may EXECUTE, which tables and columns it may SELECT, and that it writes no table directly except under DB_API's exception; state columns are revoked from UPDATE so the writer function is the only path (L468, L310, L596). This bounds what every backend, BI tool, console and script can do whatever its code.
+      - Functions run with their owner's rights only where they must write tables the caller cannot. They read the acting user from a transaction-local setting (L311, L566). That actor is the consumer's claim, not a verified fact (R1-3): functions refuse a write without an actor, check that the session role may assert that kind of actor (a backend an end user, an operator or owner role only itself; default-context table), and record both the session role and the claimed actor.
+      - Row-level security is not used by default (MD-01). It is acceptable only when the data model is simple, the scoping key leads the composite primary key of every table the policy covers, and no all-powerful administrator role must read or write across scopes (MD-01).
+
+    Undecided clause (Q1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database`. Read visibility of rows that carry per-user rules ("a draft is visible only to its author"; comments on restricted targets are covered by the same rule). Under MD-01 as written each backend filters reads, one copy per backend, against RULES.4 (L633). Writes are not in the question: they are settled above under MD-03.
+      - Recorded default: each backend filters these reads from one shared written specification, with a shared denial-test suite every backend runs (X1).
+      - Fallback kept, not forbidden: database read functions that receive the verified actor are acceptable when a per-user read rule must hold for two or more backends (X1). Under MD-03 several backends share the database by default, so this condition is always met: the fallback is available wherever MD-03's default holds. The actor is verified by the backend that asserts it and is a claim to the database (R1-3).
+      - Consequence, under either position: roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted. No statement in this guideline claims stronger visibility than this (X1).
+
+    Tension (MD-01 against evidence): L619 and L688 call for row security when several applications or agents read the database, which MD-03 makes the default. MD-01 overrides; the residual risk is that a consumer with SELECT on a table sees every user's rows, and that each backend's read filter is the only per-user gate on reads.
+
+    Rejected: P1 without the database layer; wins never (L468). P2 as sole authority: loses product policy that lives in application code (L468); row-level security wins only under MD-01's conditions. The backend as authority for per-user write rules decidable from the row: two authorities for one rule (R1-1); the backend keeps a tested copy.
+
+    Changed (R1): division of work with several consumers (MD-03); row security per MD-01 (F1 closed); new clause Q1.
+
+    Changed (R3): Q1 notation unified; recorded default and fallback reworded; comments covered; visibility of SELECT-capable roles stated (X1).
+
+    Changed (R2): one authority per per-user write rule, the writer function; backend check is a tested copy; backend owns product policy not stored in data (R1-1). Actor treated as a claim, pairing checked, writes without actor refused (R1-3). Q1 narrowed to read visibility, awaiting maintainer (R1-2).
+
+    Would move it: MD-01's three conditions (row security becomes acceptable); Q1's answer (read visibility into read functions)
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.3
+  - build/research/01_data_tier/result.md::DATA-C26
+  - build/research/05_identity_security/result.md::SEC-C02
+  - build/research/05_identity_security/result.md::SEC-C03
+  - build/research/05_identity_security/result.md::SEC-C04
+  - build/research/05_identity_security/result.md::SEC-C41
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/05_identity_security/result.md::SEC-C43
+  - build/research/05_identity_security/result.md::SEC-C44
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C70
+  - build/research/18_allocation/result.md::ALLOC-C03
+  - build/research/18_allocation/result.md::ALLOC-C07
+  - build/research/18_allocation/result.md::ALLOC-C18
+  - build/research/18_allocation/result.md::ALLOC-C19
+  - build/research/19_agent_users/result.md::AGENT-C01
+  - build/research/19_agent_users/result.md::AGENT-C02
+  - build/research/19_agent_users/result.md::AGENT-C14
+  - build/research/20_collaboration/result.md::C33
+  examples:
+  - A draft is visible only to its author (per-user read rule; comments on restricted targets are covered by the same rule).
+  - 'Only the assignee may close a task (per-user write rule decidable from the stored row and the acting user: decided by the writer function).'
+- op: node.create
+  uid: ALLOCATION.GUARD.4
+  name: Identity and Session State
+  intent: Each backend holds the sessions and credentials of its users; the browser holds only an HttpOnly, Secure, SameSite cookie carrying an opaque identifier. Database roles identify consumers, never end users.
+  parent: ALLOCATION.GUARD
+  epistemic_state: known
+  constraints:
+  - 'Authority: backend (session store in the database under the backing-roles default)'
+  - 'Copies: the browser''s opaque cookie; an agent''s own bearer token'
+  - 'Forbidden: tokens in JavaScript-readable storage; any session token, bearer token or long-lived credential in a URL, the one exception being short-lived, single-purpose, scope-limited signed URLs for file delivery, with lifetime and scope stated (X6); session state in process memory; stateless, non-revocable sessions; end users as database roles'
+  - 'Default (first-party, same-site browser): an opaque server-side session, revoked on logout, stored in a backing service, never in process memory.'
+  - 'Login through an external identity provider: a backend-for-frontend holds the tokens.'
+  - 'Agents and other non-browser clients: bearer tokens per delegation, short-lived, with server-held state that can revoke them.'
+  - No token in JavaScript-readable storage; no session token, bearer token or long-lived credential in a URL, the one exception being a short-lived, single-purpose, scope-limited signed file URL with its lifetime and scope stated.
+  - The cookie carries an identifier, never application state; no stateless, non-revocable sessions.
+  - An end user reaches the database only as the actor a backend asserts in a transaction-local setting from its verified identity.
+  design_notes: |-
+    Positions: P1 server-held opaque session, HttpOnly cookie (L315, L022, L319, L086); P2 backend-for-frontend holds the tokens (L313, L314); P3 browser application holds bearer tokens (L316, L320, L321); P4 no application state in cookies (L318).
+
+    Forces: security (token theft, revocation) against scalability and latency (stateless verification).
+
+    Decision: each backend holds the sessions and credentials of its users; the browser holds only an HttpOnly, Secure, SameSite cookie carrying an opaque identifier.
+      - Default (first-party, same-site browser): an opaque server-side session, revoked on logout (L315, L022, L319), stored in a backing service, never in process memory (L086).
+      - Login through an external identity provider: backend-for-frontend (L313).
+      - Agents and other non-browser clients: bearer tokens per delegation, short-lived, with server-held state that can revoke them (L316, L022).
+      - Database roles identify consumers, never end users; the end user reaches the database only as the actor a backend asserts in a transaction-local setting, from its verified identity, checked against the backend's role (R1-3) (L311, L566).
+
+    Rejected: P3 for the browser: wins only when no backend is possible (L314); localStorage acceptance (L320, L321) loses. P4 as stated loses; its narrow sense is kept: the cookie carries an identifier, never application state.
+
+    Changed (R1): end user versus consumer role stated (MD-03).
+
+    Changed (R3): no tokens in URLs except short-lived signed file URLs (X6).
+
+    Would move it: client kind; instant revocation; no backend possible
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.4
+  - build/research/02_app_tier/result.md::APP-C26
+  - build/research/02_app_tier/result.md::APP-C27
+  - build/research/03_contract/result.md::API-C36
+  - build/research/05_identity_security/result.md::SEC-C08
+  - build/research/05_identity_security/result.md::SEC-C09
+  - build/research/05_identity_security/result.md::SEC-C11
+  - build/research/05_identity_security/result.md::SEC-C12
+  - build/research/05_identity_security/result.md::SEC-C13
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/06_operations/result.md::OPS-C46
+  - build/research/12_counter_voices/result.md::CV-C15
+  - build/research/12_counter_voices/result.md::CV-C16
+  - build/research/12_counter_voices/result.md::CV-C17
+  - build/research/12_counter_voices/result.md::CV-C18
+  - build/research/12_counter_voices/result.md::CV-C19
+  - build/research/13_web_principles/result.md::WEB-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+- op: node.create
+  uid: ALLOCATION.GUARD.5
+  name: Concurrency Control and Conflict Resolution
+  intent: 'The database detects concurrent changes inside the writer function, and the conflict policy follows the data shape: optimistic versions for discrete fields edited by users, last-writer-wins per property for toggles, leases for frequent costly conflicts, a text engine for long collaborative text.'
+  parent: ALLOCATION.GUARD
+  epistemic_state: known
+  constraints:
+  - 'Authority: database (detection in the writer function), with the backend carrying the version through its contract'
+  - 'Copies: the browser holds the version it read'
+  - 'Forbidden: browser or agent resolving conflicts; locks across requests'
+  - Detect with constraints, isolation, row locks and version checks inside one short transaction in the writer function; isolation level per GUARD.2.
+  - 'Discrete fields edited by users: optimistic version; a stale write is rejected (412), and the condition is required (428) where a lost update matters; the writer function takes the expected version as a parameter.'
+  - 'Toggles, status, assignment, ordering: per-property last-writer-wins is acceptable.'
+  - 'Frequent conflicts with costly lost work: a lease with owner and expiry, checked by the writer function.'
+  - 'Long collaborative text: a text engine with the server as central authority.'
+  - Never hold a transaction or lock across user think time; never silent whole-record last-writer-wins; never check-then-write without serializable isolation or a lock.
+  design_notes: |-
+    Positions: P1 the database decides (L628, L473, L568); P2 optimistic version across requests (L475, L260); P3 pessimistic checkout (L570); P4 silent last-writer-wins per property (L674); P5 merge on the client (L677, L302).
+
+    Forces: correctness (no lost update) against latency and user effort.
+
+    Decision: the database detects; the conflict policy follows the data shape (L678).
+      - Detection: constraints, isolation, row locks and version checks inside one short transaction, inside the writer function (L628, L473, L475; MD-03). Isolation level per GUARD.2 (DATA judge).
+      - Discrete fields edited by users (default): optimistic version; ETag and If-Match; a stale write is rejected (412); the condition is required (428) where a lost update matters (L475, L260). The writer function takes the expected version as a parameter.
+      - Toggles, status, assignment, ordering: per-property last-writer-wins is acceptable (L674).
+      - Frequent conflicts with costly lost work: a lease with owner and expiry, checked by the writer function (L570).
+      - Long collaborative text: a text engine with the server as central authority (L677, L679).
+      - Never a transaction or lock held across user think time (L475).
+
+    Rejected: silent whole-record last-writer-wins; wins never (L674). P5: wins with local-first data or offline and peer-to-peer text (L677). Check-then-write without serializable isolation or a lock; wins never (L628).
+
+    Changed (R1): detection inside the writer function (MD-03); isolation handed to DATA (F4).
+
+    Would move it: conflict rate, data shape, edit length, offline use
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.5
+  - build/research/03_contract/result.md::API-C08
+  - build/research/12_counter_voices/result.md::CV-C08
+  - build/research/16_consistency_ordering/result.md::CONS-C09
+  - build/research/16_consistency_ordering/result.md::CONS-C13
+  - build/research/16_consistency_ordering/result.md::CONS-C14
+  - build/research/16_consistency_ordering/result.md::CONS-C15
+  - build/research/18_allocation/result.md::ALLOC-C31
+  - build/research/18_allocation/result.md::ALLOC-C38
+  - build/research/20_collaboration/result.md::C11
+  - build/research/20_collaboration/result.md::C12
+  - build/research/20_collaboration/result.md::C13
+  - build/research/20_collaboration/result.md::C14
+  - build/research/20_collaboration/result.md::C17
+  - build/research/20_collaboration/result.md::C18
+  - build/research/20_collaboration/result.md::C19
+  - build/research/20_collaboration/result.md::C21
+- op: node.create
+  uid: ALLOCATION.GUARD.6
+  name: Duplicate Suppression
+  intent: 'Duplicate suppression is layered and the database decides: idempotent by design where the domain allows, otherwise an idempotency key recorded with the effect in the same transaction, with a unique constraint as the final backstop. Exactly-once is unavailable across a process or network boundary, so effects are made effectively-once by at-least-once delivery plus idempotence.'
+  parent: ALLOCATION.GUARD
+  epistemic_state: known
+  constraints:
+  - 'Authority: database (key and effect in the writer function''s transaction; unique constraint as final arbiter); the backend passes the key through its contract'
+  - 'Copies: browser pending state and form token; agent clients send keys'
+  - 'Forbidden: the browser as the only guard; a key store separate from the effect'
+  - 'Prefer idempotent design: client-supplied identifiers, upserts, absolute assignments.'
+  - Otherwise record an idempotency key in the same transaction as the effect; replay the first response and reject a different payload under the same key.
+  - Require a key on every mutation offered to agents that is not idempotent by design, and on payment-like creates.
+  - A unique constraint is the final arbiter.
+  - Browser measures (disable resubmission, 303 after POST, a form token minted at render) only reduce repeats.
+  design_notes: |-
+    Positions: P1 idempotent by design (L051, L655, L587, L588); P2 idempotency key recorded with the effect (L269, L546, L270, L599); P3 layered across tiers (L582).
+
+    Forces: correctness of effects against simplicity.
+
+    Decision: layered, and the database decides. Ground: exactly-once is unavailable across a process or network boundary, and a lost acknowledgement leaves the caller unsure (L478, L479); effects are made effectively-once by at-least-once delivery plus idempotence where the effect is recorded.
+      1. Idempotent by design where the domain allows: client-supplied identifiers, upserts, absolute assignments (L655, L587 MAINT, L588).
+      2. Otherwise an idempotency key recorded by the API function in the same transaction as the effect; the first response is replayed and a different payload under the same key is rejected (L269, L546, L270, L599). Required on every mutation offered to agents that is not idempotent by design, and on payment-like creates (L051).
+      3. A unique constraint as the backstop (L582).
+      The browser layer (disable resubmission, 303 after POST, a form token minted at render) only reduces repeats (L582).
+
+    Rejected: P1 alone: wins when every mutation has a natural idempotent form. A key store apart from the effect; wins never (L270, L479).
+
+    Changed (R1): key recorded inside the API function (MD-03).
+
+    Would move it: automated callers; payment-like or external effects
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.GUARD.6
+  - build/research/03_contract/result.md::API-C23
+  - build/research/03_contract/result.md::API-C24
+  - build/research/03_contract/result.md::API-C25
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C57
+  - build/research/16_consistency_ordering/result.md::CONS-C10
+  - build/research/16_consistency_ordering/result.md::CONS-C24
+  - build/research/16_consistency_ordering/result.md::CONS-C25
+  - build/research/16_consistency_ordering/result.md::CONS-C26
+  - build/research/16_consistency_ordering/result.md::CONS-C27
+  - build/research/16_consistency_ordering/result.md::CONS-C36
+  - build/research/19_agent_users/result.md::AGENT-C28
+  - build/research/19_agent_users/result.md::AGENT-C29
+  - build/research/19_agent_users/result.md::AGENT-C30
+- op: node.create
+  uid: ALLOCATION.ACT.1
+  name: Business Rules and State Transitions
+  intent: 'Everything that must hold whoever writes is in the database: every operation that changes several tables as one business operation is one database function, and each state column has exactly one authoritative writer function that every entry point routes through. The backend keeps workflow orchestration across operations, product policy not stored in the data, external calls, presentation, sessions and authentication.'
+  parent: ALLOCATION.ACT
+  epistemic_state: 'known: MD-03, L584 | conflict: L215, L066 (research, application first)'
+  constraints:
+  - 'Authority: database for operations, transitions, invariants and per-user write rules decidable from the row; backend for workflow, product policy not stored in the data and external calls'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested); the browser previews which actions are allowed (feedback)'
+  - 'Forbidden: multi-table writes composed in a backend; a backend transaction wrapping several API calls; business rules in the browser, agent adapters or prompts (L633); a second writer of a state column, owner-run jobs included unless a recorded exception'
+  - Multi-table operations are database functions; never compose a multi-table write in a backend.
+  - Each state column has exactly one authoritative writer function, which logs each transition; consumer roles hold no UPDATE on state columns or direct writes on tables with multi-table effects.
+  - Per-user write rules decidable from the stored row and the acting user are decided by the writer function; a backend's check is a generated or tested copy.
+  - One business operation is one function call in its own transaction; a backend never wraps several API calls; a step atomic with another is a new function, which may call other domains' published functions in the same transaction; direct access to another domain's tables is forbidden.
+  - Owner-run jobs change a state column only through its writer function, or as a recorded exception under the data-job checklist, with the operator and ticket id set as actor.
+  - External calls never run inside a database transaction; they stay in the backend.
+  - No business rules in the browser, agent adapters or prompts.
+  design_notes: |-
+    Positions: P1 application first; profile, move proven hot spots to SQL; the use-case layer owns the transaction (L215, L066, L226); P2 split by kind, middle zone disputed (L214); P3 database behind a cost-benefit gate, with a listed in-database band and one writer per state column (L527, L528, L584, L596, all MAINT); P4 thick database, SmartDB (L616, L617).
+
+    Forces: correctness across several writers, round trips and lock time (L614) against changeability (testability, tooling, skill: L042, L472).
+
+    Decision: P3, with MD-03 meeting L527's gate by default (reuse by two or more consumers).
+      - Database: everything that must hold whoever writes: constraints and multi-row invariants (GUARD.2); every operation that changes several tables as one business operation, as one database function (L584, MD-03); state transitions, each state column with exactly one authoritative writer function that every entry point (backends, consoles, ingestion, agents through a backend) routes through and that logs each transition (L596); per-user write rules decidable from the stored row and the acting user (author, owner, assignee), decided by that writer function, with any backend check a generated or tested copy (R1-1); set-based algorithms over large data (L528, L613).
+      - Owner-run jobs (R1-6): the owner role bypasses grants and column revokes, but not constraints or triggers (GUARD.2). A data job that changes a state column calls its writer function, or is a recorded exception under L545's checklist, with the operator and ticket id set as actor (R1-3).
+      - Backend: workflow orchestration across operations, product policy not stored in the data (product roles, plan limits, feature flags, workflow steps: R1-1), external calls, presentation, sessions and authentication (L528's application half).
+      - Unit of work (R1-4): one business operation is one function call in its own transaction; a backend never opens a transaction around several API calls. A step that must be atomic with another is a new business operation, so a new function, which may call other domains' published functions in the same transaction (X3); direct access to another domain's tables is forbidden. A workflow across operations advances through state columns and the outbox (ACT.2), each step idempotent (GUARD.6). L066's "one boundary per operation" holds, with the function as its owner (L584).
+      - Enforcement: consumer roles hold no UPDATE on state columns and no direct write on tables with multi-table effects; the writer functions do (L596; F8).
+      - L584 stands (MD-03); L527, L528 and L596 are the max choice.
+
+    Costs weighed (F8): one round trip per operation instead of one per statement (L614), and locks held for one call instead of across round trips, which also lowers retries under Serializable (inferred); against that, tests need a live database (L042, L472) — already true for any use case whose invariants the database guards (GUARD.2) — and tooling and onboarding costs (L472), paid with versioned migrations and CI against a live database (FORCES.6).
+
+    Tension (MD-03 against evidence): research puts domain logic in the application first, profiling hot spots into SQL (L215, Fowler, T2), and keeps the transaction boundary in the use-case layer (L066); the doctrine's heavier-database position is what L214 calls the disputed middle zone. MD-03 decides it for this guideline.
+
+    Rejected:
+      - P1: wins when one backend is the only writer, the team's SQL skill is low (L041), and policy changes faster than migrations can follow (L215).
+      - P4 (workflow and external calls in the database too): external calls cannot run inside a database transaction (L234) and stay in the backend (L528).
+
+    Changed (R1): re-judged under MD-03; the verdict against L584 is withdrawn; costs weighed (F8); column privileges as enforcement (F8).
+
+    Changed (R2): per-user write rules in the writer function, backend product policy defined (R1-1); one operation, one call, one transaction, no wrapping (R1-4); owner-run jobs through the writer function or a recorded exception (R1-6).
+
+    Changed (R3): cross-domain composition through published functions (X3).
+
+    Would move it: a single consumer with low SQL skill (P1); latency-critical multi-statement operations reinforce the database placement
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.1
+  - build/research/01_data_tier/result.md::DATA-C44
+  - build/research/02_app_tier/result.md::APP-C04
+  - build/research/02_app_tier/result.md::APP-C09
+  - build/research/02_app_tier/result.md::APP-C16
+  - build/research/14_thin_spots/result.md::THIN-C27
+  - build/research/14_thin_spots/result.md::THIN-C28
+  - build/research/14_thin_spots/result.md::THIN-C29
+  - build/research/14_thin_spots/result.md::THIN-C31
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C42
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C44
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C45
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/18_allocation/result.md::ALLOC-C10
+  - build/research/18_allocation/result.md::ALLOC-C11
+  - build/research/18_allocation/result.md::ALLOC-C12
+  - build/research/18_allocation/result.md::ALLOC-C14
+  - build/research/18_allocation/result.md::ALLOC-C15
+  - build/research/18_allocation/result.md::ALLOC-C16
+  - build/research/18_allocation/result.md::ALLOC-C23
+  - build/research/18_allocation/result.md::ALLOC-C32
+  - build/research/18_allocation/result.md::ALLOC-C33
+  - build/research/19_agent_users/result.md::AGENT-C01
+  - build/research/19_agent_users/result.md::AGENT-C02
+- op: node.create
+  uid: ALLOCATION.ACT.2
+  name: Side Effects and Integrations
+  intent: The database function that changes state also writes the intent of its side effects (an outbox row or staged job) in the same transaction, and a backend worker delivers it after commit to idempotent consumers. External calls are made by backends, never by the database, and no transaction stays open across a remote call.
+  parent: ALLOCATION.ACT
+  epistemic_state: 'known | unvalidated: the 1 s in-request exception is inferred (L013, L589)'
+  constraints:
+  - 'Authority: backend (delivery, external calls), database (the staged intent, written by the operation)'
+  - 'Copies: none'
+  - 'Forbidden: third-party credentials in the browser (inferred, L624); calls to external systems from inside the database; dual writes to the database and a broker; remote calls inside an open transaction; a foreign call in the request without its intent recorded first; post-commit hooks for foreign effects'
+  - Write the intent in the operation's transaction; deliver after commit, idempotently.
+  - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery points and an idempotency key, in a worker behind a 202 response with a status resource.
+  - 'In the request only when the user must see the outcome within about 1 s: the database function records the intent first and commits; the request performs the call as one atomic phase and marks the row done; a worker completer picks up the row if the request dies.'
+  - Post-commit hooks only for losable work that touches no foreign system.
+  - No dual writes to the database and a broker; no remote call inside an open transaction; no third-party credentials in the browser.
+  design_notes: |-
+    Positions: P1 backend effects staged in the database and delivered after commit (L624, L409, L410); P2 post-commit hooks in the request process (L600, L233); P3 atomic phases with recovery points (L589, L234, L246); P4 sagas with compensation (L590, L480).
+
+    Forces: correctness (no lost or doubled effect) against request latency.
+
+    Decision: P1. The database function that performs the state change writes the intent (outbox row or staged job) in the same transaction (L624, L409); a backend worker delivers it after commit to idempotent consumers (L410, L599). External calls are made by backends, never by the database. No database transaction stays open across a remote call (L234).
+      - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery points and an idempotency key passed to the foreign system (P3 as a complement: L589, L234, L246), in a worker behind a 202 response with a status resource (ACT.3, L271, L602).
+      - In the request only when the user must see the outcome within about 1 s (L013): the database function still records the intent (outbox row) first and commits; the request then performs the call as one atomic phase with the idempotency key and marks the row done. If the request dies, the worker's completer picks the row up (L589). (Revision 3: adopted from the logic unit's realization, M4.)
+
+    Rejected: P2 (post-commit hook): acceptable only for losable work that touches no foreign system, such as cache invalidation (L600); a losable notice to a foreign system still goes through the outbox, which costs one row. P4: only when one business transaction spans services with separate databases (L590, L480).
+
+    Changed (R1): intent written by the database function (MD-03).
+
+    Changed (R3): tension with ACT.3 resolved: foreign mutations in a worker behind 202; in the request only for an outcome needed within about 1 s, intent recorded first; post-commit hooks only for losable work touching no foreign system (logic review M4).
+
+    Would move it: an outcome the user must see within about 1 s (in-request phase, intent recorded first); a business transaction crossing services with their own databases (saga)
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.2
+  - build/research/01_data_tier/result.md::DATA-C53
+  - build/research/02_app_tier/result.md::APP-C15
+  - build/research/02_app_tier/result.md::APP-C16
+  - build/research/02_app_tier/result.md::APP-C17
+  - build/research/02_app_tier/result.md::APP-C18
+  - build/research/02_app_tier/result.md::APP-C23
+  - build/research/02_app_tier/result.md::APP-C46
+  - build/research/03_contract/result.md::API-C26
+  - build/research/13_web_principles/result.md::WEB-C14
+  - build/research/16_consistency_ordering/result.md::CONS-C24
+  - build/research/16_consistency_ordering/result.md::CONS-C28
+  - build/research/16_consistency_ordering/result.md::CONS-C29
+  - build/research/16_consistency_ordering/result.md::CONS-C30
+  - build/research/16_consistency_ordering/result.md::CONS-C31
+  - build/research/16_consistency_ordering/result.md::CONS-C33
+  - build/research/18_allocation/result.md::ALLOC-C26
+- op: node.create
+  uid: ALLOCATION.ACT.3
+  name: Deferred and Scheduled Work
+  intent: Inside the request go validation, authorization, every change atomic with what the user sees next, and the persisted intent of deferred work, in one transaction; core writes are never asynchronous. Foreign effects, work that would push the response past the 1 s flow budget, fan-out and derived data are deferred to workers fed from the database-staged queue, or to scheduled work inside the database for pure data work.
+  parent: ALLOCATION.ACT
+  epistemic_state: 'known | unvalidated: the 1 s threshold is my choice between L601''s two rules of thumb'
+  constraints:
+  - 'Authority: backend (what is deferred) and database (staged intent, data schedules)'
+  - 'Copies: the status resource shows the pending state'
+  - 'Forbidden: deferring core writes; foreign effects inside the request, except ACT.2''s in-request phase (outcome needed within about 1 s, intent recorded first)'
+  - Never defer core writes.
+  - Foreign mutations run as atomic phases in a worker behind 202; the one in-request exception is ACT.2's outcome the user must see within about 1 s, with the intent recorded first.
+  - An operation that outlasts the request answers 202 with a status resource.
+  - Every asynchronous stream states its staleness window and a convergence check.
+  - In-process background tasks only for small tasks that may be lost.
+  design_notes: |-
+    Positions: P1 inside the request what the user sees next (L601); P2 separate worker processes (L406, L407); P3 scheduled work inside the database (L604 MAINT); P4 asynchrony only for derived data and bulk jobs (L482 MAINT, L545).
+
+    Forces: latency against correctness and scalability.
+
+    Decision:
+      - Inside the request: validation, authorization, every change atomic with what the user sees next, and the persisted intent of deferred work, in one transaction, which is one function call when the change is a database operation (L601, MD-03). Core writes are never asynchronous (L482, MAINT, max).
+      - Deferred: foreign effects, work that would push the response past the 1 s flow budget (L013, L271), fan-out, derived data. Foreign mutations run as atomic phases in a worker behind 202; the one in-request exception is ACT.2's: an outcome the user must see within about 1 s, with the intent recorded by the database function first.
+      - Host: workers fed from the database-staged queue (L406, L407, L409); scheduled pure data work inside the database (L604; JOB_HOST).
+      - An operation that outlasts the request answers 202 with a status resource (L271, L602). Every asynchronous stream states its staleness window and a convergence check (L482).
+
+    Rejected: in-process background tasks: only for small tasks that may be lost (L407). P3 for everything: not for Python logic, foreign effects, highly parallel or OS-level work (L604).
+
+    Changed (R3): in-request exception aligned with ACT.2 (logic review M4).
+
+    Would move it: duration, foreign effects, set-based data work
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.3
+  - build/research/01_data_tier/result.md::DATA-C53
+  - build/research/02_app_tier/result.md::APP-C17
+  - build/research/02_app_tier/result.md::APP-C20
+  - build/research/02_app_tier/result.md::APP-C21
+  - build/research/03_contract/result.md::API-C26
+  - build/research/13_web_principles/result.md::WEB-C14
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C59
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C66
+  - build/research/16_consistency_ordering/result.md::CONS-C32
+  - build/research/16_consistency_ordering/result.md::CONS-C33
+- op: node.create
+  uid: ALLOCATION.ACT.4
+  name: Audit and History
+  intent: Business history is written by the database in the same transaction as the change, recording both the consumer's role, which the database verifies, and the actor the consumer claims; the security event log is a separate record. The backend supplies the actor and any business event that row changes do not express.
+  parent: ALLOCATION.ACT
+  epistemic_state: 'known: MD-03 | gap: L684 cites no source; evidence for the trigger placement is inferred (L627)'
+  constraints:
+  - 'Authority: database (history, transitions logged by writer functions); backend supplies actor and business events; a separate log sink holds security events'
+  - 'Copies: none'
+  - 'Forbidden: application-only audit; audit only in a model transcript; an actor taken from a client-supplied id; a write without an actor; an actor the session role may not assert'
+  - History is written by triggers into append-only history tables in the same transaction as the change; writer functions log each transition.
+  - Record both the session role and the claimed actor; refuse a write with no actor; check that the session role may assert that kind of actor (a backend an end user; operator and owner roles only themselves, with the ticket id for owner-run jobs).
+  - Agent actions record acting identity, delegating subject, operation, correlation id and outcome, on the server; agent-originated writes are marked in the data.
+  - Keep the security event log as a separate record with its own store, integrity and retention.
+  - Never take the actor from a client-supplied id; never audit only in the application or only in a model transcript.
+  design_notes: |-
+    Positions: P1 written where writes converge, atomically, actor passed in (L627, L684, L212, L566); P2 application-level history (L627, L208); P3 two separate records, security event log and business audit trail (L049, L392).
+
+    Forces: correctness (completeness) against changeability (hidden behaviour, testability).
+
+    Decision: P1 and P3; audit is the database's (MD-03).
+      - Business history is written by database triggers into append-only history tables, in the same transaction as the change (L627, L212). The writer functions log each transition (L596).
+      - Actor (R1-3): each history row records both the session role, which the database verifies, and the claimed actor from the transaction-local setting (L566 MAINT, L311), which the consumer sets. Triggers and writer functions refuse a write with no actor, and check that the session role may assert that kind of actor (default-context table: a backend may assert an end user; operator and owner roles only themselves, with the ticket id for owner-run jobs, L545).
+      - Agent actions carry acting identity, delegating subject, operation, correlation id and outcome, on the server (L658); agent-originated writes are marked in the data (L659).
+      - Business events that row changes do not express (reason, intent) are passed by the backend to the function, which records them in the same transaction.
+      - The security event log is a separate record with its own store, integrity and retention (L049, L392).
+
+    Evidence note (F12): L684 is marked grounded in the ledger with no source; flagged to the ledger owner. Until fixed, the verdict rests on MD-03, L627 (inferred) and L212 (grounded for the mechanism).
+
+    Rejected: P2 alone: wins when only one application writes and business events matter more than row changes (L627); never in the MD-03 default.
+
+    Changed (R1): decided by MD-03; evidence note (F12); label (F6).
+
+    Changed (R2): session role and claimed actor both recorded; writes without actor refused; actor pairing checked (R1-3).
+
+    Would move it: nothing in the default (several writers by MD-03)
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.4
+  - build/research/01_data_tier/result.md::DATA-C43
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/14_thin_spots/result.md::THIN-C06
+  - build/research/14_thin_spots/result.md::THIN-C12
+  - build/research/14_thin_spots/result.md::THIN-C13
+  - build/research/14_thin_spots/result.md::THIN-C25
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/18_allocation/result.md::ALLOC-C30
+  - build/research/19_agent_users/result.md::AGENT-C33
+  - build/research/19_agent_users/result.md::AGENT-C34
+  - build/research/20_collaboration/result.md::C28
+  - build/research/20_collaboration/result.md::C29
+- op: node.create
+  uid: ALLOCATION.DERIVE.1
+  name: Derived Data and Aggregation
+  intent: 'The tier for derived data follows the required freshness and atomicity, in this order: compute on read when affordable; maintain it in the database in the same transaction as the source when it must change atomically; keep database cache tables with an invalidation queue or scheduled refresh when a stated staleness is acceptable.'
+  parent: ALLOCATION.DERIVE
+  epistemic_state: 'known | unvalidated: the order of options is mine (L625 inferred)'
+  constraints:
+  - 'Authority: database'
+  - 'Copies: derived columns and tables with a stated staleness'
+  - 'Forbidden: consumers writing derived stores beside the source'
+  - 'Order of options: compute on read, then same-transaction maintenance in the database, then cache tables with a stated staleness.'
+  - No consumer writes a derived store beside the source (no dual writes).
+  design_notes: |-
+    Positions: P1 inside the database with the source (L176, L532, L534, L536); P2 from an ordered log by a dedicated process (L626, L045); P3 computed on read (L488 MAINT).
+
+    Forces: correctness against performance and scalability.
+
+    Decision: choose the tier by required freshness and atomicity (L625), in this order (my order, F6): compute on read when affordable (L488, L072); when it must change atomically with the source, maintain it in the database in the same transaction (generated column, trigger: L176, L532); when a stated staleness is acceptable, database cache tables with an invalidation queue or scheduled refresh (L532, L535, L536, all MAINT). The doctrine is the max choice here.
+
+    Rejected: P2: wins with many derived stores outside the database, a high write rate and a team able to run stream infrastructure (L626). Dual writes by any consumer: never (L045).
+
+    Changed (R1): order marked as mine (F6).
+
+    Would move it: number of external derived stores, write rate, staleness tolerance
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.DERIVE.1
+  - build/research/01_data_tier/result.md::DATA-C17
+  - build/research/04_presentation/result.md::UI-C15
+  - build/research/12_counter_voices/result.md::CV-C22
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C28
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C29
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C30
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C54
+  - build/research/18_allocation/result.md::ALLOC-C27
+  - build/research/18_allocation/result.md::ALLOC-C28
+- op: node.create
+  uid: ALLOCATION.DERIVE.2
+  name: Filtering, Sorting, Paging and Search
+  intent: The database reduces many rows to the few a client needs, set-based, in one statement or read function, so only the result travels; it also owns the collation of every order it serves. The server enforces a maximum page size and pages by keyset behind an opaque continuation.
+  parent: ALLOCATION.DERIVE
+  epistemic_state: 'known | gap: P3 unargued; browser-copy condition inferred | unvalidated: collation choice open (DATA)'
+  constraints:
+  - 'Authority: database, including collation'
+  - 'Copies: the browser over rows already loaded, same collation'
+  - 'Forbidden: loading full sets into a backend or browser to reduce them; queries in loops; a browser re-sort with another collation'
+  - Filter, sort, aggregate and page in the database; never load full sets into a backend or browser to reduce them; no queries in loops.
+  - Enforce a maximum page size; page by keyset behind an opaque continuation.
+  - The database owns the collation of every order it serves; a browser re-sort over rows already loaded uses the same collation or none.
+  - Reads that need no domain behaviour may be plain queries.
+  design_notes: |-
+    Positions: P1 with the data, set-based (L613, L614); P2 reads bypass the domain model (L237); P3 in the backend or browser on a loaded set (no row; skeleton gap 2).
+
+    Forces: performance and latency against scalability (L615 exempts reductions that return small results).
+
+    Decision: the database reduces many rows to the few a client needs, set-based, in one statement or read function; only the result travels (L613, L614). The server enforces a maximum page size and pages by keyset behind an opaque continuation (L265, L266, L541). Reads that need no domain behaviour may be plain queries (P2, L237; L516). Search follows the same placement and stays deferred. Collation (F11): the database owns the collation of every order it serves, declared per column or per query; which collation is open, under DATA.
+
+    Gap handling (P3): no row argues for it; rejected as an authority on L613, L614, L615. Kept only as a copy: the browser may re-sort or filter rows it already holds, for instant feedback, with the same locale as the database's collation or not at all (F11), never deciding which rows exist beyond them. This condition is inferred.
+
+    Changed (R1): collation owned here (F11).
+
+    Would move it: data volume against result size; write load
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.DERIVE.2
+  - build/research/02_app_tier/result.md::APP-C42
+  - build/research/03_contract/result.md::API-C19
+  - build/research/03_contract/result.md::API-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C61
+  - build/research/18_allocation/result.md::ALLOC-C10
+  - build/research/18_allocation/result.md::ALLOC-C11
+  - build/research/18_allocation/result.md::ALLOC-C13
+- op: node.create
+  uid: ALLOCATION.DERIVE.3
+  name: Caching
+  intent: Every cache is a copy with a stated staleness bound and an expiry or invalidation plan; the source stays the authority. Derived-data caches live in database tables invalidated in the source transaction; HTTP responses are labelled on purpose; server state in client-rendered parts is a client cache with background refresh.
+  parent: ALLOCATION.DERIVE
+  epistemic_state: known
+  constraints:
+  - 'Authority: none: the source is the authority'
+  - 'Copies: database tables, a shared backend store, HTTP intermediaries, the browser'
+  - 'Forbidden: process memory beyond one request; personalised responses in shared caches'
+  - Every cache states its staleness bound and an expiry or invalidation plan.
+  - Derived-data caches are database tables, invalidated in the source transaction.
+  - 'Label every HTTP response on purpose: HTML no-cache with validators, fingerprinted assets immutable, personalised responses private or no-store, lifetimes set by tolerable staleness.'
+  - Response and fragment caches shared by processes live in the database by default; a cache service only on measured need.
+  - Never share per-process memory beyond one request in multi-process production; never use a cache as permanent storage.
+  design_notes: |-
+    Positions: P1 cache tables in the database (L534 MAINT, L535); P2 shared cache service (L417); P3 HTTP caches in browsers and intermediaries (L010, L414-L416); P4 server state cached in the browser (L071, L291).
+
+    Forces: latency and performance against correctness (staleness).
+
+    Decision: the positions are kinds of cache; each cache is a copy with a stated staleness bound and an expiry or invalidation plan (L419, L609).
+      - Derived-data caches: database tables, invalidated in the source transaction (L534, MAINT, max).
+      - HTTP: every response labelled on purpose; HTML no-cache with validators; fingerprinted assets immutable; personalised responses private or no-store; lifetimes set by tolerable staleness (L414, L415, L416, L010).
+      - Server state in client-rendered parts: a client cache with background refresh (L071, L291).
+      - Response and fragment caches shared by processes: Postgres by default under POSTGRES_FIRST (L125, inferred), a cache service on measured need (CACHE_STORE; F7).
+
+    Rejected: per-process memory shared beyond one request in multi-process production (L417, L086); a cache as permanent storage (L417).
+
+    Changed (R1): L534 limited to derived-data caches (F7).
+
+    Would move it: staleness tolerance, number of processes, need for atomic invalidation
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.DERIVE.3
+  - build/research/02_app_tier/result.md::APP-C26
+  - build/research/02_app_tier/result.md::APP-C27
+  - build/research/03_contract/result.md::API-C09
+  - build/research/04_presentation/result.md::UI-C13
+  - build/research/04_presentation/result.md::UI-C14
+  - build/research/04_presentation/result.md::UI-C19
+  - build/research/04_presentation/result.md::UI-C20
+  - build/research/04_presentation/result.md::UI-C21
+  - build/research/06_operations/result.md::OPS-C46
+  - build/research/06_operations/result.md::OPS-C47
+  - build/research/06_operations/result.md::OPS-C48
+  - build/research/06_operations/result.md::OPS-C49
+  - build/research/06_operations/result.md::OPS-C50
+  - build/research/06_operations/result.md::OPS-C51
+  - build/research/06_operations/result.md::OPS-C53
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+  - build/research/13_web_principles/result.md::WEB-C07
+  - build/research/13_web_principles/result.md::WEB-C08
+  - build/research/13_web_principles/result.md::WEB-C09
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C28
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C29
+  - build/research/18_allocation/result.md::ALLOC-C04
+  - build/research/18_allocation/result.md::ALLOC-C24
+  - build/research/18_allocation/result.md::ALLOC-C29
+- op: node.create
+  uid: ALLOCATION.PRESENT.1
+  name: Rendering
+  intent: 'Server-rendered HTML is the default contract with the browser: the backend holds rendering and navigation, pages work as HTML and are enhanced with CSS and JavaScript, and a page or region becomes a client-rendered island only when it meets the criteria for one. Agents get their own adapter over the same core.'
+  parent: ALLOCATION.PRESENT
+  epistemic_state: 'known | unvalidated: the default is a judgment; positions are T3 and T4, neutral T1 guidance accepts it (L281)'
+  constraints:
+  - 'Authority: backend (HTML and navigation logic)'
+  - 'Copies: browser view state and islands'' client state'
+  - 'Forbidden: business rules in browser code'
+  - Pages work as HTML and are enhanced; a client-rendered island needs the island criteria.
+  - Business rules never live in browser code.
+  - Agents use their own adapter over the same core (RULES.4).
+  design_notes: |-
+    Positions: P1 server-rendered hypermedia (L252, L629, L630, L003); P2 client-rendered application over a JSON API (L252, L253); P3 hybrid server-first (L252, L255); P4 decide per page (L281).
+
+    Forces: latency and changeability against correctness (one source of logic).
+
+    Decision: server-rendered HTML is the default contract with the browser. The backend holds rendering and navigation; pages work as HTML and are enhanced with CSS and JavaScript (L629, L003, L281). A page or region becomes a client-rendered island when it meets L253's criteria. Agents get their own adapter over the same core (RULES.4). Grounds: one source of logic, LCP from server-visible content (L297), a small JavaScript budget (L016). Unchanged by MD-03: rendering is per backend.
+
+    Rejected: P2 as default: wins when most of the product meets L253's criteria (L254). P3: wins for transitional apps (L255) when the team commits to a JavaScript server. P4 is kept as the mechanism for islands.
+
+    Would move it: UI interdependence, offline use, update frequency, crawlability
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.PRESENT.1
+  - build/research/03_contract/result.md::API-C01
+  - build/research/04_presentation/result.md::UI-C01
+  - build/research/04_presentation/result.md::UI-C02
+  - build/research/04_presentation/result.md::UI-C03
+  - build/research/04_presentation/result.md::UI-C04
+  - build/research/04_presentation/result.md::UI-C28
+  - build/research/07_architecture_styles/result.md::ARCH-C26
+  - build/research/12_counter_voices/result.md::CV-C01
+  - build/research/12_counter_voices/result.md::CV-C02
+  - build/research/12_counter_voices/result.md::CV-C03
+  - build/research/12_counter_voices/result.md::CV-C04
+  - build/research/12_counter_voices/result.md::CV-C06
+  - build/research/13_web_principles/result.md::WEB-C02
+  - build/research/18_allocation/result.md::ALLOC-C34
+  - build/research/18_allocation/result.md::ALLOC-C35
+- op: node.create
+  uid: ALLOCATION.PRESENT.2
+  name: Formatting and Localization
+  intent: 'Storage is canonical (UTC timestamps with zone, plain numbers, codes), and the tier that renders the text formats it for the reader: the backend for the HTML, email and PDF it renders, the browser runtime for client-rendered islands. Collation belongs to the database under DERIVE.2, not to formatting.'
+  parent: ALLOCATION.PRESENT
+  epistemic_state: 'speculative: placement inferred from a capability source (L632) | gap: one position only'
+  constraints:
+  - 'Authority: the rendering tier (formatting), database (canonical values)'
+  - 'Copies: none'
+  - 'Forbidden: formatted or local-time values stored as data'
+  - Store canonical values only; never store formatted or local-time values as data.
+  - Format in the rendering tier, with the reader's locale and time zone.
+  - Internationalisation stays deferred.
+  design_notes: |-
+    Positions: P1 at the edge nearest the reader, storage canonical (L632); P2 database collation (inferred, open, L632). Skeleton gap 3: one grounded position.
+
+    Forces: correctness of stored data against user experience.
+
+    Decision: storage is canonical (UTC timestamps with zone, plain numbers, codes). The tier that renders the text formats it for the reader: the backend for the HTML, email and PDF it renders, with the reader's locale and time zone; the browser runtime (Intl) for client-rendered islands (L632).
+
+    Gap handling: no competing placement exists; L632 rests on a capability page. P2 is not a formatting placement: collation is owned by DERIVE.2 (the database, for any order it serves; F11), its choice open under DATA. Internationalisation stays deferred.
+
+    Changed (R1): collation handed to DERIVE.2 (F11).
+
+    Would move it: which tier renders the text
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.PRESENT.2
+  - build/research/18_allocation/result.md::ALLOC-C37
+- op: node.create
+  uid: ALLOCATION.PRESENT.3
+  name: UI and Ephemeral State
+  intent: 'Interaction state is placed by lifetime and sharing: ephemeral view state and form state in the browser until submitted, shareable view state in the URL, durable or shared state in the database; server state held in the browser is a stale-able cache, and presence is broadcast through a channel with a timeout and never written to tables.'
+  parent: ALLOCATION.PRESENT
+  epistemic_state: 'known | unvalidated: the four kinds are a synthesis (L070)'
+  constraints:
+  - 'Authority: by kind: browser, URL, database, channel'
+  - 'Copies: the browser''s server-state cache'
+  - 'Forbidden: presence in database tables; durable state held only in the browser'
+  - Ephemeral view state in the browser; form state in the browser until submitted; shareable view state in the URL.
+  - Durable or shared state in the database; server state held in the browser is a cache.
+  - Presence is broadcast through a channel with a timeout; never written to tables.
+  - Never hold durable state only in the browser.
+  design_notes: |-
+    Positions: P1 by lifetime and sharing (L631, L070, L292); P2 server state in the browser is a cache (L071, L291); P3 presence is ephemeral (L681); P4 local-first (L302).
+
+    Forces: latency against correctness.
+
+    Decision: P1, with P2 and P3 as its rules. Ephemeral view state in the browser; form state in the browser until submitted; shareable view state in the URL (L292); durable or shared state in the database; server state held in the browser is a stale-able cache (L071); presence is broadcast through a channel with a timeout and never written to tables (L681).
+
+    Rejected: P4: RECORD.1's condition.
+
+    Would move it: offline use; sharing between users or tabs
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.PRESENT.3
+  - build/research/04_presentation/result.md::UI-C12
+  - build/research/04_presentation/result.md::UI-C13
+  - build/research/04_presentation/result.md::UI-C14
+  - build/research/04_presentation/result.md::UI-C16
+  - build/research/12_counter_voices/result.md::CV-C08
+  - build/research/18_allocation/result.md::ALLOC-C36
+  - build/research/18_allocation/result.md::ALLOC-C38
+  - build/research/20_collaboration/result.md::C21
+  - build/research/20_collaboration/result.md::C22
+- op: node.set
+  uid: ROOT
+  intent: 'Stack-neutral principles for designing a web application as a whole: who does what across database, backend and browser is decided first, per responsibility, from stated forces, context and rules, and each tier then carries out the share it is given. By default the database is the authority for the truth of stored data and for everything that must hold whoever touches it, each backend is the authority for product policy not stored in the data, its users'' identity and its workflows, and browsers and agent clients are the authority for nothing durable. Interface descriptions stay in sync with the implementation by process, and one clause, read visibility of rows with per-user rules when several backends share the database, awaits the maintainer.'
+  design_notes: |-
+    Source: the J1 allocation judge records, final revision (47 nodes judged, 39 of them in this graph; the allocation placements number 26, 25 decided and 1 undecided).
+
+    Default context (maintainer decision MD-03): a classic website (documents, forms, CRUD), one team, single tenant, humans and agents as users, and a database that may be shared by several backends and by reporting, admin consoles and scripts. Under it the database is the authority for stored-data truth and for what must hold whoever touches the data: each business operation is one function call in its own transaction (which may call other domains' published functions), each state column has one writer function, per-user write rules decidable from the row and the actor are enforced there, and so are invariants and per-role privileges; audit records both the consumer's role and the actor it claims. Each backend is the authority for product policy not stored in the data, its users' identity and its workflows, which advance through state columns and the outbox. Foreign mutations run as atomic phases in a worker behind a 202 response, in the request only when the user must see the outcome within about 1 s and then with the intent recorded first by the database function. Browsers and agent clients decide nothing durable; no token travels in a URL except a short-lived signed file URL.
+
+    Maintainer decisions applied: MD-01 (row-level security is not a default; acceptable only for a simple data model, with the scoping key in every covered table and no all-powerful administrator role), MD-02 (interface documentation is always in sync, guaranteed by process; its origin, description or code, is chosen per project with criteria for each direction), MD-03 (the default context above).
+
+    Verdict against the maintainer doctrine: one, partial. ALLOCATION.GUARD.2 goes against the doctrine's "triggers and CHECK constraints optional": only declarative constraints bind every writer, owner-run migrations included, and procedural checks need serializable isolation or a lock.
+
+    Tensions between maintainer decisions and evidence, recorded and not overridden: (a) MD-01 against the research rows that call for row security when several consumers share the database (L619, L688), which MD-03 makes the default; (b) MD-03 against the research rows that keep one application as the owner of its database (L044) and put logic in the application first, testable in memory (L215, L042); (c) MD-01 with MD-03: per-user read filters implemented in each backend become copies across backends, against ALLOCATION.RULES.4 (L633).
+
+    Open question Q1 (ALLOCATION.GUARD.3): undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database. Recorded default: each backend filters from one shared specification with shared denial tests; fallback: database read functions that receive the verified actor, acceptable when a per-user read rule must hold for two or more backends (always the case under MD-03). Under either answer, roles that may SELECT the base tables see every row, comments included, unless their own role is restricted.
+
+    Skeleton gaps: ALLOCATION.FORCES.1 and .2 own no ledger row and are judged from the rows owned elsewhere that state their demand; ALLOCATION.DERIVE.2's backend-or-browser position is unargued and kept only as a browser copy; ALLOCATION.PRESENT.2 has one grounded position and is marked speculative.
+
+    Evidence gaps: the scalability premise (L615) has no primary source (FORCES.5 is speculative); thresholds for queue contention, notification load and the 1 s deferral are unmeasured; generators for persistence models, interface fields and function wrappers were not read; the collation choice is open under the data branch; the operating cost of a JavaScript server is unweighed; L684 cites no source; the role-to-actor pairing check is inferred and no source describes it.
+
+    Judge records: build/distill/03_judge/J1_allocation/records.md (ALLOCATION roll-up record).

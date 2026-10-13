@@ -1,0 +1,1179 @@
+operations:
+- op: node.create
+  uid: PIG-WEB-DATA
+  name: Postgres Data Tier
+  intent: 'Postgres is the system of record and holds everything that must hold whoever touches the data, because several backends and other consumers (reporting, consoles, scripts) share the database. It does this work in six ways: an organized schema, declared integrity and access, concurrency control, data maintenance over time, derived data kept in sync, and a function API reached through a pooler.'
+  parent: ROOT
+  epistemic_state: 'known | open child: MAINTAIN.2 (undecided: awaiting maintainer, question 1) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | gap: collation (ORGANIZE.3)'
+  design_notes: |-
+    Question: how Postgres realizes the database share of each placement.
+    Positions: none of its own (owns no row); roll-up of its six children.
+    Decision and grounds: roll-up. Postgres is the system of record and holds everything that must hold whoever touches the data (RECORD.1, MD-03). It does that work in six ways:
+      - organize: normalized tables, scope-leading composite keys for scoped rows and identity keys elsewhere, precise column types, names that carry role and type, bounded JSON validated against schemas held in the database, schemas as domain namespaces, and every index justified by a query (ORGANIZE);
+      - guard: every rule a declarative constraint can express is declared; one role per consumer with narrow grants and no DELETE; no row-level security by default (MD-01); triggers only for a closed list of atomic side records (GUARD);
+      - concurrency: Serializable with retry for every writing role, version checks on user-edited rows, transaction-scoped locks only, idempotent statements, commit-order-safe readers (CONCURRENCY);
+      - maintain: online-safe versioned migrations with a drift gate, deletion chosen per table (default awaiting maintainer, question 1), trigger-written append-only history, human-run bulk jobs under a checklist, point-in-time recovery proven by restore (MAINTAIN);
+      - derive: derived copies only with a sync plan and a drift guard, kept by a same-transaction trigger where any other writer exists; caches in classified, commented tables (DERIVE);
+      - interface: the function API with its conventions and its compatibility rule, reached through a pooler with per-role limits and timeouts (INTERFACE).
+    Rejected: none at this level.
+    Realizes: refines web-app-philosophy:DATA (skeleton link). Through its children: RECORD.1, RECORD.2, RECORD.3, GUARD.2, GUARD.3 (per-role layer), GUARD.5, GUARD.6, ACT.1, ACT.3, ACT.4, DERIVE.1, DERIVE.3, and the stack placements DB_API, TYPE_CHAIN, ROW_SECURITY, CACHE_STORE.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE
+  name: Schema Organization
+  intent: The schema in migrations is the origin of every stored fact and of the function API's contract, and persistence models are generated from the live catalogue. It is laid out as normalized tables, keys that state scope, the most precise column types, names that read without a dictionary, bounded JSON validated in the database, schemas as domain namespaces, and indexes that each serve a stated query.
+  parent: PIG-WEB-DATA
+  epistemic_state: 'known | gap: collation (ORGANIZE.3)'
+  design_notes: |-
+    Question: how tables, keys, column types, names, JSON documents, namespaces and indexes are laid out in Postgres.
+    Positions: none of its own; roll-up of ORGANIZE.1 to .7.
+    Decision and grounds: roll-up. The schema in migrations is the origin of every stored fact and of the function API's contract (TYPE_CHAIN, RECORD.3); persistence models and function wrappers are generated from the live catalogue, so every organizing choice below is also a choice of what the backends' types say. The schema follows J2's "each fact once": normalized tables, repeating groups removed (ORGANIZE.1); keys that state scope (ORGANIZE.2); the most precise column type (ORGANIZE.3); names that read without a dictionary (ORGANIZE.4); JSON only where no relational shape exists, validated in the database (ORGANIZE.5); schemas as domain and access namespaces (ORGANIZE.6); indexes each serving a stated query (ORGANIZE.7).
+    Rejected: none at this level.
+    Realizes: PIG-WEB-ALLOCATION.TYPE_CHAIN (supplies the schema the type chain starts from: stored facts originate here). Refines web-app-philosophy:DATA.ORGANIZE.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE
+- op: node.create
+  uid: PIG-WEB-DATA.GUARD
+  name: Declared Integrity
+  intent: Every rule a declarative constraint can express is declared and named, because only what is bound to the table holds for every writer. Each consumer has its own login role with narrow grants and no DELETE, row-level security is not a default, the acting user travels as a transaction-local claim that writer functions check, and triggers do only a closed list of atomic side work.
+  parent: PIG-WEB-DATA
+  epistemic_state: 'known | conflict: against L471 (inherited from J1), L493 (GUARD.1) and L529 (GUARD.4) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database'
+  design_notes: |-
+    Question: how Postgres declares integrity and access: constraints, roles, row policies and triggers.
+    Positions: none of its own; roll-up of GUARD.1 to .4.
+    Decision and grounds: roll-up. Every rule a declarative constraint can express is declared and named (GUARD.1); each consumer has its own login role in narrow group roles, no consumer holds DELETE or owns objects, functions that need rights the caller lacks are owned by narrow non-login roles, not by the owner role, and state columns are revoked from direct update (GUARD.2); row-level security is not a default (MD-01) and the acting user reaches the database only as a transaction-local claim that writer functions and audit triggers check (GUARD.3); triggers do a closed list of atomic side work and never business transitions (GUARD.4).
+    Awaiting maintainer (X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. In this tier: each backend filters these reads from one shared written specification, with a shared denial-test suite every backend runs; database read functions that receive the verified actor are acceptable when a per-user read rule must hold for two or more backends, and where B's condition holds, read functions join INTERFACE.1 and read GUARD.3's context. Consequence: roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted. The database's part otherwise is the per-role grants of GUARD.2.
+    Realizes: refines web-app-philosophy:DATA.GUARD; through its children ALLOCATION.GUARD.2, GUARD.3 (per-role layer), ACT.1, ACT.4, ROW_SECURITY.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.GUARD
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C39
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C09
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C17
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY
+  name: Concurrency Mechanics
+  intent: Every writing role runs Serializable with a whole-transaction retry owned by the caller, and user-edited rows also carry a version checked inside the writer function. Explicit locks are transaction-scoped and serve contention, queues and what Serializable cannot reach; inseparable changes are one statement, sequences are treated as gappy, and facts are written before the state label.
+  parent: PIG-WEB-DATA
+  epistemic_state: known
+  design_notes: |-
+    Question: how Postgres isolation, locks, atomic statements and sequences keep concurrent change correct.
+    Positions: none of its own; roll-up of CONCURRENCY.1 to .6.
+    Decision and grounds: roll-up. Every writing role runs Serializable with whole-transaction retry by the caller; user-edited rows also carry a version checked inside the writer function (CONCURRENCY.1, .2). Explicit locks are transaction-scoped and serve contention, queues and the cases Serializable does not cover (CONCURRENCY.3). Inseparable changes are one statement and re-runnable work is idempotent by form (CONCURRENCY.4). Sequences are gappy and do not follow commit order, so readers in commit order use a transaction horizon (CONCURRENCY.5). Multi-place facts are written facts first, label last (CONCURRENCY.6).
+    Realizes: web-app-philosophy:ALLOCATION.GUARD.5 (concurrency control the placement gives the database); refines web-app-philosophy:DATA.GUARD.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN
+  name: Data Maintenance
+  intent: Structure changes only through small, re-runnable, online-safe versioned migrations with a CI drift gate, and every change leaves trigger-written append-only history. Deletion is chosen per table from the reason the data is kept (the default for user-facing transactional data awaits the maintainer), large data changes are human-run batched jobs, and recovery to a moment is proven by rehearsed restores.
+  parent: PIG-WEB-DATA
+  epistemic_state: 'known | open child: MAINTAIN.2 (undecided: awaiting maintainer, question 1) | gap: personal-data erasure and high availability deferred'
+  design_notes: |-
+    Question: how Postgres schema and data are changed, retired, recorded and recovered over time.
+    Positions: none of its own; roll-up of MAINTAIN.1 to .5 (.6 and .7 deferred).
+    Decision and grounds: roll-up. Structure changes only through small, re-runnable, online-safe versioned migrations, with incompatible changes as expand, migrate, contract and a CI gate against drift (MAINTAIN.1). Deletion is chosen per table from the reason the data is kept; the default for user-facing transactional data awaits the maintainer (MAINTAIN.2, question 1; recommendation: archive by default). Every change leaves trigger-written, append-only history naming the consumer role and the claimed actor (MAINTAIN.3). Large data changes are human-run, batched, idempotent jobs with a convergence query (MAINTAIN.4). Recovery to a moment is possible and proven by rehearsed restores (MAINTAIN.5).
+    Realizes: refines web-app-philosophy:DATA.MAINTAIN; through its children ALLOCATION.RECORD.3, ACT.3, ACT.4.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN
+- op: node.create
+  uid: PIG-WEB-DATA.DERIVE
+  name: Derived Data in Postgres
+  intent: 'Postgres stores the minimum and derives the rest: a stored derived value is a copy chosen in the order generated column, same-transaction trigger, then cache table with stated staleness. Every copy has a sync plan in its table comment and a drift guard, and caches are classified, invalidated through a queue written in the source transaction, and never soft-deleted.'
+  parent: PIG-WEB-DATA
+  epistemic_state: known
+  design_notes: |-
+    Question: how Postgres holds derived values and caches and keeps them in sync with their sources.
+    Positions: none of its own; roll-up of DERIVE.1 and .2 (.3 deferred).
+    Decision and grounds: roll-up. Store the minimum and derive the rest (J2, L488). A stored derived value is a copy chosen in DERIVE.1's order (J1): generated column; same-transaction trigger (the writer function only when the source table admits no other writer); cache table with a stated staleness. Every copy has the sync plan of L469 in its table comment and the drift guard of L533, except generated columns, which cannot diverge (DERIVE.1). Caches are tables classified by recomputability, invalidated through a queue written in the source transaction, never served from process memory or soft-deleted (DERIVE.2).
+    Realizes: refines web-app-philosophy:DATA.DERIVE; ALLOCATION.DERIVE.1, DERIVE.3, PIG-WEB-ALLOCATION.CACHE_STORE through its children.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.DERIVE
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C54
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C27
+- op: node.create
+  uid: PIG-WEB-DATA.INTERFACE
+  name: Database Interface
+  intent: The database offers a function API in its own schema, with one business operation per call in its own transaction, evolved by expand, migrate, contract under a catalogue gate, and with views kept off the contract. Consumers reach it through a transaction-mode pooler with per-role isolation, timeouts and connection limits.
+  parent: PIG-WEB-DATA
+  epistemic_state: 'known: MD-03 | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | gap: no philosophy counterpart'
+  design_notes: |-
+    Question: how the database offers itself to its consumers: functions, views and connections.
+    Positions: none of its own; roll-up of INTERFACE.1 and .2.
+    Decision and grounds: roll-up. The database offers a function API in its own schema, one call per business operation in its own transaction, evolved by expand, migrate, contract under a catalogue gate, with views kept off the contract (INTERFACE.1). Consumers reach it through a pooler in transaction mode, with role-level settings for isolation and timeouts and a connection limit per consumer role (INTERFACE.2).
+    Awaiting maintainer (B1, X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. Where B's condition holds, read functions join INTERFACE.1 and read GUARD.3's context.
+    Realizes: PIG-WEB-ALLOCATION.DB_API; ALLOCATION.RECORD.2. Gap (J2's gap 1): no philosophy node holds the database interface; J2 proposed `DATA.INTERFACE` to the skeleton owner; until then this node has no same-branch refines link.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.INTERFACE
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.1
+  name: Tables and Normalization
+  intent: Repeating groups become child tables with a foreign key, vertical splits of wide tables are a measured physical choice, and subtype tables share the parent's key. An array column is allowed only for a bounded, read-heavy set that references nothing, with its rules bound to the column, because no foreign key reaches inside an array.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known | unvalidated: binding the array check to the column is my reading of L489 under MD-03'
+  constraints:
+  - Repeating groups are always a child table (L169).
+  - A vertical split of a wide table is a physical choice, made when a measured access pattern needs it, with the same key in each part and a one-to-one foreign key from each part to the main row (L489; the foreign key is inferred from J2's "each fact once"). The integrity and security reasons for splitting one-to-one attributes stay those of L470 (J2).
+  - Type-specific tables (subtypes) share the parent's key, which is both their primary key and a foreign key to the parent (L489).
+  - 'An array column is allowed only for a bounded, read-heavy set of values that reference nothing; its bound and element rules are declared, as a CHECK over an immutable function where the rule is row-local (L174, L494), or the write-time trigger of GUARD.4 where it is not. "Validated by a function" (L489) is met by binding that function to the column, not by asking every writer to call it (inferred; same ground as J1 GUARD.2: only what is bound to the table holds for every writer under MD-03).'
+  design_notes: |-
+    Question: how repeating groups, wide tables and arrays are handled in table design.
+    Positions:
+      - P1 repeating groups (Class1, Class2, Class3) move to a child table with a foreign key (L169; SRC-291, single source, no dissent).
+      - P2 split very wide tables vertically only when needed, by access pattern, the same key in each part; type-specific tables share a common key set; arrays only for bounded, read-heavy sets validated by a function, never for unbounded sets or where references need integrity (L489 MAINT).
+      - Inherited: third normal form by default and Boyce-Codd, fourth and fifth normal form where they apply, a dependency lost by a Boyce-Codd decomposition being enforced by a constraint trigger (J2, DATA.ORGANIZE, L037, L469); one-to-one attributes as nullable columns, split only for L470's reasons (J2).
+    Forces: P1 serves integrity (one fact per row, a declared reference per member). P2 serves read and write performance of wide rows (vertical split) and query convenience (arrays) at the cost of a constraint the database cannot declare: no foreign key reaches inside an array.
+    Decision and grounds: P1 and P2, with the array rule bound to the database.
+      - Repeating groups are always a child table (L169).
+      - A vertical split of a wide table is a physical choice, made when a measured access pattern needs it, with the same key in each part and a one-to-one foreign key from each part to the main row (L489; the foreign key is inferred from J2's "each fact once"). The integrity and security reasons for splitting one-to-one attributes stay those of L470 (J2).
+      - Type-specific tables (subtypes) share the parent's key, which is both their primary key and a foreign key to the parent (L489).
+      - An array column is allowed only for a bounded, read-heavy set of values that reference nothing; its bound and element rules are declared, as a CHECK over an immutable function where the rule is row-local (L174, L494), or the write-time trigger of GUARD.4 where it is not. "Validated by a function" (L489) is met by binding that function to the column, not by asking every writer to call it (inferred; same ground as J1 GUARD.2: only what is bound to the table holds for every writer under MD-03).
+    Rejected: arrays for unbounded sets or members that reference rows: never (L489; a member cannot carry a foreign key). A vertical split without a measured access need: rejected; acceptable when L470's reasons apply instead.
+    Realizes: J2 DATA.ORGANIZE; TYPE_CHAIN through the parent.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.1
+  - build/research/14_thin_spots/result.md::THIN-C32
+  - build/research/14_thin_spots/result.md::THIN-C36
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C71
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C72
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C10
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.2
+  name: Keys
+  intent: Every table has an identity primary key, composite and led by the scope column where rows are scoped to a parent, so a child can never reference a row in another scope. Keys are 8-byte identity columns unless the table's size is bounded by design, and a UUID needs a stated reason and is then UUIDv7, because a key that overflows is repaired by rewriting the table at its largest.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known | conflict: partly against L503 (MAINT) on default key width | unvalidated: cross-scope reference integrity and client identifiers as a UUID reason are inferred; UUIDv7 locality rests on T4 benchmarks'
+  constraints:
+  - Every table has a primary key (L170).
+  - 'Shape (L499 to L501, MAINT, max): a row scoped to a parent that most queries filter by gets a composite key led by the scope column, down to the most selective scope level and at most about four columns, with a surrogate below that (L500). Foreign keys to it carry every key column in order (L500), which also makes a cross-scope reference impossible: a child and the row it references share the scope by construction (inferred; the integrity gain L501 does not list). Top-level entities get a single surrogate key.'
+  - 'Soft deletion is not a criterion of key shape: the doctrine''s own architecture note makes them independent and partial indexes work with any key (doctrine-internal tension 1 in the doctrine research result, `build/research/15_maintainer_doctrine/result.md`); only the scope question decides.'
+  - 'Type: identity columns, never serial; no auto-number for natural or composite keys (L502).'
+  - 'Width (partly against L503): 8-byte identity by default; a 4-byte key only for a table whose cardinality is bounded by design (lookup, status and type tables, configuration), not by a forecast. Types identical on both sides of every relationship (L503). Ground (corrected after review, m1): an overflowing key refuses writes, which is a loss of availability and changeability, not of integrity, since no stored fact becomes wrong. The verdict rests on J1''s tie-break, "the force whose loss is hardest to repair later wins": the narrow width''s failure is repaired by a rewrite of the table and of every referencing column at the moment the table is largest (L197), while the wide width costs 4 bytes per key column in rows and indexes, paid gradually and never needing a repair.'
+  - 'UUIDs: only for L504''s reasons. When one is used it is UUIDv7, never UUIDv4 for a key (L179: index locality; SRC-325 is T4, so the locality claim is to be tested on the workload). Client-supplied identifiers for idempotent creates (GUARD.6, L655) are one such reason (integration, inferred). A UUIDv7''s timestamp is never the creation time (L178, ORGANIZE.3). A deterministic UUID in a stored generated column serves a public identifier over a composite natural key (L504).'
+  design_notes: |-
+    Question: which primary-key shape and type each table gets.
+    Positions:
+      - P1 every table has a primary key (L170, consensus).
+      - P2 the key type is a recorded decision among bigint identity, UUIDv7 and UUIDv4 (L179, contested; identity compact but guessable and tied to one database; UUIDv7 time-ordered and non-enumerable; UUIDv4 poor locality, T4 benchmarks).
+      - P3 shape by two questions: is the row scoped to a parent that most queries filter by, and does the table use soft deletion; scoped tables get a composite key led by the scope column (L499 MAINT); at most about four columns, foreign keys reference every column in order, row-value comparison in joins (L500 MAINT); costs and benefits stated (L501 MAINT).
+      - P4 identity columns, not serial; no auto-number where a natural key exists or the key is composite (L502 MAINT; agrees L177).
+      - P5 integer width by expected cardinality: 4 bytes under about two billion rows, 8 bytes for very large tables or keys referenced by large tables; identical types on both sides of every relationship (L503 MAINT), against the research recommendation of bigint by default (recorded in L503's positions).
+      - P6 UUID keys only for a stated technical reason (global uniqueness, external integration, sequence contention); a deterministic UUID in a stored generated column when a public identifier must follow a composite natural key (L504 MAINT).
+    Forces: integrity (a key states identity and, when composite, scope) against index width and query discipline (L501). P5's 4-byte default saves 4 bytes per key column in rows and indexes and costs a hard write failure at overflow, repaired by a table rewrite of the table and of every referencing column (L197, L503's own same-type rule) at the moment the table is largest.
+    Decision and grounds:
+      - Every table has a primary key (L170).
+      - Shape (L499 to L501, MAINT, max): a row scoped to a parent that most queries filter by gets a composite key led by the scope column, down to the most selective scope level and at most about four columns, with a surrogate below that (L500). Foreign keys to it carry every key column in order (L500), which also makes a cross-scope reference impossible: a child and the row it references share the scope by construction (inferred; the integrity gain L501 does not list). Top-level entities get a single surrogate key.
+      - Soft deletion is not a criterion of key shape: the doctrine's own architecture note makes them independent and partial indexes work with any key (doctrine-internal tension 1 in the doctrine research result, `build/research/15_maintainer_doctrine/result.md`); only the scope question decides.
+      - Type: identity columns, never serial; no auto-number for natural or composite keys (L502).
+      - Width (partly against L503): 8-byte identity by default; a 4-byte key only for a table whose cardinality is bounded by design (lookup, status and type tables, configuration), not by a forecast. Types identical on both sides of every relationship (L503). Ground (corrected after review, m1): an overflowing key refuses writes, which is a loss of availability and changeability, not of integrity, since no stored fact becomes wrong. The verdict rests on J1's tie-break, "the force whose loss is hardest to repair later wins": the narrow width's failure is repaired by a rewrite of the table and of every referencing column at the moment the table is largest (L197), while the wide width costs 4 bytes per key column in rows and indexes, paid gradually and never needing a repair.
+      - UUIDs: only for L504's reasons. When one is used it is UUIDv7, never UUIDv4 for a key (L179: index locality; SRC-325 is T4, so the locality claim is to be tested on the workload). Client-supplied identifiers for idempotent creates (GUARD.6, L655) are one such reason (integration, inferred). A UUIDv7's timestamp is never the creation time (L178, ORGANIZE.3). A deterministic UUID in a stored generated column serves a public identifier over a composite natural key (L504).
+      - Whether an internal key may appear outside the system (URLs, agent payloads) is the interface's decision (J7, the boundary L179 names); this node only guarantees that a non-enumerable alternate key can be added as a unique UUIDv7 or generated column.
+    Rejected:
+      - L503's 4-byte default by forecast: rejected; acceptable when the table's cardinality is bounded by design.
+      - UUIDv4 as a key: rejected (L179, L504); acceptable never as a primary key; as a random token column it is outside this node.
+      - Soft deletion as a key-shape criterion (L499's second question): rejected, doctrine-internal tension 1.
+      - Single surrogate keys for scoped rows: rejected; acceptable when no query family filters by the parent and no cross-scope reference must be prevented.
+    Realizes: J2 DATA.ORGANIZE; TYPE_CHAIN; supports GUARD.6 (client identifiers). MD-01's composite-key condition for row security is met by this shape where a scope exists, without implying row security.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.2
+  - build/research/01_data_tier/result.md::DATA-C08
+  - build/research/01_data_tier/result.md::DATA-C14
+  - build/research/01_data_tier/result.md::DATA-C16
+  - build/research/01_data_tier/result.md::DATA-C15
+  - build/research/01_data_tier/result.md::DATA-C33
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C01
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C02
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C03
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C04
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C05
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C06
+  - build/research/19_agent_users/result.md::AGENT-C30
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.3
+  name: Column Types
+  intent: 'Column types are chosen for precision so the structure itself refuses wrong values: timestamptz for time, text with CHECK, numeric for quantities, lookup tables for enumerations, positive NOT NULL booleans, and created_at on every table with updated_at on those whose rows change. Values are stored canonical and formatted only where rendered; the collation choice is left open because no evidence grounds it.'
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known | conflict: partly against L498 (MAINT): no updated_at on append-only tables | gap: collation has no row; left open with its requirements | unvalidated: that updated_at states nothing on append-only tables is inferred'
+  constraints:
+  - 'time: timestamptz everywhere; event times named for the event (`*_at`, ORGANIZE.4) and ordered by CHECK (L498); a UUIDv7 never stands for creation time (L178);'
+  - 'text: `text` with a CHECK for any length limit; never char(n) or a length-limited varchar (L177, L494);'
+  - 'money and quantities: numeric with declared precision; never `money` (L177);'
+  - 'enumerations: a lookup table referenced by foreign key; CHECK IN only for short sets that are stable by definition (L497);'
+  - 'booleans: NOT NULL, a default, a positive name (L497, L506);'
+  - '`created_at` on every table, append-only tables included, where it is the record time; `updated_at` on every table whose rows are updated, written by the trigger of GUARD.4 (L498). Partial departure from L498 (recorded after review, m4): append-only tables (history, archive and queue rows) carry no `updated_at`, since their rows are never updated and the column would state nothing (inferred). Only `updated_at` departs; the record-time name stays `created_at`.'
+  - 'Canonical storage: values are stored canonical (UTC instants, plain numbers, codes); formatting happens where the text is rendered (PRESENT.2, L632).'
+  design_notes: |-
+    Question: which column types are used for time, text, numbers, enumerations and flags.
+    Positions:
+      - P1 timestamptz, text with CHECK for limits, numeric (not money), identity columns, over timestamp without time zone, char(n), money and serial (L177, consensus).
+      - P2 a UUIDv7 timestamp is not the creation time; keep an explicit timestamptz (L178).
+      - P3 lookup table with a foreign key over a native enum; CHECK with an IN list only for short stable sets; booleans NOT NULL with a default, positively phrased (L497 MAINT).
+      - P4 every table carries created_at and updated_at as timestamptz NOT NULL default now(); event times named for the event; ordering between timestamps is a CHECK; no timestamp without time zone (L498 MAINT).
+      - Native enum types: named by L497 as the alternative it rejects; no row defends them.
+    Forces: all serve integrity through precision (L485, J2). P3 trades a join for metadata and change without a type migration; native enums are compact but change only by type migration.
+    Decision and grounds: P1 to P4 adopted (MAINT and research agree; max):
+      - time: timestamptz everywhere; event times named for the event (`*_at`, ORGANIZE.4) and ordered by CHECK (L498); a UUIDv7 never stands for creation time (L178);
+      - text: `text` with a CHECK for any length limit; never char(n) or a length-limited varchar (L177, L494);
+      - money and quantities: numeric with declared precision; never `money` (L177);
+      - enumerations: a lookup table referenced by foreign key; CHECK IN only for short sets that are stable by definition (L497);
+      - booleans: NOT NULL, a default, a positive name (L497, L506);
+      - `created_at` on every table, append-only tables included, where it is the record time; `updated_at` on every table whose rows are updated, written by the trigger of GUARD.4 (L498). Partial departure from L498 (recorded after review, m4): append-only tables (history, archive and queue rows) carry no `updated_at`, since their rows are never updated and the column would state nothing (inferred). Only `updated_at` departs; the record-time name stays `created_at`.
+      - Canonical storage: values are stored canonical (UTC instants, plain numbers, codes); formatting happens where the text is rendered (PRESENT.2, L632).
+    Rejected: L498's `updated_at` on append-only tables: rejected; acceptable when a table described as append-only in fact receives updates, which makes it an ordinary table. timestamp without time zone, char(n), money, serial: never (L177). Native enums: rejected; acceptable when the set is fixed by definition and carries no metadata, and then a CHECK IN serves the same purpose without a type (L497). A UUIDv7 as creation time: never (L178).
+    Realizes: J2 DATA.ORGANIZE and DATA.GUARD (precise structure, L485); ALLOCATION.PRESENT.2 (canonical storage); ALLOCATION.DERIVE.2 (collation, open).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.3
+  - build/research/01_data_tier/result.md::DATA-C14
+  - build/research/01_data_tier/result.md::DATA-C16
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C10
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C12
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C16
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C14
+  - build/research/18_allocation/result.md::ALLOC-C37
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.4
+  name: Naming
+  intent: Identifiers are lower-case snake_case, schema-qualified in production code, and carry role and type in the name (entity_id, _at, is_/has_/can_, named constraints), with no bare id or status in new tables. Conventions evolve forward only, so a name that reads without a dictionary stays stable and violations map to stable errors.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: known
+  constraints:
+  - Schema qualification in every production reference also closes the search-path attack of L181 for functions that run with their owner's rights (GUARD.2).
+  - Constraint names spelling source and target are what lets a violation map to a stable error (L495, GUARD.1).
+  - The deprecated-column suffix is the expand phase of MAINTAIN.1; removal is its contract phase (L192).
+  - 'Conventions evolve forward only: new objects follow the rule, legacy names change only through expand, migrate, contract (L474, J2 DATA.MAINTAIN).'
+  design_notes: |-
+    Question: how identifiers are named so that role and type read from the name.
+    Positions: P1 identifier hygiene: lower-case snake_case, plural table names, no type prefixes, at most 63 bytes (silent truncation), every reference schema-qualified in production code (L505 MAINT; agrees L181). P2 names carry role and type: `<entity>_id`, `_at`, `is_/has_/can_`, `_ids`, `statuses`/`types`, `_to_` for link tables, constraint names spelling source and target, deprecated columns suffixed and removed later (L506 MAINT). P3 join-safe names in new tables: no bare `id`, `status`, `name`, `type`; key named for its entity, other columns share a short table prefix; audit columns unprefixed; legacy tables not renamed (L507 MAINT). No competing row.
+    Forces: integrity of reading (no ambiguous join column, no silently truncated name, no search-path capture) and changeability (forward-only evolution) against brevity.
+    Decision and grounds: P1 to P3 adopted whole (MAINT, uncontested, max).
+      - Schema qualification in every production reference also closes the search-path attack of L181 for functions that run with their owner's rights (GUARD.2).
+      - Constraint names spelling source and target are what lets a violation map to a stable error (L495, GUARD.1).
+      - The deprecated-column suffix is the expand phase of MAINTAIN.1; removal is its contract phase (L192).
+      - Conventions evolve forward only: new objects follow the rule, legacy names change only through expand, migrate, contract (L474, J2 DATA.MAINTAIN).
+    Rejected: bare `id` and other ambiguous names in new tables: never (L507). Bulk renaming of legacy tables: rejected (L474); acceptable only through expand, migrate, contract.
+    Realizes: TYPE_CHAIN (generated models inherit these names); J2 DATA.MAINTAIN (forward-only conventions).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.4
+  - build/research/01_data_tier/result.md::DATA-C19
+  - build/research/01_data_tier/result.md::DATA-C35
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C74
+  - build/research/17_data_contracts/result.md::DCON-C23
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C13
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C14
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C15
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.5
+  name: JSON Documents
+  intent: JSON is stored as JSONB, only where no relational shape exists (an indivisible object, a flexible periphery on a normalized core), never for core entities or queried fields. Every stored document is validated on write by a trigger against schemas held in a registry table, so validation holds for every writer, and a breaking schema change adds a new named version beside the old.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known | unvalidated: binding validation by trigger extends L509 from L511 | gap: validator mechanism not read'
+  constraints:
+  - 'Use: L508''s list and L531''s cases (an indivisible object; a normalized core with a flexible periphery). Anything that drives logic, filtering or joins is a column (L508, L531).'
+  - 'Validation: every stored JSON document is validated on write by a trigger that calls the registry''s validate function; function inputs and outputs that carry JSON validate through the same function. A CHECK cannot do it because the validator reads the registry and is not immutable (L174). This resolves doctrine-internal tension 4 (a direct write can bypass function-level validation) toward enforcement at the table, as J1 did for GUARD.2.'
+  - 'Registry: source form, composition by reference, expanded forms regenerated (L510).'
+  - 'Evolution: a relaxing change in place; a breaking change as a new named version beside the old one, the old one retired after its documents are migrated (L512; the same expand, migrate, contract as MAINTAIN.1). A breaking change to a stored document schema migrates the stored documents in the same release, so no table holds mixed versions (L511).'
+  design_notes: |-
+    Question: when JSON documents are stored and how their schemas are held and evolved.
+    Positions:
+      - P1 JSONB, never json, for semi-structured metadata, configuration, cached aggregates, external payloads and event data; not for core entities or often-queried fields; at most three levels; no binary; bounded size (L508 MAINT).
+      - P2 documents crossing a boundary are validated against schemas held in a registry table, through one validate function every code path calls; schemas compose by reference (L509 MAINT).
+      - P3 registry rows hold source form; expanded forms are derived artifacts (L510 MAINT).
+      - P4 per-scope schemas layer on a base contract and are enforced by a write-time trigger; changing one is a data migration done with the schema; versioning planned (L511 MAINT).
+      - P5 relax in place; a breaking change adds a new named version and soft-deletes the old one (L512 MAINT).
+      - Related: L531 (indivisible object and flexible periphery as legitimate JSON uses).
+    Forces: integrity of documents the relational schema cannot describe, against flexibility of semi-structured data. Validation that "every code path calls" (P2) holds only for writers that call it; a trigger (P4) holds for every writer.
+    Decision and grounds: P1 to P5 adopted (MAINT, max), with validation bound to the table.
+      - Use: L508's list and L531's cases (an indivisible object; a normalized core with a flexible periphery). Anything that drives logic, filtering or joins is a column (L508, L531).
+      - Validation: every stored JSON document is validated on write by a trigger that calls the registry's validate function; function inputs and outputs that carry JSON validate through the same function. A CHECK cannot do it because the validator reads the registry and is not immutable (L174). This resolves doctrine-internal tension 4 (a direct write can bypass function-level validation) toward enforcement at the table, as J1 did for GUARD.2.
+      - Registry: source form, composition by reference, expanded forms regenerated (L510).
+      - Evolution: a relaxing change in place; a breaking change as a new named version beside the old one, the old one retired after its documents are migrated (L512; the same expand, migrate, contract as MAINTAIN.1). A breaking change to a stored document schema migrates the stored documents in the same release, so no table holds mixed versions (L511).
+      - The validator's implementation (extension or SQL) was not read: open.
+    Rejected: json (text) type: never (L508). JSON for core entities or queried fields: never. Validation only by convention in callers: rejected under MD-03; acceptable when a single writer path exists and the document never crosses a boundary (inferred).
+    Realizes: J2 DATA.GUARD (precise structure); TYPE_CHAIN (document schemas are stored facts of the contract).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.5
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C34
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C35
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C36
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C37
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C38
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C25
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.6
+  name: Schemas and Tenancy
+  intent: Schemas are business-domain namespaces with nothing in the shared public schema; the function API schema is the one technical namespace, justified by the permissions it carries. The default is a single tenant, so no tenancy mechanism is built; a multi-tenant project records its choice, with the tenant key leading every composite key and row-level security only under its three conditions.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known: MD-01 | unvalidated: multi-tenant criteria beyond L128 are inferred (light scope)'
+  constraints:
+  - Schemas are domain namespaces (L513, MAINT, max); no application object in `public`, and CREATE on `public` revoked (L180, L181).
+  - 'The function API''s dedicated schema (DB_API) is a legitimate schema under L513''s "access need" criterion: it is the object that consumer roles receive USAGE and EXECUTE on (GUARD.2). It is the one technical namespace, and it is justified by permissions, not by layering (inferred; no conflict with L513).'
+  - 'Tenancy: the default context is single tenant (J1), so no tenancy mechanism is built. When a project is multi-tenant, the choice is recorded per L128: separate databases where tenants are few and contractual or regulatory isolation is required; otherwise shared tables with the tenant key leading every composite key (ORGANIZE.2), so no row can reference another tenant''s row. Row-level security only under MD-01''s three conditions, with application checks kept and denial tested through the deployed role (L128, MD-01).'
+  design_notes: |-
+    Question: how schemas group objects and how tenants are isolated.
+    Positions:
+      - P1 tenant isolation is a recorded decision among separate databases, separate schemas, or shared tables with row-level security; with row security, keep application checks and test denial through the deployed role (L128, majority).
+      - P2 schemas are namespaces by owner or purpose; nothing in the shared `public` schema (L180, inferred).
+      - P3 schemas are business-domain namespaces, never technical layers; a new schema needs a distinct domain, an access need, team ownership or name isolation (L513 MAINT).
+    Forces: integrity and security of isolation against operating cost; namespace clarity.
+    Decision and grounds:
+      - Schemas are domain namespaces (L513, MAINT, max); no application object in `public`, and CREATE on `public` revoked (L180, L181).
+      - The function API's dedicated schema (DB_API) is a legitimate schema under L513's "access need" criterion: it is the object that consumer roles receive USAGE and EXECUTE on (GUARD.2). It is the one technical namespace, and it is justified by permissions, not by layering (inferred; no conflict with L513).
+      - Tenancy: the default context is single tenant (J1), so no tenancy mechanism is built. When a project is multi-tenant, the choice is recorded per L128: separate databases where tenants are few and contractual or regulatory isolation is required; otherwise shared tables with the tenant key leading every composite key (ORGANIZE.2), so no row can reference another tenant's row. Row-level security only under MD-01's three conditions, with application checks kept and denial tested through the deployed role (L128, MD-01).
+    Rejected: schemas as technical layers (one for views, one for tables): rejected (L513), except the function API schema above. Shared tables with row security by default for tenancy: rejected (MD-01).
+    Realizes: PIG-WEB-ALLOCATION.DB_API (the API schema); PIG-WEB-ALLOCATION.ROW_SECURITY (tenancy without row security by default). Multi-tenancy is in light scope (skeleton).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.6
+  - build/research/05_identity_security/result.md::SEC-C43
+  - build/research/01_data_tier/result.md::DATA-C18
+  - build/research/01_data_tier/result.md::DATA-C19
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C68
+- op: node.create
+  uid: PIG-WEB-DATA.ORGANIZE.7
+  name: Indexes
+  intent: Every foreign-key column leads some index, and every other index names the query pattern it serves in its comment or migration. Indexes on live tables are built concurrently, and predicates that writer functions filter by are indexed so Serializable keeps predicate locks narrow.
+  parent: PIG-WEB-DATA.ORGANIZE
+  epistemic_state: 'known | unvalidated: the predicate-lock reason is my link of L574 to L490'
+  constraints:
+  - Every foreign-key column (or column list, for composite keys) is the leading part of some index; an existing index whose leading columns are the foreign key covers it (inferred).
+  - Every other index names the query pattern it serves, in its comment or migration (L490); unique, partial unique and exclusion constraints count as integrity indexes (GUARD.1).
+  - Under Serializable (CONCURRENCY.1) an index on every predicate a writer function filters by also keeps predicate locks narrow, since sequential scans take relation-level predicate locks (L574).
+  - Indexes on live tables are built concurrently (L196, MAINTAIN.1).
+  design_notes: |-
+    Question: which indexes exist and what justifies each.
+    Positions: P1 index referencing columns explicitly; Postgres does not index foreign keys (L173, consensus). P2 index rules: foreign keys; partial indexes over active rows; block-range indexes for large, append-only, time-correlated tables; GIN only with its write cost in mind; equality columns first, then range, then sort; every index serves a query pattern (L490 MAINT; agrees L173, L175).
+    Forces: read performance and the speed of foreign-key checks on parent deletes and updates, against write cost and storage.
+    Decision and grounds: P1 and P2 adopted (max; MAINT and research agree).
+      - Every foreign-key column (or column list, for composite keys) is the leading part of some index; an existing index whose leading columns are the foreign key covers it (inferred).
+      - Every other index names the query pattern it serves, in its comment or migration (L490); unique, partial unique and exclusion constraints count as integrity indexes (GUARD.1).
+      - Under Serializable (CONCURRENCY.1) an index on every predicate a writer function filters by also keeps predicate locks narrow, since sequential scans take relation-level predicate locks (L574).
+      - Indexes on live tables are built concurrently (L196, MAINTAIN.1).
+    Rejected: indexes without a stated query: rejected (L490); acceptable never in production schemas.
+    Realizes: ALLOCATION.DERIVE.2 (the database reduces rows set-based, which needs these indexes); CONCURRENCY.2.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.ORGANIZE.7
+  - build/research/01_data_tier/result.md::DATA-C11
+  - build/research/01_data_tier/result.md::DATA-C13
+  - build/research/01_data_tier/result.md::DATA-C32
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C73
+  - build/research/16_consistency_ordering/result.md::CONS-C06
+- op: node.create
+  uid: PIG-WEB-DATA.GUARD.1
+  name: Constraints
+  intent: Every rule that a key, NOT NULL, CHECK, foreign key, unique or exclusion constraint, or domain can express is declared and named in Postgres, required whatever the backends also check. Foreign keys are strict (NO ACTION by default, CASCADE only for components meaningless without their parent), cross-row rules end in a constraint trigger under Serializable, and a hierarchy's parent link stays a declared foreign key.
+  parent: PIG-WEB-DATA.GUARD
+  epistemic_state: 'known | conflict: partly against L493 (MAINT) on hierarchy representation; against L471 (MAINT, inherited from J1) | unvalidated: the acyclicity trigger, the fixed-depth table-per-level rule and the domain-change route are inferred'
+  constraints:
+  - NOT NULL by default; a nullable column states the absence it means (L171, L485 via J2); a group of columns that must be present together gets a CHECK (J2).
+  - 'Foreign keys: P2'' (L492, MAINT, stricter, max): every reference declared, across schemas too, every foreign-key column indexed (ORGANIZE.7); NO ACTION by default; SET NULL for optional links; CASCADE only for a component meaningless without its parent, never for core entities, soft-deletable tables or cross-schema links. Deletion of anything else goes through a deletion function (MAINTAIN.2).'
+  - 'CHECK: row-local and immutable, paired with NOT NULL (L174), for L494''s list; complex row-local rules in reusable immutable validation functions called from the CHECK (L494).'
+  - 'Cross-row rules: partial unique index, NULLS NOT DISTINCT, exclusion constraint first (L175); beyond them, a constraint trigger under Serializable or a lock (GUARD.4, CONCURRENCY.1).'
+  - Junction tables per L491.
+  - 'Hierarchies (partly against L493): a fixed-depth hierarchy is one table per level (inferred; L493 does not state it, corrected after review, m2). An unbounded hierarchy stores the parent link as a declared self-referencing foreign key, the fact "x''s parent is y" stored once (J2 DATA.ORGANIZE), with acyclicity checked by a constraint trigger; acyclicity is a multi-row rule, so the trigger runs under Serializable or after locking the rows it reads (CONCURRENCY.1). A materialized path, closure table or nested set is a derived read structure kept in the same transaction, under DERIVE.1''s sync plan and drift guard, never the only representation. Ground, per form (corrected after review, m2): a materialized path or nested set lists ancestors with no foreign key on them, so a moved or deleted ancestor leaves rows that state a false hierarchy; a closure table does carry foreign keys on both ancestor and descendant, but no constraint protects its transitive completeness, so a missed or extra pair states a false ancestry (inferred from L492 and L488).'
+  - Deferrable constraints only for circular dependencies or in-transaction reordering; immediate by default (L493).
+  - Domains for value types used in several places, check allowing NULL, NOT NULL on the column (L496). A domain check is changed so that stored data is rechecked (L496), on large tables by the NOT VALID then VALIDATE route of MAINTAIN.1 (L195) rather than a drop and re-add under an exclusive lock (inferred).
+  - Every constraint is named, source and target in the name (L495, L506); the backends' validators are generated from or tested against the constraints (L495, J1 RULES.1).
+  - Same-row derived values are stored generated columns (L494, L176; DERIVE.1).
+  design_notes: |-
+    Question: which rules are declared as keys, NOT NULL, CHECK, foreign keys, unique and exclusion constraints and domains.
+    Positions:
+      - P1 most columns NOT NULL; nullable needs a reason (L171).
+      - P2 foreign keys declared, ON DELETE by ownership: CASCADE for components, RESTRICT or NO ACTION for independent objects, SET NULL for optional links (L172) against P2' every foreign key declared, including across schemas, and indexed; NO ACTION by default; SET NULL for optional metadata links; CASCADE only where the child is meaningless without its parent, never for core entities, soft-deletable tables or cross-schema links (L492 MAINT, stricter).
+      - P3 CHECK row-local and immutable, paired with NOT NULL; cross-row rules by unique index, exclusion constraint or constraint trigger (L174); partial unique indexes, NULLS NOT DISTINCT, exclusion constraints (L175).
+      - P4 junction tables: both foreign keys NOT NULL, unique pair; surrogate only when the junction has attributes; outside scoped schemas a link table gets a surrogate plus a unique constraint (L491 MAINT).
+      - P5 avoid self-referential foreign keys: only for unbounded hierarchies with no alternative, and then prefer materialized path, closure table or nested set; deferrable constraints only for circular dependencies or in-transaction reordering (L493 MAINT).
+      - P6 enforce at the database: CHECK for ranges, lengths, exclusivity, conditional requirements, time ordering; NOT NULL for keys, references, core fields, timestamps, booleans; text with CHECK; reusable validation functions for complex row-local rules; same-row derived values as stored generated columns (L494 MAINT).
+      - P7 constraints are the contract half that holds whatever writes; semantics of NULL in CHECK, unique and foreign keys; mirror the Python model's constraints; name constraints so violations map to stable errors (L495).
+      - P8 domains for reusable constraints, check allowing NULL with NOT NULL on the column; change a domain check by drop, adjust, re-add (L496).
+      - Inherited: L471 (MAINT) makes CHECK and triggers optional defence in depth; J1 GUARD.2 requires declarative constraints (partial verdict against L471).
+    Forces: integrity for every writer (P1 to P8) against migration effort and write cost. P2 and P2' differ on how far a delete reaches by itself. P5 trades a declared parent reference for read structures whose correctness no constraint fully protects: a materialized path or nested set lists ancestors with no foreign key on them; a closure table carries foreign keys on both ancestor and descendant, but no constraint protects its transitive completeness.
+    Decision and grounds: declare every rule a declarative constraint can express, required (J1 GUARD.2, MD-03; L040, L471 adopted on authority, its "optional" part not).
+      - NOT NULL by default; a nullable column states the absence it means (L171, L485 via J2); a group of columns that must be present together gets a CHECK (J2).
+      - Foreign keys: P2' (L492, MAINT, stricter, max): every reference declared, across schemas too, every foreign-key column indexed (ORGANIZE.7); NO ACTION by default; SET NULL for optional links; CASCADE only for a component meaningless without its parent, never for core entities, soft-deletable tables or cross-schema links. Deletion of anything else goes through a deletion function (MAINTAIN.2).
+      - CHECK: row-local and immutable, paired with NOT NULL (L174), for L494's list; complex row-local rules in reusable immutable validation functions called from the CHECK (L494).
+      - Cross-row rules: partial unique index, NULLS NOT DISTINCT, exclusion constraint first (L175); beyond them, a constraint trigger under Serializable or a lock (GUARD.4, CONCURRENCY.1).
+      - Junction tables per L491.
+      - Hierarchies (partly against L493): a fixed-depth hierarchy is one table per level (inferred; L493 does not state it, corrected after review, m2). An unbounded hierarchy stores the parent link as a declared self-referencing foreign key, the fact "x's parent is y" stored once (J2 DATA.ORGANIZE), with acyclicity checked by a constraint trigger; acyclicity is a multi-row rule, so the trigger runs under Serializable or after locking the rows it reads (CONCURRENCY.1). A materialized path, closure table or nested set is a derived read structure kept in the same transaction, under DERIVE.1's sync plan and drift guard, never the only representation. Ground, per form (corrected after review, m2): a materialized path or nested set lists ancestors with no foreign key on them, so a moved or deleted ancestor leaves rows that state a false hierarchy; a closure table does carry foreign keys on both ancestor and descendant, but no constraint protects its transitive completeness, so a missed or extra pair states a false ancestry (inferred from L492 and L488).
+      - Deferrable constraints only for circular dependencies or in-transaction reordering; immediate by default (L493).
+      - Domains for value types used in several places, check allowing NULL, NOT NULL on the column (L496). A domain check is changed so that stored data is rechecked (L496), on large tables by the NOT VALID then VALIDATE route of MAINTAIN.1 (L195) rather than a drop and re-add under an exclusive lock (inferred).
+      - Every constraint is named, source and target in the name (L495, L506); the backends' validators are generated from or tested against the constraints (L495, J1 RULES.1).
+      - Same-row derived values are stored generated columns (L494, L176; DERIVE.1).
+    Rejected: P2's broader CASCADE: rejected; acceptable for a component meaningless without its parent, which P2' keeps. A path, closure table or nested set as the only representation of an unbounded hierarchy: rejected; acceptable as a derived copy. Application-only enforcement of any rule a constraint can express: never (J1 GUARD.2). L471's "CHECK constraints optional": rejected (inherited from J1).
+    Realizes: web-app-philosophy:ALLOCATION.GUARD.2 (declares the invariants the placement gives the database); J2 DATA.GUARD.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.GUARD.1
+  - build/research/01_data_tier/result.md::DATA-C07
+  - build/research/01_data_tier/result.md::DATA-C09
+  - build/research/01_data_tier/result.md::DATA-C10
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/01_data_tier/result.md::DATA-C13
+  - build/research/01_data_tier/result.md::DATA-C17
+  - build/research/01_data_tier/result.md::DATA-C31
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C39
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C54
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C07
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C08
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C09
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C10
+  - build/research/17_data_contracts/result.md::DCON-C23
+  - build/research/17_data_contracts/result.md::DCON-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C14
+- op: node.create
+  uid: PIG-WEB-DATA.GUARD.2
+  name: Roles and Privileges
+  intent: Each consumer connects with its own login role, a member of narrow NOLOGIN group roles per functional branch; no consumer holds DELETE, owns objects or is a superuser, and the owner role only owns tables and runs migrations. Functions that must write what the caller cannot are owned by narrow non-login roles holding only their own DML, so a flaw in one cannot disable triggers or alter history.
+  parent: PIG-WEB-DATA.GUARD
+  epistemic_state: 'known: MD-03 | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | unvalidated: narrow non-login function-owner roles resolving tension 2, grant-matrix check in CI'
+  constraints:
+  - 'Group roles (NOLOGIN, L183) per functional branch (L514): a read level (SELECT on tables and columns), an API level (USAGE on the API schema, EXECUTE on the functions of that branch), and an admin level. Under MD-03 the "write" level of L514 is EXECUTE on writer functions, not table DML; direct INSERT or UPDATE is granted only under DB_API''s single-consumer exception, and never on state columns (J1 GUARD.3, L596).'
+  - 'Login roles: one per consumer (each backend, the reporting tool, the console, each script family), neither owner nor superuser (L182, L184), a member of the group roles it needs. One login per consumer is what makes the session role in history rows (MAINTAIN.3) name the consumer (J1 actor trust). Humans have personal login roles, members of the operator or read roles (L514); they assert only themselves as actor (J1).'
+  - 'Owner role: owns tables and the other schema objects (one owner per table, L519), runs migrations and human-run data jobs, never serves requests (J1). It does not own the functions that run with their owner''s rights (changed after review, M3): a table owner holds rights that cannot be granted separately (L182, SRC-146), including disabling the table''s triggers, so a bug or injectable dynamic SQL in a function running with the owner''s rights could switch off the history and constraint triggers or drop objects.'
+  - 'Narrow function-owner roles (changed after review, M3; inferred): each family of functions that must write what the caller cannot is owned by its own NOLOGIN role holding only the DML that family executes, for example a deletion role (DELETE on the target tables, INSERT on the archive), a history-writer role (INSERT on the history tables) and a cache-maintenance role (DELETE and upsert on the cache tables and invalidation queue). No consumer role is a member of these roles, and none of them owns a table. This follows L514''s "narrow roles for sensitive features can be granted independently", L184''s "grant the narrow attributes needed" and the doctrine''s own grant of DELETE to one admin role for cache invalidation (L525''s tension note). It resolves doctrine-internal tension 2 (no DELETE grant, yet archive-then-delete needs one): DELETE is held by a narrow non-login role that owns the deletion functions; the caller does not hold it (inferred).'
+  - Functions with their owner's rights run only where they must write what the caller cannot (J1 GUARD.3), owned by the narrow role above, with a fixed search_path and schema-qualified references (L181, L505; inferred for this function form).
+  - 'Defaults: EXECUTE on functions, CONNECT and TEMPORARY revoked from PUBLIC; default privileges set so new objects get the right grants; each REVOKE in the creating transaction (L185).'
+  - 'Reporting role: SELECT on the tables and columns it needs, personal-data columns withheld by default (J1); on a replica when its load matters. Like the operator role, it sees every row of a table it may SELECT, rows with per-user rules and comments included, unless its own role is restricted (X1).'
+  - 'Authentication: scram-sha-256, TLS for every remote connection, trust only on local sockets (L186).'
+  - A function lists a role's effective permissions (L514), and CI checks the grant matrix against the role design (inferred).
+  - Per-role settings (timeouts, default isolation) are set here, on the role (CONCURRENCY.1, INTERFACE.2).
+  design_notes: |-
+    Question: how database roles, grants and authentication separate owners, runtime users and humans.
+    Positions:
+      - P1 explicit, minimal search_path; revoke CREATE on `public` from PUBLIC (L181).
+      - P2 the owner role that runs migrations differs from the runtime role, which gets only the DML it needs (L182, inferred synthesis).
+      - P3 privileges granted to NOLOGIN group roles; login roles are members (L183).
+      - P4 no superuser for daily work or the application (L184).
+      - P5 revoke PUBLIC defaults (CONNECT, TEMPORARY, EXECUTE on functions); ALTER DEFAULT PRIVILEGES for future objects; REVOKE in the same transaction as the creation (L185).
+      - P6 scram-sha-256; trust only on local sockets; TLS (hostssl) for remote connections (L186).
+      - P7 role hierarchy per functional branch (read, write, admin), each including the one below; default privileges; grants checked at every level; narrow roles for sensitive features; no DELETE grants; humans are members of roles; a function lists a user's effective permissions (L514 MAINT).
+      - Placement: J1's access paths (one role per consumer; backend, reporting, operator, owner) and GUARD.3's per-role layer (EXECUTE per function, SELECT per table and column, UPDATE revoked on state columns).
+    Forces: security and integrity (what a consumer can do whatever its code) against administration effort.
+    Decision and grounds: P1 to P7 adopted, shaped to J1's access paths (max).
+      - Group roles (NOLOGIN, L183) per functional branch (L514): a read level (SELECT on tables and columns), an API level (USAGE on the API schema, EXECUTE on the functions of that branch), and an admin level. Under MD-03 the "write" level of L514 is EXECUTE on writer functions, not table DML; direct INSERT or UPDATE is granted only under DB_API's single-consumer exception, and never on state columns (J1 GUARD.3, L596).
+      - Login roles: one per consumer (each backend, the reporting tool, the console, each script family), neither owner nor superuser (L182, L184), a member of the group roles it needs. One login per consumer is what makes the session role in history rows (MAINTAIN.3) name the consumer (J1 actor trust). Humans have personal login roles, members of the operator or read roles (L514); they assert only themselves as actor (J1).
+      - Owner role: owns tables and the other schema objects (one owner per table, L519), runs migrations and human-run data jobs, never serves requests (J1). It does not own the functions that run with their owner's rights (changed after review, M3): a table owner holds rights that cannot be granted separately (L182, SRC-146), including disabling the table's triggers, so a bug or injectable dynamic SQL in a function running with the owner's rights could switch off the history and constraint triggers or drop objects.
+      - Narrow function-owner roles (changed after review, M3; inferred): each family of functions that must write what the caller cannot is owned by its own NOLOGIN role holding only the DML that family executes, for example a deletion role (DELETE on the target tables, INSERT on the archive), a history-writer role (INSERT on the history tables) and a cache-maintenance role (DELETE and upsert on the cache tables and invalidation queue). No consumer role is a member of these roles, and none of them owns a table. This follows L514's "narrow roles for sensitive features can be granted independently", L184's "grant the narrow attributes needed" and the doctrine's own grant of DELETE to one admin role for cache invalidation (L525's tension note). It resolves doctrine-internal tension 2 (no DELETE grant, yet archive-then-delete needs one): DELETE is held by a narrow non-login role that owns the deletion functions; the caller does not hold it (inferred).
+      - Functions with their owner's rights run only where they must write what the caller cannot (J1 GUARD.3), owned by the narrow role above, with a fixed search_path and schema-qualified references (L181, L505; inferred for this function form).
+      - Defaults: EXECUTE on functions, CONNECT and TEMPORARY revoked from PUBLIC; default privileges set so new objects get the right grants; each REVOKE in the creating transaction (L185).
+      - Reporting role: SELECT on the tables and columns it needs, personal-data columns withheld by default (J1); on a replica when its load matters. Like the operator role, it sees every row of a table it may SELECT, rows with per-user rules and comments included, unless its own role is restricted (X1).
+      - Authentication: scram-sha-256, TLS for every remote connection, trust only on local sockets (L186).
+      - A function lists a role's effective permissions (L514), and CI checks the grant matrix against the role design (inferred).
+      - Per-role settings (timeouts, default isolation) are set here, on the role (CONCURRENCY.1, INTERFACE.2).
+    Awaiting maintainer (B1, X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. For this node: by default each backend filters these reads and this node grants per role; where B's condition holds, consumer roles receive EXECUTE on the read functions (INTERFACE.1) and, per role, lose direct SELECT on the tables those functions guard. Roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted.
+    Rejected: one shared runtime role for all consumers: rejected (J1 access paths; audit could not name the consumer). DELETE grants to consumer roles: never (L514, L525). Superuser or owner for the application: never (L184, L182). Definer functions owned by the owner role: rejected (M3); acceptable never, since a narrow role always suffices for a function family's DML.
+    Realizes: ALLOCATION.GUARD.3 (database layer per consumer role); ALLOCATION.RECORD.2 and PIG-WEB-ALLOCATION.DB_API (EXECUTE as the contract's access); ALLOCATION.ACT.4 (session role names the consumer). Links proposed, not created: GUARD.2 realizes GUARD.3 and DB_API.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.GUARD.2
+  - build/research/01_data_tier/result.md::DATA-C19
+  - build/research/01_data_tier/result.md::DATA-C22
+  - build/research/01_data_tier/result.md::DATA-C23
+  - build/research/01_data_tier/result.md::DATA-C24
+  - build/research/01_data_tier/result.md::DATA-C25
+  - build/research/01_data_tier/result.md::DATA-C27
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C13
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C69
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C48
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C22
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+- op: node.create
+  uid: PIG-WEB-DATA.GUARD.3
+  name: Row Security Policies
+  intent: Row-level security is not enabled by default; it is acceptable only when the data model is simple, the scoping key leads every covered table's composite key, and no all-powerful administrator role must cross scopes. The acting user, and the person an agent acts for, always travel as transaction-local settings that writer functions and audit triggers require and check against the session role, because the actor is a claim and not a verified fact.
+  parent: PIG-WEB-DATA.GUARD
+  epistemic_state: 'known: MD-01 | conflict: L619, L688 favour row security when several consumers share the database (MD-03 default; recorded by J1) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | unvalidated: the pairing table and function'
+  constraints:
+  - 'Row-level security is not enabled by default (MD-01). It is acceptable only when the data model is simple, the scoping key leads the composite key of every covered table (ORGANIZE.2), and no all-powerful administrator role must cross scopes. Where it is used: backend checks are kept (L128); the request role is neither owner nor superuser and FORCE is set where the owner connects (L310); policies get a design review and denial tests through the deployed role and connection path (L128, L310); policy columns are indexed (L619''s mechanics, cited via J1).'
+  - 'Request context is always passed, row security or not, because writer functions and audit triggers need the actor (J1 GUARD.3, ACT.4): the backend sets the acting user, and the person an agent acts for, in transaction-local settings (`SET LOCAL` or `set_config(..., true)`) in a reserved namespace, derived from its verified identity (L311, L566, L685). Transaction-local scope is also what keeps context from leaking across pooled connections in transaction mode (L311, L200; INTERFACE.2).'
+  - 'The actor is a claim, not a verified fact (J1 R1-3): writer functions and audit triggers refuse a write with no actor and check that the session role may assert that kind of actor (a backend an end user or agent, an operator or owner role only itself and, for owner-run jobs, a ticket id). The pairing lives in one table read by one function, so every check uses the same rule (inferred realization).'
+  - Fixture context lives in a separate namespace that production code never reads (L566).
+  design_notes: |-
+    Question: how row-level security policies and the request context they read behave and are set.
+    Positions:
+      - P1 row security semantics: default deny once enabled; USING governs visibility, WITH CHECK written rows; permissive OR, restrictive AND (L309).
+      - P2 skipped for superusers, BYPASSRLS roles and owners unless FORCE; bypassed by unique and foreign-key checks; sub-select policies can race and leak: non-owner, non-superuser request role and a design review; whether to use it rather than application filtering is not settled by the sources (L310).
+      - P3 pass the application user or tenant with transaction-local settings, derived from the verified identity, never from a client id (L311).
+      - P4 functions read request context from transaction-local settings in a reserved namespace; fixtures use a separate namespace production never reads (L566 MAINT).
+      - Placement: ROW_SECURITY decided by MD-01 (not a default; acceptable under three conditions); L619 and L688 favour row security when several consumers share the database (tension recorded by J1).
+    Forces: security in depth per user, against policy complexity, testability and the administrator roles row policies mesh badly with (MD-01).
+    Decision and grounds:
+      - Row-level security is not enabled by default (MD-01). It is acceptable only when the data model is simple, the scoping key leads the composite key of every covered table (ORGANIZE.2), and no all-powerful administrator role must cross scopes. Where it is used: backend checks are kept (L128); the request role is neither owner nor superuser and FORCE is set where the owner connects (L310); policies get a design review and denial tests through the deployed role and connection path (L128, L310); policy columns are indexed (L619's mechanics, cited via J1).
+      - Request context is always passed, row security or not, because writer functions and audit triggers need the actor (J1 GUARD.3, ACT.4): the backend sets the acting user, and the person an agent acts for, in transaction-local settings (`SET LOCAL` or `set_config(..., true)`) in a reserved namespace, derived from its verified identity (L311, L566, L685). Transaction-local scope is also what keeps context from leaking across pooled connections in transaction mode (L311, L200; INTERFACE.2).
+      - The actor is a claim, not a verified fact (J1 R1-3): writer functions and audit triggers refuse a write with no actor and check that the session role may assert that kind of actor (a backend an end user or agent, an operator or owner role only itself and, for owner-run jobs, a ticket id). The pairing lives in one table read by one function, so every check uses the same rule (inferred realization).
+      - Fixture context lives in a separate namespace that production code never reads (L566).
+    Awaiting maintainer (B1, X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. Where B's condition holds, read functions join INTERFACE.1 and read this node's context: the "verified actor" they receive (X1) is the actor the backend derives from its verified identity, which to the database remains a claim checked against the session role (J1 R1-3). Row security stays not a default (MD-01) in either case; it remains acceptable under MD-01's three conditions.
+    Rejected: row security by default (L619, L688 as defaults): rejected by MD-01; they win under MD-01's three conditions. Session-level settings for context: never (L311). Context from a client-supplied id: never (L311).
+    Realizes: PIG-WEB-ALLOCATION.ROW_SECURITY; ALLOCATION.GUARD.3 (actor claim and pairing); ALLOCATION.ACT.4 (actor recorded).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.GUARD.3
+  - build/research/05_identity_security/result.md::SEC-C43
+  - build/research/01_data_tier/result.md::DATA-C37
+  - build/research/05_identity_security/result.md::SEC-C40
+  - build/research/05_identity_security/result.md::SEC-C41
+  - build/research/05_identity_security/result.md::SEC-C44
+  - build/research/01_data_tier/result.md::DATA-C26
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+  - build/research/18_allocation/result.md::ALLOC-C18
+  - build/research/20_collaboration/result.md::C30
+  - build/research/20_collaboration/result.md::C33
+- op: node.create
+  uid: PIG-WEB-DATA.GUARD.4
+  name: Triggers
+  intent: 'Triggers do a closed list of work that must be atomic with the write and hold for every writer: history rows, constraint triggers, same-transaction derived copies, JSON and actor validation, and updated_at stamped only when the row changes. Business transitions and multi-table operations stay in writer functions, and nothing in a trigger calls outside the database.'
+  parent: PIG-WEB-DATA.GUARD
+  epistemic_state: 'known | conflict: against L529 (MAINT) on updated_at | unvalidated: the stamp-on-change trigger form is inferred'
+  constraints:
+  - history rows (AFTER ROW, append-only; MAINTAIN.3, ACT.4);
+  - constraint triggers for invariants no declarative constraint expresses, asserting the isolation level they need (GUARD.1, J1 GUARD.2), including the refusal of an active child of a soft-deleted parent (MAINTAIN.2) and dependencies lost by a Boyce-Codd decomposition (J2 DATA.ORGANIZE);
+  - same-transaction maintenance of a derived copy at the top of the sync gradient (DERIVE.1, L532);
+  - write-time validation of JSON documents (ORGANIZE.5, L511) and the actor checks of GUARD.3;
+  - '`updated_at` (against L529): a narrow BEFORE UPDATE trigger sets it, and stamps only when the row changes (`NEW IS DISTINCT FROM OLD`, inferred; added after review, m3). Ground: under MD-03 rows are also written by owner-run data jobs and, under DB_API''s exception, by a consumer''s direct single-table write; only a trigger sets the column for every writer, as only a constraint binds every writer (J1 GUARD.2). A stale `updated_at` is not cosmetic: cache staleness checks depend on it (L537). (The earlier ground "timestamp-based readers, L594" is dropped after review, m3: L594 is about sequence ids, its extension to `updated_at` is inferred, and CONCURRENCY.5 forbids bare timestamp cursors anyway.) L216 lists exactly this use. L529''s reason, avoiding WAL traffic and needless trigger work, is met at the table: writers skip rows whose values would not change (an `IS DISTINCT FROM` predicate), and the trigger''s stamp-on-change form means a no-op update by any writer re-stamps nothing.'
+  - 'Not in triggers: state transitions and multi-table business operations (the writer function, ACT.1, L596), outbox and job rows (written explicitly by the writer function, ACT.2), anything that calls outside the database (ACT.2). Each trigger is documented in its table''s comment, named so that name order is the intended firing order, and does not fire another trigger''s work (L216; the last clause inferred).'
+  design_notes: |-
+    Question: which work triggers may do and which stays with the writing code.
+    Positions:
+      - P1 triggers few, narrow and documented (updated_at, cross-table consistency, audit), because they hide side effects and fire in name order (L216, majority).
+      - P2 a trigger runs in its statement's transaction and rolls back with it; BEFORE may skip or alter the row, AFTER sees the final value; use triggers where an invariant or side record must be atomic with the write (L217).
+      - P3 updated_at is written by the code that updates the row, not a trigger; updates skip rows whose value would not change (L529 MAINT; contradicts L216).
+      - Placements: ACT.1 gives state transitions and multi-table operations to writer functions, one per state column (L584, L596); ACT.4 gives history to triggers; GUARD.2 allows constraint triggers under Serializable or a lock; ACT.2 forbids external calls from inside the database.
+    Forces: integrity (a side record or value that every writer produces) against transparency (hidden effects, L216) and write cost (L529).
+    Decision and grounds: triggers do a closed list of work, each item one that must be atomic with the write and hold for every writer (L217):
+      1. history rows (AFTER ROW, append-only; MAINTAIN.3, ACT.4);
+      2. constraint triggers for invariants no declarative constraint expresses, asserting the isolation level they need (GUARD.1, J1 GUARD.2), including the refusal of an active child of a soft-deleted parent (MAINTAIN.2) and dependencies lost by a Boyce-Codd decomposition (J2 DATA.ORGANIZE);
+      3. same-transaction maintenance of a derived copy at the top of the sync gradient (DERIVE.1, L532);
+      4. write-time validation of JSON documents (ORGANIZE.5, L511) and the actor checks of GUARD.3;
+      5. `updated_at` (against L529): a narrow BEFORE UPDATE trigger sets it, and stamps only when the row changes (`NEW IS DISTINCT FROM OLD`, inferred; added after review, m3). Ground: under MD-03 rows are also written by owner-run data jobs and, under DB_API's exception, by a consumer's direct single-table write; only a trigger sets the column for every writer, as only a constraint binds every writer (J1 GUARD.2). A stale `updated_at` is not cosmetic: cache staleness checks depend on it (L537). (The earlier ground "timestamp-based readers, L594" is dropped after review, m3: L594 is about sequence ids, its extension to `updated_at` is inferred, and CONCURRENCY.5 forbids bare timestamp cursors anyway.) L216 lists exactly this use. L529's reason, avoiding WAL traffic and needless trigger work, is met at the table: writers skip rows whose values would not change (an `IS DISTINCT FROM` predicate), and the trigger's stamp-on-change form means a no-op update by any writer re-stamps nothing.
+      Not in triggers: state transitions and multi-table business operations (the writer function, ACT.1, L596), outbox and job rows (written explicitly by the writer function, ACT.2), anything that calls outside the database (ACT.2). Each trigger is documented in its table's comment, named so that name order is the intended firing order, and does not fire another trigger's work (L216; the last clause inferred).
+    Rejected: L529's code-written `updated_at`: rejected; acceptable when every writer of the table is a writer function that sets it, with no direct-write grant and no owner-run job on that table. Triggers for business transitions: never (ACT.1). Triggers for "cross-table consistency" in L216's broad sense: only as items 2 or 3 above.
+    Realizes: web-app-philosophy:ALLOCATION.ACT.1 (keeps trigger logic within what the placement allows the database); ALLOCATION.ACT.4; ALLOCATION.GUARD.2.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.GUARD.4
+  - build/research/01_data_tier/result.md::DATA-C45
+  - build/research/14_thin_spots/result.md::THIN-C30
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C37
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C17
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C31
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/16_consistency_ordering/result.md::CONS-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.1
+  name: Default Concurrency Strategy
+  intent: Serializable is the default isolation of every writing role, owner included, set on the role so it survives transaction pooling, with a version column checked in the write for user-edited rows. Every caller of a writer function owns a bounded retry of the whole call, because a serialization failure aborts the transaction and write skew survives weaker isolation.
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: 'known | unvalidated: Serializable for the owner role and the job exception rule are inferred from L573; throughput under the default is not measured'
+  constraints:
+  - Serializable is the default isolation of every writing role, owner role included, set on the role (`ALTER ROLE ... SET default_transaction_isolation`), not per session, so it survives transaction pooling (L569, L203, L200). A lower-isolation writer anywhere voids the guarantee for all (L573), hence no writing role is exempt.
+  - Writer functions and constraint triggers assert `serializable` and raise otherwise (J1 GUARD.2).
+  - 'Retry: a serialization failure aborts the transaction, so the function cannot retry itself; the caller retries the whole call (one call is one transaction, J1 R1-4). Every consumer that calls a writer function owns a bounded retry; the shared specification names it (added after review, m6): the backend''s bounded retry wrapper at the use-case boundary (L575, J7), the job runner per idempotent batch (L543), and MD-03''s operator consoles and scripts (handed to J9 for console tooling).'
+  - 'User-edited rows: a version column; the writer function takes the expected version and writes with it in the predicate (L676, CONCURRENCY.2); a lease row checked by the writer function where conflicts are frequent or lost work costly (L570, J1 GUARD.5).'
+  - 'Read-only roles: reporting on the primary reads at Repeatable Read, or `SERIALIZABLE READ ONLY DEFERRABLE` where a report must be serializable (L574); reports on a replica accept snapshot anomalies (L573). No check that decides a write reads a replica (J2).'
+  - '(b) where (a) cannot reach: a write that must be protected on a replica uses Repeatable Read plus explicit locks on the primary (L573); a human-run job that cannot run Serializable is a recorded exception under L545''s checklist and takes explicit locks on what it writes, because it voids the guarantee for concurrent traffic while it runs (L573; inferred).'
+  design_notes: |-
+    Question: which concurrency-control strategy is the default for transactions and for user-edited rows.
+    Positions:
+      - P1 a recorded choice among (a) Serializable with retry for all transactions, (b) default isolation plus selected locks and constraints, (c) optimistic version columns on user-edited rows (L568, contested: SRC-331 for (a); SRC-343 selected Serializable or locks; SRC-331 Repeatable Read plus locks where replicas must be protected; SRC-344, SRC-345 by conflict rate).
+      - P2 Serializable for all writes and consistent reads needs no other effort; make it the default (`default_transaction_isolation`) with automatic retry (L569).
+      - P3 optimistic when conflicts are rare, pessimistic (a lease checked by the write path) when frequent or when losing long work is unacceptable (L570).
+      - Hand-off from J1 GUARD.2: the review recommends (a), J1 concurs (inferred); set the default per consumer role; writer functions assert it; replica reports accept snapshot anomalies (L573).
+    Forces: correctness of every concurrent write (a) against retry handling and throughput under contention; (b) puts correctness on each developer finding each anomaly, and write skew survives Repeatable Read (L577); (c) solves a different problem, lost updates across requests and user think time (L475), and is needed whatever the isolation.
+    Decision and grounds: (a) for transactions and (c) for user-edited rows, (b) only where (a) cannot reach.
+      - Serializable is the default isolation of every writing role, owner role included, set on the role (`ALTER ROLE ... SET default_transaction_isolation`), not per session, so it survives transaction pooling (L569, L203, L200). A lower-isolation writer anywhere voids the guarantee for all (L573), hence no writing role is exempt.
+      - Writer functions and constraint triggers assert `serializable` and raise otherwise (J1 GUARD.2).
+      - Retry: a serialization failure aborts the transaction, so the function cannot retry itself; the caller retries the whole call (one call is one transaction, J1 R1-4). Every consumer that calls a writer function owns a bounded retry; the shared specification names it (added after review, m6): the backend's bounded retry wrapper at the use-case boundary (L575, J7), the job runner per idempotent batch (L543), and MD-03's operator consoles and scripts (handed to J9 for console tooling).
+      - User-edited rows: a version column; the writer function takes the expected version and writes with it in the predicate (L676, CONCURRENCY.2); a lease row checked by the writer function where conflicts are frequent or lost work costly (L570, J1 GUARD.5).
+      - Read-only roles: reporting on the primary reads at Repeatable Read, or `SERIALIZABLE READ ONLY DEFERRABLE` where a report must be serializable (L574); reports on a replica accept snapshot anomalies (L573). No check that decides a write reads a replica (J2).
+      - (b) where (a) cannot reach: a write that must be protected on a replica uses Repeatable Read plus explicit locks on the primary (L573); a human-run job that cannot run Serializable is a recorded exception under L545's checklist and takes explicit locks on what it writes, because it voids the guarantee for concurrent traffic while it runs (L573; inferred).
+    Rejected: (b) as the default: rejected; it leaves write skew to each author (L577). Acceptable as the exceptions above. (c) alone: rejected for transactions; it is a second, complementary layer.
+    Realizes: ALLOCATION.GUARD.2 (hand-off: default isolation) and ALLOCATION.GUARD.5; J2 DATA.GUARD.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.1
+  - build/research/01_data_tier/result.md::DATA-C37
+  - build/research/01_data_tier/result.md::DATA-C29
+  - build/research/16_consistency_ordering/result.md::CONS-C13
+  - build/research/20_collaboration/result.md::C14
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C63
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/16_consistency_ordering/result.md::CONS-C15
+  - build/research/16_consistency_ordering/result.md::CONS-C04
+  - build/research/16_consistency_ordering/result.md::CONS-C14
+  - build/research/20_collaboration/result.md::C13
+  - build/research/16_consistency_ordering/result.md::CONS-C05
+  - build/research/16_consistency_ordering/result.md::CONS-C06
+  - build/research/16_consistency_ordering/result.md::CONS-C07
+  - build/research/16_consistency_ordering/result.md::CONS-C03
+  - build/research/20_collaboration/result.md::C16
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.2
+  name: Isolation Mechanics
+  intent: Isolation is recorded per operation, read-modify-write never spans the backend and the database, and failed transactions (40001, 40P01) are retried as a whole call with bounded attempts. Critical invariants are backed by constraints, not isolation alone, and logic tests and commit-only concurrency tests are separated.
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: known
+  constraints:
+  - 'The isolation of each operation is recorded (L571): Serializable by default; every deviation named with its reason (CONCURRENCY.1).'
+  - 'Read-modify-write never spans the backend and the database: the change is one statement, or a version predicate, inside the writer function (L572, L676). A version write that affects zero rows raises a stable error the backend maps to a precondition failure (J1 GUARD.5; J7).'
+  - 'Serializable kept cheap (L574): read-only transactions declared, transactions short (L228), connections bounded by the pooler (INTERFACE.2), predicates indexed (ORGANIZE.7), explicit locks that Serializable made redundant removed.'
+  - 'Retry (L575): 40001 and 40P01 retried as the whole call, logic included, with a bounded number of attempts and backoff; 23505 not retried blindly (it may be persistent); the wrapper sits in the backend at the use-case boundary (J7, L066 as amended by J1: the function owns the transaction, the backend owns the retry), and every other caller of a writer function (job runner, consoles, scripts) owns its own bounded retry, named in the shared specification (m6; console tooling handed to J9).'
+  - Critical invariants are constraints, not isolation alone, and the server stays on a current minor release (L576).
+  - 'Tests (X4): logic tests on shared data run in never-committing transactions (L567). Behaviour that only shows at commit (serialization retries, lock waits, deferred constraints, the outbox) is tested with committing sessions in a disposable database, never a shared one. Concurrency tests for the rules GUARD.2 requires (Serializable with retry, locks) are part of the default test suite, not a gap.'
+  design_notes: |-
+    Question: how isolation levels behave, what they cost and how failed transactions are retried.
+    Positions: (consensus; T1 and T2 sources): L571 choose and record isolation per use case, with the anomalies each level permits; L572 Read Committed re-evaluates a waiting UPDATE, so read-modify-write in code loses updates: one atomic statement, a row lock or a version; L573 Serializable's preconditions and limits; L574 keeping Serializable cheap; L575 retry 40001 and 40P01 as whole transactions, 23505 only with care, bounded attempts, the application owns the wrapper; L576 a documented level is not proof (Jepsen, SSI bugs): patch level current, critical invariants backed by constraints; L577 Repeatable Read is snapshot isolation, write skew remains; L676 the version predicate inside the write, then check the affected-row count.
+    Forces: correctness under concurrency against throughput and retry cost.
+    Decision and grounds: all adopted as the mechanics of CONCURRENCY.1 (max, uncontested).
+      - The isolation of each operation is recorded (L571): Serializable by default; every deviation named with its reason (CONCURRENCY.1).
+      - Read-modify-write never spans the backend and the database: the change is one statement, or a version predicate, inside the writer function (L572, L676). A version write that affects zero rows raises a stable error the backend maps to a precondition failure (J1 GUARD.5; J7).
+      - Serializable kept cheap (L574): read-only transactions declared, transactions short (L228), connections bounded by the pooler (INTERFACE.2), predicates indexed (ORGANIZE.7), explicit locks that Serializable made redundant removed.
+      - Retry (L575): 40001 and 40P01 retried as the whole call, logic included, with a bounded number of attempts and backoff; 23505 not retried blindly (it may be persistent); the wrapper sits in the backend at the use-case boundary (J7, L066 as amended by J1: the function owns the transaction, the backend owns the retry), and every other caller of a writer function (job runner, consoles, scripts) owns its own bounded retry, named in the shared specification (m6; console tooling handed to J9).
+      - Critical invariants are constraints, not isolation alone, and the server stays on a current minor release (L576).
+      - Tests (X4): logic tests on shared data run in never-committing transactions (L567). Behaviour that only shows at commit (serialization retries, lock waits, deferred constraints, the outbox) is tested with committing sessions in a disposable database, never a shared one. Concurrency tests for the rules GUARD.2 requires (Serializable with retry, locks) are part of the default test suite, not a gap.
+    Rejected: read-modify-write in application code at Read Committed: never (L572, L676). Retrying only the failed statement: never (L575).
+    Realizes: ALLOCATION.GUARD.5; ALLOCATION.GUARD.2.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.2
+  - build/research/02_app_tier/result.md::APP-C09
+  - build/research/02_app_tier/result.md::APP-C10
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C58
+  - build/research/16_consistency_ordering/result.md::CONS-C01
+  - build/research/16_consistency_ordering/result.md::CONS-C02
+  - build/research/16_consistency_ordering/result.md::CONS-C05
+  - build/research/16_consistency_ordering/result.md::CONS-C06
+  - build/research/16_consistency_ordering/result.md::CONS-C07
+  - build/research/16_consistency_ordering/result.md::CONS-C08
+  - build/research/16_consistency_ordering/result.md::CONS-C03
+  - build/research/20_collaboration/result.md::C16
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.3
+  name: Locks
+  intent: Explicit locks are transaction-scoped only, taken in one documented order, and used for contention on a hot logical key, for the exceptions where Serializable cannot reach, and for claiming queue rows with SKIP LOCKED. No lock outlives a transaction and none is held across user think time.
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: known
+  constraints:
+  - 'Under the Serializable default, explicit locks are for: reducing serialization failures on a hot logical key (L581); the exceptions of CONCURRENCY.1 (replica-protected writes, a job outside Serializable); claiming queue rows (`FOR UPDATE SKIP LOCKED`, L413, L595, queue tables only).'
+  - Only transaction-scoped locks; session-level advisory locks never (L580, L200).
+  - Locks on several objects in one documented order (L579); a lock taken before the first query when under Repeatable Read (L578); never a locking call beside a LIMIT at the same query level (L580).
+  - Advisory lock keys per L581.
+  - No lock outlives a transaction, and no transaction spans user think time (L475); a lease for long edits is a row the writer function checks, not a lock (J1 GUARD.5, L476 via J2).
+  design_notes: |-
+    Question: how row and advisory locks are taken, ordered and released.
+    Positions: L578 `FOR UPDATE` semantics; under Repeatable Read lock before the first query; L579 one consistent lock order, retry the deadlock victim; L580 transaction-level advisory locks over session-level ones (which survive rollback and break under transaction pooling); no locking function at the query level of a LIMIT; L581 serialize writers of one logical key with a transaction-scoped advisory lock on a 64-bit hash of every key dimension (MAINT). Related: L475 (no lock across think time), L413 and L595 (SKIP LOCKED only for queues).
+    Forces: correctness and contention control against blocking and deadlocks.
+    Decision and grounds: all adopted (max; MAINT agrees with the research).
+      - Under the Serializable default, explicit locks are for: reducing serialization failures on a hot logical key (L581); the exceptions of CONCURRENCY.1 (replica-protected writes, a job outside Serializable); claiming queue rows (`FOR UPDATE SKIP LOCKED`, L413, L595, queue tables only).
+      - Only transaction-scoped locks; session-level advisory locks never (L580, L200).
+      - Locks on several objects in one documented order (L579); a lock taken before the first query when under Repeatable Read (L578); never a locking call beside a LIMIT at the same query level (L580).
+      - Advisory lock keys per L581.
+      - No lock outlives a transaction, and no transaction spans user think time (L475); a lease for long edits is a row the writer function checks, not a lock (J1 GUARD.5, L476 via J2).
+    Rejected: session-level advisory locks: never (L580). Locks held across requests: never (L475).
+    Realizes: ALLOCATION.GUARD.5; ALLOCATION.ACT.3 (queue claiming, with JOB_HOST).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.3
+  - build/research/01_data_tier/result.md::DATA-C37
+  - build/research/01_data_tier/result.md::DATA-C52
+  - build/research/16_consistency_ordering/result.md::CONS-C13
+  - build/research/20_collaboration/result.md::C14
+  - build/research/16_consistency_ordering/result.md::CONS-C17
+  - build/research/16_consistency_ordering/result.md::CONS-C11
+  - build/research/16_consistency_ordering/result.md::CONS-C12
+  - build/research/16_consistency_ordering/result.md::CONS-C16
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C56
+  - build/research/16_consistency_ordering/result.md::CONS-C22
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.4
+  name: Atomic Statements
+  intent: An inseparable change is one statement, or separate statements inside one transaction when one must see another's effect, and re-runnable work is idempotent by form (absolute assignments, upserts, self-limiting predicates). Operations behind a recorded idempotency key may use relative updates, and insert-or-update is ON CONFLICT DO UPDATE, never select-then-branch.
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: 'known | unvalidated: the keyed-operation exception to L587 is inferred'
+  constraints:
+  - 'Inseparable changes: one statement when no step must observe another (L585); separate statements inside one transaction, that is inside one writer function, when one must (L586). In a writer function both forms are atomic; L585''s single statement is required where statements run in their own transactions (batch jobs, L543).'
+  - 'Re-runnable work (jobs, migrations, deliveries, anything retried without a recorded key) is idempotent by form: absolute assignments, upserts, conflict-ignoring inserts, self-limiting predicates (L587).'
+  - Keyed operations (behind an idempotency key recorded in the same transaction, J1 GUARD.6) may use atomic relative updates such as `n = n + 1` (L572), because the key prevents a second execution (inferred).
+  - Upserts by `ON CONFLICT DO UPDATE` (L588); never select-then-branch, which also fails under Serializable as a unique violation after a "key absent" check (L573).
+  design_notes: |-
+    Question: which changes are expressed as single idempotent statements.
+    Positions: L585 inseparable changes are one statement (a move is one data-modifying statement, never an insert then a delete), because a sharded job runs each statement in its own transaction (MAINT); L586 sibling data-modifying subqueries share a snapshot; a step that must see another's effect is a separate statement in one transaction (MAINT); L587 mutations idempotent: absolute assignments, upserts, conflict-ignoring inserts, self-limiting predicates (MAINT); L588 "insert or update" as `INSERT ... ON CONFLICT DO UPDATE`, not select-then-branch. Tension inside the evidence: L572 recommends the atomic increment (`n = n + 1`), which L587's absolute assignment excludes.
+    Forces: atomicity and safe re-execution (integrity) against expressiveness.
+    Decision and grounds: all adopted (MAINT and research, max), with the tension resolved by where a mutation can be re-run.
+      - Inseparable changes: one statement when no step must observe another (L585); separate statements inside one transaction, that is inside one writer function, when one must (L586). In a writer function both forms are atomic; L585's single statement is required where statements run in their own transactions (batch jobs, L543).
+      - Re-runnable work (jobs, migrations, deliveries, anything retried without a recorded key) is idempotent by form: absolute assignments, upserts, conflict-ignoring inserts, self-limiting predicates (L587).
+      - Keyed operations (behind an idempotency key recorded in the same transaction, J1 GUARD.6) may use atomic relative updates such as `n = n + 1` (L572), because the key prevents a second execution (inferred).
+      - Upserts by `ON CONFLICT DO UPDATE` (L588); never select-then-branch, which also fails under Serializable as a unique violation after a "key absent" check (L573).
+    Rejected: two statements for an inseparable change outside one transaction: never (L585). Select-then-branch: never (L588). Relative updates in re-runnable work without a key: rejected (L587).
+    Realizes: web-app-philosophy:ALLOCATION.GUARD.6 (mutations as idempotent statements); ALLOCATION.ACT.3 (batch jobs).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.4
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C63
+  - build/research/16_consistency_ordering/result.md::CONS-C02
+  - build/research/16_consistency_ordering/result.md::CONS-C05
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C50
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C51
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C57
+  - build/research/16_consistency_ordering/result.md::CONS-C10
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.5
+  name: Sequences and Commit Order
+  intent: 'Sequences are identifiers only: gaps are normal and no value leaves the database before commit; gapless business numbers come from a counter row updated in the business transaction. Readers that must see every row claim and mark rows with SKIP LOCKED, or use an xid8 column and the snapshot horizon where a cursor is needed, never a bare id or timestamp cursor.'
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: 'known | unvalidated: claim-and-mark as avoiding the hazard, and timestamp cursors under the same rule, are inferred; the polling hazard rests on one T3 source'
+  constraints:
+  - 'Sequences are identifiers only: gaps are normal, never a business count; no value leaves the database before commit (L591, L592).'
+  - Gapless business numbers (invoices) come from a counter row updated by the writer function in the business transaction, accepting serialized writers for that series (L593).
+  - 'Readers that must see every row: first, avoid cursors where a claim-and-mark design works: queue and outbox rows are claimed with SKIP LOCKED and marked or deleted when processed, so every unprocessed row is seen whatever its id (L413, L595, L409; inferred that the hazard of L594 does not arise). Where a cursor is needed (an ordered feed to an outside consumer, an incremental export), position (a): an `xid8` column and the snapshot horizon filter (L594, mechanism T1, max: it is a guarantee, where (b) is a heuristic wait). Timestamp cursors follow the same rule; never a bare `updated_at > last` cursor (L594, inferred).'
+  design_notes: |-
+    Question: what sequences guarantee and how readers follow rows in commit order.
+    Positions:
+      - L591 sequences are non-transactional: gaps are normal; no gapless numbering from a sequence.
+      - L592 no sequence value exposed outside the database before commit.
+      - L593 gapless business numbers from a counter row updated inside the business transaction, serializing writers.
+      - L594 a sequence id does not reflect commit order: a reader polling `id > last_seen` can skip a late row forever. Positions: (a) read only rows from transactions older than the oldest in flight (`xid8` column against `pg_snapshot_xmin(pg_current_snapshot())`), order then follows transaction start (SRC-351 T3, mechanism T1); (b) gap detection with a high-water mark and a wait (non-trivial); (c) a locked counter table (serializes all writers; rejected by the source). Same hazard plausibly for `updated_at` cursors (inferred).
+      - L595 SKIP LOCKED gives an inconsistent view, for queues only; under Read Committed ORDER BY with a locking clause can return rows out of order.
+    Forces: correctness of readers that must see every row (outbox relays, change feeds, exports, cache workers) against write concurrency.
+    Decision and grounds:
+      - Sequences are identifiers only: gaps are normal, never a business count; no value leaves the database before commit (L591, L592).
+      - Gapless business numbers (invoices) come from a counter row updated by the writer function in the business transaction, accepting serialized writers for that series (L593).
+      - Readers that must see every row: first, avoid cursors where a claim-and-mark design works: queue and outbox rows are claimed with SKIP LOCKED and marked or deleted when processed, so every unprocessed row is seen whatever its id (L413, L595, L409; inferred that the hazard of L594 does not arise). Where a cursor is needed (an ordered feed to an outside consumer, an incremental export), position (a): an `xid8` column and the snapshot horizon filter (L594, mechanism T1, max: it is a guarantee, where (b) is a heuristic wait). Timestamp cursors follow the same rule; never a bare `updated_at > last` cursor (L594, inferred).
+    Rejected: (b) gap detection: rejected; acceptable when the reader cannot add a column to the source table and tolerates a bounded wait. (c) a locked counter for ordering: rejected (L594); it is kept only for gapless business numbers (L593). Bare id or timestamp cursors: never.
+    Realizes: ALLOCATION.ACT.2 (outbox relay reads, with J7's PROCESS.2); ALLOCATION.DERIVE.1 (cache workers); ALLOCATION.GUARD.5. Link proposed, not created: CONCURRENCY.5 realizes ALLOCATION.ACT.2.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.5
+  - build/research/02_app_tier/result.md::APP-C17
+  - build/research/01_data_tier/result.md::DATA-C53
+  - build/research/01_data_tier/result.md::DATA-C52
+  - build/research/16_consistency_ordering/result.md::CONS-C18
+  - build/research/16_consistency_ordering/result.md::CONS-C19
+  - build/research/16_consistency_ordering/result.md::CONS-C21
+  - build/research/16_consistency_ordering/result.md::CONS-C20
+  - build/research/16_consistency_ordering/result.md::CONS-C22
+- op: node.create
+  uid: PIG-WEB-DATA.CONCURRENCY.6
+  name: State Transition Order
+  intent: Where one fact spans several places, the single writer function of the state column writes the facts first and flips the state label last, after a transition audit against the data. A new transition is enforced from its first release; observe-only checks are a time-boxed migration aid over data that already violates them.
+  parent: PIG-WEB-DATA.CONCURRENCY
+  epistemic_state: 'known | unvalidated: the exit condition for observe-only checks is inferred'
+  constraints:
+  - L597 adopted (MAINT, max). The single writer function of the state column (ACT.1, L596) writes the facts first and the label last, and its transition audit checks the target state against the data before the flip. Order matters within one transaction because the audit and constraint triggers run in statement order, and across transactions because a workflow advances through several operations (J1 ACT.1), where a reader sees each committed step.
+  - 'L598 kept as a migration aid, not a mode: a new transition is enforced from its first release. Observe-only is acceptable only when a check is introduced over existing data that already violates it, with the violations listed and an exit (the release that turns enforcement on) recorded (L598 states it is not the fix; the time-boxed exit is inferred).'
+  design_notes: |-
+    Question: in which order facts and state labels are written, and how transition checks are introduced.
+    Positions: L597 where one fact spans several places (presence flag, aggregate result, state label), write the facts first and flip the label last; teardown mirrors; the transition audit checks desired against current data before the flip, so the wrong order fails (MAINT). L598 transition checks start in observe-only mode behind an enforcement flag: they run, report and dry-run fixes but raise nothing; tolerable for known defects, explicitly not the fix; open violations listed in the ownership document (MAINT).
+    Forces: integrity of multi-place facts against the cost of introducing checks over data that already violates them.
+    Decision and grounds:
+      - L597 adopted (MAINT, max). The single writer function of the state column (ACT.1, L596) writes the facts first and the label last, and its transition audit checks the target state against the data before the flip. Order matters within one transaction because the audit and constraint triggers run in statement order, and across transactions because a workflow advances through several operations (J1 ACT.1), where a reader sees each committed step.
+      - L598 kept as a migration aid, not a mode: a new transition is enforced from its first release. Observe-only is acceptable only when a check is introduced over existing data that already violates it, with the violations listed and an exit (the release that turns enforcement on) recorded (L598 states it is not the fix; the time-boxed exit is inferred).
+    Rejected: label first, facts after: never (L597). Observe-only for new transitions: rejected.
+    Realizes: web-app-philosophy:ALLOCATION.ACT.1 (orders transitions written by their single authoritative writer); J2 DATA.DERIVE (L597 cited there).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.CONCURRENCY.6
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C53
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C55
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.1
+  name: Migrations
+  intent: Schema changes are versioned, reviewed migrations run by automation, each small and re-runnable, with online-safe forms for every DDL and schema and data changes kept apart. Incompatible changes go expand, migrate, contract across every consumer, and a CI drift gate compares a freshly migrated catalogue with production's, so the live database never diverges from version control.
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'known | unvalidated: drift gate mechanism inferred, no source read'
+  constraints:
+  - 'Path: versioned migrations in version control, reviewed, run by automation as a release step in every environment, with a database per developer and the same CI pipeline as code (L189, L519, J2).'
+  - 'Form: each change small (L190); DDL re-runnable (conditional create and drop, create or replace), which also makes a partly applied non-transactional step (a concurrent index build) safe to resume (L519, L196); one owner role per table, set in its creation script (L519, GUARD.2).'
+  - 'Online safety: short lock_timeout with retry on every DDL (L193); a column default added only when non-volatile, otherwise the multi-step route (L194); constraints NOT VALID then VALIDATE, SET NOT NULL proven by a validated CHECK (L195); indexes built concurrently outside a transaction, a failed build dropped and retried (L196); type changes as add, backfill, switch, drop (L197).'
+  - 'Schema and data apart: a backfill is a separate, batched data step outside the schema migration''s transaction (L198); beyond the threshold of MAINTAIN.4 it is a human-run job (L519, L540, L545).'
+  - 'Incompatible changes: expand, migrate, contract (J2): data moves by dual write, verified read switch, write switch, removal (L191); drops and renames only in the contract phase once no deployed consumer references the old object (L192). Under MD-03 "deployed" covers every consumer: backends, BI queries, consoles and scripts.'
+  - 'Drift gate (J2 hand-off, inferred, no source read): CI applies every migration to an empty database and compares its catalogue with production''s (schema objects, grants, function signatures); a difference fails the release and is reconciled by a migration, never by editing the live database. The function-signature part is DB_API''s catalogue diff (INTERFACE.1).'
+  design_notes: |-
+    Question: how schema changes are written and run against live tables.
+    Positions: L189 a database per developer; migrations in the same CI pipeline as code; L190 each change as small as possible; L191 data moves: dual write, switch reads (verified by comparing), switch writes, remove old; L192 drops and renames in the contract phase, after no deployed version references the old name; L193 short lock_timeout and retry (ALTER TABLE takes ACCESS EXCLUSIVE and the queue blocks behind it); L194 metadata-only defaults versus rewrites; L195 constraints NOT VALID then VALIDATE; SET NOT NULL skips the scan with a validated CHECK; L196 CREATE INDEX CONCURRENTLY outside a transaction; a failed build leaves an invalid index to drop; L197 type changes as add, backfill, switch, drop; L198 backfills batched outside the schema migration, schema and data never in one transaction; L519 versioned migrations, re-runnable DDL, one owner role per table in its creation script, long data work outside automated runs (MAINT). Inherited from J2: one path of change, live database as truth for structure, a drift check (inferred, mechanism handed here), expand, migrate, contract for tables and the function API.
+    Forces: integrity of running code and data across releases, against the number of steps per change.
+    Decision and grounds: all adopted (consensus and MAINT agree; max), plus the drift gate.
+      - Path: versioned migrations in version control, reviewed, run by automation as a release step in every environment, with a database per developer and the same CI pipeline as code (L189, L519, J2).
+      - Form: each change small (L190); DDL re-runnable (conditional create and drop, create or replace), which also makes a partly applied non-transactional step (a concurrent index build) safe to resume (L519, L196); one owner role per table, set in its creation script (L519, GUARD.2).
+      - Online safety: short lock_timeout with retry on every DDL (L193); a column default added only when non-volatile, otherwise the multi-step route (L194); constraints NOT VALID then VALIDATE, SET NOT NULL proven by a validated CHECK (L195); indexes built concurrently outside a transaction, a failed build dropped and retried (L196); type changes as add, backfill, switch, drop (L197).
+      - Schema and data apart: a backfill is a separate, batched data step outside the schema migration's transaction (L198); beyond the threshold of MAINTAIN.4 it is a human-run job (L519, L540, L545).
+      - Incompatible changes: expand, migrate, contract (J2): data moves by dual write, verified read switch, write switch, removal (L191); drops and renames only in the contract phase once no deployed consumer references the old object (L192). Under MD-03 "deployed" covers every consumer: backends, BI queries, consoles and scripts.
+      - Drift gate (J2 hand-off, inferred, no source read): CI applies every migration to an empty database and compares its catalogue with production's (schema objects, grants, function signatures); a difference fails the release and is reconciled by a migration, never by editing the live database. The function-signature part is DB_API's catalogue diff (INTERFACE.1).
+    Rejected: hand-applied production changes: never (J2). Schema and data in one transaction: never (L198). A blocking ALTER without lock_timeout: never (L193). Big-bang renames: rejected (L192).
+    Realizes: ALLOCATION.RECORD.3 (structure as the origin of stored facts; via J2 DATA.MAINTAIN); PIG-WEB-ALLOCATION.DB_API (function changes ship as migrations).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.1
+  - build/research/01_data_tier/result.md::DATA-C04
+  - build/research/06_operations/result.md::OPS-C39
+  - build/research/01_data_tier/result.md::DATA-C06
+  - build/research/01_data_tier/result.md::DATA-C35
+  - build/research/01_data_tier/result.md::DATA-C28
+  - build/research/01_data_tier/result.md::DATA-C30
+  - build/research/01_data_tier/result.md::DATA-C31
+  - build/research/01_data_tier/result.md::DATA-C32
+  - build/research/01_data_tier/result.md::DATA-C33
+  - build/research/01_data_tier/result.md::DATA-C34
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C48
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C60
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.2
+  name: Deletion, Retention and Partitioning
+  intent: 'Deletion is decided per table from the reason the data is kept, and always runs through functions owned by a narrow non-login deletion role that no consumer can use directly; retained data is archived in the same transaction. The default for user-facing transactional data is undecided and awaits the maintainer: hard delete with an archive is recommended, and soft delete with three safeguards is recorded if the question goes unanswered.'
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'undecided: awaiting maintainer, default deletion for user-facing transactional data (question 1; recommendation: hard delete with a same-transaction archive; recorded if unanswered: L520 with three safeguards) | conflict: L520 (MAINT) against L204 and the research recommendation | unvalidated: the three safeguards are inferred'
+  constraints:
+  - 'Per table, recorded (P2, P3 agree): the reason the data is kept selects the mechanism; lookup, configuration and ephemeral rows are hard-deleted; rebuildable caches are invalidated or dropped, never soft-deleted (L520, L525, L538); bulk expiry of time-bounded data is a partition drop or detach, partitioning adopted only when size justifies it, partition keys in primary and unique keys (L206, L207); queryable past values use the temporal model of MAINTAIN.3 (L205, L213).'
+  - 'Whatever the mechanism: deletion goes only through functions owned by the narrow, non-login deletion role of GUARD.2, which holds DELETE on the target tables and INSERT on the archive (changed after review, M3); no consumer role holds DELETE (L525, L514, GUARD.2); a hard delete of retained data copies the row to an archive in the same transaction, the history trigger of MAINTAIN.3 recording it as well (L525, L204); CASCADE follows GUARD.1 (L492).'
+  - 'Where soft delete is used: L521 to L524 apply whole, plus three safeguards required under MD-03 (inferred): (1) a constraint trigger on the child table refuses an active row whose parent is soft-deleted, run under Serializable or with a lock on the parent row (CONCURRENCY.1), since no foreign key does; bound to the table, it also holds for a direct single-table write under DB_API''s exception and for owner-run jobs (changed after review, M2: it was a check in the writer functions only); (2) the active-row predicate is written once in the shared specification every consumer reads with, and the reporting role''s documentation names it; (3) a restore re-checks the row against the current constraints, since a deleted row escaped them (L522).'
+  design_notes: |-
+    Question: how rows are deleted, archived or expired per table.
+    Positions:
+      - P1 deletion is a recorded decision: soft delete flag, hard delete plus an archive written in the same transaction (table name, id, jsonb copy), or hard delete only; soft deletion leaks its predicate into every query, stops foreign keys from enforcing consistency between deleted parents and children, makes a legally required purge harder; undelete is rarely used; applies: soft delete when users need undo in the product, otherwise archive (L204, contested; critique T3, soft delete defended only in T4 snippets).
+      - P2 decide per entity from the reason data is kept: none (hard delete), legal or audit retention (archive or append-only audit), user-visible recovery (archive, or soft delete with an owner for the predicate), queryable past (temporal model), bulk expiry (partition drop) (L205, majority, inferred synthesis).
+      - P3 per-table gradient: full version history (rare), partial soft delete (the default for user-facing transactional data, about 60% of tables), archive table, hard delete (lookup, configuration, ephemeral) (L520 MAINT; contradicts L204 and the research recommendation D2).
+      - P4 soft delete mechanics: nullable timestamptz `deleted_at`, every read filters, partial indexes over active rows; the predicate leak accepted (L521 MAINT); checks carry an "or deleted" escape and uniqueness is a partial unique index over active rows (L522 MAINT); soft-delete cascades shadow the foreign-key graph in dedicated functions (L523 MAINT); idempotent, polyvalent functions with a bulk confirmation flag, deletion time not before creation (L524 MAINT); hard deletion only for rebuildable data or after an archive copy; no DELETE privilege for application roles (L525 MAINT).
+      - P5 time-bounded data partitioned by time; detach or drop old partitions instead of bulk DELETE (L206); partition only when size justifies it (larger than memory); partition keys in primary and unique keys (L207).
+      - The doctrine research's synthesis (D2 answer): the doctrine is the defender the critique lacked, its mitigations answer the critique; suggested record: soft delete by default with the mitigations as conditions.
+    Forces: (reframed after review, M1):
+      - Integrity of references and reads for every consumer, the node's own force, favours hard delete with archive: foreign keys and unique constraints keep working unchanged, and no reader can see a deleted row by forgetting a predicate.
+      - Immediate undo and in-place history, for users and for reporting, favours soft delete: a user's or an agent's mistake is undone by a single update (a force of the INTERACTION branch, the user's ability to work with the data), and a reporting consumer that counts deleted items in historical figures (last year's orders, including those deleted since) finds them in the base table, where under an archive it must union the archive.
+      - Recoverability as such does not divide them: both options keep deleted data recoverable and kept for audit. What differs is the speed and effort of a restore (one update against a restore function the team owns) and where the integrity cost falls.
+      - MD-03 cuts both ways. It makes the predicate leak (L521) a cost for every consumer that reads base tables (each backend, BI, consoles, scripts), and foreign keys no longer stop a new active child from referencing a soft-deleted parent, a check the cascade functions (L523) do not cover. It also adds the reporting consumers who, under an archive, must union it to count deleted rows.
+      - A cost both pay: GUARD.1 (L492) forbids CASCADE on core entities, so deleting a parent with children needs a deletion function that handles the children in order, soft-deleting them under soft delete (L523), archiving and removing them under the archive.
+    Decision and grounds: (one clause awaiting maintainer, question 1) everything except the default for user-facing transactional data is decided.
+      - Per table, recorded (P2, P3 agree): the reason the data is kept selects the mechanism; lookup, configuration and ephemeral rows are hard-deleted; rebuildable caches are invalidated or dropped, never soft-deleted (L520, L525, L538); bulk expiry of time-bounded data is a partition drop or detach, partitioning adopted only when size justifies it, partition keys in primary and unique keys (L206, L207); queryable past values use the temporal model of MAINTAIN.3 (L205, L213).
+      - Whatever the mechanism: deletion goes only through functions owned by the narrow, non-login deletion role of GUARD.2, which holds DELETE on the target tables and INSERT on the archive (changed after review, M3); no consumer role holds DELETE (L525, L514, GUARD.2); a hard delete of retained data copies the row to an archive in the same transaction, the history trigger of MAINTAIN.3 recording it as well (L525, L204); CASCADE follows GUARD.1 (L492).
+      - Where soft delete is used: L521 to L524 apply whole, plus three safeguards required under MD-03 (inferred): (1) a constraint trigger on the child table refuses an active row whose parent is soft-deleted, run under Serializable or with a lock on the parent row (CONCURRENCY.1), since no foreign key does; bound to the table, it also holds for a direct single-table write under DB_API's exception and for owner-run jobs (changed after review, M2: it was a check in the writer functions only); (2) the active-row predicate is written once in the shared specification every consumer reads with, and the reporting role's documentation names it; (3) a restore re-checks the row against the current constraints, since a deleted row escaped them (L522).
+      - Awaiting maintainer (question 1): the default for user-facing transactional data. Recommendation: hard delete with a same-transaction archive by default; soft delete where the product offers users a restore or undo on the table (trash, undo), or where reporting consumers must count deleted rows in place. Ground: it is the max for the node's force, integrity of references and reads for every consumer of a shared database (MD-03), while deleted data stays recoverable through a restore function. Why it stays a question: soft delete's advantage, immediate undo and in-place history for users and reporting, is a force of other branches that the max for DATA does not weigh, and the default for most user-facing tables (about 60%, L520) is the maintainer's codified practice. The review's preferred fix, deciding the archive as a fifth partial verdict against L520, is recorded and not taken: the question goes to the maintainer, framed even-handed. The evidence that restores are rare is one T3 practitioner critique (L204, SRC-265). If unanswered, the graph records the doctrine's default (soft delete for user-facing transactional data, L520) with the three safeguards above mandatory, and marks the clause `undecided: awaiting maintainer`.
+    Rejected: hard delete without archive for retained data: never (L525). Soft delete for caches: never (L538). Bulk DELETE of time-bounded data where partitioning applies: rejected (L206); acceptable below L207's size threshold. A boolean deleted flag: never (L521).
+    Realizes: ALLOCATION.ACT.4 (archive and history kept in the database); J2 DATA.MAINTAIN (gap 3: lifecycle at stack level only). Personal-data erasure (deferred MAINTAIN.6, L526 recorded as input) must reach soft-deleted rows, archives and history; noted, not judged.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.2
+  - build/research/01_data_tier/result.md::DATA-C40
+  - build/research/14_thin_spots/result.md::THIN-C21
+  - build/research/14_thin_spots/result.md::THIN-C22
+  - build/research/14_thin_spots/result.md::THIN-C26
+  - build/research/01_data_tier/result.md::DATA-C41
+  - build/research/14_thin_spots/result.md::THIN-C23
+  - build/research/01_data_tier/result.md::DATA-C42
+  - build/research/14_thin_spots/result.md::THIN-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C08
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C69
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C18
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C19
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C11
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C21
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C22
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C23
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C32
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.3
+  name: History Tables
+  intent: Every table holding business data has an AFTER ROW trigger writing an append-only history row in the same transaction, recording the session role, the claimed actor, the person an agent acts for and the transaction, written by a narrow history-writer role and refused when no actor is present. High-value data adds tamper detection, and statement-level audit of owner and operator sessions goes to the security log, not the history tables.
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'known: MD-03 | unvalidated: the narrow history-writer role is inferred | gap: tamper-detection mechanism not read; L685 inferred from one source; L684 (cited by J1) has no source'
+  constraints:
+  - 'Audit history for every table that holds business data: an AFTER ROW trigger writes an append-only history row in the same transaction (L212, L208): table, key, operation, old and new row values, session role (the consumer, verified by the database), claimed actor and the person an agent acts for (L685, L566), transaction id, record time as `created_at` (ORGANIZE.3), and the business time and reason when the writer function passes them (L210; J1 ACT.4). Correlation id and outcome for agent actions (L658).'
+  - 'Append-only by privilege: no consumer role holds UPDATE or DELETE on history; the trigger function is owned by the narrow, non-login history-writer role of GUARD.2, which holds only INSERT on the history tables, so a fault in it cannot disable the triggers or alter past rows (changed after review, M3: it was owned by the owner role). Retention purges are owner-run jobs under L545.'
+  - 'Tamper detection for high-value data (L209): because the owner role owns the history tables and so bypasses grants, a detection mechanism (chained row hashes or an external anchor) reveals modified or deleted history. Mechanism open, no source read; the requirement stands for high-value data.'
+  - 'Temporal model where the product queries past values (L211, L205): validity periods with WITHOUT OVERLAPS and PERIOD foreign keys on Postgres 18 or later, exclusion constraints with ranges before (L213); the version is checked per project.'
+  - Statement-level audit of owner and operator sessions (DDL, human-run jobs) by pgaudit or logging, routed to the security event log, not the history tables (L208; J1 ACT.4, the separate sink).
+  - Writes with no actor, or with an actor the session role may not assert, are refused (GUARD.3).
+  design_notes: |-
+    Question: how row history and audit records are written and queried in Postgres.
+    Positions: L208 no native system-versioned tables: trigger-written audit tables or application-written history tables, and statement-level "who ran what" with pgaudit or logging (majority, inferred); L209 high-value transactions get an audit trail with integrity controls: append-only tables plus tamper detection (consensus); L210 record the actual date and the record date; L211 choose by how tightly history is queried: audit log (simple, hard to read) or temporal properties (integrated, model cost); L212 audit by trigger commits atomically with the change; AFTER sees the final row; L213 Postgres 18 application-time constraints (WITHOUT OVERLAPS, PERIOD), exclusion constraints with ranges before; L685 record the acting identity and, when a program acts for a person, both, passed through a transaction-local setting (majority, inferred, one source). Placement ACT.4: trigger-written, append-only, same transaction, session role and claimed actor both recorded, writes without actor refused, pairing checked; agent actions carry acting identity, delegating subject, operation, correlation id, outcome (L658); the security event log apart (L049, L392).
+    Forces: completeness and trustworthiness of history (integrity) against write cost and query convenience.
+    Decision and grounds: realization of ACT.4 (MD-03), the max.
+      - Audit history for every table that holds business data: an AFTER ROW trigger writes an append-only history row in the same transaction (L212, L208): table, key, operation, old and new row values, session role (the consumer, verified by the database), claimed actor and the person an agent acts for (L685, L566), transaction id, record time as `created_at` (ORGANIZE.3), and the business time and reason when the writer function passes them (L210; J1 ACT.4). Correlation id and outcome for agent actions (L658).
+      - Append-only by privilege: no consumer role holds UPDATE or DELETE on history; the trigger function is owned by the narrow, non-login history-writer role of GUARD.2, which holds only INSERT on the history tables, so a fault in it cannot disable the triggers or alter past rows (changed after review, M3: it was owned by the owner role). Retention purges are owner-run jobs under L545.
+      - Tamper detection for high-value data (L209): because the owner role owns the history tables and so bypasses grants, a detection mechanism (chained row hashes or an external anchor) reveals modified or deleted history. Mechanism open, no source read; the requirement stands for high-value data.
+      - Temporal model where the product queries past values (L211, L205): validity periods with WITHOUT OVERLAPS and PERIOD foreign keys on Postgres 18 or later, exclusion constraints with ranges before (L213); the version is checked per project.
+      - Statement-level audit of owner and operator sessions (DDL, human-run jobs) by pgaudit or logging, routed to the security event log, not the history tables (L208; J1 ACT.4, the separate sink).
+      - Writes with no actor, or with an actor the session role may not assert, are refused (GUARD.3).
+    Rejected: application-written history as the only record: rejected under MD-03 (J1 ACT.4); acceptable when one application is the only writer (L627 via J1). Audit only in logs: rejected for business history (L208 keeps logs for statement-level audit).
+    Realizes: web-app-philosophy:ALLOCATION.ACT.4 (writes history where the audit placement says). Conflicts link of PIG-WEB-TRANSVERSE.OPERABILITY.4 (security log apart) respected.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.3
+  - build/research/14_thin_spots/result.md::THIN-C13
+  - build/research/14_thin_spots/result.md::THIN-C26
+  - build/research/01_data_tier/result.md::DATA-C43
+  - build/research/14_thin_spots/result.md::THIN-C25
+  - build/research/14_thin_spots/result.md::THIN-C05
+  - build/research/14_thin_spots/result.md::THIN-C10
+  - build/research/14_thin_spots/result.md::THIN-C11
+  - build/research/14_thin_spots/result.md::THIN-C12
+  - build/research/14_thin_spots/result.md::THIN-C24
+  - build/research/14_thin_spots/result.md::THIN-C06
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+  - build/research/18_allocation/result.md::ALLOC-C30
+  - build/research/20_collaboration/result.md::C29
+  - build/research/19_agent_users/result.md::AGENT-C33
+  - build/research/20_collaboration/result.md::C28
+  - build/research/20_collaboration/result.md::C30
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.4
+  name: Bulk Data Jobs
+  intent: 'Large data changes are batched, idempotent jobs run by a human after a checklist, not by automation: sharding only above about 10^7 rows, each batch its own Serializable transaction, a convergence query that must reach zero, and a stop plan. They run as the owner role with the operator and a ticket id as actor.'
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: known
+  constraints:
+  - Below the L540 threshold a data change is a batched data step outside the schema migration (L198, MAINTAIN.1); above it, a sharded job per L541 to L544.
+  - Each batch is its own transaction under Serializable (CONCURRENCY.1), idempotent by form (CONCURRENCY.4, L587), its statements inseparable where they must be (L585); a procedure with transaction control is the tool for per-batch commits (L516, INTERFACE.1).
+  - The job runs as the owner role under L545's checklist; it sets the operator and ticket id as actor (J1 R1-3, GUARD.3); a state column changes only through its writer function or as a recorded exception (J1 R1-6).
+  - Convergence query at zero before the job is done; staleness window and convergence check stated for any asynchronous stream (L543, L482 via J1).
+  design_notes: |-
+    Question: how large data changes are batched, run, observed and recovered.
+    Positions: (all MAINT, uncontested; agree L198, L410, L193, L196, L199): L540 shard one statement across workers only from about 10^7 to 10^9 rows; smaller work is an ordinary migration; L541 four decisions in order: batching key (key prefix or indexed foreign key, then numeric range, modulo last; keyset paging, offset never in the millions), work list, fan-out, observe and recover; L542 the work list from the data, no batch per giant entity; L543 each batch its own transaction; batches idempotent or self-limiting; a job log; retries only for idempotent batches; a convergence query that must reach zero; L544 disjoint rows; lock waits, dead tuples and replica lag as signals; pool sized by the smallest headroom; ramp up; shard data changes only, never DDL; L545 run by a human after a checklist: ticket id in the statement comment, end-to-end run on a copy, index-backed predicate verified by plan, written convergence query, stop plan, detachable session; automation may write the script but not run it.
+    Forces: integrity and availability of live data during large changes, against job duration and operator effort.
+    Decision and grounds: L540 to L545 adopted whole (MAINT, max), within J1's owner-run path.
+      - Below the L540 threshold a data change is a batched data step outside the schema migration (L198, MAINTAIN.1); above it, a sharded job per L541 to L544.
+      - Each batch is its own transaction under Serializable (CONCURRENCY.1), idempotent by form (CONCURRENCY.4, L587), its statements inseparable where they must be (L585); a procedure with transaction control is the tool for per-batch commits (L516, INTERFACE.1).
+      - The job runs as the owner role under L545's checklist; it sets the operator and ticket id as actor (J1 R1-3, GUARD.3); a state column changes only through its writer function or as a recorded exception (J1 R1-6).
+      - Convergence query at zero before the job is done; staleness window and convergence check stated for any asynchronous stream (L543, L482 via J1).
+    Rejected: one giant statement over 10^7 rows or more: rejected (L540). Offset paging in the millions: never (L541). Automated execution of long data jobs: rejected (L545); J2 settled this against a reading of L046 that would automate them.
+    Realizes: web-app-philosophy:ALLOCATION.ACT.3 (bulk data work as the deferred-work placement allows).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.4
+  - build/research/01_data_tier/result.md::DATA-C03
+  - build/research/07_architecture_styles/result.md::ARCH-C21
+  - build/research/06_operations/result.md::OPS-C38
+  - build/research/01_data_tier/result.md::DATA-C28
+  - build/research/01_data_tier/result.md::DATA-C32
+  - build/research/01_data_tier/result.md::DATA-C34
+  - build/research/01_data_tier/result.md::DATA-C36
+  - build/research/02_app_tier/result.md::APP-C18
+  - build/research/02_app_tier/result.md::APP-C23
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C59
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C60
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C61
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C62
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C63
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C64
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C50
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C57
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.5
+  name: Backup and Recovery
+  intent: 'Recovery to a chosen moment is the default: base backups plus continuous WAL archiving to a repository on another host, with a backup counting only once a restore of it has been rehearsed on a schedule. Logical dumps serve portability only, fsync is never off, and synchronous_commit is relaxed only for data that may be lost on a crash.'
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'known | unvalidated: per-transaction synchronous_commit scope | gap: recovery objectives (how much loss, how long a restore) have no row'
+  constraints:
+  - 'Point-in-time recovery by default: base backups plus continuous WAL archiving to a repository on another host, with retention and tracked chains (L218, L222); the archive command strict (L218).'
+  - Archiving tested and monitored before the first base backup; a backup counts only once a restore of it has been rehearsed, and restores are rehearsed on a schedule (L219).
+  - Logical dumps (with roles dumped separately) only for portability and partial copies, never as the recovery plan (L220).
+  - Configuration in version control (L221).
+  - fsync on, write caches safe (L223); synchronous_commit on by default; off only per transaction or per role for data that may be lost on a crash, such as rebuildable caches (L223's trade-off made explicit; per-transaction scope inferred).
+  design_notes: |-
+    Question: how the database is backed up and proven restorable.
+    Positions: (consensus): L218 recovery to a moment needs a base backup plus continuous WAL archiving; the archive command succeeds only on real success and refuses to overwrite; L219 archiving set up, tested and monitored before the first base backup; restores rehearsed (inferred wording); L220 pg_dump is a logical snapshot of one database, without roles, not point-in-time recovery; L221 configuration files are not restored by WAL replay and live in version control; L222 backup repository on a separate host, with retention and tracked full, differential, incremental chains; L223 fsync never off; safe write caches; synchronous_commit is the explicit durability and latency trade-off.
+    Forces: durability and recoverability (integrity) against storage cost and commit latency.
+    Decision and grounds: all adopted (max, uncontested).
+      - Point-in-time recovery by default: base backups plus continuous WAL archiving to a repository on another host, with retention and tracked chains (L218, L222); the archive command strict (L218).
+      - Archiving tested and monitored before the first base backup; a backup counts only once a restore of it has been rehearsed, and restores are rehearsed on a schedule (L219).
+      - Logical dumps (with roles dumped separately) only for portability and partial copies, never as the recovery plan (L220).
+      - Configuration in version control (L221).
+      - fsync on, write caches safe (L223); synchronous_commit on by default; off only per transaction or per role for data that may be lost on a crash, such as rebuildable caches (L223's trade-off made explicit; per-transaction scope inferred).
+    Rejected: logical dumps as the only backup: rejected (L220). fsync off: never (L223).
+    Realizes: ALLOCATION.RECORD.1 (the system of record survives loss). High availability is deferred (MAINTAIN.7).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.5
+  - build/research/01_data_tier/result.md::DATA-C46
+  - build/research/01_data_tier/result.md::DATA-C47
+  - build/research/01_data_tier/result.md::DATA-C48
+  - build/research/01_data_tier/result.md::DATA-C49
+  - build/research/01_data_tier/result.md::DATA-C50
+  - build/research/01_data_tier/result.md::DATA-C51
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.6
+  name: Personal Data Erasure
+  intent: 'How personal data is erased or anonymized on request. Deferred: scope out of round 2, recorded only, not judged.'
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'deferred: scope out of round 2, recorded only, not judged; personal-data erasure has one maintainer-doctrine paragraph (L526) as input'
+  design_notes: |-
+    Judge record: not judged (deferred node). L526 (maintainer doctrine, a one-paragraph sketch: a timestamp marks the forgotten subject; a background job anonymizes identifying fields and keeps the row for audit) is recorded as input. Dependency noted by MAINTAIN.2 and MAINTAIN.3: erasure must reach soft-deleted rows, archives and history rows.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.6
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C23
+- op: node.create
+  uid: PIG-WEB-DATA.MAINTAIN.7
+  name: High Availability and Replication
+  intent: 'How the database survives the loss of its primary. Deferred: scope out of round 2, recorded only, not judged.'
+  parent: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'deferred: scope out of round 2, recorded only, not judged; no ledger row covers it'
+  design_notes: |-
+    Judge record: not judged (deferred node). No ledger row; related to ALLOCATION.FORCES.5. Dependency noted: reports on replicas (CONCURRENCY.1) and UNLOGGED caches (DERIVE.2).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.MAINTAIN.7
+- op: node.create
+  uid: PIG-WEB-DATA.DERIVE.1
+  name: Denormalization and Sync
+  intent: A denormalized copy exists only when computing on read is measured too costly, with a sync plan recorded before it is built and a drift guard that recomputes and alerts on divergence. A copy that decides writes is kept by a same-transaction trigger, because only what is bound to the table holds for every writer, and the database guards the redundancy, not one application.
+  parent: PIG-WEB-DATA.DERIVE
+  epistemic_state: 'known | unvalidated: the order of options is inherited from J1, where it is marked inferred; the trigger-first top rung follows this tier''s binding rule (inferred)'
+  constraints:
+  - Of L531's reasons, the indivisible object and the flexible periphery are organizing choices governed by ORGANIZE.5 (no fact is stored twice); only the derived summary is a copy governed here.
+  - A copy exists only when computing on read is measured too costly (L168, J2), with L469's sync plan recorded in the table comment before it is built.
+  - 'Mechanism, in J1''s order: a stored generated column for same-row values (L176); when any reader decides a write from the copy or shows it as authoritative (L532''s top rung), a same-transaction trigger, and the writer function only when the source table admits no other writer (no direct-write grant, no owner-run job) (changed after review, M2: a direct writer under DB_API''s exception or an owner-run job would skip a function-kept copy; only what is bound to the table holds for every writer); a cache table with a stated staleness otherwise (DERIVE.2). L532''s choice by change frequency and divergence harm applies within that order.'
+  - 'Every copy other than a generated column gets L533''s drift guard (MAINT). "Documentation only" therefore never stands alone: with the guard it is the periodic-detection rung (L532 read with L533; no conflict).'
+  - 'The redundancy is guarded by the database (trigger, function, constraint), not by "the application" of L168: under MD-03 several applications write (J1 DERIVE.1).'
+  design_notes: |-
+    Question: when data is denormalized and which sync mechanism and drift check each copy gets.
+    Positions: L168 denormalize deliberately, where measured performance requires it, the application guarding the redundancy (consensus); L176 same-row derivable values as generated columns, stored if read often or replicated logically; L531 three legitimate reasons: an indivisible object (bounded, schema-validated JSON), a derived summary of disaggregated data (needs sync), a normalized core with a flexible periphery (MAINT); L532 the sync gradient: documentation only, constraints, periodic detection, scheduled refresh, same-transaction triggers; move up with change frequency and divergence harm (MAINT); L533 drift guard: a scheduled query recomputes each denormalized aggregate, counts divergence and alerts (MAINT). Placement DERIVE.1 (J1): compute on read; same transaction when atomic with the source; cache tables with stated staleness; consumers never write derived stores beside the source.
+    Forces: integrity (a copy cannot be trusted further than its sync) against read performance.
+    Decision and grounds: realization of DERIVE.1 and J2 DATA.DERIVE; the doctrine is the max.
+      - Of L531's reasons, the indivisible object and the flexible periphery are organizing choices governed by ORGANIZE.5 (no fact is stored twice); only the derived summary is a copy governed here.
+      - A copy exists only when computing on read is measured too costly (L168, J2), with L469's sync plan recorded in the table comment before it is built.
+      - Mechanism, in J1's order: a stored generated column for same-row values (L176); when any reader decides a write from the copy or shows it as authoritative (L532's top rung), a same-transaction trigger, and the writer function only when the source table admits no other writer (no direct-write grant, no owner-run job) (changed after review, M2: a direct writer under DB_API's exception or an owner-run job would skip a function-kept copy; only what is bound to the table holds for every writer); a cache table with a stated staleness otherwise (DERIVE.2). L532's choice by change frequency and divergence harm applies within that order.
+      - Every copy other than a generated column gets L533's drift guard (MAINT). "Documentation only" therefore never stands alone: with the guard it is the periodic-detection rung (L532 read with L533; no conflict).
+      - The redundancy is guarded by the database (trigger, function, constraint), not by "the application" of L168: under MD-03 several applications write (J1 DERIVE.1).
+    Rejected: denormalization without a measured need: rejected (L168). A copy maintained by a consumer beside the source: never (J1 DERIVE.1, L045). An ordered-log pipeline: rejected in the default; wins with many external derived stores, a high write rate and a team able to run it (L626 via J1).
+    Realizes: web-app-philosophy:ALLOCATION.DERIVE.1 (keeps denormalized copies in sync as the placement sets); J2 DATA.DERIVE.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.DERIVE.1
+  - build/research/12_counter_voices/result.md::CV-C22
+  - build/research/14_thin_spots/result.md::THIN-C34
+  - build/research/01_data_tier/result.md::DATA-C17
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C25
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C27
+  - build/research/18_allocation/result.md::ALLOC-C28
+- op: node.create
+  uid: PIG-WEB-DATA.DERIVE.2
+  name: Cache Tables
+  intent: Cache data lives in hand-managed tables classified by recomputability, invalidated by a key inserted in the source transaction and recomputed set-based by workers that claim keys with SKIP LOCKED. UNLOGGED tables are used only for rebuildable data no standby reader needs, and cache rows are invalidated or dropped by a narrow cache-maintenance role, never soft-deleted.
+  parent: PIG-WEB-DATA.DERIVE
+  epistemic_state: 'known | unvalidated: SKIP LOCKED claiming, the MD-03 limit on L538, the narrow cache-maintenance role and the exact standby behaviour of UNLOGGED tables are inferred'
+  constraints:
+  - Classification, keys, names, comments per L535 and L537.
+  - 'Invalidation: the source change inserts the cache key in the same transaction (L536), by a trigger, or by the writer function only when the source table admits no other writer (DERIVE.1''s rule, applied here for consistency with M2); workers claim keys with `FOR UPDATE SKIP LOCKED` in bounded batches, so concurrent workers never recompute the same key (L413, L595; fills the doctrine''s gap 6, inferred); recomputation is set-based, not a row loop (L530; doctrine-internal tension 6).'
+  - 'Single-owner caches (L538): a cache whose sources are written by other consumers too keeps its invalidation in the source''s transaction; L538''s full ownership (compute, upsert, invalidation) applies only when that service is also the only writer of the cache''s sources (inferred under MD-03; consistent with J1 DERIVE.1''s ban on derived stores written beside the source). The service writes the cache through its upsert function, with L538''s lease and terminal failure marker.'
+  - 'UNLOGGED only for rebuildable caches that no replica reader needs: the contents of UNLOGGED tables are not replicated to standby servers, so they are unavailable on a standby to a reporting role reading there (L420; corrected after review, m5: the earlier "would read them empty" was not grounded; whether a standby query errors or returns nothing was not checked).'
+  - Materialized views only for an atomic full refresh (L539).
+  - Cache rows are invalidated or dropped, never soft-deleted (L538); dropping is done by invalidation functions owned by the narrow, non-login cache-maintenance role of GUARD.2, not by a consumer's DELETE and not with the owner role's rights (changed after review, M3).
+  design_notes: |-
+    Question: how cache tables are classified, invalidated, named and refreshed.
+    Positions: (MAINT unless noted): L420 rebuildable cache data may live in UNLOGGED tables (fast, truncated on crash, not replicated); nothing else (consensus); L535 classify by recomputability: aggregates of immutable source (no sync), outputs of logic outside SQL (invalidation queue plus scheduled recompute), expensive SQL aggregates (scheduled refresh, or invalidate and refresh lazily); L536 invalidation queue: the source change inserts the key (conflicts ignored); a scheduled worker recomputes a bounded batch, upserts, removes the keys; staleness window stated; queue size and oldest age monitored; gap: no rule against double work by concurrent consumers; L537 key follows the query pattern; timestamps for staleness; cache-class suffix; comment states sync level, freshness, source, impact of divergence; L538 when exactly one service owns every write path of a cache, it may own compute, upsert and invalidation, with a lease timestamp and a terminal failure marker; cache rows invalidated or dropped, never soft-deleted; L539 hand-managed cache tables over materialized views; a materialized view fits only an atomic full refresh; the doctrine does not use them. Placement CACHE_STORE: derived caches in Postgres tables; response caches too, UNLOGGED when rebuildable.
+    Forces: freshness and atomic invalidation (integrity of what caches serve) against read latency and load on the primary.
+    Decision and grounds: L535 to L539 and L420 adopted (MAINT, max), with three realizations.
+      - Classification, keys, names, comments per L535 and L537.
+      - Invalidation: the source change inserts the cache key in the same transaction (L536), by a trigger, or by the writer function only when the source table admits no other writer (DERIVE.1's rule, applied here for consistency with M2); workers claim keys with `FOR UPDATE SKIP LOCKED` in bounded batches, so concurrent workers never recompute the same key (L413, L595; fills the doctrine's gap 6, inferred); recomputation is set-based, not a row loop (L530; doctrine-internal tension 6).
+      - Single-owner caches (L538): a cache whose sources are written by other consumers too keeps its invalidation in the source's transaction; L538's full ownership (compute, upsert, invalidation) applies only when that service is also the only writer of the cache's sources (inferred under MD-03; consistent with J1 DERIVE.1's ban on derived stores written beside the source). The service writes the cache through its upsert function, with L538's lease and terminal failure marker.
+      - UNLOGGED only for rebuildable caches that no replica reader needs: the contents of UNLOGGED tables are not replicated to standby servers, so they are unavailable on a standby to a reporting role reading there (L420; corrected after review, m5: the earlier "would read them empty" was not grounded; whether a standby query errors or returns nothing was not checked).
+      - Materialized views only for an atomic full refresh (L539).
+      - Cache rows are invalidated or dropped, never soft-deleted (L538); dropping is done by invalidation functions owned by the narrow, non-login cache-maintenance role of GUARD.2, not by a consumer's DELETE and not with the owner role's rights (changed after review, M3).
+    Rejected: a separate cache service by default: rejected (CACHE_STORE); wins at measured cache latency or load on the primary (J1). Materialized views for partial or per-entry refresh: rejected (L539). UNLOGGED for data that is not rebuildable: never (L420).
+    Realizes: PIG-WEB-ALLOCATION.CACHE_STORE (holds cache tables when the placement keeps caches in Postgres); ALLOCATION.DERIVE.3; ALLOCATION.ACT.3 (scheduled refresh, with JOB_HOST).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.DERIVE.2
+  - build/research/01_data_tier/result.md::DATA-C52
+  - build/research/01_data_tier/result.md::DATA-C56
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C46
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C29
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C30
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C31
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C32
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C33
+  - build/research/16_consistency_ordering/result.md::CONS-C22
+- op: node.create
+  uid: PIG-WEB-DATA.DERIVE.3
+  name: Search
+  intent: 'How full-text and faceted search is provided. Deferred: scope out of round 2, recorded only, not judged.'
+  parent: PIG-WEB-DATA.DERIVE
+  epistemic_state: 'deferred: scope out of round 2, recorded only, not judged; no ledger row covers it'
+  design_notes: |-
+    Judge record: not judged (deferred node). No ledger row; related to ALLOCATION.DERIVE.2.
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.DERIVE.3
+- op: node.create
+  uid: PIG-WEB-DATA.INTERFACE.1
+  name: Functions and Views
+  intent: Every write that is a business operation is a database function called once in its own transaction, named by entity, action and variant, granted per consumer role and, where it needs rights the caller lacks, owned by a narrow non-login role. Additive changes are free, a breaking change goes expand, migrate, contract unless every consumer ships with the migration, and the catalogue diff in CI keeps the interface description in sync.
+  parent: PIG-WEB-DATA.INTERFACE
+  epistemic_state: 'known: MD-03 | conflict: partly against L517 (MAINT) on breaking changes (counted here for both graphs); L187 rejected in favour of L516 | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | unvalidated: zero-call evidence, the override restriction, procedures limited to jobs'
+  constraints:
+  - 'One operation, one call (X3): one business operation is one database function call in its own transaction (J1 R1-4); backends never compose several calls into one operation. A database function may call another domain''s published functions inside the same transaction: composition across domains happens in the database. What is forbidden across domains is direct access to another domain''s tables, not calling its published functions.'
+  - 'Ladder (L516): every write that is a business operation is a function (DB_API, L584, L596); simple reads query base tables, except tables guarded by per-user read functions where B''s condition holds (see "Awaiting maintainer"); a procedure only where transaction control is needed, which in practice means owner-run batch jobs (MAINTAIN.4): a procedure that commits inside cannot be a consumer''s call, since one call is one transaction (J1 R1-4; inferred).'
+  - Views are never contract objects (L516; DB_API); where a throwaway view exists, L188's rules apply (security_invoker when the caller's rights must apply, security_barrier for filters).
+  - 'Conventions (L530) adopted: entity, action, variant names; parameters validated first; a safe variant over a base operation; errors naming the function with stable codes, which, with named constraints (L495), the backends map to their interface errors (J7); one result row per affected table with action and count; a change log per function; set-based statements, a loop only when justified and documented. The override flag for blockable business rules is honoured only for roles granted it, and its use is recorded in history with the actor (GUARD.2, MAINTAIN.3; inferred: an unrestricted override would let any consumer bypass a rule the database is the authority for).'
+  - 'Parameters the placements require: the expected version for user-edited rows (GUARD.5, CONCURRENCY.2), the idempotency key where the operation is not idempotent by design (GUARD.6), the business reason where history needs it (ACT.4); the actor comes from the transaction-local context, never from a parameter (GUARD.3).'
+  - 'Security: EXECUTE revoked from PUBLIC and granted per consumer role (L185, GUARD.2); its owner''s rights only where the function must write what the caller cannot, the owner being a narrow non-login role of GUARD.2, never the owner role, with a fixed search_path (GUARD.2, M3).'
+  - 'Evolution (partly against L517; this departure is counted here, once, for both graphs, X2): additive changes need nothing more (L517): new functions, new parameters with defaults. "Deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. L517''s coordination with every consumer and "no formal version numbers, a new function name carries the change" are kept: the new behaviour ships as a new function or variant beside the old one (L530''s variant naming), every consuming team is coordinated with, consumers move, and the old function is removed in a change marked coordinated once no consumer calls it, checked by the catalogue diff in CI (DB_API) and by evidence of zero calls over a stated window (function call statistics; inferred, mechanism not read). Ground: under MD-03 backends, BI, consoles and scripts deploy on their own schedules, and the database and its consumers never deploy atomically (J2 DATA.MAINTAIN).'
+  - 'Description in sync (X7, MD-02): "always in sync by process" and the compatibility window apply to the database function API catalogue as to every interface description consumers read; the catalogue diff in CI is that process here, and the generated wrappers are its consumer-side copy (TYPE_CHAIN).'
+  - 'Functions ship as migrations (MAINTAIN.1) and are tested against a live database in CI (DB_API), under X4''s boundary (CONCURRENCY.2): logic tests in never-committing transactions, commit-only behaviour in a disposable database.'
+  design_notes: |-
+    Question: how database functions and views are written, named, secured and evolved.
+    Positions:
+      - P1 views run with owner's privileges by default; security_invoker when the caller's rights or row policies must apply; security_barrier for row-filter views (L188).
+      - P2 tool ladder: plain query, then a function when a strong reason pays, then a procedure only where transaction control is needed; views off the path, acceptable only as throwaway objects; backends may query base tables for simple reads (L516 MAINT; contradicts L187).
+      - P3 the function API evolves additively; a breaking change is coordinated with every consuming team and deployed together; no formal version numbers (L517 MAINT).
+      - P4 conventions: names read entity, action, variant; mandatory parameters validated first; a validating "safe" variant wraps a base operation; errors name the function and carry stable codes, with an override flag for blockable business rules; results return one row per affected table with action and count; a change log per function; set-based statements over loops (L530 MAINT).
+      - P5 a contract schema of views and functions hiding base tables (L187, contested; rejected by J1 in DB_API).
+      - Placement DB_API (MD-03): function API in a dedicated schema; EXECUTE per consumer role; writes through functions, one call per transaction; simple reads on base tables; CI fails on a removed function or incompatible signature unless marked coordinated; wrappers generated from the catalogue. J2 flagged a narrowing of P3.
+    Forces: integrity of every consumer's access (one operation, one call, one transaction) and changeability of the database behind it, against the coordination cost of an API several consumers deploy against on their own schedules.
+    Decision and grounds: realization of DB_API (MD-03), the doctrine as the max except on breaking changes.
+      - One operation, one call (X3): one business operation is one database function call in its own transaction (J1 R1-4); backends never compose several calls into one operation. A database function may call another domain's published functions inside the same transaction: composition across domains happens in the database. What is forbidden across domains is direct access to another domain's tables, not calling its published functions.
+      - Ladder (L516): every write that is a business operation is a function (DB_API, L584, L596); simple reads query base tables, except tables guarded by per-user read functions where B's condition holds (see "Awaiting maintainer"); a procedure only where transaction control is needed, which in practice means owner-run batch jobs (MAINTAIN.4): a procedure that commits inside cannot be a consumer's call, since one call is one transaction (J1 R1-4; inferred).
+      - Views are never contract objects (L516; DB_API); where a throwaway view exists, L188's rules apply (security_invoker when the caller's rights must apply, security_barrier for filters).
+      - Conventions (L530) adopted: entity, action, variant names; parameters validated first; a safe variant over a base operation; errors naming the function with stable codes, which, with named constraints (L495), the backends map to their interface errors (J7); one result row per affected table with action and count; a change log per function; set-based statements, a loop only when justified and documented. The override flag for blockable business rules is honoured only for roles granted it, and its use is recorded in history with the actor (GUARD.2, MAINTAIN.3; inferred: an unrestricted override would let any consumer bypass a rule the database is the authority for).
+      - Parameters the placements require: the expected version for user-edited rows (GUARD.5, CONCURRENCY.2), the idempotency key where the operation is not idempotent by design (GUARD.6), the business reason where history needs it (ACT.4); the actor comes from the transaction-local context, never from a parameter (GUARD.3).
+      - Security: EXECUTE revoked from PUBLIC and granted per consumer role (L185, GUARD.2); its owner's rights only where the function must write what the caller cannot, the owner being a narrow non-login role of GUARD.2, never the owner role, with a fixed search_path (GUARD.2, M3).
+      - Evolution (partly against L517; this departure is counted here, once, for both graphs, X2): additive changes need nothing more (L517): new functions, new parameters with defaults. "Deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. L517's coordination with every consumer and "no formal version numbers, a new function name carries the change" are kept: the new behaviour ships as a new function or variant beside the old one (L530's variant naming), every consuming team is coordinated with, consumers move, and the old function is removed in a change marked coordinated once no consumer calls it, checked by the catalogue diff in CI (DB_API) and by evidence of zero calls over a stated window (function call statistics; inferred, mechanism not read). Ground: under MD-03 backends, BI, consoles and scripts deploy on their own schedules, and the database and its consumers never deploy atomically (J2 DATA.MAINTAIN).
+      - Description in sync (X7, MD-02): "always in sync by process" and the compatibility window apply to the database function API catalogue as to every interface description consumers read; the catalogue diff in CI is that process here, and the generated wrappers are its consumer-side copy (TYPE_CHAIN).
+      - Functions ship as migrations (MAINTAIN.1) and are tested against a live database in CI (DB_API), under X4's boundary (CONCURRENCY.2): logic tests in never-committing transactions, commit-only behaviour in a disposable database.
+    Awaiting maintainer (B1, X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. Where B's condition holds, read functions join this API: they receive the verified actor through GUARD.3's context (a claim to the database, checked against the session role), follow these conventions, and the tables they guard lose direct SELECT for the consumer roles that read through them.
+    Rejected: P5, views as contract (L187): rejected (DB_API, L516); wins when a CRUD-dominant application is served by a database-as-API server with a strong Postgres team (L618 via J1). L517's "deployed together" as the general rule: rejected; acceptable under the condition above. An unrestricted override flag: rejected.
+    Realizes: PIG-WEB-ALLOCATION.DB_API (writes the functions and views the placement calls for); ALLOCATION.RECORD.2; ALLOCATION.ACT.1 (operations as functions); ALLOCATION.GUARD.5, GUARD.6 (parameters).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.INTERFACE.1
+  - build/research/01_data_tier/result.md::DATA-C25
+  - build/research/01_data_tier/result.md::DATA-C20
+  - build/research/01_data_tier/result.md::DATA-C21
+  - build/research/17_data_contracts/result.md::DCON-C23
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C46
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/18_allocation/result.md::ALLOC-C17
+- op: node.create
+  uid: PIG-WEB-DATA.INTERFACE.2
+  name: Connections and Pooling
+  intent: Consumers reach Postgres through an external pooler in transaction mode, so session state is avoided and context travels in transaction-local settings. Each consumer role gets its own connection limit, statement, lock and idle-in-transaction timeouts, and default isolation set on the role, with owner-run jobs and migrations on session-mode or direct connections.
+  parent: PIG-WEB-DATA.INTERFACE
+  epistemic_state: 'known | unvalidated: pool sizing formula is a T3 heuristic | gap: prepared-statement support in transaction-mode pooling by pooler version (research)'
+  constraints:
+  - 'An external pooler in transaction mode for backends and consoles; the design already avoids session state: context in transaction-local settings (L311, GUARD.3), only transaction-scoped advisory locks (L580), settings on the role, not the session (L203). Prepared statements, LISTEN and WITH HOLD cursors are not used through it (L200), which stays the safe default; a listener for database notifications connects directly or in session mode (J8, REALTIME.5). Two points added after review (m7), neither checked against a source: newer PgBouncer releases are reported to support protocol-level prepared statements in transaction mode (marked for research); and database drivers that cache prepared statements by default must be configured to match the pooler (handed to J7 for the backends and J9 for consoles and scripts).'
+  - Owner-run jobs and migrations use session-mode or direct connections (detachable sessions, L545; concurrent index builds outside a transaction, L196).
+  - Pool size per L199 as a starting point, measured on the workload (the formula is a heuristic).
+  - 'Per consumer role (L201, L203): a connection limit, so BI or a script cannot starve the backends; statement_timeout, lock_timeout and idle_in_transaction_session_timeout set on the role (short for backends, longer for reporting, short lock_timeout for the owner''s DDL, L193); default isolation on the role (CONCURRENCY.1). Reserved slots keep administration possible (L201).'
+  - idle_in_transaction_session_timeout on every role, so an abandoned transaction neither holds locks nor blocks vacuum (L202).
+  - Remote connections over TLS with scram-sha-256 (L186, GUARD.2).
+  design_notes: |-
+    Question: how consumers connect, how connections are pooled and how sessions are bounded.
+    Positions: (consensus): L199 small server-side concurrency (rule of thumb: cores times 2 plus effective spindles) enforced by an external pooler; max_connections slightly above the pool total (one T3 source for the formula); L200 transaction-mode pooling breaks session state (SET, LISTEN, WITH HOLD cursors, session advisory locks, prepared statements in PgBouncer's documented modes): avoid them or use session mode; L201 per-role connection limits and reserved slots keep administrative access when the pool saturates; L202 idle_in_transaction_session_timeout set; L203 lock_timeout, statement_timeout and idle timeouts per role or session, not globally.
+    Forces: availability and integrity under load (no abandoned transaction holding locks, no consumer starving others) against connection convenience.
+    Decision and grounds: all adopted (max), shaped to J1's access paths.
+      - An external pooler in transaction mode for backends and consoles; the design already avoids session state: context in transaction-local settings (L311, GUARD.3), only transaction-scoped advisory locks (L580), settings on the role, not the session (L203). Prepared statements, LISTEN and WITH HOLD cursors are not used through it (L200), which stays the safe default; a listener for database notifications connects directly or in session mode (J8, REALTIME.5). Two points added after review (m7), neither checked against a source: newer PgBouncer releases are reported to support protocol-level prepared statements in transaction mode (marked for research); and database drivers that cache prepared statements by default must be configured to match the pooler (handed to J7 for the backends and J9 for consoles and scripts).
+      - Owner-run jobs and migrations use session-mode or direct connections (detachable sessions, L545; concurrent index builds outside a transaction, L196).
+      - Pool size per L199 as a starting point, measured on the workload (the formula is a heuristic).
+      - Per consumer role (L201, L203): a connection limit, so BI or a script cannot starve the backends; statement_timeout, lock_timeout and idle_in_transaction_session_timeout set on the role (short for backends, longer for reporting, short lock_timeout for the owner's DDL, L193); default isolation on the role (CONCURRENCY.1). Reserved slots keep administration possible (L201).
+      - idle_in_transaction_session_timeout on every role, so an abandoned transaction neither holds locks nor blocks vacuum (L202).
+      - Remote connections over TLS with scram-sha-256 (L186, GUARD.2).
+    Rejected: session-mode pooling for backends: rejected; acceptable when a consumer needs session state the design cannot avoid. Global timeouts in server configuration: rejected (L203).
+    Realizes: PIG-WEB-ALLOCATION.DB_API (how consumers reach the API); ALLOCATION.RECORD.2 (one role per consumer, bounded). Topology of the pooler belongs to J9 (TRANSVERSE.TOPOLOGY).
+  impl_pointers:
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB-DATA.INTERFACE.2
+  - build/research/01_data_tier/result.md::DATA-C27
+  - build/research/01_data_tier/result.md::DATA-C28
+  - build/research/01_data_tier/result.md::DATA-C32
+  - build/research/01_data_tier/result.md::DATA-C36
+  - build/research/01_data_tier/result.md::DATA-C37
+  - build/research/01_data_tier/result.md::DATA-C38
+  - build/research/01_data_tier/result.md::DATA-C39
+  - build/research/01_data_tier/result.md::DATA-C29
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/research/16_consistency_ordering/result.md::CONS-C16

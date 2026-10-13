@@ -1,0 +1,16 @@
+operations:
+  - op: node.set
+    uid: ALLOCATION
+    name: "Allocation of Responsibilities"
+  - op: node.set
+    uid: ALLOCATION.RULES.1
+    name: "Authority and Copies"
+  - op: node.set
+    uid: ALLOCATION.RULES.3
+    name: "Trust Boundary"
+  - op: node.set
+    uid: ALLOCATION.GUARD.1
+    name: "Validation"
+  - op: node.set
+    uid: ALLOCATION.GUARD.2
+    name: "Invariants"

@@ -1,0 +1,171 @@
+operations:
+- op: node.create
+  uid: DATA
+  name: Durable Data
+  parent: ROOT
+  intent: 'The database is the system of record and holds everything that must hold whoever touches the data: it organizes facts so each is stored once, guards them under concurrent and partial change, keeps structure correct over time, and derives instead of storing. Several backends and other consumers (reporting, admin consoles, scripts) may share it, so what must hold for every consumer lives in the database, not in any one backend.'
+  epistemic_state: 'known | gap: no philosophy realizer for RECORD.2, the database share of ACT.1, ACT.4 and the per-role layer of GUARD.3 under MD-03; data lifecycle (retention, recovery) has no principle row'
+  constraints:
+  - 'Organize: each fact stored once, in tables normalized at least to third normal form (DATA.ORGANIZE).'
+  - 'Guard: every rule a declarative constraint can express is declared; the rest is checked by writer functions under an isolation level or lock that makes the check correct (DATA.GUARD).'
+  - 'Maintain: structure changes only through versioned migrations applied by automation; incompatible changes go expand, migrate, contract; the live database is the truth for structure (DATA.MAINTAIN).'
+  - 'Derive: store the minimum and compute the rest; every stored derived value is a copy with a stated sync and staleness (DATA.DERIVE).'
+  design_notes: |-
+    Roll-up of its four children; owns no ledger row, so it has no positions of its own. Judged under the work J1 and MD-03 give the database (default context: several consumers share the database; operations that change several tables as one business operation are the database's responsibility; everything that must hold whoever touches the data lives in the database).
+    Realizes, through its children: ALLOCATION.RECORD.1, ALLOCATION.RECORD.3, ALLOCATION.GUARD.2, ALLOCATION.GUARD.5, ALLOCATION.DERIVE.1.
+    Rejected: none at this level; each child records its own.
+    Gap 1 (structure): under MD-03 no philosophy DATA node realizes ALLOCATION.RECORD.2 (the database function API as default contract), the database share of ALLOCATION.ACT.1 (each business operation one function call; one writer function per state column, L584, L596), the per-role layer of ALLOCATION.GUARD.3, or ALLOCATION.ACT.4 (audit). The target hierarchy places the database function API under DATA; the skeleton has it only in the defaults graph (database interface node), which has no philosophy counterpart. Proposal to the skeleton owner, not applied: a philosophy node DATA.INTERFACE (realizes RECORD.2 and the database share of ACT.1; refined by the defaults graph's database interface node), judged as a realization of J1's verdicts because it would own no row.
+    Gap 3: data lifecycle (retention, deletion, recovery) has no principle-level row; it exists only in the defaults graph (maintenance nodes for deletion, retention, history, bulk jobs, recovery).
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+- op: node.create
+  uid: DATA.ORGANIZE
+  name: Organized Facts
+  parent: DATA
+  intent: Each fact is stored once and changed in one place; the normal forms are the tests of that rule. Third normal form is the floor for every table, and Boyce-Codd, fourth and fifth normal form apply where they apply, because the anomaly they remove is of the same kind.
+  epistemic_state: 'known | unvalidated: the Boyce-Codd claim and the trigger for a lost dependency, the co-presence CHECK, and the MD-03 consequence are inferred | gap: collation choice has no row (handed to J6)'
+  constraints:
+  - 'Every table passes third normal form: every non-key field states a fact about the key, the whole key and nothing but the key.'
+  - Boyce-Codd, fourth and fifth normal form are applied where they apply. Stopping at third normal form is acceptable only when every candidate key is a single column, and there are no multi-valued facts.
+  - Where a Boyce-Codd decomposition loses a dependency, the lost dependency MUST be enforced by a constraint trigger under DATA.GUARD's rule (Serializable isolation or a lock).
+  - 'Denormalization is not an organizing choice: a denormalized value is a derived copy governed by DATA.DERIVE and exists only with a sync plan recorded before it is built (what and why, sync level, freshness, change frequency, impact of divergence, drift detection and reconciliation, alerting; recorded in the table comment).'
+  - 'A new one-to-one attribute is a nullable column by default; a separate table only for, in this order: cardinality likely to change, a different permission boundary, an independent audit or lifecycle, blast radius on heavily used tables. Sparsity and NULL count are never reasons to split.'
+  - A column is nullable only when absence is a meaningful state of the fact; where several nullable columns must be present together, a CHECK states it.
+  - Collation is a declared property of the stored text, not of a consumer.
+  design_notes: |-
+    Question: how facts are shaped so that each is stored once and changed in one place.
+    Positions: P1 third normal form by default (L037; L469 maintainer doctrine). P2 third normal form as the practical ceiling, higher forms only in specific multi-valued or overlapping-key designs (L039, majority; one T3 source says higher forms are rarely considered, SRC-254 T2 describes fourth and fifth normal form without ranking and has no Boyce-Codd section). P3 denormalize where measured performance requires it, the application guarding the redundancy (L168, owned by the defaults graph's derive node; under L469 only with a sync plan chosen before it is built). P4 a new one-to-one attribute is a nullable column by default, a separate table only for the listed reasons (L470 maintainer doctrine); the opposite position (split to avoid NULLs) is named by L470 itself and no ledger row argues for it.
+    Forces: all positions serve integrity, the node's purpose: no update anomaly or inconsistent dependency can arise (L038). P2 and P3 trade some of it for design effort and read performance (normalization spreads data over several records, L168). P4 trades a nullable column against a join on every read that needs the attribute.
+    Decision: the rule is "each fact once" (L038); the normal forms are its tests. Third normal form for every table (L037, L469; doctrine and research agree). Higher forms where they apply (L039; the fourth and fifth normal form claim is grounded in SRC-254; the Boyce-Codd claim is inferred from standard theory).
+    Changed after review (M4): the higher forms do not cost nothing. Where candidate keys overlap, a Boyce-Codd decomposition is not always dependency-preserving: a dependency one table's key enforced in third normal form can come to span two tables and can no longer be enforced by a key (inferred from standard theory, not in the ledger). The cost is an integrity cost, a rule moving from a declarative key to a procedural cross-table check; enforcing it by constraint trigger keeps both "each fact once" and "every rule enforced", which is the max under the selection rule.
+    Denormalization: a derived copy of a fact stored elsewhere, governed by DATA.DERIVE and ALLOCATION.DERIVE.1, with L469's sync plan.
+    One-to-one attributes: L470 adopted on authority and as the max choice; its split criteria are integrity and security reasons; sparsity is not one, because a split states no fact more precisely and adds a join on every read.
+    Nullable columns state their meaning (L485; L040 cites the database vendor guidance that most columns are NOT NULL, SRC-134 T1); the co-presence CHECK is inferred from L485 and L174.
+    MD-03: the schema is read directly by reporting and operator roles (RECORD.2 access paths); normalization keeps every consumer's view of a fact identical without consumer-side reconciliation (inferred).
+    Rejected: P2 as a ceiling, because stopping at third normal form where overlapping keys or independent multi-valued facts exist leaves the anomalies L038 exists to prevent; acceptable not to analyze beyond third normal form when every candidate key is a single column and there are no multi-valued facts (narrowed after review, M4: a single composite candidate key is not enough, as Kent's own fifth-normal-form example, an all-key table of agents, companies and products, still needs fifth normal form; SRC-254). P3 as an organizing default: never; acceptable as a derived copy when measured read performance requires it, with L469's sync plan, DATA.DERIVE's sync gradient (L532) and drift guard (L533). Splitting a one-to-one attribute for sparsity or NULL count: rejected (L470); a split wins only under L470's criteria.
+    Gap, collation: J1 owns collation in ALLOCATION.DERIVE.2 (the database is the authority for every order it serves) and left its choice open under DATA. No ledger row grounds a choice. Handed, open, to J6 (defaults graph, column types node) to decide with evidence or keep open; the philosophy-level consequence of DERIVE.2 is only that collation is a declared property of the stored text (inferred).
+    Realizes: ALLOCATION.RECORD.1 (holds the durable facts in the form the system-of-record placement gives the database). Refines python-kb-philosophy:STRUCTURE and :DATACENTRICITY (skeleton links).
+    Gap 5: the Boyce-Codd claims rest on standard theory, not on a ledger row.
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA.ORGANIZE
+  - build/research/14_thin_spots/result.md::THIN-C32
+  - build/research/14_thin_spots/result.md::THIN-C33
+  - build/research/14_thin_spots/result.md::THIN-C35
+  - build/research/01_data_tier/result.md::DATA-C07
+  - build/research/14_thin_spots/result.md::THIN-C34
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C71
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C27
+- op: node.create
+  uid: DATA.GUARD
+  name: Guarded Consistency
+  parent: DATA
+  intent: 'The database keeps data valid and consistent under concurrent and partial change: every rule a declarative constraint can express is declared, because only declarative constraints bind every writer; the remaining rules are checked inside one transaction under an isolation level or lock that makes the check correct. Concurrency conflicts are detected by the store, and the consistency model is stated per operation.'
+  epistemic_state: 'known | conflict: against L471 (MAINT) on optional CHECK constraints, inherited from J1 GUARD.2 | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (J1 Q1; recorded default: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends) | unvalidated: the stack form of fencing (L476) and "no deciding read on a replica" are inferred'
+  constraints:
+  - 'Declare every rule a declarative constraint can express: NOT NULL unless absence is a meaningful state; row-local CHECK paired with NOT NULL; foreign keys; unique, partial unique and exclusion constraints for cross-row rules; domains for value types used in several places. Constraints are named, so a violation maps to a stable error. Required, not optional.'
+  - Rules no constraint can express (other multi-row rules, legal transitions, dependencies lost by a Boyce-Codd decomposition) are checked in the writer function or a constraint trigger, under Serializable isolation with retry or after locking the governing row; the function or trigger asserts the isolation it needs, set per consumer role. The default isolation level belongs to J6.
+  - Each business operation commits or rolls back as one transaction inside one function call; callers never pass partial steps and backends never compose several calls into one operation. A database function may call another domain's published functions inside the same transaction; direct access to another domain's tables is forbidden.
+  - Concurrent change is detected inside the writer function, which takes the expected version as a parameter; no transaction or lock is held across user think time.
+  - 'Mutual exclusion that guards correctness is enforced by the store: row version, unique constraint or row lock inside the transaction; a lease is checked by the writer function as a fencing token. A lock outside the database is acceptable only to save duplicate work.'
+  - 'The consistency model is stated per operation: which isolation, whether it reads the primary or a replica, and what staleness it accepts. A check that decides a write never reads a replica. A datastore is never labelled "CP" or "AP".'
+  - 'Access guarding: each consumer has its own role, neither owner nor superuser; grants bound which functions it may execute and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path. Row-level security is not a default (MD-01).'
+  design_notes: |-
+    Question: how the database keeps data valid and consistent under concurrent and partial change.
+    Positions: P1 model data with the most precise structure available so illegal states cannot be represented: NOT NULL, CHECK, foreign keys and domains in the database, precise types at the boundary (L485; SRC-338 T2, SRC-134 T1); placement: ALLOCATION.GUARD.2 requires declarative constraints (L040, L473, L471 maintainer doctrine). P2 application-side validation as the guard (common practice, L040's note; rejected by J1 in GUARD.2: check-then-write is correct only under serializable isolation, L473). P3 state the consistency model per operation (L043; SRC-232 T2) against P3' classifying the datastore as "CP" or "AP" (the practice L043 rejects). P4 a lock that guards correctness carries a fencing token the storage checks; in this stack the row version or a unique constraint is the fencing, preferred to an external lock service (L476; SRC-346 T2); against P4' a lease-based lock service without fencing; P4'' a best-effort lock used only to save duplicate work (L476 allows it).
+    Forces: P1, P3, P4 serve integrity under concurrency and partial failure. P2 serves changeability (rules tested in memory, L042) and loses integrity whenever a second writer or a concurrent request exists (L473), which MD-03 makes the default. P3' serves brevity and hides latency and multi-object transactions (L043). P4' serves availability of the lock and loses correctness when a paused holder acts after its lease expired (L476). P4'' serves efficiency only.
+    Decision: six ways, each the realization of a J1 verdict (GUARD.2 for constraints and procedural rules; RULES.5 and ACT.1 for one transaction per operation, L584 doctrine, MD-03, cross-branch resolution X3: one business operation is one database function call in its own transaction, J1 R1-4, and composition across domains happens in the database; GUARD.5 and L475 for version detection and no lock across think time; L476 for fencing by the store; L043 for the consistency model per operation). Reports on a replica accept snapshot anomalies (L573, via GUARD.2); "no deciding read on a replica" is inferred from L573. Only declarative constraints bind every writer, owner-run migrations and human-run jobs included (J1, GUARD.2); constraints are named so violations map to stable errors (L495).
+    Access guarding (realization of GUARD.3's database layer; not in the node's question as worded, see gap 1): realized in the defaults graph's roles and privileges node (J6). MD-01 and MD-03 apply.
+    Awaiting maintainer (changed after review, B1, X1): undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database ("a draft is visible only to its author"; J1's Q1). Not settled here. The graph records J1's stated default word for word: A provisional, with one written specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold for two or more backends. That is: each backend filters these reads from one shared written specification, with a shared denial-test suite every backend runs; database read functions that receive the verified actor (verified by the backend, still a claim to the database, J1 R1-3) are acceptable when a per-user read rule must hold for two or more backends, which under MD-03 can easily be the case. The database's part otherwise is the per-role grants. Consequence: roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted. Where B's condition holds, the filter lives in read functions of the database function API and DATA.GUARD's clause then reads "read functions filter by the acting user" for those tables.
+    Maintainer doctrine: L471 adopted on authority (database enforcement is the source of truth; application validation an optimisation). J1's partial verdict against L471 ("triggers and CHECK constraints optional as defence in depth") is inherited and realized here; no new verdict.
+    Rejected: P2 for any rule that must hold for every writer: never (GUARD.2); application validators stay as generated or tested copies, for feedback (RULES.1). P3': never; a store label hides the per-operation guarantee that matters (L043). P4' for correctness: never (L476). P4'': acceptable when the lock only avoids duplicate work and a duplicate is harmless, or is caught by a constraint.
+    Realizes: ALLOCATION.GUARD.2 (invariants), ALLOCATION.GUARD.5 (concurrency control). Links proposed, not created: realizes ALLOCATION.GUARD.3 (database layer per consumer role) and ALLOCATION.RULES.5 (atomicity ends at the transaction).
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA.GUARD
+  - build/research/01_data_tier/result.md::DATA-C07
+  - build/research/14_thin_spots/result.md::THIN-C29
+  - build/research/18_allocation/result.md::ALLOC-C23
+  - build/research/12_counter_voices/result.md::CV-C21
+  - build/research/01_data_tier/result.md::DATA-C12
+  - build/research/01_data_tier/result.md::DATA-C13
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C39
+  - build/research/16_consistency_ordering/result.md::CONS-C09
+  - build/research/16_consistency_ordering/result.md::CONS-C13
+  - build/research/20_collaboration/result.md::C14
+  - build/research/16_consistency_ordering/result.md::CONS-C17
+  - build/research/17_data_contracts/result.md::DCON-C10
+  - build/research/17_data_contracts/result.md::DCON-C23
+  - build/research/16_consistency_ordering/result.md::CONS-C05
+  - build/research/16_consistency_ordering/result.md::CONS-C03
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+- op: node.create
+  uid: DATA.MAINTAIN
+  name: Maintained Over Time
+  parent: DATA
+  intent: 'Schema and data evolve without breaking running code: structure changes only through versioned migrations applied by automation, and an incompatible change keeps every running consumer working by going expand, migrate, contract. Migrations are the only origin of change, and the live database is the truth for current structure.'
+  epistemic_state: 'known | unvalidated: the drift check between live catalogue and migration history, and expand-contract as the only route under MD-03, are inferred | gap: data lifecycle (retention, recovery) has no principle row'
+  constraints:
+  - Every schema change is a versioned migration kept in version control with the code, ordered, reviewed, and applied only by automation as an explicit step of every release, identically in every environment, never by hand. No production change, structural or data, is ad hoc SQL.
+  - Long-running data work is a versioned script outside the automated migration run, launched by a human under a checklist with a ticket id.
+  - Migrations are the only origin of change; the live database is the truth for current structure, and documentation, persistence models and function wrappers are generated from it. A structure the migrations would not produce is a defect to reconcile, not a new truth.
+  - 'An incompatible change keeps every running consumer working: add the new structure or function beside the old, move every consumer, then remove the old in a change marked coordinated once no deployed consumer references it. This holds for tables and the function API alike.'
+  - 'Conventions evolve forward only: new objects follow the new rule, legacy ones are not renamed in bulk.'
+  design_notes: |-
+    Question: how schema and data evolve without breaking running code, and what is the source of truth for structure.
+    Positions: P1 every schema change is a versioned migration in version control with the code, ordered, applied only by automation, as an explicit release step, the same way in every environment, never by hand (L046; SRC-220 T2, SRC-022 T1, SRC-183 T2, SRC-187 T2); the doctrine agrees and adds re-runnable DDL, one owner role per table, long data work kept out of automated runs (L519, owned by J6). P2 hand-applied or ad hoc changes to production structure (the practice L046 rejects). P3 a backward-incompatible change proceeds expand, migrate, contract, so every phase can be released, verified and rolled back (L047; SRC-186, SRC-190, SRC-220, SRC-311, SRC-278). P3' a breaking change to the function API is coordinated with every consuming team and deployed together (L517 doctrine, owned and judged by J6 in the defaults graph's functions and views node; cited, not judged). P4 the live database is the source of truth for structure: table and function documentation is generated from it (L474 doctrine; SRC-220). P5 conventions evolve forward only: new tables follow the new rule, legacy ones are not renamed in bulk (L474), against P5' bulk renaming to the new convention.
+    Forces: integrity of running code and data across releases. P1 and P3 serve it and cost process (each change small, several releases for one incompatible change). P2 serves speed and loses reproducibility and the record of what changed. P3' serves speed of a coordinated change and, unless every consumer deploys in one step with the migration, leaves a window where old code runs against the new structure. P5' serves uniformity of names and breaks every consumer of the old names, several under MD-03.
+    Decision: one path of change (L046, L519; consensus and doctrine agree; long data work under L545's checklist, J1's owner-role access path). Origin of change and truth of state are distinct and must agree (L474; RECORD.3, doctrine, max); a structure the migrations would not produce is a defect (inferred from L046 with L474); the drift check, such as comparing a freshly migrated database's catalogue with production, has no source read and its mechanism is handed to J6. Incompatible changes go expand, migrate, contract (L047), for tables and the function API alike; the contract phase is the change marked coordinated (L192; RECORD.3's catalogue diff in CI fails on a removal not so marked). Max: the database and its consumers never deploy atomically, and under MD-03 several consumers (backends, reporting, consoles, scripts) deploy on their own schedules; expand, migrate, contract is the only route that keeps every running version working (inferred from L047 with MD-03). Conventions evolve forward only (L474, doctrine, max): a rename is itself an incompatible change for every consumer.
+    Principle-level requirement (changed after review, m8, X2): an incompatible change keeps every running consumer working. How the function API meets it, and the verdict on L517, belong to J6, which counts that departure once for both graphs: "deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. This node cites that verdict and does not count it; the former conflict state on L517 is removed.
+    Rejected: P2 never. P3' a breaking change deployed together: not judged here, see above. P5' acceptable only through expand, migrate, contract, when the inconsistent name costs more than moving every consumer (inferred).
+    Out of this node's rows: retention, deletion, history tables, bulk jobs and recovery are realized in the defaults graph's maintenance nodes (J6) and have no principle-level row here (gap 3). ALLOCATION.ACT.4 (audit) is realized by the defaults graph's history tables node; no philosophy link (gap 1).
+    Realizes: ALLOCATION.RECORD.3 (keeps the database structure as the origin of every stored fact and of the function API's contract). Refines python-kb-philosophy:REPRODUCIBILITY (skeleton link). Link proposed, not created: realizes ALLOCATION.ACT.4 through history kept in the database.
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA.MAINTAIN
+  - build/research/01_data_tier/result.md::DATA-C03
+  - build/research/07_architecture_styles/result.md::ARCH-C21
+  - build/research/06_operations/result.md::OPS-C38
+  - build/research/01_data_tier/result.md::DATA-C05
+  - build/research/06_operations/result.md::OPS-C40
+  - build/research/01_data_tier/result.md::DATA-C35
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C74
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C48
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+- op: node.create
+  uid: DATA.DERIVE
+  name: Derived, Not Stored
+  parent: DATA
+  intent: 'Store the minimum and derive the rest: a value that is not stored cannot diverge from its facts. A stored derived value is a copy, kept only when computing on read is measured to be too costly, with a stated sync plan and drift guard.'
+  epistemic_state: 'known | unvalidated: the order of options is inherited from DERIVE.1, where it is marked inferred; the trigger-first rule for same-transaction copies and the generated-column exception for stored predicates are inferred'
+  constraints:
+  - 'Compute on read by default: eligibility and other predicates over stored facts are computed, not stored.'
+  - A derived outcome (an aggregate result) is stored as its own row, never folded into a state value. Where a state label must agree with such facts, the facts are written first and the label is flipped last by its single writer function.
+  - 'A stored derived value is a copy, allowed only when computing on read is measured to be too costly, in this order: same-row values as generated columns; values that must change atomically with their source maintained in the same transaction, by a trigger, or by the writer function only when the source table admits no other writer; values that tolerate a stated staleness in cache tables with scheduled refresh or an invalidation queue.'
+  - Each stored copy has the sync plan of DATA.ORGANIZE (recorded before it is built) and a drift guard.
+  - A derived outcome or eligibility is never encoded as a state value or flag maintained by code. A stored predicate is acceptable only as a generated column, which cannot diverge, when an index or a consumer needs it stored.
+  design_notes: |-
+    Question: what is stored and what is derived from stored facts.
+    Positions: P1 store the minimum and derive the rest: eligibility for serving is computed from the state plus the deletion marker, not stored; a derived outcome is its own row rather than a state value (L488 doctrine; agrees L072, SRC-304 T3). P2 store derived values for read performance: generated columns for same-row values (L176; SRC-142), derived summaries with a sync mechanism (L531, L532 doctrine), denormalization where measured (L168). P3 encode a derived outcome or eligibility as a stored state value or flag maintained by code (the practice L488 rejects).
+    Forces: P1 serves integrity: a value that is not stored cannot diverge from its facts. P2 serves read performance and costs a sync mechanism and a drift risk (L532: triggers never diverge but cost write latency; scheduled refresh has a staleness window). P3 serves query convenience and creates a second, divergent statement of the same fact.
+    Decision: realization of ALLOCATION.DERIVE.1 (J1), the doctrine being the max choice. Compute on read by default (L488, L072; DERIVE.1's first option). A derived outcome is a fact of its own; the facts-first, label-last order is L597 and L596 (J6's concurrency state-transition node). A stored derived value is a copy (RULES.1) in DERIVE.1's order: generated columns (L176); same-transaction maintenance by a trigger, or by the writer function only when the source table admits no other writer (L532; aligned with J6's review fix M2, since only what is bound to the table holds for every writer under MD-03); cache tables with scheduled refresh or invalidation queue (L532, L535, L536). Each copy has L469's sync plan and L533's drift guard. Mechanisms belong to J6 (defaults graph, denormalization and cache table nodes).
+    Rejected: P2 as a default: rejected; acceptable when measured read cost requires it, under DERIVE.1's order, L469's sync plan and L533's drift guard. P3: never as code-maintained state; a stored predicate is acceptable only as a generated column, which cannot diverge, when an index or a consumer needs it stored (inferred from L176).
+    Realizes: ALLOCATION.DERIVE.1 (keeps derived values in the tier and freshness the placement sets).
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA.DERIVE
+  - build/research/04_presentation/result.md::UI-C15
+  - build/research/14_thin_spots/result.md::THIN-C34
+  - build/research/01_data_tier/result.md::DATA-C17
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C54
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C25
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C27
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C29
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C30
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C53

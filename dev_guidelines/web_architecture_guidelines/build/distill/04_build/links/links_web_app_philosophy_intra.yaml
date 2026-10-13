@@ -1,0 +1,258 @@
+operations:
+- op: link.create
+  src: DATA.ORGANIZE
+  dst: ALLOCATION.RECORD.1
+  intent: Holds the durable facts in the form the system-of-record placement gives the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.GUARD
+  dst: ALLOCATION.GUARD.2
+  intent: Enforces the invariants the placement gives the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.GUARD
+  dst: ALLOCATION.GUARD.5
+  intent: Carries the concurrency control the placement gives the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.GUARD
+  dst: ALLOCATION.GUARD.3
+  intent: The database layer of authorization per consumer role (grants) is part of the authorization
+    placement.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.GUARD
+  dst: ALLOCATION.RULES.5
+  intent: Atomicity guarded by the database ends at the transaction boundary the rule sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.DERIVE
+  dst: ALLOCATION.DERIVE.1
+  intent: Keeps derived values in the tier and with the freshness the placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.MAINTAIN
+  dst: ALLOCATION.RECORD.3
+  intent: Keeps the database structure as the origin of shapes when the placement makes it the origin.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.MAINTAIN
+  dst: ALLOCATION.ACT.4
+  intent: Audit and history are kept in the database where the audit placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.SECURE
+  dst: ALLOCATION.GUARD.1
+  intent: Performs the boundary checks the validation placement gives the backend.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.SECURE
+  dst: ALLOCATION.GUARD.3
+  intent: Enforces the access decisions the authorization placement gives the backend.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.SECURE
+  dst: ALLOCATION.GUARD.4
+  intent: Holds sessions and credentials as the identity placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.ENFORCE
+  dst: ALLOCATION.ACT.1
+  intent: Holds the business rules and transitions the placement gives the backend.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.ENFORCE
+  dst: ALLOCATION.RULES.4
+  intent: One business core must serve every client, so enforcement lives in the core and not in an adapter.
+  shape:
+    type: requires
+- op: link.create
+  src: LOGIC.PROCESS
+  dst: ALLOCATION.GUARD.4
+  intent: Stateless processes keep session state in a backing service, never in process memory.
+  shape:
+    type: constrains
+- op: link.create
+  src: LOGIC.PROCESS
+  dst: ALLOCATION.DERIVE.3
+  intent: Process memory holds no cache shared beyond one request.
+  shape:
+    type: constrains
+- op: link.create
+  src: LOGIC.PROCESS
+  dst: ALLOCATION.ACT.2
+  intent: The backend delivers side effects from the staged outbox the placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.PROCESS
+  dst: ALLOCATION.ACT.3
+  intent: Workers execute the deferred work the placement assigns to them.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.EXPOSE
+  dst: ALLOCATION.RECORD.2
+  intent: Offers the backend interface through which browsers and agents reach data, and through which
+    an outside consumer reaches it when it needs deploys independent of the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: LOGIC.EXPOSE
+  dst: ALLOCATION.GUARD.6
+  intent: Gives repeated requests safe method semantics, so duplicate suppression has a contract to rest
+    on.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.VISUALIZE
+  dst: ALLOCATION.PRESENT.1
+  intent: Renders what the rendering placement gives the browser.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.VISUALIZE
+  dst: ALLOCATION.PRESENT.2
+  intent: Formats values for the reader where the placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.COLLABORATE
+  dst: ALLOCATION.GUARD.5
+  intent: Surfaces conflicts with the policy the concurrency placement chose.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.COLLABORATE
+  dst: ALLOCATION.PRESENT.3
+  intent: Keeps presence and other ephemeral state where the placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.COLLABORATE
+  dst: ALLOCATION.GUARD.3
+  intent: Comment visibility must follow the authorization placement.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.AGENT
+  dst: ALLOCATION.RULES.4
+  intent: The agent surface must be one more adapter on the same core, with no logic of its own.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.AGENT
+  dst: ALLOCATION.GUARD.3
+  intent: Agents never decide access; the authorization authority does.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.AGENT
+  dst: ALLOCATION.GUARD.6
+  intent: Agent retries must be absorbed by the duplicate-suppression placement.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.AGENT
+  dst: ALLOCATION.ACT.4
+  intent: Agent actions must be recorded where the audit placement writes history.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.7
+  dst: ALLOCATION.RULES.3
+  intent: Script in the page has the application's privileges, so the browser cannot hold deciding checks.
+  shape:
+    type: constrains
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.7
+  dst: ALLOCATION.GUARD.4
+  intent: Credentials are kept out of reach of page script, as the identity placement requires.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.4
+  dst: ALLOCATION.DERIVE.3
+  intent: Copies in caches the team does not own cannot be recalled, so shared caches hold only what may
+    go stale.
+  shape:
+    type: constrains
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.3
+  dst: TRANSVERSE.CONTRACTS
+  intent: Version skew between client and server needs compatible contract evolution.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.2
+  dst: ALLOCATION.PRESENT.3
+  intent: In-progress state lives in the browser and durable state in the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.2
+  dst: ALLOCATION.GUARD.5
+  intent: The server arbitrates concurrent writes made from several tabs.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.2
+  dst: ALLOCATION.GUARD.6
+  intent: Background work repeated by several tabs is absorbed by the duplicate-suppression keys.
+  shape:
+    type: realizes
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.5
+  dst: ALLOCATION.GUARD.6
+  intent: Safe retries depend on the duplicate-suppression placement.
+  shape:
+    type: requires
+- op: link.create
+  src: INTERACTION.ENVIRONMENT.6
+  dst: ALLOCATION.PRESENT.3
+  intent: The URL is the authority for shareable view state.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.SECURITY
+  dst: ALLOCATION.RULES.3
+  intent: Cross-tier security properties rest on the trust-boundary rule.
+  shape:
+    type: refines
+- op: link.create
+  src: TRANSVERSE.PERFORMANCE
+  dst: ALLOCATION.FORCES.3
+  intent: Field measurement supplies the evidence that performance-driven placements need.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.PERFORMANCE
+  dst: ALLOCATION.FORCES.4
+  intent: Field measurement supplies the latency evidence placements weigh.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.CONTRACTS
+  dst: ALLOCATION.RECORD.3
+  intent: Explicit contracts must derive from the origin definition the placement names.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.OPERABILITY.1
+  dst: ALLOCATION.ACT.4
+  intent: The security event log and the business audit trail must be kept apart, never merged into one
+    record.
+  shape:
+    type: conflicts

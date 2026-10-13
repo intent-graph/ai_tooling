@@ -1,0 +1,121 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-TRANSVERSE.SECURITY.1, PIG-WEB-TRANSVERSE.OPERABILITY.5) | undecided (in children): awaiting maintainer, hosting model (PIG-WEB-TRANSVERSE.TOPOLOGY.3, PIG-WEB-TRANSVERSE.TOPOLOGY.4, PIG-WEB-TRANSVERSE.SECURITY.4)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-TRANSVERSE.SECURITY.1) | undecided (in children): awaiting maintainer, hosting model (PIG-WEB-TRANSVERSE.SECURITY.4)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.PERFORMANCE
+  epistemic_state: 'known | unvalidated: lab budgets limited to LCP, CLS and weight; derived server budget | gap: no source-stated server target; no agent-surface latency target'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.CONTRACTS
+  epistemic_state: 'known | gap: owns no row (roll-up)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-TRANSVERSE.OPERABILITY.5)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, hosting model (PIG-WEB-TRANSVERSE.TOPOLOGY.3, PIG-WEB-TRANSVERSE.TOPOLOGY.4)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.EVOLUTION
+  epistemic_state: 'known | gap: owns no row (roll-up)'
+- op: node.set
+  uid: PIG-WEB-DATA.ORGANIZE.1
+  epistemic_state: 'known | unvalidated: binding the array check to the column is a reading of L489 under MD-03'
+- op: node.set
+  uid: PIG-WEB-DATA.ORGANIZE.7
+  epistemic_state: 'known | unvalidated: the predicate-lock reason is a link of L574 to L490'
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.4
+  epistemic_state: 'known | unvalidated: delegation ranked above an own store (L338 ranks neither; the ranking is inferred); the acr/amr check and step-up (OpenID Connect Core, not in the ledger); sender-constraining support across agent hosts not read'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.1
+  epistemic_state: 'known | gap: ASVS chapter list not read (L304''s level part now grounded) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.2
+  epistemic_state: 'known | unvalidated: staged HSTS ramp (L147); database connection encryption | gap: no row on Postgres connection TLS; proxy-to-app re-encryption open (L140)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.3
+  epistemic_state: 'known | unvalidated: one setter per header; no shared caching of nonce pages'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.4
+  epistemic_state: 'known | conflict: L350 contested (environment variables against a managed store), reconciled by authority and delivery | undecided: awaiting maintainer, hosting model of the default context (recorded default: the file fallback is in force until a managed store is added) | unvalidated: the reconciliation; credentials per consumer role'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.5
+  epistemic_state: 'known | unvalidated: extensions and JavaScript lockfile practice by extension of L354'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.CONTRACTS.1
+  epistemic_state: 'known | unvalidated: consumer suites against the candidate schema; the catalogue gate extended to granted tables and columns | conflict: L560 contested, settled for the default context'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.CONTRACTS.2
+  epistemic_state: 'known | unvalidated: meaning stored in the catalogue; decimal form | conflict: L564''s derivation direction against RECORD.3 (J1 wins); L565''s version field read through L517 (MAINT); realizes the L517 narrowing, counted at PIG-WEB-DATA.INTERFACE.1'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.1
+  epistemic_state: 'known | unvalidated: trace id in the transaction-local setting and on audit rows; trace context in job rows; keep-all then tail sampling'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.2
+  epistemic_state: 'known | unvalidated: trace id injected into rendered pages; release and trace stamping (L382 inferred)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.3
+  epistemic_state: 'known | unvalidated: per-role database load; placement triggers as monitored signals'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.4
+  epistemic_state: 'known | unvalidated: database-side refusals reaching the log'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.5
+  epistemic_state: 'known | unvalidated: commit-time behaviour tested in a disposable database; concurrency tests required by GUARD.2; tests run as the consumer role | gap: no row on concurrency testing | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.6
+  epistemic_state: 'known | conflict: L251 contested, reconciled by kind of value | unvalidated: migration release order across separately deployed consumers'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.1
+  epistemic_state: 'known | unvalidated: buffering off on streaming routes | gap: proxy-to-app re-encryption across a network hop open (L140)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.2
+  epistemic_state: 'known | unvalidated: Gunicorn and Uvicorn as defaults (L150); a separate ASGI process type; total connection budget across consumers; worker type or timeout for routes with blocking external calls'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.3
+  epistemic_state: 'known | conflict: L157 contested, settled by hosting model | undecided: awaiting maintainer, hosting model of the default context (recorded default: one or a few self-managed hosts without a container orchestrator) | unvalidated: roles per kind of process'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.4
+  epistemic_state: 'known | undecided: awaiting maintainer, hosting model of the default context (recorded default: the proxy on the application host serves static files) | unvalidated: cumulative asset store across the compatibility window; CDN threshold (L165)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.EVOLUTION.1
+  epistemic_state: 'known | conflict: L117 (services first) contested, rejected as default | unvalidated: future services as domain schemas (MD-03); a split moves no data'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.EVOLUTION.2
+  epistemic_state: 'known | unvalidated: modules aligned with domain schemas; the module rule (tables forbidden, function API reachable within grants) | gap: no module-boundary tool read (L123)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.EVOLUTION.3
+  epistemic_state: known
+- op: node.set
+  uid: ROOT
+  epistemic_state: 'known (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-LOGIC.SECURE.1, PIG-WEB-DATA.GUARD) | undecided (in children): awaiting maintainer, default deletion for user-facing transactional data (PIG-WEB-DATA.MAINTAIN.2) | undecided (in children): awaiting maintainer, SameSite value of the session cookie (PIG-WEB-LOGIC.SECURE.2) | undecided (in children): awaiting maintainer, hosting model of the default context (PIG-WEB-TRANSVERSE.TOPOLOGY.3)'
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.2
+  epistemic_state: 'known | undecided: awaiting maintainer, SameSite value of the session cookie (recorded default Lax plus a cross-site navigation check, Strict for operator consoles) | unvalidated: session table under DB_API''s direct-write exception (inferred); the navigation check (inferred, no ledger row)'
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.3
+  epistemic_state: 'known | undecided: awaiting maintainer, SameSite value of the session cookie (inherited from SECURE.2; this node holds whatever value is chosen as the second layer) | unvalidated: the cookie and bearer endpoints kept apart (inferred)'
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE
+  epistemic_state: 'known (roll-up) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (SECURE.1) | undecided (in children): awaiting maintainer, SameSite value of the session cookie (PIG-WEB-LOGIC.SECURE.2, PIG-WEB-LOGIC.SECURE.3)'
+- op: node.set
+  uid: PIG-WEB-LOGIC
+  epistemic_state: 'known (roll-up) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see SECURE.1) | undecided (in children): awaiting maintainer, SameSite value of the session cookie (PIG-WEB-LOGIC.SECURE.2, PIG-WEB-LOGIC.SECURE.3) | unvalidated: framework choice (ENFORCE.5)'
+- op: node.set
+  uid: PIG-WEB-LOGIC.ENFORCE
+  epistemic_state: 'known (roll-up) | unvalidated: framework choice (ENFORCE.5) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-LOGIC.ENFORCE.3)'
+- op: node.set
+  uid: PIG-WEB-LOGIC.PROCESS
+  epistemic_state: 'known (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (PIG-WEB-LOGIC.PROCESS.6)'
+- op: node.set
+  uid: PIG-WEB-DATA
+  epistemic_state: 'known | undecided (in children): awaiting maintainer, default deletion for user-facing transactional data (PIG-WEB-DATA.MAINTAIN.2) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database | gap: collation (ORGANIZE.3)'
+- op: node.set
+  uid: PIG-WEB-DATA.MAINTAIN
+  epistemic_state: 'known | undecided (in children): awaiting maintainer, default deletion for user-facing transactional data (PIG-WEB-DATA.MAINTAIN.2) | gap: personal-data erasure and high availability deferred'
+- op: node.set
+  uid: PIG-WEB-ALLOCATION
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (inherited from web-app-philosophy ALLOCATION.GUARD.3)'

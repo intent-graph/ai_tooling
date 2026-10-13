@@ -1,0 +1,17 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-LOGIC.ENFORCE.1
+  constraints:
+  - 'One use-case layer per backend, the only way into its logic: HTML views, JSON endpoints, the agent adapter, management commands and job handlers call the same use-case functions.'
+  - Handlers parse into Pydantic models, call one use case and map its outcome to a status and a representation.
+  - A use case never composes several API calls into one business operation (PIG-WEB-DATA.INTERFACE.1).
+  - The use case, not the adapter, decides whether to set a writer function's override flag, after the policy module authorizes it for the actor.
+  - State transitions stay in the database; the backend's share scales from a transaction script to a domain model of plain Python objects.
+  - ORM models are read mappers and are never saved, except for tables under the direct-write exception (the session table, other single-writer tables the backend owns).
+  - 'Forbidden: orchestration written in each handler; state transitions in backend domain objects.'
+- op: link.create
+  src: PIG-WEB-LOGIC.ENFORCE.1
+  dst: PIG-WEB-DATA.INTERFACE.1
+  intent: A use case calls each business operation as one API call and never composes several.
+  shape:
+    type: requires

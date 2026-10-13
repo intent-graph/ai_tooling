@@ -1,0 +1,291 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-INTERACTION
+  design_notes: "Decides: how browser JavaScript and the agent surface realize the interaction share of\
+    \ each placement.\nRows: none (roll-up).\nDecision: roll-up of five children. Browsers get server-rendered\
+    \ HTML from Python, enhanced with JavaScript only where a part is interactive; agents get an OAuth-protected\
+    \ adapter over the same HTTP core. Neither decides anything durable: each holds copies (the version\
+    \ it read, drafts, a server-state cache, its own credential) and every decision reaches a backend\
+    \ and the database's writer functions.\n  - Visualize: per-request HTML from Python, build-time output\
+    \ where the URL set is known, islands only under the rendering placement's criteria; view state in\
+    \ the URL; LCP content in the first HTML; WCAG 2.2 AA (VISUALIZE).\n  - Edit: POST, then 303; the\
+    \ version travels with every edit and a stale write is shown as a conflict with both versions; layered\
+    \ duplicate suppression (EDIT).\n  - Real time: polling, then server-sent events, then WebSocket for\
+    \ two-way traffic; events are hints keyed by a commit-safe cursor; Postgres wakes the connection processes,\
+    \ tables carry the data (REALTIME).\n  - Collaborate: comments anchored by foreign key and target\
+    \ version, threads by parent pointer, tombstones and revisions, notifications as rows written with\
+    \ the comment, moderation as a recorded queue; a text engine only for long collaborative text, server-authoritative\
+    \ (COLLABORATE).\n  - Agent: OpenAPI-described core, an MCP adapter for third-party agent hosts whose\
+    \ tool list and schemas are kept in sync like the description, protected-resource metadata, delegated\
+    \ identity recording user and agent, approval for irreversible effects held on the server, agent-shaped\
+    \ errors and per-agent quotas (AGENT).\n  - Environment: feature detection, back/forward-cache eligibility,\
+    \ input saved on page hide (ENVIRONMENT).\nRealizes: refines INTERACTION (J4); through its children\
+    \ ALLOCATION.PRESENT.1 to .3, GUARD.3 to GUARD.6, ACT.2, ACT.4, RULES.4, PIG-WEB-ALLOCATION.JS_SERVER\
+    \ and POSTGRES_FIRST.\nInherited open clause (from the authorization placement, through REALTIME.4\
+    \ and COLLABORATE.4): awaiting maintainer, read visibility of rows with per-user rules when several\
+    \ backends share the database. Recorded default: each backend filters these reads from one shared\
+    \ written specification, with a shared denial-test suite every backend runs; database read functions\
+    \ that receive the verified actor stay acceptable when a per-user read rule must hold for two or more\
+    \ backends. Consequence: until the maintainer answers, the reporting role gets no SELECT on comment\
+    \ content or narrower-audience comments, the operator role sees every row, and any other role that\
+    \ may SELECT the base tables sees every row unless its own role is restricted; until the question\
+    \ is answered they get no SELECT on comment content or narrower-audience comments.\nMaintainer decisions\
+    \ applied: MD-01 (no row-level security by default; authorization stays a backend decision), MD-02\
+    \ (interface description always in sync, origin per project, extended here to the agent tool surface),\
+    \ MD-03 (several consumers share the database; multi-table operations are database function calls).\n\
+    Contested rows decided by composing positions along conditions the default context fixes: push channel\
+    \ (L436), token binding (L641), agent protocol surface (L635), approval design (L646); automated traffic\
+    \ (L652) carried into AGENT.5. Two owned rows narrowed to fit settled placements: L437 (Redis only\
+    \ at a measured limit, by POSTGRES_FIRST) and L583 (multi-step writes are database functions, by MD-03).\n\
+    Evidence gaps: (1) no ledger row names AA; AA is grounded through the W3C conformance page plus the\
+    \ max rule, one legal floor at AA read (US ADA Title II rule, WCAG 2.1 AA), both sources not yet in\
+    \ the register, other jurisdictions not read; (2) the push-channel debate rests on a T3 guide and\
+    \ a T4 vendor, the SSE buffering claim on one vendor source; (3) the comment model rests mostly on\
+    \ single or inferred sources (L665, L669, L670, L683; L673 has none), legal moderation obligations\
+    \ not read; (4) agent identity and registration rest on moving specifications and drafts, agent-readable\
+    \ content on T4 and secondhand evidence; (5) a separate process type for long-lived connections (L458)\
+    \ and reconnect jitter (L454) are inferred; (6) no owned row chooses the enhancement library or the\
+    \ islands component library: left open; (7) the rate-limit partition (L651) is inferred, its combination\
+    \ a synthesis.\nReview: the adversarial review's findings on this unit are applied (read-visibility\
+    \ notation and consequence, no credentials in URLs, MCP tool schemas under the drift gate, scarce-goods\
+    \ flows, resolve right, POST for state-changing forms, 409 and 412/428 split, AA grounding, tombstones\
+    \ through deletion functions, per-tab drafts on sensitive pages, NOTIFY only for live subscribers,\
+    \ cursor horizon stall)."
+- op: node.set
+  uid: PIG-WEB-DATA.GUARD
+  design_notes: 'Question: how Postgres declares integrity and access: constraints, roles, row policies
+    and triggers.
+
+    Positions: none of its own; roll-up of GUARD.1 to .4.
+
+    Decision and grounds: roll-up. Every rule a declarative constraint can express is declared and named
+    (GUARD.1); each consumer has its own login role in narrow group roles, no consumer holds DELETE or
+    owns objects, functions that need rights the caller lacks are owned by narrow non-login roles, not
+    by the owner role, and state columns are revoked from direct update (GUARD.2); row-level security
+    is not a default (MD-01) and the acting user reaches the database only as a transaction-local claim
+    that writer functions and audit triggers check (GUARD.3); triggers do a closed list of atomic side
+    work and never business transitions (GUARD.4).
+
+    Awaiting maintainer (X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules
+    when several backends share the database` (J1 Q1). Recorded default, J1''s word for word: A provisional,
+    with one written specification per rule and a shared denial suite; B acceptable when a per-user read
+    rule must hold for two or more backends. In this tier: each backend filters these reads from one shared
+    written specification, with a shared denial-test suite every backend runs; database read functions
+    that receive the verified actor are acceptable when a per-user read rule must hold for two or more
+    backends, and where B''s condition holds, read functions join INTERFACE.1 and read GUARD.3''s context.
+    Consequence: until the maintainer answers, the reporting role gets no SELECT on comment content or
+    narrower-audience comments, the operator role sees every row, and any other role that may SELECT the
+    base tables sees every row unless its own role is restricted. The database''s part otherwise is the
+    per-role grants of GUARD.2.
+
+    Realizes: refines web-app-philosophy:DATA.GUARD; through its children ALLOCATION.GUARD.2, GUARD.3
+    (per-role layer), ACT.1, ACT.4, ROW_SECURITY.'
+- op: node.set
+  uid: PIG-WEB-DATA.GUARD.2
+  design_notes: "Question: how database roles, grants and authentication separate owners, runtime users\
+    \ and humans.\nPositions:\n  - P1 explicit, minimal search_path; revoke CREATE on `public` from PUBLIC\
+    \ (L181).\n  - P2 the owner role that runs migrations differs from the runtime role, which gets only\
+    \ the DML it needs (L182, inferred synthesis).\n  - P3 privileges granted to NOLOGIN group roles;\
+    \ login roles are members (L183).\n  - P4 no superuser for daily work or the application (L184).\n\
+    \  - P5 revoke PUBLIC defaults (CONNECT, TEMPORARY, EXECUTE on functions); ALTER DEFAULT PRIVILEGES\
+    \ for future objects; REVOKE in the same transaction as the creation (L185).\n  - P6 scram-sha-256;\
+    \ trust only on local sockets; TLS (hostssl) for remote connections (L186).\n  - P7 role hierarchy\
+    \ per functional branch (read, write, admin), each including the one below; default privileges; grants\
+    \ checked at every level; narrow roles for sensitive features; no DELETE grants; humans are members\
+    \ of roles; a function lists a user's effective permissions (L514 MAINT).\n  - Placement: J1's access\
+    \ paths (one role per consumer; backend, reporting, operator, owner) and GUARD.3's per-role layer\
+    \ (EXECUTE per function, SELECT per table and column, UPDATE revoked on state columns).\nForces: security\
+    \ and integrity (what a consumer can do whatever its code) against administration effort.\nDecision\
+    \ and grounds: P1 to P7 adopted, shaped to J1's access paths (max).\n  - Group roles (NOLOGIN, L183)\
+    \ per functional branch (L514): a read level (SELECT on tables and columns), an API level (USAGE on\
+    \ the API schema, EXECUTE on the functions of that branch), and an admin level. Under MD-03 the \"\
+    write\" level of L514 is EXECUTE on writer functions, not table DML; direct INSERT or UPDATE is granted\
+    \ only under DB_API's single-consumer exception, and never on state columns (J1 GUARD.3, L596).\n\
+    \  - Login roles: one per consumer (each backend, the reporting tool, the console, each script family),\
+    \ neither owner nor superuser (L182, L184), a member of the group roles it needs. One login per consumer\
+    \ is what makes the session role in history rows (MAINTAIN.3) name the consumer (J1 actor trust).\
+    \ Humans have personal login roles, members of the operator or read roles (L514); they assert only\
+    \ themselves as actor (J1).\n  - Owner role: owns tables and the other schema objects (one owner per\
+    \ table, L519), runs migrations and human-run data jobs, never serves requests (J1). It does not own\
+    \ the functions that run with their owner's rights (changed after review, M3): a table owner holds\
+    \ rights that cannot be granted separately (L182, SRC-146), including disabling the table's triggers,\
+    \ so a bug or injectable dynamic SQL in a function running with the owner's rights could switch off\
+    \ the history and constraint triggers or drop objects.\n  - Narrow function-owner roles (changed after\
+    \ review, M3; inferred): each family of functions that must write what the caller cannot is owned\
+    \ by its own NOLOGIN role holding only the DML that family executes, for example a deletion role (DELETE\
+    \ on the target tables, INSERT on the archive), a history-writer role (INSERT on the history tables)\
+    \ and a cache-maintenance role (DELETE and upsert on the cache tables and invalidation queue). No\
+    \ consumer role is a member of these roles, and none of them owns a table. This follows L514's \"\
+    narrow roles for sensitive features can be granted independently\", L184's \"grant the narrow attributes\
+    \ needed\" and the doctrine's own grant of DELETE to one admin role for cache invalidation (L525's\
+    \ tension note). It resolves doctrine-internal tension 2 (no DELETE grant, yet archive-then-delete\
+    \ needs one): DELETE is held by a narrow non-login role that owns the deletion functions; the caller\
+    \ does not hold it (inferred).\n  - Functions with their owner's rights run only where they must write\
+    \ what the caller cannot (J1 GUARD.3), owned by the narrow role above, with a fixed search_path and\
+    \ schema-qualified references (L181, L505; inferred for this function form).\n  - Defaults: EXECUTE\
+    \ on functions, CONNECT and TEMPORARY revoked from PUBLIC; default privileges set so new objects get\
+    \ the right grants; each REVOKE in the creating transaction (L185).\n  - Reporting role: SELECT on\
+    \ the tables and columns it needs, personal-data columns withheld by default (J1); on a replica when\
+    \ its load matters. Like the operator role, it sees every row of a table it may SELECT, rows with\
+    \ per-user rules and comments included, unless its own role is restricted (X1).\n  - Authentication:\
+    \ scram-sha-256, TLS for every remote connection, trust only on local sockets (L186).\n  - A function\
+    \ lists a role's effective permissions (L514), and CI checks the grant matrix against the role design\
+    \ (inferred).\n  - Per-role settings (timeouts, default isolation) are set here, on the role (CONCURRENCY.1,\
+    \ INTERFACE.2).\nAwaiting maintainer (B1, X1): `undecided: awaiting maintainer, read visibility of\
+    \ rows with per-user rules when several backends share the database` (J1 Q1). Recorded default, J1's\
+    \ word for word: A provisional, with one written specification per rule and a shared denial suite;\
+    \ B acceptable when a per-user read rule must hold for two or more backends. For this node: by default\
+    \ each backend filters these reads and this node grants per role; where B's condition holds, consumer\
+    \ roles receive EXECUTE on the read functions (INTERFACE.1) and, per role, lose direct SELECT on the\
+    \ tables those functions guard. until the maintainer answers, the reporting role gets no SELECT on\
+    \ comment content or narrower-audience comments, the operator role sees every row, and any other role\
+    \ that may SELECT the base tables sees every row unless its own role is restricted.\nRejected: one\
+    \ shared runtime role for all consumers: rejected (J1 access paths; audit could not name the consumer).\
+    \ DELETE grants to consumer roles: never (L514, L525). Superuser or owner for the application: never\
+    \ (L184, L182). Definer functions owned by the owner role: rejected (M3); acceptable never, since\
+    \ a narrow role always suffices for a function family's DML.\nRealizes: ALLOCATION.GUARD.3 (database\
+    \ layer per consumer role); ALLOCATION.RECORD.2 and PIG-WEB-ALLOCATION.DB_API (EXECUTE as the contract's\
+    \ access); ALLOCATION.ACT.4 (session role names the consumer). Links proposed, not created: GUARD.2\
+    \ realizes GUARD.3 and DB_API.\n\nBuild narrative moved out of the constraints: changed after review,\
+    \ M3; changed after review, M3; inferred."
+- op: node.set
+  uid: PIG-WEB-DATA.GUARD.3
+  design_notes: "Question: how row-level security policies and the request context they read behave and\
+    \ are set.\nPositions:\n  - P1 row security semantics: default deny once enabled; USING governs visibility,\
+    \ WITH CHECK written rows; permissive OR, restrictive AND (L309).\n  - P2 skipped for superusers,\
+    \ BYPASSRLS roles and owners unless FORCE; bypassed by unique and foreign-key checks; sub-select policies\
+    \ can race and leak: non-owner, non-superuser request role and a design review; whether to use it\
+    \ rather than application filtering is not settled by the sources (L310).\n  - P3 pass the application\
+    \ user or tenant with transaction-local settings, derived from the verified identity, never from a\
+    \ client id (L311).\n  - P4 functions read request context from transaction-local settings in a reserved\
+    \ namespace; fixtures use a separate namespace production never reads (L566 MAINT).\n  - Placement:\
+    \ ROW_SECURITY decided by MD-01 (not a default; acceptable under three conditions); L619 and L688\
+    \ favour row security when several consumers share the database (tension recorded by J1).\nForces:\
+    \ security in depth per user, against policy complexity, testability and the administrator roles row\
+    \ policies mesh badly with (MD-01).\nDecision and grounds:\n  - Row-level security is not enabled\
+    \ by default (MD-01). It is acceptable only when the data model is simple, the scoping key is present\
+    \ in every covered table, in practice composite primary keys led by that key (ORGANIZE.2), and no\
+    \ all-powerful administrator role must cross scopes. Where it is used: backend checks are kept (L128);\
+    \ the request role is neither owner nor superuser and FORCE is set where the owner connects (L310);\
+    \ policies get a design review and denial tests through the deployed role and connection path (L128,\
+    \ L310); policy columns are indexed (L619's mechanics, cited via J1).\n  - Request context is always\
+    \ passed, row security or not, because writer functions and audit triggers need the actor (J1 GUARD.3,\
+    \ ACT.4): the backend sets the acting user, and the person an agent acts for, in transaction-local\
+    \ settings (`SET LOCAL` or `set_config(..., true)`) in a reserved namespace, derived from its verified\
+    \ identity (L311, L566, L685). Transaction-local scope is also what keeps context from leaking across\
+    \ pooled connections in transaction mode (L311, L200; INTERFACE.2).\n  - The actor is a claim, not\
+    \ a verified fact (J1 R1-3): writer functions and audit triggers refuse a write with no actor and\
+    \ check that the session role may assert that kind of actor (a backend an end user or agent, an operator\
+    \ or owner role only itself and, for owner-run jobs, a ticket id). The pairing lives in one table\
+    \ read by one function, so every check uses the same rule (inferred realization).\n  - Fixture context\
+    \ lives in a separate namespace that production code never reads (L566).\nAwaiting maintainer (B1,\
+    \ X1): `undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends\
+    \ share the database` (J1 Q1). Recorded default, J1's word for word: A provisional, with one written\
+    \ specification per rule and a shared denial suite; B acceptable when a per-user read rule must hold\
+    \ for two or more backends. Where B's condition holds, read functions join INTERFACE.1 and read this\
+    \ node's context: the \"verified actor\" they receive (X1) is the actor the backend derives from its\
+    \ verified identity, which to the database remains a claim checked against the session role (J1 R1-3).\
+    \ Row security stays not a default (MD-01) in either case; it remains acceptable under MD-01's three\
+    \ conditions.\nRejected: row security by default (L619, L688 as defaults): rejected by MD-01; they\
+    \ win under MD-01's three conditions. Session-level settings for context: never (L311). Context from\
+    \ a client-supplied id: never (L311).\nRealizes: PIG-WEB-ALLOCATION.ROW_SECURITY; ALLOCATION.GUARD.3\
+    \ (actor claim and pairing); ALLOCATION.ACT.4 (actor recorded).\n\nRenamed and reordered at the critique\
+    \ step: the request-context rule applies with or without row security and is used by the roles, interface,\
+    \ transaction, history and observability nodes; row security comes second."
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.1
+  design_notes: "Positions: - P1 implement the authorization mechanism once, centrally (filters or middleware),\
+    \ and apply it to every request whatever its origin (L305).\n  - P2 enforce object-level rules (record\
+    \ ownership), not only route or role checks (L306).\n  - P3 prefer attribute- or relationship-based\
+    \ control over plain role-based control when granularity or tenancy grows (L307; one T1 source, no\
+    \ dissent).\n  - P4 test authorization with unit and integration tests including denial cases; log\
+    \ access-control failures with alerting (L308).\n  - Placement positions cited, settled by MD-01 in\
+    \ ROW_SECURITY: row security on every path (L619), only with several consumers (L688), as a second\
+    \ line (L128).\n\nForces: security (all positions); changeability of policy (P3's richer model against\
+    \ plain roles); detection (P4).\n\nDecision: 1. **One policy module per backend, deny by default**\
+    \ (P1; L020 via GUARD.3). Middleware refuses any route that declares no permission; every use case\
+    \ calls the module with actor, action and object for each single object it reads or changes (P2).\
+    \ For collection reads, the module emits a query predicate that the read statement applies (ENFORCE.3),\
+    \ never a check on rows already loaded, which would yield short pages and leak counts (review m8;\
+    \ DERIVE.2). Central and object-level at once.\n     - **Overrides of blockable rules** (L530, MAINT;\
+    \ review M7): a writer function's blockable business rule can be overridden by an explicit flag. Setting\
+    \ that flag is an action the policy module authorizes per actor, like any other; it never comes from\
+    \ client input unchecked, and the override is audited with the actor (ACT.4). The use case decides\
+    \ whether to set it (ENFORCE.1).\n  2. **Model**: product roles for product policy not stored in the\
+    \ data, plus attribute and relationship rules evaluated on the object (owner, author, assignee, plan,\
+    \ flag) (P3). The default context already carries per-user rules, so P3's condition holds from the\
+    \ start (inferred).\n  3. **Division with the database** (GUARD.3, ROW_SECURITY, MD-01): no row-level\
+    \ security, so the backend's checks are kept in full. Per-user write rules decidable from the row\
+    \ are decided by the writer function; the backend's identical check is a copy generated from or tested\
+    \ against that function (RULES.1), and the function's named denial maps to the same response as the\
+    \ backend's (EXPOSE.2). The backend sets the verified actor for every call (ENFORCE.2; L311, L566).\n\
+    \  4. **Per-user read visibility** (`undecided: awaiting maintainer, read visibility of rows with\
+    \ per-user rules when several backends share the database`): who filters reads of rows that carry\
+    \ per-user rules (\"a draft is visible only to its author\") is J1's open question (Q1), not re-asked\
+    \ here (X1).\n     - Recorded default: **each backend filters these reads from one shared written\
+    \ specification of the visibility rules, inside the read statement (ENFORCE.3), with a shared denial-test\
+    \ suite every backend runs**. Row security stays excluded by default (MD-01).\n     - J1's fallback,\
+    \ kept: database read functions that receive the verified actor are acceptable when a per-user read\
+    \ rule must hold for two or more backends (J1 Q1). **Under that answer** (review M1): the read goes\
+    \ through the read function, run with the actor set (ENFORCE.2); the table loses direct SELECT; this\
+    \ step's filter moves from the backend's statement into the function. Note for J1's owner: the fallback's\
+    \ condition, two or more backends, already holds in MD-03's default context, so a reader may take\
+    \ it as the fallback winning by default; J1 should reword it.\n     - Consequence, stated so no line\
+    \ claims more: until the maintainer answers, the reporting role gets no SELECT on comment content\
+    \ or narrower-audience comments, the operator role sees every row, and any other role that may SELECT\
+    \ the base tables sees every row unless its own role is restricted. Per-role grants bound which tables\
+    \ and columns a role sees, not which users' rows.\n  5. **Tests and logs** (P4): a denial test for\
+    \ every rule, at unit level and through the deployed stack against a live database under the backend's\
+    \ real role, because the database's half of authorization cannot be tested otherwise (ACT.1). Those\
+    \ tests run in never-committing transactions when the database is shared; behaviour that only shows\
+    \ at commit is tested with committing sessions in a disposable database, never a shared one (X4).\
+    \ Every denial goes to the security event log, a sink separate from the business audit (ACT.4), with\
+    \ alerting on bursts (mechanics owned by PIG-WEB-TRANSVERSE.OPERABILITY.4).\n\nRejected: - Route-\
+    \ or role-only checks: never (P2).\n  - Checks written per view without one module: never (P1).\n\
+    \  - Plain role-based control: acceptable when no rule depends on an object's attributes or relations\
+    \ (inverse of P3's condition; inferred); not this context.\n  - Row-level security by default, or\
+    \ replacing backend checks: never by default (MD-01); acceptable when MD-01's three conditions hold,\
+    \ with the backend checks kept (L128).\n  - Per-object checks on loaded rows for collections: never\
+    \ (DERIVE.2; review m8).\n  - An override flag passed through from client input: never (L530, GUARD.3;\
+    \ review M7).\n\nRealizes: PIG-WEB-ALLOCATION.ROW_SECURITY (keeps the backend checks, as the placement\
+    \ sets). Follows ALLOCATION.GUARD.3 (no skeleton link; proposed)."
+- op: node.set
+  uid: PIG-WEB-LOGIC.ENFORCE.3
+  design_notes: "Positions: - P1 an ORM for routine mapping, understanding the relational model, with\
+    \ a sanctioned route to hand-written SQL; explore the ORM first (L235).\n  - P2 raw SQL always uses\
+    \ bound parameters, never string formatting (L236).\n  - P3 reads that need no domain behaviour may\
+    \ bypass the domain model: hand-written SQL, views, denormalized tables, separate read stores (L237).\n\
+    \  - P4 each extra round trip adds latency: fetch related data in one statement, no queries in loops\
+    \ (L614).\n  - Cited: writes through the API functions, simple reads on base tables under SELECT grants,\
+    \ read functions where a read applies a rule, views never a contract (DB_API, L516); reduction in\
+    \ the database, keyset pages, a server maximum page size (DERIVE.2); wrappers generated from the catalogue\
+    \ (TYPE_CHAIN).\n\nForces: correctness; security (injection); latency; changeability.\n\nDecision:\
+    \ 1. **Writes**: only through the generated, typed wrappers of the API functions (DB_API, TYPE_CHAIN);\
+    \ the ORM writes only tables under DB_API's direct-write exception.\n  2. **Reads**, one read layer\
+    \ under the Django default (review m7): the Django ORM, its models used as read-only mappers, for\
+    \ simple reads on base tables under SELECT grants (L516); read functions, called through the generated\
+    \ wrappers, where a read must apply a rule (DB_API), in a short read-only transaction when they need\
+    \ the actor (ENFORCE.2). Each use case gathers its data in one statement or read function, related\
+    \ rows joined or eagerly loaded in that statement, never queries in loops (P4; J3's \"data in, decision\
+    \ out\"). Filtering, sorting and paging in the statement, keyset pages, the server's maximum page\
+    \ size (DERIVE.2, EXPOSE.1).\n  3. **Raw SQL**, where the ORM cannot express a read, through Django's\
+    \ database connection, always with bound parameters (P2); identifiers that must vary come from an\
+    \ allowlist (inferred).\n  4. **Per-user read rules** (`undecided: awaiting maintainer, read visibility\
+    \ of rows with per-user rules when several backends share the database`, SECURE.1): at the recorded\
+    \ default, applied inside the read statement from the shared specification, never by filtering loaded\
+    \ rows in Python (DERIVE.2); for collections, the policy module's query predicate goes into the statement\
+    \ (SECURE.1, review m8). **Under J1's read-function answer** (review M1): the read goes through the\
+    \ read function, run with the actor set (ENFORCE.2), and the table loses direct SELECT, so step 2's\
+    \ \"simple reads on base tables\" no longer covers it. until the maintainer answers, the reporting\
+    \ role gets no SELECT on comment content or narrower-audience comments, the operator role sees every\
+    \ row, and any other role that may SELECT the base tables sees every row unless its own role is restricted\
+    \ (X1).\n  5. **Read models**: derived data from database cache tables or derived columns (DERIVE.1);\
+    \ no view as a contract (L516); no read store outside the database (RECORD.1).\n\nRejected: - Views\
+    \ as a read contract (P3's views): never (L516, DB_API); acceptable only as throwaway objects no consumer\
+    \ depends on.\n  - Read stores outside Postgres (P3's separate stores): acceptable under DERIVE.1's\
+    \ condition (many external derived stores at a high write rate).\n  - ORM-first writes (P1 as stated):\
+    \ acceptable when one backend is the only consumer (L527's default then applies).\n  - Loading full\
+    \ sets into Python to reduce them: never (DERIVE.2).\n  - A second query layer (SQLAlchemy Core) beside\
+    \ the Django ORM: rejected under the Django default (review m7); acceptable as the read layer of a\
+    \ backend whose framework is not Django (inferred).\n\nRealizes: ALLOCATION.DERIVE.2 (pushes filtering\
+    \ and aggregation to the database)."

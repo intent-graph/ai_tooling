@@ -1,0 +1,199 @@
+operations:
+- op: node.set
+  uid: LOGIC.SECURE
+  constraints:
+  - 'Authenticate every caller, then authorize every request. Humans by the server-held session of GUARD.4; agents by their own short-lived, revocable tokens, accepted only when issued for this server (audience check), never forwarded downstream (GUARD.4). An ID token proves a login to the client and is never accepted as an API credential. Authorization is a separate, central mechanism, deny by default, object level, applied to every request from every client, for what the backend owns: product policy not stored in the data and identity (GUARD.3).'
+  - Assert the actor, do not decide for the database. For every call into the function API the backend sets the acting user it has verified (scoped to the transaction, from the verified identity, never a client-supplied id; GUARD.3); per-user write rules decidable from the row are decided by the writer function, and the backend's identical check is a generated or tested copy for early feedback (GUARD.3, RULES.1).
+  - 'Treat all input as untrusted and parse it at entry into the most precise type, once per process boundary (GUARD.1): request bodies, query parameters, headers, uploaded files, payloads read back from queues, and anything a model or agent produced. Client hints, tool annotations and claimed identities are never enforcement.'
+  - 'Bound consumption at two depths: identity-blind size, rate, read-rate and time limits at the outermost layer, answering 413 or 408 there, with the client''s own size check as a feedback copy; identity-aware limits in the backend, per operation and per business need, with tighter limits on operations that cost money, trigger third parties or are expensive for agents to loop on.'
+  - 'Protect harmful automation by flow, not by client kind: name the flows whose automation harms the business (sign-up, purchase, booking, referral) and protect each specifically; no blanket bot blocking, because agents are intended users in this context.'
+  - 'Defend logins in layers: MFA first, then breached-password checks, then device signals and challenges known to be spoofable; never IP blocking alone. Max applied: MFA is required by default on human accounts (inferred: the source orders MFA first; requiring it is the most demanding form).'
+  - 'Per-user read visibility is undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database; the recorded default, the fallback and the consequence for roles that may read the base tables are those of ALLOCATION.GUARD.3.'
+  - Server-side fetches of client- or agent-named URLs cannot reach private, loopback or link-local addresses.
+- op: node.set
+  uid: LOGIC.ENFORCE
+  constraints:
+  - 'Layers: adapters on the outside (HTML views, the structured-data interface, the agent adapter, job runners) translate requests into use-case calls and shape results; they hold no rule. Use cases on the inside carry the backend''s share: workflow across operations, product policy not stored in the data, external calls (ACT.1, GUARD.3).'
+  - Ports for every external system, the database function API included. Each business operation is one call in its own transaction (ALLOCATION.RULES.5); a step that must be atomic with another is a new database function.
+  - 'Testability, by share: the backend''s own logic (policy, workflow, orchestration of external calls) runs in isolation with fake adapters and no live database. The rules the database owns (invariants, operations, transitions, per-user write rules decidable from the row) are tested against a live database, as ACT.1 accepts; the backend never reimplements them to make its tests pass without one, except as a copy generated from or tested against the function (RULES.1). Test boundary: logic tests on shared data run in never-committing transactions; behaviour that only shows at commit (serialization retries, lock waits, deferred constraints, the outbox) is tested with committing sessions in a disposable database, never a shared one; concurrency tests for the rules GUARD.2 requires (Serializable with retry, locks) are part of the default test suite.'
+  - 'Behaviour lives with its authority: rules about stored data live in the database''s writer functions, never in backend objects that would be a second authority; the backend''s own policy and workflow logic, when complex, lives in behaviour-rich domain objects with a thin use-case layer around them. A simple share is a transaction script.'
+  - 'Data in, decision out: a use case gathers the data it needs in as few calls as possible (one read function or statement, never queries in loops), then decides in code that does no fetching; that keeps the decision testable without I/O and runnable from any driver (online, batch, agent).'
+- op: node.set
+  uid: LOGIC.PROCESS
+  constraints:
+  - 'Each process is disposable and replaceable: durable state, sessions (GUARD.4) and shared caches (DERIVE.3) live in backing services; process memory caches nothing beyond one request.'
+  - Several backends may share the database (MD-03); each backend is one deployable, not split into services without a measured need.
+  - 'Distinct process types from one build: web processes serve requests; worker processes run deferred work and schedules, claim jobs from the queue the database holds (ACT.3), and return an unfinished job on SIGTERM.'
+  - Each backend reaches the database as its own role, neither owner nor all-powerful, located and credentialled by configuration; a small pool per process; never a connection or an open transaction per connected client, and never a transaction held across a remote call (ACT.1, ACT.2).
+  - A supervisor owns the process lifecycle; a reverse proxy faces the internet and enforces the outermost limits of LOGIC.SECURE; one concern per container.
+  - 'Long-lived connections (real-time channels, agent streams) are the one tolerated per-process state: clients reconnect to any process and resync from the backing services.'
+  - No file is readable before a clean scan.
+- op: node.set
+  uid: LOGIC.EXPOSE
+  constraints:
+  - Browsers get server-rendered HTML whose links and forms are the contract (PRESENT.1, LOGIC.EXPOSE.3).
+  - 'Programs and agents get a resource-oriented structured-data interface on the same use cases, described machine-readably and kept in sync with the implementation by process: one origin per fact, the other side generated or conformance-checked, a CI gate that fails on drift; the origin direction is recorded per project (MD-02). An agent protocol adapter, where offered, sits on the same core.'
+  - 'MD-02 covers every interface description consumers read: "always in sync by process" and the compatibility window apply to the HTTP description, to the database function API catalogue and to the agent tool surface.'
+  - Every endpoint uses HTTP's defined meanings (LOGIC.EXPOSE.1), and every request is self-contained (LOGIC.EXPOSE.2).
+  - 'Repeated requests are safe: safe methods change nothing, PUT and DELETE are idempotent, non-idempotent mutations offered to agents carry an idempotency key that the database function records with the effect (GUARD.6).'
+- op: node.set
+  uid: INTERACTION.VISUALIZE
+  constraints:
+  - Accessibility is a requirement from the first design; a conformance target is stated before building.
+  - Conformance is judged per full page, embedded third-party content included.
+  - Start from native HTML semantics and keyboard operation; ARIA only where native elements cannot express the control.
+  - Formatting for the reader's locale and time zone follows ALLOCATION.PRESENT.2.
+  - Users with disabilities take part in early testing, not only at acceptance.
+- op: node.set
+  uid: INTERACTION.COLLABORATE
+  constraints:
+  - Every page is correct on plain load; a client that missed events catches up by fetching changes since a server-issued cursor and never trusts the events it happened to receive.
+  - The catch-up cursor is one no later commit can fall behind; a sequence id is not such a cursor.
+  - 'Use the simplest channel that meets direction of flow, update frequency and tolerable latency: polling, then long polling or server-sent events, then a two-way channel; correctness never depends on the channel.'
+  - A stale write is rejected and shown as a conflict with both versions, so the user sees the other change and reapplies; it is never merged silently and never a silent overwrite of the whole record; the browser and agent clients never resolve a conflict on their own (GUARD.5).
+  - Per-property last-writer-wins only for toggles, status, assignment and ordering; a text engine only for genuinely collaborative long-text fields.
+  - 'Presence is ephemeral: broadcast through a channel with a timeout, never written to tables; a persisted last-seen is a separate, coarse field (PRESENT.3).'
+  - A comment is its own entity with a mandatory target reference, its own author, lifecycle and permissions; comments are append-only rows that need no merge.
+  - Read, comment, edit, resolve and moderate are separate abilities, deny by default, checked per object on every request, streams and exports included; none is implied by another.
+  - 'A comment is never more visible than its target, may have a narrower audience, and the same filter applies on every surface the application serves: counts, notifications, search results, history, exports, ETags and real-time channels.'
+  - Notifications are created only for recipients who may see the target.
+  - A report queue (reports with a status and a decision) is required whenever people outside the team read comments.
+  - Until the read-visibility question is answered, per-user comment reads follow the recorded default of ALLOCATION.GUARD.3, with a shared written specification that lists every secondary surface.
+  - 'Until the read-visibility question is answered: reporting and operator roles get no read access to comment content or on comments whose audience is narrower than their target; they read comments only through a projection limited to target-wide audiences, or not at all. Where a project does not apply this, the leak to those roles is a known limit stated where comments are documented.'
+  - Agent writes are marked as agent-originated and pass the same abilities and visibility filters.
+- op: node.set
+  uid: INTERACTION.AGENT
+  constraints:
+  - The agent surface is an adapter to a backend that only translates and shapes; rules, validation, authorization and state transitions never live in the adapter or in prompts (RULES.4).
+  - Agents never connect to the database.
+  - 'Agents never decide access: model output and client-supplied hints (tool annotations, claimed identity, client name) are untrusted input; the backend and the writer functions decide (GUARD.3).'
+  - The server accepts only tokens issued for it and never forwards a caller's token; downstream calls use its own token.
+  - Each agent holds its own short-lived, revocable credential (GUARD.4).
+  - Narrowest scopes, read scopes first, elevation on demand through a precise insufficient-scope challenge, no wildcard or omnibus scope; every request still authorized in server code.
+  - Few purpose-specific tools, each with only the permissions it needs; no raw shell, raw SQL or arbitrary URL fetch on the live system.
+  - Where the application runs or hosts an agent, no session holds untrusted input, private data and the power to change state or send outward together; if all three are needed, a supervised step or a split session.
+  - For agents the team does not run, no tool sends data to an arbitrary destination, and consequential or external effects go through the approval design.
+  - Irreversible or external effects require approval by the owning user, shown the exact action on the application's own page; the effect's writer function refuses an agent-originated operation without it, and an approval dialog in the agent host is a client hint, never the gate.
+  - Agents that identify and authenticate themselves are admitted to every flow their scopes allow and limited by quota per agent identity.
+  - 'Flows whose automation harms the business (purchase, sign-up, booking, referral) are named and protected: per-flow limits for identified agents, approval by the owning user for irreversible effects, anonymous automation denied or challenged.'
+  - On a flow that hands out scarce goods or rewards automation per account, completing the flow requires a human, or agents are excluded, whatever their identity; the list of such flows is a decision recorded per project.
+  - Every mutation offered to agents that is not idempotent by design takes an idempotency key, recorded with the effect (GUARD.6).
+  - Every agent action is logged on the server with acting identity, delegating subject, operation, correlation id and outcome, never only in a model transcript; agent-originated writes are marked in the data (ACT.4).
+- op: node.set
+  uid: ALLOCATION.RULES.4
+  constraints:
+  - Rules, validation, authorization and state transitions exist once; never in an adapter or a prompt.
+  - The function API is the core for what must hold for every consumer; each backend's use cases are the core for its own workflow and product policy.
+  - Per-user read visibility across backends is the one open point where this rule and the ban on default row security pull apart.
+- op: node.set
+  uid: ALLOCATION.GUARD.4
+  constraints:
+  - 'Authority: backend (session store in the database under the backing-roles default)'
+  - 'Copies: the browser''s opaque cookie; an agent''s own bearer token'
+  - 'Forbidden: tokens in storage readable by page script; any session token, bearer token or long-lived credential in a URL, the one exception being short-lived, single-purpose, scope-limited signed URLs for file delivery, with lifetime and scope stated; session state in process memory; stateless, non-revocable sessions; end users as database roles'
+  - 'Default (first-party, same-site browser): an opaque server-side session, revoked on logout, stored in a backing service, never in process memory.'
+  - 'Login through an external identity provider: a backend-for-frontend holds the tokens.'
+  - 'Agents and other non-browser clients: bearer tokens per delegation, short-lived, with server-held state that can revoke them.'
+  - The cookie carries an identifier, never application state.
+  - An end user reaches the database only as the actor a backend asserts for the transaction from its verified identity, never from a client-supplied id.
+- op: node.set
+  uid: ALLOCATION.ACT.1
+  constraints:
+  - 'Authority: database for operations, transitions, invariants and per-user write rules decidable from the row; backend for workflow, product policy not stored in the data and external calls'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested); the browser previews which actions are allowed (feedback)'
+  - 'Forbidden: multi-table writes composed in a backend; a backend transaction wrapping several API calls; business rules in the browser, agent adapters or prompts; a second writer of a state column, owner-run jobs included unless a recorded exception'
+  - Multi-table operations are database functions.
+  - Each state column has exactly one authoritative writer function, which logs each transition; consumer roles hold no direct update right on state columns or direct writes on tables with multi-table effects.
+  - Per-user write rules decidable from the stored row and the acting user are decided by the writer function; a backend's check is a generated or tested copy.
+  - One business operation is one function call in its own transaction (ALLOCATION.RULES.5).
+  - Owner-run jobs change a state column only through its writer function, or as a recorded exception under the data-job checklist, with the operator and ticket id set as actor.
+  - External calls never run inside a database transaction; they stay in the backend.
+- op: node.set
+  uid: ALLOCATION.ACT.2
+  constraints:
+  - 'Authority: backend (delivery, external calls), database (the staged intent, written by the operation)'
+  - 'Copies: none'
+  - 'Forbidden: third-party credentials in the browser (inferred); calls to external systems from inside the database; dual writes to the database and a broker; remote calls inside an open transaction; a foreign call in the request without its intent recorded first; post-commit hooks for foreign effects'
+  - Write the intent in the operation's transaction; deliver after commit, idempotently.
+  - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery points and an idempotency key, in a worker behind a 202 response with a status resource.
+  - 'In the request only when the user must see the outcome within about 1 s: the database function records the intent first and commits; the request performs the call as one atomic phase and marks the row done; a worker completer picks up the row if the request dies.'
+  - Post-commit hooks only for losable work that touches no foreign system.
+- op: node.set
+  uid: LOGIC.EXPOSE.1
+  constraints:
+  - Safe methods never change state; mutations use POST, PUT, PATCH or DELETE with their defined idempotence; a successful form POST answers 303 to a GET page.
+  - Browser forms submit only GET and POST, so HTML mutations are POST, each one made safe to repeat by GUARD.6's layers (inferred from the HTML platform).
+  - Status codes carry their defined meaning, the precondition codes included for concurrency (412, 428; GUARD.5).
+  - Every error has a stable machine-readable identifier separate from its human message, in a standard problem format whose detail helps the caller correct the request.
+- op: node.set
+  uid: LOGIC.EXPOSE.2
+  constraints:
+  - It carries its credential (the opaque session identifier or the agent's token, in a cookie or a header, never in the URL; short-lived, single-purpose, scope-limited signed URLs for file delivery are the one exception, with their lifetime and scope stated) and every parameter its use case needs; anything it references is resolved from backing services, never from the memory of the instance that served the previous request.
+  - The server-held state is limited to identity and security state (the session, revocable; GUARD.4). Workflow progress is resource state in the database (state columns, ACT.1), addressed by identifiers in the request, never hidden in a session or a connection.
+  - Client and server are coupled only through the interface contract (HTML links and forms, or the described structured-data interface), so either can change behind it.
+- op: node.set
+  uid: LOGIC.EXPOSE.3
+  constraints:
+  - 'Browser: the HTML the server renders is the contract: links and forms drive every transition, and the server renders only the controls the user may use. The control is a cosmetic copy; the request is re-authorized on arrival (GUARD.3, RULES.1). This is the hypermedia contract in full, and it follows from PRESENT.1.'
+  - 'Programs and agents: a resource-oriented structured-data interface called what it is, resource-oriented HTTP, not REST, whose contract is the machine-readable description kept in sync by process (MD-02); the same rule holds for the agent tool surface''s description. Server-issued links are used where the server mints the next step: continuation links for paging, the created resource''s location, explicit handles for cross-call state. Clients do not build URLs the description does not define.'
+  - 'Grounds: MD-02 makes an always-synchronised description the contract programs and agents read; it buys the independent evolution that hypermedia seeks by additive change and conformance checks, at lower cost per client (inferred). The hypermedia trade is accepted where it pays: browser pages.'
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.1
+  constraints:
+  - Core read and write paths work as HTML forms and links.
+  - Enhancement is added by feature detection, in loosely coupled layers, and fails without taking the core down.
+  - No feature works in one browser, OS or device class only.
+  - Client-rendered islands, where the rendering placement admits them under its island criteria, sit inside a page whose surrounding content and navigation still work as HTML.
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.2
+  constraints:
+  - Pages stay eligible for back/forward restore; on restore from memory they refresh time-sensitive or sensitive state.
+  - Unsaved input is persisted when the page is hidden, never on unload, since the browser may freeze or discard the page without notice.
+  - 'Two tabs editing the same data are two concurrent writers: the version check of GUARD.5 rejects the stale one; background work repeated by several tabs is absorbed by the keys of GUARD.6.'
+  - Client-side coordination between tabs may reduce duplicate work and stale displays; correctness never depends on it.
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.3
+  constraints:
+  - Every client-server contract has an explicit compatibility window, at least as long as an old page can stay open.
+  - Within the window, changes are additive and readers ignore what they do not know; nothing in use is removed.
+  - Before removing or changing a behaviour, its current use is found, per consumer role.
+  - 'Every surface used by code the team does not redeploy at once is a contract under this window: structured-data endpoints, HTML form fields and URLs posted by old pages, the agent tools and their schemas.'
+  - 'Every interface description consumers read is always in sync with the implementation by process (MD-02, extended to every agent-facing interface): the HTTP description, the database function API catalogue and the agent tool surface; the compatibility window applies to each.'
+  - 'A breaking change goes expand, migrate, contract: the new shape is added beside the old, each consumer moves, the old one is removed once no consumer uses it; no client is silently broken.'
+  - Lockstep deployment ("deployed together") is acceptable only when every consumer of the changed object ships in the same deployment; a browser tab never does.
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.4
+  constraints:
+  - Every response is labelled on purpose.
+  - Long lifetimes only for immutable, fingerprinted URLs.
+  - HTML and other in-place content carry no-cache and validators.
+  - Personalised responses are private or no-store.
+  - Every intermediary is kept on purpose, with its staleness and added latency counted against its benefit.
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.5
+  constraints:
+  - Assume any request may fail, time out, arrive late or twice.
+  - Core paths work as plain HTML requests, so a failed script does not remove them (ENVIRONMENT.1).
+  - The client shows pending and failed states and keeps the user's input across a failure.
+  - The client retries only what is idempotent or carries an idempotency key (GUARD.6).
+  - Real-time channels reconnect and catch up by cursor (COLLABORATE).
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.6
+  constraints:
+  - URLs are stable and free of author, status, file extension and implementation details; the team owns the mapping from URL to resource over time.
+  - When a resource moves, its old URL keeps resolving to it.
+  - View state that users navigate, bookmark or share lives in the URL.
+  - No session token, bearer token or long-lived credential ever travels in a URL.
+  - 'The one exception: a short-lived, single-purpose, scope-limited signed URL for file delivery, with lifetime and scope stated.'
+  - 'Signed file URL conditions: issued only after an authorization check of the requester; grants one operation on one object; expires quickly; served from another origin than the application; the issuing response is no-store and the page''s referrer policy does not leak it.'
+  - One-time OAuth authorization codes in redirects, bound to the client by PKCE, are not a forbidden kind.
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.7
+  constraints:
+  - 'No long-lived credential is readable by page script: the session cookie of ALLOCATION.GUARD.4 is opaque and unreadable by script.'
+  - Output is escaped by default by the templates; CSP is the second layer, not the first.
+  - XSS prevention comes before CSRF defence, because XSS defeats every CSRF defence.
+  - CORS is not access control; CSRF defence stands on its own.
+  - User-uploaded content is served from a distinct registrable domain, so the same-origin policy contains any script in an upload.
+  - Content written by other users or by models (comments, agent output) is untrusted wherever it is rendered.
+  - No check that grants access or protects integrity runs in the page (RULES.3).

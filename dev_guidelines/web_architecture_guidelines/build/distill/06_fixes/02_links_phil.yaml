@@ -1,0 +1,12 @@
+operations:
+- op: link.set
+  uid: TRANSVERSE.OPERABILITY.1_ALLOCATION.ACT.4
+  shape:
+    type: constrains
+- op: link.set
+  uid: TRANSVERSE.SECURITY_ALLOCATION.RULES.3
+  shape:
+    type: requires
+- op: link.set
+  uid: DATA.MAINTAIN_ALLOCATION.RECORD.3
+  intent: Keeps the database structure, changed only by migration, as the origin of every stored fact and of the function API's contract.

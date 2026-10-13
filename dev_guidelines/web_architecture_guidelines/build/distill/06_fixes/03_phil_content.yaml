@@ -1,0 +1,765 @@
+operations:
+- op: node.set
+  uid: ALLOCATION.ACT.1
+  constraints:
+  - 'Authority: database for operations, transitions, invariants and per-user write rules decidable from the row; backend for workflow, product policy not stored in the data and external calls'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested); the browser previews which actions are allowed (feedback)'
+  - 'Forbidden: multi-table writes composed in a backend; a backend transaction wrapping several API calls; business rules in the browser, agent adapters or prompts (L633); a second writer of a state column, owner-run jobs included unless a recorded exception'
+  - Multi-table operations are database functions.
+  - Each state column has exactly one authoritative writer function, which logs each transition; consumer roles hold no direct update right on state columns or direct writes on tables with multi-table effects.
+  - Per-user write rules decidable from the stored row and the acting user are decided by the writer function; a backend's check is a generated or tested copy.
+  - One business operation is one function call in its own transaction (ALLOCATION.RULES.5).
+  - Owner-run jobs change a state column only through its writer function, or as a recorded exception under the data-job checklist, with the operator and ticket id set as actor.
+  - External calls never run inside a database transaction; they stay in the backend.
+- op: node.set
+  uid: DATA.GUARD
+  constraints:
+  - 'Declare every rule a declarative constraint can express: NOT NULL unless absence is a meaningful state; row-local CHECK paired with NOT NULL; foreign keys; unique, partial unique and exclusion constraints for cross-row rules; domains for value types used in several places. Constraints are named, so a violation maps to a stable error. Required, not optional.'
+  - Rules no constraint can express (other multi-row rules, legal transitions, dependencies lost by a Boyce-Codd decomposition) are checked in the writer function or a constraint trigger, under Serializable isolation with retry or after locking the governing row; the function or trigger asserts the isolation it needs, set per consumer role. The default isolation level belongs to J6.
+  - Each business operation is one function call in its own transaction (ALLOCATION.RULES.5).
+  - Concurrent change is detected inside the writer function, which takes the expected version as a parameter; no transaction or lock is held across user think time.
+  - 'Mutual exclusion that guards correctness is enforced by the store: row version, unique constraint or row lock inside the transaction; a lease is checked by the writer function as a fencing token. A lock outside the database is acceptable only to save duplicate work.'
+  - 'The consistency model is stated per operation: which isolation, whether it reads the primary or a replica, and what staleness it accepts. A check that decides a write never reads a replica. A datastore is never labelled "CP" or "AP".'
+  - 'Access guarding: each consumer has its own role, neither owner nor all-powerful; grants bound which functions it may call and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path. Row-level security is not a default (MD-01).'
+  epistemic_state: 'known | conflict: against L471 (MAINT) on optional CHECK constraints, inherited from J1 GUARD.2 | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see ALLOCATION.GUARD.3) | unvalidated: the stack form of fencing (L476) and "no deciding read on a replica" are inferred'
+- op: node.set
+  uid: LOGIC.ENFORCE
+  constraints:
+  - 'Layers (P1, L062): adapters on the outside (HTML views, the structured-data interface, the agent adapter, job runners) translate requests into use-case calls and shape results; they hold no rule (L633). Use cases on the inside carry the backend''s share: workflow across operations, product policy not stored in the data, external calls (ACT.1, GUARD.3).'
+  - Ports for every external system, the database function API included (P3, L064). Each business operation is one call in its own transaction (ALLOCATION.RULES.5); a step that must be atomic with another is a new database function.
+  - 'Testability, by share (P2, L063): the backend''s own logic (policy, workflow, orchestration of external calls) runs in isolation with fake adapters and no live database. The rules the database owns (invariants, operations, transitions, per-user write rules decidable from the row) are tested against a live database, as ACT.1 accepts (L042, L472); the backend never reimplements them to make its tests pass without one, except as a copy generated from or tested against the function (RULES.1). Test boundary (X4): logic tests on shared data run in never-committing transactions (L567); behaviour that only shows at commit (serialization retries, lock waits, deferred constraints, the outbox) is tested with committing sessions in a disposable database, never a shared one; concurrency tests for the rules GUARD.2 requires (Serializable with retry, locks) are part of the default test suite.'
+  - 'Behaviour lives with its authority (P4, L065): rules about stored data live in the database''s writer functions, never in backend objects that would be a second authority; the backend''s own policy and workflow logic, when complex, lives in behaviour-rich domain objects with a thin use-case layer around them. A simple share is a transaction script (L226).'
+  - 'Data in, decision out (P5''s first half, with L614): a use case gathers the data it needs in as few calls as possible (one read function or statement, never queries in loops), then decides in code that does no fetching; that keeps the decision testable without I/O and runnable from any driver (online, batch, agent).'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.5
+  constraints:
+  - Organise teams cross-functionally around a capability; never organise by layer or let a database team write other teams' business operations.
+  - Hold the database owner as a named role inside the team, not a layer team.
+  - When teams multiply, give each capability team its domain schema, functions and backend, with one named owner role for conventions, roles, grants and review of the function API catalogue diff.
+  - Compose a cross-domain business operation inside the database by published functions (ALLOCATION.RULES.5), never by direct access to another domain's tables.
+  - Give a cross-schema business function to the team that owns the workflow, reviewed by the owner role.
+  - Cut module and schema boundaries with the team boundaries.
+- op: node.set
+  uid: ALLOCATION.ACT.3
+  constraints:
+  - 'Authority: backend (what is deferred) and database (staged intent, data schedules)'
+  - 'Copies: the status resource shows the pending state'
+  - 'Forbidden: deferring core writes; foreign effects inside the request, except ACT.2''s in-request phase'
+  - 'Foreign mutations are deferred as ACT.2 places them: in a worker behind 202, except ACT.2''s in-request phase.'
+  - An operation that outlasts the request answers 202 with a status resource.
+  - Every asynchronous stream states its staleness window and a convergence check.
+  - In-process background tasks only for small tasks that may be lost.
+- op: node.set
+  uid: LOGIC.SECURE
+  epistemic_state: 'known | unvalidated: MFA required by default (max applied to L033) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see ALLOCATION.GUARD.3)'
+  constraints:
+  - 'Authenticate every caller, then authorize every request. Humans by the server-held session of GUARD.4; agents by their own short-lived, revocable tokens, accepted only when issued for this server (audience check), never forwarded downstream (L640, GUARD.4). An ID token proves a login to the client and is never accepted as an API credential (L021). Authorization is a separate, central mechanism, deny by default, object level, applied to every request from every client (L020, L305, L306), for what the backend owns: product policy not stored in the data and identity (GUARD.3).'
+  - Assert the actor, do not decide for the database. For every call into the function API the backend sets the acting user it has verified (scoped to the transaction, from the verified identity, never a client-supplied id; GUARD.3); per-user write rules decidable from the row are decided by the writer function, and the backend's identical check is a generated or tested copy for early feedback (GUARD.3, RULES.1).
+  - 'Treat all input as untrusted and parse it at entry into the most precise type, once per process boundary (GUARD.1; L484, L612): request bodies, query parameters, headers, uploaded files (P2, L023), payloads read back from queues, and anything a model or agent produced (L644). Client hints, tool annotations and claimed identities are never enforcement (L650).'
+  - 'Bound consumption at two depths (P3, P4): identity-blind size, rate, read-rate and time limits at the outermost layer, answering 413 or 408 there, with the client''s own size check as a feedback copy (L032); identity-aware limits in the backend, per operation and per business need, with tighter limits on operations that cost money, trigger third parties or are expensive for agents to loop on (L031).'
+  - 'Protect harmful automation by flow, not by client kind (P6): name the flows whose automation harms the business (sign-up, purchase, booking, referral) and protect each specifically (L034); no blanket bot blocking, because agents are intended users in this context (L652).'
+  - 'Defend logins in layers (P5): MFA first, then breached-password checks, then device signals and challenges known to be spoofable; never IP blocking alone (L033). Max applied: MFA is required by default on human accounts (inferred: L033 orders MFA first; requiring it is the most demanding form).'
+  - 'Per-user read visibility is undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database; the recorded default, the fallback and the consequence for roles that may read the base tables are those of ALLOCATION.GUARD.3.'
+  - Server-side fetches of client- or agent-named URLs cannot reach private, loopback or link-local addresses.
+  design_notes: 'Decision: the backend is the one gate every caller passes, human or agent, and decides nothing on the caller''s word.
+
+    Positions:
+
+    - P1 authentication is not authorization; an OpenID Connect ID token is for the client, never an access credential to APIs (L021).
+
+    - P2 every client-supplied part of an upload is untrusted: allowlisted extensions, actual signature checked, stored name generated by the server (L023).
+
+    - P3 bound every resource a client can make the server consume (rate, payload size, memory, concurrency, time, third-party spend), each limit tuned to the operation and the business need; agents as principals make loops and retries likelier, so expensive operations get their own limits (L031).
+
+    - P4 maximum body size, minimum read rate and read timeouts enforced at the outermost layer with 413 or 408, plus a size check in the client because browsers show the proxy''s error poorly (L032).
+
+    - P5 credential stuffing defended in layers: MFA first, breached-password checks, device fingerprinting and CAPTCHA understood as spoofable, never IP blocking alone (L033).
+
+    - P6 identify the business flows whose automation harms the business and protect those specifically, machine-to-machine APIs included (L034); cited, owned by INTERACTION.AGENT: do not apply blanket bot blocking where agents are intended users (L652).
+
+    - Placement rows cited, owned elsewhere: deny by default (L020); one central mechanism on every request (L305); object-level rules (L306); model output is untrusted input, never an authorization decision (L644); client hints are not enforcement (L650); a server accepts only tokens issued for it and never forwards a client''s token (L640); parse once at each entry (L484, L612).
+
+    Forces: security (all positions); availability and cost control (P3, P4); usability of login (P5''s MFA) and openness to agents (P6 against blanket blocking).
+
+    Rejected:
+
+    - Accepting ID tokens, forwarded tokens or client-declared identity as API credentials: never (L021, L640, L650).
+
+    - Validation or authorization decided in the browser, the agent client or model output: never (GUARD.1, GUARD.3; L019, L644).
+
+    - IP blocking as the only login defence, and IP alone as the limiting key: never (L033).
+
+    - Blanket bot blocking: acceptable when no automated client is an intended user of the interface concerned (inverse of L652''s condition; inferred).
+
+    - MFA optional for human accounts: acceptable when the application''s audience cannot practically be required to use a second factor; the other layers of L033 then carry the defence (condition inferred, not in the ledger row).
+
+    - Limits only at the edge, or only in the application: each misses what the other sees (identity-blind volume against per-identity and per-operation cost; L031, L032; layering inferred, its stack form owned by PIG-WEB-LOGIC.SECURE.6).
+
+    Realizes: GUARD.1 (the backend''s parsing and request-level meaning); GUARD.3 (product policy and identity; tested copy of per-user write rules; actor asserted, not decided); GUARD.4 (sessions and credentials held by the backend).
+
+    Maintainer decision cited: MD-01 (row-level security is not a default; stays excluded here).
+
+    Inherited open clause (X1): per-user read visibility, the maintainer''s question Q1 of the allocation judge, is not re-asked here; the recorded default and J1''s fallback are in the constraints and the state.
+
+    Evidence gap: MFA required by default applies the max rule to L033 (inferred); the condition for ''optional'' is inferred, not in the ledger row.
+
+
+    Lifted from the stack-neutral clause of PIG-WEB-LOGIC.SECURE.7 in pig-web-defaults, wording kept; the verdict is that record''s, not re-judged here. Clause: server-side fetches cannot reach internal addresses.'
+  impl_pointers:
+  - build/distill/03_judge/J3_phil_logic/records.md::LOGIC.SECURE
+  - build/research/05_identity_security/result.md::SEC-C01
+  - build/research/03_contract/result.md::API-C02
+  - build/research/04_presentation/result.md::UI-C18
+  - build/research/18_allocation/result.md::ALLOC-C06
+  - build/research/05_identity_security/result.md::SEC-C02
+  - build/research/18_allocation/result.md::ALLOC-C07
+  - build/research/05_identity_security/result.md::SEC-C07
+  - build/research/10_rate_limiting_uploads/result.md::UPLOAD-C05
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C01
+  - build/research/19_agent_users/result.md::AGENT-C21
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C18
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C15
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C16
+  - build/research/05_identity_security/result.md::SEC-C03
+  - build/research/05_identity_security/result.md::SEC-C04
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/17_data_contracts/result.md::DCON-C09
+  - build/research/18_allocation/result.md::ALLOC-C09
+  - build/research/19_agent_users/result.md::AGENT-C10
+  - build/research/19_agent_users/result.md::AGENT-C14
+  - build/research/19_agent_users/result.md::AGENT-C20
+  - build/research/19_agent_users/result.md::AGENT-C25
+  - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE.7
+- op: node.set
+  uid: INTERACTION.COLLABORATE
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see ALLOCATION.GUARD.3) | unvalidated: leak-surface list (L687, synthesis); channel order from one T3 source (L435); the comment-grant restriction for reporting and operator roles (inferred) | conflict: L682''s sequence-id cursor against L594, resolved for L594'
+  constraints:
+  - Every page is correct on plain load; a client that missed events catches up by fetching changes since a server-issued cursor and never trusts the events it happened to receive (L682, L006).
+  - The catch-up cursor is one no later commit can fall behind; a sequence id is not such a cursor (L594).
+  - 'Use the simplest channel that meets direction of flow, update frequency and tolerable latency: polling, then long polling or server-sent events, then a two-way channel; correctness never depends on the channel (L435).'
+  - A stale write is rejected and shown as a conflict with both versions, so the user sees the other change and reapplies; it is never merged silently and never a silent overwrite of the whole record; the browser and agent clients never resolve a conflict on their own (GUARD.5, L674).
+  - Per-property last-writer-wins only for toggles, status, assignment and ordering; a text engine only for genuinely collaborative long-text fields (L674, L679, L677).
+  - 'Presence is ephemeral: broadcast through a channel with a timeout, never written to tables; a persisted last-seen is a separate, coarse field (PRESENT.3, L681).'
+  - A comment is its own entity with a mandatory target reference, its own author, lifecycle and permissions; comments are append-only rows that need no merge (L664, L679).
+  - Read, comment, edit, resolve and moderate are separate abilities, deny by default, checked per object on every request, streams and exports included; none is implied by another (L686).
+  - 'A comment is never more visible than its target, may have a narrower audience, and the same filter applies on every surface the application serves: counts, notifications, search results, history, exports, ETags and real-time channels (L686, L687).'
+  - Notifications are created only for recipients who may see the target (L683).
+  - A report queue (reports with a status and a decision) is required whenever people outside the team read comments.
+  - Until the read-visibility question is answered, per-user comment reads follow the recorded default of ALLOCATION.GUARD.3, with a shared written specification that lists every secondary surface.
+  - 'Until the read-visibility question is answered: reporting and operator roles get no read access to comment content or on comments whose audience is narrower than their target; they read comments only through a projection limited to target-wide audiences, or not at all. Where a project does not apply this, the leak to those roles is a known limit stated where comments are documented.'
+  - Agent writes are marked as agent-originated and pass the same abilities and visibility filters (L659).
+  design_notes: "Decides: how several users discuss and change the same data and learn of each other's changes.\nRows: L006, L435, L664, L682, L686, L687. Cited: L594 (pig-web data), L671, L674, L677, L679, L681, L683, L659.\nPositions:\n- Freshness: P1 delivered events are the client's state (rejected in L682), or a client replica with a sync engine (L302, L677); P2 push is a hint over a correct pull (L682, L006).\n- Channel: P3 the simplest channel that meets the need (L435); P4 one two-way channel for everything (the WebSocket-first side of L436, owned by pig-web).\n- Comment model: P5 each comment its own entity with a mandatory target (L664); P6 comments embedded as columns or JSON in the annotated record (rejected in L664).\n- Abilities: P7 five separate abilities, deny by default, per object on every request (L686); P8 the comment right implied by the edit right or the reverse (rejected in L686).\n- Visibility: P9 a comment never more visible than its target, same filter on every secondary surface (L687); P10 the filter on the main list only (the leak L687 warns against).\nForces: P2 serves correctness under dropped connections and several tabs, at the cost of a catch-up endpoint; P1 serves latency and offline use, at the cost of every replica becoming an authority (L302). P3 serves simplicity and operability; P4 serves one code path and two-way traffic, at the cost of long-lived connection servers. P5 and P7 serve confidentiality and least privilege (comments are edited, hidden or deleted without touching the data; reviewers and customers may comment without editing), at the cost of one more entity and more checks. P9 serves confidentiality; P10 serves only simplicity.\nDecision grounds:\n1. P2 (L682, L006). L682's \"(sequence id)\" is rejected as stated: a sequence id does not follow commit order, so a reader polling with \"id greater than last seen\" can skip a row forever (L594). Realization: PIG-WEB-DATA.CONCURRENCY.5.\n2. P3 (L435), one T3 source for the order.\n3. Concurrent edits surface the concurrency placement's policy (GUARD.5; L674, L679, L677).\n4. Presence per PRESENT.3 (L681).\n5. P5 (L664); append-only rows need no merge (L679).\n6. P7 (L686). Where each check lives follows GUARD.3 as settled: a rule decidable from the stored row and the actor (an author may edit their own comment; the target's author may resolve its threads, L671) is decided by the writer function; product roles that grant abilities (reviewer, customer, moderator) are each backend's product policy; the browser hides controls cosmetically. The unsourced \"thread's opener may resolve\" was dropped (review m2).\n7. P9 (L686, L687). Who applies the per-user read filter when several backends read the same comments is undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (ALLOCATION.GUARD.3). Recorded default (MD-01 as written): each backend filters from one shared written specification with a shared denial-test suite. J1's fallback stays acceptable: database read functions that receive the verified actor, when a per-user read rule must hold for two or more backends. This node does not settle it.\n   Consequence of the default (X1): roles that may SELECT the base tables (reporting, operator) see every row, comments included, unless their own role is restricted; the guarantee covers the surfaces the application serves and claims nothing stronger for those roles.\n   Restriction required for comments until the question is answered (review M1; inferred from the confidentiality purpose of P9 and from the reporting role's column grants excluding personal data by default, J5 TRANSVERSE.SECURITY).\n8. Agents collaborate under the same rules (L659, pig-web).\nRejected:\n- P1, delivered events as state: wins never. A client replica with a sync engine wins under the system-of-record placement's condition (offline use with user-owned data, RECORD.1), and even then catch-up uses a cursor.\n- P4 as the default: wins when traffic is two-way at high frequency (L435); the choice of push channel among server-sent events and WebSocket is the pig-web channel node's (L436).\n- P6: wins never for comments (they nearly always have other readers or writers than the record, L664). A single free-text note edited by exactly the people who edit the record is a field, not a comment (inferred).\n- P8: wins never (L686). P10: wins never (L687).\nRealizes: ALLOCATION.GUARD.5 (shows conflicts with the placement's policy; holds only the version it read); ALLOCATION.PRESENT.3 (presence on a channel with timeout, drafts in the browser, durable comments in the database); requires ALLOCATION.GUARD.3 (abilities and visibility follow the authorization placement, its open read clause included).\nHand-offs: commit-ordered change cursor (PIG-WEB-DATA.CONCURRENCY.5, L594); push channel default (PIG-WEB-INTERACTION.REALTIME.1, L436); anchoring, threads, text engine fields, notification and moderation rows (PIG-WEB-INTERACTION.COLLABORATE.1 to .4); comment grants of reporting and operator roles (PIG-WEB-DATA.GUARD.2); comments as a named consequence of the read-visibility question's default (ALLOCATION.GUARD.3, allocation judge).\nMaintainer decisions: MD-01 respected (no row security by default; the read-visibility default is MD-01 as written); MD-03 shapes the row-decidable comment rules in writer functions.\nEvidence gaps: leak-surface list (L687) is a synthesis; channel order rests on one T3 source (L435); the comment-grant restriction is inferred; L682 conflicts with L594, resolved for L594.\n\nLifted from the stack-neutral clause of PIG-WEB-INTERACTION.EDIT in pig-web-defaults, wording kept; the verdict is that record's, not re-judged here. Clause: a stale write is shown as a conflict with both versions and is never merged silently.\n\nLifted from the stack-neutral clause of PIG-WEB-INTERACTION.COLLABORATE.4 in pig-web-defaults, wording kept; the verdict is that record's, not re-judged here. Clause: a report queue whenever outsiders read comments.\n\nRealized in pig-web-defaults at PIG-WEB-DATA.CONCURRENCY.5 (commit-safe cursor)."
+  impl_pointers:
+  - build/distill/03_judge/J4_phil_interaction/records.md::INTERACTION.COLLABORATE
+  - build/research/11_realtime/result.md::RT-C37
+  - build/research/12_counter_voices/result.md::CV-C08
+  - build/research/18_allocation/result.md::ALLOC-C38
+  - build/research/20_collaboration/result.md::C21
+  - build/research/11_realtime/result.md::RT-C01
+  - build/research/11_realtime/result.md::RT-C15
+  - build/research/16_consistency_ordering/result.md::CONS-C20
+  - build/research/19_agent_users/result.md::AGENT-C34
+  - build/research/20_collaboration/result.md::C01
+  - build/research/20_collaboration/result.md::C08
+  - build/research/20_collaboration/result.md::C12
+  - build/research/20_collaboration/result.md::C17
+  - build/research/20_collaboration/result.md::C19
+  - build/research/20_collaboration/result.md::C22
+  - build/research/20_collaboration/result.md::C26
+  - build/research/20_collaboration/result.md::C27
+  - build/research/20_collaboration/result.md::C31
+  - build/research/20_collaboration/result.md::C32
+  - build/distill/03_judge/J8_pig_interaction/records.md::PIG-WEB.INTERACTION.EDIT
+  - build/distill/03_judge/J8_pig_interaction/records.md::PIG-WEB.INTERACTION.COLLABORATE.4
+- op: node.set
+  uid: LOGIC
+  epistemic_state: 'known (roll-up) | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see ALLOCATION.GUARD.3)'
+  constraints:
+  - 'It secures entry: authenticates every caller, parses every input into precise types, enforces product policy deny by default on every request, and bounds what each caller can consume (LOGIC.SECURE).'
+  - 'It enforces its share of the business logic in a core separable from transport and storage: workflow across operations, product policy not stored in the data, external calls; for every operation on stored data it calls the database function API through a port, one call per operation in its own transaction (LOGIC.ENFORCE; ACT.1).'
+  - It runs as stateless, disposable processes of distinct types, with every durable fact (sessions included) in backing services (LOGIC.PROCESS).
+  - 'It exposes one HTTP interface per backend with the protocol''s defined meanings: HTML hypermedia for browsers, a described resource-oriented structured-data interface and an agent adapter on the same core (LOGIC.EXPOSE).'
+  - It does not decide invariants, multi-table operations, state transitions or per-user write rules decidable from the row (database, GUARD.2, ACT.1, GUARD.3); its checks of those are tested copies for early feedback (RULES.1). It holds no cache beyond one request (DERIVE.3) and resolves no write conflict (the database detects, GUARD.5).
+- op: node.set
+  uid: ALLOCATION.GUARD
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see ALLOCATION.GUARD.3)'
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.7
+  constraints:
+  - 'No long-lived credential is readable by page script: the session cookie of ALLOCATION.GUARD.4 is opaque and unreadable by script (L024).'
+  - Output is escaped by default by the templates; CSP is the second layer, not the first (L026).
+  - XSS prevention comes before CSRF defence, because XSS defeats every CSRF defence (L025).
+  - CORS is not access control; CSRF defence stands on its own (L027).
+  - User-uploaded content is served from a distinct registrable domain, so the same-origin policy contains any script in an upload (L028).
+  - Content written by other users or by models (comments, agent output) is untrusted wherever it is rendered (L644).
+  - No check that grants access or protects integrity runs in the page (RULES.3, L019).
+- op: node.set
+  uid: DATA
+  intent: 'The database is the system of record and holds everything that must hold whoever touches the data: it organizes facts so each is stored once, guards them under concurrent and partial change, keeps structure correct over time, derives instead of storing, and offers every consumer one function API as the contract to the data. Several backends and other consumers (reporting, admin consoles, scripts) may share it, so what must hold for every consumer lives in the database, not in any one backend.'
+  constraints:
+  - 'Organize: each fact stored once, in tables normalized at least to third normal form (DATA.ORGANIZE).'
+  - 'Guard: every rule a declarative constraint can express is declared; the rest is checked by writer functions under an isolation level or lock that makes the check correct (DATA.GUARD).'
+  - 'Maintain: structure changes only through versioned migrations applied by automation; incompatible changes go expand, migrate, contract; the live database is the truth for structure (DATA.MAINTAIN).'
+  - 'Derive: store the minimum and compute the rest; every stored derived value is a copy with a stated sync and staleness (DATA.DERIVE).'
+  - 'Offer: one function API is the contract every consumer calls, one business operation per call (DATA.INTERFACE).'
+  epistemic_state: 'known | gap: data lifecycle (retention) has no principle row | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (DATA.GUARD)'
+- op: node.set
+  uid: DATA.MAINTAIN
+  epistemic_state: 'known | unvalidated: the drift check between live catalogue and migration history, and expand-contract as the only route under MD-03, are inferred | gap: data lifecycle (retention) has no principle row'
+  constraints:
+  - Every schema change is a versioned migration kept in version control with the code, ordered, reviewed, and applied only by automation as an explicit step of every release, identically in every environment, never by hand. No production change, structural or data, is ad hoc SQL.
+  - Long-running data work is a versioned script outside the automated migration run, launched by a human under a checklist with a ticket id.
+  - Migrations are the only origin of change; the live database is the truth for current structure, and documentation, persistence models and function wrappers are generated from it. A structure the migrations would not produce is a defect to reconcile, not a new truth.
+  - 'An incompatible change keeps every running consumer working: add the new structure or function beside the old, move every consumer, then remove the old in a change marked coordinated once no deployed consumer references it. This holds for tables and the function API alike.'
+  - 'Conventions evolve forward only: new objects follow the new rule, legacy ones are not renamed in bulk.'
+  - Recovery to a chosen moment is the default, and a backup counts only once a restore of it has been rehearsed.
+  design_notes: 'Question: how schema and data evolve without breaking running code, and what is the source of truth for structure.
+
+    Positions: P1 every schema change is a versioned migration in version control with the code, ordered, applied only by automation, as an explicit release step, the same way in every environment, never by hand (L046; SRC-220 T2, SRC-022 T1, SRC-183 T2, SRC-187 T2); the doctrine agrees and adds re-runnable DDL, one owner role per table, long data work kept out of automated runs (L519, owned by J6). P2 hand-applied or ad hoc changes to production structure (the practice L046 rejects). P3 a backward-incompatible change proceeds expand, migrate, contract, so every phase can be released, verified and rolled back (L047; SRC-186, SRC-190, SRC-220, SRC-311, SRC-278). P3'' a breaking change to the function API is coordinated with every consuming team and deployed together (L517 doctrine, owned and judged by J6 in the defaults graph''s functions and views node; cited, not judged). P4 the live database is the source of truth for structure: table and function documentation is generated from it (L474 doctrine; SRC-220). P5 conventions evolve forward only: new tables follow the new rule, legacy ones are not renamed in bulk (L474), against P5'' bulk renaming to the new convention.
+
+    Forces: integrity of running code and data across releases. P1 and P3 serve it and cost process (each change small, several releases for one incompatible change). P2 serves speed and loses reproducibility and the record of what changed. P3'' serves speed of a coordinated change and, unless every consumer deploys in one step with the migration, leaves a window where old code runs against the new structure. P5'' serves uniformity of names and breaks every consumer of the old names, several under MD-03.
+
+    Decision: one path of change (L046, L519; consensus and doctrine agree; long data work under L545''s checklist, J1''s owner-role access path). Origin of change and truth of state are distinct and must agree (L474; RECORD.3, doctrine, max); a structure the migrations would not produce is a defect (inferred from L046 with L474); the drift check, such as comparing a freshly migrated database''s catalogue with production, has no source read and its mechanism is handed to J6. Incompatible changes go expand, migrate, contract (L047), for tables and the function API alike; the contract phase is the change marked coordinated (L192; RECORD.3''s catalogue diff in CI fails on a removal not so marked). Max: the database and its consumers never deploy atomically, and under MD-03 several consumers (backends, reporting, consoles, scripts) deploy on their own schedules; expand, migrate, contract is the only route that keeps every running version working (inferred from L047 with MD-03). Conventions evolve forward only (L474, doctrine, max): a rename is itself an incompatible change for every consumer.
+
+    Principle-level requirement (changed after review, m8, X2): an incompatible change keeps every running consumer working. How the function API meets it, and the verdict on L517, belong to J6, which counts that departure once for both graphs: "deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. This node cites that verdict and does not count it; the former conflict state on L517 is removed.
+
+    Rejected: P2 never. P3'' a breaking change deployed together: not judged here, see above. P5'' acceptable only through expand, migrate, contract, when the inconsistent name costs more than moving every consumer (inferred).
+
+    Out of this node''s rows: retention, deletion, history tables, bulk jobs and recovery are realized in the defaults graph''s maintenance nodes (J6) and have no principle-level row here (gap 3). ALLOCATION.ACT.4 (audit) is realized by the defaults graph''s history tables node; no philosophy link (gap 1).
+
+    Realizes: ALLOCATION.RECORD.3 (keeps the database structure as the origin of every stored fact and of the function API''s contract). Refines python-kb-philosophy:REPRODUCIBILITY (skeleton link). Link proposed, not created: realizes ALLOCATION.ACT.4 through history kept in the database.
+
+
+    Lifted from the stack-neutral clause of PIG-WEB-DATA.MAINTAIN.5 in pig-web-defaults, wording kept; the verdict is that record''s, not re-judged here. Clause: point-in-time recovery, with backups that count only once a restore has been rehearsed.'
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA.MAINTAIN
+  - build/research/01_data_tier/result.md::DATA-C03
+  - build/research/07_architecture_styles/result.md::ARCH-C21
+  - build/research/06_operations/result.md::OPS-C38
+  - build/research/01_data_tier/result.md::DATA-C05
+  - build/research/06_operations/result.md::OPS-C40
+  - build/research/01_data_tier/result.md::DATA-C35
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C74
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C48
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C65
+  - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA.MAINTAIN.5
+- op: node.set
+  uid: INTERACTION.AGENT
+  constraints:
+  - The agent surface is an adapter to a backend that only translates and shapes; rules, validation, authorization and state transitions never live in the adapter or in prompts (RULES.4, L633).
+  - Agents never connect to the database.
+  - 'Agents never decide access: model output and client-supplied hints (tool annotations, claimed identity, client name) are untrusted input; the backend and the writer functions decide (GUARD.3; L644, L650).'
+  - The server accepts only tokens issued for it and never forwards a caller's token; downstream calls use its own token (L640).
+  - Each agent holds its own short-lived, revocable credential (GUARD.4).
+  - Narrowest scopes, read scopes first, elevation on demand through a precise insufficient-scope challenge, no wildcard or omnibus scope; every request still authorized in server code (L642).
+  - Few purpose-specific tools, each with only the permissions it needs; no raw shell, raw SQL or arbitrary URL fetch on the live system (L645).
+  - Where the application runs or hosts an agent, no session holds untrusted input, private data and the power to change state or send outward together; if all three are needed, a supervised step or a split session (L648).
+  - For agents the team does not run, no tool sends data to an arbitrary destination, and consequential or external effects go through the approval design (L646).
+  - Irreversible or external effects require approval by the owning user, shown the exact action on the application's own page; the effect's writer function refuses an agent-originated operation without it, and an approval dialog in the agent host is a client hint, never the gate.
+  - Agents that identify and authenticate themselves are admitted to every flow their scopes allow and limited by quota per agent identity (L652).
+  - 'Flows whose automation harms the business (purchase, sign-up, booking, referral) are named and protected: per-flow limits for identified agents, approval by the owning user for irreversible effects, anonymous automation denied or challenged (L652, L034).'
+  - On a flow that hands out scarce goods or rewards automation per account, completing the flow requires a human, or agents are excluded, whatever their identity; the list of such flows is a decision recorded per project.
+  - Every mutation offered to agents that is not idempotent by design takes an idempotency key, recorded with the effect (GUARD.6).
+  - Every agent action is logged on the server with acting identity, delegating subject, operation, correlation id and outcome, never only in a model transcript; agent-originated writes are marked in the data (ACT.4; L658, L659).
+  design_notes: 'Decides: how agents act as users with bounded authority, verifiable identity and limited consumption.
+
+    Rows: L640, L642, L645, L648, L652. Cited: L633, L644, L650, L646, L651, L658, L659, L034.
+
+    Positions:
+
+    - Tokens: P1 the server accepts only tokens issued for it and obtains its own for downstream calls (L640); P2 forwarding the client''s token downstream (rejected in L640).
+
+    - Scopes: P3 narrowest scopes, read first, elevation on demand (L642); P4 coarser scopes (acceptable in L642 for trusted first-party agents).
+
+    - Tools: P5 few purpose-specific tools (L645); P6 open-ended tools: raw shell, raw SQL, arbitrary URL fetch (acceptable in L645 only inside a sandbox, SRC-398).
+
+    - Session capabilities: P7 never untrusted input, private data and the power to change state or communicate externally in one session (L648); P8 rely on filtering the input (L649, pig-web: filters as an additional layer only).
+
+    - Automated traffic: P9 deny non-human patterns on sensitive flows (L652 a, L034); P10 admit automated clients that identify and authenticate themselves, limited by quota (L652 b); P11 blanket bot blocking (rejected in L652).
+
+    Forces: P1, P3, P5, P7 serve security and audit clarity (bounded authority), at the cost of consent friction, step-up round trips and fewer things an agent can do in one call. P4 and P6 serve capability and fewer round trips, at the cost of blast radius. P9 serves business integrity on flows whose automation harms the business; P10 serves agents as intended users; the ledger row states this trade-off itself ("serves business integrity against agent access", L652), and each side wins under its own condition. P11 serves neither once agents are users.
+
+    Decision grounds: P1, P3, P5, P7, P10 with P9 as conditioned below; one core (RULES.4, L633); agents never decide access (GUARD.3; L644, L650); duplicate-safe (GUARD.6); accountable (ACT.4; L658; the backend asserts the user and the agent as the actor, R1-3 of the allocation records). Quotas are partitioned per agent identity so one runaway agent cannot exhaust its user''s allowance (L651, pig-web). The application of L648 to external agents (tool shape and approval design instead of session control) is inferred.
+
+    Rejected:
+
+    - P2: wins never (L640).
+
+    - P4: acceptable when the agent is first-party (built and run by the team) and every request is still authorized in server code (L642).
+
+    - P6: acceptable only inside a sandbox that holds no authority and no connection to the system of record (L645, SRC-398; RECORD.2 forbids agent connections to the database).
+
+    - P8 as the only control: wins never (L649); filters stay an additional layer.
+
+    - P9 as the default for all automated traffic: rejected, since agents are intended users in the default context. P9 wins on the named harmful flows for anonymous automation, and wins outright on a flow that hands out scarce goods or rewards automation per account (limited stock, referral credit): per-agent quotas and owner approval do not stop one party running many accounts each with its own approved agent (L652 a: wins for scarce-inventory or abuse-prone flows; L034). The contest is resolved per flow by this condition, not dissolved.
+
+    - P11: wins never where agents are intended users (L652).
+
+    Realizes: requires ALLOCATION.RULES.4 (one more adapter on the same core); ALLOCATION.GUARD.3 (agents never decide access); ALLOCATION.GUARD.6 (agent retries absorbed by keys recorded with the effect); ALLOCATION.ACT.4 (agent actions recorded where history is written, both session role and claimed actor).
+
+    Hand-offs: protocol and transport (PIG-WEB-INTERACTION.AGENT.1), discovery (.2), identity, delegation and agent-write marking (.3), approval designs and injection containment (.4, L646, L649), rate-limit partition and agent-shaped errors (.5, L651, L656, L657); scarce-goods flows closed to agents or requiring a human (.5).
+
+    Maintainer decisions: MD-03 shapes the node (agents never connect to the database; the backend asserts the actor).
+
+    Evidence gaps: L648 applied to agents the application runs or serves is inferred; the identify-then-limit synthesis of L652 is inferred.
+
+
+    Lifted from the stack-neutral clause of PIG-WEB-INTERACTION.AGENT.4 in pig-web-defaults, wording kept; the verdict is that record''s, not re-judged here. Clause: irreversible or external effects need the owning user''s approval, on the application''s own page, checked by the effect''s writer.'
+  impl_pointers:
+  - build/distill/03_judge/J4_phil_interaction/records.md::INTERACTION.AGENT
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C16
+  - build/research/19_agent_users/result.md::AGENT-C01
+  - build/research/19_agent_users/result.md::AGENT-C02
+  - build/research/19_agent_users/result.md::AGENT-C10
+  - build/research/19_agent_users/result.md::AGENT-C12
+  - build/research/19_agent_users/result.md::AGENT-C14
+  - build/research/19_agent_users/result.md::AGENT-C15
+  - build/research/19_agent_users/result.md::AGENT-C16
+  - build/research/19_agent_users/result.md::AGENT-C18
+  - build/research/19_agent_users/result.md::AGENT-C19
+  - build/research/19_agent_users/result.md::AGENT-C20
+  - build/research/19_agent_users/result.md::AGENT-C23
+  - build/research/19_agent_users/result.md::AGENT-C25
+  - build/research/19_agent_users/result.md::AGENT-C31
+  - build/research/19_agent_users/result.md::AGENT-C32
+  - build/research/19_agent_users/result.md::AGENT-C33
+  - build/research/19_agent_users/result.md::AGENT-C34
+  - build/distill/03_judge/J8_pig_interaction/records.md::PIG-WEB.INTERACTION.AGENT.4
+- op: node.set
+  uid: LOGIC.PROCESS
+  constraints:
+  - 'Each process is disposable and replaceable: durable state, sessions (GUARD.4) and shared caches (DERIVE.3) live in backing services; process memory caches nothing beyond one request (L086).'
+  - Several backends may share the database (MD-03); each backend is one deployable, not split into services without a measured need (X5).
+  - 'Distinct process types from one build: web processes serve requests; worker processes run deferred work and schedules, claim jobs from the queue the database holds (ACT.3), and return an unfinished job on SIGTERM (L087, L088).'
+  - Each backend reaches the database as its own role, neither owner nor all-powerful, located and credentialled by configuration (L089; J1 access paths); a small pool per process; never a connection or an open transaction per connected client, and never a transaction held across a remote call (L094; L234 via ACT.1, ACT.2).
+  - A supervisor owns the process lifecycle (L090); a reverse proxy faces the internet and enforces the outermost limits of LOGIC.SECURE (L091, L032); one concern per container (L092).
+  - 'Long-lived connections (real-time channels, agent streams) are the one tolerated per-process state: clients reconnect to any process and resync from the backing services (L093).'
+  - No file is readable before a clean scan.
+  design_notes: 'Decision: adopt P1 to P9 together; no position contests another.
+
+    Positions:
+
+    (all owned rows, consensus unless stated):
+
+    - P1 stateless, share-nothing processes; anything durable, sessions included, in a backing service; no sticky sessions; process memory or disk at most a single-request cache (L086).
+
+    - P2 scale out by process type (web, worker) from one codebase, release and configuration, scaled independently under an external process manager (L087).
+
+    - P3 disposability: start in seconds, stop gracefully on SIGTERM (stop accepting, finish in-flight work, return the current job to the queue), tolerate sudden death (L088).
+
+    - P4 the database and every other backing service is an attached resource located and credentialled by configuration, swappable without code changes (L089).
+
+    - P5 an external supervisor starts and restarts processes; no self-daemonizing or PID files (L090).
+
+    - P6 the application server never faces the public internet; a reverse proxy or routing layer sits in front (L091).
+
+    - P7 containers are disposable and hold one concern each (L092).
+
+    - P8 a long-lived connection is disposable state held by one process; truth lives in backing services; clients reconnect to any process and resync (L093; majority, reconciliation inferred).
+
+    - P9 never a database connection or transaction per connected client; client count independent of the small server-side pool (L094; inferred from sources).
+
+    Forces: scalability and availability (P1-P3); security (P6, P4''s credentials in configuration); correctness under failure (P3, P8); database protection (P9).
+
+    Rejected:
+
+    - Sticky sessions and in-memory sessions: never in this context (L086, GUARD.4).
+
+    - Process-memory caches shared beyond one request: never in multi-process production (DERIVE.3, L417).
+
+    - Self-daemonizing processes, PID files: never (L090).
+
+    - Application server facing the internet: acceptable only for local development (inferred from L091''s production framing).
+
+    - Per-client database connections: never (L094).
+
+    Realizes: constrains GUARD.4 (sessions in a backing service) and DERIVE.3 (no process cache beyond one request). Refined by PIG-WEB-TRANSVERSE.TOPOLOGY. Not linked in the skeleton, though the placements give this node work: ACT.2 (the backend delivers side effects from the outbox) and ACT.3 (workers execute deferred work); see the note in `result.md`.
+
+    Placements that give this node work but are not linked in the skeleton: ACT.2 (the backend delivers side effects from the outbox) and ACT.3 (workers execute deferred work). A realizes link from LOGIC.PROCESS to each would make the philosophy graph self-contained; proposed, not created.
+
+    Refined by PIG-WEB-TRANSVERSE.TOPOLOGY.
+
+    Evidence gap: L093 reconciliation of stateless processes with long-lived connections is inferred by its research slot; L094 inferred from sources.
+
+
+    Lifted from the stack-neutral clause of PIG-WEB-LOGIC.PROCESS.5 in pig-web-defaults, wording kept; the verdict is that record''s, not re-judged here. Clause: no file readable before a clean scan.'
+  impl_pointers:
+  - build/distill/03_judge/J3_phil_logic/records.md::LOGIC.PROCESS
+  - build/research/10_rate_limiting_uploads/result.md::RATE-C18
+  - build/research/02_app_tier/result.md::APP-C26
+  - build/research/06_operations/result.md::OPS-C46
+  - build/research/02_app_tier/result.md::APP-C27
+  - build/research/02_app_tier/result.md::APP-C28
+  - build/research/09_runtime_topology/result.md::TOPO-C38
+  - build/research/02_app_tier/result.md::APP-C29
+  - build/research/06_operations/result.md::OPS-C45
+  - build/research/02_app_tier/result.md::APP-C31
+  - build/research/06_operations/result.md::OPS-C37
+  - build/research/01_data_tier/result.md::DATA-C02
+  - build/research/07_architecture_styles/result.md::ARCH-C27
+  - build/research/09_runtime_topology/result.md::TOPO-C28
+  - build/research/09_runtime_topology/result.md::TOPO-C01
+  - build/research/09_runtime_topology/result.md::TOPO-C42
+  - build/research/11_realtime/result.md::RT-C18
+  - build/research/11_realtime/result.md::RT-C23
+  - build/research/02_app_tier/result.md::APP-C16
+  - build/research/06_operations/result.md::OPS-C51
+  - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.PROCESS.5
+- op: node.set
+  uid: ALLOCATION.GUARD.3
+  constraints:
+  - 'Authority: writer function for per-user write rules decidable from the row and the actor; backend for product policy not stored in the data and for identity; database per consumer role'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested, early feedback); the browser hides controls the user may not use (cosmetic)'
+  - 'Forbidden: browser, agent client, model output, client hints; row security by default (MD-01); any consumer role owning tables or bypassing grants; a write without an actor, or with an actor its role may not assert'
+  - Per-user write rules decidable from the stored row and the acting user are decided by the column's writer function; a backend's identical check is a generated or tested copy for early feedback.
+  - 'Each backend decides product policy not stored in the data (product roles, plan limits, feature flags, workflow steps) and identity: one central mechanism, deny by default, object level, on every request from every client.'
+  - Each consumer has its own role, neither owner nor all-powerful; grants say which API functions it may call and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path.
+  - Functions read the acting user from a value scoped to the transaction, taken from the verified identity, refuse a write without an actor, check that the session role may assert that kind of actor (a backend an end user, an operator or owner role only itself), and record both the session role and the claimed actor.
+  - No row-level security by default; acceptable only when the data model is simple, the scoping key leads the composite primary key of every table the policy covers, and no all-powerful administrator role must read or write across scopes.
+  - Roles that may read the base tables (reporting, operator) see every row, comments included, unless their own role is restricted.
+  - 'Recorded default for the open clause: each backend filters per-user reads from one shared written specification with a shared denial-test suite; fallback: database read functions that receive the verified actor, acceptable when a per-user read rule must hold for two or more backends.'
+- op: node.set
+  uid: ALLOCATION.GUARD.4
+  constraints:
+  - 'Authority: backend (session store in the database under the backing-roles default)'
+  - 'Copies: the browser''s opaque cookie; an agent''s own bearer token'
+  - 'Forbidden: tokens in storage readable by page script; any session token, bearer token or long-lived credential in a URL, the one exception being short-lived, single-purpose, scope-limited signed URLs for file delivery, with lifetime and scope stated (X6); session state in process memory; stateless, non-revocable sessions; end users as database roles'
+  - 'Default (first-party, same-site browser): an opaque server-side session, revoked on logout, stored in a backing service, never in process memory.'
+  - 'Login through an external identity provider: a backend-for-frontend holds the tokens.'
+  - 'Agents and other non-browser clients: bearer tokens per delegation, short-lived, with server-held state that can revoke them.'
+  - The cookie carries an identifier, never application state.
+  - An end user reaches the database only as the actor a backend asserts for the transaction from its verified identity, never from a client-supplied id.
+- op: node.set
+  uid: ALLOCATION.RECORD.2
+  constraints:
+  - 'Authority: database function API, owned by the database owner'
+  - 'Copies: replica or reporting copy for BI'
+  - 'Forbidden: direct writes by consumers to tables with state columns or multi-table effects; database connections from browsers or agents; views as contract'
+  - Every consumer has its own role.
+  - Backends, consoles and scripts write through API functions; at most read access on base tables for simple reads.
+  - 'One direct-write exception: a single-table write grant for a table that only one consumer writes and that has no state column or multi-table effect.'
+  - Reporting reads through a read-only role with table and column grants, on a replica or reporting copy when its load matters.
+  - Evolution is additive; breaking changes are coordinated with every consumer; 'deployed together' holds only when every consumer of the changed object ships in the same deployment as the migration, otherwise expand, migrate, contract.
+  - A consumer outside the owning team gets the function API as a published contract.
+- op: node.set
+  uid: LOGIC.EXPOSE
+  intent: 'Each backend offers one HTTP interface over its one core: server-rendered HTML whose links and forms are the contract for browsers, and a resource-oriented structured-data interface plus an agent adapter on the same use cases for programs and agents. Every interface description consumers read is kept in sync with the implementation by process, and repeated requests are safe.'
+  constraints:
+  - Browsers get server-rendered HTML whose links and forms are the contract (PRESENT.1, LOGIC.EXPOSE.3).
+  - 'Programs and agents get a resource-oriented structured-data interface on the same use cases, described machine-readably and kept in sync with the implementation by process: one origin per fact, the other side generated or conformance-checked, a CI gate that fails on drift; the origin direction is recorded per project (MD-02, L634). An agent protocol adapter, where offered, sits on the same core (L633, L635).'
+  - 'MD-02 covers every interface description consumers read (X7): "always in sync by process" and the compatibility window apply to the HTTP description, to the database function API catalogue and to the agent tool surface.'
+  - Every endpoint uses HTTP's defined meanings (LOGIC.EXPOSE.1), and every request is self-contained (LOGIC.EXPOSE.2).
+  - 'Repeated requests are safe: safe methods change nothing, PUT and DELETE are idempotent, non-idempotent mutations offered to agents carry an idempotency key that the database function records with the effect (GUARD.6, L051).'
+  examples:
+  - An MCP server's tool list and schemas are an agent tool surface description.
+- op: node.set
+  uid: LOGIC.EXPOSE.2
+  constraints:
+  - 'It carries its credential (the opaque session identifier or the agent''s token, in a cookie or a header, never in the URL; X6: short-lived, single-purpose, scope-limited signed URLs for file delivery are the one exception, with their lifetime and scope stated) and every parameter its use case needs; anything it references is resolved from backing services, never from the memory of the instance that served the previous request (L054, L086).'
+  - The server-held state is limited to identity and security state (the session, revocable; GUARD.4). Workflow progress is resource state in the database (state columns, ACT.1), addressed by identifiers in the request, never hidden in a session or a connection (L661; inferred from L318's narrow sense and ACT.1).
+  - Client and server are coupled only through the interface contract (HTML links and forms, or the described structured-data interface), so either can change behind it (L055).
+- op: node.set
+  uid: LOGIC.EXPOSE.3
+  constraints:
+  - 'Browser: the HTML the server renders is the contract: links and forms drive every transition, and the server renders only the controls the user may use. The control is a cosmetic copy; the request is re-authorized on arrival (GUARD.3, RULES.1). This is P1 in full, and it follows from PRESENT.1 (L059, L629).'
+  - 'Programs and agents: a resource-oriented structured-data interface called what it is, resource-oriented HTTP, not REST (L060), whose contract is the machine-readable description kept in sync by process (MD-02, L634); the same rule holds for the agent tool surface''s description (X7). Server-issued links are used where the server mints the next step: continuation links for paging (L266), the created resource''s location, explicit handles for cross-call state (L661). Clients do not build URLs the description does not define.'
+  - 'Grounds: MD-02 makes an always-synchronised description the contract programs and agents read; it buys the independent evolution P1 seeks by additive change and conformance checks, at lower cost per client (inferred). P3''s trade is accepted where it pays: browser pages.'
+  design_notes: 'Decision: hypermedia where the client is a browser; a described, level-2 resource interface where the client is a program or an agent.
+
+    Positions:
+
+    - P1 server-provided representations drive client transitions; no fixed, out-of-band URL hierarchies; documentation-driven clients are the most frequent violation (L059; Fielding; contested).
+
+    - P2 a JSON API without hypermedia controls is resource-oriented HTTP (Richardson level 2), not REST (L060; definition agreed).
+
+    - P3 the uniform interface trades efficiency for visibility and independent evolution (L061).
+
+    - Common API practice: documented fixed URLs and an out-of-band description (L059''s positions column; L634 OpenAPI for humans, generators and agents).
+
+    - Cited: server-rendered HTML by default (PRESENT.1; L252, L629); in a hypermedia design the HTML is the contract and an OpenAPI file covers only the JSON endpoints that exist (L257, owned by PIG-WEB-LOGIC.EXPOSE.1); the description is always in sync (MD-02).
+
+    Forces: changeability (independent evolution of clients over a long horizon, P1, P3); efficiency and tooling for program and agent clients (common practice); enforcement (the server decides which transitions to offer).
+
+    Rejected:
+
+    - Full hypermedia controls in the JSON interface (links and forms in every representation): not the default; acceptable when independently developed clients must keep working over a long horizon without a shared, synchronised description (L059, L061; condition inferred).
+
+    - A client-rendered browser application driven by an out-of-band JSON description: not the default; acceptable under PRESENT.1''s conditions (many interdependent UI parts, offline, high-frequency or real-time state; L253).
+
+    - Calling a level-2 JSON interface REST: rejected on definition (L060).
+
+    Realizes: no direct link in the skeleton; follows PRESENT.1 (server-rendered HTML) and RECORD.3 with MD-02 (contract origin per project, always in sync).
+
+    Maintainer decision cited: MD-02.
+
+    Evidence gap: no ledger row on hypermedia controls for agent clients; the JSON half rests on MD-02 and L634 (inferred).
+
+    No direct skeleton link; follows PRESENT.1 (server-rendered HTML) and RECORD.3 with MD-02.
+
+    Candidate under the gap: (review m9; no change to the decision): server-computed allowed actions for agents, the agent analogue of the browser''s rendered controls, which ACT.1 already admits as a permitted copy (the server previews what the caller may do; the request is still re-authorized on arrival). Handed to INTERACTION.AGENT''s judge with L661 (explicit server-minted handles) as the nearest evidence.
+
+
+    Paging continuation links are owned by pig-web-defaults (L266).'
+- op: node.set
+  uid: INTERACTION.ENVIRONMENT.3
+  constraints:
+  - Every client-server contract has an explicit compatibility window, at least as long as an old page can stay open (L009).
+  - Within the window, changes are additive and readers ignore what they do not know; nothing in use is removed (L056, L057).
+  - Before removing or changing a behaviour, its current use is found, per consumer role (L058).
+  - 'Every surface used by code the team does not redeploy at once is a contract under this window: structured-data endpoints, HTML form fields and URLs posted by old pages, the agent tools and their schemas.'
+  - 'Every interface description consumers read is always in sync with the implementation by process (MD-02, extended to every agent-facing interface): the HTTP description, the database function API catalogue and the agent tool surface; the compatibility window applies to each.'
+  - 'A breaking change goes expand, migrate, contract: the new shape is added beside the old, each consumer moves, the old one is removed once no consumer uses it (L047); no client is silently broken.'
+  - Lockstep deployment ("deployed together") is acceptable only when every consumer of the changed object ships in the same deployment; a browser tab never does.
+- op: node.set
+  uid: TRANSVERSE.CONTRACTS
+  epistemic_state: 'known | conflict: L517 (MAINT) "deployed together", narrowed to the same-deployment condition, otherwise expand, migrate, contract (L047) | unvalidated: usage known per consumer role'
+  design_notes: "SCOPE:\nwhat every contract shares. The contracts of the default context are the database function API (offered to several backends, consoles and scripts; RECORD.2, realized under PIG-WEB-DATA.INTERFACE), the grants and meaning of tables BI reads, and the backend's HTTP interface (to its browser code, which runs at an older version for days, L009, and to agents; LOGIC.EXPOSE).\n\nPOSITIONS:\n  - P1 an explicit artifact stating structure and meaning (names, types, nullability, units, invariants, owner, version), readable without the producer's code (L483; L562 and L565 at stack level).\n  - P2 evolve by compatible additions; versioning is the exception (L056); readers tolerant, writers conservative (L057); before changing or removing a behaviour, find how it is used (L058).\n  - P3 the provider contract is singular and authoritative; consumer contracts are partial and plural, and the one that matters for change is the union of what consumers use; consumer-driven contracts fit a closed community (L487).\n  - P4 a breaking change is coordinated with every consuming team and deployed together, with no formal version numbers (L517, MAINT, for the function API).\n  - P5 a breaking change goes expand (support old and new), migrate (move every client), contract (remove the old), so each phase can be released, verified and rolled back (L047, owned by DATA.MAINTAIN, grounded); for HTTP, removal is announced with machine-readable signals and a support window (L275, L277).\n\nFORCES:\nP1 serves correctness across tiers and readers outside the producer, at the cost of writing meaning down. P2 serves independent upgrade of components at different times (L056); its cost is carrying old shapes for a while. P3 serves conceptual integrity; consumer-driven tests make hidden coupling explicit at the cost of a shared channel between teams (L487). P4 serves simplicity (one shape at any time, no version bookkeeping); it costs a window of breakage, since no deployment across separate deployables is atomic (L009). P5 serves the same independence as P2 for the unavoidable break; it costs a period with two shapes.\n\nDECISION:\nP1, P2, P3 and P5; P4's coordination kept, its \"deployed together\" replaced.\n  - Every contract is an explicit artifact with structure and meaning, readable without the producer's code (L483). Its origin is the one RECORD.3 names: the database schema for stored facts and for the function API (documentation generated from the live database, L474); the project's recorded origin for interface-only facts, kept always in sync by a CI gate that fails on drift (MD-02).\n  - \"Always in sync by process\" and the compatibility window apply to every interface description consumers read: the HTTP description, the database function API catalogue, and the agent tool surface (for example an MCP server's tool list and schemas) (MD-02, X7).\n  - The provider's contract is authoritative (L487): the database owner's for the function API (L515), the backend's for HTTP.\n  - Changes are additive by default (L056); readers are tolerant (L057). Before a change or removal, usage is known, not assumed (L058). Under MD-03 every database consumer has its own role, so usage can be read per consumer: from its grants, and from the session role that audit records on every write (ACT.4). Inferred; how reads are counted per role is open.\n  - A breaking change to any contract goes expand, migrate, contract (L047). For the function API: the new function or signature is added beside the old, each consumer moves, and the old one is removed once no consumer role calls it. The new name is the expand step, and it carries the change, so no formal version number is needed: \"no formal version numbers\" is L517's rule, the new name is the expand phase (L047) and the route the maintainer's own L512 takes for stored contract schemas (new named version, old one soft-deleted, consumers migrate gradually). The coordination with every consumer that L517 demands is kept.\n  - \"Deployed together\" (L517) stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract (X2).\n  - Grounds for expand, migrate, contract as the default: the database, several backends, BI reports and scripts deploy separately (MD-03), and backends roll out instance by instance. A browser tab keeps old code for days (L009, L278). There is usually a window in which old and new meet.\n  - Counting: this is the L517 narrowing, realized here and counted once at its owner, PIG-WEB-DATA.INTERFACE.1 (J6). It is narrower than \"against the doctrine\" suggests, since L512 already takes this route for stored contract schemas.\n  - Consumer-driven contract tests where consumers are separate teams in a closed community (L487); for the single team's own browser client, whether they add value beyond schema checks stays with the stack judge (L560, contested, PIG-WEB-TRANSVERSE.CONTRACTS.1).\n\nREJECTED:\n  - P4 lockstep (\"deployed together\") for a breaking change: acceptable only when every consumer of the changed object ships in the same deployment as the migration (X2). This is never the case for HTTP contracts with browser clients, whose open tabs are consumers that do not ship with the deployment (L009), or for contracts BI reports or scripts read.\n  - Versioning as the routine way to change (version per release): versioning is the exception (L056); when a break is unavoidable, the version sits in one agreed place (L276, stack level).\n  - Removing behaviour on the assumption that nobody uses it: never (L058).\n  - Consumer-driven contracts as the authority: they are partial views (L487); acceptable as tests, never as the origin.\n\nPLACEMENTS REALIZED:\nrequires RECORD.3 (skeleton link); required by INTERACTION.ENVIRONMENT.3 (version skew). Rests on RECORD.2 (function API as the default contract, MD-03) and MD-02. J1's RECORD.3 gate lets a function-API break through when it is marked as coordinated; this record fills in what that mark requires (the expand, migrate, contract sequence, or the lockstep condition above). No placement is changed.\n\nREVIEW FIXES:\nM1 and X2 (one lockstep condition, word for word; the departure cited here and counted once at its owner; the new name credited to the expand step and L512, not to L517; L512 noted as already taking this route); X7 (sync and compatibility window extended to every interface description, the agent tool surface included).\n\nThe L517 departure is counted once, at PIG-WEB-DATA.INTERFACE.1 in pig-web-defaults, for both graphs."
+  constraints:
+  - Make every contract an explicit artifact stating structure and meaning (names, types, nullability, units, invariants, owner, version), readable without the producer's code.
+  - Keep every interface description consumers read always in sync with the implementation by process and a CI gate that fails on drift; this covers the HTTP description, the function API catalogue and the agent tool surface.
+  - Treat the provider's contract as authoritative; consumer-driven contracts are tests, never the origin.
+  - Change contracts by compatible additions by default, with tolerant readers and conservative writers; versioning is the exception.
+  - Know how a behaviour is used before changing or removing it; never remove on the assumption that nobody uses it.
+  - Take a breaking change through expand, migrate, contract, coordinated with every consumer, unless every consumer of the changed object ships in the same deployment as the migration.
+- op: node.set
+  uid: ALLOCATION.RECORD.1
+  constraints:
+  - 'Authority: database'
+  - 'Copies: browser server-state cache (versioned, for latency), HTTP caches, cache tables, search index, reporting copy, browser drafts of unsent input'
+  - 'Forbidden: any copy acting as authority; dual writes from any consumer'
+- op: node.set
+  uid: ALLOCATION.GUARD.2
+  constraints:
+  - 'Authority: database'
+  - 'Copies: generated or tested backend validators and types, browser feedback'
+  - 'Forbidden: application-only enforcement of any rule that must hold for every writer; a procedural check under Read Committed without a lock'
+  - Declarative constraints (NOT NULL, CHECK, UNIQUE, foreign keys, domains) are required for every rule they can express; CHECK constraints are not optional.
+  - Cross-row rules use a partial unique index or an exclusion constraint first.
+  - Other multi-row rules (including legal state transitions) run in a constraint trigger or the writer function under serializable isolation with retry, or after locking the governing row; the trigger asserts the isolation level it needs.
+  - Read Committed alone admits violations and Repeatable Read admits write skew; never a procedural check under Read Committed without a lock.
+  - Set the default isolation per consumer role; writer functions assert their isolation level; reports on a replica accept snapshot anomalies.
+  - Backend and browser validators are generated from or tested against the constraints; named constraints map violations to stable errors.
+- op: node.set
+  uid: ALLOCATION.GUARD.5
+  constraints:
+  - 'Authority: database (detection in the writer function), with the backend carrying the version through its contract'
+  - 'Copies: the browser holds the version it read'
+  - 'Forbidden: browser or agent resolving conflicts; locks across requests'
+  - Detect with constraints, isolation, row locks and version checks inside one short transaction in the writer function; isolation level per GUARD.2.
+  - 'Discrete fields edited by users: optimistic version; a stale write is rejected (412), and the condition is required (428) where a lost update matters; the writer function takes the expected version as a parameter.'
+  - 'Toggles, status, assignment, ordering: per-property last-writer-wins is acceptable.'
+  - 'Frequent conflicts with costly lost work: a lease with owner and expiry, checked by the writer function.'
+  - 'Long collaborative text: a text engine with the server as central authority.'
+  - Never silent whole-record last-writer-wins; never check-then-write without serializable isolation or a lock.
+- op: node.set
+  uid: ALLOCATION.ACT.2
+  constraints:
+  - 'Authority: backend (delivery, external calls), database (the staged intent, written by the operation)'
+  - 'Copies: none'
+  - 'Forbidden: third-party credentials in the browser (inferred, L624); calls to external systems from inside the database; dual writes to the database and a broker; remote calls inside an open transaction; a foreign call in the request without its intent recorded first; post-commit hooks for foreign effects'
+  - Write the intent in the operation's transaction; deliver after commit, idempotently.
+  - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery points and an idempotency key, in a worker behind a 202 response with a status resource.
+  - 'In the request only when the user must see the outcome within about 1 s: the database function records the intent first and commits; the request performs the call as one atomic phase and marks the row done; a worker completer picks up the row if the request dies.'
+  - Post-commit hooks only for losable work that touches no foreign system.
+- op: node.set
+  uid: ALLOCATION.ACT.4
+  constraints:
+  - 'Authority: database (history, transitions logged by writer functions); backend supplies actor and business events; a separate log sink holds security events'
+  - 'Copies: none'
+  - 'Forbidden: application-only audit; audit only in a model transcript; an actor taken from a client-supplied id; a write without an actor; an actor the session role may not assert'
+  - History is written by triggers into append-only history tables in the same transaction as the change; writer functions log each transition.
+  - Record both the session role and the claimed actor; refuse a write with no actor; check that the session role may assert that kind of actor (a backend an end user; operator and owner roles only themselves, with the ticket id for owner-run jobs).
+  - Agent actions record acting identity, delegating subject, operation, correlation id and outcome, on the server; agent-originated writes are marked in the data.
+  - Keep the security event log as a separate record with its own store, integrity and retention.
+- op: node.set
+  uid: ALLOCATION.DERIVE.1
+  constraints:
+  - 'Authority: database'
+  - 'Copies: derived columns and tables with a stated staleness'
+  - 'Forbidden: consumers writing derived stores beside the source'
+  - 'Order of options: compute on read, then same-transaction maintenance in the database, then cache tables with a stated staleness.'
+- op: node.set
+  uid: ALLOCATION.DERIVE.2
+  constraints:
+  - 'Authority: database, including collation'
+  - 'Copies: the browser over rows already loaded, same collation'
+  - 'Forbidden: loading full sets into a backend or browser to reduce them; queries in loops; a browser re-sort with another collation'
+  - Filter, sort, aggregate and page in the database.
+  - Enforce a maximum page size; page by keyset behind an opaque continuation.
+  - The database owns the collation of every order it serves; a browser re-sort over rows already loaded uses the same collation or none.
+  - Reads that need no domain behaviour may be plain queries.
+- op: node.set
+  uid: ALLOCATION.DERIVE.3
+  constraints:
+  - 'Authority: none: the source is the authority'
+  - 'Copies: database tables, a shared backend store, HTTP intermediaries, the browser'
+  - 'Forbidden: process memory beyond one request; personalised responses in shared caches'
+  - Every cache states its staleness bound and an expiry or invalidation plan.
+  - Derived-data caches are database tables, invalidated in the source transaction.
+  - 'Label every HTTP response on purpose: HTML no-cache with validators, fingerprinted assets immutable, personalised responses private or no-store, lifetimes set by tolerable staleness.'
+  - Response and fragment caches shared by processes live in the database by default; a cache service only on measured need.
+  - Never use a cache as permanent storage.
+- op: node.set
+  uid: ALLOCATION.PRESENT.1
+  constraints:
+  - 'Authority: backend (HTML and navigation logic)'
+  - 'Copies: browser view state and islands'' client state'
+  - 'Forbidden: business rules in browser code'
+  - Pages work as HTML and are enhanced; a client-rendered island needs the island criteria.
+  - Agents use their own adapter over the same core (RULES.4).
+- op: node.set
+  uid: ALLOCATION.PRESENT.2
+  constraints:
+  - 'Authority: the rendering tier (formatting), database (canonical values)'
+  - 'Copies: none'
+  - 'Forbidden: formatted or local-time values stored as data'
+  - Store canonical values only.
+  - Format in the rendering tier, with the reader's locale and time zone.
+  - Internationalisation stays deferred.
+- op: node.set
+  uid: ALLOCATION.PRESENT.3
+  constraints:
+  - 'Authority: by kind: browser, URL, database, channel'
+  - 'Copies: the browser''s server-state cache'
+  - 'Forbidden: presence in database tables; durable state held only in the browser'
+  - Ephemeral view state in the browser; form state in the browser until submitted; shareable view state in the URL.
+  - Durable or shared state in the database; server state held in the browser is a cache.
+  - Presence is broadcast through a channel with a timeout.
+- op: node.set
+  uid: INTERACTION
+  constraints:
+  - The interaction tier decides nothing durable; every decision reaches a backend (RULES.3).
+  - Agents are users through an adapter on the same core, never a second implementation of the rules.
+- op: node.set
+  uid: INTERACTION.VISUALIZE
+  intent: 'Accessibility is a project requirement from the first design: a conformance target is stated before building and judged per full page, and the interface starts from native HTML semantics and keyboard operation, with users with disabilities taking part in early testing. Retrofitting accessibility at the end costs more and leaves parts that never conform; formatting for the reader''s locale and time zone is placed by ALLOCATION.PRESENT.2.'
+  constraints:
+  - Accessibility is a requirement from the first design; a conformance target is stated before building (L005, L300).
+  - Conformance is judged per full page, embedded third-party content included (L300).
+  - Start from native HTML semantics and keyboard operation; ARIA only where native elements cannot express the control (L301).
+  - Formatting for the reader's locale and time zone follows ALLOCATION.PRESENT.2.
+  - Users with disabilities take part in early testing, not only at acceptance (L005).
+- op: node.set
+  uid: ALLOCATION.FORCES.5
+  constraints:
+  - Do not place logic off the database pre-emptively.
+  - Move a placement for scalability only on measured write or connection load near the primary's limit.
+- op: node.set
+  uid: TRANSVERSE
+  constraints:
+  - State each property that spans every tier once here and design it in across browser, backend, database and every other database consumer, not per tier.
+  - Turn each cross-tier property into an automated check where one exists (interface drift gate, function-API catalogue diff, page budgets, module-boundary checks, tests at every tier).
+  - Leave stack choices to the stack graph; tier branches realize these properties and do not restate them.
+- op: node.set
+  uid: DATA.ORGANIZE
+  constraints:
+  - 'Every table passes third normal form: every non-key field states a fact about the key, the whole key and nothing but the key.'
+  - Boyce-Codd, fourth and fifth normal form are applied where they apply. Stopping at third normal form is acceptable only when every candidate key is a single column, and there are no multi-valued facts.
+  - Where a Boyce-Codd decomposition loses a dependency, the lost dependency is enforced by a constraint trigger under DATA.GUARD's rule (Serializable isolation or a lock).
+  - 'Denormalization is not an organizing choice: a denormalized value is a derived copy governed by DATA.DERIVE and exists only with a sync plan recorded before it is built (what and why, sync level, freshness, change frequency, impact of divergence, drift detection and reconciliation, alerting; recorded in the table comment).'
+  - 'A new one-to-one attribute is a nullable column by default; a separate table only for, in this order: cardinality likely to change, a different permission boundary, an independent audit or lifecycle, blast radius on heavily used tables. Sparsity and NULL count are never reasons to split.'
+  - A column is nullable only when absence is a meaningful state of the fact; where several nullable columns must be present together, a CHECK states it.
+  - Collation is a declared property of the stored text, not of a consumer.
+- op: node.set
+  uid: TRANSVERSE.SECURITY
+  constraints:
+  - Serve every page and every API over encrypted transport with strict transport enforcement and no mixed content; the same property covers database connections of every consumer role.
+  - Collect only the data the user's goal needs; never log secrets, session ids, tokens, keys, payment data, connection strings or unneeded personal data, trace headers included.
+  - Give every threat category an owning tier that the requester cannot modify, named through the allocation placements.
+  - Answer insecure design with a threat model per placement and per critical flow (authentication, access control, business operations, agent access) and misuse-case tests per tier.
+  - Assign software and data integrity failures to the delivery pipeline and the parsing tier for untrusted serialized input; declarative constraints are not that control.
+  - State each property as a verifiable requirement with a traceable id, at a level chosen by risk; the threat list is an awareness map, never the requirement set.
+  - Never claim a stronger read-visibility guarantee than the recorded default gives while the maintainer question is open.
+- op: node.set
+  uid: TRANSVERSE.PERFORMANCE
+  constraints:
+  - Judge user-perceived performance on field data at the 75th percentile, segmented by device class; never use averages.
+  - Enforce lab budgets in the build as a gate, and never let them override field data.
+  - Optimise only after measurement has named the critical path.
+  - Join field page metrics through the correlation id to server timing and database time per request.
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY
+  constraints:
+  - Observe, test and deliver the system as one whole across every tier.
+  - Carry one correlation id from the browser to the database transaction.
+  - Keep the security event log apart from the business audit trail.
+  - Promote one immutable build everywhere with database changes in the same pipeline.
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION
+  constraints:
+  - Name, choose from required properties, and record the costly decisions.
+  - Grow in small tested increments with fit checked automatically.
+  - Never split a backend into services without a measured need.
+  - Adopt a new technology only past a measured limit of an existing one.
+  - Cut teams by capability, with a cross-schema business function owned by the team that owns the workflow.
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.1
+  constraints:
+  - Carry one correlation id per user interaction from the browser through the backend into the database transaction, stamped on every log record, span, client event and audit row.
+  - Give database consumers outside the request path their identity and ticket id in the session.
+  - Record validation failures, authentication successes and failures, authorization failures, session failures, application errors and use of higher-risk functions in a security event log with its own store, integrity and retention.
+  - Treat changes to privileges, roles, credentials, grants and the role-to-actor pairing as security events; never put business data changes in the security log.
+  - Record a retention decision per record type, set by legal, regulatory and contractual obligations, no shorter and no longer.
+  - Never log or place in trace context anything secret or unneeded and personal.
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.2
+  constraints:
+  - Test at the lowest level that can catch the failure, and add the low-level test when a high-level test finds a bug; ratios are not prescribed.
+  - Test logic placed in the database on a real engine of the production kind; never mock the database or use another engine for it.
+  - Isolate each data test, by a rolled-back transaction by default; tests that mutate shared data run in a boundary that never commits.
+  - Test behaviour that only shows at commit or between sessions with concurrent committing sessions in a disposable database, never a shared one.
+  - Give every invariant enforced procedurally (serializable with retry, or a lock) a concurrent test, part of the default suite.
+  - 'Test authorization by denial: each role and actor is refused what it may not do.'
+  - Keep end-to-end tests few, on critical journeys.
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.3
+  constraints:
+  - Keep one codebase per application in version control with many deploys.
+  - Separate build, release and run; build once, assets included, and promote the same immutable artifact everywhere.
+  - Keep configuration apart from code and secrets out of source.
+  - Run every environment on the same database engine and version as production, with no adapters hiding differences.
+  - Keep schema and function-API changes as versioned migrations in version control, run once per release before the new code starts and additive across the release window.
+  - Release in small, frequent increments.
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.1
+  constraints:
+  - Identify the costly decisions early and record each with its forces, alternatives and the condition that would reverse it.
+  - Decide each hard-to-reverse choice when enough is known, not up front for every one.
+  - Record per-project decisions the same way, including the interface origin direction with its criteria and any adoption of row-level security with its conditions.
+  - Test changes against the constraints the decision set, automatically where a check exists.
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.2
+  constraints:
+  - Keep internal quality from the start.
+  - Never build capabilities for presumed future features; invest in tests, refactoring and continuous delivery.
+  - Design capacity headroom for about 10x the current load and plan reaching about 100x as a rewrite of the part concerned, not anticipate it in code.
+  - Make fit explicit as automated fitness functions, non-functional ones included.
+  - Take debt only as prudent, deliberate and recorded.
+  - Replace at seams, never by big-bang rewrite.
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.3
+  constraints:
+  - Make each backend one deployable, modular by business concept; never split it into services without a measured need.
+  - Split off a further deployable only when a team needs independent releases, the boundary has proven stable and the distribution premium is budgeted.
+  - Map bounded contexts to domain schemas in the shared database, each with its own functions and roles.
+  - Give a new deployable access to data only through the function API with its own role; never write tables beside it or hold a second system of record.
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.4
+  constraints:
+  - Adopt few, mature technologies with known failure modes.
+  - Let a new technology in only when an existing one's measured limit is reached and its perpetual operating cost is budgeted.
+  - Count runtimes, stores, services and frameworks; the paradigm inside an adopted language is not limited by this rule.
+- op: node.create
+  uid: DATA.INTERFACE
+  name: Offered Contract
+  parent: DATA
+  intent: 'The database offers every consumer one published contract: a function API owned by the database owner, one business operation per call in its own transaction, one role per consumer, evolving additively. Writes and state transitions go through it, simple reads may query base tables under grants, and browsers and agents never connect to the database.'
+  constraints:
+  - The function API is the contract to the data that every consumer calls; its placement is ALLOCATION.RECORD.2.
+  - One business operation is one function call in its own transaction, and each state column is written only by its writer function (ALLOCATION.RULES.5, ALLOCATION.ACT.1).
+  - The contract evolves additively, and its catalogue is an interface description kept in sync with the implementation by process (ALLOCATION.RECORD.3).
+  epistemic_state: 'known: realization of ALLOCATION.RECORD.2 and the database share of ALLOCATION.ACT.1 under MD-03 | gap: owns no ledger row'
+  design_notes: 'Realization node for the database function API. It owns no ledger row: the verdicts it realizes are ALLOCATION.RECORD.2 and the database share of ALLOCATION.ACT.1, judged at the allocation step under the shared-database default (MD-03). The DATA judge proposed it as DATA.INTERFACE, a realization of those verdicts; the target hierarchy places the database function API under DATA. Created on the critique''s recommendation so that DATA offers its contract as LOGIC.EXPOSE does for the backend. Refined by PIG-WEB-DATA.INTERFACE in pig-web-defaults.'
+  impl_pointers:
+  - build/distill/03_judge/J2_phil_data/records.md::DATA

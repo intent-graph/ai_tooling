@@ -8,13 +8,15 @@ This repository is designed to sit beside the sibling `intent_graph` repository 
 links from here assume a checkout layout of `../intent_graph`.
 
 ## Layout
-<!-- Lines 12-27 -->
+<!-- Lines 12-29 -->
 
 - `documentation_tools/` — `md_structure_sync` (TOC/line-range sync CLI), `md_structure_viz`
   (doc-tree visualization CLI), `codemap` (structural code-graph CLI for Python), and
   `DOCUMENTATION_STANDARD.md` (the doc format these tools maintain).
-- `dev_guidelines/` — `python_guidelines` (a Python knowledge base, LOD-organized) and
-  `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU).
+- `dev_guidelines/` — `python_guidelines` (a Python knowledge base, LOD-organized),
+  `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU) and
+  `web_architecture_guidelines` (architecture of a JavaScript + Python + Postgres web
+  application: who does what across tiers, held as two IntentGraphs).
 - `diagrams_for_humans/` — reference for generating yEd `.graphml` diagrams.
 - `level_of_detail/` — the level-of-detail practice: an agent-facing core plus satellites, and
   the authoring record behind them.
@@ -26,7 +28,7 @@ links from here assume a checkout layout of `../intent_graph`.
   (`md-doc-tools`, `codemap`) that wrap the CLIs above for agent use.
 
 ## Installing the CLIs
-<!-- Lines 30-42 -->
+<!-- Lines 32-44 -->
 
 Each CLI is a standalone Python project installed system-wide with `uv`:
 
@@ -41,7 +43,7 @@ This puts `codemap`, `md-structure-sync`, `md-doc-tree-simple`, `md-doc-tree-ric
 test setup and alternative install methods.
 
 ## License
-<!-- Lines 45-53 -->
+<!-- Lines 47-55 -->
 
 - **CC BY 4.0** — `level_of_detail/`, `ai_evolution/`, `dev_guidelines/`, `howto/`,
   `documentation_tools/DOCUMENTATION_STANDARD.md` (intellectual/creative work).

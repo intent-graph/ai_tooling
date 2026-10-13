@@ -1,0 +1,144 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-INTERACTION.REALTIME.1
+  constraints:
+  - No push where a page's data changes rarely or staleness does not matter.
+  - Short polling for slow-changing views with second-scale tolerance, ended by a status code when done.
+  - 'Server-sent events for one-way push (notifications, comment streams, status of long work): resume by event id (.2), authentication by the session cookie, which fits SSE''s lack of custom headers (GUARD.4).'
+  - 'WebSocket only for frequent two-way, low-latency traffic: live cursors and typing, the collaborative text engine (COLLABORATE.3).'
+  - Long polling only as a fallback where streaming cannot pass a hop.
+  - 'The buffering risk that motivates the WebSocket-first position is contained, not ignored: the team turns buffering off on its own proxy for streaming routes; the client treats a stream that delivers nothing past the heartbeat interval as broken and falls back to polling (inferred); because push is only a hint, a buffered stream delays updates but never corrupts state.'
+- op: node.set
+  uid: PIG-WEB-DATA.MAINTAIN.2
+  constraints:
+  - 'Per table, recorded: the reason the data is kept selects the mechanism; lookup, configuration and ephemeral rows are hard-deleted; rebuildable caches are invalidated or dropped, never soft-deleted; bulk expiry of time-bounded data is a partition drop or detach, partitioning adopted only when size justifies it, partition keys in primary and unique keys; queryable past values use the temporal model of MAINTAIN.3.'
+  - 'Whatever the mechanism: deletion goes only through functions owned by the narrow, non-login deletion role of GUARD.2, which holds DELETE on the target tables and INSERT on the archive; no consumer role holds DELETE (GUARD.2); a hard delete of retained data copies the row to an archive in the same transaction, the history trigger of MAINTAIN.3 recording it as well; CASCADE follows GUARD.1.'
+  - 'Where soft delete is used, these rules apply whole: deleted_at is a nullable timestamptz, never a boolean, NULL means active, every read filters on it, and partial indexes over active rows cut index size and write cost; constraints on soft-deletable tables exempt deleted rows (row-local checks carry an ''or deleted'' escape, uniqueness uses a partial unique index over active rows); soft-delete cascades shadow the foreign-key graph, so the child set and order equal what a native cascading delete would remove unless each deviation is explicit and justified, and they run in dedicated functions, not bare updates, that validate business rules, invalidate derived caches, report per-table counts and log; soft-delete functions are idempotent (deleting an already deleted or missing row affects zero rows, no error), polyvalent (one signature serves single and bulk, and bulk requires an explicit confirmation flag), reject a deletion time earlier than the row''s creation, and exist as a wrapper only where a cascade or business rule exists, leaf tables getting the single-table base function only, plus three safeguards required under MD-03 (inferred): (1) a constraint trigger on the child table refuses an active row whose parent is soft-deleted, run under Serializable or with a lock on the parent row (CONCURRENCY.1), since no foreign key does; bound to the table, it also holds for a direct single-table write under DB_API''s exception and for owner-run jobs; (2) the active-row predicate is written once in the shared specification every consumer reads with, and the reporting role''s documentation names it; (3) a restore re-checks the row against the current constraints, since a deleted row escaped them.'
+- op: node.set
+  uid: PIG-WEB-DATA.MAINTAIN.4
+  constraints:
+  - 'Shard one statement across parallel workers only when it touches roughly 10^7 to 10^9 rows, where a single statement would hold locks and dead tuples for hours; smaller work is an ordinary batched data step outside the schema migration (MAINTAIN.1). A parallel job is four decisions in order: batching key (part of the primary key or an indexed foreign key, then a numeric range over an indexed surrogate, then modulo as a last resort; offset paging only when the work does not change the selection and never in the millions, otherwise keyset paging); work list (generated from the data, batches per entity = ceiling of count over batch size, so skew cannot make one batch the job''s duration; never one batch per giant entity; no cartesian grids over ragged data); fan-out (workers touch disjoint rows; the pool is sized by the smallest of connection headroom, IO headroom and tolerable lag; ramp from one batch to one worker to four and then deliberately more); observe and recover (locks waiting, dead tuples and replica lag are the governing signals; each batch is its own transaction, so atomicity is per batch only: every batch idempotent or the predicate self-limiting, a job log of batches so that only failures are resumed, retries only for idempotent batches, and a convergence query that must reach zero before the job is done). Shard only data changes, never DDL (build indexes concurrently in a migration).'
+  - Each batch is its own transaction under Serializable (CONCURRENCY.1), idempotent by form (CONCURRENCY.4), its statements inseparable where they must be; a procedure with transaction control is the tool for per-batch commits (INTERFACE.1).
+  - The job runs as the owner role under the data-job checklist; it sets the operator and ticket id as actor (web-app-philosophy:ALLOCATION.GUARD.3); a state column changes only through its writer function or as a recorded exception.
+  - Convergence query at zero before the job is done; staleness window and convergence check stated for any asynchronous stream.
+- op: node.set
+  uid: PIG-WEB-DATA.ORGANIZE.5
+  constraints:
+  - 'Use: JSONB (never json) for semi-structured metadata, configuration, cached aggregates, external payloads and event data; not for core entities, not for fields queried often (extract them to columns), with no deep nesting (over three levels), no binary content, and bounded size for indivisible objects. The legitimate cases are an indivisible object (bounded, schema-validated) and a normalized core with a flexible periphery (stable contract fields as columns, provider-specific extras as JSON). Anything that drives logic, filtering or joins is a column.'
+  - 'Validation: every stored JSON document is validated on write by a trigger that calls the registry''s validate function; function inputs and outputs that carry JSON validate through the same function. A CHECK cannot do it because the validator reads the registry and is not immutable. This resolves the tension that a direct write can bypass function-level validation toward enforcement at the table, as the philosophy does for invariants (web-app-philosophy:ALLOCATION.GUARD.2).'
+  - 'Registry: source form, composition by reference, expanded forms regenerated.'
+  - 'Evolution: a relaxing change in place; a breaking change as a new named version beside the old one, the old one retired after its documents are migrated (the same expand, migrate, contract as MAINTAIN.1). A breaking change to a stored document schema migrates the stored documents in the same release, so no table holds mixed versions.'
+- op: node.set
+  uid: PIG-WEB-DATA.GUARD.1
+  constraints:
+  - NOT NULL by default; a nullable column states the absence it means; a group of columns that must be present together gets a CHECK.
+  - 'Foreign keys, in the stricter form: every reference declared, across schemas too, every foreign-key column indexed (ORGANIZE.7); NO ACTION by default; SET NULL for optional links; CASCADE only for a component meaningless without its parent, never for core entities, soft-deletable tables or cross-schema links. Deletion of anything else goes through a deletion function (MAINTAIN.2).'
+  - 'CHECK: row-local and immutable, paired with NOT NULL, for ranges, lengths, either-or exclusivity, conditional requirements and time ordering; complex row-local rules in reusable immutable validation functions called from the CHECK.'
+  - 'Cross-row rules: partial unique index, NULLS NOT DISTINCT, exclusion constraint first; beyond them, a constraint trigger under Serializable or a lock (GUARD.4, CONCURRENCY.1).'
+  - Junction tables carry both foreign keys NOT NULL plus a uniqueness constraint on the pair (a surrogate id only when the junction has attributes); a junction bridging two schemas lives in the schema of the entity it enriches. Outside scoped schemas, a simple link table gets a surrogate key plus a unique constraint rather than a composite primary key.
+  - 'Hierarchies: a fixed-depth hierarchy is one table per level (inferred). An unbounded hierarchy stores the parent link as a declared self-referencing foreign key, the fact "x''s parent is y" stored once (web-app-philosophy:DATA.ORGANIZE), with acyclicity checked by a constraint trigger; acyclicity is a multi-row rule, so the trigger runs under Serializable or after locking the rows it reads (CONCURRENCY.1). A materialized path, closure table or nested set is a derived read structure kept in the same transaction, under DERIVE.1''s sync plan and drift guard, never the only representation. Ground, per form: a materialized path or nested set lists ancestors with no foreign key on them, so a moved or deleted ancestor leaves rows that state a false hierarchy; a closure table does carry foreign keys on both ancestor and descendant, but no constraint protects its transitive completeness, so a missed or extra pair states a false ancestry (inferred).'
+  - Deferrable constraints only for circular dependencies or in-transaction reordering; immediate by default.
+  - Domains for value types used in several places, check allowing NULL, NOT NULL on the column. A domain check is changed so that stored data is rechecked, on large tables by the NOT VALID then VALIDATE route of MAINTAIN.1 rather than a drop and re-add under an exclusive lock (inferred).
+  - Every constraint is named, source and target in the name; the backends' validators are generated from or tested against the constraints (web-app-philosophy:ALLOCATION.RULES.1).
+  - Same-row derived values are stored generated columns (DERIVE.1).
+- op: node.set
+  uid: PIG-WEB-DATA.INTERFACE.2
+  constraints:
+  - 'An external pooler in transaction mode for backends and consoles; the design already avoids session state: context in transaction-local settings (GUARD.3), only transaction-scoped advisory locks, settings on the role, not the session. Prepared statements, LISTEN and WITH HOLD cursors are not used through it, which stays the safe default; a listener for database notifications connects directly or in session mode (REALTIME.5). Two points, neither checked against a source: newer PgBouncer releases are reported to support protocol-level prepared statements in transaction mode; and database drivers that cache prepared statements by default must be configured to match the pooler, in the backends and in consoles and scripts.'
+  - Owner-run jobs and migrations use session-mode or direct connections (detachable sessions; concurrent index builds outside a transaction).
+  - Pool size from the rule of thumb of cores x 2 plus effective spindles as a starting point, measured on the workload (a heuristic from one practitioner source; the PostgreSQL documentation only describes the settings).
+  - 'Per consumer role: a connection limit, so BI or a script cannot starve the backends; statement_timeout, lock_timeout and idle_in_transaction_session_timeout set on the role (short for backends, longer for reporting, short lock_timeout for the owner''s DDL); default isolation on the role (CONCURRENCY.1). Reserved slots keep administration possible.'
+  - idle_in_transaction_session_timeout on every role, so an abandoned transaction neither holds locks nor blocks vacuum.
+  - Remote connections over TLS with scram-sha-256 (GUARD.2).
+- op: node.set
+  uid: PIG-WEB-DATA.INTERFACE.1
+  constraints:
+  - 'One operation, one call: one business operation is one database function call in its own transaction; backends never compose several calls into one operation. A database function may call another domain''s published functions inside the same transaction: composition across domains happens in the database. What is forbidden across domains is direct access to another domain''s tables, not calling its published functions.'
+  - 'Ladder: every write that is a business operation is a function (DB_API); simple reads query base tables, except tables guarded by per-user read functions where B''s condition holds (see PIG-WEB-LOGIC.SECURE.1); a procedure only where transaction control is needed, which in practice means owner-run batch jobs (MAINTAIN.4): a procedure that commits inside cannot be a consumer''s call, since one call is one transaction (inferred).'
+  - Views are never contract objects (DB_API); where a throwaway view exists, the platform's view rules apply (security_invoker when the caller's rights must apply, security_barrier for filters).
+  - 'Conventions adopted: entity, action, variant names; parameters validated first; a safe variant over a base operation; errors naming the function with stable codes, which, with named constraints, the backends map to their interface errors; one result row per affected table with action and count; a change log per function; set-based statements, a loop only when justified and documented. The override flag for blockable business rules is honoured only for roles granted it, and its use is recorded in history with the actor (GUARD.2, MAINTAIN.3; inferred: an unrestricted override would let any consumer bypass a rule the database is the authority for).'
+  - 'Parameters the placements require: the expected version for user-edited rows (GUARD.5, CONCURRENCY.2), the idempotency key where the operation is not idempotent by design (GUARD.6), the business reason where history needs it (ACT.4); the actor comes from the transaction-local context, never from a parameter (GUARD.3).'
+  - 'Security: EXECUTE revoked from PUBLIC and granted per consumer role (GUARD.2); its owner''s rights only where the function must write what the caller cannot, the owner being a narrow non-login role of GUARD.2, never the owner role, with a fixed search_path (GUARD.2).'
+  - 'Evolution (partly against the doctrine''s coordinated-change rule; this departure is counted here, once, for both graphs): additive changes need nothing more: new functions, new parameters with defaults. "Deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. The doctrine''s coordination with every consumer and "no formal version numbers, a new function name carries the change" are kept: the new behaviour ships as a new function or variant beside the old one, every consuming team is coordinated with, consumers move, and the old function is removed in a change marked coordinated once no consumer calls it, checked by the catalogue diff in CI (DB_API) and by evidence of zero calls over a stated window (function call statistics; inferred, mechanism not read). Ground: under MD-03 backends, BI, consoles and scripts deploy on their own schedules, and the database and its consumers never deploy atomically.'
+  - 'Description in sync (MD-02): "always in sync by process" and the compatibility window apply to the database function API catalogue as to every interface description consumers read; the catalogue diff in CI is that process here, and the generated wrappers are its consumer-side copy (TYPE_CHAIN).'
+  - 'Functions ship as migrations (MAINTAIN.1) and are tested against a live database in CI (DB_API), under the test boundary of CONCURRENCY.2: logic tests in never-committing transactions, commit-only behaviour in a disposable database.'
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.1
+  constraints:
+  - One policy module per backend; middleware refuses any route that declares no permission.
+  - Every use case calls the module with actor, action and object for each single object it reads or changes.
+  - Collection reads apply a query predicate emitted by the policy module inside the read statement; never a check on rows already loaded.
+  - Product roles for product policy not stored in the data, plus attribute and relationship rules evaluated on the object.
+  - Setting an override flag on a blockable business rule is an action the policy module authorizes per actor; it never comes from client input unchecked and is audited with the actor.
+  - The backend sets the verified actor for every database call.
+  - Per-user write rules decidable from the row are decided by the writer function; the backend's identical check is generated from or tested against that function, and the function's named denial maps to the same response as the backend's.
+  - 'Per-user read visibility is undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database. Recorded default: each backend filters these reads inside the read statement from one shared written specification of the rules, with a shared denial-test suite every backend runs; database read functions receiving the verified actor are acceptable when a per-user read rule must hold for two or more backends (ALLOCATION.GUARD.3 in the philosophy).'
+  - 'Consequence, stated so no line claims more: roles that may SELECT the base tables (reporting, operator) see every row, the change table, comments and notification rows included, unless their own role is restricted; per-role grants bound which tables and columns a role sees, not which users'' rows.'
+  - A denial test for every rule, at unit level and through the deployed stack against a live database under the backend's real role; shared-data tests run in never-committing transactions, commit-time behaviour in committing sessions in a disposable database.
+  - Every denial goes to the security event log, a sink separate from the business audit, with alerting on bursts.
+  - 'Forbidden: route- or role-only checks; per-view checks without one module; per-object checks on loaded collections; an override flag passed through from client input.'
+- op: node.set
+  uid: PIG-WEB-INTERACTION.AGENT.5
+  constraints:
+  - 'Nested partitions: each agent identity has its own quota inside its user''s allowance, so a runaway agent exhausts only its own share; each client application has a ceiling across its users; the user''s own interactive traffic is counted apart from their agents'' (nesting inferred). The flows whose automation harms the business carry their own per-flow limits.'
+  - 'Scarce-goods flows are closed to agents or need a human (web-app-philosophy:INTERACTION.AGENT): quotas and owner approval do not stop one party running many accounts, each with its own approved agent. On a flow that hands out scarce goods or rewards automation per account (limited stock, referral credit), completing the flow requires a human step in the application''s own page, or agent credentials are refused there, whatever their identity; the list of such flows is recorded per project.'
+  - 'Problem details for every error: stable type, status, detail and extensions; tool execution errors say what to change in the call.'
+  - 'Agent-shaped responses: paginated and filtered by default, size-capped, high-signal fields; readable labels beside opaque handles; every handle checked for ownership on the server.'
+- op: node.set
+  uid: PIG-WEB-DATA.ORGANIZE.6
+  constraints:
+  - Schemas are domain namespaces; no application object in `public`, and CREATE on `public` revoked.
+  - 'The function API''s dedicated schema (DB_API) is a legitimate schema under the doctrine''s rule that a schema is justified by a business domain or an access need: it is the object that consumer roles receive USAGE and EXECUTE on (GUARD.2). It is the one technical namespace, and it is justified by permissions, not by layering (inferred).'
+  - 'Tenancy: the default context is single tenant, so no tenancy mechanism is built. When a project is multi-tenant, the choice is recorded: separate databases where tenants are few and contractual or regulatory isolation is required; otherwise shared tables with the tenant key leading every composite key (ORGANIZE.2), so no row can reference another tenant''s row. Row-level security only under MD-01''s three conditions, with application checks kept and denial tested through the deployed role.'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.CONTRACTS.1
+  constraints:
+  - '**Function API** (provider: the database owner; consumers: several backends, consoles, scripts that deploy separately, MD-03): provider side: the catalogue diff in CI fails on a removed function or an incompatible signature unless marked coordinated (DB_API); the mark holds only for the contract phase of expand, migrate, contract, or when every consumer of the changed object ships in the same deployment as the migration; consumer side: each consumer''s typed wrappers are generated from the catalogue (TYPE_CHAIN), and each consumer''s integration suite runs against the candidate schema before a migration is promoted. That suite is its consumer contract: the union of what consumers use is executed, not assumed (mechanism inferred).'
+  - '**Tables and columns granted to BI**: the same catalogue diff covers every object granted to a consumer role, so a removed or retyped granted column fails the gate (inferred extension of DB_API''s gate). The change then goes expand, migrate, contract.'
+  - '**HTTP interface to the team''s own browser code**: the OpenAPI description is kept in sync with the implementation by the MD-02 gate. A diff against the last released description fails on a breaking change inside the compatibility window. Island types are generated from it at build time (TYPE_CHAIN), so the compile is the consumer check. Consumer-driven tests are not required for this seam; this settles, for the default context, whether consumer-driven tests add value beyond schema checks for the team''s own browser client.'
+  - '**Agents**: they run code the team does not control, so no consumer test can be collected. The description, its breaking-change diff and machine-readable deprecation signals are the whole contract (inferred). "Always in sync by process" and the compatibility window apply to every interface description agents read: the HTTP description and the agent tool surface (for example an MCP server''s tool list and schemas) both sit under the MD-02 drift gate and the breaking-change diff.'
+  - '**External services**: contract tests of the doubles run daily or on the supplier''s change rhythm; a failure opens a realignment task.'
+- op: node.set
+  uid: PIG-WEB-INTERACTION.ENVIRONMENT.1
+  constraints:
+  - Enhancement checks features and degrades without them; nothing varies on User-Agent.
+  - No unload handlers anywhere; no-store only on pages showing sensitive data (authenticated personalised pages are private and revalidated).
+  - On pageshow from the back/forward cache, the page refreshes time-sensitive state, and re-checks the session so a page restored after logout does not stay usable (the session re-check inferred).
+  - Unsaved input is saved on visibilitychange or pagehide, never unload, and restored on return; it sits in per-tab or per-origin browser storage and is cleared after a successful submit or at logout; on pages that show sensitive data, drafts go to per-tab storage only or are not persisted, so they do not outlive the session on a shared device (storage choice, clearing and the per-tab rule inferred).
+  epistemic_state: 'known | unvalidated: session re-check on restore inferred; draft storage, clearing and the per-tab rule for sensitive pages inferred; L294 partly single-vendor T3 (SRC-269)'
+- op: node.set
+  uid: PIG-WEB-INTERACTION.VISUALIZE.2
+  epistemic_state: 'known | unvalidated: P1 rests on one vendor T3 source (L291)'
+- op: node.set
+  uid: PIG-WEB-INTERACTION.EDIT
+  epistemic_state: 'known | unvalidated: conflict screen content and hidden-field transport inferred (L583 conflict UI inferred); 409 for a stale hidden-field version follows the HTTP interface''s mapping (L259); the handling of a form missing its version field inferred'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.PERFORMANCE
+  constraints:
+  - 'Targets: the "good" thresholds of Core Web Vitals at the 75th percentile, per device class, from field data (OPERABILITY.2). They are the user-facing service level indicators of OPERABILITY.3.'
+  - Build budgets per page type on the lab-measurable vitals (LCP, CLS) and on page weight. A build over budget fails or the page is optimised. INP is gated on field data after release. The sample budget numbers of the performance-budget guide (tied to a past device baseline) are not adopted; the budget metrics are Core Web Vitals.
+  - 'The server''s share of each page is visible: Server-Timing carries server and database time for authorised audiences, joined to field data through the trace id (inferred).'
+  - 'Derived server budget (inferred from grounded rows, unvalidated): about 1 s at most for the server''s part of a page at the 75th percentile, and well under 1 s for an interaction''s request. Grounds: the HTML response (TTFB) is about 40% of LCP time against LCP''s 2.5 s; 1 s keeps the flow of thought and 0.1 s feels instantaneous; work over about 1 s is deferred (ACT.3, settled). Database time is part of this server share.'
+- op: node.set
+  uid: PIG-WEB-LOGIC.ENFORCE.2
+  constraints:
+  - One transaction per business operation, holding exactly the actor setting and one API function call (`transaction.atomic(durable=True)` around those two statements, asserting it is outermost, `ATOMIC_REQUESTS` off).
+  - Never two API calls in one transaction, never a transaction per request, never one open across a remote call or a user's think time.
+  - Reads precede the write; the write carries the version it read, so the writer function rejects a decision taken on stale data.
+  - Plain reads (base tables under SELECT grants, no rule needing the actor) run in autocommit; a read needing the actor runs in a short read-only transaction that sets the actor and makes one read call through the generated wrapper; read functions refuse a missing actor.
+  - No exception swallowed inside the atomic block; database errors mapped after it.
+  - One connection per thread, never shared; one per task under async.
+  - The wrapper retries the whole one-call transaction on SQLSTATE 40001 and 40P01 at any isolation level, within PROCESS.3's caps; after an unknown commit outcome only calls carrying an idempotency key are retried.
+  - The isolation level is set per consumer role in the database; the backend never lowers it per transaction.
+  - Logic tests on shared data run in never-committing transactions; retry paths, lock waits, deferred constraints and the outbox are tested with committing sessions in a disposable database; concurrency tests are part of the default suite.
+- op: node.set
+  uid: PIG-WEB-DATA.DERIVE.1
+  constraints:
+  - Of the three legitimate reasons to denormalize, the indivisible object and the normalized core with a flexible periphery are organizing choices governed by ORGANIZE.5 (no fact is stored twice); only the derived summary is a copy governed here.
+  - A copy exists only when computing on read is measured too costly, with its sync plan recorded in the table comment before it is built.
+  - 'Mechanism, in the philosophy''s order: a stored generated column for same-row values; when any reader decides a write from the copy or shows it as authoritative, a same-transaction trigger, and the writer function only when the source table admits no other writer (no direct-write grant, no owner-run job); a cache table with a stated staleness otherwise (DERIVE.2). The choice by change frequency and divergence harm applies within that order.'
+  - 'Every copy other than a generated column gets a drift guard. "Documentation only" therefore never stands alone: with the guard it is the periodic-detection rung.'
+  - 'The redundancy is guarded by the database (trigger, function, constraint), not by "the application": under MD-03 several applications write (web-app-philosophy:ALLOCATION.DERIVE.1).'
+- op: link.set
+  uid: PIG-WEB-LOGIC.EXPOSE.7_PIG-WEB-LOGIC.SECURE.2
+  intent: The compatibility window lasts at least as long as the absolute session timeout, so a page open with a valid session keeps working.

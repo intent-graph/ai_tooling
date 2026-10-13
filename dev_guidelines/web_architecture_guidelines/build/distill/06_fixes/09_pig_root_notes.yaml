@@ -1,0 +1,4 @@
+operations:
+- op: node.set
+  uid: ROOT
+  design_notes: 'Maintainer decisions applied: MD-01 (row-level security is not a default; acceptable only for a simple data model, with the scoping key in every covered table and no all-powerful administrator role), MD-02 (interface documentation is always in sync, guaranteed by process; its origin, description or code, is chosen per project with criteria for each direction), MD-03 (the database is shared by several backends and other consumers; multi-table operations belong to the database as functions; the function API is the default contract to the data). Each decision overrides the judges on its point and is cited by id in the nodes it governs. Open maintainer questions: read visibility of rows with per-user rules when several backends share the database; default deletion for user-facing transactional data; SameSite value of the session cookie; hosting model of the default context.'

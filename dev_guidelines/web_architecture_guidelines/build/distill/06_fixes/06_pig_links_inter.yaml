@@ -1,0 +1,65 @@
+- src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.7
+  dst: web-app-philosophy:INTERACTION.ENVIRONMENT.3
+  shape:
+    type: requires
+  intent: The API compatibility window is the one the non-atomic deployment rule sets.
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.TOPOLOGY.4
+  dst: web-app-philosophy:INTERACTION.ENVIRONMENT.3
+  shape:
+    type: requires
+  intent: Assets of previous releases are kept for the compatibility window.
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.CONTRACTS.2
+  dst: web-app-philosophy:ALLOCATION.RECORD.3
+  shape:
+    type: requires
+  intent: Contract ownership takes the schema as the origin of stored facts, so a published contract does not follow a direction that makes another side the origin.
+- src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.3
+  dst: web-app-philosophy:INTERACTION.ENVIRONMENT.7
+  shape:
+    type: requires
+  intent: CSRF defence stands independent of CORS, with the cookie attributes hostile page script requires.
+- src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.5
+  dst: web-app-philosophy:INTERACTION.COLLABORATE
+  shape:
+    type: realizes
+  intent: Provides the commit-safe catch-up cursor collaboration relies on.
+- src: pig-web-defaults:PIG-WEB-DATA.INTERFACE.1
+  dst: web-app-philosophy:TRANSVERSE.CONTRACTS
+  shape:
+    type: realizes
+  intent: Counts, once for both graphs, the narrowing of deployed-together for the function API contract.
+- src: pig-web-defaults:PIG-WEB-INTERACTION.EDIT
+  dst: web-app-philosophy:INTERACTION.COLLABORATE
+  shape:
+    type: refines
+  intent: Shows a stale write as a conflict with both versions, never merged silently.
+- src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.4
+  dst: web-app-philosophy:INTERACTION.AGENT
+  shape:
+    type: refines
+  intent: Realizes approval of irreversible or external effects by the owning user, checked by the effect's writer.
+- src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.4
+  dst: web-app-philosophy:INTERACTION.COLLABORATE
+  shape:
+    type: refines
+  intent: Realizes recipient-checked notifications and the report queue.
+- src: pig-web-defaults:PIG-WEB-LOGIC.PROCESS.5
+  dst: web-app-philosophy:LOGIC.PROCESS
+  shape:
+    type: refines
+  intent: Realizes the rule that no file is readable before a clean scan.
+- src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.7
+  dst: web-app-philosophy:LOGIC.SECURE
+  shape:
+    type: refines
+  intent: Realizes the rule that server-side fetches cannot reach internal addresses.
+- src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
+  dst: web-app-philosophy:DATA.MAINTAIN
+  shape:
+    type: refines
+  intent: Realizes recovery to a chosen moment, proven by rehearsed restores.
+- src: pig-web-defaults:PIG-WEB-DATA.INTERFACE
+  dst: web-app-philosophy:DATA.INTERFACE
+  shape:
+    type: refines
+  intent: The database function API in Postgres realizes the offered contract of the data tier.

@@ -1,0 +1,132 @@
+operations:
+- op: node.set
+  uid: ALLOCATION.GUARD
+  intent: Deciding checks run in the database for rules about stored data, multi-table operations, concurrent change, duplicate suppression and per-role access, and in the backend for meaning and access that need the end user's identity, policy or request context, and for sessions. Browsers and agent clients only echo checks, for feedback; one clause, read visibility of rows with per-user rules, awaits the maintainer.
+- op: node.set
+  uid: DATA.MAINTAIN
+  design_notes: 'Question: how schema and data evolve without breaking running code, and what is the source of truth for structure.
+
+    Positions: P1 every schema change is a versioned migration in version control with the code, ordered, applied only by automation, as an explicit release step, the same way in every environment, never by hand (L046; SRC-220 T2, SRC-022 T1, SRC-183 T2, SRC-187 T2); the doctrine agrees and adds re-runnable DDL, one owner role per table, long data work kept out of automated runs (L519, owned by J6). P2 hand-applied or ad hoc changes to production structure (the practice L046 rejects). P3 a backward-incompatible change proceeds expand, migrate, contract, so every phase can be released, verified and rolled back (L047; SRC-186, SRC-190, SRC-220, SRC-311, SRC-278). P3'' a breaking change to the function API is coordinated with every consuming team and deployed together (L517 doctrine, owned and judged by J6 in the defaults graph''s functions and views node; cited, not judged). P4 the live database is the source of truth for structure: table and function documentation is generated from it (L474 doctrine; SRC-220). P5 conventions evolve forward only: new tables follow the new rule, legacy ones are not renamed in bulk (L474), against P5'' bulk renaming to the new convention.
+
+    Forces: integrity of running code and data across releases. P1 and P3 serve it and cost process (each change small, several releases for one incompatible change). P2 serves speed and loses reproducibility and the record of what changed. P3'' serves speed of a coordinated change and, unless every consumer deploys in one step with the migration, leaves a window where old code runs against the new structure. P5'' serves uniformity of names and breaks every consumer of the old names, several under MD-03.
+
+    Decision: one path of change (L046, L519; consensus and doctrine agree; long data work under L545''s checklist, J1''s owner-role access path). Origin of change and truth of state are distinct and must agree (L474; RECORD.3, doctrine, max); a structure the migrations would not produce is a defect (inferred from L046 with L474); the drift check, such as comparing a freshly migrated database''s catalogue with production, has no source read and its mechanism is handed to J6. Incompatible changes go expand, migrate, contract (L047), for tables and the function API alike; the contract phase is the change marked coordinated (L192; RECORD.3''s catalogue diff in CI fails on a removal not so marked). Max: the database and its consumers never deploy atomically, and under MD-03 several consumers (backends, reporting, consoles, scripts) deploy on their own schedules; expand, migrate, contract is the only route that keeps every running version working (inferred from L047 with MD-03). Conventions evolve forward only (L474, doctrine, max): a rename is itself an incompatible change for every consumer.
+
+    Principle-level requirement (changed after review, m8, X2): an incompatible change keeps every running consumer working. How the function API meets it, and the verdict on L517, belong to J6, which counts that departure once for both graphs: "deployed together" stays acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise a breaking change goes expand, migrate, contract. This node cites that verdict and does not count it; the former conflict state on L517 is removed.
+
+    Rejected: P2 never. P3'' a breaking change deployed together: not judged here, see above. P5'' acceptable only through expand, migrate, contract, when the inconsistent name costs more than moving every consumer (inferred).
+
+    Out of this node''s rows: retention, deletion, history tables and bulk jobs are realized in the defaults graph''s maintenance nodes (J6) and have no principle-level row here (gap 3). ALLOCATION.ACT.4 (audit) is realized here through history kept in the database (link to ACT.4).
+
+    Realizes: ALLOCATION.RECORD.3 (keeps the database structure as the origin of every stored fact and of the function API''s contract). Refines python-kb-philosophy:REPRODUCIBILITY (skeleton link). Also realizes ALLOCATION.ACT.4 through history kept in the database.
+
+
+    Lifted from the stack-neutral clause of PIG-WEB-DATA.MAINTAIN.5 in pig-web-defaults, wording kept; the verdict is that record''s, not re-judged here. Clause: point-in-time recovery, with backups that count only once a restore has been rehearsed.'
+- op: link.create
+  src: ALLOCATION.ACT.1
+  dst: ALLOCATION.RULES.5
+  intent: Each business operation is one transaction, and atomicity ends there.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.ACT.3
+  dst: ALLOCATION.ACT.2
+  intent: Defers foreign mutations under the side-effect placement's rule.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.GUARD.1
+  dst: ALLOCATION.RULES.1
+  intent: Early validators are copies, generated from or tested against the authority.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.GUARD.3
+  dst: ALLOCATION.RULES.3
+  intent: Authorization decisions run only in a tier the requester cannot modify.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.DERIVE.3
+  dst: ALLOCATION.RULES.1
+  intent: A cache is a copy with a staleness bound; the source stays the authority.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.RECORD.2
+  dst: ALLOCATION.RULES.4
+  intent: The function API is the core for what must hold for every consumer.
+  shape:
+    type: requires
+- op: link.create
+  src: ALLOCATION.RULES.2
+  dst: ALLOCATION.FORCES.1
+  intent: The end-to-end rule is the correctness veto applied to placement.
+  shape:
+    type: refines
+- op: link.create
+  src: ALLOCATION.RULES.3
+  dst: ALLOCATION.FORCES.2
+  intent: The trust-boundary rule is the security veto applied to placement.
+  shape:
+    type: refines
+- op: link.create
+  src: LOGIC.ENFORCE
+  dst: ALLOCATION.RULES.5
+  intent: The core calls each operation as one function call in its own transaction.
+  shape:
+    type: requires
+- op: link.create
+  src: LOGIC.EXPOSE.2
+  dst: ALLOCATION.GUARD.4
+  intent: The one server-held state of a request is the revocable session.
+  shape:
+    type: requires
+- op: link.create
+  src: LOGIC.EXPOSE.3
+  dst: ALLOCATION.PRESENT.1
+  intent: The browser half of the hypermedia contract is the rendering placement.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.OPERABILITY.2
+  dst: ALLOCATION.GUARD.2
+  intent: Concurrency tests are required for every invariant enforced procedurally.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.OPERABILITY.2
+  dst: ALLOCATION.GUARD.3
+  intent: Authorization is tested by denial, role by role.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY
+  dst: ALLOCATION.GUARD.3
+  intent: Access control is verified where the authorization placement puts it.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.EVOLUTION.3
+  dst: ALLOCATION.RECORD.2
+  intent: A new deployable reaches data only through the function API with its own role.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.EVOLUTION.5
+  dst: ALLOCATION.RULES.5
+  intent: Cross-domain operations are composed inside the database as one call.
+  shape:
+    type: requires
+- op: link.create
+  src: DATA.INTERFACE
+  dst: ALLOCATION.RECORD.2
+  intent: Offers the data access interface the placement assigns to the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: DATA.INTERFACE
+  dst: ALLOCATION.ACT.1
+  intent: Offers business operations as database functions, the database share of the business-rule placement.
+  shape:
+    type: realizes
