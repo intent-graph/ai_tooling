@@ -24,7 +24,7 @@ The database is the system of record and holds everything that must hold whoever
 
 Each fact is stored once and changed in one place; the normal forms are the tests of that rule.
 - Every table passes third normal form. Boyce-Codd, fourth and fifth normal form apply where they apply; stopping at third is acceptable only when every candidate key is a single column and there are no multi-valued facts (inferred).
-- Where a Boyce-Codd decomposition loses a dependency, a constraint trigger enforces it under the rule of [Guarded Consistency](#guarded-consistency) (inferred).
+- Where a Boyce-Codd decomposition would lose a dependency, keep the dependency-preserving third-normal-form design and enforce every dependency declaratively: the repeated determinant is covered by a composite foreign key to the table that owns the pair, so it cannot diverge and needs no sync plan (inferred). A constraint trigger under the rule of [Guarded Consistency](#guarded-consistency) only where no declarative form exists.
 - Denormalization is not an organizing choice: a denormalized value is a [derived copy](glossary.md#copy) under [Derived, Not Stored](#derived-not-stored), built only with a sync plan recorded first in the table comment (what and why, sync level, freshness, change frequency, impact of divergence, drift detection and reconciliation, alerting).
 - A new one-to-one attribute is a nullable column by default; a separate table only for, in this order: cardinality likely to change, a different permission boundary, an independent audit or lifecycle, blast radius on heavily used tables. Sparsity and NULL count are never reasons to split.
 - A column is nullable only when absence is a meaningful state; a CHECK states that columns must be present together where they must (inferred).
@@ -36,7 +36,7 @@ Realizes [System of Record](allocation.md#system-of-record). `DATA.ORGANIZE`
 
 The database keeps data valid and consistent under concurrent and partial change.
 - Declare every rule a declarative constraint can express: NOT NULL unless absence is a meaningful state; row-local CHECK paired with NOT NULL; foreign keys; unique, partial unique and exclusion constraints for cross-row rules; domains for value types used in several places. Constraints are named, so a violation maps to a stable error. Required, not optional.
-- Rules no constraint can express (other multi-row rules, legal transitions, dependencies lost by a Boyce-Codd decomposition) are checked in the [writer function](glossary.md#writer-function) or a constraint trigger, under serializable isolation with retry or after locking the governing row. The check asserts the isolation it needs, set per [consumer role](glossary.md#consumer-role); the default isolation level is the stack's choice.
+- Rules no constraint can express (other multi-row rules, legal transitions, dependencies lost by a Boyce-Codd decomposition when no declarative form exists) are checked in the [writer function](glossary.md#writer-function) or a constraint trigger, under serializable isolation with retry or after locking the governing row. The check asserts the isolation it needs, set per [consumer role](glossary.md#consumer-role); the default isolation level is the stack's choice.
 - Each business operation is one function call in its own transaction.
 - Concurrent change is detected inside the writer function, which takes the expected version as a parameter; no transaction or lock is held across user think time.
 - Mutual exclusion that guards correctness is enforced by the store (row version, unique constraint, row lock); a [lease](glossary.md#lease) is checked by the writer function as a fencing token (inferred). A lock outside the database is acceptable only to save duplicate work.
@@ -93,7 +93,7 @@ The backend is the one gate every caller passes, human or agent, and decides not
 - Parse all input at entry into the most precise type, once per process boundary: bodies, query parameters, headers, uploads, payloads read back from queues, anything a model or agent produced. Client hints, tool annotations and claimed identities never enforce.
 - Bound consumption at two depths: identity-blind size, rate, read-rate and time limits at the outermost layer (413 or 408), with the client's size check as a feedback copy; identity-aware limits in the backend per operation, tighter for operations that cost money, call third parties or are expensive for agents to loop on.
 - Protect harmful automation by flow (sign-up, purchase, booking, referral), not by client kind; no blanket bot blocking, because agents are intended users.
-- Defend logins in layers: [MFA](glossary.md#mfa) first, required by default on human accounts (inferred: the strictest reading of the source); breached-password checks; device signals and challenges known to be spoofable; never IP blocking alone. Acceptable when the audience cannot practically be required to use a second factor: MFA optional, the other layers carrying the defence.
+- Defend logins in layers: [MFA](glossary.md#mfa) first, then breached-password checks, then device signals and challenges known to be spoofable; never IP blocking alone. Offer MFA on every human account, phishing-resistant authenticators (passkeys, WebAuthn) preferred; require it on privileged accounts (operator, owner, administrator) and before sensitive operations (step-up). Whether it is required on every account follows the security level the project chooses by risk ([Security Across Tiers](#security-across-tiers); scope inferred). Acceptable when the project's chosen risk level requires it, or when one account's exposure is severe: MFA required on every human account.
 - Server-side fetches of client- or agent-named URLs never reach private, loopback or link-local addresses.
 - Per-user read visibility: simple reads that carry no logic are written by the backend directly; sensitive, complex, high-impact or shared reads, per-user visibility rules included, go through database functions that receive the verified actor ([Authorization](allocation.md#authorization)).
 
@@ -264,7 +264,7 @@ Properties that span every tier are stated once and designed in across browser, 
 
 - Serve every page and every API over encrypted transport with strict transport enforcement and no mixed content; database connections of every consumer role included.
 - Collect only the data the user's goal needs. Never log secrets, session ids, tokens, keys, payment data, connection strings or unneeded personal data, trace headers included; a hashed session id is acceptable when sessions must be tracked.
-- Give every threat category an owning tier the requester cannot modify (table below). Answer insecure design with a threat model per placement and per critical flow (authentication, access control, business operations, agent access), with misuse-case tests per tier; the allocation records are the model's input, not the model.
+- Give every threat category an owning tier the requester cannot modify (table below). Answer insecure design with a threat model per critical flow and trust boundary (authentication, access control, business operations, agent access), revisited when a placement on that flow changes, with misuse-case tests per tier; the allocation records are the model's input, not the model.
 - State each property as a verifiable requirement with a traceable id, at a level chosen by risk; the threat list is an awareness map, never the requirement set.
 
 | Threat category | Owning tier |
@@ -274,7 +274,7 @@ Properties that span every tier are stated once and designed in across browser, 
 | Supply chain | the pipeline and dependencies |
 | Cryptographic failures | the backend, the proxy's TLS, the database connections of every role, storage at rest |
 | Injection | backend and database: precise types at every entry, typed function parameters |
-| Insecure design | a threat model per placement and critical flow, misuse-case tests per tier |
+| Insecure design | a threat model per critical flow and trust boundary, revisited when a placement on the flow changes; misuse-case tests per tier |
 | Authentication failures | backend |
 | Software or data integrity | the delivery pipeline, and the parsing tier for untrusted serialized input; declarative constraints are not this control |
 | Logging and alerting failures | operations |

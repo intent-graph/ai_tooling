@@ -7,9 +7,9 @@ How AI agents use the application on this stack: one described HTTP core with an
 1. [Agent Surface Overview](#agent-surface-overview) _(Lines 18-21)_
 1. [Surface and Protocol](#surface-and-protocol) _(Lines 24-33)_
 1. [Discovery and Registration](#discovery-and-registration) _(Lines 36-44)_
-1. [Identity and Delegation](#identity-and-delegation) _(Lines 47-57)_
-1. [Approval and Injection Defense](#approval-and-injection-defense) _(Lines 60-69)_
-1. [Agent-Shaped Responses and Limits](#agent-shaped-responses-and-limits) _(Lines 72-81)_
+1. [Identity and Delegation](#identity-and-delegation) _(Lines 47-60)_
+1. [Approval and Injection Defense](#approval-and-injection-defense) _(Lines 63-72)_
+1. [Agent-Shaped Responses and Limits](#agent-shaped-responses-and-limits) _(Lines 75-84)_
 
 ---
 
@@ -43,23 +43,26 @@ Refines [Identity and Session State](allocation.md#identity-and-session-state).
 `PIG-WEB-INTERACTION.AGENT.2`
 
 ## Identity and Delegation
-<!-- Lines 47-57 -->
+<!-- Lines 47-60 -->
 
 An agent has its own identity and acts for a user, with tokens carrying subject and [actor](glossary.md#actor) so both are recorded in logs and in the database. Every agent credential has an owner, is revocable and has a lifecycle.
 - Tokens carry subject and actor (act claim or equivalent). The backend asserts both to the database in the transaction-local setting, checked against its role; agent-originated writes are marked as a class.
-- Binding by consequence (inferred: a composition of the token rules): tokens are short-lived and audience-bound for every scope; scopes allowing payments, transfers, deletions or bulk exports require a sender-constrained token ([DPoP](glossary.md#dpop) or mutual TLS); short-lived, narrow bearer tokens for the rest, which keeps open agent clients able to connect.
+- Binding by client capability: tokens are short-lived and audience-bound for every scope. They are sender-constrained ([DPoP](glossary.md#dpop) or mutual TLS) for every client that can hold a key, and the authorization server issues bound tokens to every client that supports them.
+- A client that can hold only bearer tokens keeps consequential scopes (payments, transfers, deletions, bulk exports) under three conditions: its tokens are short-lived and narrow, revocation is held on the server, and every consequential operation it requests runs only through the exact-action approval of [Approval and Injection Defense](#approval-and-injection-defense), which the writer function checks (inferred). An approved effect whose result returns to the caller (a bulk export) is delivered to the approving user in the application, not to the token holder (inferred).
 - Consequential operations are bound to their details by Rich Authorization Requests where supported, else by the exact-action approval in [Approval and Injection Defense](#approval-and-injection-defense) (inferred).
 - Lifecycle: one revocable credential per agent, a recorded sponsor, short lifetimes, no orphaned permission after removal.
-- Open: the agent parameters of token exchange.
+- Open: the agent parameters of token exchange. Gap: sender-constraining support across agent hosts was not read.
+
+Acceptable when every client that needs consequential scopes can hold a key (a closed or certified set of agents), or when an approved effect's result must return to the token holder: sender-constrained tokens required for consequential scopes.
 
 Refines [Identity and Session State](allocation.md#identity-and-session-state), [Audit and History](allocation.md#audit-and-history) and [Authorization](allocation.md#authorization).
 `PIG-WEB-INTERACTION.AGENT.3`
 
 ## Approval and Injection Defense
-<!-- Lines 60-69 -->
+<!-- Lines 63-72 -->
 
 Reads and reversible writes proceed under ordinary authorization. Irreversible or external effects require approval by the owning user, shown the exact action on the application's own page, and the effect's [writer function](glossary.md#writer-function) refuses an agent-originated operation without it.
-- Flow: the agent's call creates a pending operation with exact parameters; the user approves it in the application under their own session; the writer function refuses an agent-originated operation without a matching approval by the delegating user (inferred). An approval dialog in the agent host is a client hint, never the gate; approval never replaces authorization.
+- Flow: the agent's call creates a pending operation with exact parameters; the user approves it in the application under their own session; the writer function refuses an agent-originated operation without a matching approval by the delegating user (inferred). An approval dialog in the agent host is a client hint, never the gate; approval never replaces authorization. For a bearer-only client this approval is the gate for consequential operations ([Identity and Delegation](#identity-and-delegation)).
 - Approvals stay rare by scoping, so fatigue does not erode them (inferred).
 - Credentials, payment details and third-party authorization are collected on the application's own page, bound to the user who started the flow, never through the agent.
 - Injection is contained structurally: few purpose-specific tools; no agent session the application runs holds untrusted input, private data and outward power together; filters only as an extra layer. Annotations, claimed identity and client names are untrusted.
@@ -68,7 +71,7 @@ Refines [Authorization](allocation.md#authorization) and [Business Rules and Sta
 `PIG-WEB-INTERACTION.AGENT.4`
 
 ## Agent-Shaped Responses and Limits
-<!-- Lines 72-81 -->
+<!-- Lines 75-84 -->
 
 Rate limits are nested. Errors are machine-readable problem details; responses are paginated, size-capped and high-signal. Flows that hand out scarce goods need a human step or refuse agents.
 - Each agent identity has its own quota inside its user's allowance, so a runaway agent exhausts only its own share; each client application has a ceiling across its users; the user's own interactive traffic is counted apart (nesting inferred). Flows whose automation harms the business carry per-flow limits.

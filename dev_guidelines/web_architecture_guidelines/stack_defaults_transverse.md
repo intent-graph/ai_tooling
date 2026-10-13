@@ -90,7 +90,7 @@ Acceptable when the build platform cannot isolate runs or keep the signing key f
 Core Web Vitals at the 75th percentile, per device class, from field data, are the targets: [LCP](glossary.md#lcp) 2.5 s, [INP](glossary.md#inp) 200 ms, [CLS](glossary.md#cls) 0.1. Build budgets per page type are the gate before release. Refines [Measured Performance](philosophy.md#measured-performance).
 - Build budgets cover the lab-measurable vitals (LCP, CLS) and page weight (inferred); a build over budget fails or the page is optimised. INP is gated on field data after release.
 - The server's share of each page is visible: Server-Timing carries server and database time to authenticated and authorised audiences only, joined to field data through the trace id (inferred).
-- Derived server budget (inferred): about 1 s at most for the server part of a page at the 75th percentile, well under 1 s for an interaction's request; work over about 1 s is deferred. Database time counts inside it. No source states a server target.
+- Derived server budget (inferred): about 1 s at most for the server part of a page at the 75th percentile, well under 1 s for an interaction's request; work expected to exceed a few seconds or the request timeout is deferred; 1 s is the interactive target, not the cut-off. Database time counts inside it. No source states a server target.
 - Not adopted: the sample budget numbers of the public performance-budget guide.
 - Gap: no latency target for the agent surface.
 

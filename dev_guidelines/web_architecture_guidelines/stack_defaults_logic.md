@@ -7,7 +7,7 @@ How a Django backend carries the business logic tier above the Postgres [functio
 1. [Python Tier Overview](#python-tier-overview) _(Lines 16-40)_
 1. [Business Logic Realization](#business-logic-realization) _(Lines 43-103)_
 1. [Processing and Side Effects](#processing-and-side-effects) _(Lines 106-180)_
-1. [HTTP Interface](#http-interface) _(Lines 183-277)_
+1. [HTTP Interface](#http-interface) _(Lines 183-278)_
 
 ---
 
@@ -73,7 +73,7 @@ Acceptable when one backend is the only consumer and the request makes no remote
 Refines [Filtering, Sorting, Paging and Search](allocation.md#filtering-sorting-paging-and-search).
 - Writes only through the generated wrappers; the ORM writes only direct-write-exception tables.
 - Reads: the ORM as read-only mappers for simple reads on base tables under SELECT grants; read functions where a read applies a rule.
-- One statement per use case, related rows joined or eagerly loaded, never queries in loops; filtering, sorting and keyset paging in the statement, with a server maximum page size.
+- One statement per use case, related rows joined or eagerly loaded, never queries in loops; filtering, sorting and paging in the statement: keyset pages for structured-data collections and large or growing sets, with a server maximum page size.
 - Raw SQL with bound parameters only; varying identifiers from an allowlist.
 - Derived data from database cache tables or derived columns; no view as a contract; no read store outside the database.
 - [Per-user read rules](glossary.md#per-user-rule): [sensitive reads](glossary.md#sensitive-read) go through the read function with the actor set, as [Access Control Enforcement](stack_defaults_logic_security.md#access-control-enforcement) sets, never by filtering loaded rows in Python; the table is not read directly for them.
@@ -127,7 +127,7 @@ Refines [Side Effects and Integrations](allocation.md#side-effects-and-integrati
 - Post-commit hooks only for losable work, registered robust.
 - Forbidden: post-commit hooks as default carrier; enqueueing to a broker before or after commit.
 
-Acceptable when the user must see the foreign outcome in the same response and the call fits a 1 s budget: in-request phases.
+Acceptable when the user must see the foreign outcome in the same response and the call is expected to finish within a few seconds, under the request timeout: in-request phases.
 `PIG-WEB-LOGIC.PROCESS.2`
 
 ### Resilience
@@ -179,7 +179,7 @@ Deferred: out of scope, recorded only, not researched. When taken up it inherits
 `PIG-WEB-LOGIC.PROCESS.7`
 
 ## HTTP Interface
-<!-- Lines 183-277 -->
+<!-- Lines 183-278 -->
 
 HTML to browsers, resource-oriented JSON under `/v1` to programs and agents, problem details, idempotency, 202 status resources, labelled caches, one origin, Pydantic at every entry, additive evolution under a CI gate. Refines [Backend Interface](philosophy.md#backend-interface). `PIG-WEB-LOGIC.EXPOSE`
 
@@ -188,8 +188,9 @@ HTML to browsers, resource-oriented JSON under `/v1` to programs and agents, pro
 Refines the paging rule of [Filtering, Sorting, Paging and Search](allocation.md#filtering-sorting-paging-and-search).
 - Server-rendered HTML is the browser contract; OpenAPI describes only the JSON endpoints (inferred).
 - JSON: named resources, standard methods; state transitions are custom methods (a POST naming the transition), each mapped to its one writer function, never a PATCH of the state field (inferred).
-- Every collection paginated, keyset in the database, opaque continuation token or next link, server maximum page size. The token encodes position only, carries no authorization, every page is re-authorized. No next link ends the collection; no total count by default. HTML lists page the same way.
-- Forbidden: offset and limit for client-facing collections; PATCH of a writer-owned state column; RPC tunnelling of every operation.
+- Every collection paginated, with a server maximum page size. Structured-data and agent collections, and any list over a large or growing set, use keyset paging in the database behind an opaque continuation token or next link. The token encodes position only, carries no authorization, every page is re-authorized. No next link ends the collection; no total count by default.
+- A human-facing HTML list over a bounded, filtered result may page by offset with page numbers; larger or growing HTML lists use keyset next links.
+- Forbidden: offset and limit for structured-data and agent collections, for deep pages and for bulk work; PATCH of a writer-owned state column; RPC tunnelling of every operation.
 
 Acceptable when many clients need different field subsets of one graph and the team designs authorization, pagination and limits itself: GraphQL.
 `PIG-WEB-LOGIC.EXPOSE.1`

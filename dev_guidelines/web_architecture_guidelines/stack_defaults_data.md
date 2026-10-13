@@ -178,7 +178,7 @@ Every rule a declarative constraint can express is declared and named, because o
 Triggers do work that must be atomic with the write and hold for every writer:
 
 - history rows (AFTER ROW, append-only);
-- constraint triggers for invariants no declarative constraint expresses, asserting the isolation level they need (including refusing an active child of a soft-deleted parent);
+- constraint triggers for invariants no declarative constraint expresses, asserting the isolation level they need (including refusing an active child of a soft-deleted parent, and dependencies lost by a Boyce-Codd decomposition when no declarative form exists);
 - same-transaction maintenance of a derived copy;
 - JSON validation on write and actor checks;
 - `updated_at`: a narrow BEFORE UPDATE trigger stamps only when the row changes (`NEW IS DISTINCT FROM OLD`; inferred). Writers also skip no-op rows with an `IS DISTINCT FROM` predicate. Code-written `updated_at` is acceptable only when every writer of the table is a writer function that sets it, with no direct-write grant and no owner-run job.
