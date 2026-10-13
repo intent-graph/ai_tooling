@@ -1,0 +1,2260 @@
+# Intentlink completion batch for the guideline graph (see decisions.md and result.md).
+# Order: link.remove, link.set, link.create.
+operations:
+- op: link.remove
+  uid: ASSURANCE.AVAILABILITY.4_ASSURANCE.AVAILABILITY.5
+- op: link.remove
+  uid: TRANSVERSE.SECURITY.2_TRANSVERSE.SECURITY_MONITORING.4
+- op: link.remove
+  uid: TRANSVERSE.SECURITY_MONITORING.3_TRANSVERSE.PRIVACY.2
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.4_TRANSVERSE.SECURITY_MONITORING.2
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.4_TRANSVERSE.PRIVACY.1
+- op: link.remove
+  uid: CONSTRUCTION.DESIGN.3_CONSTRUCTION.DEPENDENCY_DIRECTION.2
+- op: link.remove
+  uid: CONSTRUCTION.HIDING_CONSTRUCTION.PARADIGM
+- op: link.remove
+  uid: CONSTRUCTION.HIDING.2_CONSTRUCTION.HIDING.3
+- op: link.remove
+  uid: CONSTRUCTION.HIDING.3_CONSTRUCTION.DEPENDENCY_DIRECTION.2
+- op: link.remove
+  uid: CONSTRUCTION.HIDING.3_CONSTRUCTION.PARADIGM.2
+- op: link.remove
+  uid: CONSTRUCTION.STATE.1_CONSTRUCTION.STATE.2
+- op: link.remove
+  uid: CONSTRUCTION.STATE.3_CONSTRUCTION.PROCESS.3
+- op: link.remove
+  uid: OPERATION.ALERTING.1_OPERATION.INCIDENTS.3
+- op: link.remove
+  uid: OPERATION.TELEMETRY.1_OPERATION.TELEMETRY.7
+- op: link.remove
+  uid: OPERATION.TELEMETRY.1_OPERATION.TELEMETRY.8
+- op: link.remove
+  uid: OPERATION.TELEMETRY.4_OPERATION.TELEMETRY.5
+- op: link.remove
+  uid: OPERATION.RUNBOOKS.1_OPERATION.ALERTING.1
+- op: link.remove
+  uid: EVOLUTION.DEBT.2_EVOLUTION.DECOMMISSION.1
+- op: link.remove
+  uid: EVOLUTION.DEBT.2_EVOLUTION.INCREMENTAL.1
+- op: link.remove
+  uid: CHANGE_FLOW.REVIEW.1_CHANGE_FLOW.DATA_CHANGE.3
+- op: link.remove
+  uid: CHANGE_FLOW.REVIEW.1_CHANGE_FLOW.DATA_CHANGE.8
+- op: link.remove
+  uid: CHANGE_FLOW.RELEASE.4_CHANGE_FLOW.DATA_CHANGE.3
+- op: link.remove
+  uid: CHANGE_FLOW.DEPLOY.1_CHANGE_FLOW.DATA_CHANGE.1
+- op: link.remove
+  uid: CHANGE_FLOW.DEPLOY.1_CHANGE_FLOW.DATA_CHANGE.3
+- op: link.remove
+  uid: CHANGE_FLOW.ROLLBACK.2_CHANGE_FLOW.DATA_CHANGE.4
+- op: link.remove
+  uid: CHANGE_FLOW.DATA_CHANGE.6_CHANGE_FLOW.DATA_CHANGE.8
+- op: link.remove
+  uid: ASSURANCE.BEHAVIOUR.3_ASSURANCE.CONTRACTS.2
+- op: link.remove
+  uid: ASSURANCE.AVAILABILITY.3_ASSURANCE.AVAILABILITY.5
+- op: link.remove
+  uid: ASSURANCE.DOCS_SYNC.2_ASSURANCE.DOCS_SYNC.4
+- op: link.remove
+  uid: OWNERSHIP.STANCE.3_OWNERSHIP.LIFECYCLE.4
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.1_TRANSVERSE.SECURITY_MONITORING.3
+- op: link.remove
+  uid: CONSTRUCTION.DESIGN.1_CONSTRUCTION.NAMING
+- op: link.remove
+  uid: CONSTRUCTION.SYSTEM_SHAPE.4_CONSTRUCTION.HIDING.2
+- op: link.remove
+  uid: CONSTRUCTION.HIDING_CONSTRUCTION.STATE
+- op: link.remove
+  uid: CONSTRUCTION.HIDING_CONSTRUCTION.NAMING
+- op: link.remove
+  uid: CONSTRUCTION.HIDING.3_CONSTRUCTION.STATE.1
+- op: link.remove
+  uid: CONSTRUCTION.BOUNDARY.6_CONSTRUCTION.BOUNDARY.1
+- op: link.remove
+  uid: CONSTRUCTION.DEPENDENCY_DIRECTION_CONSTRUCTION.HIDING.3
+- op: link.remove
+  uid: CONSTRUCTION.NAMING.1_CONSTRUCTION.NAMING.2
+- op: link.remove
+  uid: CONSTRUCTION.DATA_NOT_CODE.2_CONSTRUCTION.BOUNDARY.1
+- op: link.remove
+  uid: OPERATION.RELIABILITY.3_OPERATION.INCIDENTS.2
+- op: link.remove
+  uid: OPERATION.INCIDENTS.1_OPERATION.RECOVERY.6
+- op: link.remove
+  uid: OPERATION.READINESS.3_OPERATION.RECOVERY.6
+- op: link.remove
+  uid: OPERATION.READINESS.3_OPERATION.RUNBOOKS.1
+- op: link.remove
+  uid: OPERATION.RUNBOOKS.1_OPERATION.RECOVERY.6
+- op: link.remove
+  uid: OPERATION.RECOVERY.3_OPERATION.RECOVERY.2
+- op: link.remove
+  uid: ASSURANCE.BEHAVIOUR.3_ASSURANCE.BEHAVIOUR.4
+- op: link.remove
+  uid: ASSURANCE.DATA_INTEGRITY.3_ASSURANCE.DATA_INTEGRITY.5
+- op: link.remove
+  uid: OWNERSHIP.STANCE.1_OWNERSHIP.SELECTION.2
+- op: link.remove
+  uid: OWNERSHIP.STANCE.1_OWNERSHIP.SELECTION.1
+- op: link.remove
+  uid: OWNERSHIP.STANCE.2_OWNERSHIP.STANCE.3
+- op: link.remove
+  uid: OWNERSHIP.LIFECYCLE.2_OWNERSHIP.SELECTION.3
+- op: link.remove
+  uid: OWNERSHIP.LIFECYCLE.4_OWNERSHIP.SELECTION.5
+- op: link.remove
+  uid: OWNERSHIP.LIFECYCLE.5_OWNERSHIP.SELECTION.5
+- op: link.remove
+  uid: OWNERSHIP.CONTAINMENT.1_OWNERSHIP.SERVICES.3
+- op: link.remove
+  uid: OWNERSHIP.CONTAINMENT.1_OWNERSHIP.CONTAINMENT.2
+- op: link.remove
+  uid: OWNERSHIP.SERVICES.3_OWNERSHIP.STANCE.2
+- op: link.remove
+  uid: TRANSVERSE.SECURITY.1_TRANSVERSE.SECURITY.2
+- op: link.remove
+  uid: TRANSVERSE.SECURITY.5_TRANSVERSE.SECURITY.6
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.1_TRANSVERSE.PRIVACY.2
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_TRANSVERSE.PRIVACY.3
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.3_TRANSVERSE.SECURITY_MONITORING.5
+- op: link.remove
+  uid: TRANSVERSE.CONFIG.4_TRANSVERSE.PRIVACY.2
+- op: link.remove
+  uid: OPERATION.ALERTING.1_OPERATION.RUNBOOKS.2
+- op: link.remove
+  uid: EVOLUTION.DECISIONS.4_EVOLUTION.DECOMMISSION.2
+- op: link.remove
+  uid: EVOLUTION.INCREMENTAL.4_EVOLUTION.DECOMMISSION.5
+- op: link.remove
+  uid: EVOLUTION.DEBT.1_EVOLUTION.INCREMENTAL.2
+- op: link.remove
+  uid: EVOLUTION.TECHNOLOGY.1_EVOLUTION.TECHNOLOGY.3
+- op: link.set
+  uid: ASSURANCE.PERFORMANCE.2_ASSURANCE.PERFORMANCE.4
+  intent: Load test design takes the verdict on whether a load test may run in production from PERFORMANCE.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: ASSURANCE.AVAILABILITY.1_ASSURANCE.AVAILABILITY.2
+  intent: A degraded mode's overload behaviour relies on the retry caps that AVAILABILITY.2 states once.
+  shape:
+    type: requires
+- op: link.set
+  uid: ASSURANCE.AVAILABILITY.1_ASSURANCE.AVAILABILITY.3
+  intent: A degraded mode counts as tolerated only once it is exercised under the real conditions that AVAILABILITY.3 sets.
+  shape:
+    type: requires
+- op: link.set
+  uid: ASSURANCE.DATA_INTEGRITY.5_ASSURANCE.DATA_INTEGRITY.3
+  intent: The detection layer of layered protection is carried out by the old-against-new checks and validation jobs of DATA_INTEGRITY.5.
+  shape:
+    type: realizes
+- op: link.set
+  uid: ASSURANCE.SECURITY.3_ASSURANCE.SECURITY.1
+  intent: Verification techniques are applied to the depth that SECURITY.1 sets per application.
+  shape:
+    type: requires
+- op: link.set
+  uid: ASSURANCE.SECURITY.3_ASSURANCE.SECURITY.4
+  intent: The static scan of the floor follows the placement and noise practice of static analysis in SECURITY.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: OWNERSHIP.STANCE.2_OWNERSHIP.SERVICES.3
+  intent: Writing, adopting or renting per need is priced with the export and switching terms of SERVICES.3.
+  shape:
+    type: requires
+- op: link.set
+  uid: OWNERSHIP.STANCE.3_OWNERSHIP.STANCE.2
+  intent: Bringing code inside (copy, vendor, upstream) is one mode of the per-need write, adopt or rent decision.
+  shape:
+    type: refines
+- op: link.set
+  uid: OWNERSHIP.SELECTION.1_OWNERSHIP.STANCE.1
+  intent: 'The admission gate carries out the necessity test of STANCE.1: every admitted dependency has first earned its place.'
+  shape:
+    type: realizes
+- op: link.set
+  uid: OWNERSHIP.SELECTION.2_OWNERSHIP.STANCE.1
+  intent: Novelty is one more thing that must earn its cost, which narrows the necessity test of STANCE.1 to fit, maturity and novelty.
+  shape:
+    type: refines
+- op: link.set
+  uid: OWNERSHIP.SELECTION.3_OWNERSHIP.LIFECYCLE.2
+  intent: The compatibility signals gathered in SELECTION.3 feed the range and pin choices of LIFECYCLE.2.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: OWNERSHIP.SELECTION.5_OWNERSHIP.LIFECYCLE.4
+  intent: Authenticity and provenance checks at adoption rely on the channel, mirror and rebuild rules of LIFECYCLE.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: OWNERSHIP.SELECTION.5_OWNERSHIP.LIFECYCLE.5
+  intent: The provenance and vulnerability state recorded at adoption is the baseline that inventory and watching keep current.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: OWNERSHIP.LIFECYCLE.3_OWNERSHIP.LIFECYCLE.1
+  intent: Updates change the lock only through the path that Declare and Lock defines.
+  shape:
+    type: requires
+- op: link.set
+  uid: OWNERSHIP.CONTAINMENT.2_OWNERSHIP.CONTAINMENT.1
+  intent: The adapter between code and dependency carries out the decision on how much reversibility to buy, priced by the same exit logic.
+  shape:
+    type: realizes
+- op: link.set
+  uid: OWNERSHIP.SERVICES.3_OWNERSHIP.CONTAINMENT.1
+  intent: The switching terms and data export rights of SERVICES.3 feed the exit price weighed in CONTAINMENT.1.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: OWNERSHIP.LICENCE.2_OWNERSHIP.LICENCE.1
+  intent: Licence policy classes follow the classification of licences made in LICENCE.1.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.SECURITY.2_TRANSVERSE.SECURITY.1
+  intent: The maturity model of the anchor framework is the one that the maturity targets and cycle of SECURITY.2 run.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.SECURITY.6_TRANSVERSE.SECURITY.5
+  intent: Reports received through the disclosure policy are the intake of the vulnerability response loop.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: TRANSVERSE.SECURITY_MONITORING.3_TRANSVERSE.PRIVACY.1
+  intent: Sanitising investigation logs relies on the classification and pseudonymisation rules of PRIVACY.1.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.SECURITY_MONITORING.5_TRANSVERSE.PRIVACY.3
+  intent: The reason an audit trail is kept bounds when and how PRIVACY.3 may delete it.
+  shape:
+    type: constrains
+- op: link.set
+  uid: TRANSVERSE.PRIVACY.2_TRANSVERSE.PRIVACY.1
+  intent: Retention periods are set per the classification of the data being retained, fixed in PRIVACY.1.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.PRIVACY.2_TRANSVERSE.CONFIG.4
+  intent: The retention periods bound how long the secret access audit is kept.
+  shape:
+    type: constrains
+- op: link.set
+  uid: TRANSVERSE.PRIVACY.3_TRANSVERSE.PRIVACY.2
+  intent: The erasure mechanism applies the retention periods of PRIVACY.2 when a period ends.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.1_TRANSVERSE.CONFIG.4
+  intent: Keeping secrets apart from configuration and code relies on the central custody and audit of every secret access in CONFIG.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.2_TRANSVERSE.CONFIG.1
+  intent: The delivery channel to the running software relies on the separation of configuration from code and secrets.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.2_TRANSVERSE.CONFIG.4
+  intent: The delivery channel draws from the managed secret store that CONFIG.4 keeps.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.4_TRANSVERSE.SECURITY_MONITORING.2
+  intent: Secret access audit entries follow the entry content, time and format rule of SECURITY_MONITORING.2.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.5_TRANSVERSE.CONFIG.4
+  intent: Credential lifetime and pipeline identity rely on the custody and lifecycle of secrets in CONFIG.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.6_TRANSVERSE.CONFIG.4
+  intent: Investigating the use of a leaked secret relies on the access audit that central custody keeps.
+  shape:
+    type: requires
+- op: link.set
+  uid: TRANSVERSE.CONFIG.6_TRANSVERSE.SECURITY.5
+  intent: A leaked secret is one case of a vulnerability, handled by the response loop of SECURITY.5.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.DESIGN.2_CONSTRUCTION.SYSTEM_SHAPE.3
+  intent: Costly decisions wait until the domain is understood, so service boundaries are not placed earlier than that.
+  shape:
+    type: constrains
+- op: link.set
+  uid: CONSTRUCTION.SYSTEM_SHAPE.1_CONSTRUCTION.SYSTEM_SHAPE.3
+  intent: A split of the first unit follows the boundary placement rules of SYSTEM_SHAPE.3.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.SYSTEM_SHAPE.1_CONSTRUCTION.SYSTEM_SHAPE.2
+  intent: A split is paid for by the distribution premium that SYSTEM_SHAPE.2 prices.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.SYSTEM_SHAPE.1_CONSTRUCTION.HIDING.2
+  intent: The one initial unit is cut inside by business concept, as HIDING.2 decides.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.SYSTEM_SHAPE.4_CONSTRUCTION.SYSTEM_SHAPE.1
+  intent: The team count bounds and moves the initial shape.
+  shape:
+    type: constrains
+- op: link.set
+  uid: CONSTRUCTION.HIDING_CONSTRUCTION.DEPENDENCY_DIRECTION
+  intent: Hidden decisions are kept apart by the one-way dependencies of DEPENDENCY_DIRECTION.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.HIDING.4_CONSTRUCTION.BOUNDARY.4
+  intent: Direct access by several consumers goes through the published interface layer of BOUNDARY.4.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.1_CONSTRUCTION.BOUNDARY.2
+  intent: Parsing at the edge uses the positive definition of valid from BOUNDARY.2.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.1_CONSTRUCTION.STATE.1
+  intent: The precise parsed form produced at the edge is the single representation from which other forms derive.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: CONSTRUCTION.DATA_NOT_CODE_CONSTRUCTION.BOUNDARY.2
+  intent: Narrowing at each sink refines the positive definition of valid.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.DATA_NOT_CODE_CONSTRUCTION.BOUNDARY.1
+  intent: Sink narrowing presupposes that boundary data was parsed first.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.3_CONSTRUCTION.STATE.1
+  intent: Deriving types from one place, never hand-copying them across tiers, applies one place per fact to type declarations.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.4_CONSTRUCTION.BOUNDARY.5
+  intent: The form of the published layer (read surface or operation) is decided in BOUNDARY.5.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.5_CONSTRUCTION.NAMING
+  intent: A call carries its meaning by name, which refines the naming rules.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.STATE.3_CONSTRUCTION.STATE.1
+  intent: A cache is a derived representation of a fact held elsewhere, which applies one place per fact.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.STATE.5_CONSTRUCTION.DEPENDENCY_DIRECTION.1
+  intent: Load order must not decide behaviour, which refines the ban on dependency cycles.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.DEPENDENCY_DIRECTION.1_CONSTRUCTION.HIDING.1
+  intent: A cycle makes two modules one decision unit, which refines the cut by hidden decision.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.DEPENDENCY_DIRECTION.1_CONSTRUCTION.DEPENDENCY_DIRECTION.2
+  intent: Acyclicity is one of the declared, checked rules of the layering.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.NAMING.3_CONSTRUCTION.DESIGN.1
+  intent: The naming half of the derivation practice, names derived from concepts, specialises the derivation order of DESIGN.1.
+  shape:
+    type: refines
+- op: link.set
+  uid: CONSTRUCTION.PROCESS.1_CONSTRUCTION.PROCESS.3
+  intent: Fast replacement of a process needs stateless processes.
+  shape:
+    type: requires
+- op: link.set
+  uid: CONSTRUCTION.PROCESS.2_CONSTRUCTION.PROCESS.1
+  intent: Fail-fast supervision relies on the fast start and graceful stop of PROCESS.1.
+  shape:
+    type: requires
+- op: link.set
+  uid: OPERATION.TELEMETRY.2_OPERATION.TELEMETRY.4
+  shape:
+    type: requires
+- op: link.set
+  uid: OPERATION.TELEMETRY.5_OPERATION.TELEMETRY.6
+  intent: Sampling carries out the control of telemetry volume and cost.
+  shape:
+    type: realizes
+- op: link.set
+  uid: OPERATION.READINESS.1_OPERATION.CAPACITY
+  intent: The readiness checklist covers capacity, so the review relies on the capacity practice.
+  shape:
+    type: requires
+- op: link.set
+  uid: OPERATION.READINESS.1_OPERATION.RECOVERY.1
+  intent: The failure-mode part of the readiness check is read against the recovery objectives.
+  shape:
+    type: requires
+- op: link.set
+  uid: OPERATION.RUNBOOKS.2_OPERATION.ALERTING.1
+  intent: 'Runbook automation carries out the matching rule of ALERTING.1: a page answerable by a mechanical response is automated.'
+  shape:
+    type: realizes
+- op: link.set
+  uid: OPERATION.RECOVERY.1_OPERATION.RELIABILITY.2
+  intent: A recovery objective is set like a reliability objective, which specialises the objective-level method to recovery.
+  shape:
+    type: refines
+- op: link.set
+  uid: EVOLUTION.DECOMMISSION.2_EVOLUTION.DECISIONS.4
+  intent: The retirement record supersedes the adoption record, following the supersession rule of the changed-record node.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DECOMMISSION.2_EVOLUTION.DECISIONS.3
+  intent: The retirement record is kept in the form and place that the form-and-storage node sets for every record.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DECISIONS.6_EVOLUTION.DECISIONS.1
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DECISIONS.6_EVOLUTION.DECISIONS.5
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.INCREMENTAL.2_EVOLUTION.DEBT.1
+  intent: An unfinished migration is a debt item, which instantiates the definition of debt.
+  shape:
+    type: refines
+- op: link.set
+  uid: EVOLUTION.INCREMENTAL.3_EVOLUTION.INCREMENTAL.1
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.INCREMENTAL.3_EVOLUTION.DECOMMISSION
+  intent: A replaced system is retired through the decommissioning practice once the new one is verified.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.INCREMENTAL.6_EVOLUTION.DECOMMISSION.3
+  intent: A deprecated item is marked in the machine-readable metadata that the announcement practice sets.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DEBT.2_EVOLUTION.DEBT.3
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DEBT.5_EVOLUTION.INCREMENTAL.4
+  intent: Cross-team repayment needs an owner and capacity, as a mass migration does.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DECOMMISSION.5_EVOLUTION.INCREMENTAL.4
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.DECOMMISSION.5_EVOLUTION.DECOMMISSION.3
+  intent: The deprecation stage announced in two stages ends in the sunset that a compulsory retirement sets.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.TECHNOLOGY.1_EVOLUTION.DECOMMISSION.2
+  intent: A technology that is replaced is retired on stated grounds and the retirement is recorded.
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.TECHNOLOGY.2_EVOLUTION.DECISIONS.3
+  shape:
+    type: requires
+- op: link.set
+  uid: EVOLUTION.TECHNOLOGY.3_EVOLUTION.TECHNOLOGY.1
+  intent: A departure whose cost its own team carries is the case where adding alongside is allowed, which bounds how firmly replace-not-add holds.
+  shape:
+    type: constrains
+- op: link.set
+  uid: EVOLUTION.TECHNOLOGY.4_EVOLUTION.TECHNOLOGY.1
+  intent: Adding a specialised store is one case of adding a technology, which replaces or has a stated need.
+  shape:
+    type: refines
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.2_CHANGE_FLOW.RELEASE.3
+  intent: Work that spans the integration interval is merged hidden behind the flags that RELEASE.3 governs.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.3_CHANGE_FLOW.RELEASE.1
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.3_CHANGE_FLOW.ROLLBACK.1
+  intent: Without a release branch a defect is fixed forward, the choice that ROLLBACK.1 makes per change class.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.4_CHANGE_FLOW.INTEGRATION.5
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.5_CHANGE_FLOW.REVIEW.2
+  intent: Small batches keep the unit of review small enough to read.
+  shape:
+    type: constrains
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.5_CHANGE_FLOW.ROLLBACK.2
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.INTEGRATION.6_CHANGE_FLOW.REVIEW.1
+  shape:
+    type: dataflow
+- op: link.set
+  uid: CHANGE_FLOW.REVIEW.4_CHANGE_FLOW.BUILD.1
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.BUILD.2_CHANGE_FLOW.RELEASE.2
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.RELEASE.1_CHANGE_FLOW.MEASURE.1
+  intent: Raising release frequency alone yields failures, so cadence is judged by the outcomes MEASURE.1 holds.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.RELEASE.4_CHANGE_FLOW.DEPLOY.1
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DEPLOY.2_CHANGE_FLOW.ROLLBACK.1
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DEPLOY.3_CHANGE_FLOW.DATA_CHANGE.3
+  intent: Changes that depend on known environment differences are routed to the gated lane of DATA_CHANGE.3.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DEPLOY.3_CHANGE_FLOW.DATA_CHANGE.7
+  intent: Changes that depend on scale or data volume are rehearsed on production-shaped data, as DATA_CHANGE.7 sets.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.ROLLBACK.3_CHANGE_FLOW.DATA_CHANGE.4
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DATA_CHANGE.1_CHANGE_FLOW.DATA_CHANGE.2
+  intent: Checking once-only application of ordered scripts relies on the recorded history of DATA_CHANGE.2.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DATA_CHANGE.5_CHANGE_FLOW.DATA_CHANGE.6
+  intent: Sharding applies to data changes only, which are the bulk batches that DATA_CHANGE.6 designs.
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.DATA_CHANGE.7_CHANGE_FLOW.DATA_CHANGE.3
+  intent: The time budget produced by rehearsal is the gate criterion of the risky class.
+  shape:
+    type: dataflow
+- op: link.set
+  uid: CHANGE_FLOW.DATA_CHANGE.8_CHANGE_FLOW.DATA_CHANGE.3
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.MEASURE.2_CHANGE_FLOW.MEASURE.1
+  shape:
+    type: requires
+- op: link.set
+  uid: CHANGE_FLOW.MEASURE.2_CHANGE_FLOW.RELEASE.1
+  intent: Frequency gains count only where the preconditions MEASURE.2 names hold, which bounds how cadence in RELEASE.1 is judged.
+  shape:
+    type: constrains
+- op: link.set
+  uid: ASSURANCE.BEHAVIOUR.6_ASSURANCE.BEHAVIOUR.1
+  shape:
+    type: refines
+- op: link.set
+  uid: ASSURANCE.CONTRACTS.1_ASSURANCE.CONTRACTS.2
+  intent: 'The additive, coordinated evolution of CONTRACTS.1 and the contract tests between independently released components of CONTRACTS.2 pull apart; the consumer-reach context resolves it: coordination for few reachable consumers, contract tests where release is independent.'
+  shape:
+    type: conflicts
+- op: link.set
+  uid: ASSURANCE.CONTRACTS.2_ASSURANCE.CONTRACTS.3
+  intent: A single-team application that deploys client and server together verifies its seam with the interface description diff held in CONTRACTS.3.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.AVAILABILITY.5
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: Recovery exercises repeat and measure the restore path whose proof AVAILABILITY.4 establishes.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.4
+  dst: TRANSVERSE.SECURITY.2
+  intent: Time to detect, produced by detection and escalation, is the outcome measure that the maturity cycle manages.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.PRIVACY.2
+  dst: TRANSVERSE.SECURITY_MONITORING.3
+  intent: Log retention is bounded by the retention periods that PRIVACY.2 sets.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.2
+  dst: TRANSVERSE.PRIVACY.4
+  intent: Log entries, as SECURITY_MONITORING.2 defines them, are the data that answers a breach.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.PRIVACY.1
+  dst: TRANSVERSE.PRIVACY.4
+  intent: The classification of PRIVACY.1 is the data that answers a breach.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CONSTRUCTION.DEPENDENCY_DIRECTION.2
+  dst: CONSTRUCTION.DESIGN.3
+  intent: Declared layering, enforced by DEPENDENCY_DIRECTION.2, is how the constraints adopted in DESIGN.3 are carried out.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.PARADIGM
+  dst: CONSTRUCTION.HIDING
+  intent: The paradigm and the placement of logic follow the module cut that HIDING makes.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.HIDING.3
+  dst: CONSTRUCTION.HIDING.2
+  intent: 'Layer separation refines the business-concept cut: it applies inside each module.'
+  shape:
+    type: refines
+- op: link.create
+  src: CONSTRUCTION.DEPENDENCY_DIRECTION.2
+  dst: CONSTRUCTION.HIDING.3
+  intent: Declaring directions between kinds of module requires the layers that HIDING.3 separates.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.PARADIGM.2
+  dst: CONSTRUCTION.HIDING.3
+  intent: Where domain logic is placed in the data tier depends on the layer isolation of HIDING.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.STATE.2
+  dst: CONSTRUCTION.STATE.1
+  intent: Normalisation is one place per fact applied to stored relational data.
+  shape:
+    type: refines
+- op: link.create
+  src: CONSTRUCTION.PROCESS.3
+  dst: CONSTRUCTION.STATE.3
+  intent: Stateless processes allow only derived in-memory state that can be rebuilt.
+  shape:
+    type: constrains
+- op: link.create
+  src: OPERATION.INCIDENTS.3
+  dst: OPERATION.ALERTING.1
+  intent: The bounded on-call load, including the alert-to-incident ratio, limits how many pages the paging rules may produce.
+  shape:
+    type: constrains
+- op: link.create
+  src: OPERATION.TELEMETRY.7
+  dst: OPERATION.TELEMETRY.1
+  intent: Vantage points specialise the service and resource signals with probes from outside and from real users.
+  shape:
+    type: refines
+- op: link.create
+  src: OPERATION.TELEMETRY.8
+  dst: OPERATION.TELEMETRY.1
+  intent: Scheduled work signals specialise the signal set for work that is not request-driven.
+  shape:
+    type: refines
+- op: link.create
+  src: OPERATION.TELEMETRY.5
+  dst: OPERATION.TELEMETRY.4
+  intent: The sampling decision travels with the propagated trace context.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.ALERTING.1
+  dst: OPERATION.RUNBOOKS.1
+  intent: A page links the playbook that RUNBOOKS.1 keeps, so the paging rule relies on it.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.1
+  dst: EVOLUTION.DEBT.2
+  intent: Deleting code, held in the why-remove node, is part of how a system is kept simple.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.1
+  dst: EVOLUTION.DEBT.2
+  intent: Releasing in small steps, held in the step-size node, is part of how a system is kept simple.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.3
+  dst: CHANGE_FLOW.REVIEW.1
+  intent: The delivery path of DATA_CHANGE.3 carries out the qualified approval that REVIEW.1 requires for high-blast-radius changes.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.8
+  dst: CHANGE_FLOW.REVIEW.1
+  intent: A production bulk job that holds locks or runs long needs a qualified approver under REVIEW.1.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.3
+  dst: CHANGE_FLOW.RELEASE.4
+  intent: The authorization stage of DATA_CHANGE.3 is the human gate for the irreversible data class that RELEASE.4 requires.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.1
+  dst: CHANGE_FLOW.DEPLOY.1
+  intent: Migrations run through the same deployment process in every environment.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.3
+  dst: CHANGE_FLOW.DEPLOY.1
+  intent: A human-triggered risky database change is a gate within the one deployment process.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: CHANGE_FLOW.ROLLBACK.2
+  intent: The data procedure of DATA_CHANGE.4 specialises the generic backward-compatibility rule to stored data.
+  shape:
+    type: refines
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.8
+  dst: CHANGE_FLOW.DATA_CHANGE.6
+  intent: How a bulk job is run and watched follows from how its batches are designed.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.CONTRACTS.2
+  dst: ASSURANCE.BEHAVIOUR.3
+  intent: Contract tests are the test level that serves the seams between independently released components in the mix.
+  shape:
+    type: refines
+- op: link.create
+  src: CONSTRUCTION.DESIGN
+  dst: OWNERSHIP.STANCE.4
+  intent: Design derivation carries out the stance of building for probable use only where a structural choice is costly to reverse.
+  shape:
+    type: realizes
+- op: link.create
+  src: OWNERSHIP.LIFECYCLE.3
+  dst: EVOLUTION.DEBT
+  intent: Updates deferred because verification is weak are handed to the debt practice as debt to repay.
+  shape:
+    type: dataflow
+- op: link.create
+  src: OWNERSHIP.LIFECYCLE.3
+  dst: TRANSVERSE.CONFIG.6
+  intent: After a supply-chain compromise, revocation, rotation and investigation of exposed credentials rely on the leaked-secret response of CONFIG.6.
+  shape:
+    type: requires
+- op: link.create
+  src: OWNERSHIP.CONTAINMENT.3
+  dst: TRANSVERSE.CONFIG
+  intent: Where the configuration of a backing service lives is decided by the configuration and secrets practice.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.2
+  dst: ASSURANCE.RULES.1
+  intent: Security findings block or advise under the false-alarm budget that RULES.1 holds; SECURITY.2 keeps only the release-time block, who may waive, and the published figure.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.3
+  dst: ASSURANCE.BEHAVIOUR.6
+  intent: The coverage floor is decided in BEHAVIOUR.6 (none, security-relevant code included), so SECURITY.3 states no coverage figure of its own.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.RULES.2
+  intent: The build pipeline carries out the placement of checks and the minutes-long blocking feedback that RULES.2 decides.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION
+  dst: ASSURANCE.RULES.3
+  intent: Protecting the mainline is how a gate that cannot be skipped is carried out at integration.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.ARTIFACT.2
+  dst: ASSURANCE.RULES.3
+  intent: The protected mainline carries out the gate that always runs and fails closed.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.ARTIFACT.2
+  dst: ASSURANCE.RULES.4
+  intent: The protected mainline carries out the independent review and the approval that binds the exact content.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.REVIEW
+  dst: ASSURANCE.RULES.5
+  intent: Review is where evidence that completion is shown, not asserted, is carried out.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: The build runs the self-testing suite on every change.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.PRIVACY
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: Real records in test data are bound by the privacy rules held in TRANSVERSE.PRIVACY.
+  shape:
+    type: constrains
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY
+  dst: ASSURANCE.BEHAVIOUR
+  intent: The data-integrity-specific tests specialise the general testing decisions of BEHAVIOUR.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.SECURITY
+  dst: ASSURANCE.BEHAVIOUR
+  intent: The security-specific tests (verification techniques, fuzz depth) specialise the general testing decisions of BEHAVIOUR.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.PERFORMANCE
+  dst: ASSURANCE.BEHAVIOUR
+  intent: The performance-specific tests specialise the general testing decisions of BEHAVIOUR.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.ARTIFACT
+  dst: ASSURANCE.BEHAVIOUR
+  intent: The artifact-specific checks specialise the general testing decisions of BEHAVIOUR.
+  shape:
+    type: refines
+- op: link.create
+  src: OWNERSHIP.SERVICES.2
+  dst: ASSURANCE.CONTRACTS.1
+  intent: SERVICES.2 keeps only the consumer side (read the promise, consume deprecation signals, pin the version) and relies on the provider policies of CONTRACTS.1.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY
+  dst: ASSURANCE.CONTRACTS
+  intent: 'Contracts are carried out in code at the boundary: BOUNDARY holds the form a boundary takes, CONTRACTS how compatibility is verified.'
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.2
+  dst: ASSURANCE.RULES.3
+  intent: 'A gate with an explicit, visible override: the opt-in and the migration-lint assertion of DATA_INTEGRITY.2 are overrides of that kind.'
+  shape:
+    type: refines
+- op: link.create
+  src: TRANSVERSE.PRIVACY.2
+  dst: ASSURANCE.DATA_INTEGRITY.3
+  intent: Retention periods for personal data, backup copies included, bound how long the first-layer copies of DATA_INTEGRITY.3 are kept.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.PRIVACY.3
+  dst: ASSURANCE.DATA_INTEGRITY.3
+  intent: Erasure of personal data held in backups, set in PRIVACY.3, bounds the deletion form of the layered protection.
+  shape:
+    type: constrains
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: A restore that undoes a destructive change is proven in AVAILABILITY.4, which the layered protection relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.4
+  dst: OPERATION.TELEMETRY.8
+  intent: Detection queries and refreshes are scheduled work whose duration, failure, backlog and missed runs are signalled by TELEMETRY.8.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.5
+  dst: CHANGE_FLOW.DATA_CHANGE
+  intent: The checks of DATA_INTEGRITY.5 run inside the rehearsal and rollout of the data change held in DATA_CHANGE.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DOCS_SYNC
+  dst: ASSURANCE.RULES.5
+  intent: Documentation is part of the evidence for every change, which applies the one-bar rule of RULES.5 to documents.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.DOCS_SYNC.2
+  dst: ASSURANCE.RULES.3
+  intent: The documentation gate is a gate with a recorded, visible override.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DOCS_SYNC.2
+  dst: ASSURANCE.RULES.4
+  intent: The documentation waiver is granted by the reviewer who approves the change, independent of its author.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DOCS_SYNC.3
+  dst: ASSURANCE.CONTRACTS.3
+  intent: One origin per fact for interface descriptions is held in CONTRACTS.3, which the documentation single-source rule relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.1
+  dst: TRANSVERSE.SECURITY
+  intent: The risk model and programme of TRANSVERSE.SECURITY set the depth that verification applies.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.2
+  dst: ASSURANCE.RULES.2
+  intent: Placement of a security check follows the feedback-speed rule of RULES.2.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.2
+  dst: ASSURANCE.RULES.3
+  intent: Security gates that cannot be skipped, with an audited override, follow RULES.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.SECURITY.2
+  intent: The pipeline stages of CHANGE_FLOW.BUILD carry out the stage placement and blocking policy of SECURITY.2.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.SECURITY.3
+  dst: ASSURANCE.BEHAVIOUR.3
+  intent: The test levels the security tests sit in are decided in BEHAVIOUR.3.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.4
+  dst: ASSURANCE.BEHAVIOUR.2
+  intent: The static layer of BEHAVIOUR.2 is refined for security weaknesses, with their scheduled and noise-handling practice.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.SECURITY.5
+  dst: OWNERSHIP.LIFECYCLE.5
+  intent: The inventory of consumed components stays in the inventory and watching practice of the dependency lifecycle.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.6
+  dst: TRANSVERSE.SECURITY
+  intent: The security programme sets the access and automation policy that the tooling of SECURITY.6 enforces.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.6
+  dst: CHANGE_FLOW.INTEGRATION.6
+  intent: Attribution of every automated change is held in the change attribution rules of INTEGRATION.6, which the limits on automation rely on.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.6
+  dst: ASSURANCE.RULES.4
+  intent: The accountable person or named group who authorizes and triggers a large-blast-radius run is defined by RULES.4.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.7
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: Closing the loop on findings relies on the proven ability to restore from AVAILABILITY.4.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.1
+  dst: OPERATION.RELIABILITY
+  intent: The performance target is an objective derived from the service objective that RELIABILITY owns.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.1
+  dst: OPERATION.RELIABILITY.1
+  intent: The percentile rule for latency is held in RELIABILITY.1, which the performance threshold relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.1
+  dst: OPERATION.RELIABILITY.2
+  intent: A provisional test target from measured history follows the starting-point rule of RELIABILITY.2.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.2
+  dst: OPERATION.CAPACITY
+  intent: Capacity planning consumes the breaking point that the load test of PERFORMANCE.2 finds.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.PERFORMANCE.3
+  intent: The pipeline stages of the build carry out the per-change and scheduled placement of performance tests.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.3
+  dst: ASSURANCE.RULES.2
+  intent: The placement of a performance test by cost and noise applies the placement rule of RULES.2.
+  shape:
+    type: refines
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.2
+  dst: ASSURANCE.PERFORMANCE.4
+  intent: Canary evaluation and rollback on organic traffic carry out the production-side performance checks of PERFORMANCE.4.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.4
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: Production load tests leave no durable effect on data, the rule held in BEHAVIOUR.7.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.5
+  dst: OPERATION.TELEMETRY.1
+  intent: What can be measured depends on which signals exist, held in TELEMETRY.1.
+  shape:
+    type: requires
+- op: link.create
+  src: OWNERSHIP.CONTAINMENT.2
+  dst: ASSURANCE.AVAILABILITY.2
+  intent: The adapter between code and dependency is where the timeouts and retries of remote-call protection are applied.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.AVAILABILITY.2
+  dst: OPERATION.TELEMETRY.1
+  intent: Circuit-breaker state changes are signals that telemetry records.
+  shape:
+    type: dataflow
+- op: link.create
+  src: ASSURANCE.AVAILABILITY.3
+  dst: ASSURANCE.BEHAVIOUR.5
+  intent: A gap that an experiment finds is a defect handled by BEHAVIOUR.5, which makes it a test that fails first.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.AVAILABILITY.3
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: The durable-data rule for tests in production is held in BEHAVIOUR.7; the guardrails of AVAILABILITY.3 govern transient effects only.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.AVAILABILITY.5
+  dst: ASSURANCE.BEHAVIOUR.5
+  intent: The tests that a gap found in an exercise calls for are written under BEHAVIOUR.5.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.ARTIFACT
+  intent: The build operates the provenance mechanism and promotes one artifact, so provenance and the bound mainline are checkable.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.RELEASE
+  dst: ASSURANCE.ARTIFACT
+  intent: Release operates the provenance mechanism.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION
+  dst: ASSURANCE.ARTIFACT
+  intent: Integration operates the protected mainline.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: ASSURANCE.ARTIFACT.1
+  intent: The build platform produces the signed provenance that ARTIFACT.1 requires.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.RELEASE
+  dst: ASSURANCE.ARTIFACT.1
+  intent: Release archives each release with its provenance.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.ARTIFACT.2
+  dst: ASSURANCE.SECURITY.6
+  intent: The protected mainline is where the limits on automation and access set in SECURITY.6 bind every actor, automated ones included.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.DESIGN.1
+  dst: OWNERSHIP.STANCE.4
+  intent: Structuring for probable use where reversal is costly carries out the probable-use stance of STANCE.4.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.DESIGN.3
+  dst: ASSURANCE.RULES.3
+  intent: Mechanically checkable constraints adopted in DESIGN.3 are enforced as blocking checks under RULES.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.DESIGN.4
+  dst: EVOLUTION.INCREMENTAL.3
+  intent: The growth horizon feeds the choice between rewrite and part-by-part replacement held in INCREMENTAL.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.DESIGN.4
+  dst: OWNERSHIP.STANCE.4
+  intent: Sizing parts that are cheap to change to the present need carries out the stance of not building for presumed needs.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.CAPACITY
+  dst: CONSTRUCTION.DESIGN.4
+  intent: Capacity measurements supply the signal that sets the growth horizon.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CONSTRUCTION.SYSTEM_SHAPE.2
+  dst: CHANGE_FLOW.DEPLOY.1
+  intent: Paying the distribution premium requires the automated deployment path of DEPLOY.1.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.SYSTEM_SHAPE.3
+  dst: ASSURANCE.CONTRACTS.1
+  intent: Placing service boundaries carries out independent deployability, with the coordinated breaking change as its exception, that CONTRACTS.1 governs.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.SYSTEM_SHAPE.3
+  dst: ASSURANCE.CONTRACTS.2
+  intent: Placing service boundaries carries out the compatibility across them that CONTRACTS.2 verifies.
+  shape:
+    type: realizes
+- op: link.create
+  src: OWNERSHIP.CONTAINMENT
+  dst: CONSTRUCTION.HIDING.1
+  intent: Containing a dependency behind a boundary carries out hiding a decision behind a boundary.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.1
+  dst: CONSTRUCTION.HIDING.4
+  intent: Integrity rules declared in the store presuppose that one application owns each schema.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.1
+  dst: ASSURANCE.DATA_INTEGRITY.1
+  intent: Edge validation by BOUNDARY.1 carries out the integrity rules, beside the constraints declared in the store.
+  shape:
+    type: realizes
+- op: link.create
+  src: OWNERSHIP.CONTAINMENT.2
+  dst: CONSTRUCTION.BOUNDARY.1
+  intent: Third-party responses are parsed at the wrapper that CONTAINMENT.2 describes, which carries out parsing at the edge.
+  shape:
+    type: realizes
+- op: link.create
+  src: OWNERSHIP.CONTAINMENT.4
+  dst: CONSTRUCTION.BOUNDARY.1
+  intent: Data from external destinations is untrusted, so the bounds of CONTAINMENT.4 carry out parsing at the edge for it.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.3
+  dst: ASSURANCE.CONTRACTS.1
+  intent: The version or change-log form of a contract carries out the compatibility policy that follows consumer reach.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.3
+  dst: ASSURANCE.CONTRACTS.3
+  intent: Deriving types from the place where the team records the chain starts carries out the one source of description.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.3
+  dst: EVOLUTION.DECOMMISSION
+  intent: The contract lifecycle statuses (deprecated, retired) rely on the decommissioning practice.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.4
+  dst: ASSURANCE.CONTRACTS.1
+  intent: The published interface over stored data carries out the compatibility policy of CONTRACTS.1.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.BOUNDARY.5
+  dst: ASSURANCE.CONTRACTS
+  intent: Removal and evolution of a call follow CONTRACTS.1, and the input and output split follows CONTRACTS.3.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.1
+  dst: CONSTRUCTION.BOUNDARY.6
+  intent: A violated store constraint is the input that BOUNDARY.6 maps to a stable contract error.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CONSTRUCTION.STATE.1
+  dst: ASSURANCE.DATA_INTEGRITY.4
+  intent: A managed copy needs the sync plan settled in DATA_INTEGRITY.4.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.STATE.2
+  dst: ASSURANCE.DATA_INTEGRITY.4
+  intent: Denormalised redundancy is guarded by the sync plan of DATA_INTEGRITY.4.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.STATE.3
+  dst: ASSURANCE.DATA_INTEGRITY.4
+  intent: A cache is derived data that needs the sync plan of DATA_INTEGRITY.4.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.DEPENDENCY_DIRECTION.2
+  dst: ASSURANCE.RULES.3
+  intent: 'A declared layering is a blocking check: it carries out the gate that cannot be skipped.'
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.NAMING.2
+  dst: TRANSVERSE.DOCS
+  intent: One name per concept binds documents as well as code.
+  shape:
+    type: constrains
+- op: link.create
+  src: CONSTRUCTION.PARADIGM.1
+  dst: OWNERSHIP.SELECTION.2
+  intent: Choosing a paradigm by intent applies the fit-over-novelty rule of SELECTION.2 to paradigms.
+  shape:
+    type: refines
+- op: link.create
+  src: CONSTRUCTION.PARADIGM.2
+  dst: ASSURANCE.DATA_INTEGRITY.1
+  intent: Invariants that must hold across several writers are declared in the store, so the placement of logic relies on DATA_INTEGRITY.1.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.PARADIGM.2
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: Logic placed in the store is tested against a real store, as BEHAVIOUR.7 sets.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.DATA_NOT_CODE
+  dst: ASSURANCE.SECURITY.6
+  intent: Least privilege is the second layer behind keeping data from becoming code, held in SECURITY.6.
+  shape:
+    type: requires
+- op: link.create
+  src: CONSTRUCTION.DATA_NOT_CODE.3
+  dst: OWNERSHIP.CONTAINMENT.4
+  intent: Redirect and destination allowlists for paths and destinations rely on the bounds of CONTAINMENT.4.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.CAPACITY
+  dst: CONSTRUCTION.PROCESS
+  intent: Capacity is added by adding processes, so capacity planning relies on the process model.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.4
+  dst: CONSTRUCTION.PROCESS.1
+  intent: Instance replacement during a release relies on fast start and graceful stop so that no work is lost.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION
+  dst: ASSURANCE.RULES
+  intent: Version control and integration carry out the rule that checks bind and review is accountable.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION
+  dst: ASSURANCE.ARTIFACT.2
+  intent: The mechanism that binds every actor on the mainline is carried out by integration.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.1
+  dst: OWNERSHIP.LIFECYCLE
+  intent: The one-version rule for shared components is a dependency rule specialised to a repository.
+  shape:
+    type: refines
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.2
+  dst: ASSURANCE.RULES.2
+  intent: Small, frequent integrations carry out the small feedback loops that RULES.2 asks for.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.6
+  dst: ASSURANCE.ARTIFACT.2
+  intent: The recorded trail and actor rules are how the protected mainline binds every actor.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.6
+  dst: ASSURANCE.RULES.4
+  intent: A change not attributable to a person needs a named accountable approver, as RULES.4 defines.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.RULES.5
+  dst: CHANGE_FLOW.INTEGRATION.6
+  intent: One bar for every change is why the actor rules need no disclosure rule.
+  shape:
+    type: constrains
+- op: link.create
+  src: CHANGE_FLOW.REVIEW
+  dst: ASSURANCE.RULES
+  intent: Review carries out the independent, accountable, content-bound review that the rules decide.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.1
+  dst: ASSURANCE.RULES.4
+  intent: Mechanism and depth by risk carry out independent review; why a post-merge review is only a low-risk tier is held in RULES.4.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.1
+  dst: ASSURANCE.RULES.5
+  intent: Depth of review set by risk and evidence carries out one bar for every change.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.3
+  dst: ASSURANCE.BEHAVIOUR.8
+  intent: The reviewer's defect catalogue relies on the classes of defect that survive review, held in BEHAVIOUR.8.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.4
+  dst: ASSURANCE.RULES.2
+  intent: Automated checks run before the reviewer, in the places where the rules put each check.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.RULES.4
+  dst: CHANGE_FLOW.REVIEW.4
+  intent: A machine may assist a review but is never the accountable approving party that RULES.4 requires.
+  shape:
+    type: constrains
+- op: link.create
+  src: CHANGE_FLOW.BUILD.1
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: The build runs the self-testing suite whose content BEHAVIOUR.1 decides.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.BUILD.1
+  dst: OWNERSHIP.LIFECYCLE
+  intent: Reproducible builds depend on pinned, declared dependencies.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.BUILD.2
+  dst: ASSURANCE.ARTIFACT
+  intent: Building once and promoting by identity makes the provenance match to source checkable per environment.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.BUILD.2
+  dst: ASSURANCE.ARTIFACT.1
+  intent: The provenance of the promoted artifact is verified before use, which carries out ARTIFACT.1.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.BUILD.2
+  dst: TRANSVERSE.CONFIG
+  intent: Environment configuration lives outside the artifact, which relies on the configuration separation rules.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.RELEASE
+  dst: ASSURANCE.RULES
+  intent: A staged pipeline with stated gates is how the rules bind at release.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.2
+  dst: ASSURANCE.CONTRACTS.1
+  intent: A compatibility-promising version number belongs where consumers are many, external or independent, as CONTRACTS.1 decides.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.3
+  dst: EVOLUTION.DECOMMISSION
+  intent: A release toggle's expiry and removal task is one case of retirement.
+  shape:
+    type: refines
+- op: link.create
+  src: OPERATION.INCIDENTS
+  dst: CHANGE_FLOW.RELEASE.5
+  intent: Deployment is blocked during an incident except for the change that remediates it.
+  shape:
+    type: constrains
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY
+  dst: ASSURANCE.AVAILABILITY
+  intent: Progressive, observable deployment carries out tested, progressive resilience.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.2
+  dst: ASSURANCE.AVAILABILITY
+  intent: Progressive rollout with automatic detection and rollback carries out resilience by blast radius.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.2
+  dst: ASSURANCE.AVAILABILITY.3
+  intent: Production experiments and rollouts share the guardrails held in AVAILABILITY.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.ROLLBACK
+  dst: ASSURANCE.AVAILABILITY
+  intent: A decided, rehearsed way back carries out resilience to a bad change.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.ROLLBACK.3
+  dst: ASSURANCE.DATA_INTEGRITY
+  intent: Deciding and recording the undo of a data change carries out the guarantees on data.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.ROLLBACK.3
+  dst: ASSURANCE.DATA_INTEGRITY.3
+  intent: A change that can lose data is undone by the prepared and tested restore held in DATA_INTEGRITY.3.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE
+  dst: ASSURANCE.DATA_INTEGRITY
+  intent: The procedures of DATA_CHANGE carry out the data-integrity guarantees (rules, scope for bulk and destructive operations, layered protection, sync, old against new).
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.1
+  dst: ASSURANCE.ARTIFACT.1
+  intent: The reviewed script is the deployed unit, so deployed objects match reviewed source.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.3
+  dst: ASSURANCE.DATA_INTEGRITY
+  intent: One pipeline and one history for database change carry out what-runs-is-what-was-reviewed.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.3
+  dst: ASSURANCE.SECURITY.6
+  intent: The authorization stage applies the principle for starting a large-blast-radius job.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: ASSURANCE.DATA_INTEGRITY
+  intent: Order and compatibility with running code carry out the old-against-new guarantee.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: ASSURANCE.CONTRACTS.1
+  intent: A compatibility surface for a shared structure follows the compatibility defined by consumer reach.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: CONSTRUCTION.HIDING.3
+  intent: Database access sits behind a clear layer in code, as HIDING.3 separates data access.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.2
+  dst: CHANGE_FLOW.DATA_CHANGE.6
+  intent: Bulk work is bounded by the explicit scope that DATA_INTEGRITY.2 requires.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.PRIVACY
+  dst: CHANGE_FLOW.DATA_CHANGE.7
+  intent: Personal data in a rehearsal copy is bound by the privacy rules, masking included.
+  shape:
+    type: constrains
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.7
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: Rehearsal data is one case of test data management.
+  shape:
+    type: refines
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.8
+  dst: OPERATION.TELEMETRY.1
+  intent: Watching the target system (lock waits, lag, dead-tuple growth) uses the service and resource signals.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.8
+  dst: ASSURANCE.SECURITY.6
+  intent: A large-blast-radius job is a reviewed script whose run is authorized and triggered through the guarded path.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.MEASURE
+  dst: ASSURANCE.RULES
+  intent: Delivery outcome measures are the evidence that judges whether the rules produce trustworthy delivery.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CHANGE_FLOW.MEASURE
+  dst: OPERATION.FEEDBACK
+  intent: Delivery outcomes feed the operational feedback loop.
+  shape:
+    type: dataflow
+- op: link.create
+  src: CHANGE_FLOW.MEASURE.1
+  dst: OPERATION.RELIABILITY
+  intent: Recovery time and change fail rate are reliability outcomes that the delivery measures rely on.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RELIABILITY
+  dst: ASSURANCE.AVAILABILITY
+  intent: The objectives and budget of RELIABILITY are what the availability proof is read against.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.TELEMETRY
+  dst: ASSURANCE.PERFORMANCE
+  intent: The signals (including per-statement statistics) that performance assurance measures are enabled by telemetry.
+  shape:
+    type: realizes
+- op: link.create
+  src: CONSTRUCTION.PARADIGM.2
+  dst: OPERATION.TELEMETRY.8
+  intent: The monitoring of scheduled work required by construction practice is held in TELEMETRY.8.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.TELEMETRY.1
+  dst: ASSURANCE.PERFORMANCE.3
+  intent: Signals read from the service and resource set feed the performance measurements of PERFORMANCE.3.
+  shape:
+    type: dataflow
+- op: link.create
+  src: OPERATION.TELEMETRY.3
+  dst: OWNERSHIP.CONTAINMENT
+  intent: Libraries depend on the instrumentation API only, which specialises library wrapping and dependency containment.
+  shape:
+    type: refines
+- op: link.create
+  src: OPERATION.INCIDENTS
+  dst: ASSURANCE.AVAILABILITY.5
+  intent: Incident learning carries out the corrective actions that recovery exercises demand.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.INCIDENTS
+  dst: ASSURANCE.SECURITY.7
+  intent: Incident defects change the process, as SECURITY.7 requires.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.INCIDENTS.2
+  dst: TRANSVERSE.SECURITY_MONITORING.4
+  intent: Incident lessons are fed back into detection and escalation.
+  shape:
+    type: dataflow
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.2
+  dst: OPERATION.CAPACITY.1
+  intent: Capacity planning uses the breaking point held in PERFORMANCE.2.
+  shape:
+    type: dataflow
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.2
+  dst: OPERATION.CAPACITY.2
+  intent: Headroom is derived from the tested breaking point.
+  shape:
+    type: dataflow
+- op: link.create
+  src: OPERATION.CAPACITY.2
+  dst: ASSURANCE.AVAILABILITY.1
+  intent: Overload behaviour carries out what the availability design decision requires.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.READINESS
+  dst: ASSURANCE.AVAILABILITY
+  intent: The readiness review checks failure modes and recovery proof, which carries out the availability guarantees.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION.READINESS.1
+  dst: CHANGE_FLOW.RELEASE
+  intent: The readiness gate sits at launch, in the release flow.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RUNBOOKS.1
+  dst: ASSURANCE.DOCS_SYNC.3
+  intent: RUNBOOKS.1 applies the owner, date and review rule of DOCS_SYNC.3 and adds validation by another person.
+  shape:
+    type: refines
+- op: link.create
+  src: OPERATION.RECOVERY
+  dst: ASSURANCE.AVAILABILITY
+  intent: Recovery practice carries out the availability guarantees; AVAILABILITY holds the proof of restore and exercises.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: OPERATION.RECOVERY
+  intent: The second layer of integrity defence is backups, which the layered protection relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.1
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: The recovery objectives are the criteria against which the restore proof is fixed.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.PRIVACY.2
+  dst: OPERATION.RECOVERY.2
+  intent: Backup retention is bounded above by the retention periods of PRIVACY.2.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.PRIVACY.3
+  dst: OPERATION.RECOVERY.2
+  intent: Erasure of personal data in backups is governed by PRIVACY.3, which bounds backup scope and design.
+  shape:
+    type: constrains
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.5
+  dst: OPERATION.RECOVERY.2
+  intent: The oldest backup is kept at least as long as corruption may go undetected, a period set by DATA_INTEGRITY.5.
+  shape:
+    type: constrains
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: OPERATION.RECOVERY.2
+  intent: The first-layer copy's purge and retention rely on the backup retention that RECOVERY.2 sets.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.2
+  dst: EVOLUTION.DECOMMISSION.6
+  intent: Backups of a retired system follow the retention rules, neither shorter nor longer.
+  shape:
+    type: constrains
+- op: link.create
+  src: OPERATION.RECOVERY.3
+  dst: ASSURANCE.SECURITY.6
+  intent: No single credential or person can delete every copy, which carries out the large-blast-radius principle of SECURITY.6.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.PRIVACY.3
+  dst: OPERATION.RECOVERY.3
+  intent: Erasure in backups, including a copy locked as immutable, is governed by PRIVACY.3.
+  shape:
+    type: constrains
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: OPERATION.RECOVERY.3
+  intent: The second-layer copy of layered protection is handled as RECOVERY.3 sets.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.4
+  dst: ASSURANCE.AVAILABILITY.5
+  intent: Every recovery path relied on is exercised, as AVAILABILITY.5 fixes.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.4
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: Restore tests prove the restore path that the recovery strategy relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.5
+  dst: CHANGE_FLOW
+  intent: Rebuild from source rests on infrastructure as code in the change flow.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY
+  dst: OPERATION.RECOVERY.5
+  intent: The recovered environment is held to the production security baseline.
+  shape:
+    type: constrains
+- op: link.create
+  src: OPERATION.RECOVERY.5
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: The restore path stays independent of schema tooling, which the restore proof relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.6
+  dst: ASSURANCE.AVAILABILITY.4
+  intent: Regular restore testing is the proof of recovery.
+  shape:
+    type: requires
+- op: link.create
+  src: OPERATION.RECOVERY.6
+  dst: ASSURANCE.DOCS_SYNC.3
+  intent: The recovery plan is a hand-written document under the owner, date and review rule of DOCS_SYNC.3.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DECISIONS
+  dst: OWNERSHIP.SELECTION.1
+  intent: The decision-records branch carries out the written reason for each selection by storing it as a decision record.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DECISIONS.2
+  dst: OWNERSHIP.SELECTION
+  intent: The significance test bounds which selection decisions get a record.
+  shape:
+    type: constrains
+- op: link.create
+  src: EVOLUTION.DECISIONS.5
+  dst: CHANGE_FLOW.REVIEW
+  intent: Accepted records are consulted during the review that the change flow carries out.
+  shape:
+    type: dataflow
+- op: link.create
+  src: EVOLUTION.INCREMENTAL
+  dst: OWNERSHIP.STANCE.4
+  intent: Incremental change carries the no-building-for-presumed-needs stance to the unit of change.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL
+  dst: OWNERSHIP.LIFECYCLE
+  intent: Incremental change and migration carry out the lifecycle of what the team owns.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL
+  dst: ASSURANCE.CONTRACTS
+  intent: Incremental change keeps the promises that the contract decisions state.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.1
+  dst: CHANGE_FLOW.INTEGRATION
+  intent: Releasable steps rest on the integration practice.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.1
+  dst: CHANGE_FLOW.ROLLBACK
+  intent: Releasable steps keep rollback possible, which carries out reversibility.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.1
+  dst: OWNERSHIP.STANCE.4
+  intent: Building to learn is the stance of not building for presumed needs, carried to the step.
+  shape:
+    type: realizes
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE
+  dst: EVOLUTION.INCREMENTAL.2
+  intent: The data-change practice carries out the mechanics of expand, migrate, contract for stored data.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.2
+  dst: CHANGE_FLOW.ROLLBACK
+  intent: Expanding first keeps rollback possible during the move, which carries out reversibility.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.2
+  dst: ASSURANCE.CONTRACTS.1
+  intent: What counts as an incompatible change is decided by the provider-side evolution policy of CONTRACTS.1.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.3
+  dst: OWNERSHIP.STANCE
+  intent: Replacing or rewriting weighs the cost of carrying one's own code, held in the ownership stance.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.4
+  dst: CHANGE_FLOW.INTEGRATION
+  intent: Sharded mechanical changes stay reviewable and integrable in small units.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.5
+  dst: OWNERSHIP.STANCE.4
+  intent: Investment follows expected lifespan, the same stance as not building for presumed needs.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.5
+  dst: OWNERSHIP.LIFECYCLE
+  intent: Cost of change over the life of what is owned carries out the dependency lifecycle.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.5
+  dst: OWNERSHIP.SELECTION
+  intent: Lifespan and consumer count bound what is selected.
+  shape:
+    type: constrains
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.5
+  dst: ASSURANCE.CONTRACTS.1
+  intent: Reliance on observable behaviour grows with consumers, as CONTRACTS.1 reasons.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.5
+  dst: ASSURANCE.CONTRACTS.2
+  intent: Reliance tests are the mechanism that lets shared infrastructure change, as CONTRACTS.2 provides.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DEBT
+  dst: OWNERSHIP.STANCE
+  intent: Debt is the cost-of-lasting-liability stance applied to change.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DEBT.1
+  dst: OWNERSHIP.LIFECYCLE.5
+  intent: Out-of-date dependencies are debt items, found through the inventory and end-of-life watching of LIFECYCLE.5.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DEBT.2
+  dst: OWNERSHIP.STANCE
+  intent: Taking debt knowingly carries out the cost-of-lasting-liability stance.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DEBT.3
+  dst: OWNERSHIP.LIFECYCLE
+  intent: The length of the dependency upgrade cycle is the debt-side view of the lifecycle.
+  shape:
+    type: refines
+- op: link.create
+  src: EVOLUTION.DEBT.4
+  dst: ASSURANCE.BEHAVIOUR.5
+  intent: Behaviour not pinned by tests is pinned first, as the characterization rule of BEHAVIOUR.5 requires.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DEBT.4
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: Refactoring relies on the check that detects a behaviour change, held in BEHAVIOUR.1.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DEBT.5
+  dst: CHANGE_FLOW.REVIEW.2
+  intent: A tidy lands as its own change, as the review practice of REVIEW.2 decides.
+  shape:
+    type: requires
+- op: link.create
+  src: OWNERSHIP.LIFECYCLE.3
+  dst: EVOLUTION.DEBT.5
+  intent: Risk-carrying debt such as vulnerable dependencies follows the update rules of LIFECYCLE.3, not the interest rule.
+  shape:
+    type: constrains
+- op: link.create
+  src: OWNERSHIP.LIFECYCLE.5
+  dst: EVOLUTION.DEBT.5
+  intent: Risk-carrying debt such as end-of-life dependencies follows the watching rules of LIFECYCLE.5, not the interest rule.
+  shape:
+    type: constrains
+- op: link.create
+  src: EVOLUTION.DECOMMISSION
+  dst: OWNERSHIP.STANCE
+  intent: Retirement carries out the liability stance.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.1
+  dst: OWNERSHIP.STANCE
+  intent: Code is a liability whose value is its functionality, so removing it carries out the stance.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.3
+  dst: ASSURANCE.CONTRACTS.1
+  intent: Announcing deprecation and sunset is how the provider-side evolution policy is carried out.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.3
+  dst: OWNERSHIP.SERVICES.2
+  intent: Deprecation signals announced for a retirement are what the consumer side reads and routes to an alert.
+  shape:
+    type: dataflow
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.4
+  dst: ASSURANCE.CONTRACTS.1
+  intent: The support windows and the indefinitely compatible case are the policies by consumer reach that CONTRACTS.1 decides.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.4
+  dst: OWNERSHIP.SERVICES.2
+  intent: The support-window promise is what the consumer side reads and pins its version against.
+  shape:
+    type: dataflow
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.5
+  dst: OWNERSHIP.SERVICES.2
+  intent: The deadline of a compulsory retirement is what the consumer side sees.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.PRIVACY.2
+  dst: EVOLUTION.DECOMMISSION.6
+  intent: Backups kept after retirement are kept no longer than the retention periods allow.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.PRIVACY.3
+  dst: EVOLUTION.DECOMMISSION.6
+  intent: Erased data in a backup of a retired system is put beyond use, as PRIVACY.3 requires.
+  shape:
+    type: constrains
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.6
+  dst: CHANGE_FLOW.DATA_CHANGE
+  intent: Metadata and data of a retired system are handled as a data change.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.6
+  dst: ASSURANCE.DATA_INTEGRITY
+  intent: Backups kept after retirement stay restorable, which relies on the data-integrity protection layers.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY
+  dst: OWNERSHIP.SELECTION
+  intent: Keeping technologies few carries out the selection rule over the whole estate.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY
+  dst: OWNERSHIP.STANCE
+  intent: Keeping technologies few carries out the stance against building or adding for presumed needs.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.2
+  dst: OWNERSHIP.SELECTION
+  intent: The register records the team's position on each selected technology, relying on the selection record.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.3
+  dst: OWNERSHIP.SELECTION
+  intent: The default technology set is held within the selection default.
+  shape:
+    type: refines
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.3
+  dst: OWNERSHIP.LIFECYCLE.2
+  intent: The version choice for each dependency is decided in LIFECYCLE.2.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.3
+  dst: CHANGE_FLOW.INTEGRATION.1
+  intent: One version of each shared component is decided in INTEGRATION.1.
+  shape:
+    type: requires
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.4
+  dst: OWNERSHIP.STANCE.4
+  intent: A specialised store is not added for presumed needs, which carries out the stance of STANCE.4.
+  shape:
+    type: realizes
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.4
+  dst: OWNERSHIP.SELECTION
+  intent: Adding a specialised store passes the entry test of selection.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS
+  dst: ASSURANCE.DOCS_SYNC
+  intent: Documentation practice carries out the authoring and organisation whose mechanisms DOCS_SYNC holds.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.DOCS.1
+  dst: ASSURANCE.DOCS_SYNC
+  intent: The full docs-as-code level relies on the owners and gates held in DOCS_SYNC.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.1
+  dst: ASSURANCE.DOCS_SYNC.3
+  intent: Derived documents are read-only, which relies on the single-source rule of DOCS_SYNC.3.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.2
+  dst: ASSURANCE.DOCS_SYNC.3
+  intent: One canonical document per topic is held in DOCS_SYNC.3, which the organisation rules rely on.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.2
+  dst: ASSURANCE.DOCS_SYNC.4
+  intent: Size caps and annotations are checked mechanically by DOCS_SYNC.4.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.3
+  dst: ASSURANCE.DOCS_SYNC.3
+  intent: One canonical document and dated verification are held in DOCS_SYNC.3, which layered writing relies on.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.3
+  dst: ASSURANCE.DOCS_SYNC.4
+  intent: Examples in layered writing are executed by the mechanical checks of DOCS_SYNC.4.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.4
+  dst: CHANGE_FLOW.RELEASE
+  intent: A changelog belongs to a release.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.4
+  dst: ASSURANCE.DOCS_SYNC.4
+  intent: The chore rule of DOCS_SYNC.4 enforces the presence of a changelog entry.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.DOCS.5
+  dst: EVOLUTION.DECISIONS
+  intent: Records of an overriding rule are held in the decision records.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY
+  dst: ASSURANCE.SECURITY
+  intent: Security practice carries out the programme whose verification ASSURANCE.SECURITY holds.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.SECURITY.1
+  dst: TRANSVERSE.SECURITY.1
+  intent: The depth set per application from risk selects the requirement level of the anchor framework.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.SECURITY.2
+  dst: ASSURANCE.SECURITY.7
+  intent: The effectiveness of the maturity cycle is tested by SECURITY.7.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY.3
+  dst: ASSURANCE.SECURITY.1
+  intent: The risk model of design-time modelling is what the design review of SECURITY.1 reviews against.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.SECURITY.5
+  dst: ASSURANCE.SECURITY.7
+  intent: The process change and class-precluding approach of the vulnerability loop are held in SECURITY.7.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING
+  dst: ASSURANCE.SECURITY
+  intent: Logging and detection practice carries out the verification target held in ASSURANCE.SECURITY.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING
+  dst: OPERATION.TELEMETRY
+  intent: Security logging relies on the pipeline that operational telemetry shares.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.4
+  dst: ASSURANCE.SECURITY.7
+  intent: A known probe must be shown to raise an alert, which SECURITY.7 verifies.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.4
+  dst: OPERATION.ALERTING
+  intent: Escalation of detected attacks relies on the alerting practice.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.5
+  dst: ASSURANCE.DATA_INTEGRITY.1
+  intent: The atomic audit of the business audit trail is declared in the store, as DATA_INTEGRITY.1 sets.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.PRIVACY.1
+  dst: OPERATION.TELEMETRY.4
+  intent: Personal data is kept out of propagated trace context by the minimisation and classification rules.
+  shape:
+    type: constrains
+- op: link.create
+  src: TRANSVERSE.PRIVACY.3
+  dst: CHANGE_FLOW.DATA_CHANGE.6
+  intent: Erasure of data in bulk is batched as a bulk change, held in DATA_CHANGE.6.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.PRIVACY.4
+  dst: OPERATION.INCIDENTS
+  intent: Breach handling relies on the incident handling practice.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.CONFIG
+  dst: ASSURANCE.SECURITY
+  intent: Secrets practice carries out part of the security guarantee; secret scanning is held in ASSURANCE.SECURITY.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.CONFIG.1
+  dst: CHANGE_FLOW.INTEGRATION
+  intent: Separating configuration from code and secrets relies on repository access and tracked, attributable changes.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.CONFIG.1
+  dst: ASSURANCE.SECURITY.5
+  intent: Separating secrets from code relies on the secret scanning held in SECURITY.5.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY
+  dst: TRANSVERSE.CONFIG.2
+  intent: Deployment applies configuration to the one artifact through the delivery channel.
+  shape:
+    type: realizes
+- op: link.create
+  src: OPERATION
+  dst: TRANSVERSE.CONFIG.2
+  intent: Operation delivers configuration and secrets to the running process.
+  shape:
+    type: realizes
+- op: link.create
+  src: TRANSVERSE.CONFIG.5
+  dst: ASSURANCE.SECURITY.6
+  intent: Credential lifetime for automation relies on the limits on what automation may do, held in SECURITY.6.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.SECURITY.5
+  dst: TRANSVERSE.CONFIG.6
+  intent: A secret found in history is the input that the leaked-secret response rotates.
+  shape:
+    type: dataflow
+- op: link.create
+  src: TRANSVERSE.ENVIRONMENTS
+  dst: CHANGE_FLOW.DEPLOY.3
+  intent: The environment rules carry out environment parity and its documented differences.
+  shape:
+    type: realizes
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR
+  dst: TRANSVERSE.ENVIRONMENTS
+  intent: Tests run in the environments that the environment rules define.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.ENVIRONMENTS.2
+  dst: OWNERSHIP.LIFECYCLE
+  intent: Pinning in the definition mechanism relies on the dependency lifecycle.
+  shape:
+    type: requires
+- op: link.create
+  src: CHANGE_FLOW.BUILD
+  dst: TRANSVERSE.ENVIRONMENTS.2
+  intent: The build uses the same environment definition.
+  shape:
+    type: requires
+- op: link.create
+  src: TRANSVERSE.ENVIRONMENTS.3
+  dst: OWNERSHIP.LIFECYCLE
+  intent: Pinning and changing build tools rely on the dependency lifecycle.
+  shape:
+    type: requires

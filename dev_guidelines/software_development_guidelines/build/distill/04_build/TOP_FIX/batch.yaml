@@ -1,0 +1,54 @@
+operations:
+  - op: node.set
+    uid: OWNERSHIP
+    intent: >-
+      Nothing is added by default: each capability is written, adopted or rented through a recorded, per-need
+      decision, then declared, locked, watched and kept as a managed liability, with its licence obligations known
+      before use and its exit priced in proportion to what failure would cost (STANCE, SELECTION, LIFECYCLE,
+      CONTAINMENT, SERVICES, LICENCE). The team always knows what it depends on, why, and what leaving would cost.
+  - op: node.set
+    uid: ASSURANCE
+    intent: >-
+      Every property that must hold has a named mechanism at a named stage that runs on every change, with a signal
+      that can be believed, gates that cannot be skipped and review that is independent and bound to the exact
+      content; none rests on one control or on the author's judgement. One placement per property (behaviour,
+      contracts, data integrity, documentation sync, security, performance, availability, artifact) means that the
+      design was good, the testing was good, the review was trustworthy, and what runs is what was reviewed.
+  - op: node.set
+    uid: CONSTRUCTION
+    intent: >-
+      Design is derived from usage down to code, with effort where error is costly; the system starts as the
+      simplest shape that serves, is cut by the decision each module hides, and parses what crosses a trust
+      boundary once into a precise form that never reaches an interpreter as code. Each fact has one place and
+      dependencies flow one way, so the code is correct at its boundaries and a change touches few places.
+  - op: node.set
+    uid: CHANGE_FLOW
+    intent: >-
+      Everything needed to build, deploy and restore lives in version control, and small, independently reviewed
+      changes are integrated into one mainline; one hermetic build produces one artifact that is promoted unchanged,
+      released and deployed progressively by the same automated process everywhere. The way back is decided before
+      a change ships, so what ships was reviewed, built once and is reversible.
+  - op: node.set
+    uid: OPERATION
+    intent: >-
+      The running system is held to a stated reliability objective below 100 percent, measured as users experience
+      it and governed by an agreed rule, and a human is paged only for what needs a human now. Incidents follow
+      written conditions and named roles, workloads launch after a readiness review, and recovery is designed from
+      stated objectives and proven before it is needed, so the system stays within its objectives and, when it
+      fails, is restored within them.
+  - op: node.set
+    uid: EVOLUTION
+    intent: >-
+      Significant decisions are recorded where the code lives and superseded, never rewritten; change is made in
+      steps that keep the system releasable, every dual-support phase ends with a removal, debt is an inventoried
+      liability repaid where code changes, and obsolete forms are retired in two announced stages by an owner. The
+      set of technologies stays small because each addition is a replacement, so the system keeps working while it
+      changes and nothing old stays by neglect.
+  - op: node.set
+    uid: TRANSVERSE
+    intent: >-
+      Each cross-cutting concern is an owned, recorded practice whose guarantee is held elsewhere: documentation
+      sized by its readers, security anchored in a published framework with one vulnerability loop and protected
+      event logs, personal data minimised and retained on a schedule, configuration and secrets kept out of code and
+      artifact, and development environments treated as code and separated from production. The guarantees
+      ASSURANCE decides thus have a practice that can be carried out and checked.

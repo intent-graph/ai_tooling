@@ -1,0 +1,1007 @@
+operations:
+- op: node.create
+  uid: EVOLUTION.DECISIONS
+  name: Decision Records
+  intent: A significant decision gets a short record stored beside the code, stating the forces, the alternatives,
+    the decision and the costs it accepts; an accepted record is superseded, never rewritten. Each record
+    has a status and an owner and is consulted in review, and a separate proposal precedes the record
+    only where many stakeholders deliberate. The reason is that the motivation of past decisions is among
+    the hardest things to recover, and its loss makes a team obey outdated decisions or reverse them blindly.
+  parent: EVOLUTION
+  epistemic_state: 'known | inferred part: the immutability-versus-living split and the proposal split'
+  constraints:
+  - Children DECISIONS.1 to .6 hold the rules; this node states none of its own.
+  design_notes: 'Roll-up of DECISIONS.1 to .6; states no fact of its own (MD-03). Forces of the branch:
+    delivery continuity, reversibility, cost of ownership over time, confidence in past decisions, consumer
+    predictability, cognitive load. Certainty: grounded (consensus across the architecture-record sources);
+    inferred for the immutability-versus-living split and the proposal split. Realizes OWNERSHIP.SELECTION.1
+    (the reason for a selection is stored as a record). MD-01, MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL
+  name: Incremental Change
+  intent: Change is made in steps that keep the system releasable and teach early, and every incompatible
+    change runs as expand, migrate, contract with the contract step part of the change. A system is replaced
+    piece by piece behind its interface and rewritten only under stated conditions; a mass change has
+    one accountable owner with capacity. Investment in changeability follows expected lifespan and consumer
+    count, and a new convention applies forward only where many consumers depend on the surface.
+  parent: EVOLUTION
+  epistemic_state: 'known | inferred part: the rewrite conditions and the owner split'
+  constraints:
+  - Children INCREMENTAL.1 to .6 hold the rules; this node states none of its own.
+  design_notes: 'Roll-up of INCREMENTAL.1 to .6; states no fact of its own (MD-03). Certainty: grounded
+    for step size, expand-migrate-contract and mass-change mechanics; inferred for the rewrite conditions
+    and the owner split. Realizes OWNERSHIP.STANCE.4, OWNERSHIP.LIFECYCLE, ASSURANCE.CONTRACTS. MD-01,
+    MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL
+- op: node.create
+  uid: EVOLUTION.DEBT
+  name: Technical Debt and Refactoring
+  intent: Debt is anything that makes future change more costly, wider than code quality, and it is inventoried.
+    Speed is bought with debt only knowingly, for short-lived or exploratory work; debt is made visible
+    mainly by engineers' reports, with tools as support. Refactoring runs in small behaviour-preserving
+    steps, and repayment is timed by where code changes, with explicit capacity for debt no change touches.
+  parent: EVOLUTION
+  epistemic_state: 'known | inferred part: the speed-versus-quality payoff and the repayment timing (contested
+    or single-source rows)'
+  constraints:
+  - Children DEBT.1 to .5 hold the rules; this node states none of its own.
+  design_notes: 'Roll-up of DEBT.1 to .5; states no fact of its own (MD-03). Certainty: grounded for the
+    definition and the refactoring step size; inferred for the speed-versus-quality payoff and the repayment
+    timing (contested or single-source rows). Realizes OWNERSHIP.STANCE, OWNERSHIP.LIFECYCLE, ASSURANCE.BEHAVIOUR.
+    MD-01, MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION
+  name: Decommissioning
+  intent: Removal is planned engineering work with an owner and a budget. A retirement is decided on stated
+    grounds and recorded, announced in two stages (deprecation, then sunset) with machine-readable, actionable
+    warnings, and given a published support window where consumers are many. It has a deadline unless
+    the replacement sells itself, and is executed by verifying use, restricting reversibly, then removing
+    everything attached.
+  parent: EVOLUTION
+  epistemic_state: 'known | inferred part: the owner-and-budget synthesis and the support-window context'
+  constraints:
+  - Children DECOMMISSION.1 to .6 hold the rules; this node states none of its own.
+  design_notes: 'Roll-up of DECOMMISSION.1 to .6; states no fact of its own (MD-03). Certainty: grounded
+    for the staging, the announcement and the execution checklist (consensus); inferred for the owner-and-budget
+    synthesis and the window context. Realizes OWNERSHIP.STANCE, OWNERSHIP.SERVICES, ASSURANCE.CONTRACTS.
+    Provider-side evolution policies are held in ASSURANCE.CONTRACTS.1 and the consumer side in OWNERSHIP.SERVICES.2
+    (X7, supersedes X3). MD-01, MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION
+- op: node.create
+  uid: EVOLUTION.TECHNOLOGY
+  name: Keeping Technologies Few
+  intent: A technology is added as a replacement, with the retirement of what it replaces planned and
+    owned. The team keeps a shared register of the technologies in use, each with a position and a decision
+    trail; how firmly the set is held follows how much platform and on-call is shared, and one mature
+    general-purpose store serves several roles until a stated need exceeds it.
+  parent: EVOLUTION
+  epistemic_state: 'known | inferred part: the firmness conditions and the one-store rule'
+  constraints:
+  - Children TECHNOLOGY.1 to .4 hold the rules; this node states none of its own.
+  design_notes: 'Roll-up of TECHNOLOGY.1 to .4; states no fact of its own (MD-03). Certainty: grounded
+    for the replacement rule and the register; inferred for the firmness conditions and the store rule.
+    Realizes OWNERSHIP.SELECTION, OWNERSHIP.STANCE. MD-01, MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.TECHNOLOGY
+- op: node.create
+  uid: EVOLUTION.DECISIONS.1
+  name: Content of a Record
+  intent: A decision record states the forces at play, the decision, the serious alternatives with why
+    the rejected ones were rejected (dissent included), and the consequences including the costs it accepts,
+    in one fixed structure shared by all records. This lets a later reader tell why it was decided, what
+    would have to change to revisit it, and whether new information justifies reopening.
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: 'known | inferred part: named forces as the revisit trigger (P4, one origin, no source
+    tests it)'
+  constraints:
+  - A record states the decision and its reason
+  - A record states the alternatives rejected and the costs accepted
+  design_notes: 'Positions: P1 record the reasons (L1001; consensus; REG-1011, REG-1012, REG-154). P2
+    add alternatives, confidence and dissent (L1002; REG-1011, REG-1013, REG-1019, REG-1020, REG-1114).
+    P3 fixed template: title, context, decision, status, consequences (L1233; REG-154). P4 name the forces,
+    technical, political, social, project-local, written value-neutrally (L1009; inferred; REG-1019, REG-154).
+    P5 MAINT: state the accepted costs (L324, REG-181, not citable). Forces: confidence, reversibility,
+    cognitive load. Grounds: motivation is among the hardest things to recover and its loss makes a team
+    obey outdated decisions or reverse them blindly; alternatives and dissent keep the same discussion
+    from reopening without new information; one structure lowers reading cost; named forces make a change
+    in them the revisit trigger; stated accepted costs give a strong reason a concrete counterweight.
+    Maintainer''s codified practice (L324) agrees with public practice and is the best form of the consequences
+    part: it won, nothing lost. Rejected: nothing; the five practices are parts of one record, each serving
+    a distinct failure (lost reason, reopened argument, unreadable variety, unseen trigger, unweighed
+    cost). A reason-only record without alternatives is best only for a decision with no real alternative,
+    which DECISIONS.2 excludes from a record. Context: none. Certainty: grounded for P1 to P3 and P5;
+    inferred for P4. Realizes OWNERSHIP.SELECTION.1 (L1001, L1002, L1009 see also L029). MD-01, MD-02.
+    Evidence gaps: none.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.1
+  - build/research/12_evolution/result.md::EVOL-C01
+  - build/research/12_evolution/result.md::EVOL-C02
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C39
+  - build/research/12_evolution/result.md::EVOL-C09
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C36
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C60
+- op: node.create
+  uid: EVOLUTION.DECISIONS.2
+  name: Significance Threshold
+  intent: 'A decision gets its own record when it is architecturally significant (structure, non-functional
+    requirements, dependencies, interfaces, construction techniques) and a later maintainer could not
+    recover its reason from an existing policy or standard: several options were weighed, or no existing
+    basis supplied the answer. A decision a recorded policy settles points to the policy; a workaround
+    or an experiment gets no record; a deliberate, temporary shortcut is recorded as a debt item. So the
+    records that exist are the ones a later reader would otherwise have to guess, and none is noise.'
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: 'inferred: the bar reads the sources'' two positions as a floor and a ceiling; no source
+    gives a numeric or structural threshold'
+  constraints:
+  - A significant decision with no policy basis, or with options weighed, has a record
+  - A workaround, an experiment or a policy-backed decision has no record of its own
+  design_notes: 'Positions: P1 every architecturally significant decision, short records (L1004 a; confidence,
+    onboarding; costs authoring time; best with many contributors or long life; REG-1011, REG-1114, REG-154,
+    REG-163). P2 only when no existing basis or options were weighed (L1004 b; low overhead; best for
+    a small team with standards; REG-1012). P3 skip workarounds and experiments (REG-1028, T4). Decision
+    replaced in the final pass (R14): combined test, a floor and a ceiling. Rejected: P1 as stated, since
+    recording what a policy already carries restates its reason (MD-03); it is best only where the policy
+    itself is not recorded where readers find it. Reversibility is not part of the test (review R01: no
+    row states it). P2 alone, for a small team with standards, is kept as the baseline. Context: none;
+    with many contributors or a long life more decisions meet the test, since what is obvious to the team
+    today is not to a newcomer; the test scales, no second bar is needed. Certainty: inferred. Realizes
+    OWNERSHIP.SELECTION (L1004 see also L029); OWNERSHIP.SELECTION.1 is the dependency instance. MD-01,
+    MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.2
+  - build/research/12_evolution/result.md::EVOL-C04
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C35
+- op: node.create
+  uid: EVOLUTION.DECISIONS.3
+  name: Form and Storage
+  intent: A decision record is short (one or two pages), covers one decision, is numbered monotonically
+    with no number reused, is written as prose to a future reader in lightweight text markup, and is stored
+    in version control in the repository of the code it governs; a wiki mirror serves wider reach only,
+    the repository stays the source. So the record travels with the code, has history and is found by
+    anyone who reads the code.
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: known
+  constraints:
+  - Records live in the repository of what they govern
+  - A record number is never reused
+  design_notes: 'Position: P1 short, numbered, in the source repository (L1003; consensus across six sources,
+    no competing practice recorded; REG-1012, REG-1013, REG-1024, REG-1028, REG-1114, REG-154). Forces:
+    cognitive load, cost of ownership. Grounds: proximity to the code and history are what make a record
+    survive. Rejected: none recorded; a wiki as the source is best only where the records must be read
+    and edited by people outside the repository, at the cost of drifting from the code. Context: none.
+    Certainty: grounded. Used by TECHNOLOGY.2 (the decision trail) and DECOMMISSION.2. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.3
+  - build/research/12_evolution/result.md::EVOL-C03
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C37
+- op: node.create
+  uid: EVOLUTION.DECISIONS.4
+  name: Changing an Accepted Record
+  intent: 'An accepted decision record is not rewritten: a changed decision is a new record that supersedes
+    the old one, which stays in place marked superseded, so history is never wrong, only superseded. Only
+    corrections that do not change the decision (a typo, a broken link) edit an accepted record; a document
+    that describes the current state (how-to, reference) is living and is kept current by ownership and
+    checks. So a reader can reconstruct what was decided when and why, and always see which record is
+    current.'
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: 'known | inferred part: the assignment of the two models per document type (from L232)'
+  constraints:
+  - An accepted record is never rewritten to change its decision
+  - A superseded record carries a link to its successor
+  design_notes: 'Positions: P1 immutable log with supersession (L232 a, L1005 a; best with many readers
+    relying on the record, regulated review, rationale documents; REG-154, REG-163, REG-1011). P2 mutable
+    living document with dated additions, kept current by CI and ownership (L232 b, L1005 b; accuracy
+    of the current picture, less authoring friction; best where the record is the only place readers look
+    and a few people own it; how-to and reference documents; REG-1028, REG-1012). Agreement recorded:
+    majority (L232), contested (L1005 EVOL-C05), consensus (WEB:ARCH-C38). Forces: audit, confidence,
+    accuracy of the current picture, cost of ownership. Grounds: a record is rationale at a moment and
+    history that is rewritten cannot be audited; the contrary evidence (REG-1028, mutability has worked
+    better) concerns documents readers use as the current truth, the living-document type, not a decision
+    record; in version control history survives edits, which lowers the cost of mutation, but the status
+    stays machine-readable only when records are superseded (inferred, L1005 note). Rejected: P2 for decision
+    records, since it loses the order of decisions and the status; best for how-to and reference documents,
+    assigned to TRANSVERSE.DOCS. Context: DOCUMENT_TYPE (L232): rationale documents immutable with supersession,
+    how-to and reference documents living. Certainty: grounded for supersession (consensus on the rule,
+    contested only on the alternative); the assignment per document type inferred. See DECOMMISSION.2.
+    MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.4
+  - build/research/06_transverse/result.md::TRANS-C23
+  - build/research/12_evolution/result.md::EVOL-C05
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C38
+- op: node.create
+  uid: EVOLUTION.DECISIONS.5
+  name: Status, Ownership and Use in Review
+  intent: Each record has a status (proposed, accepted, rejected, superseded, deprecated), a named owner
+    accountable for its upkeep and a review before acceptance. During code and design review the accepted
+    records are consulted, and a change that violates one is linked to it and either conforms or arrives
+    with a new record that supersedes it. So a decision that was accepted is checked at the moment a change
+    could break it.
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: 'known | inferred part: consulting records in review (one source, no dissent found)'
+  constraints:
+  - Every record has a status and a named owner
+  - A change that contradicts an accepted record cites it
+  design_notes: 'Positions: P1 status, owner and review before acceptance (L1006; consensus, single practice
+    recorded; REG-1011, REG-1013, REG-154). P2 consult accepted records during review (L1007; one source,
+    no dissent; REG-1011). Forces: confidence, accountability. Grounds: status, owner and review are the
+    minimum for a record to be trusted; a record nobody consults at review has no effect; it matches the
+    review that binds of ASSURANCE.RULES.4. Rejected: none; the two are complementary and no source argues
+    against either. A record without owner or status is best only for a throwaway note, which DECISIONS.2
+    excludes. Routing note: L1007 stays here (consulting records in review sits with the record''s status
+    and ownership). Context: none. Certainty: grounded for P1; inferred for P2. See CHANGE_FLOW.REVIEW
+    and ASSURANCE.RULES.4. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.5
+  - build/research/12_evolution/result.md::EVOL-C06
+  - build/research/12_evolution/result.md::EVOL-C07
+- op: node.create
+  uid: EVOLUTION.DECISIONS.6
+  name: Proposal Versus Record
+  intent: Where many stakeholders must be heard, the decision is prepared in a proposal written before
+    it is made (drawbacks, alternatives, unresolved questions, a backward-compatibility section, a named
+    decider), and the record keeps only the outcome and its reason, linking the proposal. Where few stakeholders
+    are involved the lightweight record alone is the whole practice. So deliberation and outcome each
+    reach the reader who needs them, and a small team does not pay for a process it does not need.
+  parent: EVOLUTION.DECISIONS
+  epistemic_state: 'inferred: single-origin synthesis of two open-source projects; no source measures
+    either practice'
+  constraints:
+  - A proposal names its decider
+  - A decision made through a proposal links it from the record
+  design_notes: 'Positions: P1 separate proposal and record (best for changes with many stakeholders;
+    confidence, speed; REG-1012, REG-1013, REG-1020). P2 one document serves both, as in a language-enhancement
+    process (fewer artifacts, history in version control, cognitive load; best in open projects with many
+    contributors; REG-1013). P3 lightweight record only (lowest overhead; best for small teams; REG-154,
+    REG-1012). Grounds: deliberation and outcome serve different readers, and a record that grows into
+    a discussion is no longer short. Rejected: P2, best where the proposal itself is the permanent versioned
+    history and carries a final status, as in an open project with many contributors, because it avoids
+    duplicating the reasoning; P3 for many stakeholders loses the deliberation (review R02 deleted a variant
+    clause from this rejection). Context: STAKEHOLDER_COUNT (L1008): many stakeholders, proposal then
+    record; small team, lightweight record. Certainty: inferred. See DECISIONS.1 and DECISIONS.5. MD-01,
+    MD-02.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECISIONS.6
+  - build/research/12_evolution/result.md::EVOL-C08
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.1
+  name: Step Size and Feedback
+  intent: Change proceeds in steps that keep the system releasable at every step, using an interface that
+    supports both versions or an abstraction with two suppliers, rather than a long-lived branch or one
+    switch-over. Each step is released and its effect checked against the effect it was meant to have,
+    because many presumed improvements do not move their metric. So the system is never held back by a
+    half-finished change, and a wrong direction is found while it is cheap to reverse.
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: known
+  constraints:
+  - Every step leaves the system releasable
+  - A step's intended effect is stated and checked after release
+  design_notes: 'Positions: P1 releasable steps (L1010; consensus; REG-1004, REG-105). P2 short feedback
+    beats up-front analysis: only about a third of presumed features improved their target metric (L1236;
+    majority; REG-034). Forces: delivery continuity, reversibility, delivery speed, evidence of value.
+    Grounds: releasable steps keep continuous integration and rollback possible; build-to-learn is the
+    evidence-backed use of a step and carries OWNERSHIP.STANCE.4 (no building for presumed needs) to the
+    unit of change. Rejected: a long-lived branch or a single switch-over; see INCREMENTAL.2 for when
+    a switch-over is best (review R03). Skipping analysis entirely is not what P2 says: analysis proportional
+    to the cost of being wrong stays (STANCE.4 on costly-to-reverse structures). Routing note: L1236 stays
+    here, its subject being step size and feedback; L1208 is held in OWNERSHIP.STANCE.4. Context: none.
+    Certainty: grounded for P1; grounded for P2 on one source. Realizes OWNERSHIP.STANCE.4; see CHANGE_FLOW.INTEGRATION,
+    CHANGE_FLOW.ROLLBACK. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.1
+  - build/research/12_evolution/result.md::EVOL-C10
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C43
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.2
+  name: Expand, Migrate, Contract
+  intent: 'An incompatible interface or schema change runs as expand, migrate, contract: first support
+    old and new together (for a schema, deploy a form that supports both application versions, verify,
+    then deploy the application that uses the new one), then move consumers, then remove the old form.
+    The removal step belongs to the change, because supporting two versions is a recurring cost that ends
+    only at removal; an unfinished migration is debt. So rollback stays possible during the move and the
+    old form does not become permanent.'
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: 'known | inferred part: an unfinished migration is itself debt (P2)'
+  constraints:
+  - 'The plan of an incompatible change names its removal step and owner (owner and capacity: DECOMMISSION.1)'
+  design_notes: 'Positions: P1 expand, migrate, contract (L1011; consensus; REG-087, REG-1004, REG-105,
+    REG-244). P2 an unfinished migration is itself debt, held in DEBT.1 (L1012; inferred; REG-1030, REG-105).
+    Forces: reversibility, delivery continuity, cost of ownership. Grounds: expanding first keeps rollback;
+    a migration without removal is debt. What counts as breaking is ASSURANCE.CONTRACTS.1; the mechanics
+    for stored data are CHANGE_FLOW.DATA_CHANGE (MD-03). Final pass R18: owner and capacity principle
+    held in DECOMMISSION.1. Rejected: a single coordinated switch-over: best where one release unit contains
+    every consumer and a short outage or lock is acceptable (the few-reachable-consumers case of CONTRACTS.1),
+    at the price of no rollback during the switch. Context: none beyond the consumer-reach context decided
+    in CONTRACTS.1. Certainty: grounded for P1; inferred for P2. Realizes ASSURANCE.CONTRACTS.1; see CHANGE_FLOW.DATA_CHANGE,
+    CHANGE_FLOW.ROLLBACK, DEBT.1 (inventoried by DEBT.3). MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.2
+  - build/research/12_evolution/result.md::EVOL-C11
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C40
+  - build/research/12_evolution/result.md::EVOL-C12
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.3
+  name: Replacement Versus Rewrite
+  intent: A system is replaced incrementally while it keeps running, at seams and behind its existing
+    interface (the strangler pattern). A full rewrite is justified only when the old platform is obsolete,
+    the old system runs in parallel until the new one is proven, and the migration is slow and verified;
+    a big-bang cut-over is not a practice. So users keep a working system, the hidden knowledge in the
+    old behaviour is preserved, and the old system is removed only once the new one is shown equivalent.
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: 'known | inferred part: the conditions for a full rewrite (it is open whether any position
+    wins in general)'
+  constraints:
+  - A replacement keeps the old system serving until the new one is verified against the old behaviour
+  - A full rewrite carries a recorded reason that the platform is obsolete
+  design_notes: 'Positions: P1 never rewrite, refactor in place (best when the system ships, its behaviour
+    is poorly specified and no replacement need exists; REG-1021). P2 rewrite when changing the old costs
+    more than new (best when the platform is obsolete and the old system runs in parallel; threshold unverified;
+    REG-1029). P3 incremental replacement, full rewrite only under stated conditions with parallel running
+    (REG-033, REG-1004). P4 big-bang wholesale rewrite (no source argues for it; best, inferred, only
+    where the system is small, every consumer sits in one release unit, equivalence is verified and a
+    short outage is acceptable). Rows L039 (ADOPT-C06) and L1017 (EVOL-C17, WEB:ARCH-C42). EVOL-C17 records
+    the incremental form as contested against never-rewrite and rewrite; WEB:ARCH-C42 states it as consensus.
+    Forces: continuity, replacement, reversibility, delivery speed. The rewrite rule of thumb (25 percent)
+    is one unverified source and is not adopted. Final pass R17: ''or no seam exists'' dropped from the
+    decision and constraint; grounds: REG-033 (strangler fig article, fetched in the final pass) describes
+    seams as ones that can be inserted into the system and a transitional architecture whose cost the
+    reduced risk and earlier value outweigh, so a missing seam is a cost to pay, not a condition for a
+    rewrite. Context: none; the conditions for the rewrite exception are part of the decision. Certainty:
+    grounded for the positions; the conditions for a full rewrite inferred (review R05 stated the P4 condition).
+    See OWNERSHIP.STANCE (L038), INCREMENTAL.1, DECOMMISSION. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.3
+  - build/research/02_adoption/result.md::ADOPT-C06
+  - build/research/12_evolution/result.md::EVOL-C17
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C42
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.4
+  name: Mass Change and Migration Ownership
+  intent: A mechanical change across a large codebase is generated with tools, split into independently
+    testable and reviewable shards, with the old pattern blocked from reappearing; small single-owner
+    code can change in one step. A migration across many consumers has one accountable owner, usually
+    the party that wants the change, and a finish condition. Consumers migrate on their own only where
+    the replacement is transformatively better, since an unfunded mandate stalls; so the change completes
+    and consumers carry little of the load.
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: 'known | inferred part: the boundary between the sharded, owned form and a single step'
+  constraints:
+  - A migration has a named owner and a finish condition
+  - 'The old pattern is blocked by a check once the migration is done (owner and capacity: DECOMMISSION.1)'
+  design_notes: 'Positions: P1 generate, shard, block the old pattern (L1013; REG-1003). P2 central owner
+    with staffed capacity (L1014; REG-1002, REG-1003). P3 consumers migrate themselves (best when the
+    replacement is transformatively better). Grounds: the largest atomic change shrinks as codebase and
+    contributors grow, so mechanical sharding scales and review stays possible; an unfunded mandate becomes
+    organic migration that rarely completes. Accountability is stated as an outcome (a named owner with
+    capacity), not as a rule about who writes code (MD-02). Rejected: P3 as default (autonomy; best when
+    the replacement is transformatively better so consumers move unprompted); P2 for few consumers (capacity
+    not needed where consumers are few and reachable); one atomic change for a large codebase (best only
+    for small single-owner code). Final pass R18: the owner-and-capacity principle is held in DECOMMISSION.1,
+    this node keeps ''usually the party that wants the change; a finish condition''. Context: CONSUMER_COUNT_AND_OWNER_COUNT
+    (L1013, L1014). Certainty: grounded for P1 and P2 (REG-1002, REG-1003, T2 practice); the context boundary
+    inferred. OWNERSHIP.LIFECYCLE (L058, L052) carries the dependency-update analogue. See CHANGE_FLOW.INTEGRATION,
+    DECOMMISSION.5. MD-01, MD-02, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.4
+  - build/research/12_evolution/result.md::EVOL-C13
+  - build/research/12_evolution/result.md::EVOL-C14
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.5
+  name: Lifespan, Consumers and Cost of Change
+  intent: The life of a system is a series of changes it must absorb, so the investment in changeability
+    is set by its expected lifespan. The cost of change and removal grows with the number of consumers,
+    because they depend on observable behaviour; so owners of shared infrastructure can change it without
+    tracking each consumer only through reliance-capturing tests. Changeability is thus bought where life
+    and reach justify it, and change does not silently break dependants.
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: known
+  constraints:
+  - The expected lifespan and the consumers of a shared interface are stated where the investment is decided
+  design_notes: 'Positions: P1 lifespan decides the investment (L1015; consensus; REG-1014). P2 cost of
+    change grows with consumers; counter with reliance tests in CI, the mechanism being ASSURANCE.CONTRACTS.2
+    (L1016; consensus; REG-1002, REG-1014). Forces: cost of ownership over time, consumer predictability.
+    Grounds: lifespan multiplies every maintainability cost (same stance as OWNERSHIP.STANCE.4); the more
+    consumers, the more behaviours are relied on (Hyrum''s Law, ASSURANCE.CONTRACTS.1). Review R06: outcome
+    kept here, mechanism in CONTRACTS.2. Rejected: none; the two are not rivals. A fixed investment regardless
+    of lifespan is best for neither a throwaway nor a decades-long system. Context: none (lifespan and
+    consumer count are the inputs). Certainty: grounded (consensus). Evidence gap: the figure REG-1031
+    was not read from the original and is not used. Realizes OWNERSHIP.STANCE.4, OWNERSHIP.LIFECYCLE,
+    OWNERSHIP.SELECTION, ASSURANCE.CONTRACTS.1 and .2. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.5
+  - build/research/12_evolution/result.md::EVOL-C15
+  - build/research/12_evolution/result.md::EVOL-C16
+- op: node.create
+  uid: EVOLUTION.INCREMENTAL.6
+  name: Conventions Applied Forward Only
+  intent: A new convention applies to new objects, and existing objects are not renamed where the surface
+    has many consumers. A deprecated item is marked where its consumers and their tools see it, in machine-readable
+    metadata of the item, and in its name only where renaming it breaks no consumer; it stays, with documented
+    deprecation and its relationships, until a later planned removal. Where consumers are few and reachable
+    and the rename is mechanical and verified by tests, one coordinated rename avoids a permanently split
+    convention; so consistency is bought at the lowest cost to consumers.
+  parent: EVOLUTION.INCREMENTAL
+  epistemic_state: 'known | inferred part: the few-consumer exception (no row states it)'
+  constraints:
+  - A deprecated item is marked where its consumers and their tools see it (machine-readable metadata;
+    in its name only where renaming it breaks no consumer) and remains until its planned removal
+  design_notes: 'Positions: P1 MAINT: forward only, deprecated items marked and removed later (L296, MAINT-C32,
+    REG-181, not citable; majority in public practice). P2 retroactive rename (consistency at a cost of
+    risk; best where consumers are few, reachable and the change is tool-made and tested). Maintainer''s
+    codified practice won as the base rule (forward only, many consumers). Two refinements go beyond it
+    and are listed for the maintainer to object (maintainer_points item 18, settled, no answer awaited):
+    R15, the deprecation mark is placed in machine-readable metadata, and in the name only where a rename
+    breaks no consumer, since CONTRACTS.1 classes a rename as breaking; and the few-consumer exception,
+    which follows from settled CONTRACTS.1 (few, in-house, reachable consumers: a breaking change is coordinated
+    and deployed together) and INCREMENTAL.4, extends the maintainer''s practice and does not go against
+    it (R16, unchanged text). Rejected: P2 for a surface with many consumers (risk without a matching
+    gain). Forces: cost, reversibility, consistency. Context: CONSUMER_COUNT (L296). Certainty: grounded
+    for forward-only; the few-consumer exception inferred. See DECOMMISSION.3, INCREMENTAL.4. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.INCREMENTAL.6
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C32
+- op: node.create
+  uid: EVOLUTION.DEBT.1
+  name: What Counts as Debt
+  intent: 'Debt is any design or implementation choice, or unfinished piece of work, that makes future
+    change more costly or impossible, whether taken knowingly or not. The inventory is wider than code
+    quality: it includes design trade-offs invisible to code metrics, unfinished migrations, missing or
+    stale documentation, missing tests, dead code, out-of-date dependencies, concentrated team expertise
+    and a weak release process. So debt that hurts change is weighed even when no tool shows it.'
+  parent: EVOLUTION.DEBT
+  epistemic_state: 'known | inferred part: the full list of items (secondary source for the breadth)'
+  constraints:
+  - An unfinished migration and an out-of-date dependency are debt items when they raise the cost of change
+  design_notes: 'Positions: P1 debt limited to internal qualities, maintainability and evolvability (L1018;
+    consensus; REG-1001, REG-1005, REG-1006; a contingent liability). P2 debt wider than code (L1021;
+    REG-1006, REG-1025, REG-1030; the most significant debt comes from design trade-offs not visible in
+    code metrics). Both state one idea at two widths; the wider one serves the purpose, which is to decide
+    what gets inventoried and weighed. Rejected: P1 as the whole definition: best where the aim is only
+    to talk about code structure; it omits debt that code metrics cannot see. Context: none. Certainty:
+    grounded for the definition; the full list inferred. Review R04: unfinished-migration-as-debt is kept
+    here and in DEBT.3, INCREMENTAL.2 points here. See CHANGE_FLOW.DATA_CHANGE, INCREMENTAL.2, OWNERSHIP.LIFECYCLE.5.
+    MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT.1
+  - build/research/12_evolution/result.md::EVOL-C18
+  - build/research/12_evolution/result.md::EVOL-C21
+- op: node.create
+  uid: EVOLUTION.DEBT.2
+  name: Taking Debt Versus Investing in Quality
+  intent: Internal quality is invested in from the start for anything that will be changed, because the
+    payoff of good design arrives in weeks and does not trade against speed beyond the smallest scope.
+    Debt is taken deliberately only for a short-lived or exploratory deliverable, knowingly, recorded,
+    and then repaid as DEBT.5 sets or dropped with the deliverable. The system is kept simple with minimal,
+    modular interfaces and small releases; so debt is a recorded choice with a repayment, not an accident.
+  parent: EVOLUTION.DEBT
+  epistemic_state: 'inferred: contested source claim, payoff point unproven | known part: the knowing-and-recorded
+    rule'
+  constraints:
+  - Deliberate debt is recorded as an inventory item (DEBT.3), repaid as DEBT.5 sets, or dropped with
+    the deliverable
+  - A deliverable that outlives its stated short life is re-judged as a lasting one
+  design_notes: 'Positions: P1 a little debt speeds development if repaid promptly (best for a short-lived
+    or exploratory deliverable). P2 quality is not a trade-off (anything that will be changed). P3 prudent
+    versus reckless; deliberate only knowingly (L1237, REG-1130). P4 simplicity as a reliability property
+    (L1231, REG-1132). Rows L1020 and L1207 (REG-1001, REG-1005, REG-1007, REG-1120, REG-1121): contested;
+    the author of the payoff claim states there is no objective proof, so the decision is conditional
+    on the lifetime of the work, not a universal. Repayment timing is DEBT.5 (REG-1130, REG-1001, fetched
+    in review: interest is paid only when working in the area; final pass R19). Deletion of code is held
+    in DECOMMISSION.1, small releases in INCREMENTAL.1. L308 (MAINT, OWNERSHIP.STANCE.1) states the cost-of-lasting-liability
+    stance this node realizes. Rejected: P1 as a general policy (best for a short-lived or exploratory
+    deliverable, the condition kept); quality as a universal free good (the payoff point is unproven,
+    so a throwaway may rightly skip it). Review R07: constraint points to the inventory item. Context:
+    SCOPE_AND_LIFETIME (L1020). Certainty: inferred. Evidence gap: payoff point unproven. Realizes OWNERSHIP.STANCE
+    (L1231 see also L308). MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT.2
+  - build/research/12_evolution/result.md::EVOL-C20
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C02
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C44
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C33
+- op: node.create
+  uid: EVOLUTION.DEBT.3
+  name: Finding and Inventorying Debt
+  intent: Debt is inventoried as items, each with cause, consequence, affected artefact and impact, and
+    managed by recognising, analysing, monitoring and measuring. Because no validated automatic metric
+    predicts where debt hinders, a periodic survey of engineers is the main signal of where it hurts,
+    with tools (smells, coupling, dependency analysis) and measurable maintainability signals as trend
+    tracking. The inventory is one list kept where the team plans its work, so repayment competes with
+    features in the same plan; a code marker carries only the item's id as a pointer, and a decision record
+    holds a debt item only where the debt came from a recorded decision.
+  parent: EVOLUTION.DEBT
+  epistemic_state: 'inferred: survey primacy (summary of an unread paper), item fields and inventory placement
+    | known part: the limits of tools'
+  constraints:
+  - Every deliberate debt item and every unfinished migration appears in the inventory
+  design_notes: 'Positions: P1 tool-detected smells (cheap, trend tracking, misses design debt; best as
+    the supplement). P2 survey of engineers (what hinders them, deliberate debt, investment in reduction;
+    subjective, survey fatigue). P3 inventory with item fields, in a tracker, an in-code marker or a decision
+    record. P4 measurable maintainability signals: searchability, time to change code in another team''s
+    area, duplicate and unused code, version consistency, length of the dependency upgrade cycle (L1027,
+    single source REG-1015; the upgrade cycle is the debt-side view of OWNERSHIP.LIFECYCLE.3 and .5).
+    Sources: REG-1006, REG-1025, REG-1030 (L1022); REG-1006, REG-1027, REG-1028, REG-1030 (L1023, inferred).
+    Final pass R20: survey sentence opens with ''Because no validated automatic metric predicts where
+    debt hinders''; context: where a validated metric exists for a kind of debt it replaces the survey
+    for that kind (L1022''s condition). R21 (judge flag F1, undecided, now settled): the inventory is
+    one list where the team plans its work (no tool named); the marker''s force (proximity to the code)
+    is kept by the pointer and the record''s by the link, so nothing either serves is lost, not a genuine
+    trade-off. Rejected: P1 as the primary signal (misses design debt; best as the supplement); P2 alone
+    (subjective and fatiguing, so paired with measured trends). Certainty: inferred as stated; grounded
+    for tool limits. Realizes OWNERSHIP.LIFECYCLE (L1027 see also L052); see CHANGE_FLOW.MEASURE. MD-01,
+    MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT.3
+  - build/research/12_evolution/result.md::EVOL-C22
+  - build/research/12_evolution/result.md::EVOL-C23
+  - build/research/12_evolution/result.md::EVOL-C27
+- op: node.create
+  uid: EVOLUTION.DEBT.4
+  name: Refactoring Step Size
+  intent: Refactoring proceeds only in small steps that preserve behaviour, with the checks green after
+    each, so the system is never left broken for more than minutes of work. Behaviour not pinned by tests
+    is pinned first; a larger rearrangement is restructuring and runs as an incremental change with its
+    own controls. So a refactoring can be stopped or reverted at any step and behaviour never changes
+    unnoticed.
+  parent: EVOLUTION.DEBT
+  epistemic_state: known
+  constraints:
+  - Each refactoring step leaves the checks green
+  - A refactoring never changes observable behaviour
+  design_notes: 'Position: P1 small behaviour-preserving steps (L1024; consensus, single practice; REG-1008,
+    REG-1009). Grounds: small, behaviour-preserving steps are the definition of the practice; the check
+    that detects a behaviour change is ASSURANCE.BEHAVIOUR, characterization before change is BEHAVIOUR.5
+    (L107; review R08). Rejected: a large unverified rearrangement called refactoring is not a refactoring;
+    best treated as a restructuring with its own staging (INCREMENTAL.1, INCREMENTAL.3). Context: none.
+    Certainty: grounded (two sources). Realizes ASSURANCE.BEHAVIOUR.5 and .1; see CHANGE_FLOW.REVIEW.
+    MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT.4
+  - build/research/12_evolution/result.md::EVOL-C24
+- op: node.create
+  uid: EVOLUTION.DEBT.5
+  name: Timing and Responsibility of Repayment
+  intent: 'Maintainability debt is repaid where code is changed, because interest accrues only there:
+    tidy before a change when tidying plus the change costs less than the change alone, tidy after, later
+    or never otherwise, and never in code that will not change again. Refactoring is opportunistic and
+    ordinary work where tests are strong and ownership is shared; structural debt that spans teams, which
+    no one touches in passing, gets explicit capacity or a programme with an owner. A tidy lands as its
+    own change; so effort goes where it lowers the cost of the next change and cross-team debt is not
+    left to feature pressure.'
+  parent: EVOLUTION.DEBT
+  epistemic_state: 'inferred: single-author source for most of it; the cost inequality is unproven'
+  constraints:
+  - Maintainability debt in code that will not change again is not repaid
+  - Debt that carries risk (code left on production, vulnerable or end-of-life dependencies) is not governed
+    by this rule and follows DECOMMISSION.1 and OWNERSHIP.LIFECYCLE.3 and .5
+  - Cross-team debt has a named owner and capacity
+  design_notes: 'Positions: P1 interest only where changed (L1019; REG-1001, REG-1006). P2 time tidying
+    by cost comparison (L1025; majority; REG-1008, REG-1010; options and ''never'' grounded, the inequality
+    inferred). P3 opportunistic only. P4 opportunistic plus explicit capacity (L1026; REG-1008; REG-1015,
+    REG-1030 secondary; best with strong tests and shared ownership for opportunistic; explicit capacity
+    for cross-team debt, a day or two for a gnarly lump). Rejected: P3 alone for cross-team debt (nobody
+    touches it in passing; best when tests are strong and ownership shared); a standing debt sprint for
+    all debt (argued by no source; best only as the explicit capacity for structural debt). Review R09:
+    rule scoped to maintainability debt, risk-carrying debt follows DECOMMISSION.1 and LIFECYCLE. Review
+    R10: separate tidy changes decided in CHANGE_FLOW.REVIEW.2; judge flag F2 closed (the skeleton''s
+    possible-tension link with review is resolved there, so the link is See). Context: OWNERSHIP_OF_CODE_AND_TEST_STRENGTH
+    (L1026). Certainty: inferred. See CHANGE_FLOW.REVIEW.2, INCREMENTAL.4. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DEBT.5
+  - build/research/12_evolution/result.md::EVOL-C19
+  - build/research/12_evolution/result.md::EVOL-C25
+  - build/research/12_evolution/result.md::EVOL-C26
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.1
+  name: Why Remove
+  intent: Code is a liability whose value lies in the functionality it provides, so the aim is more functionality
+    per unit of code, and obsolete code is removed. Removal and migration work is ordinary engineering
+    work with a named owner and capacity in the plan, planned alongside features and not left over after
+    them, because without them it stalls. Code no longer meant to be used is not left on a production
+    system, so it cannot be activated by accident.
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: 'known | inferred part: removal as one rule with owner and budget (no source states
+    it as one rule); that removal prevents the whole class of accidental activation'
+  constraints:
+  - Removal and migration work has a named owner and capacity in the plan
+  - Code not intended to run on production is removed from it
+  design_notes: 'Positions: P1 code is a liability (L1028; consensus; REG-1002; matches OWNERSHIP.STANCE.1).
+    P2 do not leave retired code on production systems (L1029; one T1 case, REG-1017: a regulator found
+    missing controls against activating retired code a contributing failure in an incident that lost over
+    460 million dollars in 45 minutes). P3 removal is ordinary work with owner and budget (L1041; majority,
+    inferred synthesis; REG-1002, REG-1003, REG-1006, REG-1008, REG-1021). This node holds the owner-and-capacity
+    principle (final pass R18; stalls without them, REG-1002); INCREMENTAL.2, INCREMENTAL.4, DECOMMISSION.5
+    and .6 point here (MD-03). Rejected: removal as leftover work done when capacity allows (best never;
+    it is what stalls); keeping dormant code for possible reuse (best only where a recorded reuse is planned,
+    with an owner). Context: none. Certainty: grounded for P1 and for P2''s case; P3 inferred. Realizes
+    OWNERSHIP.STANCE (L1028 see also L037, L001); see CHANGE_FLOW.DEPLOY (L1029 see also L166). MD-01,
+    MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.1
+  - build/research/12_evolution/result.md::EVOL-C28
+  - build/research/12_evolution/result.md::EVOL-C29
+  - build/research/12_evolution/result.md::EVOL-C41
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.2
+  name: Grounds to Retire
+  intent: 'A retirement is decided on stated grounds: a replacement of comparable or better function exists,
+    the upkeep cost exceeds the value, the technology is out of date, the strategy has changed, or use
+    is low. It is recorded as a decision record that supersedes the adoption record. So a retirement has
+    a reason that can be checked and that a later reader finds.'
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: 'known | inferred part: recording the retirement as a decision record (from the practice
+    of DECISIONS.1 to .4)'
+  constraints:
+  - A retirement names its ground and is recorded
+  design_notes: 'Position: P1 retire on stated grounds and record it (L1037; consensus for the grounds;
+    REG-1002, REG-1011, REG-1026, REG-154). Rejected: retirement by neglect or by the departure of the
+    maintainer, which states no ground and is best never, since consumers cannot plan. Context: none.
+    Certainty: grounded for the grounds; inferred for the record. See DECISIONS.4 and DECISIONS.3. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.2
+  - build/research/12_evolution/result.md::EVOL-C37
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.3
+  name: Announcing Retirement
+  intent: 'A team retiring an interface or form it offers announces it in two stages with distinct signals:
+    deprecation (no longer recommended, still working) and sunset (stops at a stated time), the sunset
+    never earlier than the deprecation. Warnings are actionable and relevant, since excess causes alert
+    fatigue, and are exposed in machine-readable form so that remaining users are found. So every consumer
+    can learn the state and the date by machine, and the owner can see who still uses the form.'
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: known
+  constraints:
+  - The sunset is not earlier than the deprecation
+  - A deprecation is visible to a machine as well as a reader
+  design_notes: 'Positions: P1 two stages (L1030; consensus; REG-1026, REG-182, REG-183). P2 actionable,
+    relevant, machine-readable warnings (L1032; consensus; REG-008, REG-1002). The principle is neutral;
+    stack pointers: L1030 HTTP header fields for deprecation and sunset; L1032 the machine forms (a response
+    warning, an audit annotation, a usage metric labelled with the removal version) are Kubernetes and
+    HTTP specific. The consumer side (reading these signals, routing them to an alert) is decided in OWNERSHIP.SERVICES.2;
+    what counts as a breaking change is ASSURANCE.CONTRACTS.1 (X7: ''see'', not ''realizes'', for SERVICES.2).
+    Rejected: a single ''removed in a future release'' notice: best only for an internal item with one
+    reachable consumer, who is told directly. Context: none. Certainty: grounded. Realizes ASSURANCE.CONTRACTS.1;
+    see OWNERSHIP.SERVICES.2, INCREMENTAL.6. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.3
+  - build/research/12_evolution/result.md::EVOL-C30
+  - build/research/12_evolution/result.md::EVOL-C32
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.4
+  name: Support Window Before Removal
+  intent: 'Where consumers are many or external, a support policy is published by stability tier with
+    fixed minimum windows: a stable interface is deprecated but not removed within a major version, a
+    pre-release one has a fixed period, an experimental one may go at any release. Where consumers are
+    few and known, the window is set case by case with them. An infrastructure-like API with a large consumer
+    base and the funds to carry old behaviour is held as an indefinitely compatible, date-pinned surface,
+    which has no window; that case is held in ASSURANCE.CONTRACTS.1. So consumers can plan from a published
+    rule and maintainers do not carry old forms without limit.'
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: 'known | gap: no general durations; the concrete numbers (nine months, three releases)
+    are one project''s and are not adopted'
+  constraints:
+  - A published window states, per tier, how long a deprecated form stays
+  - No form is removed before its stated window
+  design_notes: 'Positions: P1 tiered fixed windows in a published policy (L1031; REG-008, REG-030; predictability
+    for consumers, at the cost of carrying old forms). P2 case by case (best with few known consumers,
+    where a conversation is faster than a policy). The minor-release rule before removal in a major is
+    ASSURANCE.CONTRACTS.1 (review R11); the indefinitely compatible case is held there too (X7, L353 b).
+    Rejected: P2 for many external consumers (they cannot plan). Context: CONSUMER_COUNT (L1031): many
+    external consumers, a published tiered window; few known consumers, case by case. Certainty: grounded
+    for the tiered policy; the numbers are one project''s, not general. Realizes ASSURANCE.CONTRACTS.1;
+    see OWNERSHIP.SERVICES.2. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.4
+  - build/research/12_evolution/result.md::EVOL-C31
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.5
+  name: Advisory or Compulsory Deprecation
+  intent: When the old form is to be removed, the retirement is compulsory with a firm deadline, so the
+    deprecation stage ends in a sunset. Advisory deprecation without a deadline is right only when the
+    replacement sells itself or the old form is cheap to carry and no removal is intended. So a retirement
+    that is meant to happen does happen, at a known load on consumers.
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: known
+  constraints:
+  - 'A compulsory retirement has a firm deadline (owner and capacity: DECOMMISSION.1)'
+  design_notes: 'Positions: P1 advisory, no deadline (autonomy, no central load, but the form stays; best
+    when the replacement is transformatively better). P2 compulsory, firm deadline plus a staffed migration
+    team (L1033; REG-1002). Grounds: advisory deprecation rarely completes unless the replacement is transformatively
+    better; a compulsory one completes and removes the cost, at the risk of an unfunded mandate, which
+    the owner and capacity of INCREMENTAL.4 answer. Final pass R18: this node keeps only ''a firm deadline''.
+    Rejected: P1 as the default for a removal. Context: none; the condition for advisory is part of the
+    decision. Certainty: grounded (one T2 source, consistent with the other incremental rows). See OWNERSHIP.SERVICES.2
+    (X7), INCREMENTAL.4, DECOMMISSION.3. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.5
+  - build/research/12_evolution/result.md::EVOL-C33
+- op: node.create
+  uid: EVOLUTION.DECOMMISSION.6
+  name: Carrying Out the Retirement
+  intent: 'Before switching a system off, who or what still uses it is verified and access is restricted
+    reversibly for a period to flush out remaining users, restorable backups and recorded metadata are
+    kept per the retention rules, neither shorter nor longer, and only then is it removed. Removal is
+    the owner''s primary objective, with measurable intermediate milestones, and everything attached is
+    removed: licences, attached storage, DNS entries, domain membership, and entries in configuration,
+    monitoring, automation and security tooling, checked against compliance requirements. So nothing used
+    is cut off, nothing attached is left behind, and the retirement can be undone until it is final.'
+  parent: EVOLUTION.DECOMMISSION
+  epistemic_state: known
+  constraints:
+  - Usage is verified before switch-off
+  - A retirement lists and removes its attachments
+  - 'Backups kept after retirement follow the retention rules, neither shorter nor longer (owner and capacity:
+    DECOMMISSION.1)'
+  design_notes: 'Positions: P1 verify use, restrict reversibly, keep backups, then remove (L1034; consensus;
+    REG-1018, REG-1026). P2 explicit owner with measurable milestones, such as deleting key sub-components
+    (L1035; single source; REG-1002). P3 cover everything attached (L1036; single source; REG-1018). The
+    three are steps of one process: check use, finish with an owner, leave nothing attached. Cross-unit
+    X8: retention is held in OPERATION.RECOVERY.2 and TRANSVERSE.PRIVACY.2, erased data in a backup in
+    TRANSVERSE.PRIVACY.3; this node reads ''per the retention rules, neither shorter nor longer''. Final
+    pass R18: owner and capacity principle in DECOMMISSION.1. Rejected: an abrupt switch-off (best never
+    for a system with possible users); immediate removal is best only for something provably unused. Context:
+    none. Certainty: grounded for P1; P2 and P3 single-source consensus. See OPERATION.RECOVERY.2, TRANSVERSE.PRIVACY.2
+    and .3, CHANGE_FLOW.DATA_CHANGE, ASSURANCE.DATA_INTEGRITY. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.DECOMMISSION.6
+  - build/research/12_evolution/result.md::EVOL-C34
+  - build/research/12_evolution/result.md::EVOL-C35
+  - build/research/12_evolution/result.md::EVOL-C36
+- op: node.create
+  uid: EVOLUTION.TECHNOLOGY.1
+  name: Adding as Replacing
+  intent: 'The number of different tools solving the same problem is held down: a new technology is introduced
+    as a replacement, with the retirement of the older one planned and owned, because the long-term cost
+    of keeping an extra system reliable exceeds the convenience of building with it. A few tools that
+    cover the whole domain are preferred, so shared platform work benefits all. How firmly this holds
+    follows TECHNOLOGY.3: for few, independently operated components, fit to the problem counts as the
+    stated need that allows adding alongside; so the count does not grow by default.'
+  parent: EVOLUTION.TECHNOLOGY
+  epistemic_state: known
+  constraints:
+  - Introducing a technology records what it replaces, or why it replaces nothing, and the retirement
+    owner
+  design_notes: 'Positions: P1 hold the number of tools per problem down, plan migration. P2 add as replacement,
+    plan retirement (L026, L1038; majority, same normative claim; REG-013, REG-1002, REG-1022). P3 few
+    tools covering the domain (L1229; majority; REG-1022; shared platform work scales with few tools).
+    This node carries out, at the level of the whole estate, the entry rule of OWNERSHIP.SELECTION.2 (novelty
+    spent only where the existing tool cannot solve the need, with an exit or migration plan); this node
+    holds the replacement commitment, that rule holds the entry test (MD-03). Final pass R24: firmness
+    sentence added. Rejected: adding alongside, best only where the new technology serves a problem the
+    present ones cannot, which SELECTION.2 requires to be documented. Context: see TECHNOLOGY.3. Certainty:
+    grounded (majority, three sources). Realizes OWNERSHIP.SELECTION; see TECHNOLOGY.3, DECOMMISSION.2.
+    MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.TECHNOLOGY.1
+  - build/research/01_sourcing/result.md::SRC-C26
+  - build/research/12_evolution/result.md::EVOL-C38
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C31
+- op: node.create
+  uid: EVOLUTION.TECHNOLOGY.2
+  name: Standing Position per Technology
+  intent: The team keeps a shared register of the technologies in use, each with a position (standard,
+    being evaluated, held for retirement) and a decision trail linking its record. Where the organisation
+    has capacity for experiments the four-ring vocabulary (adopt, trial, assess, hold) is used; a small
+    or operations-heavy team keeps the register without the evaluation rings. The register holds technologies
+    and the team's position on each; it is neither the sanctioned list of admitted dependencies (the gate)
+    nor the inventory of what is deployed, since position, admission and presence are three facts, each
+    held once. So anyone can see what the team standardises on, tries and is moving away from, and why.
+  parent: EVOLUTION.TECHNOLOGY
+  epistemic_state: 'known | inferred part: the decision trail'
+  constraints:
+  - Each technology in use has a position and a link to its record
+  design_notes: 'Position: P1 an explicit shared position per technology with a decision trail (L1039;
+    majority; REG-015, REG-1024). Grounds: grounded for the rings, inferred for the decision trail. The
+    scale of the practice follows OWNERSHIP.SELECTION.2, which keeps standing rings as the way novelty
+    is run where the capacity exists, not as a default for every team. Final pass R25: register-scope
+    sentence and the two links added (technologies, languages, frameworks, stores, platforms; admission
+    gate is OWNERSHIP.SELECTION.1, deployed inventory is OWNERSHIP.LIFECYCLE.5). Rejected: standing rings
+    for every team (best where capacity for experiments and tolerance for churn exist, SELECTION.2); an
+    implicit, unrecorded stance (best never, since newcomers cannot tell what is standard). Context: EXPERIMENT_CAPACITY
+    (from OWNERSHIP.SELECTION.2): rings only where there is capacity. Certainty: grounded for the register;
+    inferred for the trail. Realizes OWNERSHIP.SELECTION (L1039 see also L025, L024); see DECISIONS.3,
+    OWNERSHIP.SELECTION.1, OWNERSHIP.LIFECYCLE.5. MD-01, MD-03.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.TECHNOLOGY.2
+  - build/research/12_evolution/result.md::EVOL-C39
+- op: node.create
+  uid: EVOLUTION.TECHNOLOGY.3
+  name: How Firmly the Stack Is Held
+  intent: 'The set of technologies is held as firmly as the cost of a departure is shared. Wherever a
+    platform or on-call is shared, a supported default set is kept: a departure whose whole operating
+    cost stays with the team that chose it is permitted and unsupported (paved path), and a departure
+    whose cost would land on the shared platform or on-call needs a recorded decision naming who carries
+    it (mandate). Where components run independently and nothing is shared, each is chosen by fit within
+    the default of the selection rule; so the cost of an extra technology is carried by whoever chooses
+    it.'
+  parent: EVOLUTION.TECHNOLOGY
+  epistemic_state: 'inferred: contested row'
+  constraints:
+  - A departure from the default set whose operating cost would land on the shared platform or on-call
+    has a recorded decision naming who carries it
+  design_notes: 'Positions: P1 mandate a small set (cognitive load, upgrade cost, shared operations; costs
+    local fit; REG-106, REG-013). P2 paved path, departures unsupported (autonomy with a cheap default;
+    a tail of unsupported variants; REG-1023). P3 polyglot freedom per component (local fit, learning;
+    heterogeneity; REG-1016). Row L1040 is contested; the three positions differ on one variable, who
+    carries the operating cost, which the row names as the force; shared platform and on-call turn a local
+    choice into a shared cost. Final pass R26: decision replaced; the ''between the two'' condition, stated
+    by no source, is dropped; the constraint was edited consequently so it no longer contradicts the paved-path
+    sentence. Rejected: P1 for a departure whose cost stays with its team; P2 for a departure that would
+    land on a shared on-call; P3 for a shared platform. Review R12: a rejection of multiple versions deleted;
+    version choice per dependency is OWNERSHIP.LIFECYCLE.2 and one version of each shared component is
+    CHANGE_FLOW.INTEGRATION.1. Context: where the operating cost of a departure lands (L1040). Certainty:
+    inferred. See TECHNOLOGY.1; realizes OWNERSHIP.SELECTION. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.TECHNOLOGY.3
+  - build/research/12_evolution/result.md::EVOL-C40
+- op: node.create
+  uid: EVOLUTION.TECHNOLOGY.4
+  name: One General-Purpose Store for Several Roles
+  intent: One mature general-purpose data store is preferred for queue, cache, search and documents while
+    it meets the need now with headroom. A specialised system is added when a stated requirement (very
+    low latency cache, large-scale search relevance, scale) exceeds what the store delivers, shown by
+    measurement or by a documented limit of the store, not by the team's expectation. So there are fewer
+    systems to operate, and each added system has a measured reason.
+  parent: EVOLUTION.TECHNOLOGY
+  epistemic_state: 'inferred: no top-tier or second-tier source states the rule | gap: contested row resting
+    on one-project or commercially interested sources, limits of the store not verified from primary sources;
+    no final-pass resolution addressed it (judge flag F8)'
+  constraints:
+  - A specialised store is added with the requirement it meets and the measurement or documented limit
+    showing the general store falls short
+  design_notes: 'Positions: P1 one general-purpose store until limits are reached (L1232; REG-1126 T1,
+    REG-1128 and REG-1129 T4, one with commercial interest; fewer failure points, less context switching).
+    P2 specialised system from the start (best where a stated requirement is known at the start to exceed
+    the general store: sub-millisecond cache, large-scale search). The T1 source documents the limits
+    of the one store for queue-like use and says it is not for general-purpose work. It is the data-store
+    case of OWNERSHIP.STANCE.4 (no building for presumed needs) and of TECHNOLOGY.1. The proponent''s
+    headroom figure (about ten times) is one source''s and not adopted. Review R13: ''by measurement or
+    by a documented limit of the store''. Rejected: P2 as a default (adds systems on a prediction). Context:
+    LOAD_AND_TEAM_SIZE (L1232): small team and modest load. Certainty: inferred. Stack pointer: origin
+    stack was a relational database, restated stack-neutral by the ledger; boundary DATA. Open flag F8.
+    Realizes OWNERSHIP.STANCE.4, OWNERSHIP.SELECTION; see TECHNOLOGY.1. MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J8_evolution/judged.md::EVOLUTION.TECHNOLOGY.4
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C34
+- op: link.create
+  src: EVOLUTION.DECISIONS.4
+  dst: EVOLUTION.DECOMMISSION.2
+  intent: A retirement is recorded as a record that supersedes the adoption record, following the supersession
+    rule for accepted records.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.2
+  dst: EVOLUTION.DECISIONS.4
+  intent: The retirement record supersedes the adoption record under the supersession rule of the changed-record
+    node.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.2
+  dst: EVOLUTION.DECISIONS.3
+  intent: The retirement record is kept in the form and place the form-and-storage node sets for every
+    record.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECISIONS.6
+  dst: EVOLUTION.DECISIONS.1
+  intent: The record that follows a proposal keeps the content a record must state.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECISIONS.6
+  dst: EVOLUTION.DECISIONS.5
+  intent: A proposal ends in a record that carries a status, an owner and a review before acceptance.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.2
+  dst: EVOLUTION.DEBT.1
+  intent: An unfinished migration is a debt item, as the definition of debt counts it.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.3
+  dst: EVOLUTION.INCREMENTAL.1
+  intent: A replacement proceeds in releasable steps like any other change.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.3
+  dst: EVOLUTION.DECOMMISSION
+  intent: A replaced system is retired by the decommissioning practice once the new one is verified.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.4
+  dst: EVOLUTION.DECOMMISSION.5
+  intent: A mass migration across consumers ends in a compulsory retirement with a firm deadline.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.6
+  dst: EVOLUTION.DECOMMISSION.3
+  intent: A deprecated item is marked in the machine-readable metadata the announcement practice sets.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DEBT.1
+  dst: EVOLUTION.INCREMENTAL.2
+  intent: An unfinished expand-migrate-contract is the first example of debt the definition counts.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DEBT.2
+  dst: EVOLUTION.DEBT.3
+  intent: Deliberate debt is recorded as an item of the inventory.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DEBT.2
+  dst: EVOLUTION.DECOMMISSION.1
+  intent: Keeping the system simple includes deleting code, which the why-remove node holds.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DEBT.2
+  dst: EVOLUTION.INCREMENTAL.1
+  intent: Keeping the system simple includes releasing in small steps, which the step-size node holds.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DEBT.5
+  dst: EVOLUTION.INCREMENTAL.4
+  intent: Cross-team debt needs an owner and capacity as a mass migration does.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.5
+  dst: EVOLUTION.INCREMENTAL.4
+  intent: A compulsory retirement is staffed through the owner and finish condition of mass change.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.5
+  dst: EVOLUTION.DECOMMISSION.3
+  intent: The deprecation stage announced in two stages ends in the sunset a compulsory retirement sets.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.1
+  dst: EVOLUTION.TECHNOLOGY.3
+  intent: How firmly the replace-not-add rule holds follows who carries the cost of a departure.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.1
+  dst: EVOLUTION.DECOMMISSION.2
+  intent: A technology replaced is retired on stated grounds and the retirement is recorded.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.2
+  dst: EVOLUTION.DECISIONS.3
+  intent: The decision trail of each technology is a record kept as the form-and-storage node sets.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.3
+  dst: EVOLUTION.TECHNOLOGY.1
+  intent: A departure whose cost is carried by its own team is the case where adding alongside is allowed.
+  shape:
+    type: see
+- op: link.create
+  src: EVOLUTION.TECHNOLOGY.4
+  dst: EVOLUTION.TECHNOLOGY.1
+  intent: Adding a specialised store is the case of adding a technology, which replaces or has a stated
+    need.
+  shape:
+    type: see

@@ -9,7 +9,7 @@ Read that subpart's `README.md` (and `CLAUDE.md` where present) first — each t
 base here documents itself:
 
 - `documentation_tools/{codemap,md_structure_sync,md_structure_viz}/`
-- `dev_guidelines/{python_guidelines,cli_guidelines,web_architecture_guidelines,javascript_guidelines}/`
+- `dev_guidelines/{software_development_guidelines,python_guidelines,cli_guidelines,web_architecture_guidelines,javascript_guidelines}/`
 - `level_of_detail/` — read `README.md` and `CLAUDE.md` before touching `LOD_CORE.md`,
   `drill_down/`, or `build/`.
 - `global_skills/` — user-wide skills; read its `CLAUDE.md` (self-contained folders, no

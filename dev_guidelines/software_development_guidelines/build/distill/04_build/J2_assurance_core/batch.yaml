@@ -1,0 +1,624 @@
+operations:
+- op: node.create
+  uid: ASSURANCE.RULES
+  name: Rules Common to Every Property
+  intent: A check is worth running only if its failure means a real defect, and it runs as low and as early as it can catch that failure; a rule that matters is enforced by a gate that cannot be skipped. Review of a change is independent, accountable and bound to the exact content, and every change meets one bar and shows its completion by evidence. So a pass can be believed, a finding is acted on, and the review was trustworthy.
+  parent: ASSURANCE
+  epistemic_state: 'known | gap: every numeric default is inferred (one organisation''s or one source''s figure)'
+  design_notes: 'Roll-up of RULES.1 to RULES.5 (31 rows); the node holds no rows, positions or rejected positions of its own (they are on the children). Context: change volume moves RULES.2, risk moves RULES.4. Certainty as a roll-up: grounded for the principles (T1/T2 sources under each child), inferred for every numeric default. Used by BEHAVIOUR, CONTRACTS and every other property node. No flags.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR
+  name: Behaviour
+  intent: 'The software is self-testing: an automated suite runs on every change and a pass means no substantial defects. Types and static checks form the cheapest blocking layer, the mix of test levels is chosen for confidence per unit of time, tests observe behaviour and are built as production code, and tests are triggered by change events. The suite''s power is measured rather than assumed, no test leaves a durable effect on data, and defect classes that survive review are caught on production-shaped data.'
+  parent: ASSURANCE
+  epistemic_state: 'known | gap: effect claims of BEHAVIOUR.6, and BEHAVIOUR.7 and .8 are inferred (maintainer-only support)'
+  design_notes: 'Roll-up of BEHAVIOUR.1 to BEHAVIOUR.8 (61 rows); no rows or positions of its own. Outcome stated by the judge: the testing was good. Context: criticality and suite maturity (BEHAVIOUR.1, .6), where complexity lives (BEHAVIOUR.3). Certainty as a roll-up: grounded for BEHAVIOUR.1 to .4, inferred for the effect claims of .6 and for .7 and .8. Requires RULES.1 to RULES.3; the property-specific tests are held in ASSURANCE.ARTIFACT, DATA_INTEGRITY, SECURITY and PERFORMANCE (cross links). Flags F3, F4 and F5 were settled in the final pass (R28, R29, R22).'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR
+- op: node.create
+  uid: ASSURANCE.CONTRACTS
+  name: Interfaces and Contracts
+  intent: Compatibility has a definition, is verified between independently released components by contract tests rather than shared integrated environments, and each interface has one machine-readable source of description from which documentation, stubs and tests derive, with an automated diff catching breaking changes. So a change to an interface cannot silently break a consumer.
+  parent: ASSURANCE
+  epistemic_state: 'known | gap: the style choices (which evolution policy, which contract-test style, code-first or design-first) are inferred, each resolved by context'
+  design_notes: 'Roll-up of CONTRACTS.1 to CONTRACTS.3 (18 rows); no rows or positions of its own. Context: number and reach of consumers and the independence of release cadences move CONTRACTS.1 and .2. Certainty as a roll-up: grounded for the definition and the contract-test principle, inferred for the style choices. Requires RULES.3 (a blocking diff), carried as the link of CONTRACTS.3. F6 settled at CONTRACTS.1 (R30, X7). CONSTRUCTION.BOUNDARY realizes contracts in code (cross link).'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.CONTRACTS
+- op: node.create
+  uid: ASSURANCE.RULES.1
+  name: Trustworthy Signal
+  intent: 'A failing check must mean a real defect, so a pass can be believed and a finding is acted on: non-determinism is prevented at its cause, and a flaky test that already exists is a defect of the pipeline, taken out of the blocking gate into a quarantine with an owner, a numeric cap and a time limit, then fixed or deleted. A check blocks while its measured false-alarm rate is within the budget the team states for it, a lower-confidence check is shown in review as advice also under a budget, and a check over budget in either mode is fixed or removed.'
+  parent: ASSURANCE.RULES
+  epistemic_state: 'known | gap: every numeric threshold is inferred (one organisation each); transfer of the Java-dominated studies to other languages is inferred'
+  constraints:
+  - MUST a check, blocking or advisory, have a stated false-alarm budget
+  - MUST a check over its budget be fixed or removed
+  - MUST a quarantined test have an owner, a cap and an end date
+  - MUST NOT a rerun hide a failure
+  design_notes: 'Decision as judged (R15, R26 applied): prevent non-determinism at its cause as in the examples; quarantine with owner, cap and time limit; block-or-advise under a team-stated false-alarm budget (X4: this node holds the rule, BEHAVIOUR.2 and SECURITY.2 apply it).
+
+    Positions: P1 quarantine with cap and limit; P2 remove at once; P3 rerun only marked-flaky tests; P4 classify, retry or disable during investigation; P5 prevent the cause; P6 track flake rate, act near 1%; P7 false-positive budget for static checks; P8 hand-written clean-up of shared state (L1560).
+
+    Grounds: a test or finding that fails without a defect teaches people to ignore it (L109 consensus; REG-048, REG-054, REG-056; L147 REG-085). Causes of flakiness are known and preventable: asynchronous waits were 45% (74 of 161) of classified fixes, and 74% (14 of 19) of order-dependent flaky tests were fixed by cleaning shared state (L1559, L1560; REG-1570, T2, mostly Java; L111 REG-051, REG-054); that figure shows the state must be clean, not that hand-written clean-up is the better mechanism. Quarantine with a cap and deadline keeps the gate trustworthy while causes are found (L110; REG-054). A budget for static-check false positives is operated at scale (L086, L1132; REG-052, REG-1086, REG-1092, REG-1099; the secure-development framework REG-004 asks for a human reviewing tool findings).
+
+    Rejected, with the condition under which each would be best: P2 immediate removal is quarantine with a zero time limit; best when the test is of low value or nobody will own the quarantine, then delete. P3 rerun marked tests: a rerun that turns red to green hides the defect; acceptable only as a recorded, capped part of quarantine, or for a failure traced to infrastructure. P4: folded into the decision as quarantine (temporary disable); retry alone is rejected for the reason of P3. P6: kept as an example only; the 1% threshold and the 0.15% figure are one organisation''s figures (L1561, single source REG-048, origin marked risky), not a standard; best as the budget when a team has no better data. P7: adopted as a budget; the 10% figure is one organisation''s policy (L1132), so the value is the team''s to state. P8: a bug in clean-up code shows up as a failure in another test (REG-054); best only where neither a rebuild nor a platform undo is available, and then each test checks its precondition at its start (inferred).
+
+    Maintainer: the rule ''no durable effect anywhere'' is the maintainer''s own (L265), so this is not against the maintainer''s practice; the maintainer''s rollback on shared data is the platform undo, under BEHAVIOUR.7 d1''s own condition. Conflict with BEHAVIOUR.7 (L265 against L111) is resolved here. Context: none. Flags: none (F7 closed by review: numeric defaults stated as one organisation''s; F1 settled R15, R26, X5).'
+  examples:
+  - 'Prevention of the cause: each test establishes the state it needs instead of relying on another test''s clean-up; where rebuilding per test costs too much, the undo is done by the platform (a rolled-back transaction, a snapshot restore), never by hand-written clean-up code.'
+  - 'Further preventions: wait on events or polling rather than bare sleeps, wrap the clock, double remote services, shrink large tests, check a new test repeatedly when it is added.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES.1
+  - build/research/03_verification/result.md::VERIFY-C07
+  - build/research/03_verification/result.md::VERIFY-C30
+  - build/research/03_verification/result.md::VERIFY-C31
+  - build/research/03_verification/result.md::VERIFY-C32
+  - build/research/04_delivery/result.md::DELIVER-C24
+  - build/research/15_security_depth/result.md::SECD-C14
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_STABILITY
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_STABILITY.1
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_STABILITY.2
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_STABILITY.3
+- op: node.create
+  uid: ASSURANCE.RULES.2
+  name: Placement and Feedback Speed
+  intent: Each check runs at the lowest level and the earliest stage that can catch the failure it exists for, and a defect that a higher-level test finds and no lower-level test caught produces the lower-level test. Blocking feedback returns in minutes (about ten), the build runs on every commit, a broken build is fixed first, and which analyses and tests run at which stage for which risk is recorded. Different kinds of check are combined and none is relied on alone, so failures are cheap, quickly located, and no single mechanism is the only line of defence.
+  parent: ASSURANCE.RULES
+  epistemic_state: 'known | gap: combining and layering are inferred (one taxonomy, one dated study); the ten-minute figure is a default, not a measured optimum'
+  constraints:
+  - MUST the blocking set return in minutes
+  - MUST every higher-level miss produce a lower-level test
+  - MUST a stage policy be recorded per risk
+  design_notes: 'Positions: P1 lowest level possible; P2 minutes of feedback, build on every commit; P3 gate on the fast and reliable, run the slow after merge and roll back (accepts some coverage loss); P4 staged pipeline, slower stages more thorough; P5 recorded policy per stage and risk; P6 combine kinds of check; P7 layer controls; P8 machines find forgotten defects.
+
+    Grounds: lower is cheaper, faster and more precise (L091, L1183 consensus; REG-044, REG-072). Minutes-long feedback and priority repair of a broken build are DORA capabilities and Google''s practice (L112; REG-056, REG-057, REG-085). A recorded per-stage, per-risk policy is a secure-development-framework practice (L121; REG-004). Dynamic checks found on average 49 problems per site that static analysis missed, on over 200 sites (2015, dated; L1550; REG-1561, REG-1564); layering controls follows from a taxonomy of 107 attack vectors against 33 safeguards (L1538; REG-1554, T2, inferred); machines catch what people forget to look for (L1546).
+
+    Rejected: nothing outright. P3 and P4 are two answers to one question (what blocks the merge versus what runs later); the choice depends on context. P7 and P8 restate P6 at the level of principle and are kept as grounds.
+
+    Context: change volume and rollback. With very high change volume, a build cop and automatic rollback, gate on what is fast and reliable and run slower tests after merge with automatic revert on failure (P3, L145); with smaller volume, run later stages before release in a staged pipeline (P4, L145). In both cases what ships has passed the full set. DORA pitfall: blocking tests longer than ten minutes. The ten-minute figure and the 95% presubmit pass are single-source or one organisation''s figures (F7 closed by review).
+
+    Links: requires BEHAVIOUR.1 (L1550 requires L1552); uses RULES.3 for blocking; CHANGE_FLOW.BUILD realizes the pipeline. Flags: none.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES.2
+  - build/research/03_verification/result.md::VERIFY-C12
+  - build/research/03_verification/result.md::VERIFY-C42
+  - build/research/04_delivery/result.md::DELIVER-C22
+  - build/research/03_verification/result.md::VERIFY-C33
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C25
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::DEPENDENCIES.TRUST.3
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.STATIC_BASELINE.3
+- op: node.create
+  uid: ASSURANCE.RULES.3
+  name: Gates That Cannot Be Skipped
+  intent: 'A rule that matters is a blocking automated check, not a convention: module boundaries and fitness properties (performance, security, operability) are checked automatically, the gate always runs, and a skipped, neutral or missing required check counts as a failure, never a pass. Nothing a rule forbids reaches the mainline, whoever authored the change.'
+  parent: ASSURANCE.RULES
+  epistemic_state: 'known | gap: fitness functions as the mechanism are inferred (REG-1117 plus REG-1119, majority); the skipped-check fact rests on one platform (REG-114)'
+  constraints:
+  - MUST a required check fail closed (skipped or missing counts as failed)
+  - MUST NOT a blocking check be a noisy one (RULES.1)
+  design_notes: 'Positions: P1 enforce boundaries by automated checks (L1216); P2 fitness functions (L1234); P3 a gate always runs and a skip is not a pass (L1562).
+
+    Grounds: a check changes behaviour only when failing it stops the merge; some platforms treat a skipped required check as passing (L1562; REG-114, T1, one platform''s fact stated generally, F11 closed by review: other platforms may differ, the principle holds regardless). Boundaries kept by tooling rather than convention (Shopify) and fitness functions that make fit explicit, non-functional properties included (L1216, L1234; REG-1117, REG-1119, REG-1134).
+
+    Rejected: convention or review alone for a mechanizable rule; best only when the rule cannot be expressed as a check (judgement on whether a design is appropriate), and then it belongs to review (RULES.4). Small increments in P2 (L1234) is an evolution practice: its first clause is indexed to EVOLUTION.INCREMENTAL (MD-03).
+
+    Context: none. Required by BEHAVIOUR.1 and BEHAVIOUR.2 (L1547, L1551 require L1562); CHANGE_FLOW.INTEGRATION and ASSURANCE.ARTIFACT.2 realize protection of the mainline. Flags: none.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES.3
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C11
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C40
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.ENFORCEMENT
+- op: node.create
+  uid: ASSURANCE.RULES.4
+  name: Independent Review That Binds
+  intent: Every change to mainline is checked before integration by a party other than whoever authored, pushed or requested it, working from its own context (a person or an automated reviewer; for a change the team's risk tier marks high, a reviewer of a different kind from the author), and the check is recorded on the development platform. A named person or role stays accountable for each change, approves it and is able to defend it, and an approval binds the exact final content, so a new commit that changes the diff voids earlier approvals. Only a tier the team defines in advance, in a team whose mainline is kept releasable by automated gates and fast revert, may be checked after merge; per-change approval by an external board is not used.
+  parent: ASSURANCE.RULES
+  epistemic_state: 'known | gap: the reason for rejecting review of uncertain changes only is inferred; whether a given regulation still requires an external board was not read | unvalidated: awaiting maintainer, can an automated reviewer be the independent check'
+  constraints:
+  - MUST the approver differ from the author
+  - MUST an approval lapse when the diff changes
+  - MUST a named person or role be accountable
+  design_notes: 'Decision as judged, with the maintainer default (R27) merged with the tier sentence (R16): every change gets an independent check before or after merge; the post-merge tier is only a tier defined in advance (changes that follow an established pattern, an unremarkable fix, documentation) in a team whose mainline is kept releasable by automated gates and fast revert; separation of duties is met by peer review, automated testing and monitoring, with the form of review set by the risk of the change.
+
+    MAINTAINER POINT (open, F2, R27): the research row says ''independent human check'' (L136) while MD-02 says who does the work is not a principle. The default applied is that independence is a property of the reviewer''s context, not of its kind, and that a named person stays accountable and approves; no row covers a team of one. The question awaiting the maintainer: can an automated reviewer be the independent check. Until answered the default stands, marked inferred.
+
+    Positions: P1 independent check on every change (dissent: Ship, Show, Ask, review only the uncertain); P2 no external board; P3 named accountability; P4 approver differs from author; P5 approval binds to the final content.
+
+    Grounds: independent check as a feature of the platform record (L136; REG-083, REG-094, REG-098, REG-115, REG-116). Approver differs from the author, and approval binds to content (L1046, L1047; REG-1036, REG-114, T1). Accountability attaches to the submitter, not the tool (L1043; REG-1035, REG-1037, REG-1040). DORA found no correlation of external review with lower failure rates and a negative effect on delivery performance (L143; REG-094). The tier conditions are grounded in REG-098 (one practitioner source, fetched in review).
+
+    Rejected, with the condition under which each would be best: review only for uncertain changes (P1 dissent) leaves the classification to the author at the moment of the change, while a tier defined in advance removes that discretion (inferred, X14: CHANGE_FLOW.REVIEW.1 points here for this reason); it is best, in a post-merge ''show'' form, for the tier of the Decision (consistent with L143 ''by risk''). ''Ship'' with no review at all: best never under this node, since every change gets an independent check before or after merge. External approval board: best where a regulation requires one; regulated contexts are deferred (MD-05) and whether a given regulation still requires a board was not read (open).
+
+    Context: risk. The default is blocking pre-merge review; the post-merge tier applies only where gates and revert are automatic (L136, L143). Links: index to CHANGE_FLOW.REVIEW (how review is carried out); realized for the mainline by ASSURANCE.ARTIFACT.2 (L131, L1063); the mechanism terms of a platform (L1046, L1047) are stack pointers only. Flags: none on the record beyond the maintainer point.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES.4
+  - build/research/04_delivery/result.md::DELIVER-C13
+  - build/research/04_delivery/result.md::DELIVER-C20
+  - build/research/13_change_authors/result.md::AUTH-C02
+  - build/research/13_change_authors/result.md::AUTH-C05
+  - build/research/13_change_authors/result.md::AUTH-C06
+- op: node.create
+  uid: ASSURANCE.RULES.5
+  name: One Bar and Evidence for Every Change
+  intent: Every change, whatever its author, meets the same bar for design, testing and review; before a change is produced, its intent, scope, interfaces, out-of-scope items and acceptance check are fixed, in proportion to its size. Every change comes with an executable pass-or-fail check independent of the author's judgement that it is done, and completion is shown as evidence (test output, command and result, screenshot), not asserted. Tests and the code under test come from independent contexts where practicable.
+  parent: ASSURANCE.RULES
+  epistemic_state: 'known | gap: intent-and-acceptance-first and independent contexts are inferred (a vendor guide, one DORA capability); the executable check and the evidence rest on one T1 vendor source, no consensus claim'
+  constraints:
+  - MUST every change carry an executable check
+  - MUST completion be shown by evidence
+  - MUST NOT a change be exempt by its author
+  design_notes: 'Positions: P1 same bar; P2 intent and acceptance fixed first; P3 executable check; P4 evidence; P5 independent contexts for tests and code.
+
+    Grounds: same bar, no exemption (L1042; REG-1035, REG-1036, REG-1040, T1, consensus). Executable check and evidence over assertion (L1051, L1052; REG-1038, one T1 vendor guide, L1052 recorded single-source; consistent with L123 and L269 on recorded, self-reporting results). Fixing intent and acceptance first (L1045; REG-1038, REG-1041; a vendor guide plus one DORA capability). Independent contexts so one set of assumptions does not validate itself (L1053; REG-1038, inferred, a vendor recommendation with no study of effect).
+
+    Rejected: no competing practice recorded. Exemption for generated or trusted-author change: best never; the bar is a property of the change.
+
+    Context: cost and speed of producing a change; the cheaper and faster the production, the more necessary it is to fix the acceptance check first (L1045). Links: requires RULES.1 and RULES.4; refined by BEHAVIOUR.1; ''evidence'' is realized in CHANGE_FLOW.REVIEW. Maintainer decision cited: MD-02 (the outcomes hold whoever authors the change). Flags: none.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.RULES.5
+  - build/research/13_change_authors/result.md::AUTH-C01
+  - build/research/13_change_authors/result.md::AUTH-C04
+  - build/research/13_change_authors/result.md::AUTH-C10
+  - build/research/13_change_authors/result.md::AUTH-C11
+  - build/research/13_change_authors/result.md::AUTH-C12
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.1
+  name: What the Suite Must Promise
+  intent: 'Code is self-testing: the automated suite can be run at any time, on every change, and a pass means no substantial defects; without that there is no continuous integration. Everything the team does not want to break has a test, in the strict form where criticality is high or consumers are many and as enough tests to change the code confidently, scaled to risk, otherwise. The team keeps a written test policy, the suite has an accountable owner, its results are recorded, and it is judged by what it detects, not what it executes.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: the strict/weak split is inferred (one formulation per form); whether the maintainer''s practice has an automated trigger is open (inferred absence, not confirmed), decision unchanged'
+  constraints:
+  - MUST the suite run on every change and be runnable in the language's standard way
+  - MUST a written test policy exist (new functionality and every fix come with automated tests); the evidence that it is followed is the tests in each change, visible in its review, with no separate artefact
+  - MUST NOT a pass be read as proof of reliability
+  design_notes: 'Decision as judged (R17 applied): the strict form means every behaviour, performance, accessibility and security property tested; the policy costs one line and makes the rule reviewable, while a separate evidence artefact would be the most demanding reading, not the best. Results, root causes and triage are recorded in the team''s workflow. Outcome: the testing was good, and change is safe and fast.
+
+    Positions: P1 self-testing code; P2 strict (Google) against weaker (Fowler) coverage of ''everything not to break''; P3 tests first for safe change; P4 written policy, the tests in each change as evidence; P5 developers own acceptance tests, testers explore; P6 maintainer: no stated trigger or regression catch.
+
+    Grounds: L081 consensus (REG-056, REG-057, REG-063); L080 the purpose of tests is safe change and speed, bug-catching secondary (REG-048, REG-063); L083 a pass does not prove reliability, a failure proves its absence (REG-067); strict and weak forms scaled by criticality (L082; REG-048, REG-064); written policy and adequacy by detection (L1551, L1552; REG-1563, T1 criteria); recorded results (L123; REG-004). L122 (who writes acceptance tests) is restated as an outcome per MD-02: someone is accountable for each suite and its upkeep; exploratory and usability testing cannot be automated and complement it.
+
+    Rejected, with the condition under which each would be best: P6, the maintainer''s doctrine states how a test is built and run but not who runs it, when, on what trigger (practice appears to be on-demand runs): it contradicts L081, L106 and L144 and an on-demand suite does not guard change; adequate only for one-off code never changed again. P5 as a rule about who writes tests: outside the principles (MD-02); only the outcome (owner, upkeep, exploratory complement) is kept. The strict form of P2 for every team: best only under high criticality or many consumers (L082), else the weaker form.
+
+    Settled against the maintainer''s practice (R28, F3, unchanged): self-testing code on every change is consensus (L081, L106, L144) whether or not the maintainer''s practice has an automated trigger (L331). R29 (F4): L080 is a consensus row read as ''tests exist before the change is trusted'', consistent with L101.
+
+    Context: criticality and number of consumers. Links: requires RULES.3 and RULES.1 (L1551 requires L1562 and L1558); refines RULES.5; realized in CHANGE_FLOW.BUILD. Flags: none.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.1
+  - build/research/03_verification/result.md::VERIFY-C01
+  - build/research/03_verification/result.md::VERIFY-C02
+  - build/research/03_verification/result.md::VERIFY-C03
+  - build/research/03_verification/result.md::VERIFY-C04
+  - build/research/03_verification/result.md::VERIFY-C43
+  - build/research/03_verification/result.md::VERIFY-C44
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C67
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_SUITE
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_SUITE.1
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.2
+  name: Static Layer
+  intent: 'Type checking, linting and analysis form the first and cheapest test layer and run on every change: type checks, compiler warnings and the linter rules the team adopts block, and analyses whose findings need judgement advise in review, each under the false-alarm budget of RULES.1. Builds run with warnings enabled and treated as errors, every linter warning is addressed, and at least one analyser beyond compiler warnings runs before a major release. Analysis is incremental and reports newly introduced issues first, and types are enforced for large long-lived code and introduced gradually on existing code.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: ''types as the first test layer'' is inferred (the sources are T3 or tool documentation); the trend practice rests on one observational study; rejection of tests-alone rests on absence of a source'
+  constraints:
+  - MUST type checks, compiler warnings and the adopted linter rules block, and analyses whose findings need judgement advise in review, each under the false-alarm budget of RULES.1
+  - MUST a warning be fixed or suppressed with a reason
+  design_notes: 'Decision as judged (X4 applied: ''block the merge'' for all static checks is replaced by the stated split; RULES.1 holds the rule, SECURITY.2 applies it to security findings).
+
+    Positions: P1 enforce types; P2 gradual typing; P3 tests alone suffice; P4 warnings as errors plus analysis; P5 incremental analysis in review; P6 gates and trend; P7 every project analyses code statically and acts on it.
+
+    Grounds: types as first test layer (L084, majority; REG-047, REG-065, REG-075); gradual adoption (L085 consensus; REG-065, REG-075); warnings as errors and continuous analysis (L088; REG-004); linter MUST and analyser before release (L1548, L1549; REG-1563 T1 criteria); incremental, new-first analysis (L087; REG-052); trend watching (L1054; REG-1035, REG-1046, one observational study, practice inferred); type checks, warnings and adopted linter rules block (L1547, requires RULES.3), judgement analyses advise under the budget of RULES.1 (X4).
+
+    Rejected: P3 tests alone, no source holds it strongly; best only for small, short-lived code where annotation cost exceeds the defects prevented (not evidenced by a row, stated as the condition). P1 against P2 are not rivals: strict enforcement is the end state for large long-lived code, gradual is the route on existing code.
+
+    Context: existing versus new code; gradual with an escape hatch on existing code (L085), enforced from the start on new, large, long-lived code (L084). Links: requires RULES.3 (L1547 requires L1562); stack pointer L085 (gradual typing in Python, TypeScript, Flow). Certainty detail: REG-047 and REG-065 are T3, REG-075 is tool documentation attesting gradual typing, not the layer claim. Flags: none.'
+  examples:
+  - 'Gradual introduction on existing code: annotate incrementally, keep an escape hatch, no rewrite.'
+  - Analysis reports newly introduced issues first, appears in review, offers automated fixes; the trend of warnings and complexity is watched against volume-driven drift.
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.2
+  - build/research/03_verification/result.md::VERIFY-C05
+  - build/research/03_verification/result.md::VERIFY-C06
+  - build/research/03_verification/result.md::VERIFY-C08
+  - build/research/03_verification/result.md::VERIFY-C09
+  - build/research/13_change_authors/result.md::AUTH-C13
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.STATIC_BASELINE
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.STATIC_BASELINE.1
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.STATIC_BASELINE.2
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.3
+  name: Test Level Mix
+  intent: 'The mix of small, integrated and end-to-end tests follows from placing each check at the lowest level that catches its failure: where logic lives inside units, many small fast tests and progressively fewer broader ones; where failures arise between services, the weight moves to integration tests; for user-interface code, to static checks plus integration tests. End-to-end tests stay few, on critical journeys, and the proportions are recorded as a team decision with the reason. Confidence is chosen per unit of time and cost; exact ratios matter less than fast, reliable, meaningful-failure tests.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: which shape fits which context is inferred (each shape held by its own proponents, no comparison study); the mapping from RULES.2 to each shape is inferred'
+  constraints:
+  - MUST the mix be recorded
+  - MUST end-to-end tests be few and for critical journeys unless fast, reliable and cheap
+  design_notes: 'Decision as judged (R19 applied: the first sentence is replaced; one repeated sentence about interactions and user-interface code was left as it was, a redundancy only). Larger tests are added where fidelity matters (configuration, load, cross-service behaviour), choosing the system under test by fidelity against flakiness; tests are described on two separate axes, size and scope. Outcome: confidence is chosen per unit of time and cost, with the mix recorded.
+
+    Positions: P1 pyramid; P2 honeycomb; P3 trophy; P4 numbers matter less, record the mix; P5 minimal end-to-end (Fowler counter-note); P6 larger tests where fidelity matters; P7 describe on two axes.
+
+    Grounds: direction and the inverted-cone warning (L089, L1182 consensus; REG-044, REG-045, REG-048, REG-072); the three models agree numbers matter less than speed, reliability and meaningful failures (L090; REG-045, REG-046, REG-047, REG-048); end-to-end tests are slow, flaky and costly to debug (L092, L1188; REG-044, REG-045, REG-048, REG-072); hermetic single process wins on speed and determinism, shared environments on fidelity (L117; REG-051); size and scope are independent axes (L093; REG-048, REG-072). No shape is the default by popularity; each follows from where failures arise.
+
+    Rejected, with the condition under which each would be best: a fixed ratio 70/20/10 or 80/15/5 as a rule is team-specific, Google-like infrastructure (L1554, single source REG-048, REG-049, one organisation''s position). Honeycomb or trophy as the general shape: best where complexity lives in interactions or the code is user-interface. Minimal end-to-end: loses where high-level tests are fast, reliable and cheap to change (L092 counter-note, L1188).
+
+    Context: where complexity lives, logic density, team size, environment speed (L090): logic-dense code, large teams and slow environments favour the pyramid; microservices the honeycomb; user-interface applications the trophy. Links: follows from RULES.2; shared with BEHAVIOUR.4 (L1554 ratio); CONTRACTS.2 for cross-service seams. Flags: none.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.3
+  - build/research/03_verification/result.md::VERIFY-C10
+  - build/research/03_verification/result.md::VERIFY-C11
+  - build/research/03_verification/result.md::VERIFY-C13
+  - build/research/03_verification/result.md::VERIFY-C14
+  - build/research/03_verification/result.md::VERIFY-C38
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C24
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C30
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.4
+  name: Test Construction
+  intent: A test observes behaviour through the public interface, one test per behaviour, and never changes unless requirements change; test code is production code, readable and descriptive over strictly DRY, with no loops or conditionals and one condition per test. Real collaborators are used when fast, deterministic and simple, otherwise a fake owned by the team that owns the real thing, mocks and stubs last; integration tests run against a real backing service of the production kind. The team states what a unit is and where tests start and stop, and records its double style, so tests survive refactoring and fail only for real defects.
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: sub-decisions d5, d6 and d8 are inferred (maintainer practice only); the classical-versus-mockist default is inferred (contested); the real-engine rule beyond databases is stated generally from a database case'
+  constraints:
+  - MUST the double style and the unit definition be recorded
+  - MUST a test not change when only structure changes
+  - MUST integration tests use the production kind of backing service
+  design_notes: 'Decision as judged, with d5, d6, d8 moved here from BEHAVIOUR.7 (R22): sub-decisions of test construction, inferred, maintainer practice only; d5 (L269), d6 (L270), d8 (L272; platform mechanics are a stack pointer). The twelve properties of a good test (L100, REG-068) are kept as the aid for judging trade-offs between tests (no test needs all, some pairs conflict), without conflict with the decision (R07).
+
+    Positions: P1 team-defined unit; P2 observable behaviour; P3 classical; P4 mockist; P5 state over interaction verification; P6 real, then fake, then mock, with an 80/15/5 mix; P7 real backing service; P8 tests are code; P9 twelve properties; P10 self-reported verdict (d5); P11 colocated against mirrored tests (d6); P12 named fixture variables (d8).
+
+    Grounds: behaviour through public interfaces (L095; REG-046, REG-048, REG-049, REG-068); real implementations first, fakes, then mocks, because over-mocking produced tests costly to maintain and rarely finding bugs (L097; REG-049, REG-050); state verification (L096; REG-049, REG-050, REG-062); tests as code and DAMP (L099, L1189; REG-044, REG-049); real backing service of the production kind (L1184; REG-044, REG-1106, REG-1109; mocks or a different engine hide engine behaviour); twelve properties as trade-offs for judging a test (L100; REG-068). d5, d6, d8 rest on maintainer practice (REG-181), public practice read as consensus or majority for d5 and contested for d6 (L270), not fetched; no public source cited, so inferred.
+
+    Rejected, with the condition under which each would be best: mirrored test tree as the general rule (P11), best where the language has a test runner; colocated best where the tooling lacks a test tree. Mockist as the default (P4): contested, Fowler is a convinced classicist but many skilled practitioners prefer it; best when driving design from the outside in and collaborators are costly to build (L098, L096). Interaction verification as the default: best for state-changing calls not otherwise observable. In-memory or different-engine databases in integration tests: best only where the production engine cannot be run locally or in CI. The 80/15/5 mix as a rule: acceptable only with Google-like infrastructure (L1554, single source, one organisation''s position, origin marked risky). P9 is not rejected: it is the judging aid.
+
+    Context: style of design (outside-in design with role interfaces favours the mockist double style; frequent refactoring and small object graphs favour classical, L098); tooling (a test tree or not) moves d6. Links: stack pointers L1184 (origin stack postgres, restated neutral) and L272 (PostgreSQL, d8); BEHAVIOUR.3 holds the mix. Flags: none.'
+  examples:
+  - Verify state rather than interactions, except for state-changing calls that cannot be observed otherwise; arrange-act-assert.
+  - 'Sub-decision d5: a test reports its own verdict in a fixed, searchable shape carrying unit and scenario identity.'
+  - 'Sub-decision d6: tests live where they change together with the unit and are discoverable; colocated where the tooling has no test tree, in a separate mirrored tree where the language has a test runner.'
+  - 'Sub-decision d8: fixture values reused across a test are named and set once, not hard-coded per statement.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.4
+  - build/research/03_verification/result.md::VERIFY-C15
+  - build/research/03_verification/result.md::VERIFY-C16
+  - build/research/03_verification/result.md::VERIFY-C17
+  - build/research/03_verification/result.md::VERIFY-C18
+  - build/research/03_verification/result.md::VERIFY-C19
+  - build/research/03_verification/result.md::VERIFY-C20
+  - build/research/03_verification/result.md::VERIFY-C21
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C26
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C31
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_SUITE.3
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C05
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C06
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C08
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.5
+  name: Tests Driven by Change
+  intent: 'Every reported defect becomes a test that fails first and passes after the fix, and code that is poorly understood is pinned by characterization tests of its actual behaviour before it is changed. A scheduled job is tested before it is scheduled like any other unit, and its first runs on real data are bounded and inspected. Writing tests before code is a team decision by context, not a requirement: what is required is that the test exists, was seen to fail for the right reason where it guards a fix, and runs on every change; a gap found by an experiment in production is such a defect.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: the ordering question (test first or not) is contested, inferred; the pre-schedule test of a job is inferred (maintainer practice only)'
+  constraints:
+  - MUST a fixed defect have a regression test
+  - MUST a scheduled job pass its tests before it is scheduled
+  design_notes: 'Decision as judged (R20 applied: decision clause and constraint; the reduced-scope mode is one example because L316 is maintainer-only: the outcome holds, the mechanism is one example). X13: this node holds ''a gap found becomes a test'': a gap found by an experiment in production (ASSURANCE.AVAILABILITY.3, REG-228) is a defect handled here the same way; AVAILABILITY.5 points here for the tests. Outcome: the regression suite is built from operational experience and change is safe.
+
+    Positions: P1 test-first is a team decision (Beck for it in some contexts; DHH against; Fowler contextual); P2 bug to failing test; P3 characterization tests; P4 maintainer''s pre-schedule test.
+
+    Grounds: bug becomes a failing test (L106 consensus; REG-004, REG-067, REG-072); characterization before change (L107; REG-063, REG-073); test-first is contested: all agree on self-testing code and disagree on the ordering mechanics, and DORA''s evidence is of test automation in general, not of test-first ordering (L101; REG-056, REG-063, REG-064); scheduled job tested before it is scheduled, first runs bounded (L316, maintainer-only, public practice read as majority, not fetched); a gap found in production becomes a test (REG-228, cited by AVAILABILITY.3).
+
+    Rejected, with the condition under which each would be best: mandatory test-first is best for compilers, API design and tangled interfaces (Beck, L101), where fast design feedback pays; not general because the evidence is of test automation, not ordering, and DHH names design damage in MVC web code. Never testing before the change for a fix: rejected, a fix without a failing test cannot show it fixes anything.
+
+    Context: test-first ordering is best when writing compilers, designing an API, or untangling interfaces; elsewhere the order is free (L101). Links: requires BEHAVIOUR.1; scheduled-job placement in CONSTRUCTION.PARADIGM. L080 is a consensus row, not a maintainer row (F4, R29 settled, unchanged). Flags: none.'
+  examples:
+  - 'Bounded first runs of a scheduled job: a reduced-scope test mode (one example of the mechanism; the outcome is what holds).'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.5
+  - build/research/03_verification/result.md::VERIFY-C22
+  - build/research/03_verification/result.md::VERIFY-C27
+  - build/research/03_verification/result.md::VERIFY-C28
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C52
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.6
+  name: Measuring Adequacy and Probing for Faults
+  intent: 'Coverage is used to find code no test executes and is never a quality score, a merge gate or a target; this holds for security-relevant code too, where no numeric coverage floor applies. For security-relevant code the requirement is instead fuzzing of input-handling code, tests derived from threats and past bugs, and review of every unexecuted security-relevant branch that coverage reveals. The suite''s detection power is probed directly: mutation testing where criticality is high and the suite is mature, and property-based testing for code with a describable input range. This node is the one location of the coverage decision.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: the rule for security-relevant code is inferred (it follows from the study and Google''s report, no source tests a floor on security code); mutation and property-based testing effect is inferred (no effect size) | gap: effect size of mutation testing is open'
+  constraints:
+  - MUST NOT a coverage number gate a merge, set a quality target or serve as a security floor
+  - MUST input-handling code of security relevance be fuzzed
+  design_notes: 'Decision as judged (R21, F10, X1: settled unchanged): the L1126 row of SECURITY.3 (a developer security floor with structural tests to at least 80% statement coverage, derived from the secure-development framework) is decided here as P8 and rejected; SECURITY.3 points here and states no coverage figure of its own. The principle that adequacy is judged by detection, not execution, is stated in BEHAVIOUR.1 (MD-03, R08). Outcome: a team knows what its suite detects, not only what it executes.
+
+    Positions: P1 coverage as a diagnostic; P2 coverage floor; P3 OpenSSF suggests covering most or all branches; P4 mutation testing; P5 skip or run offline; P6 property-based testing; P7 fuzzing; P8 (from SECURITY.3, row L1126, SECD-C08; REG-1081, REG-1086, REG-1094) developer security floor with structural tests to at least 80% statement coverage.
+
+    Grounds: correlation of coverage with effectiveness is low to moderate once suite size is controlled (31,000 suites, five large Java systems; L1553; REG-1565, T2; transfer inferred); coverage is easy to inflate (L113; REG-048, REG-059, REG-074); Google reports engineers treat 80% as a ceiling, not a floor (REG-048, fetched in review); mutation score measures what coverage cannot show and is applied incrementally at scale (L114, L1556; REG-058, REG-074, REG-1566, REG-1567); property-based testing exposes edge cases examples miss (L115, L1557; REG-060, REG-1568, REG-1569); fuzzing is required by frameworks for security-relevant code (L116; REG-004, REG-066, T1).
+
+    Rejected, with the condition under which each would be best: a coverage threshold as a gate (P2) and the 80% statement floor (P8) neither measure detection and both reward inflation, the evidence (REG-1565, REG-048) is against them; P2 is best, if at all, for low-trust or fast-growing teams as management visibility (inferred from the wording of REG-048); P8 is best as a conformance minimum when a security baseline or contract mandates the number, stated as conformance and not as a quality claim: NIST IR 8397 (REG-1086), fetched in the final pass, states ''at least 80%'' as a minimum standard, and regulated contexts are deferred (MD-05). The OpenSSF branch-coverage suggestion (P3) is compatible and wins only for a project adopting those criteria. Skipping mutation testing (P5): best where compute or noise dominates, or the suite is immature (mutating a weak suite measures nothing useful).
+
+    Context: criticality and suite maturity (mutation as a routine review signal for high-criticality code and mature suites; offline or skipped otherwise, L114); a mandated baseline (the number is met as conformance, P8). Links: stack pointers L115 (Hypothesis, Python), L116 (OSS-Fuzz languages); dataflow to BEHAVIOUR.1 (adequacy by detection); SECURITY.3 (J3) points here. Flags: none (F10 resolved).'
+  examples:
+  - 'The rejected figure: a floor of 80% of statements, as a security-testing floor or as a gate.'
+  - Mutation testing run diff-based on changed code in review, with mutants filtered; property-based generators following the real data distribution, failures shrunk; fuzzing continuously where possible.
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.6
+  - build/research/03_verification/result.md::VERIFY-C34
+  - build/research/03_verification/result.md::VERIFY-C35
+  - build/research/03_verification/result.md::VERIFY-C36
+  - build/research/03_verification/result.md::VERIFY-C37
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.TEST_SUITE.2
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.FAULT_DETECTION
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.FAULT_DETECTION.1
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::VERIFICATION.FAULT_DETECTION.2
+  - build/research/15_security_depth/result.md::SECD-C08
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.7
+  name: Tests Without Durable Effect on Data
+  intent: 'A test never leaves a durable effect on data that anyone relies on: the default mechanism is a separate disposable data store per run, never the production one, with each test isolated. Running on shared or production-sized data behind a boundary guaranteed to be undone is best only when the dataset cannot be cloned or its shapes cannot be synthesized and the platform can undo every effect of the test, and a functional test never runs against production data unless every durable effect is provably undone. Test data and configuration are kept apart from production, and re-runs behave identically.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'known | gap: d2, d3, d7 and d9 are inferred (maintainer practice only, public practice read not fetched); the d1 default rests on one framework''s documentation plus the rebuild-state principle (consensus recorded, not several T1 sources); d4 is a platform fact of one stack'
+  constraints:
+  - MUST NOT a test commit a durable change to shared data
+  - MUST NOT production code read the test namespace
+  - MUST a mutating automated test on shared or production-sized data run as one rolled-back unit
+  design_notes: 'Decision as judged: lead plus sub-decisions per row (the leaf constraints).
+
+    d1 (L1185, L265): the default above; a rollback boundary is a second line of defence, and a functional test never runs against production data unless every durable effect (rows, sequences, notifications, external calls) is provably undone; load and locks are transient effects governed by the guardrails of ASSURANCE.AVAILABILITY.3, not by d1 (X5; AVAILABILITY.3 holds the guardrails every production test shares, PERFORMANCE.4 points to it).
+
+    d2 (L266): default to synthetic fixtures or factories per test (explicit, hermetic); use a curated, catalogued set of real records selected by queryable attributes where shapes are rich and costly to fabricate; never invent rows or pick arbitrary production rows; real records are subject to the privacy rules held in TRANSVERSE.PRIVACY (index only, MD-03); a persistent new shape is feature work by a separate idempotent script.
+
+    d3 (L267): choose the execution vehicle by risk and by runner: read-only tests as plain queries; tests that can mutate or fail run, when automated, as one atomic unit that is rolled back; an open-transaction wrapper only for a human at the keyboard.
+
+    d4 (L268): stack pointer only, not a decision. d5, d6, d8 moved to BEHAVIOUR.4 (R22). d7 (L271): test configuration lives in a namespace disjoint from the production context and production code never reads it. d9 (L273): shaping mutations are conditional on an actual change, so re-runs behave identically and write volume drops.
+
+    Positions: P1 disposable store per run; P2 maintainer rollback on shared or production-sized data; P3 synthetic fixtures against curated real records; P4 vehicle by risk and runner; P5 final error as verdict; P8 disjoint test configuration; P10 conditional mutations (P6 self-reported verdict, P7 colocated against mirrored tests, P9 named fixture variables moved to BEHAVIOUR.4).
+
+    Grounds: disposable store and per-test isolation (L1185; REG-1106, one framework''s documentation) and no shared state, no risk to real data (L265 position a); rebuild state rather than clean up (L111; REG-051, REG-054). The maintainer''s forced-rollback practice (L265 position b, REG-181) rests on realism and cost of cloning and states its own condition (data large, shapes unsynthesizable, platform can undo every effect); it is the platform undo of RULES.1, so ''no durable effect anywhere'', the maintainer''s own rule, is respected. d2, d3, d7, d9 rest on maintainer practice with public practice read as consensus or majority for d7 and d9, not fetched.
+
+    Rejected, with the condition under which each would be best: P2 as the general rule: real shapes are a real need, but it puts at risk every effect a rollback cannot undo and conflicts with rebuild-over-cleanup (L111); best exactly under its stated condition. Synthetic factories as the only source (P3): best where the domain is small and shapes easy to construct; curated real records win where shapes are rich.
+
+    Context: size and cloneability of the data and the platform''s ability to undo every effect move d1; richness of data shapes moves d2; a human at the keyboard moves d3. Links: conflicts RULES.1 (L265 against L111, resolved there); stack pointer L268 (PostgreSQL); TRANSVERSE.PRIVACY (real records, index). Flags: none (F1 settled R15, R26, X5; F5 settled R22).'
+  examples:
+  - 'd4 (stack pointer only): on one platform, the idiom that every outcome rolls back (a final error whose message is the verdict) realizes d3.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.7
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C01
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C02
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C03
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C04
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C07
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C09
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C27
+- op: node.create
+  uid: ASSURANCE.BEHAVIOUR.8
+  name: Defect Classes That Survive Review
+  intent: 'Passing review, static analysis and deployment is not evidence that code works: code whose behaviour depends on the shape of the data (queries, parsing, conversions, code on platforms that coerce or truncate) is exercised on production-shaped data, its edge values included, before it ships, and inputs are guarded at boundaries always. A platform limit that fails silently has a check, unclear platform behaviour that a design relies on is verified empirically and recorded with its scope, and a pitfall catalogue grows after any defect found twice. A blanket search-and-replace is never applied across a file that holds two syntactic contexts.'
+  parent: ASSURANCE.BEHAVIOUR
+  epistemic_state: 'inferred: the lead claim is corroborated by one dated study (L1550, which shows only that static checks miss a run-time class of defect); the five practices rest on maintainer practice alone'
+  constraints:
+  - MUST data-dependent code be exercised on production-shaped data before it ships
+  - MUST a platform limit that fails silently have a check
+  - MUST a pitfall found twice be catalogued
+  design_notes: 'Decision as judged (R23 applied): ''every branch'' was a coverage target, which BEHAVIOUR.6 rejects, so the scope is L274''s own defect classes; the constraint reads ''data-dependent code'', not ''every branch''. Where public documentation is unclear about a platform behaviour a design relies on, verify empirically on a live instance and record the finding with its scope; anchor on context and re-check the dependants instead of a blanket search-and-replace. Outcome: classes of defect that review cannot see are caught before users meet them.
+
+    Positions: P1 static analysis and types catch part of the class against the maintainer: they do not catch these; P2 pitfall catalogue; P3 no blanket search-and-replace; P4 verify platform behaviour empirically; P5 hard rule for silent truncation.
+
+    Grounds: dynamic checks find what static analysis misses (figure in RULES.2, L1550; REG-1561, REG-1564, dated 2015); this corroborates only that static checks miss a run-time class and does not support the production-shaped-data practice itself (R12, R13); characterization tests of actual behaviour (L277 reads as the platform-level case of L107; REG-063, REG-073); the rest is maintainer practice (L274 to L278; REG-181), public practice read as majority or consensus, not fetched; L275 corresponds to blameless post-mortem knowledge capture.
+
+    Rejected: reliance on static analysis and types alone for these classes; best for the part they do catch (name errors, type errors), which is why they stay as the first layer (BEHAVIOUR.2); the decision combines both rather than choosing.
+
+    Routing note (F8, R31 settled, unchanged): L275 (pitfall catalogue) and L276 (no blanket search-and-replace) catch defect classes that review misses, which is this node''s purpose; the objection to route L275 to OPERATION.INCIDENTS was kept (its trigger is any defect, not a production incident); OPERATION.FEEDBACK links here rather than holding them. Context: none. Links: requires BEHAVIOUR.2 (static layer first); stack pointers L278, L274, L277 (PostgreSQL). Flags: none.'
+  examples:
+  - A pitfall catalogue indexed by error code or symptom; a platform that silently truncates identifiers over a length limit (L278, a PostgreSQL case, stack pointer).
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.BEHAVIOUR.8
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C10
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C11
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C12
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C13
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C14
+- op: node.create
+  uid: ASSURANCE.CONTRACTS.1
+  name: What Counts as Compatible
+  intent: 'A producer declares its public interface precisely and defines compatibility: additive change is compatible, and removal, rename, type change, default change and behavioural change are breaking within a major version; a breaking change is never silent. The evolution policy a provider follows depends on consumer reach and artifact kind: for few, in-house, reachable consumers, additive change and a coordinated deploy without version numbers; for many, external or independently released consumers, explicit versioning with a deprecation window; for an infrastructure-like API with a large consumer base and the funds to carry old behaviour, an indefinitely compatible, date-pinned surface. A consumer can tell what will and will not break.'
+  parent: ASSURANCE.CONTRACTS
+  epistemic_state: 'known | gap: the consumer-count threshold has no numeric boundary in any row (inferred); the mapping of artifact kind to policy is inferred; the maintainer''s additive-plus-coordination practice is inferred (public practice contested)'
+  constraints:
+  - MUST the public interface be declared
+  - MUST a breaking change be coordinated or deprecated, never silent
+  design_notes: 'Decision as judged with X7 applied (X7 supersedes X3): this node holds which evolution policy a provider follows; L353 is a row of this node, and its (a) ''few or controlled'' is read as external consumers that are few or bound by contract, the explicit-major branch. The consumer side (read the promise, prefer stated notice, consume deprecation signals, pin the version; any stated promise is acceptable to depend on) stays on OWNERSHIP.SERVICES.2, which points here for the policies and when each is best. Because users depend on all observable behaviour (Hyrum''s Law), automated tests detect new implicit dependencies but cannot remove them, so API change is planned accordingly.
+
+    Positions: P1 semantic versioning with deprecation; P2 additive is compatible, the rest breaks; P3 Hyrum''s Law; P4 explicit versioning (consumers choose when to move); P5 maintainer: additive, coordinated, no version numbers, dated change log; P6 (L353) the choice by consumer reach and artifact kind.
+
+    Grounds: semantic versioning, precise public API, deprecation window (L060; REG-030); definition of breaking change (L352; REG-204); Hyrum''s Law (L105; REG-071); the maintainer''s additive-plus-coordination practice serves cost of ownership and wins with few reachable consumers (L295; REG-181), while explicit versioning serves consumer independence and exit risk (L295 alternative a); the service and infrastructure-API cases come from L353 (EXT-C24).
+
+    Rejected, with the condition under which each would be best: P5 as the general rule cannot hold when consumers release independently or are external, since a simultaneous deploy is then impossible (conflict with L102, partial tension with L060); it is best, and chosen, for few in-house consumers reachable by review and conversation. P4 for every interface: best for many or external consumers; costly (multiple live versions) where consumers are few. The indefinitely compatible, date-pinned surface for every provider: best only with a large consumer base and the funds to carry old behaviour (L353 b).
+
+    Context: number and reach of consumers and artifact kind (L295, L353). A single-version service deployed as one unit is compatible with the maintainer''s practice (L135, coverage check). Settled against the maintainer''s practice (R30, F6): ''no version numbers'' holds for few, in-house, reachable consumers only. Links: conflicts CONTRACTS.2 (L295 against L102, resolved by the consumer-reach context); OWNERSHIP.SERVICES.2 keeps only the consumer side; EVOLUTION.DECOMMISSION.4 points here for the indefinitely compatible case; CONSTRUCTION.BOUNDARY and OWNERSHIP.CONTAINMENT for the consumer side. Flags: none.'
+  examples:
+  - 'Few, in-house, reachable consumers: additive and backward-compatible by default, a breaking change coordinated with every consumer and deployed together, no version numbers, a dated change log per unit.'
+  - 'Many, external or independently released consumers, installed artifact (library): semantic versioning, deprecation through at least one minor release before removal in a major.'
+  - 'Many, external or independently released consumers, running service: a breaking change ships as a new major version served alongside the old one for a stated deprecation window.'
+  - 'Infrastructure-like API with a large consumer base and the funds to carry old behaviour: an indefinitely compatible, date-pinned surface (L353 b).'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.CONTRACTS.1
+  - build/research/02_adoption/result.md::ADOPT-C30
+  - build/research/03_verification/result.md::VERIFY-C26
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C31
+  - build/research/09_external_services/result.md::EXT-C23
+  - build/research/09_external_services/result.md::EXT-C24
+- op: node.create
+  uid: ASSURANCE.CONTRACTS.2
+  name: Contract Tests
+  intent: Compatibility between independently released components is verified by contract tests, so teams deploy autonomously without a shared integrated environment. Every double of an external service is backed by a contract test against the real service, run on the rhythm of the supplier's changes, whose failure triggers a realignment task and need not break the build. Consumer-driven contracts serve a provider with known consumers under internal control, and provider-side schema validation serves unknown consumers with a published specification; a provider with known consumers uses both.
+  parent: ASSURANCE.CONTRACTS
+  epistemic_state: 'known | gap: the single-team seam rule (P5) is inferred (L1187 open; the test that decides is whether an old client can stay live); the style choice is contested, resolved by known versus unknown consumers'
+  constraints:
+  - MUST a double of an external service have a contract test against the real service
+  - MUST a contract-test failure create a realignment task
+  design_notes: 'Decision as judged (R25 applied). The two styles answer different questions: a schema describes all possible states and catches provider drift; a consumer contract covers only what the consumer uses and is replayed against the provider. A single-team application whose client and server always deploy together, with no old client left in use, verifies its own seam with integration tests and the description diff of CONTRACTS.3, without consumer-driven contracts; where old clients stay in use after a server deploy, client and server release independently in effect and the independent-release rule applies. Doubles of external services follow the contract-test rule in both cases. Outcome: independent release is safe.
+
+    Positions: P1 contract tests instead of shared environments; P2 consumer-driven contracts; P3 provider schema validation; P4 use both; P5 single-team application: decide whether its own client and server interfaces need consumer-driven tests; P6 contract-test every double on the supplier''s rhythm.
+
+    Grounds: contract tests instead of shared integrated environments (L102, L1186; REG-044, REG-046, REG-053, REG-070); consumer-driven contracts'' precision and cost (hidden coupling made explicit, risk of eroding conceptual integrity) (L103, L1281; REG-044, REG-053, REG-1152); both for different questions (L1282; REG-053, REG-1157); contract tests on doubles on the supplier''s rhythm (L104, L1283; REG-054, REG-070).
+
+    Rejected, with the condition under which each would be best: P2 alone for unknown consumers cannot know what they use; best where consumers are many and under internal control. P3 alone for known consumers shows only possible drift, not whether this consumer still works; its lower setup cost and published specification win for unknown consumers (strongest version not independently sourced, open). Shared integrated environments for compatibility: best only when all consumers deploy together as one unit (the maintainer''s single-version case, L295, L135).
+
+    Context: number of consumers and independence of release cadences; the more consumers or independent cadences, the stronger the case for consumer-driven contracts (L1187). Links: conflicts CONTRACTS.1 (L295 against L102, resolved there); BEHAVIOUR.3 (cross-service tests); OWNERSHIP.CONTAINMENT and OWNERSHIP.SERVICES for rented services. Flags: none (the open point on single-team applications is recorded in the epistemic state, decided, inferred).'
+  examples:
+  - Run the contract test of a double daily, when the supplier changes about that often; a failure may lead to a conversation with the supplier.
+  - Cached web clients and installed applications are old clients that stay in use after a server deploy.
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.CONTRACTS.2
+  - build/research/03_verification/result.md::VERIFY-C23
+  - build/research/03_verification/result.md::VERIFY-C24
+  - build/research/03_verification/result.md::VERIFY-C25
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C28
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C29
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C19
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C17
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C18
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C20
+- op: node.create
+  uid: ASSURANCE.CONTRACTS.3
+  name: One Source of Description
+  intent: Each interface has one machine-readable description from which the reference documentation, client and server stubs, types and tests are derived, never hand-copied. The description is linted in CI against a team ruleset, and CI diffs it against the main-branch version and fails on incompatible change; since the diff covers the description only, behaviour and semantics still need contract tests. The description originates in a typed model when one team owns both ends and is authored first when independent consumers depend on it, and the team records where the chain of types starts.
+  parent: ASSURANCE.CONTRACTS
+  epistemic_state: 'known | gap: lint and the CI diff are grounded as tool capability only (T3 tool pages), ''CI blocks'' is inferred; the origin condition, the ''should'' of lint and the ''description only'' limit are inferred; code-first against design-first is contested'
+  constraints:
+  - MUST the description have one source
+  - MUST a generated description not be hand-edited
+  - MUST CI block an incompatible change in the description
+  design_notes: 'Decision as judged (R14 applied to the certainty). Outcome: documentation, stubs and tests cannot drift from the interface.
+
+    Positions: P1 derive from one description, origin undecided; P2 code-first; P3 design-first; P4 choose and record the chain start, one class against separate models; P5 lint in CI; P6 diff in CI.
+
+    Grounds: one description as single source (L220; REG-147 T1, REG-164 T3); lint (L221; REG-158); breaking-change diff (L222, L1284; REG-160, REG-1158); code-first with generated artifact (L1271; REG-1150, REG-1154) against design-first (Zalando and the OpenAPI Initiative flag generated descriptions as incomplete); chain start and model separation (L1277; REG-1150, REG-1154, REG-1159, REG-1160).
+
+    Rejected, with the condition under which each would be best: hand-maintained duplicates of the description: best never. Code-first for independent consumers: generated descriptions are flagged as incomplete; best for one team owning both ends. Design-first for one team owning both ends: an authored description adds a second thing to keep in sync; best for independent consumers. One class for table and validation once the interface shape differs from storage: couples storage to the interface.
+
+    Context: who owns both ends (one team: code-first; independent consumers: design-first, L1271); complexity of the interface shape against storage moves the model separation (L1277). Links: stack pointers L220 (OpenAPI for HTTP), L221 (OpenAPI, AsyncAPI, Spectral), L222 (OpenAPI 3, openapi-diff), L1284, L1271, L1277 (restated neutral); TRANSVERSE.DOCS holds the authoring of reference documentation (MD-03); requires RULES.3. Flags: none.'
+  examples:
+  - 'Code-first: the generated description is a build artifact, committed or checked, never hand-edited.'
+  - 'Chain start: storage schema, server models or the description file; one class for table and validation in simple CRUD, separate storage, input and output models once the interface shape differs from storage.'
+  impl_pointers:
+  - build/distill/03_judge/J2_assurance_core/judged.md::ASSURANCE.CONTRACTS.3
+  - build/research/06_transverse/result.md::TRANS-C11
+  - build/research/06_transverse/result.md::TRANS-C12
+  - build/research/06_transverse/result.md::TRANS-C13
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C06
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C12
+  - ../web_architecture_guidelines/build/research/17_data_contracts/result.md::DCON-C21
+- op: link.create
+  src: ASSURANCE.RULES.1
+  dst: ASSURANCE.BEHAVIOUR.7
+  intent: The rule to rebuild state rather than clean up (RULES.1) and the maintainer's forced rollback on shared data (BEHAVIOUR.7) pull apart; RULES.1 resolves it by reading the rollback as the platform undo, valid only under the condition BEHAVIOUR.7 states.
+  shape:
+    type: conflicts
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.1
+  dst: ASSURANCE.RULES.3
+  intent: A suite that runs on every change guards anything only if a skipped or missing required check counts as a failure.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.1
+  dst: ASSURANCE.RULES.1
+  intent: A pass of the self-testing suite means no substantial defects only if a failing check means a real defect.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.1
+  dst: ASSURANCE.RULES.5
+  intent: BEHAVIOUR.1 states what the executable check of every change must let a team conclude.
+  shape:
+    type: refines
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.2
+  dst: ASSURANCE.RULES.3
+  intent: Type checks, compiler warnings and adopted linter rules block the merge only through a gate that always runs and cannot be skipped.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.2
+  dst: ASSURANCE.RULES.1
+  intent: Each static check blocks or advises under the false-alarm budget that RULES.1 holds.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.3
+  dst: ASSURANCE.RULES.2
+  intent: The mix of test levels follows from placing each check at the lowest level that catches its failure.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.3
+  dst: ASSURANCE.BEHAVIOUR.4
+  intent: The recorded proportions of the mix and the double style of test construction are decided together, and the rejected fixed ratio is held in both.
+  shape:
+    type: see
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.3
+  dst: ASSURANCE.CONTRACTS.2
+  intent: Weight on integration tests for failures between services is complemented by contract tests at the seams between independently released components.
+  shape:
+    type: see
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.5
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: A defect becomes a failing test only inside a suite that runs on every change.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.6
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: The principle that adequacy is judged by detection, not execution, is stated in BEHAVIOUR.1 and applied here to coverage, mutation and property-based testing.
+  shape:
+    type: dataflow
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.8
+  dst: ASSURANCE.BEHAVIOUR.2
+  intent: 'The static layer stays the first layer: it catches the part of these defect classes it can (name and type errors), and these practices catch the rest.'
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.RULES.2
+  dst: ASSURANCE.BEHAVIOUR.1
+  intent: Combining kinds of check and placing them low rests on a self-testing suite that exists and is judged by what it detects.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.RULES.2
+  dst: ASSURANCE.RULES.3
+  intent: A recorded stage policy blocks only through gates that cannot be skipped.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.RULES.5
+  dst: ASSURANCE.RULES.1
+  intent: Completion shown by an executable check is believable only if a failing check means a real defect.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.RULES.5
+  dst: ASSURANCE.RULES.4
+  intent: The same bar for review means the independent, accountable review that RULES.4 defines.
+  shape:
+    type: requires
+- op: link.create
+  src: ASSURANCE.CONTRACTS.1
+  dst: ASSURANCE.CONTRACTS.2
+  intent: 'The maintainer''s additive, coordinated evolution (CONTRACTS.1, L295) and contract tests between independently released components (CONTRACTS.2, L102) pull apart; the consumer-reach context resolves it: coordination for few reachable consumers, contract tests where release is independent.'
+  shape:
+    type: conflicts
+- op: link.create
+  src: ASSURANCE.CONTRACTS.2
+  dst: ASSURANCE.CONTRACTS.3
+  intent: A single-team application whose client and server deploy together verifies its seam with integration tests and the description diff held in CONTRACTS.3.
+  shape:
+    type: see
+- op: link.create
+  src: ASSURANCE.CONTRACTS.3
+  dst: ASSURANCE.RULES.3
+  intent: The diff of the interface description blocks an incompatible change only through a gate that always runs and cannot be skipped.
+  shape:
+    type: requires

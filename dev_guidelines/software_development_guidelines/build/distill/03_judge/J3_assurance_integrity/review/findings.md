@@ -1,0 +1,42 @@
+# Findings: review of unit J3_assurance_integrity
+
+Format: id | node | check | severity | what is wrong | proposed correction | evidence.
+Pin: records reviewed 19 (3 L2 roll-ups, 16 L3); findings fix 8 (R1, R2, R3, R4, R6, R7, R8, R9); findings flag 7 (R5, R10, R11, R12, R13, R14, R15); sources fetched 4, confirmed 3 (1 partial: REG-153).
+
+## fix
+
+R1 | DOCS_SYNC.2 | 2 grounding | fix | The waiver is grounded on L239, but L239 says "When documentation merges without the required reviewer, a follow-up review issue should be opened": it is a follow-up for a missing review, not a waiver of missing documentation. | Ground the waiver on L214 position (b) (GitLab: encouraged, waiver and follow-up issue); cite L239 only for the follow-up issue on a missing review. | L239 ledger text; REG-153 fetched: "the developer or maintainer must schedule a review immediately after the merge. ... create an issue with the Doc Review description template"; the same page makes writer review non-blocking, documentation itself required for user-visible features.
+
+R2 | DOCS_SYNC (roll-up) and DOCS_SYNC.1 | 7 consistency | fix | Outcomes overclaim: roll-up says "no released behaviour is described falsely" then admits residual semantic drift; .1 says "at no commit ... do documentation and behaviour disagree" although same-request delivery removes only the timing window and DOCS_SYNC.4 says path rules detect absence, not accuracy. | Roll-up: "no released behaviour lacks its documentation; accuracy is verified by review, residual semantic drift owned and scheduled". .1: "no window in time between a change and its documentation". | L226 ledger ("path-based rules detect absence of an edit, not inaccuracy"); judged DOCS_SYNC.4 outcome.
+
+R3 | DATA_INTEGRITY.1 | 2 grounding | fix | Grounds say "constraint semantics and naming are grounded (L1286)". The ledger marks semantics grounded, mirror and naming advice inferred. "MUST name constraints" rests on the inferred part. | Write "semantics grounded; naming advice inferred", keep the MUST but mark it inferred. | L1286 ledger certainty column.
+
+R4 | DATA_INTEGRITY.1 | 6 context creep | fix | Rejected P1 and Context name "no declarative constraint facility (some non-relational stores)"; no row says it. Rows give only "wins with a single application owning the store" (L279). | Drop the non-relational clause, or mark it inferred. | L279 ledger alternatives column.
+
+R6 | DATA_INTEGRITY.4 | 2 grounding | fix | Grounds say the maintainer ladder (L281, L282, L314) is "recorded as agreeing with public practice". L281 is recorded "extends", only L282 and L314 "agrees". | "L282 and L314 agree with public practice; L281 extends it". | L281, L282, L314 ledger "vs common practice" column.
+
+R7 | DATA_INTEGRITY.5 (and DATA_INTEGRITY roll-up) | 6 context creep, 7 consistency | fix | "with an owner" for observe-only mode (decision and MUST) is in no row; L284 gives only the exit (enforce after open defects removed). Roll-up certainty counts "four grounded, one inferred" but .1, .2 and .3 each carry inferred parts. | Mark owner as inferred; roll-up: "grounded cores, with inferred parts in .1, .2, .3". | L284 ledger; judged .1, .2, .3 item 6.
+
+R8 | DATA_INTEGRITY.3 | 6 context creep | fix | Rejected soft deletion is "best when ... the data model is small enough that the predicate is enforced once (a view or default scope)": no row says it. | Keep only "undelete is a product feature"; mark the view or default-scope mitigation inferred. | L1255, L1256 ledger text.
+
+R9 | SECURITY.3 | 7 consistency, 1 | fix | Decision ends "with regular penetration testing following as the practice matures", yet Rejected says regular penetration tests (fuller programme) for all applications are best only under high criticality or regulation; SECURITY.1 sets depth by risk. "As practice matures" is a context no row supports (L1137 is inferred, no frequency). | Decision: manual expert testing first at highest-risk components; regular penetration testing where criticality or regulation is high (L1126). Frequency stays open. | L1126 ledger (SAMM 2-3 win "under high criticality or regulation"); L1137 inferred.
+
+## flag
+
+R5 | DATA_INTEGRITY.3 (F2) | 2 grounding, 1 | flag | The judge says the case for soft deletion "was not read at T1 or T2". REG-250 (T2), already cited in the same node, states it: "Soft deletion is the primary defense against developer error", a window of 15-60 days, as the first of three layers. So the choice of archive over the flag is made against a read T2 source, on one T3 critique. The archive is also a different mechanism from the "retention delay" layer the consensus rows describe. | Opus pass: decide between (a) archive as default, flag when undelete is a feature (current), (b) retention-window reversibility as the layer and archive or flag as its form by context. Correct the grounds sentence either way. | REG-250 fetched; REG-1145 fetched (costs confirmed, deleted_record table with original_table, original_id, jsonb data in one transaction); L416, L417, L1092 consensus.
+
+R10 | DOCS_SYNC.2 (F5) | 1 averaging, 7 | flag | A hard merge gate whose waiver is a recorded exception with a follow-up issue is close to a blend of position (a) hard gate and (b) soft gate with waiver. The record does not say who may grant the waiver (SECURITY.2 does). Without an authority the waiver turns the gate soft. J2 RULES.3 (skipped check = failure, fail closed) is consistent only if the waiver is an explicit visible approval, not a skip. | Opus pass: confirm the gate-plus-waiver; require the waiver to be granted by the reviewer or owner and recorded in the change. | L214 ledger; REG-153 fetched (writer review non-blocking; docs required); J2 RULES.3.
+
+R11 | DATA_INTEGRITY.1 (F1) | 1 averaging | flag | Middle zone default (declarative first, procedural only when no declarative form) rests on one reasoning line; L1262 is inferred and REG-1143 (Fowler) was not fetched here. | Opus pass confirms; I did not check REG-1143. | L1262 ledger.
+
+R12 | SECURITY.2 (F3) | 6 | flag | Blocking threshold open; the decision defers the number to the team's measured false-positive rate. Honest, nothing in sources settles it. Note REG-170: by default anyone with write access can bypass push protection, bypass is logged and notified; "audited" holds, "who may waive" is a configuration (delegated bypass), not a default. | Keep as open; state that "who may waive" must be configured, not assumed. | REG-170 fetched; L246 open note.
+
+R13 | SECURITY.3 (F4) | 7 consistency | flag | The 80% statement-coverage item of L1126 is not adopted. Consistent with J2 BEHAVIOUR.6 (no coverage number as gate; its flag F10 asks J3 to reconcile, which J3 does by exclusion). Residual: the decision silently drops the floor's "run with built-in checks" item. | Opus pass: confirm reconciliation with J2 F10; optionally list built-in checks in SECURITY.4. | J2 judged BEHAVIOUR.6 item 1 and 7; L1126.
+
+R14 | SECURITY.3 (F7) | 6 | flag | Penetration-test frequency open (no source). After R9 the decision no longer asserts a frequency; the open point stays recorded. | Keep open. | L1137 inferred.
+
+R15 | SECURITY.6 (F6) | 5 author rules | flag | The decision is mostly actor-neutral (least privilege, enforcement in tooling), but "automated author" appears in the intent and decision, and the large-blast-radius job is "run by a person at their own terminal", which is a rule about who executes. The outcome (an executor cannot bypass the guards, the script was reviewed) is stated only in Rejected. The node also mixes two subjects (automation limits, data access). | Opus pass: reword to "automated actor"; state the outcome in the Decision (a job whose guards cannot be applied or whose effects are irreversible is not run through a channel that bypasses its guards, and runs from a reviewed script), keep "by a person" as an example; decide on the split. | L327, L1071 ledger; MD-02.
+
+## Checked, no finding
+
+Check 3 missed positions: every position P1..Pn of the 19 skeleton records and every MAINT row (L279-L284, L314, L319, L320, L325-L327) appears in Positions, Decision or Rejected. Check 4: rejected positions carry a condition or an explicit "best never" with a reason. Check 8: roll-up decisions restate their children by design; index links point to CHANGE_FLOW.DATA_CHANGE, OPERATION.RECOVERY, TRANSVERSE. Cross-links to J2 (RULES.3, .4, BEHAVIOUR.2, .6, CONTRACTS.3) and J4 (AVAILABILITY.4) now resolve to written verdicts.

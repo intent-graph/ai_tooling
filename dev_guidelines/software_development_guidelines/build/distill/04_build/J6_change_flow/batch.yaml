@@ -1,0 +1,1454 @@
+operations:
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION
+  name: Version Control and Integration
+  intent: Everything needed to build, deploy and restore lives in version control, and work reaches one mainline in small, frequent, attributable changes, with a broken mainline fixed before anything else. The repository stays a complete source of the system, history serves reading and reversal, and every change has a known author and approver.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of INTEGRATION.1 to .6; principles grounded in the children, numeric defaults inferred'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Everything needed to build, deploy and restore lives in version control; work is integrated into one mainline in small, frequent, attributable changes, and a broken mainline is fixed before anything else. Outcome: the repository alone rebuilds the system, history serves reading and reversal, and each change has a known author and approver.
+
+    Grounds: Roll-up of INTEGRATION.1 to .6 (18 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable (roll-up).
+
+    Context conditions: None here; contributor model moves .2, release model moves .3.
+
+    Certainty (judge record): Inferred as a roll-up (own certainty); principles grounded in the children, numeric defaults inferred.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.RULES (mechanism for RULES.3 and RULES.4 on the mainline is ARTIFACT.2).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.1
+  name: Repository Content and Shape
+  intent: The repository holds everything needed to build, deploy and restore, so a clean machine rebuilds the system from it alone. Each deployable has one codebase, code shared across applications is a versioned library, and whatever repository layout is chosen keeps one version of each shared component at any time.
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: a monorepo holds one codebase per application as one unit per deployable with its own build and deploy | gap: which repository layout wins in general is open, the layout debate rests on one practitioner source'
+  constraints:
+  - MUST a clean checkout build and deploy without machine-specific state
+  - MUST one version of each shared component hold at any time
+  design_notes: |-
+    Decision (judge record, final): Keep everything needed to build, deploy and restore (source, scripts, infrastructure and application configuration, dependency declarations) in version control; a clean machine builds from the repository alone. Each deployable application has one codebase and many deploys; code shared across applications is a versioned library, and whatever repository layout is chosen keeps one version of each shared component at any time. Outcome: reproducible rebuild and recovery from one place, and consistent dependencies.
+
+    Grounds: Consensus on content (L124; REG-077, REG-092, REG-095) and on one codebase per deployable (L1190; REG-1109). The one-version invariant is what L132 states for every layout (REG-106, single T2 source for the layout debate).
+
+    Positions considered: P1 everything in version control (reproducibility). P2 one codebase per application (ownership). P3 monorepo (atomic cross-project change). P4 multiple repositories (control, security). P5 virtual monorepo (one version across repositories).
+
+    Rejected, each with the condition under which it would be best: No layout is rejected as such: the layout is a means to the invariant. Monorepo is best for one organization with tooling investment and many interdependent projects; multiple repositories are best for regulated or access-segmented work; a virtual monorepo is best when separate repositories are required and one version still must hold. A repository that omits scripts, configuration or infrastructure needed to rebuild: best never.
+
+    Context conditions: Access segmentation (L132): regulated or access-segmented work moves the layout to multiple repositories; the invariant stays.
+
+    Certainty (judge record): Grounded for P1 and P2 (consensus); inferred that a monorepo holds "one codebase per application" as one unit per deployable with its own build and deploy; the layout debate rests on one T2 source (open on which layout wins in general).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related OWNERSHIP.LIFECYCLE (the one-version rule is a dependency rule).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.1
+  - build/research/04_delivery/result.md::DELIVER-C01
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C32
+  - build/research/04_delivery/result.md::DELIVER-C09
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.2
+  name: Integration Frequency and Branch Life
+  intent: Work is integrated into the mainline at least daily and a branch lives hours to a couple of days; unfinished work that spans longer is merged hidden, not held in a branch. Deferred integration costs more in conflicts, isolation and late feedback than continuous integration does.
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: the three-or-fewer active branches figure is a default bound, not a rule'
+  constraints:
+  - MUST a branch be merged or deleted within days (the limit is the team's, default a couple of days)
+  - MUST unfinished work on the mainline be hidden and its toggle carry an owner and an expiry (RELEASE.3)
+  design_notes: |-
+    Decision (judge record, final): Integrate into one mainline at least daily; a branch lives hours to a couple of days, and long-lived development branches are avoided. Work that spans more than the integration interval is merged hidden behind a flag, dark launch, keystone or branch by abstraction, not held in a branch. Outcome: early feedback, small conflicts, and a mainline that always holds the latest integrated work.
+
+    Grounds: Many small integrations reduce conflict cost and give early feedback (L125; REG-057, REG-077, REG-078, REG-079, REG-106); long-lived branches cost more in merges, regression isolation and large-scale change (L128, consensus; REG-079, REG-106, REG-110); hiding unfinished work keeps integration continuous (L129; REG-077, REG-078, REG-089, REG-096). The strongest argument is the cost curve of deferred integration; the opposing position is a condition, not a rival.
+
+    Positions considered: P1 daily integration, short branches (feedback). P2 feature branches merged when complete (control, low coordination cost). P3 avoid long-lived branches. P4 hide unfinished work in the mainline (carrying cost of toggles).
+
+    Rejected, each with the condition under which it would be best: P2 as the general rule: it defers integration risk rather than removing it. Best for open source with many untrusted or part-time contributors, and for features of one to two days (L125; REG-110). Daily integration without good automated tests: it only multiplies conflict-free merges of unchecked code; best preceded by the trust signal of RULES.1.
+
+    Context conditions: Contributor model (full-time team versus sparse or untrusted contributors) and test maturity (L125): sparse contributors and short features keep a feature branch merged when complete; full-time teams with good tests integrate daily.
+
+    Certainty (judge record): Grounded (consensus on avoiding long-lived branches, majority on daily merge, DORA); the "three or fewer active branches" figure is a DORA default, inferred as a bound.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related RELEASE.3 (flags), ASSURANCE.RULES.2 (small feedback loops).
+  examples:
+  - 'One research programme''s default: three or fewer active branches, merged at least daily.'
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.2
+  - build/research/04_delivery/result.md::DELIVER-C02
+  - build/research/04_delivery/result.md::DELIVER-C05
+  - build/research/04_delivery/result.md::DELIVER-C06
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.3
+  name: Branching Model and Release Branches
+  intent: 'The branching model follows the release model: one continuously delivered live version uses short branches off one mainline and fixes go forward, while explicitly versioned or multi-version software cuts a release branch just in time, fixes on the mainline, cherry-picks into it and deletes it after release. A branch exists only as long as a version needs separate fixes.'
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: the just-in-time release branch is the form a release branch takes, not a rival to it'
+  constraints:
+  - MUST a release branch (when it exists) receive fixes by cherry-pick from the mainline, not by merge back
+  design_notes: |-
+    Decision (judge record, final): Follow the release model. For one live version delivered continuously: trunk-based flow with short-lived branches and no release branch; a defect is fixed on the mainline and redeployed (fix forward). Where software is explicitly versioned or several versions are supported in the field: a release branch, cut only just in time, defects fixed on the mainline and cherry-picked into it, deleted after release and never merged back. Outcome: one place where change happens, and a branch that exists only for as long as a version needs separate fixes.
+
+    Grounds: Trunk or GitHub flow for continuous delivery, including its originator's own retraction for that case (L126; REG-078, REG-090, REG-091, REG-106); release branches by the number of versions in the field (L126; REG-090); just-in-time cut, cherry-pick, delete (L127; REG-078, REG-082, REG-106).
+
+    Positions considered: P1 trunk or GitHub flow (speed, low cognitive load). P2 release branches git-flow style (control, several versions). P3 just-in-time release branch. P4 no release branch, fix forward (simplicity).
+
+    Rejected, each with the condition under which it would be best: Standing release branches for a single live version: they add merge cost for no version to support; best only when versions are in the field. P4 for a supported-versions product: a fix to an old version has nowhere to land; best when the release cycle is hours.
+
+    Context conditions: Release model (L126): continuous single live version versus several supported versions. P3 is how P2 is done, not a rival to it.
+
+    Certainty (judge record): Grounded for the split by release model (T1/T2 sources, the originator's own statement); inferred that P3 is the form P2 takes.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related RELEASE.1, ROLLBACK.1 (fix forward).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.3
+  - build/research/04_delivery/result.md::DELIVER-C03
+  - build/research/04_delivery/result.md::DELIVER-C04
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.4
+  name: Merge Method and Commit Practice
+  intent: A change is one logical unit that can be read and reverted as one, each commit is atomic and says what changed and why, and one merge method is chosen and recorded per repository. A structured message format is used only where tools generate releases from history.
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: the squash default follows from small units and simple revert | gap: which of the three merge methods wins is open, no source ranks them'
+  constraints:
+  - MUST one merge method be recorded per repository
+  - MUST a commit be atomic and say what and why
+  design_notes: |-
+    Decision (judge record, final): The unit of integration is one logical change that can be read and reverted as one unit; each commit is atomic and complete, and its message says what changed and why; unrelated changes go in separate branches or pull requests. One merge method is chosen per repository and recorded: squash for small one-logical-unit changes (the default when changes are kept small, INTEGRATION.5 and REVIEW.2), rebase when commits are well-structured atomic commits worth keeping, merge commit when integration events must be traced. A structured message format (Conventional Commits) is used only when release notes or version bumps are generated from history. Outcome: history that can be read, bisected, reverted and, where needed, read by tools.
+
+    Grounds: Atomic commits with what and why (L133, consensus; REG-083, REG-091); the three methods each trade fidelity against simplicity (L130; REG-109, REG-114); structured messages serve automation only when automation exists (L134; REG-030, REG-102). No source ranks the three methods; the squash default follows from small units and simple revert and is inferred.
+
+    Positions considered: P1 squash (cognitive load, reversibility). P2 rebase (bisect granularity). P3 merge commit (fidelity, audit). P4 atomic commits with what and why. P5 Conventional Commits when releases are generated. P6 free-form what and why.
+
+    Rejected, each with the condition under which it would be best: Each method is best under its row's condition (above). A mandatory structured format without a generator: it costs every author and serves nobody. Several methods mixed in one repository without record: the history then has no reading rule; best never.
+
+    Context conditions: Whether integration events must be traced (merge commit), whether commits are well structured (rebase), whether history is parsed by automation (structured message).
+
+    Certainty (judge record): Grounded for atomic commits and the structured-message condition; inferred for the squash default; open on a winner among the three methods (no source read ranks them). The maintainer's mandatory unit header with a dated change log (L318, routed elsewhere) is in partial tension with free-form messages and is not decided here.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): stack pointer L130 (GitHub terms); Related INTEGRATION.5.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.4
+  - build/research/04_delivery/result.md::DELIVER-C07
+  - build/research/04_delivery/result.md::DELIVER-C10
+  - build/research/04_delivery/result.md::DELIVER-C11
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.5
+  name: Mainline Health and Batch Size
+  intent: 'A broken mainline is the highest-priority work: the faulty change is reverted and a named person owns the fix. Batches stay small, commits frequent and rollback routine, more so as change volume rises, so version control remains the safety net whoever or whatever produces the change.'
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: the causal link from change volume to oversized batches'
+  constraints:
+  - MUST a broken mainline be reverted or fixed before new work merges
+  design_notes: |-
+    Decision (judge record, final): A broken mainline is the highest-priority work: the faulty change is reverted to restore it and a named person owns the fix. Batches stay small, commits frequent and rollback routine, and the rule tightens as change volume rises, whoever or whatever produces the change. Outcome: the mainline is always releasable and any change can be undone cheaply.
+
+    Grounds: Fix or revert a broken build first (L146; consensus, REG-057, REG-077, REG-085); small batches and routine rollback at volume (L1057; REG-1041, REG-181) and the same rule for generated code (L172; REG-095, REG-096), merged here as one author-neutral rule.
+
+    Positions considered: P1 broken mainline first (consensus). P2 small batches, frequent commits, routine rollback (majority). P3 the same for generated code.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. Letting a broken mainline wait for the author: best never, since every later integration is blind.
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for P1 (consensus); grounded as majority for P2 (one program plus the maintainer); the causal link volume to oversized batches is inferred.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (author-neutral: the rule is stated for any producer of change).
+
+    Links and stack pointers (judge record): Related REVIEW.2 (small units protect review), ROLLBACK.2 (routine rollback).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.5
+  - build/research/04_delivery/result.md::DELIVER-C23
+  - build/research/04_delivery/result.md::DELIVER-C49
+  - build/research/13_change_authors/result.md::AUTH-C16
+- op: node.create
+  uid: CHANGE_FLOW.INTEGRATION.6
+  name: Change Attribution and Actor Rules
+  intent: Every change carries a recorded trail of its author, its approver and, for an automated author, the tool and session; automation uses identities distinct from human ones, and a change not attributable to a person needs approval by a named accountable person. The bar is the same whatever the origin of a change, so no disclosure rule is needed.
+  parent: CHANGE_FLOW.INTEGRATION
+  epistemic_state: 'known | inferred: the author-neutral phrasing of the actor boundaries and the choice of no disclosure rule over disclosure (one maintainer ruling, one inference)'
+  constraints:
+  - MUST an automated author use an identity distinct from a human one
+  - MUST an unattributed change be approved by a named person
+  - MUST NOT the bar depend on who authored
+  design_notes: |-
+    Decision (judge record, final): Every change carries a platform-recorded trail: who or what authored it, who approved it, and, for an automated author, which tool and session. Automation uses identities distinct from human ones; a change not attributable to a person needs an additional approval by a named, accountable person; the actors (human, bot, agent) and what each may do in the change flow are stated. No disclosure rule is needed: the same bar and the same gates apply to every change, and the recorded trail gives the benefit of disclosure without relying on declarations. Outcome: any change is traceable to an accountable party, and the bar does not depend on origin.
+
+    Grounds: Attributable record (L1061; REG-1036, REG-1040, REG-114), distinct identities and added approval (L1062; REG-1036, one vendor, platform-specific mechanism), stated actor boundaries (L1076; REG-1035, REG-1037, REG-1041); one bar for everyone is ASSURANCE.RULES.5 (L1042) and a named accountable person is ASSURANCE.RULES.4 (L1043). The row-level note that a platform trail gives P4's benefit is the deciding argument against a declaration rule.
+
+    Positions considered: P1 attributable record. P2 distinct identities, added approval. P3 stated actor boundaries. P4 mandatory disclosure of tool use (reviewer calibration, provenance). P5 no disclosure rule, same bar (simplicity).
+
+    Rejected, each with the condition under which it would be best: P4 as the general rule: declarations can be omitted and add friction; best where reviewer time is scarce and intake is public (open contribution), where it lets a reviewer calibrate depth (L1077 a). Shared human-and-bot identities: best never, attribution is lost.
+
+    Context conditions: Reviewer capacity and public intake (L1077): scarce reviewers with public intake favour a recorded disclosure on top of the trail.
+
+    Certainty (judge record): Grounded for the trail and distinct identities (majority, vendor documentation, mechanism platform-specific); inferred for the author-neutral phrasing of L1076 and for the choice of P5 over P4 (one maintainer ruling, one inference).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (the bar and the attribution do not depend on who or what authored the change).
+
+    Links and stack pointers (judge record): Related ASSURANCE.SECURITY.6 and ARTIFACT.2 (limits and mainline binding), REVIEW.1; stack pointer L1062 (one hosting platform's mechanism).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.INTEGRATION.6
+  - build/research/13_change_authors/result.md::AUTH-C20
+  - build/research/13_change_authors/result.md::AUTH-C21
+  - build/research/13_change_authors/result.md::AUTH-C35
+  - build/research/13_change_authors/result.md::AUTH-C36
+- op: node.create
+  uid: CHANGE_FLOW.REVIEW
+  name: Review
+  intent: 'Review realizes independent, accountable review bound to the exact content: the mechanism follows team and risk, depth follows risk and evidence of understanding, units are small and answered quickly, and automation runs first while a second model only assists. Review stays trustworthy and review capacity does not become the constraint.'
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of REVIEW.1 to .4; grounded in the settled independent-review decision and the children'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Review realizes ASSURANCE.RULES.4: independent, accountable, bound to the exact content. The mechanism (asynchronous approval, synchronous review or pairing, show-after-merge for the low-risk tier) follows team and risk; depth follows risk and evidence of understanding; units are small and answered quickly; automation runs first and a second model assists but never approves. Outcome: the review was trustworthy and review capacity is not the constraint.
+
+    Grounds: Roll-up of REVIEW.1 to .4 (11 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable (roll-up).
+
+    Context conditions: Team size and trust, criticality, scale (on the children).
+
+    Certainty (judge record): Inferred as a roll-up; grounded in the settled RULES.4 and the children.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.RULES.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.REVIEW
+- op: node.create
+  uid: CHANGE_FLOW.REVIEW.1
+  name: Mechanism and Depth by Risk
+  intent: One bar applies to every change and an independent party checks each change before integration; the mechanism (asynchronous approval, synchronous review or pairing, post-merge show for the defined low-risk tier) is chosen per team and recorded. Depth rises with risk and wherever the submitter's understanding cannot be assumed, and a high-blast-radius change is approved by named approvers qualified for that class.
+  parent: CHANGE_FLOW.REVIEW
+  epistemic_state: 'known | inferred: the author-neutral form of depth by evidence of understanding and the escalation criterion (maintainer practice agreeing with common practice)'
+  constraints:
+  - MUST a high-blast change name its approvers
+  - MUST NOT depth be reduced because the author is trusted or automated
+  design_notes: |-
+    Decision (judge record, final): One bar for every change (RULES.5), an independent party checks each change before integration (RULES.4); the mechanism is chosen per team and recorded: mandatory asynchronous approval, or synchronous review or pairing recorded on the platform, with show-after-merge allowed only for the low-risk tier RULES.4 defines. Depth is set by risk and by evidence that the submitter understands the change, and rises where that cannot be assumed. A change with a large blast radius (it holds locks, runs longer than the team's time budget, or can affect availability) is approved by named approvers qualified for that class; who may run it is held at DATA_CHANGE.3 and RELEASE.5. Outcome: review effort sits where it pays and no high-blast change is approved by someone unqualified for it.
+
+    Grounds: Mandatory approval gives confidence, knowledge sharing and a trail (L137; REG-083, REG-114, REG-115); synchronous review removes the queue (L137; REG-079, REG-116); Ship, Show, Ask is the post-merge tier under strong gates (L137; REG-098), which RULES.4 already admits; depth by evidence of understanding (L1044 b; REG-1040, REG-1043, REG-1044); escalation by risk with named senior approvers (L298, maintainer; agrees with common practice, REG-181).
+
+    Positions considered: P1 mandatory asynchronous approval. P2 synchronous review or pairing. P3 Ship, Show, Ask. P4 one uniform bar, depth by risk. P5 depth by evidence of understanding. P6 escalate by risk with named senior approvers.
+
+    Rejected, each with the condition under which it would be best: P3 as the general rule: settled against at RULES.4, which holds the reason; best as the post-merge tier for low-risk change with automatic gates and revert. P1 in a small trusted team that pairs: pairing satisfies independence when the second person is recorded; best for larger or less-trusting teams, regulated change control, many contributors. P2 where reviewers are distributed or contributors many. P4 and P5 are one rule seen from two sides (a bar that does not move, an effort that does). "Senior" as a title in P6: restated as a named approver qualified for the class; the title form is best with a small trusted senior group and few critical changes (L298).
+
+    Context conditions: Team size and trust (mechanism); criticality (depth); whether submitter understanding can be assumed (P5): public intake, high volume and many contributors make the deeper review the default.
+
+    Certainty (judge record): Grounded for independence and the mechanism conditions (consensus, DORA warns against heavy multi-approval review); inferred for the author-neutral form of L1044 b and for the escalation criterion (maintainer practice agreeing with common practice).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (depth tracks evidence of understanding, not the kind of author).
+
+    Final pass: cross-unit X14 applied (rejection of the post-merge show as the general rule points to the settled review decision for the reason, no restated wording; MD-03).
+
+    Links and stack pointers (judge record): Related INTEGRATION.6, DATA_CHANGE.3 and .8 (L298 and L303 name senior review of locking or long changes), ASSURANCE.RULES.4, RULES.5.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.REVIEW.1
+  - build/research/04_delivery/result.md::DELIVER-C14
+  - build/research/13_change_authors/result.md::AUTH-C03
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C34
+- op: node.create
+  uid: CHANGE_FLOW.REVIEW.2
+  name: Unit of Review and Response Speed
+  intent: A unit of review is small enough to be read meaningfully, with refactoring in separate changes and tests beside the logic they cover, and a reviewer answers within a bounded time. When production volume rises, review capacity is the binding constraint, so reviews must stay real and waiting must stay bounded.
+  parent: CHANGE_FLOW.REVIEW
+  epistemic_state: 'known | inferred: the numeric thresholds are defaults (sources differ, 100 and 200 lines) and the causal reading of review capacity as the constraint'
+  constraints:
+  - MUST a unit of review be small enough to be read in one sitting
+  - MUST a reviewer answer within the team's stated bound
+  design_notes: |-
+    Decision (judge record, final): Keep each unit of review small enough to be read meaningfully (about 100 lines typical, around 1000 too large; the thresholds are the team's), with refactoring in separate changes and tests in the same change as the logic they cover; treat review capacity as the binding constraint when production volume rises. Respond to a review request within one business day at most, preferring quick individual responses and optimising team throughput over one author's speed. Outcome: reviews are real, and waiting is bounded.
+
+    Grounds: Small changes (L140, consensus; REG-083, REG-096, REG-100), review capacity as constraint when volume rises (L1048; REG-1041, REG-1042, REG-1047), response within a business day (L139, consensus; REG-083, REG-099).
+
+    Positions considered: P1 small changes with thresholds. P2 review capacity as constraint, small units. P3 respond within one business day.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. Large reviews approved by skim: best never, the review signal then proves nothing (RULES.1).
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for P1 and P3 (consensus; thresholds differ between sources, 100 and 200 lines, so numbers are inferred defaults); P2 majority, the causal reading inferred.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related INTEGRATION.5 (L172, L1057).
+  examples:
+  - 'Thresholds one source gives: about 100 lines typical, around 1000 too large; another source says 200.'
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.REVIEW.2
+  - build/research/04_delivery/result.md::DELIVER-C17
+  - build/research/13_change_authors/result.md::AUTH-C07
+  - build/research/04_delivery/result.md::DELIVER-C16
+- op: node.create
+  uid: CHANGE_FLOW.REVIEW.3
+  name: What the Reviewer Reads and Approves
+  intent: A change is approved when it definitely improves overall code health even if imperfect, facts overrule preference, and a second reader must be able to understand it. Review is guided by an owned, freshness-checked catalog of defect patterns read by type of change, which doubles as an audit list.
+  parent: CHANGE_FLOW.REVIEW
+  epistemic_state: 'known | inferred: the maintained defect catalog (maintainer practice, public review checklists not fetched)'
+  constraints:
+  - MUST a second reader be able to understand the change
+  - MUST the catalog have an owner
+  design_notes: |-
+    Decision (judge record, final): Approve a change when it definitely improves overall code health, even if imperfect; technical facts and data overrule preference, and optional suggestions are marked as such. Review also serves understanding: a second reader must be able to understand the change. Review is guided by a maintained catalog of defect patterns read by type of change (table, function, query, index and so on), and the catalog has an owner and is checked for staleness; it doubles as an audit list. Outcome: approvals mean the change is understandable and better, and recurring defect classes are looked for deliberately.
+
+    Grounds: Improve code health, facts over preference (L138; REG-080, one T2 source, no opposing source found); review as understanding and knowledge transfer (L142, consensus; REG-083, REG-108); catalog read by change type (L297, maintainer; read as majority public practice via review checklists; REG-181). The cost noted by the row, a catalog not kept current misdirects review, is the reason for the owner and the freshness check.
+
+    Positions considered: P1 improve code health. P2 understanding and knowledge transfer. P3 maintained anti-pattern catalog by change type.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. A catalog without an owner: best never (it then misdirects review). Perfection as the approval bar: slows delivery for no gain in health (P1).
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for P1 and P2 (consensus, one T2 source for P1); inferred for P3 (maintainer practice; public checklists not fetched).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related ASSURANCE.BEHAVIOUR.8 (defect classes that survive review).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.REVIEW.3
+  - build/research/04_delivery/result.md::DELIVER-C15
+  - build/research/04_delivery/result.md::DELIVER-C19
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C33
+- op: node.create
+  uid: CHANGE_FLOW.REVIEW.4
+  name: Automated and Second-Model Layers
+  intent: 'Format, lint, tests and build run before the human reviewer so attention goes to design and logic. A second automated reviewer may be added as an extra layer but never as the approving party: accountable approval stays with an independent responsible party.'
+  parent: CHANGE_FLOW.REVIEW
+  epistemic_state: 'known | inferred: the second automated reviewer as an extra layer (vendor statements only) | gap: no study read on the accuracy of an automated second reviewer'
+  constraints:
+  - MUST automated checks run before the reviewer is asked
+  - MUST NOT an automated reviewer be the approving party
+  design_notes: |-
+    Decision (judge record, final): Format, lint, tests and build run before human review so the reviewer spends attention on design and logic. A second model reviewing in a fresh context may be added as an extra layer, never as the approver: the accountable approval stays with an independent responsible party, and the extra layer substitutes for no part of it at high risk. Outcome: the human review is spent where machines cannot judge, and approval stays accountable.
+
+    Grounds: Automation first (L141, consensus; REG-083, REG-085); second reviewer as added layer under human accountability (L1049 a; REG-1038); human gate for approval for independence of failure modes (L1049 b; REG-1036, REG-1040); RULES.4 settled that a machine may assist but is never the accountable party.
+
+    Positions considered: P1 automation first. P2 second model as extra layer. P3 human-only gate for approval.
+
+    Rejected, each with the condition under which it would be best: A second model as the approving party: best never under RULES.4 (accountability attaches to a person or role). P2 as a replacement for part of the human review: best when volume exceeds human capacity and risk is low, and only as a layer (the human review stays in force); where risk is high P3 alone governs approval.
+
+    Context conditions: Scale (volume beyond human capacity favours the extra layer) and criticality (high risk keeps the human gate sole).
+
+    Certainty (judge record): Grounded for P1; inferred for P2 (vendor statements only; no study read on AI-reviewer accuracy: open).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (a second model is an assisting layer, accountability is for a responsible party).
+
+    Links and stack pointers (judge record): Related ASSURANCE.RULES.2 and RULES.4, BUILD.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.REVIEW.4
+  - build/research/04_delivery/result.md::DELIVER-C18
+  - build/research/13_change_authors/result.md::AUTH-C08
+- op: node.create
+  uid: CHANGE_FLOW.BUILD
+  name: Build and Pipeline
+  intent: The build is scripted, repeatable and hermetic, runs a self-testing suite on every push in a reference environment, is visible to the whole team, and produces one artifact that is promoted unchanged to every environment. The same revision gives the same result anywhere and what is promoted is what was built.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of BUILD.1 and .2; children grounded'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): The build is scripted, repeatable and hermetic, runs with a self-testing suite on every push in a reference environment, is visible to the whole team, and produces one artifact that is promoted unchanged to every environment. Outcome: the same revision gives the same result anywhere, and what is promoted is what was built.
+
+    Grounds: Roll-up of BUILD.1 and .2 (5 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: none.
+
+    Certainty (judge record): Inferred as a roll-up; children grounded (consensus).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.ARTIFACT (provenance and the mainline are decided there).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.BUILD
+- op: node.create
+  uid: CHANGE_FLOW.BUILD.1
+  name: Scripted, Hermetic, Visible Build on Every Push
+  intent: An automated build and self-testing suite runs on every push to the mainline in a reference environment, scripted and hermetic so the same revision gives the same result on any machine. Pipeline state and the flow of changes are visible to the whole team, with an audit trail.
+  parent: CHANGE_FLOW.BUILD
+  epistemic_state: known
+  constraints:
+  - MUST every push to the mainline trigger the build and suite
+  - MUST a build depend on no machine-specific state
+  design_notes: |-
+    Decision (judge record, final): Run an automated build and a self-testing suite on every push to the mainline in a reference environment, not only on developer machines. Builds are scripted, repeatable and hermetic: the same revision on different machines yields the same result, with no machine-specific state. Build and pipeline state and the flow of changes are visible to the whole team, with an audit trail. Outcome: a pass is reproducible and its state is public.
+
+    Grounds: Automated build and suite on every push (L144, consensus; REG-057, REG-077); hermetic repeatable builds (L149, consensus; REG-077, REG-082, REG-104); visibility and audit trail (L148, consensus; REG-057, REG-077, REG-107).
+
+    Positions considered: P1 build and suite on every push in a reference environment. P2 scripted hermetic builds. P3 visible pipeline with audit trail.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. A build only on developer machines: best never (not reproducible).
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded (consensus, several sources).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Final pass FL7 (judge flag F11): settled, record unchanged; listed against the maintainer's practice for the case where the practice has no automated trigger.
+
+    Links and stack pointers (judge record): Related ASSURANCE.BEHAVIOUR.1 (what the tests contain), OWNERSHIP.LIFECYCLE (L149, L048 reproducible builds).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.BUILD.1
+  - build/research/04_delivery/result.md::DELIVER-C21
+  - build/research/04_delivery/result.md::DELIVER-C25
+  - build/research/04_delivery/result.md::DELIVER-C26
+- op: node.create
+  uid: CHANGE_FLOW.BUILD.2
+  name: Build Once, Promote One Artifact
+  intent: Build, release and run are separate stages; a release is immutable and uniquely identified, built once and promoted unchanged to every environment, with environment configuration kept outside it and its provenance verified before use. What runs in production is then the artifact that was tested and reviewed.
+  parent: CHANGE_FLOW.BUILD
+  epistemic_state: 'known | inferred: the wording of the build-once-promote rule'
+  constraints:
+  - MUST an artifact be promoted by identity, not rebuilt
+  - MUST configuration live outside the artifact
+  design_notes: |-
+    Decision (judge record, final): Separate build, release and run stages; releases are immutable and uniquely identified; build once and promote the same artifact to every environment, with environment-specific configuration kept outside it, and verify its provenance before use (ARTIFACT.1). Outcome: what runs in production is the artifact that was tested and reviewed.
+
+    Grounds: L150 and L1191 (consensus; REG-081, REG-082, REG-092, REG-107, REG-1109). "Build once, promote the same artifact" is inferred from REG-081 and REG-092 (REG-107 does not state it); it is what makes ARTIFACT.1 (provenance match to source) checkable per environment.
+
+    Positions considered: P1 build once, promote. P2 rebuild per environment (named in L1191 as what P1 replaces; no row argues for it).
+
+    Rejected, each with the condition under which it would be best: P2: each rebuild is a different artifact, so tests on one do not cover another; best never for "what runs is what was reviewed".
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for stage separation and immutable releases; inferred for the promotion rule's wording.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.ARTIFACT; Related RELEASE.2 (release identifier), TRANSVERSE.CONFIG.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.BUILD.2
+  - build/research/04_delivery/result.md::DELIVER-C27
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C33
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE
+  name: Release
+  intent: Releases are small and frequent, identified by what the identifier promises, separable from deployment by flags where needed, and passed through one staged automated pipeline with human gates only where the change class needs them, by an authorized group when responders are available. A release is small, identifiable, reversible and not performed blind.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of RELEASE.1 to .5; children grounded or inferred as stated on them'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Releases are small and frequent, identified by what the identifier promises, separable from deployment by flags where needed, passed through one staged automated pipeline with human gates only where the change class needs them, and performed by an authorized group when responders are available. Outcome: a release is small, identifiable, reversible, and not performed blind.
+
+    Grounds: Roll-up of RELEASE.1 to .5 (10 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: Release model moves .1, .2; criticality and test maturity move .4.
+
+    Certainty (judge record): Inferred as a roll-up; children grounded or inferred as stated.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.RULES.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE.1
+  name: Cadence and Batch Size
+  intent: 'Prefer small, frequent releases over large infrequent ones, with cadence following the release model: every merge for one live version with strong automation, a regular train for many coordinated components, explicit versions for shipped products. Frequency is raised only together with the supporting practices, because small batches cut blast radius and difficulty while frequency alone raises failures.'
+  parent: CHANGE_FLOW.RELEASE
+  epistemic_state: 'known | inferred: the cadence per release model rests on a few sources'
+  constraints:
+  - MUST the batch size per release be kept as small as the model allows
+  design_notes: |-
+    Decision (judge record, final): Prefer small, frequent releases over large infrequent ones. The cadence follows the release model: one release per merge for one live version with automation and strong tests; a regular train for many components coordinated across teams; explicit versions for shipped products and libraries with several supported. Frequency is raised only together with the supporting practices. Outcome: small blast radius, easy reversal and lower difficulty per release.
+
+    Grounds: Small and frequent (L1200, consensus; REG-082, REG-1110); continuous (L153; REG-082, REG-084, REG-097, REG-112), train (REG-084), explicit versions (REG-090); DORA warning that more frequency without supporting practices raises failure rate and burnout (REG-097, REG-093).
+
+    Positions considered: P1 continuous (speed, reversibility). P2 scheduled train (predictability). P3 explicit versions (consumer control). P4 the principle across the three.
+
+    Rejected, each with the condition under which it would be best: Large infrequent releases: best never as a goal; a long interval is accepted only as the consequence of P2 or P3. Continuous without tests and automation: raises failure and burnout; best preceded by those practices.
+
+    Context conditions: Release model (L153): every merge, a regular train, or explicit versions.
+
+    Certainty (judge record): Grounded for the principle (consensus); the cadence per model rests on a few sources (majority).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related INTEGRATION.3, MEASURE.1 (L170).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE.1
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C43
+  - build/research/04_delivery/result.md::DELIVER-C30
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE.2
+  name: Version Identity
+  intent: 'A release identifier promises only what is true: a compatibility-promising version scheme only for an artifact with a declared public interface consumed by others, and a plain build or time identifier with no compatibility promise for a deployed service with one live version. A consumer can then trust what a version number says.'
+  parent: CHANGE_FLOW.RELEASE
+  epistemic_state: 'known | inferred: the plain release identifier for a single live service | gap: calendar versioning is not read in any source, open and not rejected'
+  constraints:
+  - MUST every release have a unique identifier
+  - MUST a version number that promises compatibility be backed by a declared public interface
+  design_notes: |-
+    Decision (judge record, final): An identifier promises only what is true: Semantic Versioning only for an artifact with a declared public API consumed by others; for a deployed service with one live version a release identifier (build number or timestamp) that makes no compatibility promise. Outcome: a consumer can trust what a version number says, and a service carries no false promise.
+
+    Grounds: Semantic Versioning for consumed public API (L135; REG-030); build identifier for a single live version (REG-081); the service rule is inferred from REG-030 plus REG-081, and fits CONTRACTS.1 (explicit versioning where consumers are many, external or independent).
+
+    Positions considered: P1 Semantic Versioning for public API. P2 release identifier for a single live service. P3 calendar versioning (not read in any source).
+
+    Rejected, each with the condition under which it would be best: Semantic Versioning on an internal service nobody consumes by version: it promises a compatibility nobody checks; best when consumers choose when to move. P3: no source read; open, not rejected.
+
+    Context conditions: Release model (L135): single live version versus consumed public API.
+
+    Certainty (judge record): Grounded for P1; inferred for P2; open for P3.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related BUILD.2, ASSURANCE.CONTRACTS.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE.2
+  - build/research/04_delivery/result.md::DELIVER-C12
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE.3
+  name: Separating Release From Deployment
+  intent: 'Where a feature must be turned off without redeploying, or work spans more than the integration interval, release is decoupled from deployment with flags. Each flag is inventory with a carrying cost: classified, created with an expiry and a removal task, and its production-reachable states tested.'
+  parent: CHANGE_FLOW.RELEASE
+  epistemic_state: 'known | inferred: toggles as inventory as the general rule (single source)'
+  constraints:
+  - MUST a release toggle carry an expiry and a removal task
+  - MUST the states that can occur in production be tested
+  design_notes: |-
+    Decision (judge record, final): Where a feature needs to be turned off without redeploying, or work spans more than the integration interval, decouple release from deployment with flags. Every toggle is inventory with a carrying cost: classified (release, experiment, ops, permission), a release toggle created with an expiry and a removal task at introduction, and the relevant toggle states tested. Outcome: a feature is reversible without a deploy, and toggles do not accumulate.
+
+    Grounds: Flags decouple release from deployment (L154, majority; REG-084, REG-089, REG-096, REG-112; L1201 "where needed", REG-089); toggles as inventory (L155, L1201; REG-089, single source, no dissent found).
+
+    Positions considered: P1 flags (reversibility). P2 no flags, small batches released immediately (cost of ownership). P3 toggles as inventory.
+
+    Rejected, each with the condition under which it would be best: P2 as a universal: best when batches are small, rollback by redeploy is fast and no work spans the integration interval. Flags without expiry: best never, every toggle then adds a state to test forever.
+
+    Context conditions: none stated beyond "where needed" above.
+
+    Certainty (judge record): Grounded for P1 (majority); P3 single source (REG-089), inferred as the general rule.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related INTEGRATION.2 (L129), EVOLUTION.DECOMMISSION (toggle expiry).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE.3
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C44
+  - build/research/04_delivery/result.md::DELIVER-C31
+  - build/research/04_delivery/result.md::DELIVER-C32
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE.4
+  name: Staged Pipeline and Human Gates
+  intent: The path to production is one automated pipeline of stages, early ones giving fast feedback and later ones more confidence, and authorization after a reviewed merge is automatic by default. A human gate sits on a stage only where the change class warrants it (low confidence in automation or monitoring, high criticality or regulation, or a change not reversible by redeploy), and access control on who may release applies in either case.
+  parent: CHANGE_FLOW.RELEASE
+  epistemic_state: 'known | inferred: placing the irreversible data class under human gates'
+  constraints:
+  - MUST every gate state its criterion
+  - MUST NOT a gate be skippable by a person with a different route to production (RULES.3)
+  design_notes: |-
+    Decision (judge record, final): One automated pipeline of stages: early stages give fast feedback, later stages more confidence. Authorization after a reviewed merge is automated by default; a human authorization gate sits on a stage only where the change class warrants it: low confidence in automation or monitoring, high criticality or regulation, or a change not reversible by redeploy (the risky class of data change, DATA_CHANGE.3). Access control on who may release applies in either case. Outcome: speed where automation can be trusted and a person where being wrong is irreversible.
+
+    Grounds: One pipeline of staged confidence (L1199, consensus; REG-107, REG-1110; same as the staging half of L156); hands-off with review the last manual gate wins with mature automation and monitoring (L156; REG-115); human gates win at high criticality, regulation, low confidence (L156; REG-107; REG-082 for access control).
+
+    Positions considered: P1 one staged pipeline. P2 hands-off (speed, reduced error). P3 human gates on some stages (control).
+
+    Rejected, each with the condition under which it would be best: A manual gate on every stage: it makes the gate a ritual and removes the speed argument; best under regulation that requires it. Fully hands-off for irreversible classes: best never where a mistake cannot be rolled back.
+
+    Context conditions: Criticality and regulation, and test maturity (L156): P3 at high criticality, regulation or low confidence; P2 with mature automation and monitoring.
+
+    Certainty (judge record): Grounded for P1; grounded for the conditions of P2 and P3 (single contested row, T1 and T3 sources); inferred for placing the irreversible data class under P3.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related DATA_CHANGE.3 (the maintainer's manual lane sits inside the contested range of L156), DEPLOY.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE.4
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C42
+  - build/research/04_delivery/result.md::DELIVER-C33
+- op: node.create
+  uid: CHANGE_FLOW.RELEASE.5
+  name: Who May Release and When
+  intent: Who may perform release operations is a recorded policy, while release itself stays self-service for the teams that own the system. Deployment proceeds only when someone able to respond is available, and during an active incident only a change that remediates it ships, through a stated exception path.
+  parent: CHANGE_FLOW.RELEASE
+  epistemic_state: 'inferred: one practitioner source (REG-115) plus the argument that a change needs someone able to respond to its failure; restriction of release operations is grounded on one source'
+  constraints:
+  - MUST the set of release-permitted people be a recorded policy
+  - MUST an incident exception path exist
+  design_notes: |-
+    Decision (judge record, final): Restrict by policy who can perform release operations while keeping release itself self-service for the teams that own the system. Deployment proceeds only when someone able to respond is available; during an active incident only a change that remediates it is deployed, through a stated exception path. Outcome: no release is made by someone unauthorized or blind.
+
+    Grounds: Restrict operations, keep self-service (L157, consensus, one source; REG-082); block during incidents and outside responder hours (L164; REG-115, one T3 source, not cross-checked).
+
+    Positions considered: P1 restrict by policy, self-service. P2 block during incidents and off-hours.
+
+    Rejected, each with the condition under which it would be best: A fixed off-hours blackout where automated rollback and round-the-clock response exist: best only where nobody can respond. A deployment freeze that also blocks the remediation of the incident itself: best never.
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for P1 (one source); inferred: one T3 source (REG-115), plus the argument that a change needs someone able to respond to its failure. The MUST on the incident exception path stays: without it the block would stop the remediation itself.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Final pass FL8 (judge flag F12): settled; decision and MUST unchanged, Certainty reworded to inferred (one practitioner source plus the respond-to-failure argument).
+
+    Links and stack pointers (judge record): Related OPERATION.INCIDENTS.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.RELEASE.5
+  - build/research/04_delivery/result.md::DELIVER-C34
+  - build/research/04_delivery/result.md::DELIVER-C41
+- op: node.create
+  uid: CHANGE_FLOW.DEPLOY
+  name: Deployment
+  intent: Deployment is automated by the same process in every environment, exposes a release progressively by blast radius with a canary judged against a concurrent control, keeps environments alike in kind with unavoidable differences documented, and replaces instances rather than modifying them. A deployment is repeatable, bounded in blast radius and observable.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of DEPLOY.1 to .4; children grounded or inferred as stated on them'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Deployment is automated by the same process in every environment, exposes a release progressively by blast radius with a canary judged against a concurrent control, keeps environments alike in kind and documents the differences that cannot be removed, and replaces instances rather than modifying them. Outcome: a deployment is repeatable, bounded in blast radius and observable.
+
+    Grounds: Roll-up of DEPLOY.1 to .4 (10 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: On the children (traffic, state, regions, scale).
+
+    Certainty (judge record): Inferred as a roll-up; children grounded or inferred as stated.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.AVAILABILITY.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DEPLOY
+- op: node.create
+  uid: CHANGE_FLOW.DEPLOY.1
+  name: Automated Deployment Path
+  intent: Deployment uses the same automated, versioned, idempotent process for every environment, production included, and any authorized person can deploy any version on demand. One-off administrative processes run with the same code, environment and isolation as the application, and a human trigger on a stage for a risky change class is a gate within the process, not a different process.
+  parent: CHANGE_FLOW.DEPLOY
+  epistemic_state: 'known | inferred: the maintainer''s human-triggered lane is compatible with the same process (reasoned, see DATA_CHANGE.3)'
+  constraints:
+  - MUST production be deployed by the same scripted process as every other environment
+  - MUST deployment scripts be versioned
+  - MUST admin code ship with the application
+  design_notes: |-
+    Decision (judge record, final): Automate deployment with the same process for every environment, production included: any authorized person can deploy any version on demand, steps are idempotent and order-independent, scripts are versioned. One-off administrative processes (migrations included) run with the same code, environment and dependency isolation as the application, and their code ships with it. "The same process" means the same scripts and the same tooling; a human authorization or a human trigger on a stage for a risky class of change (RELEASE.4, DATA_CHANGE.3) is a gate within that process, not a different process. Outcome: what is deployed to production was exercised by the process that deployed it earlier, and no step depends on one person's memory.
+
+    Grounds: Same process, on demand, idempotent, versioned (L159, consensus; REG-077, REG-082, REG-092); admin processes as the application (L1198; REG-1109). The coverage check's contradiction by L290 and L328 dissolves once "automatic" and "same process" are separated: the maintainer's lane is a human-triggered run of the same tooling for a risky class (DATA_CHANGE.3), which L159 permits ("any authorized person can deploy on demand").
+
+    Positions considered: P1 same automated process in every environment. P2 admin processes isolated like the application.
+
+    Rejected, each with the condition under which it would be best: A different or hand-driven process for production: best never; it makes production the one environment never exercised. A fully hand-typed production step: banned by L286 and L159 alike.
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded (consensus); inferred that the maintainer's manual lane is compatible with it (reasoned, see DATA_CHANGE.3).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related RELEASE.4, DATA_CHANGE.1 (L1196), DATA_CHANGE.3 (resolved there); no remaining conflict.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DEPLOY.1
+  - build/research/04_delivery/result.md::DELIVER-C36
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C41
+- op: node.create
+  uid: CHANGE_FLOW.DEPLOY.2
+  name: Rollout Strategy and Canary Evaluation
+  intent: A release is exposed progressively, sized by blast radius and the cost of the strategy, and a canary is judged against a concurrent control on a few user-impact metrics, not by before-and-after comparison, with automatic detection and halt or rollback. A regression is caught on a small share of users and the call to proceed rests on evidence.
+  parent: CHANGE_FLOW.DEPLOY
+  epistemic_state: 'known | inferred: the concurrent-control rule is general (one source)'
+  constraints:
+  - MUST a rollout have an automatic halt or rollback criterion
+  - MUST a canary compare with a concurrent control
+  design_notes: |-
+    Decision (judge record, final): Expose each release progressively, sized by blast radius and the cost of the strategy, and judge a canary against a concurrent control group on a few metrics tied to user impact, not by a before-and-after comparison; one canary at a time, population and duration sized to traffic and velocity, with automatic detection and rollback. Outcome: a regression is caught on a small share of users, and the call to proceed is based on evidence.
+
+    Grounds: Blue-green for stateful, downtime-sensitive applications with budget for two environments (L160; REG-087); canary for high traffic with good metrics (REG-088); one-box then waves with bake time for multi-region (REG-115, REG-084); concurrent control and few user-impact metrics (L161, one source; REG-104); identical-traffic comparison to catch regressions (L118, majority; REG-051, REG-067); most outages come from changes to a live system, so progressive rollout, fast detection and safe rollback (L173; REG-113).
+
+    Positions considered: P1 blue-green. P2 canary. P3 one-box then waves. P4 canary against a concurrent control. P5 old versus new on identical traffic. P6 progressive rollout plus fast detection plus playbooks.
+
+    Rejected, each with the condition under which it would be best: No strategy is rejected: each is best under its row's condition (above). Exposing a release to all traffic at once: best only with no live traffic to protect or where the change cannot be split. A canary judged by before-and-after metrics: best never, drift in traffic mix is read as a regression or hides one. The "threefold faster repair with playbooks" is one operator's figure, kept as an example, not a standard.
+
+    Context conditions: Statefulness and downtime tolerance, traffic volume and metric quality, number of regions (L160).
+
+    Certainty (judge record): Grounded for the strategies and for the control-group rule (one source, REG-104, inferred as general); grounded for P6 as principle (one T2 source).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.AVAILABILITY; Related ROLLBACK.1, OPERATION.RUNBOOKS (playbook clause of L173), ASSURANCE.AVAILABILITY.3.
+  examples:
+  - One operator's figure, a threefold faster repair with playbooks, kept as an example and not as a standard.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DEPLOY.2
+  - build/research/04_delivery/result.md::DELIVER-C37
+  - build/research/04_delivery/result.md::DELIVER-C38
+  - build/research/03_verification/result.md::VERIFY-C39
+  - build/research/04_delivery/result.md::DELIVER-C50
+  - build/research/05_operation/result.md::OPERATE-C35
+- op: node.create
+  uid: CHANGE_FLOW.DEPLOY.3
+  name: Environment Parity
+  intent: Every environment is kept alike production in kind (type and version of backing services, operating system, libraries) with a short commit-to-deploy time and no stand-ins that hide differences, but never with production credentials. Differences that cannot be afforded (scale, data volume, permissions, production-only schemas) are written down, and changes that depend on them are routed to rehearsal on production-shaped data and to the gated lane.
+  parent: CHANGE_FLOW.DEPLOY
+  epistemic_state: 'known | inferred: the split by axis, kind and version against scale and data (reasoned from the rows, not stated by a source); the documented-divergence rule is maintainer practice, single source'
+  constraints:
+  - MUST backing-service type and version match production in every environment
+  - MUST the list of known environment differences be written down and referenced by the changes it affects
+  - MUST NOT parity extend to production credentials
+  design_notes: |-
+    Decision (judge record, final): Keep every environment alike production in kind: same type and version of backing services, operating system and libraries, a short time from commit to deploy, authors taking part in deploying; do not rely on adapters or lightweight stand-ins to hide differences. Parity does not extend to production credentials or access. Where parity of scale, data volume, permissions or external or shared schemas present only in production cannot be afforded, record the known differences as a list, and route every change whose behaviour depends on them (time, locks, plan, permission) to a rehearsal on production-shaped data (DATA_CHANGE.7) and to the gated lane (DATA_CHANGE.3). Outcome: a pass in an earlier environment means what it says, and each place where it cannot is known and covered.
+
+    Grounds: Tests pass on a lighter database and still fail in production (L165, L1194; REG-077, REG-092, REG-103, REG-1109); the same row says "as alike as practical", which admits residual divergence. The maintainer's rule (L328, REG-181) documents and routes the divergence that cannot be removed; it contradicts parity only where it is read as abandoning parity of kind. The two apply to different axes (kind and version against scale and data), which is why they are kept together.
+
+    Positions considered: P1 production parity in all environments (confidence, correctness). P2 reduce pre-production, test in production with canary and safe rollback (cost, real traffic). P3 lightweight stand-ins in development (speed, cost). P4 maintainer: accept divergence, document it, route to manual environment-specific migration.
+
+    Rejected, each with the condition under which it would be best: P3: the source argues against it and no row supports its merit; best when the adapter surface is narrow and production-like tests exist elsewhere in the pipeline. P2 as the answer for stateful data change: a canary does not make a schema change safe; best with high traffic, strong monitoring and fast rollback for stateless change. P4 stated as "rather than pursuing identical environments" across the board: best only for the axes it names (data volume, permissions, missing schemas, performance) when production-sized data is unaffordable to replicate.
+
+    Context conditions: Affordability of production-sized data (L328); traffic, monitoring and rollback maturity for P2 (L165).
+
+    Certainty (judge record): Grounded for P1 (Twelve-Factor and DORA); inferred for the split by axis (reasoned from the rows, not stated by a source); P4 is maintainer practice, single source.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (schema parity is guaranteed in the data-integrity and data-change nodes, this node holds environment parity).
+
+    Final pass FL3: 'schema' in the parity-of-scale clause narrowed to external or shared schemas present only in production (schema parity is guaranteed at DATA_CHANGE.1 and .2). FL6 (judge flag F4): settled, record unchanged; the twelve-factor source confirms parity of backing-service type and version and says nothing on data volume; listed against the maintainer's practice for the case where the maintainer's rule was meant to cover type or version.
+
+    Links and stack pointers (judge record): Related TRANSVERSE.ENVIRONMENTS, DATA_CHANGE.3 and .7.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DEPLOY.3
+  - build/research/04_delivery/result.md::DELIVER-C42
+  - build/research/06_transverse/result.md::TRANS-C55
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C36
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C28
+- op: node.create
+  uid: CHANGE_FLOW.DEPLOY.4
+  name: Instance Replacement and Desired State
+  intent: Running instances are replaced rather than modified, and the declared state of images and infrastructure is versioned code, so the running system equals what is declared and drift cannot persist. Either agents reconcile declared state continuously or a scripted push is paired with drift detection; no source decides between the two.
+  parent: CHANGE_FLOW.DEPLOY
+  epistemic_state: 'known | gap: pull-based reconcile versus scripted push with drift detection is open, no source compares them'
+  constraints:
+  - MUST declared state be in version control
+  - MUST NOT an instance be modified in place without the change recorded back into the declared state
+  design_notes: |-
+    Decision (judge record, final): Replace deployed instances rather than modify them, and keep the declared state of images and infrastructure as versioned code, so the running system equals what is declared and drift cannot persist. Two forms serve this: agents that pull and continuously reconcile declared state, or a scripted push deploy from CI with drift detection; no source compares them, so no switch between them is decided. Outcome: what runs matches what was declared, and a bad instance is replaced, not repaired.
+
+    Grounds: Replace, do not modify; immutable images (L166, majority; REG-081, REG-095, REG-111); pull-based reconcile corrects drift and leaves an auditable history (L167; REG-101); scripted push is the cheap form (REG-077, REG-092). No source compares pull and push.
+
+    Positions considered: P1 replace instances (consistency, reversibility). P2 managed mutable servers (stateful hosts, drift risk). P3 declarative desired state with pull reconcile (control, security). P4 push from CI (cost of ownership).
+
+    Rejected, each with the condition under which it would be best: P2: best for stateful hosts where replacement is costly (inferred), with drift detection. P4 without drift detection: it cannot correct drift; no source says when push or pull is best (open).
+
+    Context conditions: none; pull versus push is open.
+
+    Certainty (judge record): Grounded for P1 (majority); open for pull versus push (no source compares).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Stack pointers L166 (image-based provisioning), L167 (orchestrators).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DEPLOY.4
+  - build/research/04_delivery/result.md::DELIVER-C43
+  - build/research/04_delivery/result.md::DELIVER-C44
+- op: node.create
+  uid: CHANGE_FLOW.ROLLBACK
+  name: Rollback
+  intent: 'The way back is decided before a change ships: roll back automatically where redeploy reverses the change, fix forward where it does not, make every change backward compatible and reversible through version control, and give every data change a named undo. Going back is a rehearsed move, not an improvisation.'
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of ROLLBACK.1 to .3'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): The way back is decided before the change ships: roll back from alarms where a change is reversible by redeploy, fix forward where it is not, every change is made backward compatible with the previous version and reversible through version control, and a data change names its undo. Outcome: going back is a rehearsed move, not an improvisation.
+
+    Grounds: Roll-up of ROLLBACK.1 to .3 (6 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: On the children (reversibility; distribution).
+
+    Certainty (judge record): Inferred as a roll-up.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.AVAILABILITY; ROLLBACK.3 realizes ASSURANCE.DATA_INTEGRITY.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.ROLLBACK
+- op: node.create
+  uid: CHANGE_FLOW.ROLLBACK.1
+  name: Detecting and Deciding to Roll Back
+  intent: Bad releases are detected automatically and, per change class and in advance, either rolled back from alarms (backward compatible and reversible by redeploy) or fixed forward (not reversible by redeploy, such as a data migration past its last reversible point). Recovery time is short and the choice is not made under stress.
+  parent: CHANGE_FLOW.ROLLBACK
+  epistemic_state: 'known | inferred: the decision rule by reversibility (no source states it)'
+  constraints:
+  - MUST the rollback-or-fix-forward choice be decided per change class before shipping
+  design_notes: |-
+    Decision (judge record, final): Detect bad releases automatically and decide in advance, per change class, between the two: a change that is backward compatible and reversible by redeploy is rolled back automatically from alarms; a change that is not reversible by redeploy (a data migration past its last reversible point) is fixed forward, with the undo decided at ROLLBACK.3. Outcome: recovery time is short and the choice is not made under stress.
+
+    Grounds: Automated rollback on alarm (L162; REG-104, REG-113, REG-115); fix forward under continuous deployment with a very fast pipeline (REG-078, REG-106). No source states the decision rule; the rule by reversibility is inferred from both wins-when conditions, which fit together.
+
+    Positions considered: P1 automatic rollback from alarms (reversibility, recovery time). P2 fix forward (simplicity).
+
+    Rejected, each with the condition under which it would be best: P2 for a reversible change when a rollback is available and faster: best with a very fast pipeline, and for changes not reversible by redeploy. P1 for a change whose redeploy cannot restore the data: best never; rolling back code against changed data can corrupt.
+
+    Context conditions: Reversibility by redeploy (backward compatible or not).
+
+    Certainty (judge record): Grounded for both positions; inferred for the decision rule (no source states it).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related DEPLOY.2; conflicts with none: the recorded partial tension with L288 is resolved at ROLLBACK.3.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.ROLLBACK.1
+  - build/research/04_delivery/result.md::DELIVER-C39
+- op: node.create
+  uid: CHANGE_FLOW.ROLLBACK.2
+  name: Reversible by Design
+  intent: Each change is backward compatible with the version it replaces, by parallel change (expand, migrate, contract) with schema changes separate from application releases, so rollback, mixed fleets and independent release are safe. Every automated change is reversible through version control, and a tool-level checkpoint is no substitute.
+  parent: CHANGE_FLOW.ROLLBACK
+  epistemic_state: known
+  constraints:
+  - MUST a change be compatible with the version it replaces during the deploy window
+  design_notes: |-
+    Decision (judge record, final): Make each change backward compatible with the previous version (parallel change: expand, migrate, contract; schema changes separate from application releases) so rollback, mixed fleets and independent release are safe. Every automated change is reversible through version control; tool-level checkpoints are not a substitute. Outcome: any release can be undone without data or compatibility breakage.
+
+    Grounds: Backward compatibility (L163, consensus; REG-087, REG-088, REG-105, REG-115; the maintainer's L288 agrees); reversibility through version control (L1072, majority; REG-1038, REG-1041).
+
+    Positions considered: P1 backward compatible parallel change. P2 every automated change reversible through version control.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. A tool checkpoint as the only way back: best never; it is not reviewed or versioned.
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Related DATA_CHANGE.4 (the procedure for data is held there, this is the generic rule), INTEGRATION.5.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.ROLLBACK.2
+  - build/research/04_delivery/result.md::DELIVER-C40
+  - build/research/13_change_authors/result.md::AUTH-C31
+- op: node.create
+  uid: CHANGE_FLOW.ROLLBACK.3
+  name: Undoing a Data Change
+  intent: 'Before a data or schema change ships its undo is decided and recorded: leave a backward-compatible expand step and roll the application back, carry a rehearsed written reverse where script reversal is faster than a restore, or otherwise roll forward or use the tested restore. A change that can lose data is undone only by tested restore, and the last reversible point is named.'
+  parent: CHANGE_FLOW.ROLLBACK
+  epistemic_state: 'known | inferred: the choice among undo forms and the faster-than-restore condition; forward-only with a prepared undo is single-source maintainer practice generalised'
+  constraints:
+  - MUST every data change record its undo before it ships
+  - MUST the last reversible point be named
+  - MUST a destructive change rely on a tested restore
+  design_notes: |-
+    Decision (judge record, final): Before a data or schema change ships, its undo is decided and recorded in the change: a backward-compatible expand step is undone by rolling the application back and leaving the structure; a change whose reversal by script is faster than a restore (a data correction on few rows with its prior values saved, a metadata-only change) carries a written reverse prepared ahead and rehearsed with the forward script (DATA_CHANGE.7); a reverse that was not rehearsed does not count as the undo; otherwise the recorded undo is a roll-forward fix or the tested restore; a change that destroys or can lose data is undone by the tested restore of ASSURANCE.DATA_INTEGRITY.3. The last reversible point is named: the state before the old structure is removed and before reads move irreversibly; after new-only data accumulates, going back loses it. Outcome: no data change ships without a known, tested way back or an honest statement that there is none.
+
+    Grounds: Reverse for every migration versus compatibility plus roll-forward plus restore (L387; REG-244, REG-251, REG-252, REG-255); the maintainer's forward-only with a prepared undo (L288, L387 c; REG-181); last reversible point (L390; REG-087, REG-260). The strongest argument is that an automatic undo is untested code that cannot restore lost data and hides data loss, while a prepared, documented undo and a tested restore are exercised and honest; DATA_INTEGRITY.3 (settled) already treats a destructive change as undone by restore only.
+
+    Positions considered: P1 written reverse for every migration (reversibility, downgrade after a vulnerability). P2 compatibility plus roll-forward plus restore (cost of ownership, honesty). P3 maintainer: forward-only with documented undo prepared ahead. P4 last reversible point.
+
+    Rejected, each with the condition under which it would be best: P1 as the default: best for regulated or packaged software with many installed versions, where a customer must downgrade (DISTRIBUTION). Automatic down migrations as the common alternative: best for pure schema changes with no data to lose, where one command reverses; best never for a change that loses data. A written reverse for every change: reverse migrations are not worth writing all the time (REG-244) and work poorly for data changes (REG-251); best for packaged software with many installed versions (DISTRIBUTION).
+
+    Context conditions: Distribution (L387): packaged software with many installed versions needs a written reverse for every migration; a continuously deployed service with one production uses the decision as stated.
+
+    Certainty (judge record): Grounded for P2 and P4 (majority, several sources); inferred for P3 as the general form (maintainer practice, single source); the choice among undo forms is inferred, and so is the faster-than-restore condition.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this node holds the undo procedure; the guarantee that a destructive change is undone by tested restore stays in the data-integrity decision).
+
+    Final pass FL4: reversible-form clause replaced (script reversal faster than a restore, written reverse rehearsed with the forward script; an unrehearsed reverse does not count); rejection added of a written reverse for every change (REG-244, REG-251; best for packaged software with many installed versions); the faster-than-restore condition is inferred.
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.DATA_INTEGRITY; Conflicts none (L288 versus L162 resolved at ROLLBACK.1); Related DATA_CHANGE.4.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.ROLLBACK.3
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C24
+  - build/research/10_data_change/result.md::DATA-C10
+  - build/research/10_data_change/result.md::DATA-C13
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE
+  name: Data and Schema Change
+  intent: Every schema and data change is a reviewed, versioned, once-only script tracked in the target's history and never hand-typed, delivered through one pipeline with a risk-based human trigger for the risky class, ordered compatibly with the code, made without blocking locks, bulk work in re-runnable bounded batches, rehearsed on production-shaped data and watched until a convergence query says it is done. What runs in production is what was reviewed and rehearsed.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of DATA_CHANGE.1 to .8; many children rest on maintainer practice (single source) with public practice read as agreeing'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Every schema and data change is a reviewed, versioned, once-only script tracked in the target's history and never applied by hand-typed SQL, delivered through one pipeline with a risk-based human trigger for the risky class, ordered before and compatibly with the code, made without blocking locks, bulk work done in re-runnable bounded batches, rehearsed on production-shaped data against a time budget, and run and watched against stated signals until a convergence query says it is done. Outcome: a data change that ships was reviewed, rehearsed and watched, and what runs in production is what was reviewed.
+
+    Grounds: Roll-up of DATA_CHANGE.1 to .8 (48 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: Scale and downtime tolerance (.3), data volume (.6, .7), table size and write rate (.5).
+
+    Certainty (judge record): Inferred as a roll-up; many children rest on maintainer practice (single source) with public practice read as agreeing.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.DATA_INTEGRITY (the guarantees: .1 where rules live, .2 guarding bulk and destructive, .3 layered protection, .4 sync, .5 old against new).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.1
+  name: Form and Source of a Change
+  intent: Every schema and data change is a migration script in version control, ordered, applied once, recorded, and run by automation with the same process in every environment, never by hand-typed statements. Changes are as small as possible and the reviewed script is the script deployed.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: idempotent DDL as defence in depth and the separate stream for frequent urgent data fixes (maintainer practice and one practitioner source, conditions reasoned)'
+  constraints:
+  - MUST every database change be a script in version control applied by tooling
+  - MUST NOT a change be hand-typed
+  - MUST each migration name its ticket
+  - MUST the reviewed script be the deployed script
+  design_notes: |-
+    Decision (judge record, final): Every schema and data change is a migration script in version control, ordered by a unique sequence, applied once and recorded, run by automation (or the human-triggered run of DATA_CHANGE.3) and never by hand-typed ad-hoc SQL; migrations are kept with the application, run by the same process in every environment as an explicit step of the release, and each names its ticket. Each change is as small as possible so errors are quick to spot. The deployed artifact is the reviewed versioned script: where a declarative desired-state source is used for the developer loop, the generated script is what is reviewed and deployed. DDL is written so a re-run is safe wherever a step can be partially applied or the target's state may differ (steps outside a transaction, environments with known differences), except one-time data migrations and operations that must fail when their precondition does not hold. Where urgent data fixes are frequent and must not wait for the release train, keep them in their own stream, recorded in the same audit. Outcome: no change enters a database that was not reviewed, ordered and recorded.
+
+    Grounds: Migration script in version control, sequence, automation (L379, consensus; REG-244, REG-245, REG-253); the maintainer's reason, earlier inconsistent environments and untracked manual changes (L286; REG-181); same process in every environment as a release step (L1196; REG-244, REG-1109, REG-1110); small changes (L1197, L385; consensus; REG-244, REG-257); ordered scripts give auditability, determinism, offline CI and the exact SQL that runs (L381 b; REG-253), declarative gives a faster developer loop (L381 a; the vendor recommends a hybrid with generated versioned files, one source); idempotent DDL as defence in depth against partial application (L289, maintainer; once-only tooling already serves the transactional case; REG-181); separate stream for urgent data fixes (L406, one T2 source; REG-244). ASSURANCE.ARTIFACT.1 (settled) requires what runs to match reviewed source, which is why the generated script, not the declared state, is the deployed unit.
+
+    Positions considered: P1 migration in version control, ordered, automated. P2 maintainer: ordered, once-only, history-table tracked, never manual. P3 versioned scripts with the application, same process everywhere. P4 declarative desired state as source (cognitive load, iteration speed). P5 ordered change scripts as source (auditability, determinism). P6 idempotent DDL. P7 smallest possible change. P8 separate stream for urgent data fixes.
+
+    Rejected, each with the condition under which it would be best: P4 as the deployed unit: a plan computed at deploy time was not what was reviewed; best for fast local loops when CI can reach the database, and as the authoring form when the generated script is reviewed. P6 stated as a rule for every statement: for transactional all-or-nothing steps the once-only tool already serves and the cost is verbosity; best for steps that can be partially applied and for scripts run against environments known to differ. P8 as a default: a second stream is a second delivery truth to keep consistent; best when urgent fixes are frequent and must not wait for the release train.
+
+    Context conditions: Compliance and distribution (L381): compliance, many instances or packaged software require the ordered scripts as source; a fast local loop may author declaratively.
+
+    Certainty (judge record): Grounded for P1 to P3 and P7 (consensus); inferred for P6 and P8 (maintainer and one T2 source, conditions reasoned); P4 versus P5: grounded as positions, the hybrid is one vendor's recommendation.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Judge flag F5 settled: idempotent DDL narrowed to steps that can be partially applied or run against environments known to differ; this goes against the maintainer's practice and is listed there by the final pass. Review fix FX3: the separate urgent-fix stream is conditioned on frequent urgent fixes.
+
+    Links and stack pointers (judge record): Related DEPLOY.1, DATA_CHANGE.2; ASSURANCE.ARTIFACT.1 (deployed objects compared with source); stack pointers L289 (SQL form), L1196 (relational origin, statement generic).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.1
+  - build/research/10_data_change/result.md::DATA-C02
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C22
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C38
+  - ../web_architecture_guidelines/build/research/07_architecture_styles/result.md::ARCH-C21
+  - build/research/10_data_change/result.md::DATA-C04
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C25
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C39
+  - build/research/10_data_change/result.md::DATA-C08
+  - build/research/10_data_change/result.md::DATA-C29
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.2
+  name: Migration History and Immutability
+  intent: 'Each database records in itself which migrations ran, and an applied migration is never edited: a failed one is fixed and rerun, a wrong one is corrected by a new migration, and a recorded checksum enforces this. Reference data is kept with the migrations, so any environment''s state is knowable and reproducible.'
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the checksum as a general mechanism and the strict never-edit form'
+  constraints:
+  - MUST an applied migration not change
+  - MUST the history live in the target database
+  design_notes: |-
+    Decision (judge record, final): Keep a per-database record, in the target database itself, of which migrations ran, and never edit an applied migration: if it failed, fix it and rerun; if it succeeded but was wrong, add a new one; a recorded checksum enforces this, and forced replay is rare and administrator-only. Sample and reference data are kept with the migrations so every environment is consistent. Outcome: any environment's state is knowable and reproducible, and history is not rewritten.
+
+    Grounds: Per-database record, correct with a new migration (L380; REG-245, REG-252, REG-253; the strict "never edit" form is inferred from REG-252 and REG-253); the maintainer's form with checksum (L287; REG-181); state in the target and reference data with migrations (L418, consensus; REG-244, REG-245). The strict form wins wherever more than one environment has applied the change, since an edit there makes the environments differ silently.
+
+    Positions considered: P1 record and no edit of applied. P2 maintainer: checksum-enforced immutability. P3 state in the target, reference data with migrations.
+
+    Rejected, each with the condition under which it would be best: Editing an applied migration after rolling it back (one tool allows it): best when only one environment has applied it. Unrecorded history: best never.
+
+    Context conditions: none beyond "more than one environment".
+
+    Certainty (judge record): Grounded for the record and the new-migration rule (majority); inferred for the checksum as general mechanism (maintainer; the strict form is inferred).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Links and stack pointers (judge record): Stack pointer L287 (one migration tool's model); Related DATA_CHANGE.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.2
+  - build/research/10_data_change/result.md::DATA-C03
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C23
+  - build/research/10_data_change/result.md::DATA-C42
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.3
+  name: Delivery Path and Gating of Database Change
+  intent: 'Database change travels in the same pipeline as application change, as the same reviewed script with one history and one audit trail, not as a separate manual track. A recorded criterion classes each change: ordinary changes apply automatically through every environment, while the risky class passes an authorization stage where a named, qualified group approves the production run on the exact script and a member triggers it.'
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the named, qualified group that approves and triggers the authorization stage (no public source), the risk-based split as the general rule, the size criterion, and the idempotent authoring script for configuration-like content | gap: no public counterpart found for configuration-like content on its own path (L411)'
+  constraints:
+  - MUST the same reviewed script, not a retyped one, run in production
+  - MUST the classification criterion be recorded
+  - MUST NOT a risky-class change start from an automatic merge
+  - MUST a production run of the risky class name who runs it and be approved on the exact script
+  design_notes: |-
+    Decision (judge record, final): Database change is a primary delivery risk and travels in the same pipeline as application change, as the same reviewed script with one history and one audit trail; it is not a separate manual track. The pipeline classifies each change by a recorded criterion (runs longer than the team's time budget, takes locks, is environment-specific, cannot run in a transaction, needs monitoring, is irreversible, touches a table above a size the team records, or has not had its duration measured on production-shaped data (DATA_CHANGE.7)). Ordinary changes apply automatically through every environment, production included. Changes in the risky class pass an authorization stage of the same pipeline: a named, qualified group approves the production run on the exact script and a member of it triggers the stage, which runs the script with the same tooling, credential scope and audit trail as every other change (never hand-typed SQL; principle at ASSURANCE.SECURITY.6). A run started outside the pipeline is allowed only where the pipeline cannot reach the target or the job needs supervised ramping (DATA_CHANGE.8), and is then recorded in the same history. The people who manage the production database are involved beforehand and pending changes are visible across teams and environments. Configuration-like registry content travels through the same one history; an idempotent authoring script may be its source where the run is recorded in that history. Outcome: what runs in production is what was reviewed and rehearsed, and a risky change is never started by an automatic merge.
+
+    Grounds: Database change as primary delivery risk in the same pipeline (L168; REG-087, REG-097, REG-105, REG-244, REG-245); automation of everything is safer when changes are small, fast, compatible, reversible and rolled out in stages (L290 a, L410; REG-244, REG-245, REG-255; DORA); a human gate serves reversibility and control for long, locking, irreversible changes (L290 b, L410; maintainer, REG-181), its volume condition carried per change by the criterion (a table above the recorded size, an unmeasured duration) instead of a blanket rule with no threshold; the authorization stage is a stage of the one pipeline that requires human authorization (REG-107, Fowler's deployment pipeline, fetched in review) and database change goes through automated, version-controlled scripts (REG-245, DORA, fetched in review); GitLab supports separating risky changes from the release train and a release manager's discretion over timing (REG-255), not a named-group trigger, which rests on the maintainer and the SECURITY.6 argument; the public "never manual" rule bans hand-typed SQL, not a human-triggered run of an automated script (L410); involving production-database owners and making pending changes visible (L408, consensus; REG-245); configuration-like content (L294, maintainer; L411 records no public counterpart, open). The deciding argument is that the guarantee needed is "what runs is what was reviewed" (ARTIFACT) and "a risky change does not start unwatched" (SECURITY.6 requires such a job to run under guards or from a reviewed script by a person); a risk-based gate delivers both while keeping automatic delivery for the changes it is safe for, whereas manual production for all changes adds delay and a path nobody exercises in routine, which is the failure L159 and the maintainer's own L286 give for manual change. Contradiction with L168, L159 and L156 (coverage check) is resolved: the manual lane is a gate inside the pipeline for a class (RELEASE.4), not a second track.
+
+    Positions considered: P1 same pipeline, database change as primary risk (majority/consensus). P2 fully automated, every change through the pipeline (speed, consistency). P3 maintainer: split by risk, production applied manually by a small group (reversibility, control). P4 maintainer path: feature branch with ticket key, migration, manual test on development, pull request approved, automatic apply on development, verification on staging, release pull request approved but not merged, manual production run, then application deploy. P5 configuration-like content through the same pipeline. P6 maintainer: such content has an idempotent authoring script as source of truth, deployed by running it. P7 maintainer: document environment differences and route to a manual or conditional migration. P8 involve production-database owners, make pending changes visible.
+
+    Rejected, each with the condition under which it would be best: P2 for the risky class: best with small, fast, compatible, reversible changes, staged rollouts and high deploy frequency; it is the default for the ordinary class. P3 as stated, production manual for every change: best where most tables exceed the recorded size, which the criterion already routes to the risky class change by change, so no separate rule is kept. P4's unmerged release approval: not a principle; it is a mechanism that keeps the mainline equal to what is applied in production, best when merging to the mainline triggers production deployment (inferred). P6 as a separate delivery truth: two paths mean two histories; best when the content is data-like, small and often re-authored, provided the run is recorded in the same history (inferred; L411 records no public counterpart, open). P7 is decided at DEPLOY.3.
+
+    Context conditions: Data volume moves the classification: in a store where most tables exceed the recorded size, most changes fall in the risky class through the criterion, with no separate rule (L290 b, L410); criticality and table size move the gate.
+
+    Certainty (judge record): The authorization stage inside the one pipeline is grounded (REG-107, REG-245); the named, qualified group that approves and triggers it has no public source and is inferred. Grounded for P1, P8 and the ban on hand-typed SQL (consensus, T1 and T2 sources); grounded as maintainer practice (single source) for P3 and P4; inferred for the risk-based split as the general rule, for the size criterion, and for P6 (no public counterpart).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Final pass FL1 (cross-unit X6): the risky class passes an authorization stage of the same pipeline (a stage requiring human authorization, REG-107; database change through automated, version-controlled scripts, REG-245), so the split is a gate of the one pipeline (RELEASE.4), not a second track; this node holds the database procedure and points to the security principle for large-blast-radius jobs. FL2 (judge flag F1 closed): the volume condition is carried per change by the recorded criterion (table size above a recorded value, an unmeasured duration), so the decision does not depend on which context the maintainer's store is in. Review fixes FX1 (configuration-like content through the same one history) and FX2 (the named-group trigger rests on the maintainer and the security argument, not on public sources).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.DATA_INTEGRITY; Related RELEASE.4, REVIEW.1 (L298), DEPLOY.1 and DEPLOY.3 (conflicts resolved), ASSURANCE.SECURITY.6.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.3
+  - build/research/04_delivery/result.md::DELIVER-C45
+  - build/research/10_data_change/result.md::DATA-C01
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C26
+  - build/research/10_data_change/result.md::DATA-C33
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C27
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C30
+  - build/research/10_data_change/result.md::DATA-C35
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C64
+  - build/research/10_data_change/result.md::DATA-C31
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.4
+  name: Order and Compatibility With Running Code
+  intent: A schema change deploys separately from and before the code that needs it, and an incompatible structural change is made as expand, migrate, contract with an owned, scheduled contract step, because old and new code run against the same data during the deploy window. An application deploy is gated on the schema version it declares and fails if the history lacks it.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the minimum-schema-version gate as the general form (single maintainer source) and the choice among compatibility surfaces'
+  constraints:
+  - MUST schema change deploy before the code that needs it
+  - MUST the contract step have an owner and a date
+  - MUST an application deploy fail if the schema history lacks the minimum version it declares
+  design_notes: |-
+    Decision (judge record, final): Deploy a schema change separately from, and before, the application version that needs it; the first schema step supports both old and new versions. A backward-incompatible change (rename, type change, split, move) is made as expand, migrate, contract: add the new structure beside the old, move writers and readers, backfill, then remove the old; the contract step is scheduled and owned (an unfinished contract leaves a state worse than the start). Old and new application versions run against the same data over the deploy window, so every stored-data change is readable and writable by both. Before dropping a column or table, stop the application reading it (and any framework cache of it) and drop in a later deploy. An application deploy is gated on the schema state it needs: a declared minimum schema version is checked before rollout and the deploy fails if the target history lacks it. When a shared structure must change, old and new access patterns are supported during the transition behind a stable compatibility surface, with database access behind a clear layer in code. Outcome: schema and code can change in either order of rollout without a window of failure, and the contract step is not forgotten.
+
+    Grounds: Schema first, supports both (L382; REG-087, REG-244, REG-245); expand, migrate, contract (L383; REG-105, REG-245, REG-257, REG-260); schedule and own the contract (L384; REG-105, REG-260); old and new on the same data (L386; REG-087, REG-105); stop reading before dropping (L419, tool-specific, generalisation inferred; REG-258); a minimum-schema-version gate (L292, maintainer; REG-087, REG-181; public sources support the order, not an explicit gate): it turns an ordering convention into a blocking check, the principle of RULES.3; compatibility layer (L409; REG-105, REG-244).
+
+    Positions considered: P1 schema first, separate. P2 expand, migrate, contract. P3 own the contract. P4 old and new on the same data. P5 maintainer: minimum-schema-version gate. P6 stop reading before dropping. P7 compatibility layer: views or triggers (Fowler and Sadalage), a function with a signature (maintainer), versioned interfaces for remote APIs (REG-105).
+
+    Rejected, each with the condition under which it would be best: Code and schema deployed together in one step for an incompatible change: best never in a deployment with rolling or rollback. P5 stated as a replacement for ordering: the gate checks the order, it does not substitute for it. P7 forms: views win when consumers read shape (declarative, plannable, read-only reporting with several consumers); a function interface wins when consumers are many and diverse (absorbs change; no public source, maintainer practice, L309); versioned interfaces apply to remote APIs, not to a database structure.
+
+    Context conditions: Consumers of the shared structure (L409): their number and diversity pick the compatibility surface.
+
+    Certainty (judge record): Grounded for P1 to P4 (consensus); grounded for P6 as a tool fact, inferred as general; inferred for P5 as the general form (single maintainer source) and for the choice among P7 forms.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.DATA_INTEGRITY; Related ROLLBACK.2 (generic rule L163), ASSURANCE.CONTRACTS, CONSTRUCTION.HIDING (second clause of L409); stack pointer L419 (one web framework).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.4
+  - build/research/10_data_change/result.md::DATA-C05
+  - build/research/10_data_change/result.md::DATA-C06
+  - build/research/10_data_change/result.md::DATA-C07
+  - build/research/10_data_change/result.md::DATA-C09
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C28
+  - build/research/10_data_change/result.md::DATA-C34
+  - build/research/10_data_change/result.md::DATA-C32
+  - build/research/10_data_change/result.md::DATA-C43
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.5
+  name: Locks and Online Schema Change
+  intent: The lock a statement takes is known before it runs on a shared database; migrations use a per-session lock timeout with retry, prefer the non-blocking form of each change, run non-transactional operations in their own step, and use an online schema change tool on large tables where in-place change blocks. A schema change never holds a blocking lock longer than a stated bound.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the starvation reason for the lock timeout with retry; do-not-shard-schema-changes is maintainer practice read as consensus'
+  constraints:
+  - MUST the lock taken by a statement be known before a run on a shared database
+  - MUST a migration set a session-level lock timeout
+  - MUST a statement that cannot run in a transaction run in its own step
+  design_notes: |-
+    Decision (judge record, final): Know the lock a statement takes before running it on a shared database. Run migrations with a per-session lock timeout (not set globally) and retry on timeout so a blocked statement does not queue and starve the table; prefer the non-blocking form of each change (add a constraint unvalidated then validate separately, build indexes concurrently, add columns without volatile defaults, request metadata-only or in-place algorithms with an explicit no-lock clause); run operations that cannot execute in a transaction in their own non-transactional step; for large tables where in-place change blocks, use an online schema change tool that copies and swaps, chosen by write rate (log-based and pausable on high-write masters, trigger-based when simpler and writes are light, native when the operation is metadata-only). Do not shard schema changes: use the platform's concurrent variant in a manual migration and shard only data changes. Outcome: a schema change never holds a lock that blocks the database longer than a stated bound.
+
+    Grounds: Know the lock (L392, consensus; REG-246, REG-247, REG-249); lock timeout and retry (L393, majority; REG-246, REG-248, REG-255); non-blocking forms (L394, consensus; REG-247, REG-249, REG-258, REG-259); separate non-transactional step (L395, consensus; REG-255, REG-258); online schema change tools (L397, majority; REG-245, REG-246, REG-249, REG-256); do not shard schema changes (L304; maintainer, consensus per row; REG-181).
+
+    Positions considered: P1 know the lock. P2 session lock timeout and retry. P3 non-blocking forms. P4 non-transactional step apart. P5 online schema change tool: trigger-based, log-based, native. P6 do not shard schema changes.
+
+    Rejected, each with the condition under which it would be best: A global lock timeout: affects unrelated sessions; best never for migrations. A trigger-based tool on a high-write master: adds write overhead and cannot pause; best when writes are light and simplicity wins. In-place change on a large table where it blocks: best never.
+
+    Context conditions: Table size and write rate, and whether the operation is metadata-only (L397).
+
+    Certainty (judge record): Grounded for P1, P3, P4 (consensus); grounded for P2 and P5 (majority; the starvation reason is inferred); P6 maintainer practice read as consensus.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Links and stack pointers (judge record): Related DATA_CHANGE.6 (sharding applies to data changes only); stack pointers L392 to L397, L304 (Postgres, MySQL names).
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.5
+  - build/research/10_data_change/result.md::DATA-C15
+  - build/research/10_data_change/result.md::DATA-C16
+  - build/research/10_data_change/result.md::DATA-C17
+  - build/research/10_data_change/result.md::DATA-C18
+  - build/research/10_data_change/result.md::DATA-C20
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C40
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.6
+  name: Bulk and Backfill Design
+  intent: A change that finishes in minutes is a plain migration; a change over very large data is cut into bounded, throttled, re-runnable batches, decided by batching key, work list, fan-out and observe-and-recover, in their own step apart from schema steps. Where it runs is decided and recorded by duration, so it can be interrupted, repeated and verified without corruption.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the four-decision procedure, the re-runnable batch rules and the standard-tools rule (maintainer practice, single source, public practice agrees or extends); place by duration is contested and decided by duration'
+  constraints:
+  - MUST a bulk batch be re-runnable with the same result
+  - MUST a batch not run inside a long DDL transaction
+  - MUST the place a backfill runs be recorded with its reason
+  design_notes: |-
+    Decision (judge record, final): If one statement finishes in minutes, run it as a migration. A change over data too large for that (order of ten million rows and more) is run as four decisions in order: the batching key (an indexed key part, then a numeric range, modulo last), a work list generated from the data, fan-out by workers, observe and recover. Batches are bounded, throttled, in their own step and never inside a long DDL transaction; every batch is re-runnable in isolation with the same result (a self-limiting predicate in preference to external bookkeeping, absolute not relative updates, upsert not insert, partition by a fixed key, never read "latest" data inside the job, one logical unit in one statement, no automatic retries of non-idempotent batches). Data steps stay apart from schema steps in transaction and timing. Where the backfill runs is decided and recorded: inside a migration step with a time budget for minutes of work, as an application background job triggered by a migration for long work, offline from a snapshot for very large multi-table moves with analytic tooling. Standard command-line tools composed and verified part by part suit a one-off job; a framework suits a job that recurs. Outcome: a large data change can be interrupted, repeated and verified without corruption.
+
+    Grounds: Four-decision procedure and size gate (L299, maintainer; REG-181); bounded throttled batches in their own step (L398, consensus; REG-255, REG-257, REG-258); re-runnable batches (L300, maintainer; L399, majority, transfer from scheduled tasks inferred; REG-254, REG-181); place by duration (L401, contested; each held by a different T3 source; REG-255, REG-257, REG-258); standard tools (L307, maintainer; REG-181); data apart from schema (L407, majority; REG-255, REG-258). One long transaction serves simplicity and costs locks, bloat and an open transaction of hours; the size gate decides.
+
+    Positions considered: P1 four-decision procedure with size gate. P2 bounded throttled batches. P3 batches re-runnable, self-limiting predicate. P4 re-runnable with upsert, fixed partition, no "latest". P5 place by duration: in-migration, background job, offline snapshot. P6 compose standard tools, not a framework. P7 data apart from schema.
+
+    Rejected, each with the condition under which it would be best: One long transaction over very large data: best when it finishes in minutes. A framework for a one-off job: best when the job recurs (repeatability against cost of ownership). External bookkeeping instead of a self-limiting predicate: best when the data cannot carry its own progress. An offline backfill: best only for very large multi-table moves (zero production load against a copy that must be reconciled). Each place in P5 is best at its duration (no single winner).
+
+    Context conditions: Data volume (L299) and duration of the work (L401).
+
+    Certainty (judge record): Grounded for P2 and P7 (consensus, majority); inferred for P1, P3 and P6 (maintainer practice, single source, public practice read as agreeing or extending); P5 contested, decided by duration (inferred).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Links and stack pointers (judge record): Related DATA_CHANGE.5 (L304), DATA_CHANGE.8; ASSURANCE.DATA_INTEGRITY.2 (explicit scope for bulk operations); stack pointers L299 (named database client and parallel runner), L398, L399, L307.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.6
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C35
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C36
+  - build/research/10_data_change/result.md::DATA-C21
+  - build/research/10_data_change/result.md::DATA-C22
+  - build/research/10_data_change/result.md::DATA-C24
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/10_data_change/result.md::DATA-C30
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.7
+  name: Rehearsal and Time Budget
+  intent: A data change is rehearsed before production on data whose size and shape make the measured time, lock behaviour and plan representative, and the measurements are kept with the change; for small data a developer database with sample data suffices. Migrations have a time budget by class, and personal data is masked and side effects blocked in any copy of production.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'known | inferred: the restored-dump rehearsal on every request, the condition on skipped migrations and the time-budget figures'
+  constraints:
+  - MUST measure duration and lock behaviour on a rehearsal copy before production and keep the figures with the change
+  - MUST a migration with a skip marker be rehearsed elsewhere
+  - MUST personal data be masked in a copy of production
+  design_notes: |-
+    Decision (judge record, final): Rehearse a data change before production on data whose size and shape make the measured time, lock behaviour and plan representative, and keep the measurements with the change; for small data, developer-owned databases with versioned sample data suffice. On every change request, restore a dump of development data and apply every migration of the request; a migration that cannot work on the partial dump carries a skip marker with its reason and is rehearsed on production-shaped data before its production run. Migrations have a time budget by class (the budget is the team's, the same value as the gate criterion of DATA_CHANGE.3) so long ones are identified before deploy. When production data is copied for a rehearsal, personal data is masked before the copy leaves production and side effects (mail, analytics) are blocked in the copy. Outcome: duration, locks and plan are known before production, and no skipped rehearsal is left unrehearsed.
+
+    Grounds: Production-sized or production-shaped data (L403 a; GitLab, Postgres.ai, Neon: vendor sources are interested parties; REG-244, REG-255, REG-261, REG-262) against developer-owned data with sample data for small data (L403 b; REG-244); the maintainer's restore of a dump on every request (L293; agrees with migration CI on a representative dataset; REG-181); measure and keep (L405, majority; REG-255, REG-256, REG-261); time budget (L402, majority, one T3 source; REG-255); mask and block side effects (L404, single vendor; REG-262). A skip marker that would leave a migration never rehearsed fails the guarantee of the rehearsal; the added condition closes it.
+
+    Positions considered: P1 production-sized or production-shaped data. P2 developer-owned databases with sample data. P3 rehearsal in a rolled-back transaction on shared real data (maintainer, no public source; pointer from L403, row routed elsewhere). P4 maintainer: restored dump of development data on every request, skip marker. P5 measure and keep. P6 time budget by class. P7 mask and block side effects.
+
+    Rejected, each with the condition under which it would be best: P1 for small data: costs cloning and personal-data risk for no gain; best for large tables and where plans or lock duration depend on volume. P2 for large tables: timings do not transfer. P3: decided against as the general rule at BEHAVIOUR.7 (disposable store by default; the rollback boundary only where data cannot be cloned and every effect can be undone). Figures in P6 (3, 10 minutes, one second): one team's; the maintainer's five minutes is a value of the same kind.
+
+    Context conditions: Data volume (L403): P1 for large tables, P2 for small data.
+
+    Certainty (judge record): Grounded for P1, P2, P5 (several sources, vendor caveat); inferred for P4 as general (maintainer, agrees with common practice) and for the condition on skipped migrations; P6 numbers inferred; P3 undecided here, settled in J2.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Judge flag F10 settled: the skip marker is conditioned (a migration that cannot work on the partial dump is rehearsed on production-shaped data before its production run); this goes against the maintainer's practice and is listed there by the final pass.
+
+    Links and stack pointers (judge record): Related TRANSVERSE.PRIVACY (L404), ASSURANCE.BEHAVIOUR.7 (test data management), DATA_CHANGE.3 (budget as gate criterion).
+  examples:
+  - Time-budget figures of one team (3 and 10 minutes, one second); the maintainer's five minutes is a value of the same kind.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.7
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C29
+  - build/research/10_data_change/result.md::DATA-C25
+  - build/research/10_data_change/result.md::DATA-C26
+  - build/research/10_data_change/result.md::DATA-C27
+  - build/research/10_data_change/result.md::DATA-C28
+- op: node.create
+  uid: CHANGE_FLOW.DATA_CHANGE.8
+  name: Running and Watching a Production Data Job
+  intent: A production bulk job is declared done by a written convergence query that returns zero remaining work, not by the process returning, and it does not start until a pre-start checklist holds (ticket, index-backed plan, idempotent batches, written convergence query, detached run with a ledger, qualified review where it holds locks, a stop plan). It is ramped with a halt on the first failure, paced on the target system's health, and watched on lock waits and replica lag.
+  parent: CHANGE_FLOW.DATA_CHANGE
+  epistemic_state: 'inferred: maintainer practice, single source, public practice agrees or extends it | gap: no public counterpart found for the convergence query (L413) and for identifying a statement to its change (L412)'
+  constraints:
+  - MUST a convergence query be written before the job starts
+  - MUST the first production run halt on the first failure
+  - MUST a bulk job keep a ledger
+  - MUST a long-running statement be identifiable to its change in activity views and logs (for example the ticket key in a comment)
+  design_notes: |-
+    Decision (judge record, final): A bulk change is declared done by a written convergence query that returns zero remaining work, not by the job process returning; a non-zero result means skipped or silently failed batches, and re-runs must strictly decrease it. Who triggers a production run of the risky class is held at DATA_CHANGE.3, which points to ASSURANCE.SECURITY.6; this node holds how the job runs once started. A production bulk job does not start until a checklist holds: a ticket exists and long-running statements are identifiable to it; a full development run at one worker, then a few; the batch predicate is index-backed (verified by a plan); every batch idempotent or the predicate convergent; the convergence query written; the job detached with a ledger; senior review (a qualified approver, REVIEW.1) if it holds locks or runs long; a stop plan naming what to cancel and whether partial completion is acceptable. Concurrency is never guessed and is raised only with a reason and a metric; the recommended ramp is one batch by hand with its plan inspected, one worker, a modest default; on the first production run halt on the first failure, keep a ledger of batches with exit codes and separate error and progress streams, bound workers by connections, headroom and replica lag. The job is pausable and paced on the target system's health, replica lag first, with mid-run adjustment of batch size and lag limit; watch the target (lock waits, per-batch runtime climbing, dead-tuple growth, replica lag) and escalate on those signals. A long-running statement is identifiable to its change in activity views and logs during an incident (for example the ticket key in a comment). The procedure scales with blast radius; a job that finishes in minutes is a plain migration (DATA_CHANGE.6). Outcome: a production data job is started only when it can be stopped and finished only when proven complete.
+
+    Grounds: Convergence query (L301, maintainer, extends common practice; no public counterpart found, L413 open; nearest REG-257 shadow comparison, REG-254 idempotence; REG-181); ramp and halt rules (L302, maintainer; agrees with progressive rollout, extends it; REG-181); the checklist (L303; REG-181); pausable, paced on replica lag (L400, majority, single T3 source plus a sleep between batches in REG-258; REG-256, REG-258); watch the target (L305; agrees with common practice; REG-181); identifiability of statements to their change (L306, inferred: the outcome query tagging serves; no public counterpart found, L412 open; REG-181). The strongest argument for the convergence query is that a returning process proves only that the process finished.
+
+    Positions considered: P1 convergence query as done. P2 ramp, halt, ledger, detach. P3 pre-start checklist. P4 pausable, health-paced. P5 watch the target system. P6 ticket key in the statement.
+
+    Rejected, each with the condition under which it would be best: "Done" when the job returns: best never; it cannot see skipped batches. Guessing concurrency: best never. Watching only the job's shell: misses lock waits and lag. The full checklist for a job of minutes: best only at large blast radius; the size gate decides.
+
+    Context conditions: none stated by a row beyond blast radius (the size gate of DATA_CHANGE.6).
+
+    Certainty (judge record): Grounded as maintainer practice (single source) for P1 to P3, P5, P6, inferred as best practice (public practice agrees or extends; no counterpart found for P1, P2, P6); grounded as majority for P4 (one T3 source).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-03 (this branch holds the procedure; the guarantees stay in the data-integrity decision nodes).
+
+    Final pass FL9 (judge flag F13): the MUST on the ticket key is replaced by identifiability of a long-running statement to its change (the ticket key is an example); the ramp steps are a recommendation, while 'concurrency is raised only with a reason and a metric' stays a MUST; cross-unit X6: who triggers a production run of the risky class is held at DATA_CHANGE.3, which points to the security principle.
+
+    Links and stack pointers (judge record): Related OPERATION.TELEMETRY (L305), OPERATION.INCIDENTS (L306), REVIEW.1 (L303), DATA_CHANGE.3 (authorization stage, run outside the pipeline), DATA_CHANGE.6, ASSURANCE.SECURITY.6 (a large-blast-radius job is a reviewed script, its run authorized and triggered by the accountable group through the guarded path); stack pointers L305 (dead tuples), L400 (a MySQL tool).
+  examples:
+  - 'Identifying a long-running statement to its change: the ticket key in a comment of the statement.'
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.DATA_CHANGE.8
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C37
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C38
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C39
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C41
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C42
+  - build/research/10_data_change/result.md::DATA-C23
+  - build/research/10_data_change/result.md::DATA-C36
+  - build/research/10_data_change/result.md::DATA-C37
+- op: node.create
+  uid: CHANGE_FLOW.MEASURE
+  name: Measuring Delivery
+  intent: Delivery is judged by outcomes (lead time, deployment frequency, recovery time, change fail rate, rework), used to guide improvement and not to rank people, and never by the volume of code produced. A measured gain from automation is checked against an independent baseline, and the fundamentals of the delivery system are treated as preconditions.
+  parent: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of MEASURE.1 and .2'
+  design_notes: |-
+    Roll-up node: the intent summarizes its children; no ledger rows attach here.
+
+    Decision (judge record, final): Delivery is judged by outcomes (lead time, deployment frequency, recovery time, change fail rate, rework), used to guide improvement not to rank people, never by volume of code produced; a measured gain from automation is verified against an independent baseline, and the fundamentals of the delivery system are treated as preconditions. Outcome: delivery performance is measured by what reaches users and holds, not by output.
+
+    Grounds: Roll-up of MEASURE.1 and .2 (5 rows).
+
+    Positions considered: None here (roll-up).
+
+    Rejected, each with the condition under which it would be best: Not applicable.
+
+    Context conditions: Foundation practices (on MEASURE.1).
+
+    Certainty (judge record): Inferred as a roll-up.
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition).
+
+    Links and stack pointers (judge record): Realizes ASSURANCE.RULES; Related OPERATION.FEEDBACK.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.MEASURE
+- op: node.create
+  uid: CHANGE_FLOW.MEASURE.1
+  name: Outcomes That Judge Delivery
+  intent: Delivery is measured with five outcome metrics (change lead time, deployment frequency, failed-deployment recovery time, change fail rate, deployment rework rate), used to guide improvement and not to rank people. Speed and stability move together only with supporting practices, and the change flow is judged by outcomes, never by the volume of code or changes produced.
+  parent: CHANGE_FLOW.MEASURE
+  epistemic_state: 'known | gap: the net effect of automation on delivery outcomes is contested (small samples, vendor sources) and not decided'
+  constraints:
+  - MUST delivery be judged on the outcome measures
+  - MUST NOT the metrics be used to rank individuals
+  design_notes: |-
+    Decision (judge record, final): Measure with the five DORA metrics (change lead time, deployment frequency, failed deployment recovery time, change fail rate, deployment rework rate) and use them to guide improvement, not to rank people. Treat speed and stability as correlated, not traded off, but only with supporting practices: raising frequency alone yields failures and burnout. Judge the change flow by delivery outcomes, not by the volume of code or pull requests produced; the net effect of automation on those outcomes depends on the foundation practices and is not settled by the sources. Outcome: a team improves what reaches users, and no measure becomes a target that distorts it.
+
+    Grounds: Five metrics (L169, consensus; REG-093; "not to rank people" inferred); speed and stability correlated with supporting practices (L170, majority; REG-093, REG-097); outcomes, not volume (L1058; REG-1041, REG-1042, REG-1043, REG-1047). The contested net effect: automation raises throughput and satisfaction with instability a fixable side effect (REG-1041), or gains vanish at organisation level or are negative for experienced developers in mature code (REG-1043, sixteen developers, REG-1047); sample and vendor caveats apply.
+
+    Positions considered: P1 five DORA metrics. P2 speed and stability correlated with supporting practices. P3 outcomes, not volume; net effect contested (a) positive, (b) vanishes or negative.
+
+    Rejected, each with the condition under which it would be best: Output volume (code, pull requests) as the measure: best never, it measures activity. The conventional speed-versus-stability trade-off: no source read defends it. The net effect is not decided: (a) is best in teams with version control, small batches, testing, a platform and a clear policy; (b) elsewhere (L1058).
+
+    Context conditions: Foundation practices (L1058): present means (a), absent means (b).
+
+    Certainty (judge record): Grounded for P1 and P2; grounded for the outcome-not-volume principle; open on the net effect of automation (contested, small samples, vendor sources).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (outcomes, not who writes the code).
+
+    Links and stack pointers (judge record): Related OPERATION.RELIABILITY (L169, L208), RELEASE.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.MEASURE.1
+  - build/research/04_delivery/result.md::DELIVER-C46
+  - build/research/04_delivery/result.md::DELIVER-C47
+  - build/research/13_change_authors/result.md::AUTH-C17
+- op: node.create
+  uid: CHANGE_FLOW.MEASURE.2
+  name: Independent Baselines and Preconditions
+  intent: A claimed gain from automation, in speed or security, is measured against a baseline not produced by the claimant. Version control, small batches, testing, a platform and a clear policy are preconditions, because automation magnifies existing strengths and weaknesses.
+  parent: CHANGE_FLOW.MEASURE
+  epistemic_state: 'known | inferred: the independent baseline as a principle (findings from small samples)'
+  constraints:
+  - MUST a claimed gain be measured against a baseline not produced by the claimant
+  design_notes: |-
+    Decision (judge record, final): Do not rely on self-reported speed or security gains from automation: measure them against an independent baseline. Treat the delivery system's fundamentals (version control, small batches, testing, platform, clear policy) as preconditions: automation magnifies existing strengths and weaknesses. Outcome: a claimed gain is a measured gain, and automation is added where it will help.
+
+    Grounds: Independent baseline (L1059; REG-1043, REG-1044, REG-1050; findings from small samples, principle inferred); fundamentals as preconditions (L1060, majority; REG-1041, REG-1042).
+
+    Positions considered: P1 independent baseline. P2 preconditions.
+
+    Rejected, each with the condition under which it would be best: No competing position recorded. Self-reported gain as evidence: best never for a decision about adoption.
+
+    Context conditions: none.
+
+    Certainty (judge record): Grounded for P2 (majority); inferred for P1 as principle (small samples).
+
+    Maintainer decisions: MD-01 (the best practice for the node's purpose, not the average; every weaker position is kept with its winning condition); MD-02 (outcomes, not who writes the code).
+
+    Links and stack pointers (judge record): Related MEASURE.1, RELEASE.1.
+  impl_pointers:
+  - build/distill/03_judge/J6_change_flow/judged.md::CHANGE_FLOW.MEASURE.2
+  - build/research/13_change_authors/result.md::AUTH-C18
+  - build/research/13_change_authors/result.md::AUTH-C19
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.2
+  dst: CHANGE_FLOW.RELEASE.3
+  intent: Work that spans the integration interval is merged hidden behind the flags RELEASE.3 governs.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.3
+  dst: CHANGE_FLOW.RELEASE.1
+  intent: The branching model follows the release model that also sets the release cadence.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.3
+  dst: CHANGE_FLOW.ROLLBACK.1
+  intent: Without a release branch a defect is fixed forward, the choice ROLLBACK.1 makes per change class.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.4
+  dst: CHANGE_FLOW.INTEGRATION.5
+  intent: The squash default rests on the small batches and routine rollback that mainline health keeps.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.5
+  dst: CHANGE_FLOW.REVIEW.2
+  intent: 'Small batches protect review: the unit of review stays small enough to read.'
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.5
+  dst: CHANGE_FLOW.ROLLBACK.2
+  intent: Routine rollback is safe only when each change is backward compatible and reversible through version control.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.INTEGRATION.6
+  dst: CHANGE_FLOW.REVIEW.1
+  intent: The recorded trail and the extra approval for unattributed changes feed the independent, risk-scaled review.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.1
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: Review of a high-blast-radius change names qualified approvers; who may run the risky class is held at DATA_CHANGE.3.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.1
+  dst: CHANGE_FLOW.DATA_CHANGE.8
+  intent: A production bulk job that holds locks or runs long needs a qualified approver under REVIEW.1.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.REVIEW.4
+  dst: CHANGE_FLOW.BUILD.1
+  intent: The checks that run before the reviewer are the build and suite BUILD.1 runs on every push.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.BUILD.2
+  dst: CHANGE_FLOW.RELEASE.2
+  intent: The promoted artifact carries the release identifier RELEASE.2 defines.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.1
+  dst: CHANGE_FLOW.MEASURE.1
+  intent: Raising release frequency alone yields failures; MEASURE.1 holds how speed and stability relate.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.4
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: The human gate for the irreversible data class is the authorization stage DATA_CHANGE.3 holds.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.4
+  dst: CHANGE_FLOW.DEPLOY.1
+  intent: A human gate is a stage within the one deployment process, not a different process.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.1
+  dst: CHANGE_FLOW.DATA_CHANGE.1
+  intent: Migrations run through the same deployment process in every environment.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.1
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: A human-triggered risky database change is a gate within the same process; no conflict remains.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.2
+  dst: CHANGE_FLOW.ROLLBACK.1
+  intent: A rollout's automatic halt or rollback criterion is the decision ROLLBACK.1 makes in advance.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.3
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: Changes that depend on known environment differences are routed to the gated lane.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DEPLOY.3
+  dst: CHANGE_FLOW.DATA_CHANGE.7
+  intent: Changes that depend on scale or data volume are rehearsed on production-shaped data.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.ROLLBACK.2
+  dst: CHANGE_FLOW.DATA_CHANGE.4
+  intent: This node holds the generic backward-compatibility rule; the data procedure is held at DATA_CHANGE.4.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.ROLLBACK.3
+  dst: CHANGE_FLOW.DATA_CHANGE.4
+  intent: The expand step and the last reversible point rely on the order and compatibility rules of DATA_CHANGE.4.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.1
+  dst: CHANGE_FLOW.DATA_CHANGE.2
+  intent: The recorded history makes the once-only application of ordered scripts checkable.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.5
+  dst: CHANGE_FLOW.DATA_CHANGE.6
+  intent: Sharding applies to data changes only, which are the bulk batches of DATA_CHANGE.6.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.6
+  dst: CHANGE_FLOW.DATA_CHANGE.8
+  intent: How a bulk job is run and watched follows from how its batches are designed.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.7
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: The time budget is the gate criterion of the risky class.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.8
+  dst: CHANGE_FLOW.DATA_CHANGE.3
+  intent: Who triggers a risky production run, and through which stage, is held at DATA_CHANGE.3.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.MEASURE.2
+  dst: CHANGE_FLOW.MEASURE.1
+  intent: The independent baseline checks the outcome measures MEASURE.1 uses.
+  shape:
+    type: related
+- op: link.create
+  src: CHANGE_FLOW.MEASURE.2
+  dst: CHANGE_FLOW.RELEASE.1
+  intent: Frequency gains count only where the foundation practices are present.
+  shape:
+    type: related

@@ -1,0 +1,38 @@
+operations:
+- op: node.set
+  uid: OWNERSHIP.SELECTION.6
+  impl_pointers:
+  - build/distill/03_judge/J1_ownership/judged.md::OWNERSHIP.SELECTION.6
+  - build/research/01_sourcing/result.md::SRC-C27
+  - build/research/02_adoption/result.md::ADOPT-C12
+  - build/research/02_adoption/result.md::ADOPT-C49
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::DEPENDENCIES.ADMISSION.4
+- op: node.set
+  uid: OWNERSHIP.STANCE.1
+  impl_pointers:
+  - build/distill/03_judge/J1_ownership/judged.md::OWNERSHIP.STANCE.1
+  - build/research/01_sourcing/result.md::SRC-C01
+  - build/research/02_adoption/result.md::ADOPT-C08
+  - build/research/02_adoption/result.md::ADOPT-C01
+  - build/research/07_maintainer_doctrine/result.md::MAINT-C44
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::DEPENDENCIES.ADMISSION.1
+- op: node.set
+  uid: TRANSVERSE.CONFIG.1
+  impl_pointers:
+  - build/distill/03_judge/J9_transverse/judged.md::TRANSVERSE.CONFIG.1
+  - build/research/04_delivery/result.md::DELIVER-C35
+  - build/research/06_transverse/result.md::TRANS-C45
+  - ../web_architecture_guidelines/build/research/06_operations/result.md::OPS-C34
+  - ../web_architecture_guidelines/build/research/05_identity_security/result.md::SEC-C50
+  - build/research/06_transverse/result.md::TRANS-C48
+  - build/research/06_transverse/result.md::TRANS-C53
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::DEFENSE.SECRETS
+  - ../javascript_guidelines/build/research/06_runsec/result.md::RUNSEC-C46
+- op: node.set
+  uid: CONSTRUCTION.BOUNDARY.2
+  impl_pointers:
+  - build/distill/03_judge/J5_construction/judged.md::CONSTRUCTION.BOUNDARY.2
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::CONTRACTS.BOUNDARY.2
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::CONTRACTS.BOUNDARY.3
+  - ../javascript_guidelines/build/handoff/to_software_guideline/package.md::CONTRACTS.BOUNDARY.4
+  - ../javascript_guidelines/build/research/14_secgap2/result.md::SECGAP2-C03

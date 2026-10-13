@@ -1,0 +1,1269 @@
+# batch.yaml: final pass on the critique flags Y01 to Y23 (see verdicts.md beside this file).
+# Apply with:
+#   ig-tool apply -g intent_graphs/software_development_philosophy.ig.yaml --batch build/distill/05_critique/final/batch.yaml -o <out> --role final-pass -m "final pass on critique flags Y01-Y23"
+# node.set replaces whole lists (constraints, examples); old text read from the graph through ig-tool query.
+operations:
+- op: node.set
+  uid: ASSURANCE
+  constraints:
+  - Every property MUST have a mechanism, a stage and a recurring trigger
+  - Every check MUST have a stated false-alarm budget against which its measured rate is held
+  - A gate MUST NOT be skippable
+  - Every approval MUST bind the exact content that ships
+- op: node.set
+  uid: ASSURANCE.AVAILABILITY.2
+  intent: Every remote call is bounded by connection and request timeouts sized from the dependency's measured latency percentile and by a deadline propagated across calls; retries are limited to transient failures, capped, made at one layer only, safe for non-read operations only if idempotent, and bounded system-wide by a retry budget. A circuit breaker, whose state changes are logged, is added only where a dependency fails slowly or is shared by many callers, so a failing dependency cannot exhaust the caller's resources and retries cannot amplify an outage.
+- op: node.set
+  uid: ASSURANCE.AVAILABILITY.3
+  intent: Resilience is verified by automated experiments built on a steady-state hypothesis over measurable outputs, in pre-production by default and on production traffic only when the steady state is measurable, rollback is proven and the blast radius is bounded. These guardrails govern the transient effects that every production test shares; durable effects on data fall under the rule held in BEHAVIOUR.7, and a gap an experiment finds is a defect handled like any other.
+  constraints:
+  - MUST state a steady-state hypothesis over measurable outputs or an abort criterion
+  - MUST have a proven rollback
+  - MUST bound blast radius
+  - MUST treat a gap found as a defect handled by BEHAVIOUR.5
+- op: node.set
+  uid: ASSURANCE.AVAILABILITY.4
+  intent: A backup counts only if a restore from it was tested end to end, regularly and automatically, by the procedure of a real recovery, against criteria fixed beforehand (data present, uncorrupted, accessible and within the recovery point; restore complete within the recovery time). A restore runs by its own path, independent of schema-change tooling. Backup integrity is verified before restore and restored assets before service is declared restored, so the recovery objectives are shown by test and not assumed.
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.1
+  constraints:
+  - The suite MUST run on every change and be runnable in the language's standard way
+  - A written test policy MUST exist (new functionality and every fix come with automated tests); the evidence that it is followed is the tests in each change, visible in its review, with no separate artefact
+  - A pass MUST NOT be read as proof of reliability
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.2
+  constraints:
+  - Type checks, compiler warnings and the adopted linter rules MUST block, and analyses whose findings need judgement MUST advise in review, each under the false-alarm budget of RULES.1
+  - A warning MUST be fixed or suppressed with a reason
+  epistemic_state: 'known | gap: ''types as the first test layer'' is inferred (the sources are third-tier or tool documentation); the trend practice rests on one observational study; rejection of tests-alone rests on absence of a source'
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.3
+  constraints:
+  - The mix MUST be recorded
+  - End-to-end tests MUST be few and for critical journeys unless fast, reliable and cheap
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.4
+  constraints:
+  - The double style and the unit definition MUST be recorded
+  - A test MUST NOT change when only structure changes
+  - Integration tests MUST use the production kind of backing service
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.5
+  constraints:
+  - A fixed defect MUST have a regression test
+  - A scheduled job MUST pass its tests before it is scheduled
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.6
+  constraints:
+  - A coverage number MUST NOT gate a merge, set a quality target or serve as a security floor
+  - Input-handling code of security relevance MUST be fuzzed
+  epistemic_state: 'known | gap: the rule for security-relevant code is inferred (it follows from the study and Google''s report, no source tests a floor on security code); mutation and property-based testing effect is inferred (no effect size); effect size of mutation testing is open'
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.7
+  intent: 'A test never leaves a durable effect on data that anyone relies on: the default mechanism is a separate disposable data store per run, never the production one, with each test isolated. Running on shared or production-sized data behind a boundary guaranteed to be undone is best only when the dataset cannot be cloned or its shapes cannot be synthesized and the platform can undo every effect of the test, and no test, functional or experimental, runs against production data unless every durable effect is provably undone: its records isolated and marked apart from real data and removed after the run, and any other durable effect suppressed or undone. Test records are synthetic and built per test by default, with a curated, catalogued set of real records only where shapes are rich and costly to fabricate, and real records stay under the privacy rules. Test data and configuration are kept apart from production, and re-runs behave identically.'
+  constraints:
+  - A test MUST NOT commit a durable change to shared data
+  - Production code MUST NOT read the test namespace
+  - A mutating automated test on shared or production-sized data MUST run as one rolled-back unit
+  - A test on production data MUST isolate and mark its records and remove them after the run
+  examples:
+  - 'Stack-specific, not a decision: on one platform, the idiom that every outcome rolls back (a final error whose message is the verdict) realizes the rolled-back unit.'
+  epistemic_state: 'known | gap: the synthetic-versus-curated records default, the execution vehicle, the disjoint test configuration and the conditional mutations are inferred (maintainer practice only, public practice read not fetched); the disposable-store default rests on one framework''s documentation plus the rebuild-state principle (consensus recorded, not several top-tier sources); the rollback idiom is a platform fact of one stack'
+- op: node.set
+  uid: ASSURANCE.BEHAVIOUR.8
+  intent: 'Passing review, static analysis and deployment is not evidence that code works: code whose behaviour depends on the shape of the data (queries, parsing, conversions, code on platforms that coerce or truncate) is exercised on production-shaped data, its edge values included, before it ships, beyond the parsing at boundaries that CONSTRUCTION.BOUNDARY.1 holds. A platform limit that fails silently has a check, unclear platform behaviour that a design relies on is verified empirically and recorded with its scope, and a pitfall catalogue grows after any defect found twice. A blanket search-and-replace is never applied across a file that holds two syntactic contexts.'
+  constraints:
+  - Data-dependent code MUST be exercised on production-shaped data before it ships
+  - A platform limit that fails silently MUST have a check
+  - A pitfall found twice MUST be catalogued
+  examples:
+  - A pitfall catalogue indexed by error code or symptom; a platform that silently truncates identifiers over a length limit (stack-specific, not a decision).
+- op: node.set
+  uid: ASSURANCE.CONTRACTS
+  epistemic_state: 'inferred: roll-up of CONTRACTS.1 to .3; the definition and the contract-test principle are grounded | gap: the style choices (which evolution policy, which contract-test style, code-first or design-first) are inferred, each resolved by context'
+- op: node.set
+  uid: ASSURANCE.CONTRACTS.1
+  constraints:
+  - The public interface MUST be declared
+  - A breaking change MUST be coordinated or deprecated, never silent
+  epistemic_state: 'known | gap: the consumer-count threshold has no numeric boundary in any source (inferred); the mapping of artifact kind to policy is inferred; the maintainer''s additive-plus-coordination practice is inferred (public practice contested)'
+- op: node.set
+  uid: ASSURANCE.CONTRACTS.2
+  constraints:
+  - A double of an external service MUST have a contract test against the real service
+  - A contract-test failure MUST create a realignment task
+- op: node.set
+  uid: ASSURANCE.CONTRACTS.3
+  intent: Each interface has one machine-readable description from which the reference documentation, client and server stubs, the types of every tier and tests are derived, never hand-copied. The description is linted in CI against a team ruleset, and CI diffs it against the main-branch version and fails on incompatible change; since the diff covers the description only, behaviour and semantics still need contract tests. The description originates in a typed model when one team owns both ends and is authored first when independent consumers depend on it, and the team records where the chain of types starts.
+  constraints:
+  - The description MUST have one source
+  - A generated description MUST NOT be hand-edited
+  - CI MUST block an incompatible change in the description
+  - A type MUST NOT be hand-copied across tiers
+  epistemic_state: 'known | gap: lint and the CI diff are grounded as tool capability only (third-tier tool pages), ''CI blocks'' is inferred; the origin condition, the ''should'' of lint and the ''description only'' limit are inferred; code-first against design-first is contested; the derivation of physical types in every tier is inferred'
+- op: node.set
+  uid: ASSURANCE.DATA_INTEGRITY.2
+  epistemic_state: 'known | gap: inferred, that application-level opt-in and the schema-change lint are one principle'
+- op: node.set
+  uid: ASSURANCE.DATA_INTEGRITY.3
+  epistemic_state: 'inferred: layers grounded (second-tier, consensus claims); the deletion form is inferred'
+- op: node.set
+  uid: ASSURANCE.DATA_INTEGRITY.5
+  epistemic_state: 'known | gap: inferred, the owner of observe-only mode (no source states it)'
+- op: node.set
+  uid: ASSURANCE.DOCS_SYNC
+  epistemic_state: 'inferred: the ordering of mechanisms by strength is a synthesis of this guideline; each part is grounded'
+- op: node.set
+  uid: ASSURANCE.DOCS_SYNC.1
+  epistemic_state: 'known | gap: inferred, the motivation of the reduced pipeline for documentation-only changes'
+- op: node.set
+  uid: ASSURANCE.DOCS_SYNC.2
+  epistemic_state: 'inferred: each component grounded; the combination of declared documentation impact checked by CI plus reviewer verification is a synthesis of this guideline (sources split on hard versus soft gate)'
+- op: node.set
+  uid: ASSURANCE.DOCS_SYNC.4
+  epistemic_state: 'known | gap: inferred, the reasons marked inferred (link checks on a schedule, others)'
+- op: node.set
+  uid: ASSURANCE.PERFORMANCE
+  epistemic_state: 'inferred: roll-up of the five child decisions, each with its own certainty; the weakest child is .5 (transfer of its measurement methods to other runtimes)'
+- op: node.set
+  uid: ASSURANCE.PERFORMANCE.4
+  constraints:
+  - MUST apply the production-test guardrails of AVAILABILITY.3
+  - A production load test MUST run off-peak, ramp from a small share and reserve capacity
+- op: node.set
+  uid: ASSURANCE.RULES
+  epistemic_state: 'inferred: roll-up of RULES.1 to .5; the principles are grounded under each child | gap: every numeric default is inferred (one organisation''s or one source''s figure) | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (RULES.4, default applied)'
+- op: node.set
+  uid: ASSURANCE.RULES.1
+  intent: 'A failing check must mean a real defect, so a pass can be believed and a finding is acted on: non-determinism is prevented at its cause, each test establishing the state it needs instead of relying on another test''s clean-up and, where rebuilding per test costs too much, the platform doing the undo (a rolled-back transaction, a snapshot restore), never hand-written clean-up code; a flaky test that already exists is a defect of the pipeline, taken out of the blocking gate into a quarantine with an owner, a numeric cap and a time limit, then fixed or deleted. A check blocks while its measured false-alarm rate is within the budget the team states for it, a lower-confidence check is shown in review as advice also under a budget, and a check over budget in either mode is fixed or removed.'
+  constraints:
+  - A check, blocking or advisory, MUST have a stated false-alarm budget
+  - A check over its budget MUST be fixed or removed
+  - A quarantined test MUST have an owner, a cap and an end date
+  - A rerun MUST NOT hide a failure
+  examples:
+  - 'Further preventions: wait on events or polling rather than bare sleeps, wrap the clock, double remote services, shrink large tests, check a new test repeatedly when it is added.'
+- op: node.set
+  uid: ASSURANCE.RULES.2
+  constraints:
+  - The blocking set MUST return in minutes
+  - Every higher-level miss MUST produce a lower-level test
+  - A stage policy MUST be recorded per risk
+- op: node.set
+  uid: ASSURANCE.RULES.3
+  constraints:
+  - A required check MUST fail closed (skipped or missing counts as failed)
+  - A blocking check MUST NOT be a noisy one (RULES.1)
+- op: node.set
+  uid: ASSURANCE.RULES.4
+  constraints:
+  - The approver MUST differ from the author
+  - An approval MUST lapse when the diff changes
+  - A named person or role MUST be accountable
+  epistemic_state: 'known | gap: the reviewer-kind clause (a person or an automated reviewer; for a high-risk change, a reviewer of a different kind from the author) is the default applied and inferred; the reason for rejecting review of uncertain changes only is inferred; whether a given regulation still requires an external board was not read | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (default applied)'
+- op: node.set
+  uid: ASSURANCE.RULES.5
+  constraints:
+  - Every change MUST carry an executable check
+  - Completion MUST be shown by evidence
+  - A change MUST NOT be exempt by its author
+  epistemic_state: 'known | gap: intent-and-acceptance-first and independent contexts are inferred (a vendor guide, one DORA capability); the executable check and the evidence rest on one top-tier vendor source, no consensus claim'
+- op: node.set
+  uid: ASSURANCE.SECURITY.1
+  epistemic_state: 'known | gap: inferred, the revisit trigger of the assurance target'
+- op: node.set
+  uid: ASSURANCE.SECURITY.5
+  constraints:
+  - MUST layer secret scanning
+  - MUST give a bypass the audited waiver of SECURITY.2
+  - A secret found in history MUST be rotated (practice in TRANSVERSE)
+- op: node.set
+  uid: ASSURANCE.SECURITY.6
+  intent: 'Limits on what any actor can touch, a person, a script or an automated agent, are enforced in tooling at the lowest layer every path passes through, never by an instruction the actor is asked to follow. The condition that moves the rest is whether the actor acts without a person''s judgement at the moment of action: such an actor gets the least functionality, permission and autonomy its task needs, does not itself execute a job whose guards cannot be applied or whose effects are irreversible, and never combines untrusted input, access to sensitive systems and outward state change without a human gate. Data access goes through one guarded path with least-privilege roles, whoever uses it. What an actor or an ad-hoc path can touch is thus bounded by something it cannot argue with.'
+  constraints:
+  - Limits MUST be enforced in tooling, never by instruction
+  - An actor that acts without a person's judgement MUST NOT combine untrusted input, access to sensitive systems and outward state change without a human gate
+  - MUST record the execute-or-write-only decision for a large-blast-radius job
+  examples:
+  - An instruction in an automated agent's prompt is not a limit; a deny rule in its sandbox is.
+  epistemic_state: 'known | gap: inferred, the framing of the execute-or-write-only choice as a recorded decision, the generalisation of the three-condition rule, and its condition stated as acting without a person''s judgement at the moment of action'
+- op: node.set
+  uid: CHANGE_FLOW
+  constraints:
+  - A change MUST NOT reach production except from reviewed mainline through the one pipeline
+  - The deployed artifact MUST be the one that was built
+  - Every change MUST have a named way back before it ships
+  - A schema or data change MUST NOT be applied as hand-typed statements
+  epistemic_state: 'inferred: roll-up of eight L2 records; build-once, small batches and review principles grounded, numeric defaults and much of DATA_CHANGE inferred (single-source practice) | gap: open at INTEGRATION.1, INTEGRATION.4, REVIEW.4, RELEASE.2, DEPLOY.4, MEASURE.1 | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (ASSURANCE.RULES.4, default applied)'
+- op: node.set
+  uid: CHANGE_FLOW.BUILD.1
+  constraints:
+  - Every push to the mainline MUST trigger the build and suite
+  - A build MUST depend on no machine-specific state
+- op: node.set
+  uid: CHANGE_FLOW.BUILD.2
+  intent: Build, release and run are separate stages; a release is immutable and uniquely identified, built once and promoted unchanged to every environment, with environment configuration kept outside it as TRANSVERSE.CONFIG.1 holds and its provenance verified before use as ASSURANCE.ARTIFACT.1 holds. What runs in production is then the artifact that was tested and reviewed.
+  constraints:
+  - An artifact MUST be promoted by identity, not rebuilt
+  epistemic_state: 'known | gap: inferred, the wording of the build-once-promote rule'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.1
+  intent: Every schema and data change is a migration script in version control, ordered, applied once, recorded, and run by the automated deployment process of DEPLOY.1, never by hand-typed statements. Changes are as small as possible and the reviewed script is the script deployed.
+  constraints:
+  - Every database change MUST be a script in version control applied by tooling
+  - A change MUST NOT be hand-typed
+  - Each migration MUST name its ticket
+  - The reviewed script MUST be the deployed script
+  epistemic_state: 'known | gap: inferred, idempotent DDL as defence in depth and the separate stream for frequent urgent data fixes (maintainer practice and one practitioner source, conditions reasoned)'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.2
+  constraints:
+  - An applied migration MUST NOT change
+  - The history MUST live in the target database
+  epistemic_state: 'known | gap: inferred, the checksum as a general mechanism and the strict never-edit form'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.3
+  intent: 'Database change travels in the same pipeline as application change, as the reviewed script of DATA_CHANGE.1 with one history and one audit trail, not as a separate manual track. A recorded criterion classes each change: ordinary changes apply automatically through every environment, while the risky class passes an authorization stage where a named, qualified group approves the production run on the exact script and a member triggers it.'
+  constraints:
+  - The classification criterion MUST be recorded
+  - A risky-class change MUST NOT start from an automatic merge
+  - A production run of the risky class MUST name who runs it and be approved on the exact script
+  epistemic_state: 'inferred: the decision core is inferred, the named, qualified group that approves and triggers the authorization stage (no public source) and the risk-based split as the general rule, as are the size criterion and the idempotent authoring script for configuration-like content; one pipeline and one history for database and application change are grounded | gap: no public counterpart found for configuration-like content on its own path'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.4
+  intent: A schema change deploys separately from and before the code that needs it, and an incompatible structural change follows expand, migrate, contract as EVOLUTION.INCREMENTAL.2 holds, with a scheduled contract step, because old and new code run against the same data during the deploy window. An application deploy is gated on the schema version it declares and fails if the history lacks it.
+  constraints:
+  - A schema change MUST deploy before the code that needs it
+  - 'The contract step of a schema change MUST have a date (its owner: EVOLUTION.INCREMENTAL.2)'
+  - An application deploy MUST fail if the schema history lacks the minimum version it declares
+  epistemic_state: 'known | gap: inferred, the minimum-schema-version gate as the general form (single maintainer source) and the choice among compatibility surfaces'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.5
+  constraints:
+  - The lock taken by a statement MUST be known before a run on a shared database
+  - A migration MUST set a session-level lock timeout
+  - A statement that cannot run in a transaction MUST run in its own step
+  epistemic_state: 'known | gap: inferred, the starvation reason for the lock timeout with retry; do-not-shard-schema-changes is maintainer practice read as consensus'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.6
+  constraints:
+  - A bulk batch MUST be re-runnable with the same result
+  - A batch MUST NOT run inside a long schema-change transaction
+  - The place a backfill runs MUST be recorded with its reason
+  epistemic_state: 'known | gap: inferred, the four-decision procedure, the re-runnable batch rules and the standard-tools rule (maintainer practice, single source, public practice agrees or extends); place by duration is contested and decided by duration'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.7
+  constraints:
+  - MUST measure duration and lock behaviour on a rehearsal copy before production and keep the figures with the change
+  - A migration with a skip marker MUST be rehearsed elsewhere
+  - Personal data MUST be masked in a copy of production
+  epistemic_state: 'known | gap: inferred, the restored-dump rehearsal on every request, the condition on skipped migrations and the time-budget figures'
+- op: node.set
+  uid: CHANGE_FLOW.DATA_CHANGE.8
+  constraints:
+  - A convergence query MUST be written before the job starts
+  - The first production run MUST halt on the first failure
+  - A bulk job MUST keep a ledger
+  - A long-running statement MUST be identifiable to its change in activity views and logs (for example the ticket key in a comment)
+- op: node.set
+  uid: CHANGE_FLOW.DEPLOY.1
+  constraints:
+  - Production MUST be deployed by the same scripted process as every other environment
+  - Deployment scripts MUST be versioned
+  - Admin code MUST ship with the application
+  epistemic_state: 'known | gap: inferred, the maintainer''s human-triggered lane is compatible with the same process (reasoned, see DATA_CHANGE.3)'
+- op: node.set
+  uid: CHANGE_FLOW.DEPLOY.2
+  constraints:
+  - A rollout MUST have an automatic halt or rollback criterion
+  - A canary MUST compare with a concurrent control
+  epistemic_state: 'known | gap: inferred, the concurrent-control rule is general (one source)'
+- op: node.set
+  uid: CHANGE_FLOW.DEPLOY.3
+  intent: Every environment is kept alike production in kind (type and version of backing services, operating system, libraries) with a short commit-to-deploy time and no stand-ins that hide differences, while credentials stay isolated per environment as TRANSVERSE.ENVIRONMENTS.1 holds. Differences that cannot be afforded (scale, data volume, permissions, production-only schemas) are written down, and changes that depend on them are routed to rehearsal on production-shaped data and to the gated lane.
+  constraints:
+  - Backing-service type and version MUST match production in every environment
+  - The list of known environment differences MUST be written down and referenced by the changes it affects
+  epistemic_state: 'inferred: the split by axis (kind and version against scale and data) is reasoned from the source claims, not stated by a source, and the documented-divergence rule is the maintainer''s practice, single source; parity of kind and version is grounded'
+- op: node.set
+  uid: CHANGE_FLOW.DEPLOY.4
+  constraints:
+  - Declared state MUST be in version control
+  - An instance MUST NOT be modified in place without the change recorded back into the declared state
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.1
+  intent: The repository holds everything needed to build, deploy and restore, so a clean machine rebuilds the system from it alone through the hermetic build of BUILD.1. Each deployable has one codebase, code shared across applications is a versioned library, and whatever repository layout is chosen keeps one version of each shared component at any time.
+  constraints:
+  - The repository MUST hold everything needed to build, deploy and restore
+  - One version of each shared component MUST hold at any time
+  epistemic_state: 'known | gap: which repository layout wins in general is open, the layout debate rests on one practitioner source; inferred, a monorepo holds one codebase per application as one unit per deployable with its own build and deploy'
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.2
+  constraints:
+  - A branch MUST be merged or deleted within days (the limit is the team's, default a couple of days)
+  - Unfinished work on the mainline MUST be hidden and its toggle carry an owner and an expiry (RELEASE.3)
+  epistemic_state: 'known | gap: inferred, the three-or-fewer active branches figure is a default bound, not a rule'
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.3
+  intent: 'The branching model follows the release model: one continuously delivered live version uses short branches off one mainline and fixes go forward, while explicitly versioned or multi-version software cuts a release branch just in time, fixes on the mainline, copies each fix into it and deletes it after release. A branch exists only as long as a version needs separate fixes.'
+  constraints:
+  - A release branch (when it exists) MUST receive fixes copied from the mainline, not by merge back
+  examples:
+  - In a version-control system that offers it, the copy of a mainline fix into a release branch is a cherry-pick.
+  epistemic_state: 'known | gap: inferred, the just-in-time release branch is the form a release branch takes, not a rival to it'
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.4
+  constraints:
+  - One merge method MUST be recorded per repository
+  - A commit MUST be atomic and say what and why
+  epistemic_state: 'known | gap: which of the three merge methods wins is open, no source ranks them; inferred, the squash default follows from small units and simple revert'
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.5
+  constraints:
+  - A broken mainline MUST be reverted or fixed before new work merges
+  epistemic_state: 'known | gap: inferred, the causal link from change volume to oversized batches'
+- op: node.set
+  uid: CHANGE_FLOW.INTEGRATION.6
+  constraints:
+  - An automated author MUST use an identity distinct from a human one
+  - An unattributed change MUST be approved by a named person
+  - The bar MUST NOT depend on who authored
+  epistemic_state: 'inferred: the author-neutral phrasing of the actor boundaries and the choice of no disclosure rule over disclosure (one maintainer ruling, one inference); the recorded trail and distinct automation identities are grounded'
+- op: node.set
+  uid: CHANGE_FLOW.MEASURE.1
+  intent: Delivery is measured with five outcome metrics (change lead time, deployment frequency, failed-deployment recovery time, change fail rate, deployment rework rate), used as signals to guide improvement and not to rank people; the two that production feeds back are never made targets (OPERATION.FEEDBACK). Speed and stability move together only with supporting practices, and the change flow is judged by outcomes, never by the volume of code or changes produced.
+  constraints:
+  - Delivery MUST be judged on the outcome measures
+  - The metrics MUST NOT be used to rank individuals
+- op: node.set
+  uid: CHANGE_FLOW.MEASURE.2
+  constraints:
+  - A claimed gain MUST be measured against a baseline not produced by the claimant
+  epistemic_state: 'known | gap: inferred, the independent baseline as a principle (findings from small samples)'
+- op: node.set
+  uid: CHANGE_FLOW.RELEASE.1
+  constraints:
+  - The batch size per release MUST be kept as small as the model allows
+  epistemic_state: 'known | gap: inferred, the cadence per release model rests on a few sources'
+- op: node.set
+  uid: CHANGE_FLOW.RELEASE.2
+  constraints:
+  - Every release MUST have a unique identifier
+  - A version number that promises compatibility MUST be backed by a declared public interface
+  epistemic_state: 'known | gap: calendar versioning is not read in any source, open and not rejected; inferred, the plain release identifier for a single live service'
+- op: node.set
+  uid: CHANGE_FLOW.RELEASE.3
+  constraints:
+  - A release toggle MUST carry an expiry and a removal task
+  - The states that can occur in production MUST be tested
+  epistemic_state: 'known | gap: inferred, toggles as inventory as the general rule (single source)'
+- op: node.set
+  uid: CHANGE_FLOW.RELEASE.4
+  constraints:
+  - Every gate MUST state its criterion
+  - A gate MUST NOT be skippable by a person with a different route to production (RULES.3)
+  epistemic_state: 'known | gap: inferred, placing the irreversible data class under human gates'
+- op: node.set
+  uid: CHANGE_FLOW.RELEASE.5
+  constraints:
+  - The set of release-permitted people MUST be a recorded policy
+  - An incident exception path MUST exist
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW
+  epistemic_state: 'inferred: roll-up of REVIEW.1 to .4; grounded in the settled independent-review decision and the children | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (ASSURANCE.RULES.4, default applied)'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.1
+  intent: Every change meets the one bar of ASSURANCE.RULES.5 and the independent check before integration of RULES.4; the mechanism (asynchronous approval, synchronous review or pairing, post-merge show for the defined low-risk tier) is chosen per team and recorded. Depth rises with risk and wherever the submitter's understanding cannot be assumed, and a high-blast-radius change is approved by named approvers qualified for that class.
+  constraints:
+  - A high-blast-radius change MUST name its approvers
+  - Depth MUST NOT be reduced because the author is trusted or automated
+  epistemic_state: 'known | gap: inferred, the author-neutral form of depth by evidence of understanding and the escalation criterion (maintainer practice agreeing with common practice) | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (ASSURANCE.RULES.4, default applied)'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.2
+  constraints:
+  - A unit of review MUST be small enough to be read in one sitting
+  - A reviewer MUST answer within the team's stated bound
+  epistemic_state: 'known | gap: inferred, the numeric thresholds are defaults (sources differ, 100 and 200 lines) and the causal reading of review capacity as the constraint'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.3
+  constraints:
+  - A second reader MUST be able to understand the change
+  - The catalog MUST have an owner
+  epistemic_state: 'known | gap: inferred, the maintained defect catalog (maintainer practice, public review checklists not fetched)'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.4
+  constraints:
+  - Automated checks MUST run before the reviewer is asked
+  - An automated reviewer MUST NOT be the approving party
+  epistemic_state: 'known | gap: no study read on the accuracy of an automated second reviewer; inferred, the second automated reviewer as an extra layer (vendor statements only) | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (ASSURANCE.RULES.4, default applied)'
+- op: node.set
+  uid: CHANGE_FLOW.ROLLBACK.1
+  constraints:
+  - The rollback-or-fix-forward choice MUST be decided per change class before shipping
+  epistemic_state: 'known | gap: inferred, the decision rule by reversibility (no source states it)'
+- op: node.set
+  uid: CHANGE_FLOW.ROLLBACK.2
+  intent: Each change is backward compatible with the version it replaces, so rollback, mixed fleets and independent release are safe; an incompatible change keeps this through expand, migrate, contract (EVOLUTION.INCREMENTAL.2), with schema changes released separately from application releases (DATA_CHANGE.4). Every automated change is reversible through version control, and a tool-level checkpoint is no substitute.
+  constraints:
+  - A change MUST be compatible with the version it replaces during the deploy window
+- op: node.set
+  uid: CHANGE_FLOW.ROLLBACK.3
+  intent: 'Before a data or schema change ships its undo is decided and recorded: leave a backward-compatible expand step and roll the application back, carry a rehearsed written reverse where script reversal is faster than a restore, or otherwise roll forward or use the restore. A change that can lose data falls back on the tested restore held in ASSURANCE.DATA_INTEGRITY.3, and the last reversible point is named.'
+  constraints:
+  - Every data change MUST record its undo before it ships
+  - The last reversible point MUST be named
+  epistemic_state: 'inferred: the choice among undo forms and the faster-than-restore condition are inferred, and forward-only with a prepared undo generalises the maintainer''s single-source practice; recording the undo before the change ships is grounded'
+- op: node.set
+  uid: CONSTRUCTION
+  constraints:
+  - Untrusted data MUST NOT reach an interpreter as code, command, query, path or object
+  - Modules MUST NOT form a dependency cycle
+  - Loading a module MUST NOT perform an effect
+  - Input MUST NOT be accepted unless it meets the whole of its positive definition of valid
+- op: node.set
+  uid: CONSTRUCTION.BOUNDARY.3
+  intent: 'A data contract is an explicit artifact, readable without the producer''s source, stating structure and meaning: names, types stated logically, nullability, units, invariants, an owner, and the version or change-log form the contract-evolution decision sets for the consumer reach. Each contract has one owner, one authoritative provider description and a lifecycle status, and its concrete types in each tier are derived as ASSURANCE.CONTRACTS.3 sets, never hand-copied. A consumer knows what it may rely on and what to ask the owner.'
+  constraints:
+  - MUST state structure and meaning without the producer's source
+  - MUST give each contract one owner
+  epistemic_state: 'known | gap: the checklist reading of the data-engineering contract format is inferred and left open by the sources read'
+- op: node.set
+  uid: CONSTRUCTION.BOUNDARY.4
+  intent: The published interface through which consumers reach a store, as HIDING.4 requires, takes one of two forms. When one application owns the store and all access passes through it, that application's interface is the contract; when several consumers need the data, the owner publishes an application interface by default, or a dedicated published layer in the store where consumers need direct query access or privileges must be separated in the store itself. A change to the stored structure then cannot break an unknown consumer.
+  constraints:
+  - MUST serve several consumers through an application interface unless they need direct query access or privileges must be separated in the store
+  epistemic_state: 'inferred: contested (one source family against one practice); the conditions are inferred and are the source claim''s own condition made explicit'
+- op: node.set
+  uid: CONSTRUCTION.BOUNDARY.5
+  epistemic_state: 'inferred: the maintainer''s claim is the only source for the form, so the decision rests on who composes the result; the tolerant-reader family is grounded (consensus, two sources)'
+- op: node.set
+  uid: CONSTRUCTION.DATA_NOT_CODE.1
+  epistemic_state: 'known | gap: the case of user-authored logic is inferred (the sources do not cover it)'
+- op: node.set
+  uid: CONSTRUCTION.DATA_NOT_CODE.3
+  epistemic_state: 'known | gap: the clause "checked after resolution and used without a race" is left open by the sources read and kept as the logical form of the containment check (inferred)'
+- op: node.set
+  uid: CONSTRUCTION.DATA_NOT_CODE.4
+  intent: Data crossing a trust boundary is exchanged in a pure data format that carries neither types nor code and is never deserialised into executable structures; when the expected messages are known, serialised data is signed and verified before deserialising, and a new object is populated from validated fields. An untrusted document is parsed with embedded definitions and external references disabled, and where two components read the same bytes their parsers must agree, so control and delimiter characters that can alter structure never reach a field value. Payload content cannot become executable structure or desynchronise two parsers.
+  examples:
+  - For XML, document type definitions are disabled in the parser.
+- op: node.set
+  uid: CONSTRUCTION.DEPENDENCY_DIRECTION
+  epistemic_state: 'inferred: roll-up of .1 and .2 plus the sources'' summary statement for the node'
+- op: node.set
+  uid: CONSTRUCTION.DEPENDENCY_DIRECTION.2
+  epistemic_state: 'inferred: grounded only through the settled mechanical-enforcement rule, left open as a standalone principle by the sources read'
+- op: node.set
+  uid: CONSTRUCTION.DESIGN
+  epistemic_state: 'inferred: roll-up of DESIGN.1 to .4; the children are mostly single-source or maintainer claims'
+- op: node.set
+  uid: CONSTRUCTION.DESIGN.1
+  epistemic_state: 'inferred: the order rests on one maintainer claim and the reversal-cost argument; no source measures it'
+- op: node.set
+  uid: CONSTRUCTION.HIDING.4
+  constraints:
+  - MUST name one owner per schema
+  - MUST NOT expose base structures to a consumer other than the owner
+- op: node.set
+  uid: CONSTRUCTION.PARADIGM.2
+  intent: 'Place each piece of logic by the property it must have: where an integrity rule lives is held in ASSURANCE.DATA_INTEGRITY.1; other domain logic that changes with the product, is branching or algorithmic, or must be tested fast lives in the application first, and a proven hot spot moves into the data tier as a set-based query. Scheduled work runs where the data lives only when it acts on that store''s state as bounded statements and needs no operating-system commands, no retries beyond a rerun and no cross-system dependencies; otherwise it runs in the application tier or an orchestrator, and it is monitored. Each kind of logic is where it holds, changes and is tested at least cost.'
+  epistemic_state: 'inferred: placement by property follows from grounded claims and the settled split; the scheduler clause is single-source maintainer practice, the application-first clause is contested, the set-oriented clause has no source'
+- op: node.set
+  uid: CONSTRUCTION.STATE.1
+  intent: 'Each fact has one authoritative place and every other representation is derived from it: generated, computed, or a managed copy under the synchronisation plan held in ASSURANCE.DATA_INTEGRITY.4. Type definitions repeated across tiers are derived as ASSURANCE.CONTRACTS.3 holds. Copies cannot silently disagree.'
+  constraints:
+  - MUST derive every other representation of a fact from its authoritative place
+- op: node.set
+  uid: CONSTRUCTION.STATE.2
+  intent: 'Design relational tables to the normal form that removes the update anomalies of their actual dependencies: third normal form by default, with repeating groups moved to a child table, and a higher form where candidate keys overlap or independent multi-valued facts share a table. Denormalise deliberately and only for a measured performance requirement, with the redundancy guarded by the synchronisation plan held in ASSURANCE.DATA_INTEGRITY.4, and prefer a derived read structure over distorting the base tables. Each fact is stored and changed in one place and any redundancy is chosen, measured and guarded.'
+  constraints:
+  - MUST NOT denormalise without a measured performance need
+- op: node.set
+  uid: CONSTRUCTION.STATE.4
+  epistemic_state: 'known | gap: the tolerance point is grounded (one source), the positive statement is inferred, and any preference between immutability and restriction is open (no source read)'
+- op: node.set
+  uid: CONSTRUCTION.STATE.5
+  epistemic_state: 'inferred: the hazard class is grounded in two unrelated language families, the general rule is inferred; the mechanics are stack-specific'
+- op: node.set
+  uid: CONSTRUCTION.SYSTEM_SHAPE.3
+  epistemic_state: 'known | gap: "lock-step is a signal of a misplaced boundary" is inferred (follows from the two positions, no source states it)'
+- op: node.set
+  uid: EVOLUTION
+  constraints:
+  - A significant decision MUST have a record that outlives its author
+  - An incompatible change MUST have a removal step and an owner
+  - A retirement MUST have verified usage and a stated deadline
+  - A technology MUST NOT be added without the retirement of what it replaces or a stated reason none exists
+  epistemic_state: 'inferred: roll-up of five L2 records; decision records, expand-migrate-contract and staged retirement grounded, debt timing and technology firmness inferred | gap: open at INCREMENTAL.3 | unvalidated: contested single-store claim at TECHNOLOGY.4 rests on one-project or commercially interested sources, no later review settled it'
+- op: node.set
+  uid: EVOLUTION.DEBT
+  epistemic_state: 'inferred: roll-up of DEBT.1 to .5; the refactoring step size (DEBT.4) is grounded and the definition (DEBT.1) is grounded except the breadth of its list, while the speed-versus-quality payoff (DEBT.2), survey primacy (DEBT.3) and repayment timing (DEBT.5) are inferred (contested or single-source claims)'
+- op: node.set
+  uid: EVOLUTION.DEBT.1
+  constraints:
+  - An unfinished migration and an out-of-date dependency MUST be counted as debt items when they raise the cost of change
+  epistemic_state: 'known | gap: inferred, the full list of items (secondary source for the breadth)'
+- op: node.set
+  uid: EVOLUTION.DEBT.2
+  intent: Internal quality is invested in from the start for anything that will be changed, on the argument that good design pays back within weeks and does not trade against speed beyond the smallest scope. Debt is taken deliberately only for a short-lived or exploratory deliverable, knowingly, recorded, and then repaid as DEBT.5 sets or dropped with the deliverable. The system is kept simple with minimal, modular interfaces and small releases; so debt is a recorded choice with a repayment, not an accident.
+  constraints:
+  - Deliberate debt MUST be recorded as an inventory item (DEBT.3), repaid as DEBT.5 sets, or dropped with the deliverable
+  - A deliverable that outlives its stated short life MUST be re-judged as a lasting one
+  epistemic_state: 'inferred: contested source claim, payoff point unproven; grounded: the knowing-and-recorded rule'
+- op: node.set
+  uid: EVOLUTION.DEBT.3
+  constraints:
+  - Every deliberate debt item and every unfinished migration MUST appear in the inventory
+  epistemic_state: 'inferred: survey primacy (summary of an unread paper), item fields and inventory placement; grounded: the limits of tools'
+- op: node.set
+  uid: EVOLUTION.DEBT.4
+  constraints:
+  - Each refactoring step MUST leave the checks green
+  - A refactoring MUST NOT change observable behaviour
+- op: node.set
+  uid: EVOLUTION.DEBT.5
+  constraints:
+  - Maintainability debt in code that will not change again MUST NOT be repaid
+  - Debt that carries risk (code left on production, vulnerable or end-of-life dependencies) MUST follow DECOMMISSION.1 and OWNERSHIP.LIFECYCLE.3 and .5, not this rule
+  - Cross-team debt MUST have a named owner and capacity
+- op: node.set
+  uid: EVOLUTION.DECISIONS.1
+  constraints:
+  - A record MUST state the decision and its reason
+  - A record MUST state the alternatives rejected and the costs accepted
+  epistemic_state: 'known | gap: inferred, named forces as the revisit trigger (one source, none tests it)'
+- op: node.set
+  uid: EVOLUTION.DECISIONS.2
+  constraints:
+  - A significant decision with no policy basis, or with options weighed, MUST have a record
+  - A workaround, an experiment or a policy-backed decision MUST NOT get a record of its own
+- op: node.set
+  uid: EVOLUTION.DECISIONS.3
+  constraints:
+  - Records MUST live in the repository of what they govern
+  - A record number MUST NOT be reused
+- op: node.set
+  uid: EVOLUTION.DECISIONS.4
+  constraints:
+  - An accepted record MUST NOT be rewritten to change its decision
+  - A superseded record MUST carry a link to its successor
+  epistemic_state: 'known | gap: inferred, the assignment of the two models per document type'
+- op: node.set
+  uid: EVOLUTION.DECISIONS.5
+  constraints:
+  - Every record MUST have a status and a named owner
+  - A change that contradicts an accepted record MUST cite it
+  epistemic_state: 'inferred: consulting records in review (one source, no dissent found); the status and named owner of each record are grounded'
+- op: node.set
+  uid: EVOLUTION.DECISIONS.6
+  constraints:
+  - A proposal MUST name its decider
+  - A decision made through a proposal MUST be linked to it from the record
+  epistemic_state: 'inferred: one source''s synthesis of two open-source projects; no source measures either practice'
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION
+  epistemic_state: 'inferred: roll-up of DECOMMISSION.1 to .6; the cores are grounded | gap: inferred, the owner-and-budget synthesis and the support-window context'
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.1
+  constraints:
+  - Removal and migration work MUST have a named owner and capacity in the plan
+  - Code not intended to run on production MUST be removed from it
+  epistemic_state: 'known | gap: inferred, removal as one rule with owner and budget (no source states it as one rule); that removal prevents the whole class of accidental activation'
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.2
+  constraints:
+  - A retirement MUST name its ground and be recorded
+  epistemic_state: 'known | gap: inferred, recording the retirement as a decision record (from the practice of DECISIONS.1 to .4)'
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.3
+  constraints:
+  - The sunset MUST NOT be earlier than the deprecation
+  - A deprecation MUST be visible to a machine as well as a reader
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.4
+  constraints:
+  - A published window MUST state, per tier, how long a deprecated form stays
+  - A form MUST NOT be removed before its stated window
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.5
+  constraints:
+  - 'A compulsory retirement MUST have a firm deadline (owner and capacity: DECOMMISSION.1)'
+- op: node.set
+  uid: EVOLUTION.DECOMMISSION.6
+  constraints:
+  - Usage MUST be verified before switch-off
+  - A retirement MUST list and remove its attachments
+  - 'Backups kept after retirement MUST follow the retention rules, neither shorter nor longer (owner and capacity: DECOMMISSION.1)'
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL
+  epistemic_state: 'inferred: roll-up of INCREMENTAL.1 to .6; the cores are grounded | gap: whether any rewrite position wins in general is open (INCREMENTAL.3); inferred, the rewrite conditions and the owner split'
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.1
+  constraints:
+  - Every step MUST leave the system releasable
+  - A step's intended effect MUST be stated and checked after release
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.2
+  intent: 'An incompatible interface or schema change runs as expand, migrate, contract: first support old and new together (for stored data, in the deploy order held in CHANGE_FLOW.DATA_CHANGE.4), then move consumers, then remove the old form. The removal step belongs to the change, because supporting two versions is a recurring cost that ends only at removal; an unfinished migration is debt. So rollback stays possible during the move and the old form does not become permanent.'
+  constraints:
+  - 'The plan of an incompatible change MUST name its removal step and owner (owner and capacity: DECOMMISSION.1)'
+  epistemic_state: 'known | gap: inferred, an unfinished migration is itself debt'
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.3
+  constraints:
+  - A replacement MUST keep the old system serving until the new one is verified against the old behaviour
+  - A full rewrite MUST carry a recorded reason that the platform is obsolete
+  epistemic_state: 'known | gap: inferred, the conditions for a full rewrite (it is open whether any position wins in general)'
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.4
+  constraints:
+  - A migration MUST have a named owner and a finish condition
+  - 'The old pattern MUST be blocked by a check once the migration is done (owner and capacity: DECOMMISSION.1)'
+  epistemic_state: 'known | gap: inferred, the boundary between the sharded, owned form and a single step'
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.5
+  constraints:
+  - The expected lifespan and the consumers of a shared interface MUST be stated where the investment is decided
+- op: node.set
+  uid: EVOLUTION.INCREMENTAL.6
+  constraints:
+  - A deprecated item MUST be marked where its consumers and their tools see it (machine-readable metadata; in its name only where renaming it breaks no consumer) and remain until its planned removal
+  epistemic_state: 'known | gap: inferred, the few-consumer exception (no source states it)'
+- op: node.set
+  uid: EVOLUTION.TECHNOLOGY
+  epistemic_state: 'inferred: roll-up of TECHNOLOGY.1 to .4; adding-as-replacing (TECHNOLOGY.1) is grounded and the register (TECHNOLOGY.2) is grounded except its decision trail, while the firmness conditions (TECHNOLOGY.3, contested claim) and the one-store rule (TECHNOLOGY.4) are inferred | unvalidated: contested single-store claim at TECHNOLOGY.4 rests on one-project or commercially interested sources, no later review settled it'
+- op: node.set
+  uid: EVOLUTION.TECHNOLOGY.1
+  constraints:
+  - Introducing a technology MUST record what it replaces, or why it replaces nothing, and the retirement owner
+- op: node.set
+  uid: EVOLUTION.TECHNOLOGY.2
+  constraints:
+  - Each technology in use MUST have a position and a link to its record
+  epistemic_state: 'known | gap: inferred, the decision trail'
+- op: node.set
+  uid: EVOLUTION.TECHNOLOGY.3
+  constraints:
+  - A departure from the default set whose operating cost would land on the shared platform or on-call MUST have a recorded decision naming who carries it
+  epistemic_state: 'inferred: contested claim'
+- op: node.set
+  uid: EVOLUTION.TECHNOLOGY.4
+  constraints:
+  - A specialised store MUST be added only with the requirement it meets and the measurement or documented limit showing the general store falls short
+  epistemic_state: 'inferred: no top-tier or second-tier source states the rule | gap: contested claim resting on one-project or commercially interested sources, limits of the store not verified from primary sources; no later review settled it'
+- op: node.set
+  uid: OPERATION
+  constraints:
+  - A page MUST NOT be sent unless a human action is needed now
+  - A workload MUST NOT be launched without a readiness review
+  - A backup, plan or restore MUST NOT be treated as present until tested (ASSURANCE.AVAILABILITY)
+  - A target MUST NOT be set on the delivery measures that production feeds back to development
+- op: node.set
+  uid: OPERATION.ALERTING.2
+  epistemic_state: 'known | gap: burn-rate alerting rests on a single authority with no independent measurement; inferred, the imminent-failure reconciliation of symptom and cause alerts'
+- op: node.set
+  uid: OPERATION.CAPACITY.1
+  epistemic_state: 'known | gap: inferred, the small-team spreadsheet case'
+- op: node.set
+  uid: OPERATION.CAPACITY.3
+  epistemic_state: 'known | gap: inferred, the caveats (observation window spanning the longest workload cycle; an index backing a constraint is kept)'
+- op: node.set
+  uid: OPERATION.INCIDENTS.1
+  epistemic_state: 'known | gap: the high-bar-for-severe-events position is unsourced (rejected); inferred, that declaring should be cheap'
+- op: node.set
+  uid: OPERATION.INCIDENTS.3
+  intent: 'The human cost of operating is bounded by stated, measured limits kept under review, on operational work, on-call time, incidents per shift and the alert-to-incident ratio, with a rotation sized to meet them so that each engineer is on call often enough to stay familiar with production. For a dedicated rotation the limits default to one model''s figures: operational work at most half of an engineer''s time, on-call about a quarter of time, about two incidents per twelve-hour shift and an alert-to-incident ratio near one to one. Where developers own operations in a small team, the team sets and records its own limits with the same outcome.'
+  epistemic_state: 'known | gap: inferred, the treatment for small teams (the numbers are one model''s, for dedicated rotations)'
+- op: node.set
+  uid: OPERATION.RECOVERY.1
+  epistemic_state: 'known | gap: the dependency-compatibility rule rests on one source; inferred, the two-objective framing'
+- op: node.set
+  uid: OPERATION.RECOVERY.2
+  epistemic_state: 'known | gap: inferred, that a platform''s own availability does not replace backing up its state'
+- op: node.set
+  uid: OPERATION.RECOVERY.3
+  epistemic_state: 'known | gap: inferred, the 3-2-1-1-0 extension (vendor-originated, third-tier)'
+- op: node.set
+  uid: OPERATION.RECOVERY.4
+  intent: The recovery strategy is chosen per tier from the ladder (backup and restore, pilot light, warm standby, active/active) by the objectives against cost and complexity, never a rung stricter than needed, and every recovery path relied on is exercised as ASSURANCE.AVAILABILITY.5 sets; a standby that cannot be exercised realistically is converted to failover (both paths carrying traffic continuously) where the objectives justify it, or removed. Failover is started by a person through an automated push-button procedure where a false alarm costs availability or data, and is automatic on health signals, with trained oversight and tuned thresholds, only where the objective is shorter than a human can meet; failback is planned as its own process.
+  constraints:
+  - MUST choose the rung by tier and objectives
+  - MUST convert to failover, or remove, a standby that cannot be exercised realistically
+  - MUST state the failover trigger rule
+  - MUST plan failback separately
+  epistemic_state: 'known | gap: inferred, the reconciliation of a maintained standby against a single production path'
+- op: node.set
+  uid: OPERATION.RECOVERY.5
+  epistemic_state: 'known | gap: the opposite position (favour recovery speed) is argued in no source read; inferred, the default toward hardening (one third-tier source states and accepts the trade-off); the stated per-system decision is the rule'
+- op: node.set
+  uid: OPERATION.RECOVERY.6
+  intent: A named owner answers for data durability, including keeping the restore proof of ASSURANCE.AVAILABILITY.4 current; backup and restore jobs are monitored and failure alerts routed over a path that is itself verified. The recovery plan, runbooks and contact lists are kept current and accessible when production is down, reviewed periodically and on every change to the system or organisation and after every test or incident; recovery roles are assigned ahead of time and the end of recovery is declared by stated criteria.
+  epistemic_state: 'known | gap: inferred, the owner and the monitoring clauses (from cases, not measured)'
+- op: node.set
+  uid: OPERATION.TELEMETRY.1
+  epistemic_state: 'known | gap: inferred, the minimal per-service set is stated by third-tier sources, with the second-tier golden signals as counterpart'
+- op: node.set
+  uid: OPERATION.TELEMETRY.2
+  epistemic_state: 'known | gap: inferred, the pipeline check mechanism (a heartbeat or known test event that must arrive) and the condition split for the storage model, argued and not measured'
+- op: node.set
+  uid: OPERATION.TELEMETRY.3
+  intent: Code is instrumented against a vendor-neutral API with standard semantic conventions, using automatic instrumentation for framework, HTTP and database-client coverage and code-based instrumentation only for business logic; libraries depend on the instrumentation API only, never on an implementation. The application writes logs as an unbuffered, structured event stream to the channel the execution environment provides, and does not own routing or storage; the execution environment collects and routes them.
+  examples:
+  - A process writes its event stream to standard output, and the platform's collector routes and stores it.
+  epistemic_state: 'known | gap: inferred, the vendor-SDK and file-logging alternatives and their conditions (unargued in any source read)'
+- op: node.set
+  uid: OPERATION.TELEMETRY.4
+  intent: One trace context, carrying no personal data (TRANSVERSE.PRIVACY.1), is propagated across every tier and process boundary in the standard format of the transport; trace and span ids are put in every log record, every event of one user interaction carries a shared correlation id (the trace id serves), and client error and real-user events are stamped with the release version and the trace or request id. One request can then be reconstructed from browser to database.
+  constraints:
+  - MUST propagate trace context at every boundary
+  - MUST put trace and span ids in every log record
+  - MUST NOT put personal data in trace context
+  epistemic_state: 'known | gap: inferred, the client-event stamp (one source, inferred)'
+- op: node.set
+  uid: OPERATION.TELEMETRY.5
+  epistemic_state: 'known | gap: inferred, the order of the ladder (start with head, add tail with volume)'
+- op: node.set
+  uid: OPERATION.TELEMETRY.6
+  epistemic_state: 'known | gap: no source treats telemetry cost as a governed budget; inferred, the per-service telemetry bound is a recommendation with no normative source'
+- op: node.set
+  uid: OPERATION.TELEMETRY.7
+  epistemic_state: 'known | gap: inferred, real-user measurement (fourth-tier source only)'
+- op: node.set
+  uid: OWNERSHIP
+  constraints:
+  - A dependency, layer or service MUST NOT be adopted without a recorded reason
+  - An adopted artifact MUST NOT be installed from anything but the lock
+  - A rented service MUST NOT be adopted without a tested way out proportional to its criticality
+- op: node.set
+  uid: OWNERSHIP.CONTAINMENT
+  constraints:
+  - A rented service MUST NOT be adopted without a tested way out proportional to its criticality
+  epistemic_state: 'inferred: roll-up of CONTAINMENT.1 to .4; the cores are grounded | gap: the extent of runtime isolation is not sourced; inferred, the proportionality of exit capability'
+- op: node.set
+  uid: OWNERSHIP.CONTAINMENT.1
+  constraints:
+  - The exit path of a rented service (data export, replacement candidate, contract notice) MUST be defined before adopting it, in proportion to its criticality
+  - A tested exit and an alternative MUST be required where regulation requires them and for critical functions, where the expected loss of being unable to leave exceeds the cost of testing the exit
+  epistemic_state: 'known | gap: inferred, the proportionality of the exit requirement (the EU exit-strategy requirement is known only from summaries)'
+- op: node.set
+  uid: OWNERSHIP.CONTAINMENT.2
+  constraints:
+  - Where a wrapper exists, a vendor type MUST NOT cross the team's public interface
+  - External types and parsing of the external payload MUST stay inside the wrapper, in one place
+  - A vendor's identifier MUST be stored only as an attribute of the team's entity that refers out, never as the key of the team's data or as a type in its public interface
+  epistemic_state: 'known | gap: inferred, the identifier rule'
+- op: node.set
+  uid: OWNERSHIP.CONTAINMENT.3
+  constraints:
+  - The location and credentials of a backing or third-party service MUST be configuration
+  - Code MUST NOT branch on local versus third-party instances; where semantics genuinely differ, the difference MUST be modelled in the adapter of CONTAINMENT.2
+- op: node.set
+  uid: OWNERSHIP.CONTAINMENT.4
+  constraints:
+  - Every third-party response MUST be validated and sanitised before use, fetched over an encrypted channel, redirected only to an allowlist of targets, and capped in the resources spent on it
+  - Risky dependencies MUST be isolated at runtime (sandbox, least privilege) where practical for the ecosystem
+- op: node.set
+  uid: OWNERSHIP.LICENCE
+  epistemic_state: 'inferred: roll-up of LICENCE.1 to .4; the cores are grounded | gap: the linking boundary of copyleft is settled case by case with legal review; inferred, the permissive policy for host-only teams'
+- op: node.set
+  uid: OWNERSHIP.LICENCE.1
+  constraints:
+  - The licence MUST be present, clear and acceptable for the intended use before adoption
+  - A dependency MUST be classified by licence family and by the team's distribution model
+  - Licence variants (the 'or later' forms, exceptions) MUST be stated with standard machine-readable licence expressions
+  - A source-available licence with a field-of-use restriction MUST NOT be treated as open source
+- op: node.set
+  uid: OWNERSHIP.LICENCE.2
+  constraints:
+  - Licence classes MUST be written down by distribution model with a named decider
+  - A defined compliance process with identified roles MUST exist and be kept working over time
+  epistemic_state: 'known | gap: inferred, the permissive policy for host-only teams and the process details'
+- op: node.set
+  uid: OWNERSHIP.LICENCE.3
+  constraints:
+  - Network-copyleft code MUST be decided separately from other copyleft and MUST NOT be accepted by default
+  - A separate-component claim MUST NOT be assumed; where the boundary matters it MUST be settled with legal review
+- op: node.set
+  uid: OWNERSHIP.LICENCE.4
+  constraints:
+  - The licence and copyright of every file MUST be declared machine-readably
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE
+  constraints:
+  - An adopted artifact MUST NOT be installed from anything but the lock
+  epistemic_state: 'inferred: roll-up of LIFECYCLE.1 to .5; the cores are grounded | gap: inferred, the release-age cooldown and the range-edge testing for library consumers'
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE.1
+  constraints:
+  - Dependencies MUST be declared completely and exactly in a manifest and run in an isolated environment, never relying on implicitly installed packages
+  - A lock recording the exact resolved tree, direct and transitive, MUST be committed
+  - CI and production MUST install from the lock only, and the build MUST fail when lock and manifest disagree
+  - Artifacts MUST be verified by a cryptographic hash recorded in the lock, covering transitive dependencies; an install mode that rejects any artifact lacking a recorded hash MUST be used in deploys where the tool supports it
+  - A new developer MUST need only the runtime, the dependency manager and one command
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE.2
+  constraints:
+  - Applications and services nobody else installs MUST pin all dependency types exactly, each bump being a reviewable change
+  - Libraries MUST declare ranges and MUST test the lowest and newest versions their ranges admit in their own CI
+  - The manifest range MUST still exclude known-broken versions
+  - A version MUST change only through an explicit, reviewable change to the lock
+  epistemic_state: 'known | gap: inferred, the testing of both range edges and the neutrality toward the resolution rule'
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE.3
+  constraints:
+  - Each update MUST be gated by the project's own tests (including integration tests for the team's usage) and release-note or diff review, and MUST be deployed through staged rollouts
+  - Fixes for known vulnerabilities MUST be applied urgently, bypassing any scheduled delay, and kept separate from feature updates
+  - Routine non-security updates of deployables MUST be held for a release-age cooldown of at least seven days; security fixes MUST NOT be held
+  - Where verification is weak or deployment costly, updating on need MUST be recorded as debt to repay (EVOLUTION.DEBT)
+  - After a worm-style supply-chain compromise, every developer credential MUST be treated as exposed, lockfiles reviewed and versions pinned to before the incident; rotation is held by TRANSVERSE.CONFIG.6
+  epistemic_state: 'known | gap: inferred, the cooldown length and benefit (one analysis of ten attacks), the interim cadence under weak verification, and the post-compromise trigger (single source)'
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE.4
+  constraints:
+  - Artifacts MUST be obtained only through controlled, trusted channels, with lock and hashes
+  - Provenance verification MUST be applied recursively, and a removed upstream MUST be addressed separately by a mirror, cache or vendored copy
+  - Any artifact whose binary provenance cannot be confirmed MUST be rebuilt from verified source (the single statement of the rebuild rule); every deployed open-source artifact MUST be rebuilt from source in the team's own infrastructure for critical infrastructure or supply-chain-targeted organisations
+  - The automation's own tools, plugins and descriptors, and build tools and compilers, MUST be pinned, vetted, changed only through audited change management, not auto-updated without review, and kept on versions that still receive security fixes
+  - Two-factor authentication MUST protect publishing accounts of any registry, and phishing-resistant multi-factor authentication MUST protect developer accounts after compromises
+  epistemic_state: 'known | gap: inferred, the tooling pinning rule and the account-protection scope beyond the cited sources'
+- op: node.set
+  uid: OWNERSHIP.LIFECYCLE.5
+  constraints:
+  - A machine-generated inventory MUST be kept and scanned continuously against vulnerability databases for as long as the software is in service, with a triage and update plan
+  - Each component MUST be confirmed maintained and not at end of life, and a plan MUST exist for components that stop being maintained
+  - Where law applies, due diligence on third-party components, an inventory and reporting of component vulnerabilities to their maintainers MUST be done
+  epistemic_state: 'known | gap: inferred, the exact wording of the legal duty (primary text not read)'
+- op: node.set
+  uid: OWNERSHIP.SELECTION
+  constraints:
+  - A candidate MUST be judged against written criteria before it is admitted
+- op: node.set
+  uid: OWNERSHIP.SELECTION.1
+  intent: 'Every dependency is judged against an explicit written criteria set in the context of its intended use, and the reason for each non-trivial selection is recorded. Aggregator catalogues serve discovery and first screening only. It enters through a gate: a central sanctioned list where many teams, regulation or high criticality are involved, otherwise a reviewed proposal with light visibility.'
+  constraints:
+  - Candidates MUST be judged against a written criteria set in the context of intended use, repeated when the use changes substantially
+  - The reason for each non-trivial selection (alternatives, criteria, accepted risks) MUST be stored as a decision record where later maintainers find it (EVOLUTION.DECISIONS)
+  - A dependency MUST enter only through the gate
+  - Aggregators MUST serve only discovery and first screening
+  epistemic_state: 'known | gap: inferred, the written-selection and recorded-reason practices (one study, synthesis)'
+- op: node.set
+  uid: OWNERSHIP.SELECTION.2
+  constraints:
+  - Before novelty is spent, why the existing tool cannot solve the problem MUST be documented
+  - Novelty MUST be introduced in stages (limited production trial, then adopt or hold) with an exit or migration plan
+  - The perpetual operating cost of a new technology MUST be weighed against the convenience of adoption
+  epistemic_state: 'known | gap: inferred, the staged-versus-boring reconciliation and the reversible entry'
+- op: node.set
+  uid: OWNERSHIP.SELECTION.3
+  constraints:
+  - Several maintainers from several organisations MUST be required when the component is on a critical path or hard to replace
+  - A single-maintainer component outside the small, stable, easily replaced case MUST carry a recorded compensating reason or an exit plan
+  - A popularity or aggregate score MUST NOT be treated as proof of quality or fit
+  epistemic_state: 'known | gap: inferred, the stance on pre-1.0 labels and the remark on screening by score at scale'
+- op: node.set
+  uid: OWNERSHIP.SELECTION.4
+  constraints:
+  - Transitive dependencies MUST be counted as part of a candidate's cost
+  - Trivial functionality the team can own in a few lines MUST be inlined instead of taken as a package
+  - The registry's maintainer-account concentration MUST be counted as part of the exposure
+  epistemic_state: 'known | gap: inferred, generalisation beyond the evidence of one ecosystem'
+- op: node.set
+  uid: OWNERSHIP.SELECTION.5
+  constraints:
+  - A candidate whose current version has known unfixed vulnerabilities for the intended deployment MUST be rejected or deferred
+  - 'Authenticity MUST be verified: official source over a secure link, signatures where available, the name checked against look-alikes and compromised forks, and a generated or suggested name resolved to the intended vetted package'
+  - Provenance (bill of materials, source composition, signatures) MUST be obtained for high-criticality use, and integrity checks applied
+  - Where binary provenance cannot be confirmed, the rebuild rule of LIFECYCLE.4 MUST apply
+  epistemic_state: 'known | gap: inferred, the claim that ecosystem coverage of provenance is partial'
+- op: node.set
+  uid: OWNERSHIP.SELECTION.6
+  constraints:
+  - Components that handle untrusted input, credentials or cryptography MUST get the candidate's tests run, sandboxed behaviour tests and code review for install scripts, exfiltration, obfuscation and unfinished security gaps
+  - A candidate MUST be tested in isolation for unexpected indirect dependencies
+  - Example code shipped with a package MUST be treated as untrusted until reviewed
+- op: node.set
+  uid: OWNERSHIP.SERVICES
+  epistemic_state: 'inferred: roll-up of SERVICES.1 to .6; the cores are grounded, with inferred parts marked in each child'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.1
+  constraints:
+  - A service's availability target MUST be at least the team's own
+  - Where SLA credits cannot cover the team's loss, the team MUST mitigate by design (fallback, redundancy)
+  - The internal objective MUST be tighter than the SLA signed or advertised
+  - Reachability, latency and errors of each service MUST be monitored as part of adopting it
+  epistemic_state: 'known | gap: inferred, the remedy-versus-loss mitigation, planning from observed behaviour and per-service monitoring (no source)'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.2
+  constraints:
+  - The stability tiers and deprecation policy of a service API MUST be read before depending on it
+  - Machine-readable deprecation signals MUST be consumed and routed to an alert
+  - The API version MUST be pinned where the provider allows it, and upgraded deliberately
+  epistemic_state: 'known | gap: whether consumers act on deprecation signals; inferred, real notice is shorter than the stated policy'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.3
+  constraints:
+  - Export of all the team's data in a commonly used machine-readable format through an open interface MUST be verified at selection and tested once before depending on the service
+  - A cloud or data-processing provider's contract MUST cover switching (notice and transition terms, data return, no punitive egress charges)
+  - An independent copy of critical data held in a service MUST be kept, and credentials and integration logic MUST be kept exportable
+  - For managed services and SaaS, what the provider's backups cover, and for whose recovery, MUST be verified
+  epistemic_state: 'known | gap: inferred, the independent-copy advice and the backup consequence'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.4
+  constraints:
+  - Where a service processes personal data, a written processor contract (documented instructions only, confidentiality, security measures, authorised sub-processors, assistance with data-subject rights, deletion or return at the end, audit rights) MUST be in place, with processors giving sufficient guarantees
+  - Cost MUST have an owner, and the pricing model, unit economics and egress MUST be understood as part of selection
+  - For each critical open-source or hosted dependency, who controls its licence MUST be recorded and the response to changed terms decided in advance
+  epistemic_state: 'known | gap: inferred, the price-risk handling (no primary source on contractual price caps) and the governance rule for single-vendor projects'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.5
+  constraints:
+  - A vendor's posture (authentication options, intrusion evidence with logs retained at least six months, bill of materials and open-source governance, vulnerability disclosure policy and CVE practice, patch support) MUST be assessed before depending on it
+  - The assessment MUST be repeated through the contract life, not only at selection
+  - A small team without capacity to triage MUST use the uniform baseline checklist for every vendor
+  epistemic_state: 'inferred: the scaling of depth is inferred, the six-month log retention is one checklist''s figure, and the reading of assurance reports and the same-criteria rule for tools have no source; assessing posture before depending and repeating it through the contract life are grounded'
+- op: node.set
+  uid: OWNERSHIP.SERVICES.6
+  constraints:
+  - Third-party CI components MUST be pinned to an immutable identifier from their official source, not a fork, and their source audited
+  - The default token permission MUST be read-only and raised per job
+  - Self-hosted runners MUST NOT run untrusted code such as public repositories
+  examples:
+  - Where CI components are repositories, the immutable identifier is a full commit hash.
+  epistemic_state: 'known | gap: inferred, the generalisation beyond one platform''s guidance'
+- op: node.set
+  uid: OWNERSHIP.STANCE
+  constraints:
+  - A dependency or layer MUST NOT be added without a recorded reason
+- op: node.set
+  uid: OWNERSHIP.STANCE.1
+  constraints:
+  - The reason for a new dependency or layer MUST be written before the quality evaluation starts
+  - A layer MUST NOT be created unless at least one strong reason outweighs its cost
+  epistemic_state: 'known | gap: inferred, the layer reasons are the maintainer''s formulation, inferred as general'
+- op: node.set
+  uid: OWNERSHIP.STANCE.2
+  constraints:
+  - Custom code chosen over a built-in or a vetted component MUST carry a recorded reason
+  - When custom code is chosen over a built-in, the missing capability MUST be recorded and the choice revisited if the need shrinks to what the built-in does
+  - Renting MUST pass the same cost test as adopting, plus the control cost
+  epistemic_state: 'known | gap: inferred, the built-in preference and the renting rule (sources address rented software only through outsourcing)'
+- op: node.set
+  uid: OWNERSHIP.STANCE.3
+  constraints:
+  - Copied or vendored code MUST keep a record of its origin and version
+  - Fixes MUST go upstream and MUST NOT live in a private fork
+  - Cryptography and protocols MUST depend on the vetted component, not on a copy
+  epistemic_state: 'known | gap: inferred, the scope of the cryptography exception and the vendoring condition'
+- op: node.set
+  uid: OWNERSHIP.STANCE.4
+  constraints:
+  - Functionality MUST NOT be built for a presumed future need
+  - A structural choice that is costly to reverse MUST be weighed against probable use when it is made
+- op: node.set
+  uid: ROOT
+  constraints:
+  - Every property that must hold MUST have a mechanism, a stage and a recurring trigger
+  - A capability MUST NOT enter without a recorded decision
+  - A change MUST NOT reach production except through the reviewed, gated path
+  - A guideline decision MUST NOT depend on who wrote the code
+  epistemic_state: 'inferred: the whole as one claim, no source states the seven-branch guideline; the order and split of the branches are the maintainer''s decisions | gap: 41 open items kept at the L2 and L3 nodes (cadences, numeric thresholds, one-source minority views, and two points still open, the reviewer kind at ASSURANCE.RULES.4 and the single-store rule at EVOLUTION.TECHNOLOGY.4); a contested position settled by a stated condition is a decision, not an open item; none contradicts a decision at this height | unvalidated: awaiting maintainer, can an automated reviewer be the independent check (ASSURANCE.RULES.4, default applied)'
+- op: node.set
+  uid: TRANSVERSE
+  constraints:
+  - Configuration and secrets MUST NOT be held in code or in the artifact
+  - An exposed secret MUST NOT be treated as safe
+  - Personal data MUST NOT be kept without a recorded purpose and period
+  - A development environment MUST NOT be able to reach production by accident
+- op: node.set
+  uid: TRANSVERSE.CONFIG.1
+  intent: Configuration is kept strictly separate from code and from the deployable package, so one build serves every environment, the test being that the codebase could be open-sourced at any moment without exposing a credential. Secrets are never hardcoded or committed and are kept apart from non-secret configuration, so no credential is recoverable from source, history or artifact.
+  constraints:
+  - MUST NOT commit a secret to source or configuration
+  - MUST keep configuration out of the deployable package
+- op: node.set
+  uid: TRANSVERSE.CONFIG.2
+  epistemic_state: 'known | gap: inferred, the leak vectors of environment variables and the separation of custody from delivery channel'
+- op: node.set
+  uid: TRANSVERSE.CONFIG.3
+  epistemic_state: 'known | gap: inferred, the argument for named bundles and the no-branching rule'
+- op: node.set
+  uid: TRANSVERSE.CONFIG.5
+  epistemic_state: 'known | gap: inferred, the merit of static rotated secrets'
+- op: node.set
+  uid: TRANSVERSE.DOCS.1
+  epistemic_state: 'known | gap: inferred, context mapping of the three levels and the causal reading of documentation quality as a capability driver'
+- op: node.set
+  uid: TRANSVERSE.DOCS.2
+  intent: Documents are small and modular, each organised by one reader need, reached from an index that is updated in the same change, and improved in small increments. Size caps are enforced mechanically and derived navigation aids (tables of contents, line references) are generated, never kept by hand, because small documents get updated and hand-kept aids rot.
+  constraints:
+  - MUST keep an index updated in the change that adds or moves a document
+  - MUST NOT keep a derived navigation aid (table of contents, line reference) by hand
+  epistemic_state: 'known | gap: inferred, the generated-only condition for line counts and tables of contents; organisation by reader need rests on one taxonomy source'
+- op: node.set
+  uid: TRANSVERSE.DOCS.3
+  epistemic_state: 'known | gap: inferred, the choice against the dated header change log rests on a small set of sources and one maintainer claim; the deployed-definition case'
+- op: node.set
+  uid: TRANSVERSE.DOCS.4
+  constraints:
+  - MUST write each entry in the section for unreleased changes, in the change that introduces it
+- op: node.set
+  uid: TRANSVERSE.DOCS.5
+  intent: 'Every rule records its basis, observed practice with its evidence or a principle with the outcome it guarantees: in a mature codebase rules are induced from real production code and updated as practice evolves, and where no mature practice exists yet a rule deduced from principles is marked deduced and unconfirmed until practice confirms it. A rule that overrides an earlier one states which rule and for which objects. A reader can then tell why a rule exists, how much evidence stands behind it and what it replaced.'
+  constraints:
+  - MUST state the basis of each rule
+  - MUST mark a deduced rule unconfirmed until practice confirms it
+  - MUST state the overridden rule and its objects
+  epistemic_state: 'known | gap: inferred, the basis record and the deduced-unconfirmed marker follow from the guideline''s own method'
+- op: node.set
+  uid: TRANSVERSE.ENVIRONMENTS.1
+  intent: 'Development, build, test and production are separated and protected from each other: secrets are isolated, non-production minimizes use of production services and human access to build services is minimized and audited. Isolation is of instance and credentials; parity with production, of kind and version, is held in CHANGE_FLOW.DEPLOY.3.'
+  epistemic_state: 'known | gap: inferred, the parity-versus-isolation reconciliation'
+- op: node.set
+  uid: TRANSVERSE.ENVIRONMENTS.2
+  epistemic_state: 'known | gap: inferred, the comparative costs and the ladder of mechanisms'
+- op: node.set
+  uid: TRANSVERSE.PRIVACY
+  epistemic_state: 'inferred: roll-up of grounded components; EU legal text restated neutral, regulated contexts deferred by the guideline''s scope'
+- op: node.set
+  uid: TRANSVERSE.PRIVACY.1
+  constraints:
+  - MUST state the purpose for each personal data field collected
+- op: node.set
+  uid: TRANSVERSE.PRIVACY.4
+  epistemic_state: 'known | gap: the framework body was not read; inferred, the neutral restatement of EU text and the link to logging and classification'
+- op: node.set
+  uid: TRANSVERSE.SECURITY.1
+  epistemic_state: 'known | gap: requirements-standard level definitions were not read; inferred, the mapping of framework to question'
+- op: node.set
+  uid: TRANSVERSE.SECURITY.2
+  epistemic_state: 'known | gap: no source shows that higher maturity scores or requirement levels reduce incidents; inferred, benchmark as evidence and pairing scores with outcome measures'
+- op: node.set
+  uid: TRANSVERSE.SECURITY.3
+  epistemic_state: 'known | gap: inferred, the trigger rule for remodelling'
+- op: node.set
+  uid: TRANSVERSE.SECURITY.5
+  epistemic_state: 'known | gap: inferred, the stated prioritization rule and remediation time'
+- op: node.set
+  uid: TRANSVERSE.SECURITY_MONITORING.2
+  epistemic_state: 'known | gap: inferred, the receipt-time clause for clients whose clocks cannot be synchronized'
+- op: node.set
+  uid: TRANSVERSE.SECURITY_MONITORING.4
+  epistemic_state: 'known | gap: the dwell-time figure is dated, open as a current value; inferred, the exit-risk argument for tool-neutral rules (one source)'
+- op: link.remove
+  uid: CONSTRUCTION.BOUNDARY.3_CONSTRUCTION.STATE.1
+- op: link.create
+  src: CONSTRUCTION.STATE.1
+  dst: ASSURANCE.CONTRACTS.3
+  intent: Type definitions repeated across tiers are the case of one place per fact held in CONTRACTS.3.
+- op: link.set
+  uid: CONSTRUCTION.BOUNDARY.3_ASSURANCE.CONTRACTS.3
+  intent: A contract's concrete types are derived from the one source of description held in CONTRACTS.3.
+- op: link.set
+  uid: CONSTRUCTION.HIDING.4_CONSTRUCTION.BOUNDARY.4
+  intent: The form of the interface the owner publishes is decided in BOUNDARY.4.
+- op: link.remove
+  uid: EVOLUTION.INCREMENTAL.2_CHANGE_FLOW.ROLLBACK
+- op: link.create
+  src: EVOLUTION.INCREMENTAL.2
+  dst: CHANGE_FLOW.ROLLBACK.2
+  intent: Expanding first keeps each change backward compatible during the move, the reversibility that ROLLBACK.2 requires.
+- op: link.remove
+  uid: CHANGE_FLOW.DATA_CHANGE_EVOLUTION.INCREMENTAL.2
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: EVOLUTION.INCREMENTAL.2
+  intent: The order of schema and code deploys carries out expand, migrate, contract for stored data.
+- op: link.remove
+  uid: CHANGE_FLOW.DATA_CHANGE.4_ASSURANCE.DATA_INTEGRITY
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.4
+  dst: ASSURANCE.DATA_INTEGRITY.5
+  intent: Order and compatibility with running code carry out the old-against-new guarantee held in DATA_INTEGRITY.5.
+- op: link.remove
+  uid: CHANGE_FLOW.DATA_CHANGE.3_ASSURANCE.DATA_INTEGRITY
+- op: link.remove
+  uid: CHANGE_FLOW.ROLLBACK.3_ASSURANCE.DATA_INTEGRITY
+- op: link.remove
+  uid: CHANGE_FLOW.MEASURE_OPERATION.FEEDBACK
+- op: link.create
+  src: CHANGE_FLOW.MEASURE.1
+  dst: OPERATION.FEEDBACK
+  intent: Recovery time and change fail rate come from production as the feedback FEEDBACK holds, which keeps them from becoming targets.
+- op: link.remove
+  uid: TRANSVERSE.ENVIRONMENTS_CHANGE_FLOW.DEPLOY.3
+- op: link.create
+  src: TRANSVERSE.ENVIRONMENTS.1
+  dst: CHANGE_FLOW.DEPLOY.3
+  intent: Parity with production in kind and version is held in DEPLOY.3; ENVIRONMENTS.1 holds isolation of instance and credentials.
+- op: link.create
+  src: CHANGE_FLOW.BUILD.1
+  dst: CHANGE_FLOW.INTEGRATION.1
+  intent: The hermetic build draws every input from the repository content that INTEGRATION.1 requires.
+- op: link.set
+  uid: OPERATION.RECOVERY.6_ASSURANCE.AVAILABILITY.4
+  intent: The owner of durability keeps the restore proof of AVAILABILITY.4 current.
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.8
+  dst: CONSTRUCTION.BOUNDARY.1
+  intent: Parsing at the boundary, held in BOUNDARY.1, is the guard these practices build on; they catch the data-shaped defects it lets through.
+- op: link.remove
+  uid: CHANGE_FLOW.BUILD.2_ASSURANCE.ARTIFACT
+- op: link.remove
+  uid: CHANGE_FLOW.BUILD.2_TRANSVERSE.CONFIG
+- op: link.create
+  src: CHANGE_FLOW.BUILD.2
+  dst: TRANSVERSE.CONFIG.1
+  intent: Environment configuration lives outside the artifact, as the separation of CONFIG.1 requires.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.1_TRANSVERSE.PRIVACY.4
+- op: link.create
+  src: TRANSVERSE.PRIVACY.4
+  dst: TRANSVERSE.PRIVACY.1
+  intent: The classification of PRIVACY.1 is the data that answers a breach.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_ASSURANCE.DATA_INTEGRITY.3
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: TRANSVERSE.PRIVACY.2
+  intent: Retention periods for personal data, backup copies included, bound how long the first-layer copies of DATA_INTEGRITY.3 are kept.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_EVOLUTION.DECOMMISSION.6
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.6
+  dst: TRANSVERSE.PRIVACY.2
+  intent: Backups kept after retirement are kept no longer than the retention periods allow.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_OPERATION.RECOVERY.2
+- op: link.create
+  src: OPERATION.RECOVERY.2
+  dst: TRANSVERSE.PRIVACY.2
+  intent: Backup retention is bounded above by the retention periods of PRIVACY.2.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_TRANSVERSE.CONFIG.4
+- op: link.create
+  src: TRANSVERSE.CONFIG.4
+  dst: TRANSVERSE.PRIVACY.2
+  intent: The retention periods bound how long the secret access audit is kept.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.2_TRANSVERSE.SECURITY_MONITORING.3
+- op: link.create
+  src: TRANSVERSE.SECURITY_MONITORING.3
+  dst: TRANSVERSE.PRIVACY.2
+  intent: Log retention is bounded by the retention periods that PRIVACY.2 sets.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.3_ASSURANCE.DATA_INTEGRITY.3
+- op: link.create
+  src: ASSURANCE.DATA_INTEGRITY.3
+  dst: TRANSVERSE.PRIVACY.3
+  intent: Erasure of personal data held in backups, set in PRIVACY.3, bounds the deletion form of the layered protection.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.3_EVOLUTION.DECOMMISSION.6
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.6
+  dst: TRANSVERSE.PRIVACY.3
+  intent: Erased data in a backup of a retired system is put beyond use, as PRIVACY.3 requires.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.3_OPERATION.RECOVERY.2
+- op: link.create
+  src: OPERATION.RECOVERY.2
+  dst: TRANSVERSE.PRIVACY.3
+  intent: Erasure of personal data in backups is governed by PRIVACY.3, which bounds backup scope and design.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.3_OPERATION.RECOVERY.3
+- op: link.create
+  src: OPERATION.RECOVERY.3
+  dst: TRANSVERSE.PRIVACY.3
+  intent: Erasure in backups, including a copy locked as immutable, is governed by PRIVACY.3.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY_ASSURANCE.BEHAVIOUR.7
+- op: link.create
+  src: ASSURANCE.BEHAVIOUR.7
+  dst: TRANSVERSE.PRIVACY
+  intent: Real records in test data are bound by the privacy rules held in TRANSVERSE.PRIVACY.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY_CHANGE_FLOW.DATA_CHANGE.7
+- op: link.create
+  src: CHANGE_FLOW.DATA_CHANGE.7
+  dst: TRANSVERSE.PRIVACY
+  intent: Personal data in a rehearsal copy is bound by the privacy rules, masking included.
+- op: link.remove
+  uid: OPERATION.RECOVERY.2_EVOLUTION.DECOMMISSION.6
+- op: link.create
+  src: EVOLUTION.DECOMMISSION.6
+  dst: OPERATION.RECOVERY.2
+  intent: Backups of a retired system follow the retention rules, neither shorter nor longer.
+- op: link.remove
+  uid: OWNERSHIP.LIFECYCLE.3_EVOLUTION.DEBT.5
+- op: link.create
+  src: EVOLUTION.DEBT.5
+  dst: OWNERSHIP.LIFECYCLE.3
+  intent: Risk-carrying debt such as vulnerable dependencies follows the update rules of LIFECYCLE.3, not the interest rule.
+- op: link.remove
+  uid: TRANSVERSE.PRIVACY.1_OPERATION.TELEMETRY.4
+- op: link.create
+  src: OPERATION.TELEMETRY.4
+  dst: TRANSVERSE.PRIVACY.1
+  intent: Personal data is kept out of propagated trace context by the minimisation and classification rules of PRIVACY.1.
+- op: link.remove
+  uid: OPERATION.INCIDENTS_CHANGE_FLOW.RELEASE.5
+- op: link.create
+  src: CHANGE_FLOW.RELEASE.5
+  dst: OPERATION.INCIDENTS.1
+  intent: Deployment during an incident declared under INCIDENTS.1 is limited to the change that remediates it.
+- op: link.remove
+  uid: ASSURANCE.DATA_INTEGRITY.3_OPERATION.RECOVERY
+- op: link.remove
+  uid: CHANGE_FLOW.BUILD_ASSURANCE.ARTIFACT.1
+- op: link.remove
+  uid: CHANGE_FLOW.DEPLOY.2_ASSURANCE.AVAILABILITY
+- op: link.remove
+  uid: CHANGE_FLOW.DEPLOY_ASSURANCE.AVAILABILITY
+- op: link.remove
+  uid: CHANGE_FLOW.INTEGRATION_ASSURANCE.ARTIFACT
+- op: link.remove
+  uid: CHANGE_FLOW.INTEGRATION_ASSURANCE.RULES
+- op: link.remove
+  uid: CHANGE_FLOW.RELEASE_ASSURANCE.ARTIFACT
+- op: link.remove
+  uid: CONSTRUCTION.DESIGN_OWNERSHIP.STANCE.4
+- op: link.remove
+  uid: CONSTRUCTION.PARADIGM_CONSTRUCTION.HIDING
+- op: link.remove
+  uid: EVOLUTION.DECOMMISSION_OWNERSHIP.STANCE
+- op: link.remove
+  uid: EVOLUTION.INCREMENTAL_OWNERSHIP.STANCE.4
+- op: link.set
+  uid: CHANGE_FLOW.BUILD_ASSURANCE.ARTIFACT
+  intent: 'The build operates the provenance mechanism that ARTIFACT holds: it produces signed provenance and promotes one artifact by identity.'
+- op: link.set
+  uid: CHANGE_FLOW.DEPLOY.2_ASSURANCE.AVAILABILITY.3
+  intent: Progressive rollout with automatic detection and rollback bounds the blast radius, and shares with production experiments the guardrails held in AVAILABILITY.3.
+- op: link.remove
+  uid: ASSURANCE.ARTIFACT_ASSURANCE.BEHAVIOUR
+- op: link.remove
+  uid: OPERATION_TRANSVERSE.CONFIG.2
+- op: link.remove
+  uid: CONSTRUCTION.SYSTEM_SHAPE.4_CONSTRUCTION.SYSTEM_SHAPE.1
+- op: link.create
+  src: CONSTRUCTION.SYSTEM_SHAPE.1
+  dst: CONSTRUCTION.SYSTEM_SHAPE.4
+  intent: Independent release by separate teams, one force that justifies a split, follows the team boundaries that SHAPE.4 designs together with the module boundaries.
+- op: link.remove
+  uid: OPERATION.TELEMETRY_ASSURANCE.PERFORMANCE
+- op: link.remove
+  uid: OPERATION.TELEMETRY.1_ASSURANCE.PERFORMANCE.3
+- op: link.create
+  src: ASSURANCE.PERFORMANCE.3
+  dst: OPERATION.TELEMETRY.1
+  intent: Each run's comparison with a baseline reads the service and resource signals, per-statement statistics included, that TELEMETRY.1 holds.
+- op: link.create
+  src: OPERATION.RUNBOOKS.1
+  dst: OPERATION.INCIDENTS.1
+  intent: Playbooks serve the investigation and scoping of an incident declared and run under INCIDENTS.1.
+- op: link.create
+  src: OWNERSHIP.SERVICES.5
+  dst: OWNERSHIP.SELECTION.5
+  intent: Assessing a vendor's supply-chain posture before depending on it extends to rented services the adoption checks of SELECTION.5.
+- op: link.set
+  uid: TRANSVERSE.DOCS.2_ASSURANCE.DOCS_SYNC.4
+  intent: Size caps and generated navigation aids are checked mechanically by DOCS_SYNC.4.

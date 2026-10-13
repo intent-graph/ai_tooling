@@ -1,0 +1,233 @@
+operations:
+- op: node.set
+  uid: ROOT
+  epistemic_state: 'inferred: the whole as one claim, no source states the seven-branch guideline; the
+    order and split of the branches are the maintainer''s decisions | gap: 40 open items kept at the L2
+    and L3 nodes (cadences, numeric thresholds, one-source minority views, and one point still open, the
+    single-store rule at EVOLUTION.TECHNOLOGY.4); a contested position settled by a stated condition is
+    a decision, not an open item; none contradicts a decision at this height'
+  design_notes: 'Decision: A team owns the outcome by deciding, for each capability, whether it writes,
+    adopts or rents it, and by pricing the way out before it depends on it (OWNERSHIP). It knows each
+    property holds because each property has a named mechanism, at a named stage, that runs on every change,
+    has a trustworthy signal and cannot be skipped (ASSURANCE). It constructs code that is correct at
+    its boundaries and changes in few places (CONSTRUCTION); changes the system in small, reviewed, reversible
+    steps that promote one built artifact (CHANGE_FLOW); operates it against stated objectives, with recovery
+    proven before it is needed (OPERATION); and lets it evolve by recorded decisions, incremental change,
+    repaid debt, announced retirement and a small set of technologies (EVOLUTION); documentation, security
+    practice, configuration and secrets, and development environments carry the same discipline across
+    all of these (TRANSVERSE). Outcome, whoever does the work (MD-02): the design was good, the testing
+    was good, the review was trustworthy, and what runs is what was reviewed.
+
+    Grounds: Roll-up of the seven L1 records below; the order and the split are the maintainer''s decisions
+    (MD-01 to MD-05, `target_hierarchy.md`). The unifying claim, that no single control is relied on and
+    a pass is believable, rests on the ASSURANCE grounds (L1538, L1550, L1558, L1562, L1546).
+
+    Positions: The choices made at this height, from the maintainer''s decisions: P1 two decision branches
+    first (OWNERSHIP, ASSURANCE), then the realization branches in the order construct, change, operate,
+    evolve, then the cross-cutting branch last. P2 one branch per lifecycle stage (code, build, release,
+    operate) with each property''s checks inside the stage that runs them. P3 one branch per quality property
+    with its practice inside it. P4 a branch for who does the work (human team or AI agent contributors).
+
+    Rejected: P2 as the top split: the guarantee of one property (documentation, security, data, availability)
+    would be spread over several stages and have no single home, which breaks one location per fact (MD-03);
+    it is best as the realization view, which CHANGE_FLOW and OPERATION already give. P3 as the top split:
+    it merges "how we know it holds" with "how we do it" for each property, which MD-03 keeps apart; best
+    for a guideline about one property only. P4: who writes the code is not a principle (MD-02); AI contributors
+    enter as the outcomes the other branches require when change arrives at volume or from a non-human
+    author. EVOLUTION folded into CHANGE_FLOW: ruled out by MD-04; change over time, decisions and retirement
+    are a branch of their own. Regulated contexts and software that is not a hosted service: deferred
+    (MD-05); best in a guideline written for them.
+
+    Context: None at this level. There is no default team (MD-02); the conditions that move a decision
+    (criticality, consumer reach, change volume, team and platform sharing, threat model) are on the L2
+    and L3 nodes that carry them.
+
+    Certainty: Grounded for the order and the split (maintainer decisions). Inferred for the whole as
+    one claim: no source states the seven-branch guideline, and the unification rests on each branch''s
+    own certainty. The 40 open items (see "Still open") are cadences, numeric thresholds, one-source minority
+    views and one flag; none contradicts a decision at this height.
+
+    Flags: none at this height; the one flag still open sits on EVOLUTION.TECHNOLOGY.4.
+
+    Links: children OWNERSHIP, ASSURANCE, CONSTRUCTION, CHANGE_FLOW, OPERATION, EVOLUTION, TRANSVERSE.'
+- op: node.set
+  uid: ASSURANCE
+  epistemic_state: 'inferred: roll-up of nine L2 records, no source states the nine-property set as a
+    whole; the principle that a pass is believable and no control stands alone is grounded | gap: open
+    at eight places (RULES.4 two, BEHAVIOUR.1, BEHAVIOUR.6, SECURITY.3, AVAILABILITY.4, AVAILABILITY.5,
+    ARTIFACT.1)'
+  design_notes: 'Decision: Every property that must hold has a named mechanism at a named stage that runs
+    on every change, and none rests on one control or on the author''s own judgement. A check blocks while
+    its measured false-alarm rate is within the budget the team states, and a check that needs judgement
+    advises in review under a budget; a pass can be believed, gates cannot be skipped, review is independent
+    and binds the exact content, and every change meets one bar with evidence (RULES). Behaviour is pinned
+    by self-testing code whose power is measured (BEHAVIOUR); interface compatibility has a definition,
+    a contract test and one source of description (CONTRACTS); stored data is protected where every write
+    path converges (DATA_INTEGRITY); documentation cannot drift because it travels with the change and
+    is gated (DOCS_SYNC); security is verified at a depth set by risk and limits on automation are enforced
+    in tooling (SECURITY); speed and capacity are verified against the real workload with a baseline (PERFORMANCE);
+    a degraded mode, a bounded call and a proven restore guarantee availability and recovery (AVAILABILITY);
+    and what runs is tied to reviewed source by a protected mainline and verified build provenance (ARTIFACT).
+    Outcome: the design was good, the testing was good, the review was trustworthy, and what runs is what
+    was reviewed (MD-02).
+
+    Grounds: Roll-up of all nine L2 records (RULES, BEHAVIOUR, CONTRACTS from J2; DATA_INTEGRITY, DOCS_SYNC,
+    SECURITY from J3; PERFORMANCE, AVAILABILITY, ARTIFACT from J4), 44 L3 records under nine L2 records,
+    as cross-unit fix X2 requires. The shared claim "no single control is relied on and a pass is believable"
+    rests on L1538, L1550, L1558, L1562, L1546; the untested-is-absent rule on L032, L1097, L451, L120;
+    the artifact claim on L1063 (REG-1037, REG-114), L151, L1244.
+
+    Positions: Choices at this height: P1 one placement node per property (decision), with the practice
+    in a realization branch (MD-03); P2 one assurance practice per lifecycle stage; P3 a single global
+    quality gate. The competing practices per property are at the L3 nodes.
+
+    Rejected: P2 and P3: they leave a property without one owner of its guarantee, so a gap in one stage
+    is invisible; P3 also makes the signal a single point of failure; best as the realization view (CHANGE_FLOW)
+    and as the floor RULES.5 sets for every change. A property list without the common rules: each property
+    would re-decide trust, placement and skippability.
+
+    Context: Criticality, change volume, consumer reach and suite maturity move individual decisions (RULES.2,
+    RULES.4, CONTRACTS.1, BEHAVIOUR.1, BEHAVIOUR.6); recorded at the L3 nodes. None at this height.
+
+    Certainty: Inferred as a roll-up: no source states the nine-property set as a whole. Grounded for
+    the principle that a pass is believable and no control stands alone; grounded for the nine children''s
+    cores, with inferred numeric defaults. Open at eight places (RULES.4 two, BEHAVIOUR.1, BEHAVIOUR.6,
+    SECURITY.3, AVAILABILITY.4, AVAILABILITY.5, ARTIFACT.1).
+
+    Flags: The reviewer question at RULES.4 is decided (MD-08). The earlier flag F9 (re-roll after J3
+    and J4) is closed by this record.
+
+    Links: children RULES, BEHAVIOUR, CONTRACTS, DATA_INTEGRITY, DOCS_SYNC, SECURITY, PERFORMANCE, AVAILABILITY,
+    ARTIFACT; carried out by CONSTRUCTION, CHANGE_FLOW, OPERATION, TRANSVERSE.'
+- op: node.set
+  uid: CHANGE_FLOW
+  epistemic_state: 'inferred: roll-up of eight L2 records; build-once, small batches and review principles
+    grounded, numeric defaults and much of DATA_CHANGE inferred (single-source practice) | gap: open at
+    INTEGRATION.1, INTEGRATION.4, REVIEW.4, RELEASE.2, DEPLOY.4, MEASURE.1'
+- op: node.set
+  uid: ASSURANCE.RULES
+  epistemic_state: 'inferred: roll-up of RULES.1 to .5; the principles are grounded under each child |
+    gap: every numeric default is inferred (one organisation''s or one source''s figure)'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW
+  epistemic_state: 'inferred: roll-up of REVIEW.1 to .4; grounded in the settled independent-review decision
+    and the children'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.1
+  epistemic_state: 'known | gap: inferred, the author-neutral form of depth by evidence of understanding
+    and the escalation criterion (maintainer practice agreeing with common practice)'
+- op: node.set
+  uid: ASSURANCE.RULES.4
+  intent: Every change to mainline is checked before integration by a party other than whoever authored,
+    pushed or requested it, working from its own context, and the check is recorded on the development
+    platform. That party is a person other than the author by default; an automated reviewer working from
+    its own context is the independent check only for a tier of low-risk changes the team declares in
+    advance. A named person stays accountable for each change, approves it and is able to defend it, and
+    an approval binds the exact final content, so a new commit that changes the diff voids earlier approvals.
+    Only a tier the team defines in advance, in a team whose mainline is kept releasable by automated
+    gates and fast revert, may be checked after merge; per-change approval by an external board is not
+    used.
+  epistemic_state: 'known: maintainer decision MD-08 | gap: the reason for rejecting review of uncertain
+    changes only is inferred; whether a given regulation still requires an external board was not read'
+  constraints:
+  - The approver MUST differ from the author
+  - An automated reviewer MUST NOT be the independent check outside the declared low-risk tier
+  - An approval MUST lapse when the diff changes
+  - A named person MUST be accountable and MUST approve every change
+  design_notes: 'Decision as judged, with the maintainer decision MD-08 (replacing the earlier default,
+    R27) merged with the tier sentence (R16): every change gets an independent check before or after merge,
+    and that check is a person other than the author by default, an automated reviewer working from its
+    own context only for a tier of low-risk changes the team declares in advance; the post-merge tier
+    is only a tier defined in advance (changes that follow an established pattern, an unremarkable fix,
+    documentation) in a team whose mainline is kept releasable by automated gates and fast revert; separation
+    of duties is met by peer review, automated testing and monitoring, with the form of review set by
+    the risk of the change.
+
+    MAINTAINER DECISION (MD-08, answered; was F2, R27): the research row says ''independent human check''
+    (L136) while MD-02 says who does the work is not a principle. Decided: a person other than the author
+    is the independent check by default; an automated reviewer working from its own context is the independent
+    check only for a tier of low-risk changes the team declares in advance; a named person stays accountable
+    and approves every change. Accepted cost: the team keeps a declared list of low-risk change classes,
+    and a team of one cannot meet the rule for its own higher-risk changes.
+
+    Positions: P1 independent check on every change (dissent: Ship, Show, Ask, review only the uncertain);
+    P2 no external board; P3 named accountability; P4 approver differs from author; P5 approval binds
+    to the final content; P6 a person is the independent check by default, an automated reviewer only
+    for a declared low-risk tier.
+
+    Grounds: independent check as a feature of the platform record (L136; REG-083, REG-094, REG-098, REG-115,
+    REG-116). Approver differs from the author, and approval binds to content (L1046, L1047; REG-1036,
+    REG-114, T1). Accountability attaches to the submitter, not the tool (L1043; REG-1035, REG-1037, REG-1040).
+    DORA found no correlation of external review with lower failure rates and a negative effect on delivery
+    performance (L143; REG-094). The tier conditions are grounded in REG-098 (one practitioner source,
+    fetched in review).
+
+    Rejected, with the condition under which each would be best: an automated reviewer as the independent
+    check for every change (independence by context alone): the author and the reviewer may be models
+    of the same kind with overlapping blind spots; best never as the general rule under MD-08, admitted
+    for the declared low-risk tier. A person only, with no low-risk tier: a team of one could never meet
+    the rule; best where no change class can be declared low-risk. review only for uncertain changes (P1
+    dissent) leaves the classification to the author at the moment of the change, while a tier defined
+    in advance removes that discretion (inferred, X14: CHANGE_FLOW.REVIEW.1 points here for this reason);
+    it is best, in a post-merge ''show'' form, for the tier of the Decision (consistent with L143 ''by
+    risk''). ''Ship'' with no review at all: best never under this node, since every change gets an independent
+    check before or after merge. External approval board: best where a regulation requires one; regulated
+    contexts are deferred (MD-05) and whether a given regulation still requires a board was not read (open).
+
+    Context: risk. The default is blocking pre-merge review; the post-merge tier applies only where gates
+    and revert are automatic (L136, L143). Links: index to CHANGE_FLOW.REVIEW (how review is carried out);
+    realized for the mainline by ASSURANCE.ARTIFACT.2 (L131, L1063); the mechanism terms of a platform
+    (L1046, L1047) are stack pointers only. Flags: none on the record beyond the maintainer point.'
+- op: node.set
+  uid: CHANGE_FLOW.REVIEW.4
+  intent: 'Format, lint, tests and build run before the human reviewer so attention goes to design and
+    logic. A second automated reviewer may be added as an extra layer and never as the approving party:
+    a named person approves every change. It is the independent check only for the tier of low-risk changes
+    the team declares in advance (ASSURANCE.RULES.4); every other change is checked by a person other
+    than its author.'
+  epistemic_state: 'known | gap: no study read on the accuracy of an automated second reviewer; inferred,
+    the second automated reviewer as an extra layer (vendor statements only)'
+  constraints:
+  - Automated checks MUST run before the reviewer is asked
+  - An automated reviewer MUST NOT be the approving party
+  - An automated reviewer MUST NOT be the independent check outside the declared low-risk tier
+  design_notes: 'Decision (judge record, final): Format, lint, tests and build run before human review
+    so the reviewer spends attention on design and logic. A second model reviewing in a fresh context
+    may be added as an extra layer, never as the approver: a named person approves every change. It is
+    the independent check only for the low-risk tier the team declares in advance (RULES.4, MD-08); every
+    other change is checked by a person other than its author, and the extra layer substitutes for no
+    part of that check. Outcome: the human review is spent where machines cannot judge, and approval stays
+    accountable.
+
+
+    Grounds: Automation first (L141, consensus; REG-083, REG-085); second reviewer as added layer under
+    human accountability (L1049 a; REG-1038); human gate for approval for independence of failure modes
+    (L1049 b; REG-1036, REG-1040); RULES.4 settled that a machine may assist but is never the accountable
+    party.
+
+
+    Positions considered: P1 automation first. P2 second model as extra layer. P3 human-only gate for
+    approval.
+
+
+    Rejected, each with the condition under which it would be best: A second model as the approving party:
+    best never under RULES.4 (accountability attaches to a person or role). P2 as a replacement for part
+    of the human review: best for the declared low-risk tier (MD-08), where it can be the independent
+    check while a named person still approves; outside that tier the person''s check stays in force and
+    P3 alone governs approval.
+
+
+    Context conditions: Scale (volume beyond human capacity favours the extra layer) and criticality (high
+    risk keeps the human gate sole).
+
+
+    Certainty (judge record): Grounded for P1; inferred for P2 (vendor statements only; no study read
+    on AI-reviewer accuracy: open).
+
+
+    Maintainer decisions: MD-01 (the best practice for the node''s purpose, not the average; every weaker
+    position is kept with its winning condition); MD-02 (a second model is an assisting layer, accountability
+    is for a responsible party).
+
+
+    Links and stack pointers (judge record): Related ASSURANCE.RULES.2 and RULES.4, BUILD.1.'
