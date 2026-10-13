@@ -1,0 +1,13 @@
+# ------------------------------------------------------------------------------
+# intent_resources.yaml — Project resources (IntentGraph framework).
+#   product: product IntentGraphs (WHAT/WHY). Paths are relative to this file.
+# ------------------------------------------------------------------------------
+
+name: "Software Development Guidelines Intent Graphs"
+description: "Stack-neutral software-development philosophy (product)."
+
+product:
+  - id: software-development-philosophy
+    name: "Software Development Philosophy"
+    description: "Ownership, assurance, construction, change flow, operation, evolution, transverse practice."
+    file: "software_development_philosophy.ig.yaml"
