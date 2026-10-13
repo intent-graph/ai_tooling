@@ -1,0 +1,36 @@
+# ------------------------------------------------------------------------------
+# intent_resources.yaml — Project resources (IntentGraph framework).
+# Read this first:
+#   product: product IntentGraphs (WHAT/WHY). Each entry: id, name, file.
+#     js-philosophy is this guideline's graph; python-kb-philosophy is listed so
+#     that the inter links from js-philosophy resolve.
+#   projection_by_target: map from target (javascript) to projection graphs (HOW).
+#   resources: where the evidence of the graphs lives (impl_pointers resolve here).
+# Paths are relative to this file.
+# ------------------------------------------------------------------------------
+
+name: "JavaScript Guideline Intent Graphs"
+description: "Philosophy (product) + JavaScript defaults (projection) for the JavaScript guideline."
+
+product:
+  - id: js-philosophy
+    name: "JavaScript Philosophy"
+    description: "Principles of solid JavaScript in eight branches; the why behind the defaults."
+    file: "js_philosophy.ig.yaml"
+  - id: python-kb-philosophy
+    name: "Python KB Philosophy"
+    description: "The eight principles of the Python guideline; target of the inter links of js-philosophy."
+    file: "../../python_guidelines/intent_graphs/python_kb_philosophy.yaml"
+
+projection_by_target:
+  javascript:
+    - id: pig-js-defaults
+      name: "JavaScript defaults"
+      description: "Concrete rules for JavaScript in the browser and in Node (PIG-JS.*)."
+      file: "js_defaults.ig.yaml"
+
+resources:
+  doc:
+    - id: research
+      path: "../build/research"
+      description: "Evidence slots; every impl_pointer reads build/research/<slot>/result.md::<CLAIM-ID> from the guideline root."
