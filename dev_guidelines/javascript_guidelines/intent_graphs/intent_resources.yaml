@@ -2,8 +2,8 @@
 # intent_resources.yaml — Project resources (IntentGraph framework).
 # Read this first:
 #   product: product IntentGraphs (WHAT/WHY). Each entry: id, name, file.
-#     js-philosophy is this guideline's graph; python-kb-philosophy is listed so
-#     that the inter links from js-philosophy resolve.
+#     js-philosophy is this guideline's graph; python-kb-philosophy and
+#     software-development-philosophy are listed so that the inter links resolve.
 #   projection_by_target: map from target (javascript) to projection graphs (HOW).
 #   resources: where the evidence of the graphs lives (impl_pointers resolve here).
 # Paths are relative to this file.
@@ -21,6 +21,10 @@ product:
     name: "Python KB Philosophy"
     description: "The eight principles of the Python guideline; target of the inter links of js-philosophy."
     file: "../../python_guidelines/intent_graphs/python_kb_philosophy.yaml"
+  - id: software-development-philosophy
+    name: "Software Development Philosophy"
+    description: "Stack-neutral principles of the software development guideline; target of the inter links of the four restored principles and of the defaults that render a principle sent there."
+    file: "../../software_development_guidelines/intent_graphs/software_development_philosophy.ig.yaml"
 
 projection_by_target:
   javascript:

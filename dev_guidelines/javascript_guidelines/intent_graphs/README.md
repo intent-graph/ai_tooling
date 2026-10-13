@@ -53,9 +53,10 @@ not code). Constraints are the node's `decision` rows as MUST, MUST NOT or SHOUL
 `acceptable-when` rows as "Acceptable only when <condition>: <practice>". Design notes carry the judge record
 (positions, forces, decision, rejected with the condition under which each would win).
 
-**Links:** 90 within branches and 72 across branches (162 intentlinks); 68 inter links to `js-philosophy`
-(each defaults node to the principle it renders, then cross-branch support). 43 further links, to principles that
-moved to the software development guideline, are planned, not created (section 3).
+**Links:** 90 within branches and 72 across branches (162 intentlinks); 111 inter links: 68 to `js-philosophy`
+(each defaults node to the principle it renders, then cross-branch support) and 43 to `software-development-philosophy`
+(each default to the principle, now owned by the software development guideline, that it renders in JavaScript). One
+further link, to a principle in that guideline, is planned, not created (section 3).
 
 **Use when:** writing or reviewing JavaScript, configuring linters, the type checker, the install and the CI gates,
 or answering "how should we do X in JavaScript?".
@@ -92,62 +93,27 @@ intents narrowed where children left). The philosophy graph had 52 nodes after t
   [../build/handoff/to_software_guideline/recheck/result.md](../build/handoff/to_software_guideline/recheck/result.md), and the list for
   the software guideline's session is [../build/handoff/to_software_guideline/kept_with_js_emphasis.md](../build/handoff/to_software_guideline/kept_with_js_emphasis.md).
 
-| Restored node | Name | Why it matters more in JavaScript | Planned link (not created): `refines` the principle in the software development guideline |
+| Restored node | Name | Why it matters more in JavaScript | Link (created): `refines` the principle in the software development guideline |
 |---|---|---|---|
-| `SUBSET.NUMBERS` | One number type, stated limits | one numeric type, a 64-bit binary float, for counts, identifiers and amounts | "Stated numeric limits" |
-| `SUBSET.STATE` | Immutability is stated, not assumed | a fixed binding is not a frozen value, a freeze is shallow and silent outside strict code, some array methods mutate | "Distinguished immutability" |
-| `CONTRACTS.BOUNDARY` | Boundary parse is the only attestation | types are erased, so the parse at the boundary is the only place a value earns its shape | "Boundary contract" and "Validate at every trust boundary" |
-| `DEFENSE.CODE` | Strings become code in many ways | many doors from a string to running code (eval, Function, string timers, template engines, vm) | "Strings never become code" |
+| `SUBSET.NUMBERS` | One number type, stated limits | one numeric type, a 64-bit binary float, for counts, identifiers and amounts | `CONSTRUCTION.STATE.4` (Value Precision and Mutability) |
+| `SUBSET.STATE` | Immutability is stated, not assumed | a fixed binding is not a frozen value, a freeze is shallow and silent outside strict code, some array methods mutate | `CONSTRUCTION.STATE.4` |
+| `CONTRACTS.BOUNDARY` | Boundary parse is the only attestation | types are erased, so the parse at the boundary is the only place a value earns its shape | `CONSTRUCTION.BOUNDARY.1` (Parse or Validate at the Edge) |
+| `DEFENSE.CODE` | Strings become code in many ways | many doors from a string to running code (eval, Function, string timers, template engines, vm) | `CONSTRUCTION.DATA_NOT_CODE.1` (Code and Commands) |
 
-- **Planned links to the software development guideline (not created):** the 43 defaults nodes below render a principle
-  that now lives there. When that guideline has graphs, each becomes an inter link; the target is the principle's name as
-  given in the package.
+- **Links to the software development guideline (created):** now that its graph `software-development-philosophy` has stable
+  uids (it is listed in [intent_resources.yaml](intent_resources.yaml), path relative), 42 of the 43 defaults nodes that
+  render a principle sent there link to the node that holds it, and the four restored nodes above `refines` theirs: 47 inter
+  links, all of type `refines` (one default, the publishing-credentials rule, refines two targets: an
+  ownership node and the short-lived-credentials node): the 42 defaults links keep the sentence of the removed link (4 adjusted to the target's
+  wording), the 4 restored nodes get a sentence drawn from their "why it matters more" text. The links are in the skeleton
+  tables "Inter links from ... to software-development-philosophy" ([../build/distill/skeleton.md](../build/distill/skeleton.md)); the
+  mapping table, with the reason for each retargeting, is in
+  [../build/handoff/to_software_guideline/links/result.md](../build/handoff/to_software_guideline/links/result.md).
+- **Still planned (1, not created):**
 
-| From | Rule | Planned target principle (in the package) | Sentence of the removed link |
-|---|---|---|---|
-| `PIG-JS.CONTRACTS.SIGNATURE` | Function shapes | Shape of calls | Declared signatures realise shape of calls |
-| `PIG-JS.STRUCTURE.LOADING.1` | Imports run once and hoisted | Effect-free importing | Hoisting and run-once are the JavaScript mechanisms that make import order and repetition invisible only when the top level is effect-free. |
-| `PIG-JS.STRUCTURE.LOADING.5` | Static structure for dropping unused code | Effect-free importing | Tools can drop unused code only when importing has no effect beyond exporting. |
-| `PIG-JS.STRUCTURE.SURFACE.1` | Named exports | Minimal public surface | A named export is one exposed name; a default export lets each importer rename it. |
-| `PIG-JS.STRUCTURE.SURFACE.2` | Minimal exported surface | Minimal public surface | Module-level form of the minimal public surface. |
-| `PIG-JS.STRUCTURE.PACKAGE.1` | Exports field | Minimal public surface | Package-level form of the minimal public surface. |
-| `PIG-JS.STRUCTURE.SURFACE.5` | No static-only container classes | Abstract data type versus object | A class of static members is a procedural namespace pretending to be an object (inferred). |
-| `PIG-JS.STRUCTURE.DIRECTION.1` | No import cycles | No cycles between modules | The JavaScript rule behind the principle of one-way dependencies. |
-| `PIG-JS.STRUCTURE.DIRECTION.3` | Declared layering | Declared layering | The JavaScript rendering of declared layering, undecided in both graphs. |
-| `PIG-JS.DEFENSE.INJECTION` | Injection classes | Data becoming instruction or location | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.SECRETS` | Secrets and cryptography defaults | Secrets and cryptographic primitives | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.2` | OS commands | Commands are not built from input | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.3` | SQL and NoSQL queries | Queries keep code and data apart | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.4` | File paths and archives | Paths stay inside their base | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.5` | Deserialization | Serialized data carries no behaviour | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.6` | Outbound requests | Destinations are chosen by the server | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.SECRETS.5` | Secret handling | Secrets and cryptographic primitives | The default renders the principle in JavaScript. |
-| `PIG-JS.DEPENDENCIES.INSTALL.4` | Owned scope for internal packages | Identity of the package | An owned scope closes the namespace route that the identity check covers by hand. |
-| `PIG-JS.DEPENDENCIES.UPDATE.1` | Release-age cooldown | Updates | The cooldown is the tool form of the update tradeoff. |
-| `PIG-JS.DEPENDENCIES.PUBLISH.1` | CI publishing credentials | Publishing | Short-lived CI credentials harden the publishing route. |
-| `PIG-JS.DEPENDENCIES.PUBLISH.2` | Tarball contents | Publishing | Reviewing tarball contents keeps secrets out of what consumers receive. |
-| `PIG-JS.DEPENDENCIES.PUBLISH.3` | Ship JavaScript | Publishing | Shipping runnable JavaScript is part of being a good dependency. |
-| `PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST` | Framework short list | Existing components first | The framework is the largest case of a dependency earning its trust cost. |
-| `PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST.1` | Platform baseline | Existing components first | The platform is the existing component that suffices first. |
-| `PIG-JS.VERIFICATION.TESTS.3` | Condition waits | New tests are probed | Condition waits remove the largest flake category in asynchronous JavaScript tests (inferred transfer). |
-| `PIG-JS.VERIFICATION.LINT.3` | Security findings triage | Checks complement each other | Security lint output is one analysis class among several, never the sole mechanism. |
-| `PIG-JS.RUNTIME.MEASURE.1` | Profile before optimizing | Measurement before belief | Profiling is the first concrete way a belief becomes a measurement. |
-| `PIG-JS.RUNTIME.MEASURE.2` | Engine-level tuning needs a measurement | Measurement before belief | Engine-level advice is held as a hypothesis until measured. |
-| `PIG-JS.RUNTIME.MEASURE.3` | Callback file APIs only on a measured need | Measurement before belief | A speed-motivated API swap waits for a measured need. |
-| `PIG-JS.RUNTIME.METHOD.1` | Compare runs statistically | Measurement method | Many runs and a significance test make the distribution explicit. |
-| `PIG-JS.RUNTIME.METHOD.2` | Quiet measurement environment | Measurement method | A controlled environment removes setup noise. |
-| `PIG-JS.RUNTIME.DIAGNOSE` | Diagnosis of a running process | Measurement before belief | Diagnosis gathers the evidence that belief is not allowed to replace. |
-| `PIG-JS.CONTROL.PROCESS.2` | Uncaught exceptions | Process end is designed | Node's uncaughtException and uncaughtExceptionMonitor hooks render the designed process end; the principle and its single evidence row (CONTROL-078) are held once. |
-| `PIG-JS.DEFENSE.SECRETS.2.1` | Token and JWT verification | Secrets and cryptographic primitives | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.SECRETS.2.2` | Token library settings | Secrets and cryptographic primitives | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.4.5` | Upload content checks | Paths stay inside their base | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.4.6` | Upload storage, names and limits | Paths stay inside their base | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.5.4` | XML and external entities | Serialized data carries no behaviour | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.HOST.3.1` | Header field values | Two parsers must agree (general part) | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.HOST.3.2` | Connection-specific fields | Two parsers must agree (general part) | The default renders the principle in JavaScript. |
-| `PIG-JS.DEFENSE.INJECTION.5.3` | v8.deserialize | Serialized data carries no behaviour | The default applies the principle's integrity-check and new-object rules, whose claims are held on the principle, to v8.deserialize. |
-| `PIG-JS.DEFENSE.INJECTION.6.4` | Node fetch redirect semantics | Destinations are chosen by the server | The default renders the principle in JavaScript. |
-| `PIG-JS.DEPENDENCIES.SCREEN.3` | Typosquatting screening | Identity of the package | The default renders the principle in JavaScript. |
+| From | Rule | Principle in the package | Sentence of the removed link | Why no target |
+|---|---|---|---|---|
+| `PIG-JS.DEPENDENCIES.PUBLISH.3` | Ship JavaScript | Publishing | Shipping runnable JavaScript is part of being a good dependency. | the principle sent as Publishing is two-factor authentication on registry publishing accounts (OWNERSHIP.LIFECYCLE.4 holds it); no node of the software graph states that a package ships in a form its consumers' runtime can load, and the rule rests on one Node limitation on TypeScript (inferred), so any target would be invented |
 
 ---
 
@@ -168,8 +134,8 @@ claim of every row is listed in `impl_pointers`.
 ## Manifest
 
 [intent_resources.yaml](intent_resources.yaml) lists the product graph `js-philosophy`, the projection target
-`javascript` with `pig-js-defaults`, and `python-kb-philosophy` (relative path to the Python philosophy file) so that
-the inter links resolve. Validate with the manifest:
+`javascript` with `pig-js-defaults`, and `python-kb-philosophy` and `software-development-philosophy` (relative paths to
+their graph files) so that the inter links resolve. The software graph belongs to a sibling guideline and is read only. Validate with the manifest:
 `ig-tool validate -g js_defaults.ig.yaml -m intent_resources.yaml`.
 
 ## Obsidian view
@@ -193,7 +159,7 @@ The second security gap round (token and JWT verification, XML external entities
 
 ## Out of scope: the software development guideline
 
-Concerns of any software project, whatever its language, belong to a separate software development guideline (planned): sourcing (what to build versus take, finding and judging libraries), application architecture, validating that the product works for its users, deploy, operations and monitoring, and the development process. This guideline holds only their JavaScript-specific rules (for example the dependency and framework nodes under `PIG-JS.DEPENDENCIES`, and the test tooling under `PIG-JS.VERIFICATION`). The language-general principles that its philosophy graph first held were sent to that guideline (section 3); once that guideline has graphs, its overlaps become inter links here, not copies.
+Concerns of any software project, whatever its language, belong to a separate software development guideline (planned): sourcing (what to build versus take, finding and judging libraries), application architecture, validating that the product works for its users, deploy, operations and monitoring, and the development process. This guideline holds only their JavaScript-specific rules (for example the dependency and framework nodes under `PIG-JS.DEPENDENCIES`, and the test tooling under `PIG-JS.VERIFICATION`). The language-general principles that its philosophy graph first held were sent to that guideline (section 3); its overlaps are inter links here (section 3), not copies.
 
 ## Planned boundary links (not created)
 

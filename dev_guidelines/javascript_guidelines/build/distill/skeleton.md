@@ -16,6 +16,7 @@ Conventions:
 - Slot 14_secgap2 (second security gap round) was folded by patch (`build/patch/14_secgap2/`): 17 defaults nodes added, `DOM.2.3`, `INJECTION.5.3` and `INJECTION.6.4` decided from `undecided`, `INJECTION.4.4` kept undecided; decisions in `decisions_for_review.md` section `Slot 14_secgap2`. Its review fixes (17 findings) are recorded in `build/review/patch14/fixes/result.md`.
 - Software-guideline split (maintainer decision "if they are core to js , keep them, else, send them to the other session"): of the 108 js-philosophy nodes, 56 were sent to the software development guideline, 9 were split and narrowed, 43 kept; the philosophy graph now has 52 nodes. Links touching sent nodes were removed or retargeted as recorded in `build/handoff/to_software_guideline/result.md`; the package is `build/handoff/to_software_guideline/package.md`.
 - Restoration with JavaScript emphasis (maintainer decision: general principles belong to the software development guideline, but those "especially important in JS" stay here, stated as why JavaScript makes them matter more): four philosophy nodes came back (`SUBSET.NUMBERS`, `SUBSET.STATE`, `CONTRACTS.BOUNDARY`, `DEFENSE.CODE`), 2 claims moved back from `deferred`, 20 intentlinks, 1 inter link to the Python philosophy and 6 defaults inter links re-created; the philosophy graph has 56 nodes. Record: `build/handoff/to_software_guideline/kept_with_js_emphasis.md` and `build/handoff/to_software_guideline/recheck/result.md`.
+- Inter links to the software development guideline: the graph `software-development-philosophy` is listed in `intent_graphs/intent_resources.yaml`. 4 links from js-philosophy (the restored nodes) and 42 from pig-js-defaults are created from the tables "Inter links from ... to software-development-philosophy"; 1 link stays planned (`PIG-JS.DEPENDENCIES.PUBLISH.3`, no target). Record: `build/handoff/to_software_guideline/links/result.md`.
 
 ## Graph js-philosophy
 
@@ -167,6 +168,17 @@ Target file `../python_guidelines/intent_graphs/python_kb_philosophy.yaml`; the 
 | 9 | DEPENDENCIES.CHANGE.1 | python-kb-philosophy:REPRODUCIBILITY | refines | Same inputs, same tree: lockfiles and version pinning. |
 | 10 | DEPENDENCIES.CHANGE.2 | python-kb-philosophy:REPRODUCIBILITY | refines | Version pinning is a reproducibility rule with a contested scope. |
 | 11 | CONTRACTS.BOUNDARY | python-kb-philosophy:DEFENSIVE | refines | Validate at boundaries and trust after validation: the shared principle, here with the JavaScript-distinct fact that the language has no run-time types. |
+
+### Inter links from js-philosophy to software-development-philosophy
+
+Target file `../software_development_guidelines/intent_graphs/software_development_philosophy.ig.yaml`; the uids were read there. Each restored node `refines` the general principle that the software development guideline owns.
+
+| # | from | to | type | sentence |
+|---|---|---|---|---|
+| 1 | SUBSET.NUMBERS | software-development-philosophy:CONSTRUCTION.STATE.4 | refines | One 64-bit binary float serves counts, identifiers and amounts, so the general limit on a numeric type's exactness is stated here as what breaks first in JavaScript. |
+| 2 | SUBSET.STATE | software-development-philosophy:CONSTRUCTION.STATE.4 | refines | A fixed binding is not a frozen value and a freeze is shallow and silent outside strict code, so the general distinction between immutable and restricted is only as deep as the JavaScript mechanism. |
+| 3 | CONTRACTS.BOUNDARY | software-development-philosophy:CONSTRUCTION.BOUNDARY.1 | refines | Types are erased and outside data arrives with no run-time type, so the parse at the boundary is the only place a value earns its shape. |
+| 4 | DEFENSE.CODE | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1 | refines | JavaScript has many doors from a string to running code, which makes the general rule never to build code from strings matter more here. |
 
 ## Graph pig-js-defaults
 
@@ -748,6 +760,56 @@ Within a branch (each defaults node to the principle it renders), then across br
 | 66 | PIG-JS.DEFENSE.INJECTION.1 | js-philosophy:DEFENSE.CODE | refines | The default renders the principle in JavaScript. |
 | 67 | PIG-JS.DEFENSE.INJECTION.1.3 | js-philosophy:DEFENSE.CODE | refines | The default renders the principle in JavaScript. |
 | 68 | PIG-JS.DEFENSE.INJECTION.1.4 | js-philosophy:DEFENSE.CODE | refines | The default renders the principle in JavaScript. |
+
+### Inter links from pig-js-defaults to software-development-philosophy
+
+Target file as above. Each default renders in JavaScript a principle that was sent to the software development guideline; one planned link stays planned (see `intent_graphs/README.md`).
+
+| # | from | to | type | sentence |
+|---|---|---|---|---|
+| 1 | PIG-JS.CONTRACTS.SIGNATURE | software-development-philosophy:CONSTRUCTION.BOUNDARY.5 | refines | Declared signatures realise shape of calls |
+| 2 | PIG-JS.STRUCTURE.LOADING.1 | software-development-philosophy:CONSTRUCTION.STATE.5 | refines | Hoisting and run-once are the JavaScript mechanisms that make import order and repetition invisible only when the top level is effect-free. |
+| 3 | PIG-JS.STRUCTURE.LOADING.5 | software-development-philosophy:CONSTRUCTION.STATE.5 | refines | Tools can drop unused code only when importing has no effect beyond exporting. |
+| 4 | PIG-JS.STRUCTURE.SURFACE.1 | software-development-philosophy:CONSTRUCTION.HIDING.1 | refines | A named export is one exposed name; a default export lets each importer rename it. |
+| 5 | PIG-JS.STRUCTURE.SURFACE.2 | software-development-philosophy:CONSTRUCTION.HIDING.1 | refines | Module-level form of the minimal public surface. |
+| 6 | PIG-JS.STRUCTURE.PACKAGE.1 | software-development-philosophy:CONSTRUCTION.HIDING.1 | refines | Package-level form of the minimal public surface. |
+| 7 | PIG-JS.STRUCTURE.SURFACE.5 | software-development-philosophy:CONSTRUCTION.HIDING.1 | refines | A class of static members is a procedural namespace pretending to be an object (inferred). |
+| 8 | PIG-JS.STRUCTURE.DIRECTION.1 | software-development-philosophy:CONSTRUCTION.DEPENDENCY_DIRECTION.1 | refines | The JavaScript rule behind the principle of one-way dependencies. |
+| 9 | PIG-JS.STRUCTURE.DIRECTION.3 | software-development-philosophy:CONSTRUCTION.DEPENDENCY_DIRECTION.2 | refines | The JavaScript rendering of declared layering; this rule is undecided here and the principle is only inferred in the target. |
+| 10 | PIG-JS.DEFENSE.INJECTION | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE | refines | The default renders the principle in JavaScript. |
+| 11 | PIG-JS.DEFENSE.SECRETS | software-development-philosophy:TRANSVERSE.CONFIG.1 | refines | The default renders the principle in JavaScript; this link covers its secrets-kept-out-of-code part, the target holds no statement on randomness, comparison or password storage (inferred). |
+| 12 | PIG-JS.DEFENSE.INJECTION.2 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1 | refines | The default renders the principle in JavaScript. |
+| 13 | PIG-JS.DEFENSE.INJECTION.3 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2 | refines | The default renders the principle in JavaScript. |
+| 14 | PIG-JS.DEFENSE.INJECTION.4 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3 | refines | The default renders the principle in JavaScript. |
+| 15 | PIG-JS.DEFENSE.INJECTION.5 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4 | refines | The default renders the principle in JavaScript. |
+| 16 | PIG-JS.DEFENSE.INJECTION.6 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3 | refines | The default renders the principle in JavaScript. |
+| 17 | PIG-JS.DEFENSE.SECRETS.5 | software-development-philosophy:TRANSVERSE.CONFIG.1 | refines | The default renders the principle in JavaScript. |
+| 18 | PIG-JS.DEPENDENCIES.INSTALL.4 | software-development-philosophy:OWNERSHIP.SELECTION.5 | refines | An owned scope closes the namespace route that the identity check covers by hand. |
+| 19 | PIG-JS.DEPENDENCIES.UPDATE.1 | software-development-philosophy:OWNERSHIP.LIFECYCLE.3 | refines | The cooldown is the tool form of the update tradeoff. |
+| 20 | PIG-JS.DEPENDENCIES.PUBLISH.1 | software-development-philosophy:OWNERSHIP.LIFECYCLE.4 | refines | Short-lived CI credentials harden the publishing route. |
+| 21 | PIG-JS.DEPENDENCIES.PUBLISH.2 | software-development-philosophy:TRANSVERSE.CONFIG.1 | refines | Reviewing tarball contents keeps secrets out of what consumers receive: no credential is recoverable from the shipped artifact. |
+| 22 | PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST | software-development-philosophy:OWNERSHIP.STANCE.1 | refines | The framework is the largest case of a dependency earning its trust cost. |
+| 23 | PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST.1 | software-development-philosophy:OWNERSHIP.STANCE.2 | refines | The platform is the built-in that meets the need first, and the platform baseline is the default candidate. |
+| 24 | PIG-JS.VERIFICATION.TESTS.3 | software-development-philosophy:ASSURANCE.RULES.1 | refines | Condition waits remove the largest flake category in asynchronous JavaScript tests (inferred transfer). |
+| 25 | PIG-JS.VERIFICATION.LINT.3 | software-development-philosophy:ASSURANCE.RULES.2 | refines | Security lint output is one analysis class among several, never the sole mechanism. |
+| 26 | PIG-JS.RUNTIME.MEASURE.1 | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | Profiling is the first concrete way a belief becomes a measurement. |
+| 27 | PIG-JS.RUNTIME.MEASURE.2 | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | Engine-level advice is held as a hypothesis until measured. |
+| 28 | PIG-JS.RUNTIME.MEASURE.3 | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | A speed-motivated API swap waits for a measured need. |
+| 29 | PIG-JS.RUNTIME.METHOD.1 | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | Many runs and a significance test make the distribution explicit. |
+| 30 | PIG-JS.RUNTIME.METHOD.2 | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | A controlled environment removes setup noise. |
+| 31 | PIG-JS.RUNTIME.DIAGNOSE | software-development-philosophy:ASSURANCE.PERFORMANCE.5 | refines | Diagnosis gathers the evidence that belief is not allowed to replace. |
+| 32 | PIG-JS.CONTROL.PROCESS.2 | software-development-philosophy:CONSTRUCTION.PROCESS.2 | refines | Node's uncaughtException and uncaughtExceptionMonitor hooks render the designed process end; the principle and its single evidence row (CONTROL-078) are held once. |
+| 33 | PIG-JS.DEFENSE.SECRETS.2.1 | software-development-philosophy:CONSTRUCTION.BOUNDARY.2 | refines | The default renders the principle in JavaScript. |
+| 34 | PIG-JS.DEFENSE.SECRETS.2.2 | software-development-philosophy:CONSTRUCTION.BOUNDARY.2 | refines | The default renders the principle in JavaScript. |
+| 35 | PIG-JS.DEFENSE.INJECTION.4.5 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3 | refines | The default renders the principle in JavaScript. |
+| 36 | PIG-JS.DEFENSE.INJECTION.4.6 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3 | refines | The default renders the principle in JavaScript. |
+| 37 | PIG-JS.DEFENSE.INJECTION.5.4 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4 | refines | The default renders the principle in JavaScript. |
+| 38 | PIG-JS.DEFENSE.HOST.3.1 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4 | refines | The default renders the principle in JavaScript. |
+| 39 | PIG-JS.DEFENSE.HOST.3.2 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4 | refines | The default renders the principle in JavaScript. |
+| 40 | PIG-JS.DEFENSE.INJECTION.5.3 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4 | refines | The default applies the principle's integrity-check and new-object rules, whose claims are held on the principle, to v8.deserialize. |
+| 41 | PIG-JS.DEFENSE.INJECTION.6.4 | software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3 | refines | The default renders the principle in JavaScript. |
+| 42 | PIG-JS.DEPENDENCIES.SCREEN.3 | software-development-philosophy:OWNERSHIP.SELECTION.5 | refines | The default renders the principle in JavaScript. |
+| 43 | PIG-JS.DEPENDENCIES.PUBLISH.1 | software-development-philosophy:TRANSVERSE.CONFIG.5 | refines | Publishing from CI with short-lived, identity-bound credentials instead of a long-lived token renders short-lived credentials for the publishing route. |
 
 ## Planned boundary links to the web-architecture graphs (planned, not created)
 
