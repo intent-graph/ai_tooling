@@ -78,6 +78,19 @@ Batches `14_answers_phil.yaml` (14 ops), `14_answers_pig.yaml` (35), `15_cleanup
 - MD-07 (SameSite): SECURE.2, SECURE.3 and SECURE state Lax plus a cross-site navigation check, Strict for operator consoles, as decided.
 - design_notes: owners and both ROOTs cite MD-04 to MD-07; older notes say "decided by MD-0n" in place of "awaiting maintainer".
 
+### MD-09 corrections
+
+Batches `16_md09_phil.yaml` (7 nodes), `16_md09_pig.yaml` (13 nodes), `17_md09_notes_phil.yaml` (3) and `17_md09_notes_pig.yaml` (8), role `steward`; proposed text copied from the re-audit results. Both graphs validate with the manifest, 0 errors, 0 warnings. Each corrected node's design_notes records "Corrected by MD-09 (re-audit under MD-08)" with the old verdict as a rejected option and its winning condition; the old decision lines are prefixed "(superseded by MD-09)".
+- 1 MFA: phil LOGIC.SECURE (intent, constraint, state) and PIG SECURE.4, SECURE.5 and the PIG SECURE intent: offered on every human account, phishing-resistant preferred, required for privileged accounts and at step-up, universal by the project's risk level; the old rule is the rejected "acceptable when the risk level requires it".
+- 2 Client-named fetches: PIG SECURE.7 intent, constraint and state: helper required, network guard preferred, required when the network holds internal services or a token-less metadata endpoint; proxy-for-all rejected.
+- 3 Agent tokens: PIG AGENT.3 intent, constraint, state, roll-up AGENT and AGENT.4 (approval is the gate for bearer-only clients); sender-constraining required for consequential scopes is the rejected option (closed or certified agents).
+- 4 Normalization: phil DATA.ORGANIZE constraint and state, DATA.GUARD and PIG DATA.GUARD.4 lists: declarative composite foreign key first, trigger only where no declarative form exists.
+- 5 Deferral: phil ACT.3 intent, new constraint, state; ACT.2 constraint and state; PIG PROCESS.2: few seconds or the request timeout; 1 s is the interactive target (FORCES.4); ROOT and ACT notes aligned.
+- 6 Paging: phil DERIVE.2 intent and constraint; PIG EXPOSE.1 intent, three constraints and notes; ENFORCE.3: keyset for structured-data and agent collections and large sets, offset with page numbers for a bounded human HTML list.
+- 7 Threat modelling: phil TRANSVERSE.SECURITY intent and constraint: per critical flow and trust boundary, revisited when a placement on the flow changes.
+- Also fixed: stale MAINTAIN.2 and PIG-WEB-DATA notes that said "decided by MD-05 (question 1)" for deletion (now MD-04).
+- Leftover grep (MFA required on every, most demanding form, egress proxy is required, 1 s budget or cut-off, within about 1 s, offset and limit, consequential scopes, wins never): only the rejected-option lines, the "Corrected by MD-09" narrative and one superseded-marked judge line remain; links held none. Other "wins never" lines concern unrelated positions. One note: the INTERACTION.EDIT and VISUALIZE.4 "strictness" grounds listed under "restate" in the re-audit were not part of the seven and are unchanged.
+
 ## L3 full
 
 Batches in this folder, applied in this order (op counts): 01_states_phil (22) and 01_states_pig (40): states (m1, m2, B1, M1, M2, m8); 02_links_phil (3): link kinds and m6; 02_row_security_pig (2): M3; 03_phil_content (50, one `node.create`): M6, M8, M9, M12, m3, m4, m9, m10, m11, m12; 04_phil_links_misc (20): M7a, DATA.INTERFACE links, m7, m8; 05_pig_content (30): M6, M10, M11, m7, m8, m12; 06_pig_links_intra (21): M7b and owner links; 07_clean_phil (21) and 07_clean_pig (79): M5; 08_phil_last_id (1); 08_pig_pointers (131): M4; 09_pig_root_notes (1); 10_pig_enforce1 (2); 11_phil_wording (4).

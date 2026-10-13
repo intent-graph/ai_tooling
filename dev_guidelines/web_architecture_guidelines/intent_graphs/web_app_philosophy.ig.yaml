@@ -34,9 +34,10 @@ nodes:
     is the authority for product policy not stored in the data, its users'' identity
     and its workflows, which advance through state columns and the outbox. Foreign
     mutations run as atomic phases in a worker behind a 202 response, in the request
-    only when the user must see the outcome within about 1 s and then with the intent
-    recorded first by the database function. Browsers and agent clients decide nothing
-    durable; no token travels in a URL except a short-lived signed file URL.
+    only when the user must see the outcome within a few seconds, under the request
+    timeout (MD-09) and then with the intent recorded first by the database function.
+    Browsers and agent clients decide nothing durable; no token travels in a URL except
+    a short-lived signed file URL.
 
 
     Maintainer decisions applied: MD-01 (row-level security is not a default; acceptable
@@ -109,6 +110,9 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: wording cleanup after closing the open
       questions'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: ALLOCATION
   name: Allocation of Responsibilities
   intent: 'Every responsibility of the application is placed before any tier is designed:
@@ -723,8 +727,8 @@ nodes:
     the tests of that rule. Third normal form is the floor for every table, and Boyce-Codd,
     fourth and fifth normal form apply where they apply, because the anomaly they
     remove is of the same kind.
-  epistemic_state: 'known | unvalidated: the Boyce-Codd claim and the trigger for
-    a lost dependency, the co-presence CHECK, and the MD-03 consequence are inferred
+  epistemic_state: 'known | unvalidated: the Boyce-Codd claim, the declarative form
+    for a lost dependency, the co-presence CHECK, and the MD-03 consequence are inferred
     | gap: collation choice has no row (handed to J6)'
   constraints:
   - 'Every table passes third normal form: every non-key field states a fact about
@@ -732,8 +736,11 @@ nodes:
   - Boyce-Codd, fourth and fifth normal form are applied where they apply. Stopping
     at third normal form is acceptable only when every candidate key is a single column,
     and there are no multi-valued facts.
-  - Where a Boyce-Codd decomposition loses a dependency, the lost dependency is enforced
-    by a constraint trigger under DATA.GUARD's rule (Serializable isolation or a lock).
+  - 'Where a Boyce-Codd decomposition would lose a dependency, keep the dependency-preserving
+    third-normal-form design and enforce every dependency declaratively: the repeated
+    determinant is covered by a composite foreign key to the table that owns the pair,
+    so it cannot diverge and needs no sync plan. A constraint trigger under DATA.GUARD''s
+    rule (Serializable isolation or a lock) only where no declarative form exists.'
   - 'Denormalization is not an organizing choice: a denormalized value is a derived
     copy governed by DATA.DERIVE and exists only with a sync plan recorded before
     it is built (what and why, sync level, freshness, change frequency, impact of
@@ -771,14 +778,14 @@ nodes:
     forms where they apply (L039; the fourth and fifth normal form claim is grounded
     in SRC-254; the Boyce-Codd claim is inferred from standard theory).
 
-    Changed after review (M4): the higher forms do not cost nothing. Where candidate
-    keys overlap, a Boyce-Codd decomposition is not always dependency-preserving:
-    a dependency one table''s key enforced in third normal form can come to span two
-    tables and can no longer be enforced by a key (inferred from standard theory,
-    not in the ledger). The cost is an integrity cost, a rule moving from a declarative
-    key to a procedural cross-table check; enforcing it by constraint trigger keeps
-    both "each fact once" and "every rule enforced", which is the max under the selection
-    rule.
+    (superseded by MD-09) Changed after review (M4): the higher forms do not cost
+    nothing. Where candidate keys overlap, a Boyce-Codd decomposition is not always
+    dependency-preserving: a dependency one table''s key enforced in third normal
+    form can come to span two tables and can no longer be enforced by a key (inferred
+    from standard theory, not in the ledger). The cost is an integrity cost, a rule
+    moving from a declarative key to a procedural cross-table check; enforcing it
+    by constraint trigger keeps both "each fact once" and "every rule enforced", which
+    is the max under the selection rule.
 
     Denormalization: a derived copy of a fact stored elsewhere, governed by DATA.DERIVE
     and ALLOCATION.DERIVE.1, with L469''s sync plan.
@@ -816,7 +823,17 @@ nodes:
     placement gives the database). Refines python-kb-philosophy:STRUCTURE and :DATACENTRICITY
     (skeleton links).
 
-    Gap 5: the Boyce-Codd claims rest on standard theory, not on a ledger row.'
+    Gap 5: the Boyce-Codd claims rest on standard theory, not on a ledger row.
+
+
+    Corrected by MD-09 (re-audit under MD-08): a lost Boyce-Codd dependency is enforced
+    declaratively (composite foreign key from the repeated determinant to the table
+    that owns the pair), at any isolation level and for every writer; the constraint
+    trigger is the fallback only where no declarative form exists. Rejected: the trigger
+    as the first route: wins where no declarative form exists; it needs Serializable
+    isolation or a lock on every write to either table, a concurrent test and procedural
+    code, and gains no integrity over the declarative form. Inferred from relational
+    theory, not in the ledger.'
   impl_pointers:
   - build/distill/03_judge/J2_phil_data/records.md::DATA.ORGANIZE
   - build/research/14_thin_spots/result.md::THIN-C32
@@ -838,6 +855,10 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
 - uid: DATA.GUARD
   name: Guarded Consistency
   intent: 'The database keeps data valid and consistent under concurrent and partial
@@ -856,10 +877,11 @@ nodes:
     types used in several places. Constraints are named, so a violation maps to a
     stable error. Required, not optional.'
   - Rules no constraint can express (other multi-row rules, legal transitions, dependencies
-    lost by a Boyce-Codd decomposition) are checked in the writer function or a constraint
-    trigger, under Serializable isolation with retry or after locking the governing
-    row; the function or trigger asserts the isolation it needs, set per consumer
-    role. The default isolation level is the stack's choice.
+    lost by a Boyce-Codd decomposition when no declarative form exists) are checked
+    in the writer function or a constraint trigger, under Serializable isolation with
+    retry or after locking the governing row; the function or trigger asserts the
+    isolation it needs, set per consumer role. The default isolation level is the
+    stack's choice.
   - Each business operation is one function call in its own transaction (ALLOCATION.RULES.5).
   - Concurrent change is detected inside the writer function, which takes the expected
     version as a parameter; no transaction or lock is held across user think time.
@@ -989,6 +1011,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: read visibility decided, open clauses
       closed'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
 - uid: DATA.MAINTAIN
   name: Maintained Over Time
   intent: 'Schema and data evolve without breaking running code: structure changes
@@ -1223,11 +1249,12 @@ nodes:
   name: Secured Entry
   intent: 'The backend is the one gate every caller passes, human or agent, and decides
     nothing on the caller''s word: it authenticates every caller, authorizes every
-    request deny by default, parses all input into precise types at entry, and bounds
-    consumption at two depths. This holds because every client can be hostile or wrong,
+    request deny by default, parses all input into precise types at entry, bounds
+    consumption at two depths, and requires a second factor where the account or the
+    operation warrants it. This holds because every client can be hostile or wrong,
     and an agent as a principal makes loops and retries likelier.'
-  epistemic_state: 'known: MD-05 | unvalidated: MFA required by default (max applied
-    to L033)'
+  epistemic_state: 'known: MD-05 | unvalidated: MFA scope by account privilege and
+    by the project''s risk level (inferred from L033 and TRANSVERSE.SECURITY)'
   constraints:
   - 'Authenticate every caller, then authorize every request. Humans by the server-held
     session of GUARD.4; agents by their own short-lived, revocable tokens, accepted
@@ -1255,9 +1282,11 @@ nodes:
     each specifically; no blanket bot blocking, because agents are intended users
     in this context.'
   - 'Defend logins in layers: MFA first, then breached-password checks, then device
-    signals and challenges known to be spoofable; never IP blocking alone. Max applied:
-    MFA is required by default on human accounts (inferred: the source orders MFA
-    first; requiring it is the most demanding form).'
+    signals and challenges known to be spoofable; never IP blocking alone. Offer MFA
+    on every human account, phishing-resistant authenticators (passkeys, WebAuthn)
+    preferred. Require it on privileged accounts (operator, owner, administrator)
+    and before sensitive operations (step-up). Whether it is required on every account
+    follows the security level the project chooses by risk (TRANSVERSE.SECURITY).'
   - 'Per-user read visibility (MD-05): simple reads that carry no logic are written
     by the backend directly; sensitive, complex, high-impact or shared reads, per-user
     visibility rules included, go through database functions that receive the verified
@@ -1315,9 +1344,9 @@ nodes:
     - Blanket bot blocking: acceptable when no automated client is an intended user
     of the interface concerned (inverse of L652''s condition; inferred).
 
-    - MFA optional for human accounts: acceptable when the application''s audience
-    cannot practically be required to use a second factor; the other layers of L033
-    then carry the defence (condition inferred, not in the ledger row).
+    - (superseded by MD-09) MFA optional for human accounts: acceptable when the application''s
+    audience cannot practically be required to use a second factor; the other layers
+    of L033 then carry the defence (condition inferred, not in the ledger row).
 
     - Limits only at the edge, or only in the application: each misses what the other
     sees (identity-blind volume against per-identity and per-operation cost; L031,
@@ -1334,13 +1363,23 @@ nodes:
     Q1 of the allocation judge, is not re-asked here; the former recorded default
     (superseded) and J1''s fallback are in the constraints and the state.
 
-    Evidence gap: MFA required by default applies the max rule to L033 (inferred);
-    the condition for ''optional'' is inferred, not in the ledger row.
+    (superseded by MD-09) Evidence gap: MFA required by default applies the max rule
+    to L033 (inferred); the condition for ''optional'' is inferred, not in the ledger
+    row.
 
 
     Lifted from the stack-neutral clause of PIG-WEB-LOGIC.SECURE.7 in pig-web-defaults,
     wording kept; the verdict is that record''s, not re-judged here. Clause: server-side
-    fetches cannot reach internal addresses.'
+    fetches cannot reach internal addresses.
+
+
+    Corrected by MD-09 (re-audit under MD-08): MFA is offered on every human account
+    and required on privileged accounts and at step-up; universal MFA follows the
+    project''s risk level. Rejected: MFA required on every human account: acceptable
+    when the project''s chosen risk level requires it (a high security level) or when
+    the exposure of one account is severe. MFA optional on privileged accounts: never.
+    The earlier ground (the most demanding form of L033''s ordering) is replaced by
+    MD-08: the best practice for the purpose, not the strictest.'
   impl_pointers:
   - build/distill/03_judge/J3_phil_logic/records.md::LOGIC.SECURE
   - build/research/05_identity_security/result.md::SEC-C01
@@ -1383,6 +1422,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: read visibility decided, open clauses
       closed'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
 - uid: LOGIC.ENFORCE
   name: Business Core
   intent: 'One business core per backend, separable from transport and storage, holds
@@ -2222,8 +2265,8 @@ nodes:
   intent: The whole site is served over encrypted transport and exposes and logs only
     the minimum data its purpose needs. Every threat category has an owning tier that
     the requester cannot modify, insecure design is answered by a threat model per
-    placement and critical flow with misuse-case tests, and each property is stated
-    as a verifiable requirement at a level chosen by risk.
+    critical flow and trust boundary with misuse-case tests, and each property is
+    stated as a verifiable requirement at a level chosen by risk.
   epistemic_state: 'known: MD-05 | unvalidated: the whole tier map, L303''s 7 categories
     and the 3 added here (A06, A08, A10), A04 completed'
   constraints:
@@ -2235,9 +2278,9 @@ nodes:
     included.
   - Give every threat category an owning tier that the requester cannot modify, named
     through the allocation placements.
-  - Answer insecure design with a threat model per placement and per critical flow
-    (authentication, access control, business operations, agent access) and misuse-case
-    tests per tier.
+  - Answer insecure design with a threat model per critical flow and trust boundary
+    (authentication, access control, business operations, agent access), revisited
+    when a placement on that flow changes, and misuse-case tests per tier.
   - Assign software and data integrity failures to the delivery pipeline and the parsing
     tier for untrusted serialized input; declarative constraints are not that control.
   - State each property as a verifiable requirement with a traceable id, at a level
@@ -2288,41 +2331,45 @@ nodes:
     \ (GUARD.1).\n    - A02 Security Misconfiguration: headers, CSP and deployment;\
     \ A03 Supply Chain: the pipeline and dependencies (L303; realized in PIG-WEB-TRANSVERSE.SECURITY\
     \ and OPERABILITY.3).\n    - A09 Logging and Alerting Failures: operations (L303),\
-    \ realized in OPERABILITY.1.\n    - Assigned here, inferred:\n      - A06 Insecure\
-    \ Design: a threat model per placement and per critical flow (authentication,\
-    \ access control, business operations, agent access), with misuse-case tests per\
-    \ tier; OPERABILITY.2's denial tests are their first instance. The allocation\
-    \ records (EVOLUTION.1) are the model's input, not the model. Grounded in the\
-    \ OWASP Top 10:2025 A06 preventions (threat modelling for authentication, access\
-    \ control, business logic and key flows; use-case and misuse-case tests per tier),\
-    \ read by the review.\n      - A08 Software or Data Integrity Failures: the delivery\
-    \ pipeline (signed provenance, trusted sources, review of code and configuration\
-    \ changes, segregated CI/CD; one immutable artifact, L101; realized in PIG-WEB-TRANSVERSE.SECURITY.5)\
-    \ and the parsing tier for untrusted serialized input (GUARD.1). The OWASP 2025\
-    \ category is untrusted code or data treated as trusted; the database's declarative\
-    \ constraints are not an A08 control and are not assigned here.\n      - A10 Mishandling\
-    \ of Exceptional Conditions: the tier that holds each check, which fails closed\
-    \ (inferred from RULES.3).\n  - Verifiability (max): each property is stated as\
-    \ a verifiable requirement at a level chosen by risk, with requirement ids traceable;\
-    \ the catalogue is a stack choice (P4, PIG-WEB-TRANSVERSE.SECURITY.1). Its level\
-    \ definitions are grounded: ASVS 5.0 says most applications should strive for\
-    \ Level 2, and each organisation decides its level from its risks. The Top 10\
-    \ stays the awareness map, not the requirement set.\n\nREJECTED:\n  - HTTPS only\
-    \ on login or sensitive pages: never (L029).\n  - Logging raw identifiers or secrets\
-    \ for debugging: never; a hashed session id is acceptable when sessions must be\
-    \ tracked (L036).\n  - The Top 10 as the requirement set or a compliance checklist:\
-    \ it is an awareness document (L303); wins never as the only catalogue.\n  - Security\
-    \ as a per-tier add-on without an owning tier per threat: against RULES.3 and\
-    \ L096.\n  - The recorded allocation decisions as the answer to insecure design:\
-    \ they are the threat model's input; OWASP's A06 asks for threat modelling and\
-    \ misuse-case tests. Wins never as the whole answer.\n\nPLACEMENTS REALIZED:\n\
-    refines RULES.3 (skeleton link). Rests on GUARD.1, GUARD.3, GUARD.4, GUARD.2,\
-    \ ACT.4 and the J1 access paths.\n\nREVIEW FIXES:\nM4 (A08 reassigned to the pipeline\
-    \ and the parsing tier, declarative constraints dropped; A06 as a threat model\
-    \ with misuse-case tests; A04 completed; whole map unvalidated); m1 (ASVS level\
-    \ definitions grounded, L304's level part no longer open); m7 and X1 (one notation\
-    \ for the pending clause, former recorded default (superseded), fallback and consequence\
-    \ stated)."
+    \ realized in OPERABILITY.1.\n    - Assigned here, inferred:\n      - (superseded\
+    \ by MD-09) A06 Insecure Design: a threat model per placement and per critical\
+    \ flow (authentication, access control, business operations, agent access), with\
+    \ misuse-case tests per tier; OPERABILITY.2's denial tests are their first instance.\
+    \ The allocation records (EVOLUTION.1) are the model's input, not the model. Grounded\
+    \ in the OWASP Top 10:2025 A06 preventions (threat modelling for authentication,\
+    \ access control, business logic and key flows; use-case and misuse-case tests\
+    \ per tier), read by the review.\n      - A08 Software or Data Integrity Failures:\
+    \ the delivery pipeline (signed provenance, trusted sources, review of code and\
+    \ configuration changes, segregated CI/CD; one immutable artifact, L101; realized\
+    \ in PIG-WEB-TRANSVERSE.SECURITY.5) and the parsing tier for untrusted serialized\
+    \ input (GUARD.1). The OWASP 2025 category is untrusted code or data treated as\
+    \ trusted; the database's declarative constraints are not an A08 control and are\
+    \ not assigned here.\n      - A10 Mishandling of Exceptional Conditions: the tier\
+    \ that holds each check, which fails closed (inferred from RULES.3).\n  - Verifiability\
+    \ (max): each property is stated as a verifiable requirement at a level chosen\
+    \ by risk, with requirement ids traceable; the catalogue is a stack choice (P4,\
+    \ PIG-WEB-TRANSVERSE.SECURITY.1). Its level definitions are grounded: ASVS 5.0\
+    \ says most applications should strive for Level 2, and each organisation decides\
+    \ its level from its risks. The Top 10 stays the awareness map, not the requirement\
+    \ set.\n\nREJECTED:\n  - HTTPS only on login or sensitive pages: never (L029).\n\
+    \  - Logging raw identifiers or secrets for debugging: never; a hashed session\
+    \ id is acceptable when sessions must be tracked (L036).\n  - The Top 10 as the\
+    \ requirement set or a compliance checklist: it is an awareness document (L303);\
+    \ wins never as the only catalogue.\n  - Security as a per-tier add-on without\
+    \ an owning tier per threat: against RULES.3 and L096.\n  - The recorded allocation\
+    \ decisions as the answer to insecure design: they are the threat model's input;\
+    \ OWASP's A06 asks for threat modelling and misuse-case tests. Wins never as the\
+    \ whole answer.\n\nPLACEMENTS REALIZED:\nrefines RULES.3 (skeleton link). Rests\
+    \ on GUARD.1, GUARD.3, GUARD.4, GUARD.2, ACT.4 and the J1 access paths.\n\nREVIEW\
+    \ FIXES:\nM4 (A08 reassigned to the pipeline and the parsing tier, declarative\
+    \ constraints dropped; A06 as a threat model with misuse-case tests; A04 completed;\
+    \ whole map unvalidated); m1 (ASVS level definitions grounded, L304's level part\
+    \ no longer open); m7 and X1 (one notation for the pending clause, former recorded\
+    \ default (superseded), fallback and consequence stated).\n\nCorrected by MD-09\
+    \ (re-audit under MD-08): threat models are per critical flow and trust boundary,\
+    \ revisited when a placement on the flow changes; a model per placement repeats\
+    \ the flow models and the allocation records, which are the model's input, and\
+    \ adds effort without coverage."
   impl_pointers:
   - build/distill/03_judge/J5_phil_transverse/records.md::TRANSVERSE.SECURITY
   - build/research/05_identity_security/result.md::SEC-C01
@@ -2365,6 +2412,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: wording cleanup after closing the open
       questions'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
 - uid: TRANSVERSE.PERFORMANCE
   name: Measured Performance
   intent: Performance is judged on field measurement of real users at the 75th percentile,
@@ -4030,7 +4081,7 @@ nodes:
     effects (an outbox row or staged job) in the same transaction, and a backend worker
     delivers it after commit to idempotent consumers. External calls are made by backends,
     never by the database, and no transaction stays open across a remote call.
-  epistemic_state: 'known | unvalidated: the 1 s in-request exception is inferred
+  epistemic_state: 'known | unvalidated: the few-seconds in-request exception is inferred
     (L013, L589)'
   constraints:
   - 'Authority: backend (delivery, external calls), database (the staged intent, written
@@ -4044,10 +4095,11 @@ nodes:
   - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery
     points and an idempotency key, in a worker behind a 202 response with a status
     resource.
-  - 'In the request only when the user must see the outcome within about 1 s: the
-    database function records the intent first and commits; the request performs the
-    call as one atomic phase and marks the row done; a worker completer picks up the
-    row if the request dies.'
+  - 'In the request only when the user waits for the outcome in the same response
+    and the call is expected to finish within a few seconds, under the request timeout:
+    the database function records the intent first and commits; the request performs
+    the call as one atomic phase and marks the row done; a worker completer picks
+    up the row if the request dies.'
   - Post-commit hooks only for losable work that touches no foreign system.
   design_notes: "Positions: P1 backend effects staged in the database and delivered\
     \ after commit (L624, L409, L410); P2 post-commit hooks in the request process\
@@ -4061,22 +4113,28 @@ nodes:
     \ (a payment, a remote API write) run as atomic phases with recovery points and\
     \ an idempotency key passed to the foreign system (P3 as a complement: L589, L234,\
     \ L246), in a worker behind a 202 response with a status resource (ACT.3, L271,\
-    \ L602).\n  - In the request only when the user must see the outcome within about\
-    \ 1 s (L013): the database function still records the intent (outbox row) first\
-    \ and commits; the request then performs the call as one atomic phase with the\
-    \ idempotency key and marks the row done. If the request dies, the worker's completer\
-    \ picks the row up (L589). (Revision 3: adopted from the logic unit's realization,\
-    \ M4.)\n\nRejected: P2 (post-commit hook): acceptable only for losable work that\
-    \ touches no foreign system, such as cache invalidation (L600); a losable notice\
-    \ to a foreign system still goes through the outbox, which costs one row. P4:\
-    \ only when one business transaction spans services with separate databases (L590,\
+    \ L602).\n  - (superseded by MD-09) In the request only when the user must see\
+    \ the outcome within a few seconds, under the request timeout (MD-09) (L013):\
+    \ the database function still records the intent (outbox row) first and commits;\
+    \ the request then performs the call as one atomic phase with the idempotency\
+    \ key and marks the row done. If the request dies, the worker's completer picks\
+    \ the row up (L589). (Revision 3: adopted from the logic unit's realization, M4.)\n\
+    \nRejected: P2 (post-commit hook): acceptable only for losable work that touches\
+    \ no foreign system, such as cache invalidation (L600); a losable notice to a\
+    \ foreign system still goes through the outbox, which costs one row. P4: only\
+    \ when one business transaction spans services with separate databases (L590,\
     \ L480).\n\nChanged (R1): intent written by the database function (MD-03).\n\n\
-    Changed (R3): tension with ACT.3 resolved: foreign mutations in a worker behind\
-    \ 202; in the request only for an outcome needed within about 1 s, intent recorded\
-    \ first; post-commit hooks only for losable work touching no foreign system (logic\
-    \ review M4).\n\nWould move it: an outcome the user must see within about 1 s\
-    \ (in-request phase, intent recorded first); a business transaction crossing services\
-    \ with their own databases (saga)"
+    (superseded by MD-09) Changed (R3): tension with ACT.3 resolved: foreign mutations\
+    \ in a worker behind 202; in the request only for an outcome needed within a few\
+    \ seconds, under the request timeout (MD-09), intent recorded first; post-commit\
+    \ hooks only for losable work touching no foreign system (logic review M4).\n\n\
+    (superseded by MD-09) Would move it: an outcome the user must see within a few\
+    \ seconds, under the request timeout (MD-09) (in-request phase, intent recorded\
+    \ first); a business transaction crossing services with their own databases (saga)\n\
+    \nCorrected by MD-09 (re-audit under MD-08): the in-request exception applies\
+    \ when the user waits for the outcome in the same response and the call is expected\
+    \ to finish within a few seconds, under the request timeout; intent recorded first,\
+    \ unchanged. Foreign mutations still default to a worker."
   impl_pointers:
   - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.2
   - build/research/01_data_tier/result.md::DATA-C53
@@ -4108,16 +4166,23 @@ nodes:
     note: 'critic fix M5: constraints and intents hold only the rule; ledger, judge-unit
       and review ids and build narrative removed (moved to design_notes where it carried
       a fact)'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: ALLOCATION.ACT.3
   name: Deferred and Scheduled Work
   intent: Inside the request go validation, authorization, every change atomic with
     what the user sees next, and the persisted intent of deferred work, in one transaction;
-    core writes are never asynchronous. Foreign effects, work that would push the
-    response past the 1 s flow budget, fan-out and derived data are deferred to workers
-    fed from the database-staged queue, or to scheduled work inside the database for
-    pure data work.
-  epistemic_state: 'known | unvalidated: the 1 s threshold is a choice between L601''s
-    two rules of thumb'
+    core writes are never asynchronous. Foreign effects, work expected to last more
+    than a few seconds or past the request timeout, fan-out and derived data are deferred
+    to workers fed from the database-staged queue, or to scheduled work inside the
+    database for pure data work.
+  epistemic_state: 'known | unvalidated: the few-seconds threshold follows L601; a
+    lower cut-off needs measured worker capacity'
   constraints:
   - 'Authority: backend (what is deferred) and database (staged intent, data schedules)'
   - 'Copies: the status resource shows the pending state'
@@ -4125,6 +4190,10 @@ nodes:
     ACT.2''s in-request phase'
   - 'Foreign mutations are deferred as ACT.2 places them: in a worker behind 202,
     except ACT.2''s in-request phase.'
+  - 'Deferred: foreign effects, fan-out, derived data, and work expected to last more
+    than a few seconds or past the request timeout; about 1 s stays the design target
+    for interactive responses (FORCES.4), not the cut-off for deferral; a lower cut-off
+    follows measured worker capacity.'
   - An operation that outlasts the request answers 202 with a status resource.
   - Every asynchronous stream states its staleness window and a convergence check.
   - In-process background tasks only for small tasks that may be lost.
@@ -4135,19 +4204,25 @@ nodes:
     \  - Inside the request: validation, authorization, every change atomic with what\
     \ the user sees next, and the persisted intent of deferred work, in one transaction,\
     \ which is one function call when the change is a database operation (L601, MD-03).\
-    \ Core writes are never asynchronous (L482, MAINT, max).\n  - Deferred: foreign\
-    \ effects, work that would push the response past the 1 s flow budget (L013, L271),\
-    \ fan-out, derived data. Foreign mutations run as atomic phases in a worker behind\
-    \ 202; the one in-request exception is ACT.2's: an outcome the user must see within\
-    \ about 1 s, with the intent recorded by the database function first.\n  - Host:\
-    \ workers fed from the database-staged queue (L406, L407, L409); scheduled pure\
-    \ data work inside the database (L604; JOB_HOST).\n  - An operation that outlasts\
-    \ the request answers 202 with a status resource (L271, L602). Every asynchronous\
-    \ stream states its staleness window and a convergence check (L482).\n\nRejected:\
-    \ in-process background tasks: only for small tasks that may be lost (L407). P3\
-    \ for everything: not for Python logic, foreign effects, highly parallel or OS-level\
-    \ work (L604).\n\nChanged (R3): in-request exception aligned with ACT.2 (logic\
-    \ review M4).\n\nWould move it: duration, foreign effects, set-based data work"
+    \ Core writes are never asynchronous (L482, MAINT, max).\n  - (superseded by MD-09)\
+    \ Deferred: foreign effects, work that would push the response past a few seconds\
+    \ or the request timeout (MD-09) (L013, L271), fan-out, derived data. Foreign\
+    \ mutations run as atomic phases in a worker behind 202; the one in-request exception\
+    \ is ACT.2's: an outcome the user must see within a few seconds, under the request\
+    \ timeout (MD-09), with the intent recorded by the database function first.\n\
+    \  - Host: workers fed from the database-staged queue (L406, L407, L409); scheduled\
+    \ pure data work inside the database (L604; JOB_HOST).\n  - An operation that\
+    \ outlasts the request answers 202 with a status resource (L271, L602). Every\
+    \ asynchronous stream states its staleness window and a convergence check (L482).\n\
+    \nRejected: in-process background tasks: only for small tasks that may be lost\
+    \ (L407). P3 for everything: not for Python logic, foreign effects, highly parallel\
+    \ or OS-level work (L604).\n\nChanged (R3): in-request exception aligned with\
+    \ ACT.2 (logic review M4).\n\nWould move it: duration, foreign effects, set-based\
+    \ data work\n\nCorrected by MD-09 (re-audit under MD-08): deferral threshold is\
+    \ work expected to exceed a few seconds or the request timeout (L601's wording);\
+    \ 1 s stays the interactive-response target, not the cut-off. Rejected: a 1 s\
+    \ cut-off: wins where measured synchronous-worker capacity on slow I/O is the\
+    \ binding force."
   impl_pointers:
   - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.ACT.3
   - build/research/01_data_tier/result.md::DATA-C53
@@ -4173,6 +4248,13 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: ALLOCATION.ACT.4
   name: Audit and History
   intent: Business history is written by the database in the same transaction as the
@@ -4316,8 +4398,10 @@ nodes:
   name: Filtering, Sorting, Paging and Search
   intent: The database reduces many rows to the few a client needs, set-based, in
     one statement or read function, so only the result travels; it also owns the collation
-    of every order it serves. The server enforces a maximum page size and pages by
-    keyset behind an opaque continuation.
+    of every order it serves. The server enforces a maximum page size; structured-data
+    and agent collections and any list over a large or growing set page by keyset
+    behind an opaque continuation, while a human-facing HTML list over a bounded result
+    may page by offset with page numbers.
   epistemic_state: 'known | gap: P3 unargued; browser-copy condition inferred | unvalidated:
     collation choice open (DATA)'
   constraints:
@@ -4326,7 +4410,10 @@ nodes:
   - 'Forbidden: loading full sets into a backend or browser to reduce them; queries
     in loops; a browser re-sort with another collation'
   - Filter, sort, aggregate and page in the database.
-  - Enforce a maximum page size; page by keyset behind an opaque continuation.
+  - Enforce a maximum page size. Structured-data and agent collections, and any list
+    over a large or growing set, page by keyset behind an opaque continuation. A human-facing
+    HTML list over a bounded result may page by offset with page numbers; offset never
+    for deep pages or bulk work.
   - The database owns the collation of every order it serves; a browser re-sort over
     rows already loaded uses the same collation or none.
   - Reads that need no domain behaviour may be plain queries.
@@ -4339,13 +4426,13 @@ nodes:
     return small results).
 
 
-    Decision: the database reduces many rows to the few a client needs, set-based,
-    in one statement or read function; only the result travels (L613, L614). The server
-    enforces a maximum page size and pages by keyset behind an opaque continuation
-    (L265, L266, L541). Reads that need no domain behaviour may be plain queries (P2,
-    L237; L516). Search follows the same placement and stays deferred. Collation (F11):
-    the database owns the collation of every order it serves, declared per column
-    or per query; which collation is open, under DATA.
+    (superseded by MD-09) Decision: the database reduces many rows to the few a client
+    needs, set-based, in one statement or read function; only the result travels (L613,
+    L614). The server enforces a maximum page size and pages by keyset behind an opaque
+    continuation (L265, L266, L541). Reads that need no domain behaviour may be plain
+    queries (P2, L237; L516). Search follows the same placement and stays deferred.
+    Collation (F11): the database owns the collation of every order it serves, declared
+    per column or per query; which collation is open, under DATA.
 
 
     Gap handling (P3): no row argues for it; rejected as an authority on L613, L614,
@@ -4357,7 +4444,14 @@ nodes:
     Changed (R1): collation owned here (F11).
 
 
-    Would move it: data volume against result size; write load'
+    Would move it: data volume against result size; write load
+
+
+    Corrected by MD-09 (re-audit under MD-08): keyset is required where it is grounded
+    (structured-data and agent collections, large or growing sets, bulk work); offset
+    with page numbers is acceptable for a human HTML list over a bounded result. Rejected:
+    keyset on every surface: wins for any list over a large or growing set. Inferred;
+    no ledger row argues either method for HTML lists.'
   impl_pointers:
   - build/distill/03_judge/J1_allocation/records.md::ALLOCATION.DERIVE.2
   - build/research/02_app_tier/result.md::APP-C42
@@ -4376,6 +4470,10 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
+      enforcement, deferral threshold, paging by surface, threat model per flow'
 - uid: ALLOCATION.DERIVE.3
   name: Caching
   intent: Every cache is a copy with a stated staleness bound and an expiry or invalidation

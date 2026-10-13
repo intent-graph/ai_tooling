@@ -110,3 +110,45 @@ cross-site navigations on sensitive pages, Strict for operator consoles. Closes 
 The six overrides of the codified practice, the Obsidian `.gitignore` and the commit were not
 answered: the overrides stay as judged (recorded in the graphs), the export stays untracked,
 and nothing is committed.
+
+## MD-08 "Max" means the best practice, not the most demanding one
+
+Status: decided by the maintainer on 2026-10-13, in the software-development guideline session
+(recorded there as its MD-01), and applied here.
+
+Maintainer's words: "it's not the most demanding thing, it's the best thing. The core idea is to
+not default to average." The rule rests on the aggregation of sources as collective
+intelligence: take the position the strongest arguments establish for the node's purpose, not
+the most common one and not a blend.
+
+The judges of this guideline worked under the earlier wording ("the most demanding practice
+that best serves the purpose"). Their records keep that wording as history; the live documents
+(`target_hierarchy.md`, `../RECIPE.md`, the guideline README) now state MD-08.
+
+## MD-09 Re-audit under MD-08: seven verdicts corrected
+
+Status: decided by the maintainer on 2026-10-13 ("ok apply all"), after the re-audit in
+`08_reaudit/`.
+
+The seven verdicts where strictness, not fitness for purpose, decided the outcome are replaced
+by the re-audit's proposals (full evidence and propagation in `08_reaudit/*/result.md`):
+
+1. MFA offered to every human account (phishing-resistant preferred), required for privileged
+   accounts and at step-up before sensitive operations; universal requirement by risk level
+   (LOGIC.SECURE and its stack realization).
+2. Client-named fetches: the safe fetch helper is required; a network guard is preferred, and
+   required only when the server's network holds internal services or a token-less metadata
+   endpoint (PIG-WEB-LOGIC.SECURE.7).
+3. Consequential agent scopes: sender-constrained tokens wherever the client can hold a key;
+   otherwise short-lived, revocable bearer tokens with every consequential action behind the
+   owner's exact-action approval (PIG-WEB-INTERACTION.AGENT.3, aligned with PIG-WEB-LOGIC.SECURE.4).
+4. Normalization: keep the dependency-preserving third-normal-form design and enforce the
+   dependency declaratively (composite foreign key); a trigger only where no declarative form
+   exists (DATA.ORGANIZE).
+5. Deferral: defer work expected to exceed a few seconds or the request timeout; 1 s stays the
+   interactive-response target, not the deferral cut-off (ALLOCATION.ACT.3, ACT.2).
+6. Paging: keyset for structured-data and agent interfaces and for large or growing sets;
+   offset with page numbers acceptable for a human HTML list over a bounded result
+   (ALLOCATION.DERIVE.2 and its stack realization).
+7. Threat modelling per critical flow and trust boundary, revisited when a placement on the flow
+   changes, with misuse-case tests per tier (TRANSVERSE.SECURITY).

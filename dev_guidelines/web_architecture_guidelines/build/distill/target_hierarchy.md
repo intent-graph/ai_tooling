@@ -52,8 +52,8 @@ Both graphs share this L1 cut: `web-app-philosophy` holds the why (stack-neutral
 
 ## Selection rule: max, not average
 
-For every node, the guideline states **the most demanding practice that best serves the
-purpose of the node's role**: integrity for DATA, enforcement and security for LOGIC, the
+For every node, the guideline states **the best practice for the purpose of the node's role**
+(MD-08: "best" is not "most demanding"; the point is never to default to the average): integrity for DATA, enforcement and security for LOGIC, the
 user's ability to work with the data for INTERACTION, the stated force for ALLOCATION
 placements. Agreement among sources is evidence for the judgment, never the verdict.
 Weaker practices stay only as "acceptable when <condition>". `undecided` is reserved for

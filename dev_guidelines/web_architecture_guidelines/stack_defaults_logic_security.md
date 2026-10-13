@@ -6,12 +6,12 @@ How the Django backend secures entry for every caller, human or agent: one centr
 
 1. [Backend Security Overview](#backend-security-overview) _(Lines 20-30)_
 1. [Access Control Enforcement](#access-control-enforcement) _(Lines 33-55)_
-1. [Sessions](#sessions) _(Lines 58-71)_
-1. [CSRF Defense](#csrf-defense) _(Lines 74-84)_
-1. [Federated Login and Tokens](#federated-login-and-tokens) _(Lines 87-100)_
-1. [Passwords and Login Throttling](#passwords-and-login-throttling) _(Lines 103-112)_
-1. [Abuse and Rate Limits](#abuse-and-rate-limits) _(Lines 115-127)_
-1. [Server-Side Fetch](#server-side-fetch) _(Lines 130-137)_
+1. [Sessions](#sessions) _(Lines 58-70)_
+1. [CSRF Defense](#csrf-defense) _(Lines 73-83)_
+1. [Federated Login and Tokens](#federated-login-and-tokens) _(Lines 86-99)_
+1. [Passwords and Login Throttling](#passwords-and-login-throttling) _(Lines 102-111)_
+1. [Abuse and Rate Limits](#abuse-and-rate-limits) _(Lines 114-126)_
+1. [Server-Side Fetch](#server-side-fetch) _(Lines 129-136)_
 
 ---
 
@@ -20,7 +20,7 @@ How the Django backend secures entry for every caller, human or agent: one centr
 
 The Python backend is the one gate every caller passes and decides nothing on the caller's word. Refines [Secured Entry](philosophy.md#secured-entry) and the guarding [placements](glossary.md#placement) of [Authorization](allocation.md#authorization) and [Identity and Session State](allocation.md#identity-and-session-state).
 - Access checks are central, deny by default and object level; the backend's checks are kept in full because [row-level security](glossary.md#row-level-security) is off by default.
-- Humans hold an opaque, revocable, server-side session in Postgres after a delegated [OpenID Connect](glossary.md#oidc) login with [MFA](glossary.md#mfa); its cookie is `SameSite=Lax` plus a cross-site navigation check, `Strict` for operator consoles. Agents hold short-lived, audience-bound, revocable tokens.
+- Humans hold an opaque, revocable, server-side session in Postgres after a delegated [OpenID Connect](glossary.md#oidc) login, with [MFA](glossary.md#mfa) offered on every account and required by privilege and risk level; its cookie is `SameSite=Lax` plus a cross-site navigation check, `Strict` for operator consoles. Agents hold short-lived, audience-bound, revocable tokens.
 - No session token, bearer token or long-lived credential travels in a URL. The signed upload policy and the signed download URL are both cases of the single signed-file-URL exception of [URL as Public Interface](philosophy.md#url-as-public-interface).
 - Limits apply at two depths: identity-blind at the proxy, identity-aware per identity and operation in the backend.
 - Server-side fetches of client- or agent-named URLs cannot reach private, loopback or link-local addresses.
@@ -54,7 +54,7 @@ Changes when: plain role-based control suffices when no rule depends on object a
 `PIG-WEB-LOGIC.SECURE.1`
 
 ## Sessions
-<!-- Lines 58-71 -->
+<!-- Lines 58-70 -->
 
 An opaque random identifier, with the session data server-side in Postgres through Django's database session backend. Refines [Identity and Session State](allocation.md#identity-and-session-state).
 - Framework session management, no custom mechanism; expired sessions purged by a scheduled job. The session table is written under the direct-write exception of [Database Function API](allocation.md#database-function-api) (inferred).
@@ -65,12 +65,11 @@ An opaque random identifier, with the session data server-side in Postgres throu
 - Logout deletes the server record; deleting a user's rows revokes every session. Responses that set or contain an identifier are `no-store`.
 - Forbidden: signed-cookie or stateless JWT sessions in the browser; sessions in process memory; a session identifier in a URL.
 
-
 Acceptable when no backend can hold sessions: stateless sessions.
 `PIG-WEB-LOGIC.SECURE.2`
 
 ## CSRF Defense
-<!-- Lines 74-84 -->
+<!-- Lines 73-83 -->
 
 Every layer on every request the session cookie authenticates. Realizes the CSRF rule of [Hostile Page Script](philosophy.md#hostile-page-script).
 - Django's CSRF middleware, a synchronizer token in every form and in a header for [island](glossary.md#island) scripts; no view that accepts the session cookie is exempt.
@@ -83,12 +82,12 @@ Acceptable when the application holds no server session: signed double-submit.
 `PIG-WEB-LOGIC.SECURE.3`
 
 ## Federated Login and Tokens
-<!-- Lines 87-100 -->
+<!-- Lines 86-99 -->
 
 Login delegated to an OpenID Connect server (an external provider or a self-run one); the backend is the confidential [backend-for-frontend](glossary.md#bff) client.
 - Delegation is recorded as a decision; an own credential store only when no OpenID Connect server can be used or run (the ranking is inferred).
 - Code flow with [PKCE](glossary.md#pkce), exact redirect-URI match, no open redirector, ID token validated (issuer, audience, expiry, nonce); provider tokens never reach the browser.
-- Request the required authentication context (`acr_values`, or a provider MFA policy yielding a known `amr`) and refuse a login lacking it; sensitive operations need a fresh context (`max_age`, `auth_time`).
+- Request the authentication context required for privileged accounts (`acr_values`, or a provider MFA policy yielding a known `amr`) and refuse a login of such an account that lacks it; sensitive operations need a fresh, sufficient context (`max_age`, `auth_time`) for every account.
 - Local identity keyed by issuer plus subject, never e-mail; reauthenticate before any link change.
 - Agent tokens: audience-bound to this server, short-lived, revocable; PKCE code flow when acting for a human, client credentials otherwise; refresh tokens rotated or sender-constrained; access tokens sender-constrained ([DPoP](glossary.md#dpop), mutual TLS) wherever supported.
 - Every JWT verified with pinned algorithms, `none` rejected, issuer, subject, audience and explicit `typ` checked. Downstream calls use the backend's own token; an ID token is never an API credential.
@@ -99,19 +98,19 @@ Acceptable when no such server exists: an own credential store, and then [Passwo
 `PIG-WEB-LOGIC.SECURE.4`
 
 ## Passwords and Login Throttling
-<!-- Lines 103-112 -->
+<!-- Lines 102-111 -->
 
 Where the backend holds passwords; also the bar the OpenID Connect server must meet (inferred).
-- Length: maximum at least 64, all printable Unicode, no composition rules, no periodic rotation, compromised and common lists checked. Minimum 8 where MFA is enforced (default), 15 where a password alone authenticates; numeric-only validator removed.
+- Length: maximum at least 64, all printable Unicode, no composition rules, no periodic rotation, compromised and common lists checked. Minimum 8 where MFA is enforced, 15 for any account a password alone authenticates; numeric-only validator removed.
 - Argon2id first in the hasher list (at least 19 MiB, 2 iterations, parallelism 1); upgrade old hashes at login.
-- MFA required on human accounts; passkeys and WebAuthn offered. The OpenID Connect server emits `acr` or `amr` and `auth_time` so the backend verifies MFA rather than assumes it.
+- MFA offered on every human account, passkeys and WebAuthn preferred; required on privileged accounts (operator, owner, administrator) and at step-up before sensitive operations; required on every account when the project's chosen risk level says so. The OpenID Connect server emits `acr` or `amr` and `auth_time` so the backend verifies MFA for privileged accounts and step-up rather than assumes it.
 - Generic errors; failures counted per account and source; growing delays, never hard lockout; a recovery path; one-time-code endpoints count failures only. The limit is enforced in the proxy and in login logic, never by framework throttling alone.
 
-Acceptable when FIPS-140 applies: PBKDF2. When the audience cannot practically use a second factor: optional MFA, with a minimum length of 15.
+Acceptable when FIPS-140 applies: PBKDF2. When the project's chosen risk level requires it: MFA required on every account.
 `PIG-WEB-LOGIC.SECURE.5`
 
 ## Abuse and Rate Limits
-<!-- Lines 115-127 -->
+<!-- Lines 114-126 -->
 
 Two depths (the split is inferred). Refines the consumption limits of [Secured Entry](philosophy.md#secured-entry); proxy configuration in [Reverse Proxy Edge](stack_defaults_transverse.md#reverse-proxy-edge).
 - Proxy: identity-blind rate, connection, body-size and time limits, keyed on the address it appends itself (counted from the right of `X-Forwarded-For`).
@@ -126,12 +125,12 @@ Two depths (the split is inferred). Refines the consumption limits of [Secured E
 `PIG-WEB-LOGIC.SECURE.6`
 
 ## Server-Side Fetch
-<!-- Lines 130-137 -->
+<!-- Lines 129-136 -->
 
-One helper for every fetch of a client- or agent-named URL, so a client cannot make the server reach internal services or metadata endpoints.
+One helper for every fetch of a client- or agent-named URL is the required control, so a client cannot make the server reach internal services or metadata endpoints; a network guard backs it where the hosting allows.
 - It refuses private, loopback and link-local ranges, checking the address actually connected to rather than the hostname (inferred); it validates every redirect hop the same way.
-- It leaves through an egress proxy, required (inferred: the strongest reading of the source's "preferably"); timeout and size cap; in a worker when the response does not need the result.
+- Timeout and size cap; in a worker when the response does not need the result.
+- Network guard, preferred: where the hosting can enforce outbound rules, fetches leave through an egress proxy with direct egress blocked, or outbound rules deny the application's processes the private, loopback, link-local and metadata ranges. It is required when the server's network holds internal services or a metadata endpoint that answers without a token (inferred). Where the hosting cannot enforce outbound rules, the helper is the guard.
 - Forbidden: fetching without range checks.
 
-Acceptable when the deployment has no egress proxy: direct egress, the helper then being the only guard.
 `PIG-WEB-LOGIC.SECURE.7`

@@ -28,7 +28,7 @@ The terms this guideline uses before or without defining them: its own vocabular
 - <a id="idempotency-key"></a>**Idempotency key**: a client-supplied key recorded with the effect in the same transaction, so a repeated request replays the first response instead of repeating the effect.
 - <a id="island"></a>**Island**: a page region rendered and driven by browser JavaScript inside an otherwise server-rendered page, allowed only under the island criteria of [Rendering](allocation.md#rendering).
 - <a id="lease"></a>**Lease**: a row with an owner and an expiry that grants exclusive editing for a while, checked by the writer function.
-- <a id="maintainer-decision"></a>**Maintainer decision**: a decision taken by the guideline's maintainer that overrides any other source on its point; the seven are listed in the [README](README.md#maintainer-decisions).
+- <a id="maintainer-decision"></a>**Maintainer decision**: a decision taken by the guideline's maintainer that overrides any other source on its point; the nine are listed in the [README](README.md#maintainer-decisions).
 - <a id="outbox"></a>**Outbox**: a table to which a database function writes the intent of a side effect in the same transaction as the data change; a worker delivers it after commit.
 - <a id="owner-role"></a>**Owner role**: the database role that owns the tables and runs migrations and human-run jobs; it never serves requests.
 - <a id="per-user-rule"></a>**Per-user rule**: a rule that depends on who the acting user is ("only the assignee may close a task", "a draft is visible only to its author").

@@ -154,17 +154,17 @@ nodes:
     \ - concurrency: Serializable with retry for every writing role, version checks\
     \ on user-edited rows, transaction-scoped locks only, idempotent statements, commit-order-safe\
     \ readers (CONCURRENCY);\n  - maintain: online-safe versioned migrations with\
-    \ a drift gate, deletion chosen per table (default decided by MD-05, question\
-    \ 1), trigger-written append-only history, human-run bulk jobs under a checklist,\
-    \ point-in-time recovery proven by restore (MAINTAIN);\n  - derive: derived copies\
-    \ only with a sync plan and a drift guard, kept by a same-transaction trigger\
-    \ where any other writer exists; caches in classified, commented tables (DERIVE);\n\
-    \  - interface: the function API with its conventions and its compatibility rule,\
-    \ reached through a pooler with per-role limits and timeouts (INTERFACE).\nRejected:\
-    \ none at this level.\nRealizes: refines web-app-philosophy:DATA (skeleton link).\
-    \ Through its children: RECORD.1, RECORD.2, RECORD.3, GUARD.2, GUARD.3 (per-role\
-    \ layer), GUARD.5, GUARD.6, ACT.1, ACT.3, ACT.4, DERIVE.1, DERIVE.3, and the stack\
-    \ placements DB_API, TYPE_CHAIN, ROW_SECURITY, CACHE_STORE."
+    \ a drift gate, deletion chosen per table (default decided by MD-04), trigger-written\
+    \ append-only history, human-run bulk jobs under a checklist, point-in-time recovery\
+    \ proven by restore (MAINTAIN);\n  - derive: derived copies only with a sync plan\
+    \ and a drift guard, kept by a same-transaction trigger where any other writer\
+    \ exists; caches in classified, commented tables (DERIVE);\n  - interface: the\
+    \ function API with its conventions and its compatibility rule, reached through\
+    \ a pooler with per-role limits and timeouts (INTERFACE).\nRejected: none at this\
+    \ level.\nRealizes: refines web-app-philosophy:DATA (skeleton link). Through its\
+    \ children: RECORD.1, RECORD.2, RECORD.3, GUARD.2, GUARD.3 (per-role layer), GUARD.5,\
+    \ GUARD.6, ACT.1, ACT.3, ACT.4, DERIVE.1, DERIVE.3, and the stack placements DB_API,\
+    \ TYPE_CHAIN, ROW_SECURITY, CACHE_STORE."
   impl_pointers:
   - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA
   history:
@@ -187,6 +187,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-LOGIC
   name: Python Application Tier
   intent: 'The Python backend is the gate every caller passes and the workflow tier
@@ -1180,9 +1184,9 @@ nodes:
   intent: 'The Python backend is the one gate every caller passes and decides nothing
     on the caller''s word: access is checked by one central policy module, humans
     hold an opaque server-side session in Postgres after a delegated OpenID Connect
-    login with MFA, every CSRF layer is applied, no credential travels in a URL, consumption
-    is bounded at the proxy and per identity, and fetches of client-named URLs cannot
-    reach internal addresses.'
+    login with MFA offered and required by privilege and risk level, every CSRF layer
+    is applied, no credential travels in a URL, consumption is bounded at the proxy
+    and per identity, and fetches of client-named URLs cannot reach internal addresses.'
   epistemic_state: 'known (roll-up): MD-05'
   constraints:
   - Access checks are central, deny by default and object level; the backend's checks
@@ -1201,22 +1205,23 @@ nodes:
     \ (all children); availability and cost control (SECURE.6); the session's function,\
     \ carrying a login across arrivals into the application (SECURE.2: served by that\
     \ node, because it is what a session is for); login friction (SECURE.4, SECURE.5:\
-    \ not a force this branch serves, which is why MFA is required). The two are kept\
-    \ apart (review M5): friction makes a step slower, while dropping the session\
-    \ on arrival defeats the node's function.\n\nDecision: the Python backend is the\
-    \ one gate every caller passes and decides nothing on the caller's word (J3 LOGIC.SECURE):\n\
-    \  - access checked by one central policy module, deny by default, object level,\
-    \ the backend's checks kept in full because row-level security is off (SECURE.1,\
-    \ MD-01);\n  - humans hold an opaque server-side session in Postgres (SECURE.2;\
-    \ its `SameSite` value decided by MD-07), protected against forgery by every CSRF\
-    \ layer (SECURE.3), after an OpenID Connect login delegated to an identity provider\
-    \ (SECURE.4) that meets SECURE.5's bar, the authentication context checked on\
-    \ every login;\n  - no session token, bearer token or long-lived credential ever\
-    \ travels in a URL (X6);\n  - agents hold short-lived, audience-bound, revocable\
-    \ tokens (SECURE.4);\n  - consumption is bounded at the proxy and per identity\
-    \ and operation in the backend (SECURE.6);\n  - fetches of client-named URLs cannot\
-    \ reach internal addresses (SECURE.7).\n\nRealizes: refines LOGIC.SECURE (J3);\
-    \ through its children ALLOCATION.GUARD.4 and PIG-WEB-ALLOCATION.ROW_SECURITY."
+    \ not a force this branch serves, which is why MFA is required by privilege and\
+    \ risk level (MD-09)). The two are kept apart (review M5): friction makes a step\
+    \ slower, while dropping the session on arrival defeats the node's function.\n\
+    \nDecision: the Python backend is the one gate every caller passes and decides\
+    \ nothing on the caller's word (J3 LOGIC.SECURE):\n  - access checked by one central\
+    \ policy module, deny by default, object level, the backend's checks kept in full\
+    \ because row-level security is off (SECURE.1, MD-01);\n  - humans hold an opaque\
+    \ server-side session in Postgres (SECURE.2; its `SameSite` value decided by MD-07),\
+    \ protected against forgery by every CSRF layer (SECURE.3), after an OpenID Connect\
+    \ login delegated to an identity provider (SECURE.4) that meets SECURE.5's bar,\
+    \ the authentication context checked on every login;\n  - no session token, bearer\
+    \ token or long-lived credential ever travels in a URL (X6);\n  - agents hold\
+    \ short-lived, audience-bound, revocable tokens (SECURE.4);\n  - consumption is\
+    \ bounded at the proxy and per identity and operation in the backend (SECURE.6);\n\
+    \  - fetches of client-named URLs cannot reach internal addresses (SECURE.7).\n\
+    \nRealizes: refines LOGIC.SECURE (J3); through its children ALLOCATION.GUARD.4\
+    \ and PIG-WEB-ALLOCATION.ROW_SECURITY."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE
   history:
@@ -1239,6 +1244,13 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: wording cleanup after closing the open
       questions'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.ENFORCE
   name: Business Logic Realization
   intent: Each backend is one Django deployable whose use-case layer is what every
@@ -1689,8 +1701,9 @@ nodes:
   - 'Discovery and Registration: protected-resource metadata, verifiable client identity,
     client ID metadata documents.'
   - 'Identity and Delegation: agents with their own identity acting for a user, both
-    recorded, short-lived credentials with an owner, sender-constrained tokens for
-    consequential scopes.'
+    recorded, short-lived credentials with an owner, sender-constrained tokens wherever
+    the client can hold a key, and consequential operations of bearer-only clients
+    only through server-held approval.'
   - 'Approval and Injection Defense: irreversible or external effects approved by
     the owning user on the application''s own page and checked on the server, credentials
     collected out of band, structural injection defence.'
@@ -1708,12 +1721,12 @@ nodes:
     compatibility window; a stateless surface over OAuth (.1); protected-resource
     metadata, verifiable client identity, client ID metadata documents (.2); agents
     with their own identity acting for a user, both recorded, short-lived credentials
-    with an owner, sender-constrained tokens for consequential scopes (.3); irreversible
-    or external effects approved by the owning user on the application''s own page
-    and checked on the server, credentials collected out of band, structural injection
-    defence (.4); problem-detail errors, agent-shaped responses, quotas per agent
-    within the user''s allowance, and scarce-goods flows that a human completes or
-    agents are excluded from (.5).
+    with an owner, sender-constrained tokens wherever the client can hold a key (MD-09)
+    (.3); irreversible or external effects approved by the owning user on the application''s
+    own page and checked on the server, credentials collected out of band, structural
+    injection defence (.4); problem-detail errors, agent-shaped responses, quotas
+    per agent within the user''s allowance, and scarce-goods flows that a human completes
+    or agents are excluded from (.5).
 
     Realizes: refines INTERACTION.AGENT (J4); ALLOCATION.RULES.4, GUARD.3, GUARD.4,
     GUARD.6, ACT.4 through its children.'
@@ -1731,6 +1744,13 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-INTERACTION.ENVIRONMENT
   name: Browser Environment
   intent: Pages detect features rather than sniff the browser, stay eligible for the
@@ -1854,8 +1874,9 @@ nodes:
     most for the server''s part of a page at the 75th percentile, and well under 1
     s for an interaction''s request. Grounds: the HTML response (TTFB) is about 40%
     of LCP time against LCP''s 2.5 s; 1 s keeps the flow of thought and 0.1 s feels
-    instantaneous; work over about 1 s is deferred (ACT.3, settled). Database time
-    is part of this server share.'
+    instantaneous; work expected to exceed a few seconds or the request timeout is
+    deferred, 1 s being the interactive target (ACT.3, MD-09). Database time is part
+    of this server share.'
   design_notes: "Rows: L295, L296. Cited: L015, L381, L376.\nPositions: - P1 Core\
     \ Web Vitals as the targets, judged at the 75th percentile and split by mobile\
     \ and desktop: LCP at most 2.5 s, INP at most 200 ms, CLS at most 0.1 (L295).\n\
@@ -1868,9 +1889,10 @@ nodes:
     \ is too low for a stable 75th percentile (J5). Averages: never (L381). The non-vitals\
     \ timings of SRC-174 as targets: never (L296).\nRealizes: refines TRANSVERSE.PERFORMANCE\
     \ (field truth, lab gate); feeds FORCES.3 and FORCES.4 through J5; rests on ACT.3\
-    \ (deferral of work over about 1 s).\nReview fixes: m2 (derived server budget\
-    \ stated as unvalidated from L297, L295, L013 and ACT.3; the gap kept only for\
-    \ the agent surface and a source-stated server target)."
+    \ (deferral of work beyond a few seconds or the request timeout (MD-09)).\nReview\
+    \ fixes: m2 (derived server budget stated as unvalidated from L297, L295, L013\
+    \ and ACT.3; the gap kept only for the agent surface and a source-stated server\
+    \ target)."
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.PERFORMANCE
   - build/research/04_presentation/result.md::UI-C26
@@ -1907,6 +1929,9 @@ nodes:
     date: 2026-10-13T10:24
     note: 'render-review fixes 3,4,17,21: one comment-visibility consequence, recommendation
       beside default, Server-Timing audience, reviewer named'
+  - who: agent:steward
+    date: 2026-10-13T16:00
+    note: align performance budget with MD-09 deferral rule
 - uid: PIG-WEB-TRANSVERSE.CONTRACTS
   name: Contract Verification and Meaning
   intent: Every contract (function API, tables granted to BI, HTTP interface, agent
@@ -3174,7 +3199,8 @@ nodes:
   - constraint triggers for invariants no declarative constraint expresses, asserting
     the isolation level they need (GUARD.1, web-app-philosophy:ALLOCATION.GUARD.2),
     including the refusal of an active child of a soft-deleted parent (MAINTAIN.2)
-    and dependencies lost by a Boyce-Codd decomposition (web-app-philosophy:DATA.ORGANIZE);
+    and dependencies lost by a Boyce-Codd decomposition when no declarative form exists
+    (web-app-philosophy:DATA.ORGANIZE);
   - same-transaction maintenance of a derived copy at the top of the sync gradient
     (DERIVE.1);
   - write-time validation of JSON documents (ORGANIZE.5) and the actor checks of GUARD.3;
@@ -3267,6 +3293,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-DATA.CONCURRENCY.1
   name: Default Concurrency Strategy
   intent: Serializable is the default isolation of every writing role, owner included,
@@ -3965,53 +3995,53 @@ nodes:
     \ so deleting a parent with children needs a deletion function that handles the\
     \ children in order, soft-deleting them under soft delete (L523), archiving and\
     \ removing them under the archive.\nDecision and grounds: (one clause decided\
-    \ by MD-05, question 1) everything except the default for user-facing transactional\
-    \ data is decided.\n  - Per table, recorded (P2, P3 agree): the reason the data\
-    \ is kept selects the mechanism; lookup, configuration and ephemeral rows are\
-    \ hard-deleted; rebuildable caches are invalidated or dropped, never soft-deleted\
-    \ (L520, L525, L538); bulk expiry of time-bounded data is a partition drop or\
-    \ detach, partitioning adopted only when size justifies it, partition keys in\
-    \ primary and unique keys (L206, L207); queryable past values use the temporal\
-    \ model of MAINTAIN.3 (L205, L213).\n  - Whatever the mechanism: deletion goes\
-    \ only through functions owned by the narrow, non-login deletion role of GUARD.2,\
-    \ which holds DELETE on the target tables and INSERT on the archive (changed after\
-    \ review, M3); no consumer role holds DELETE (L525, L514, GUARD.2); a hard delete\
-    \ of retained data copies the row to an archive in the same transaction, the history\
-    \ trigger of MAINTAIN.3 recording it as well (L525, L204); CASCADE follows GUARD.1\
-    \ (L492).\n  - Where soft delete is used: L521 to L524 apply whole, plus three\
-    \ safeguards required under MD-03 (inferred): (1) a constraint trigger on the\
-    \ child table refuses an active row whose parent is soft-deleted, run under Serializable\
-    \ or with a lock on the parent row (CONCURRENCY.1), since no foreign key does;\
-    \ bound to the table, it also holds for a direct single-table write under DB_API's\
-    \ exception and for owner-run jobs (changed after review, M2: it was a check in\
-    \ the writer functions only); (2) the active-row predicate is written once in\
-    \ the shared specification every consumer reads with, and the reporting role's\
-    \ documentation names it; (3) a restore re-checks the row against the current\
-    \ constraints, since a deleted row escaped them (L522).\n  - decided by MD-05\
-    \ (question 1): the default for user-facing transactional data. Recommendation:\
-    \ hard delete with a same-transaction archive by default; soft delete where the\
-    \ product offers users a restore or undo on the table (trash, undo), or where\
-    \ reporting consumers must count deleted rows in place. Ground: it is the max\
-    \ for the node's force, integrity of references and reads for every consumer of\
-    \ a shared database (MD-03), while deleted data stays recoverable through a restore\
-    \ function. Why it stays a question: soft delete's advantage, immediate undo and\
-    \ in-place history for users and reporting, is a force of other branches that\
-    \ the max for DATA does not weigh, and the default for most user-facing tables\
-    \ (about 60%, L520) is the maintainer's codified practice. The review's preferred\
-    \ fix, deciding the archive as a fifth partial verdict against L520, is recorded\
-    \ and not taken: the question goes to the maintainer, framed even-handed. The\
-    \ evidence that restores are rare is one T3 practitioner critique (L204, SRC-265).\
-    \ If unanswered, the graph records the doctrine's default (soft delete for user-facing\
-    \ transactional data, L520) with the three safeguards above mandatory, and marks\
-    \ the clause `decided by MD-05`.\nRejected: hard delete without archive for retained\
-    \ data: never (L525). Soft delete for caches: never (L538). Bulk DELETE of time-bounded\
-    \ data where partitioning applies: rejected (L206); acceptable below L207's size\
-    \ threshold. A boolean deleted flag: never (L521).\nRealizes: ALLOCATION.ACT.4\
-    \ (archive and history kept in the database); J2 DATA.MAINTAIN (gap 3: lifecycle\
-    \ at stack level only). Personal-data erasure (deferred MAINTAIN.6, L526 recorded\
-    \ as input) must reach soft-deleted rows, archives and history; noted, not judged.\n\
-    \nBuild narrative moved out of the constraints: changed after review, M3; changed\
-    \ after review, M2: it was a check in the writer functions only."
+    \ by MD-04) everything except the default for user-facing transactional data is\
+    \ decided.\n  - Per table, recorded (P2, P3 agree): the reason the data is kept\
+    \ selects the mechanism; lookup, configuration and ephemeral rows are hard-deleted;\
+    \ rebuildable caches are invalidated or dropped, never soft-deleted (L520, L525,\
+    \ L538); bulk expiry of time-bounded data is a partition drop or detach, partitioning\
+    \ adopted only when size justifies it, partition keys in primary and unique keys\
+    \ (L206, L207); queryable past values use the temporal model of MAINTAIN.3 (L205,\
+    \ L213).\n  - Whatever the mechanism: deletion goes only through functions owned\
+    \ by the narrow, non-login deletion role of GUARD.2, which holds DELETE on the\
+    \ target tables and INSERT on the archive (changed after review, M3); no consumer\
+    \ role holds DELETE (L525, L514, GUARD.2); a hard delete of retained data copies\
+    \ the row to an archive in the same transaction, the history trigger of MAINTAIN.3\
+    \ recording it as well (L525, L204); CASCADE follows GUARD.1 (L492).\n  - Where\
+    \ soft delete is used: L521 to L524 apply whole, plus three safeguards required\
+    \ under MD-03 (inferred): (1) a constraint trigger on the child table refuses\
+    \ an active row whose parent is soft-deleted, run under Serializable or with a\
+    \ lock on the parent row (CONCURRENCY.1), since no foreign key does; bound to\
+    \ the table, it also holds for a direct single-table write under DB_API's exception\
+    \ and for owner-run jobs (changed after review, M2: it was a check in the writer\
+    \ functions only); (2) the active-row predicate is written once in the shared\
+    \ specification every consumer reads with, and the reporting role's documentation\
+    \ names it; (3) a restore re-checks the row against the current constraints, since\
+    \ a deleted row escaped them (L522).\n  - decided by MD-05 (MD-04): the default\
+    \ for user-facing transactional data. Recommendation: hard delete with a same-transaction\
+    \ archive by default; soft delete where the product offers users a restore or\
+    \ undo on the table (trash, undo), or where reporting consumers must count deleted\
+    \ rows in place. Ground: it is the max for the node's force, integrity of references\
+    \ and reads for every consumer of a shared database (MD-03), while deleted data\
+    \ stays recoverable through a restore function. Why it stays a question: soft\
+    \ delete's advantage, immediate undo and in-place history for users and reporting,\
+    \ is a force of other branches that the max for DATA does not weigh, and the default\
+    \ for most user-facing tables (about 60%, L520) is the maintainer's codified practice.\
+    \ The review's preferred fix, deciding the archive as a fifth partial verdict\
+    \ against L520, is recorded and not taken: the question goes to the maintainer,\
+    \ framed even-handed. The evidence that restores are rare is one T3 practitioner\
+    \ critique (L204, SRC-265). If unanswered, the graph records the doctrine's default\
+    \ (soft delete for user-facing transactional data, L520) with the three safeguards\
+    \ above mandatory, and marks the clause `decided by MD-05`.\nRejected: hard delete\
+    \ without archive for retained data: never (L525). Soft delete for caches: never\
+    \ (L538). Bulk DELETE of time-bounded data where partitioning applies: rejected\
+    \ (L206); acceptable below L207's size threshold. A boolean deleted flag: never\
+    \ (L521).\nRealizes: ALLOCATION.ACT.4 (archive and history kept in the database);\
+    \ J2 DATA.MAINTAIN (gap 3: lifecycle at stack level only). Personal-data erasure\
+    \ (deferred MAINTAIN.6, L526 recorded as input) must reach soft-deleted rows,\
+    \ archives and history; noted, not judged.\n\nBuild narrative moved out of the\
+    \ constraints: changed after review, M3; changed after review, M2: it was a check\
+    \ in the writer functions only."
   impl_pointers:
   - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA.MAINTAIN.2
   - build/research/01_data_tier/result.md::DATA-C40
@@ -4053,6 +4083,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-DATA.MAINTAIN.3
   name: History Tables
   intent: Every table holding business data has an AFTER ROW trigger writing an append-only
@@ -5283,9 +5317,10 @@ nodes:
   name: Federated Login and Tokens
   intent: Login is delegated to an OpenID Connect server (an external provider or
     a self-run one), with the Python backend as the confidential backend-for-frontend
-    client using the code flow with PKCE, then an opaque server session; the required
-    authentication context is requested and verified on every login. Agents hold short-lived,
-    audience-bound, revocable tokens, and every JWT is verified with pinned algorithms.
+    client using the code flow with PKCE, then an opaque server session; the authentication
+    context required for privileged accounts and step-up is requested and verified.
+    Agents hold short-lived, audience-bound, revocable tokens, and every JWT is verified
+    with pinned algorithms.
   epistemic_state: 'known | unvalidated: delegation ranked above an own store (L338
     ranks neither; the ranking is inferred); the acr/amr check and step-up (OpenID
     Connect Core, not in the ledger); sender-constraining support across agent hosts
@@ -5296,9 +5331,10 @@ nodes:
   - 'The backend is the confidential client (backend-for-frontend): code flow with
     PKCE, exact redirect-URI match, no open redirector, ID token validated (issuer,
     audience, expiry, nonce); provider tokens never reach the browser.'
-  - The backend requests the required authentication context (`acr_values`, or a provider
-    MFA policy yielding a known `amr`) and refuses a login whose ID token lacks it;
-    sensitive operations require a fresh, sufficient context (`max_age`, `auth_time`).
+  - The backend requests the authentication context required for privileged accounts
+    (`acr_values`, or a provider MFA policy yielding a known `amr`) and refuses a
+    login of such an account whose ID token lacks it; sensitive operations require
+    a fresh, sufficient context (`max_age`, `auth_time`) for every account.
   - Local identity keyed by issuer plus subject, never by e-mail; reauthenticate before
     any link change.
   - Agent tokens are issued for this server only (audience), short-lived and revocable;
@@ -5345,12 +5381,12 @@ nodes:
     \ (P3), ID token validated (P5), then an opaque server session (SECURE.2). Provider\
     \ tokens never reach the browser. The authorization code in the redirect is single-use,\
     \ short-lived and bound to PKCE, not a session or bearer token; no session token,\
-    \ bearer token or long-lived credential ever travels in a URL (X6).\n  3. **The\
-    \ authentication context is verified, not assumed** (review M6; inferred from\
-    \ OpenID Connect Core 1.0, not in the ledger): the backend requests the required\
-    \ context (`acr_values`, or the provider's MFA policy that yields a known `amr`)\
-    \ and refuses a login whose ID token lacks it; for sensitive operations it requires\
-    \ a fresh, sufficient context (step-up with `max_age`, checking `auth_time`).\
+    \ bearer token or long-lived credential ever travels in a URL (X6).\n  3. (superseded\
+    \ by MD-09) **The authentication context is verified, not assumed** (review M6;\
+    \ inferred from OpenID Connect Core 1.0, not in the ledger): the backend requests\
+    \ the required context (`acr_values`, or the provider's MFA policy that yields\
+    \ a known `amr`) and refuses a login whose ID token lacks it; for sensitive operations\
+    \ it requires a fresh, sufficient context (step-up with `max_age`, checking `auth_time`).\
     \ Without this check a provider policy change could drop MFA while every other\
     \ check passes, which is deciding on the caller's word (J3 LOGIC.SECURE).\n  4.\
     \ **Local identity** keyed by issuer plus subject; reauthentication before any\
@@ -5364,14 +5400,17 @@ nodes:
     \ own token, never a forwarded one (L640).\n\nRejected: - An own credential store:\
     \ acceptable when no OpenID Connect server can be used or run, a self-run one\
     \ included (review m11); SECURE.5 then applies in full, MFA included (P1; condition\
-    \ inferred).\n  - Accepting a login without checking the asserted authentication\
-    \ context: never while MFA is required (review M6).\n  - Implicit grant, password\
-    \ grant, shared static keys for agents: never (P2); static keys only for short-lived\
-    \ scripts (L339).\n  - Account linking by e-mail: never (P6).\n  - Tokens held\
-    \ by browser JavaScript: never by default (GUARD.4).\n  - Bearer-only access tokens:\
-    \ acceptable when the provider or the agent host cannot sender-constrain, with\
-    \ a short lifetime and server-held revocation (inferred).\n\nRealizes: ALLOCATION.GUARD.4\
-    \ (handles tokens where the identity placement allows them)."
+    \ inferred).\n  - (superseded by MD-09) Accepting a login without checking the\
+    \ asserted authentication context: never for privileged accounts and step-up (MD-09).\n\
+    \  - Implicit grant, password grant, shared static keys for agents: never (P2);\
+    \ static keys only for short-lived scripts (L339).\n  - Account linking by e-mail:\
+    \ never (P6).\n  - Tokens held by browser JavaScript: never by default (GUARD.4).\n\
+    \  - Bearer-only access tokens: acceptable when the provider or the agent host\
+    \ cannot sender-constrain, with a short lifetime and server-held revocation (inferred).\n\
+    \nRealizes: ALLOCATION.GUARD.4 (handles tokens where the identity placement allows\
+    \ them).\n\nCorrected by MD-09 (re-audit under MD-08): the authentication context\
+    \ is requested and checked for privileged accounts and at step-up, not on every\
+    \ login."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE.4
   - build/research/05_identity_security/result.md::SEC-C07
@@ -5399,30 +5438,41 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.SECURE.5
   name: Passwords and Login Throttling
   intent: Passwords, where the backend holds them, follow a length-and-blocklist policy
-    with Argon2id hashing, MFA required and phishing-resistant authenticators offered,
-    and login failures are throttled per account with growing delays and never a hard
-    lockout. The node is also the bar the chosen OpenID Connect server must meet,
-    including emitting the authentication-context claims the backend checks.
+    with Argon2id hashing, MFA offered on every account (phishing-resistant authenticators
+    preferred) and required by privilege and risk level, and login failures are throttled
+    per account with growing delays and never a hard lockout. The node is also the
+    bar the chosen OpenID Connect server must meet, including emitting the authentication-context
+    claims the backend checks.
   epistemic_state: 'known | unvalidated: the provider bar (authentication-context
     claims included) and the Django validator mapping are inferred'
   constraints:
   - Maximum length at least 64, all printable Unicode, no composition rules, no periodic
     rotation, compromised and common-password lists checked; minimum 8 where MFA is
-    enforced (default), 15 for any account a password alone authenticates; the numeric-only
+    enforced, 15 for any account a password alone authenticates; the numeric-only
     validator removed.
   - Hash with Argon2id first in the hasher list (at least 19 MiB, 2 iterations, parallelism
     1); upgrade older hashes at login.
-  - MFA required on human accounts; passkeys and WebAuthn offered.
+  - MFA offered on every human account, passkeys and WebAuthn preferred; required
+    on privileged accounts (operator, owner, administrator) and at step-up before
+    sensitive operations; required on every account when the project's chosen risk
+    level says so.
   - Generic authentication errors; failures counted per account and per source; growing
     delays, never a hard lockout; a recovery path; one-time-code endpoints count failures
     only.
   - The login limit is enforced in the proxy and in the login logic, never by framework
     throttling alone.
   - The chosen OpenID Connect server emits `acr` or `amr` and `auth_time` so the backend
-    can verify MFA rather than assume it.
+    can verify MFA for privileged accounts and step-up rather than assume it.
   design_notes: "Positions: - P1 password policy: at least 64 characters allowed,\
     \ all printable Unicode, no composition rules, no periodic rotation, checks against\
     \ compromised and common-password lists; minimum length 8 with MFA, 15 without;\
@@ -5437,32 +5487,36 @@ nodes:
     \ a security control (Django does not throttle authentication; DRF says its throttling\
     \ is not brute-force protection); the real limit sits in the proxy, a dedicated\
     \ limiter or the login logic (L348).\n  - P6 one-time-code and verification endpoints\
-    \ count failed attempts only (L349; one T3 source).\n  - Cited: MFA required by\
-    \ default on human accounts (J3 LOGIC.SECURE, max applied to L033).\n\nForces:\
-    \ security; login usability, which this node does not serve as a force (J3's reasoning\
-    \ on MFA).\n\nDecision: this node governs an own credential store (SECURE.4's\
-    \ acceptable fallback) and is the bar the chosen OpenID Connect server must meet\
-    \ (selection criterion; inferred). That bar includes emitting the authentication-context\
-    \ claims (`acr` or `amr`, and `auth_time`) that SECURE.4 checks, so the backend\
-    \ can verify MFA rather than assume it (review M6; OpenID Connect Core, not in\
-    \ the ledger).\n  1. **Policy** (P1): maximum length at least 64, all printable\
-    \ Unicode, no composition rules, no rotation, compromised and common lists checked;\
-    \ minimum 8 where MFA is enforced (the default, J3), 15 for any account a password\
-    \ alone authenticates. Django's validators are configured to length and list checks\
-    \ only; the numeric-only check, a composition rule, is removed (mapping of P1\
-    \ to Django inferred).\n  2. **Hashing**: Argon2id first in the hasher list with\
-    \ the OWASP parameters; older hashes upgraded at login (P2).\n  3. **Second factor**:\
-    \ MFA required; passkeys and WebAuthn offered (P3; J3).\n  4. **Throttling**:\
-    \ generic error messages; failures counted per account and per source; growing\
-    \ delays, never a hard lockout; a recovery path (P4); the limit enforced in the\
-    \ proxy and in the login logic, never by framework throttling alone (P5); one-time-code\
-    \ endpoints count failures only (P6).\n\nRejected: hard lockout: never, it lets\
-    \ an attacker lock users out (P4). Composition rules and periodic rotation: never\
-    \ (P1). PBKDF2 as the default hasher: acceptable where FIPS-140 applies (P2).\
-    \ Framework throttling as the control: never (P5). MFA optional: acceptable when\
-    \ the audience cannot practically be required to use a second factor (J3's condition),\
-    \ then minimum length 15 (P1).\n\nRealizes: no skeleton link; follows J3 LOGIC.SECURE\
-    \ (layered login defence, L033)."
+    \ count failed attempts only (L349; one T3 source).\n  - (superseded by MD-09)\
+    \ Cited: MFA required by default on human accounts (J3 LOGIC.SECURE, max applied\
+    \ to L033; superseded by MD-09).\n\nForces: security; login usability, which this\
+    \ node does not serve as a force (J3's reasoning on MFA).\n\nDecision: this node\
+    \ governs an own credential store (SECURE.4's acceptable fallback) and is the\
+    \ bar the chosen OpenID Connect server must meet (selection criterion; inferred).\
+    \ That bar includes emitting the authentication-context claims (`acr` or `amr`,\
+    \ and `auth_time`) that SECURE.4 checks, so the backend can verify MFA rather\
+    \ than assume it (review M6; OpenID Connect Core, not in the ledger).\n  1. **Policy**\
+    \ (P1): maximum length at least 64, all printable Unicode, no composition rules,\
+    \ no rotation, compromised and common lists checked; minimum 8 where MFA is enforced\
+    \ (the default, J3), 15 for any account a password alone authenticates. Django's\
+    \ validators are configured to length and list checks only; the numeric-only check,\
+    \ a composition rule, is removed (mapping of P1 to Django inferred).\n  2. **Hashing**:\
+    \ Argon2id first in the hasher list with the OWASP parameters; older hashes upgraded\
+    \ at login (P2).\n  3. (superseded by MD-09) **Second factor**: MFA required;\
+    \ passkeys and WebAuthn offered (P3; J3).\n  4. **Throttling**: generic error\
+    \ messages; failures counted per account and per source; growing delays, never\
+    \ a hard lockout; a recovery path (P4); the limit enforced in the proxy and in\
+    \ the login logic, never by framework throttling alone (P5); one-time-code endpoints\
+    \ count failures only (P6).\n\nRejected: hard lockout: never, it lets an attacker\
+    \ lock users out (P4). Composition rules and periodic rotation: never (P1). PBKDF2\
+    \ as the default hasher: acceptable where FIPS-140 applies (P2). Framework throttling\
+    \ as the control: never (P5). MFA optional: acceptable when the audience cannot\
+    \ practically be required to use a second factor (J3's condition), then minimum\
+    \ length 15 (P1).\n\nRealizes: no skeleton link; follows J3 LOGIC.SECURE (layered\
+    \ login defence, L033).\n\nCorrected by MD-09 (re-audit under MD-08): MFA is offered\
+    \ on every account and required by privilege and risk level (philosophy LOGIC.SECURE).\
+    \ Rejected: MFA required on every account: acceptable when the project's chosen\
+    \ risk level requires it."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE.5
   - build/research/10_rate_limiting_uploads/result.md::RATE-C15
@@ -5481,6 +5535,13 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.SECURE.6
   name: Abuse and Rate Limits
   intent: 'Consumption is bounded at two depths: identity-blind rate, connection,
@@ -5595,19 +5656,25 @@ nodes:
       (PIG-WEB.AREA) so they resolve'
 - uid: PIG-WEB-LOGIC.SECURE.7
   name: Server-Side Fetch
-  intent: Every server-side fetch of a client- or agent-named URL goes through one
+  intent: 'Every server-side fetch of a client- or agent-named URL goes through one
     fetch helper that refuses private, loopback and link-local addresses, checks the
-    address actually connected to, validates every redirect hop the same way, and
-    leaves through an egress proxy, so a client cannot make the server reach internal
-    services or metadata endpoints.
-  epistemic_state: 'known | unvalidated: egress proxy required (max applied to "preferably");
-    connect-time address check inferred'
+    address actually connected to, validates every redirect hop the same way, so a
+    client cannot make the server reach internal services or metadata endpoints. Where
+    the hosting can enforce outbound rules, a network guard backs the helper: an egress
+    proxy with direct egress blocked, or rules that deny the application those ranges.'
+  epistemic_state: 'known | unvalidated: connect-time address check inferred; the
+    network guard''s ''required when'' condition inferred'
   constraints:
   - One fetch helper for every fetch of a client- or agent-named URL.
   - Refuse private, loopback and link-local ranges, checking the address actually
     connected to rather than the hostname.
   - Validate every redirect hop the same way.
-  - Leave through an egress proxy (required, not merely preferred).
+  - 'Network guard, preferred: where the hosting can enforce outbound rules, fetches
+    leave through an egress proxy with direct egress blocked, or outbound rules deny
+    the application''s processes the private, loopback, link-local and metadata ranges.
+    It is required when the server''s network holds internal services or a metadata
+    endpoint that answers without a token. Where the hosting cannot enforce outbound
+    rules, the helper is the guard.'
   - Run with a timeout and a size cap, and in a worker when the response does not
     need the result.
   - 'Forbidden: fetching without range checks.'
@@ -5620,22 +5687,30 @@ nodes:
     against the function itself (metadata documents, webhooks, link previews).
 
 
-    Decision: every fetch of a client- or agent-named URL goes through one fetch helper
-    that refuses private, loopback and link-local addresses, checking the address
-    actually connected to rather than the hostname (inferred), validates every redirect
-    hop the same way, and leaves through an egress proxy: P1''s "preferably" made
-    required (max). The helper runs with a timeout and a size cap (PROCESS.3, SECURE.6),
-    and in a worker when the response does not need the result (ACT.3, a foreign effect)
-    (inferred).
+    (superseded by MD-09) Decision: every fetch of a client- or agent-named URL goes
+    through one fetch helper that refuses private, loopback and link-local addresses,
+    checking the address actually connected to rather than the hostname (inferred),
+    validates every redirect hop the same way, and leaves through an egress proxy:
+    P1''s "preferably" made required (max). The helper runs with a timeout and a size
+    cap (PROCESS.3, SECURE.6), and in a worker when the response does not need the
+    result (ACT.3, a foreign effect) (inferred).
 
 
-    Rejected: fetching without range checks: never (P1). Direct egress without a proxy:
-    acceptable when the deployment has no egress proxy; the helper''s checks are then
-    the only guard (inferred).
+    (superseded by MD-09) Rejected: fetching without range checks: never (P1). Direct
+    egress without a proxy: acceptable when the deployment has no egress proxy; the
+    helper''s checks are then the only guard (inferred).
 
 
     Realizes: no skeleton link; follows ALLOCATION.RULES.3 (client-supplied input
-    never decides).'
+    never decides).
+
+
+    Corrected by MD-09 (re-audit under MD-08): the helper is the required control
+    and the network guard is preferred. A proxy adds a guarantee only when direct
+    egress is blocked; it is required only where an internal service or an unprotected
+    metadata endpoint is reachable (inferred). Rejected: a proxy required for every
+    deployment: wins when the server''s network holds internal services or a token-less
+    metadata endpoint. Fetching without range checks: never.'
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE.7
   - build/research/19_agent_users/result.md::AGENT-C37
@@ -5647,6 +5722,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-LOGIC.ENFORCE.1
   name: Use-Case Layer
   intent: 'Application operations are defined once in a use-case layer that every
@@ -5882,8 +5961,8 @@ nodes:
     in a short read-only transaction when they need the actor.'
   - Each use case gathers its data in one statement or read function, related rows
     joined or eagerly loaded, never queries in loops.
-  - Filtering, sorting and paging in the statement; keyset pages; a server maximum
-    page size.
+  - Filtering, sorting and paging in the statement; keyset pages for structured-data
+    collections and large or growing sets; a server maximum page size.
   - Raw SQL always with bound parameters, never string formatting; identifiers that
     must vary come from an allowlist.
   - 'Per-user read rules (MD-05): sensitive reads go through the read function with
@@ -5969,6 +6048,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-LOGIC.ENFORCE.4
   name: Concurrency Model
   intent: Handlers are synchronous on a synchronous application server by default,
@@ -6235,7 +6318,8 @@ nodes:
     passed to the foreign system; a completer job for abandoned operations and a reaper
     for old keys.'
   - In-request phases are acceptable only when the user must see the foreign outcome
-    in the same response and the call fits ACT.3's 1 s budget.
+    in the same response and the call is expected to finish within a few seconds,
+    under the request timeout (ACT.3).
   - Never a transaction open across a remote call.
   - Post-commit hooks only for losable work, registered as robust so one failure does
     not skip the others.
@@ -6279,22 +6363,23 @@ nodes:
     \ to the foreign system; a completer job for abandoned operations and a reaper\
     \ for old keys (PROCESS.1). The key row carries the recovery point and a lock\
     \ with an expiry, so a duplicate request is answered by EXPOSE.3's multi-phase\
-    \ rule (review M3).\n     - In-request phases are acceptable when the user must\
-    \ see the foreign outcome in the same response and the call fits ACT.3's 1 s budget.\n\
-    \     - Grounds: J1's ACT.2 allows in-request atomic phases while ACT.3 forbids\
-    \ foreign effects inside the request; the worker path satisfies both, and matches\
-    \ this branch's refusal to hold synchronous workers on slow I/O (PROCESS.4, ENFORCE.4).\
-    \ The tension is J1's own and is routed to J1's owner.\n  4. Never a transaction\
-    \ open across a remote call (P2).\n  5. Post-commit hooks only for losable work\
-    \ (cache invalidation, best-effort notices), registered as robust so one failure\
-    \ does not skip the others (P9; P1 narrowed).\n  6. No saga inside one Postgres\
-    \ (P7).\n\nRejected: post-commit hooks as the default carrier: acceptable for\
-    \ losable work (P9). Enqueueing to a broker before or after commit: never (P9,\
-    \ L409). Sagas: win when a business transaction spans services with separate databases\
-    \ (P7, L480). Foreign mutations inside the request by default: rejected (ACT.3's\
-    \ forbidden column; review M4); acceptable under step 3's condition.\n\nRealizes:\
-    \ ALLOCATION.ACT.2 (stages and delivers side effects as the placement sets); follows\
-    \ ALLOCATION.ACT.3 (foreign effects deferred)."
+    \ rule (review M3).\n     - (superseded by MD-09) In-request phases are acceptable\
+    \ when the user must see the foreign outcome in the same response and the call\
+    \ fits ACT.3's few-seconds threshold (MD-09).\n     - Grounds: J1's ACT.2 allows\
+    \ in-request atomic phases while ACT.3 forbids foreign effects inside the request;\
+    \ the worker path satisfies both, and matches this branch's refusal to hold synchronous\
+    \ workers on slow I/O (PROCESS.4, ENFORCE.4). The tension is J1's own and is routed\
+    \ to J1's owner.\n  4. Never a transaction open across a remote call (P2).\n \
+    \ 5. Post-commit hooks only for losable work (cache invalidation, best-effort\
+    \ notices), registered as robust so one failure does not skip the others (P9;\
+    \ P1 narrowed).\n  6. No saga inside one Postgres (P7).\n\nRejected: post-commit\
+    \ hooks as the default carrier: acceptable for losable work (P9). Enqueueing to\
+    \ a broker before or after commit: never (P9, L409). Sagas: win when a business\
+    \ transaction spans services with separate databases (P7, L480). Foreign mutations\
+    \ inside the request by default: rejected (ACT.3's forbidden column; review M4);\
+    \ acceptable under step 3's condition.\n\nRealizes: ALLOCATION.ACT.2 (stages and\
+    \ delivers side effects as the placement sets); follows ALLOCATION.ACT.3 (foreign\
+    \ effects deferred)."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.PROCESS.2
   - build/research/02_app_tier/result.md::APP-C15
@@ -6321,6 +6406,13 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.PROCESS.3
   name: Resilience
   intent: Every outbound call has a timeout and is retried at exactly one layer with
@@ -6653,10 +6745,11 @@ nodes:
       (PIG-WEB.AREA) so they resolve'
 - uid: PIG-WEB-LOGIC.EXPOSE.1
   name: Contract Style and Resources
-  intent: Browsers get server-rendered HTML as the contract; programs and agents get
-    resource-oriented JSON over HTTP with named resources, standard methods and custom
-    methods for state transitions, and every collection is paginated by an opaque
-    keyset continuation with a server maximum page size.
+  intent: 'Browsers get server-rendered HTML as the contract; programs and agents
+    get resource-oriented JSON over HTTP with named resources, standard methods and
+    custom methods for state transitions, and every collection is paginated with a
+    server maximum page size: structured-data collections by an opaque keyset continuation,
+    while a human HTML list over a bounded result may use page numbers.'
   epistemic_state: 'known | unvalidated: custom methods for state transitions (inferred
     from L264, L596); the OpenAPI-only-for-JSON corollary (L257, inferred)'
   constraints:
@@ -6665,15 +6758,17 @@ nodes:
   - Resource-oriented JSON with named resources and standard methods; state transitions
     are custom methods on their resource (a POST naming the transition), each mapped
     to its one writer function, never a PATCH of the state field.
-  - Every collection paginated; the server enforces a maximum page size; keyset paging
+  - Every collection paginated; the server enforces a maximum page size; structured-data
+    and agent collections, and any list over a large or growing set, use keyset paging
     in the database behind an opaque continuation token or next link.
   - The token encodes position only and carries no authorization; every page is re-authorized;
     the token is not a credential in the URL.
   - No next link ends the collection; no total count by default, an estimate labelled
     as such where offered.
-  - HTML lists page the same way, with next links built from the keyset.
-  - 'Forbidden: offset and limit for client-facing collections; PATCH of a state column
-    owned by a writer function.'
+  - A human-facing HTML list over a bounded, filtered result may page by offset with
+    page numbers; larger or growing HTML lists use keyset next links.
+  - 'Forbidden: offset and limit for structured-data and agent collections, for deep
+    pages and for bulk work; PATCH of a state column owned by a writer function.'
   design_notes: "Positions: - P1 GraphQL as a third option when many clients need\
     \ different field subsets of one graph; its own pages claim versionless evolution\
     \ and say the specification is silent on network, authorization and pagination\
@@ -6695,19 +6790,23 @@ nodes:
     \ JSON over HTTP with named resources and standard methods (P3). State transitions\
     \ are custom methods on their resource (a POST naming the transition), each mapped\
     \ to its one writer function, never a PATCH of the state field (inferred from\
-    \ P3 with L596).\n  3. **Collections** (P4 to P7): every collection paginated,\
-    \ the server's maximum page size enforced; keyset paging in the database (DERIVE.2)\
-    \ behind an opaque continuation token or next link; the token encodes position\
-    \ only and carries no authorization, so every page is re-authorized and the token\
-    \ is not a credential in the URL (X6); no next link ends the collection; no total\
-    \ count by default, an estimate labelled as such where offered.\n  4. HTML lists\
-    \ page the same way, with next links built from the keyset (inferred).\n\nRejected:\
-    \ GraphQL: acceptable when many clients need different field subsets of one graph\
-    \ and the team designs authorization, pagination and limits itself (P1). Offset\
+    \ P3 with L596).\n  3. (superseded by MD-09) **Collections** (P4 to P7): every\
+    \ collection paginated, the server's maximum page size enforced; keyset paging\
+    \ in the database (DERIVE.2) behind an opaque continuation token or next link;\
+    \ the token encodes position only and carries no authorization, so every page\
+    \ is re-authorized and the token is not a credential in the URL (X6); no next\
+    \ link ends the collection; no total count by default, an estimate labelled as\
+    \ such where offered.\n  4. (superseded by MD-09) HTML lists page the same way,\
+    \ with next links built from the keyset (inferred).\n\nRejected: GraphQL: acceptable\
+    \ when many clients need different field subsets of one graph and the team designs\
+    \ authorization, pagination and limits itself (P1). (superseded by MD-09) Offset\
     \ and limit for client-facing collections: never (P5). PATCH of a state column\
     \ owned by a writer function: never (inferred). RPC tunnelling of every operation:\
     \ rejected (J3 LOGIC.EXPOSE.1).\n\nRealizes: ALLOCATION.DERIVE.2 (exposes paging\
-    \ and filtering in the contract)."
+    \ and filtering in the contract).\n\nCorrected by MD-09 (re-audit under MD-08):\
+    \ keyset for structured-data and agent collections and for large or growing sets;\
+    \ offset with page numbers acceptable for a human HTML list over a bounded result\
+    \ (philosophy DERIVE.2)."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.EXPOSE.1
   - build/research/03_contract/result.md::API-C37
@@ -6726,6 +6825,13 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.EXPOSE.2
   name: Status Codes and Errors
   intent: Every JSON error is `application/problem+json` with a stable `type` URI,
@@ -6855,51 +6961,52 @@ nodes:
     \ 202; the submit carries an idempotency key (L603).\n  - Placements: GUARD.6\
     \ (the key recorded by the API function in the effect's transaction; required\
     \ on agent mutations not idempotent by design and on payment-like creates); ACT.3\
-    \ (a 1 s budget; 202 with a status resource).\n\nForces: correctness (no duplicate\
-    \ effect, no lost acceptance); simplicity; interoperability with existing clients.\n\
-    \nDecision: 1. **Natural idempotence first** (P1; L587, MAINT, the doctrine's\
-    \ max: mutations whose re-run affects no further rows, by absolute assignments,\
-    \ upserts or conflict-ignoring inserts and self-limiting predicates; review m12):\
-    \ PUT to client-chosen identifiers, upserts, conditional updates with `If-Match`\
-    \ (GUARD.5).\n  2. **Otherwise an `Idempotency-Key` header** (P2), required on\
-    \ every mutation offered to agents that is not idempotent by design, on payment-like\
-    \ creates and on 202 submits (GUARD.6, P6). HTML forms carry the form token minted\
-    \ at render (GUARD.6; browser share in PIG-WEB-INTERACTION.EDIT); the agent adapter\
-    \ maps its tool-call key onto the same field (inferred).\n  3. **The key is recorded\
-    \ by the API function in the transaction of the effect, scoped to the acting user**\
-    \ (P3, GUARD.6). Consequences (inferred from GUARD.6 and L270): only committed\
-    \ outcomes are stored and replayed; a request that committed nothing leaves no\
-    \ key, so its retry re-executes, which is safe; the same key with another payload\
-    \ gets 422; a missing required key gets 400. A duplicate arriving while the first\
-    \ is in flight is answered by operation shape (review M3):\n     - **Single-call\
-    \ operation** (one function call, one short transaction): the duplicate waits\
-    \ on the key's unique index, then gets the replay.\n     - **Multi-phase operation**\
-    \ (atomic phases around a foreign call, PROCESS.2, L589): the key row is committed\
-    \ in the first phase, before any outcome exists, and carries the recovery point\
-    \ and a lock with an expiry. A duplicate that finds the key locked gets 409 with\
-    \ `Retry-After` (L546); after completion it gets the replay; a duplicate that\
-    \ finds an expired lock does not re-run the phases itself: the completer resumes\
-    \ the operation from its recovery point (L589), and the duplicate gets 409 with\
-    \ `Retry-After` until then. Re-executing from the recovery point in the duplicate's\
-    \ request would run the foreign call twice in parallel.\n  4. **Retention**: published,\
-    \ at least 24 hours (P2), keys reaped by a scheduled job (PROCESS.1).\n  5. **Long\
-    \ operations and foreign mutations** (ACT.3's 1 s budget; foreign effects are\
-    \ deferred, PROCESS.2 step 3, review M4): 202 with `Location` of a status resource\
-    \ and `Retry-After` (P4, P5); the job record is written by the API function before\
-    \ the 202 goes out (P6, JOB_HOST); the status resource has the closed status set,\
-    \ both timestamps, problem details on failure, an `Expires` retention, 303 to\
-    \ the result when done and DELETE to cancel; clients never poll the target resource\
-    \ (P5).\n\nRejected: - The body field `request_id`: acceptable in RPC-style APIs\
-    \ where headers are awkward (P1).\n  - Replaying stored failures (Stripe v1):\
-    \ never in this stack, because the key commits with the effect (GUARD.6); a separate\
-    \ key store is forbidden by GUARD.6.\n  - Answering 409 to a concurrent duplicate\
-    \ of a single-call operation: rejected, because one-call transactions are short\
-    \ and waiting yields the replay (inferred). 409 with `Retry-After` is the answer\
-    \ for multi-phase operations (step 3, L546; review M3).\n  - Returning the current\
-    \ state (AIP-155): acceptable for naturally idempotent updates, where the current\
-    \ state is the answer (inferred).\n  - The 10 s threshold: rejected for ACT.3's\
-    \ 1 s budget.\n\nRealizes: ALLOCATION.GUARD.6 (idempotency keys in the HTTP contract);\
-    \ ALLOCATION.ACT.3 (deferred operations in the HTTP contract)."
+    \ (a few-seconds threshold; 202 with a status resource).\n\nForces: correctness\
+    \ (no duplicate effect, no lost acceptance); simplicity; interoperability with\
+    \ existing clients.\n\nDecision: 1. **Natural idempotence first** (P1; L587, MAINT,\
+    \ the doctrine's max: mutations whose re-run affects no further rows, by absolute\
+    \ assignments, upserts or conflict-ignoring inserts and self-limiting predicates;\
+    \ review m12): PUT to client-chosen identifiers, upserts, conditional updates\
+    \ with `If-Match` (GUARD.5).\n  2. **Otherwise an `Idempotency-Key` header** (P2),\
+    \ required on every mutation offered to agents that is not idempotent by design,\
+    \ on payment-like creates and on 202 submits (GUARD.6, P6). HTML forms carry the\
+    \ form token minted at render (GUARD.6; browser share in PIG-WEB-INTERACTION.EDIT);\
+    \ the agent adapter maps its tool-call key onto the same field (inferred).\n \
+    \ 3. **The key is recorded by the API function in the transaction of the effect,\
+    \ scoped to the acting user** (P3, GUARD.6). Consequences (inferred from GUARD.6\
+    \ and L270): only committed outcomes are stored and replayed; a request that committed\
+    \ nothing leaves no key, so its retry re-executes, which is safe; the same key\
+    \ with another payload gets 422; a missing required key gets 400. A duplicate\
+    \ arriving while the first is in flight is answered by operation shape (review\
+    \ M3):\n     - **Single-call operation** (one function call, one short transaction):\
+    \ the duplicate waits on the key's unique index, then gets the replay.\n     -\
+    \ **Multi-phase operation** (atomic phases around a foreign call, PROCESS.2, L589):\
+    \ the key row is committed in the first phase, before any outcome exists, and\
+    \ carries the recovery point and a lock with an expiry. A duplicate that finds\
+    \ the key locked gets 409 with `Retry-After` (L546); after completion it gets\
+    \ the replay; a duplicate that finds an expired lock does not re-run the phases\
+    \ itself: the completer resumes the operation from its recovery point (L589),\
+    \ and the duplicate gets 409 with `Retry-After` until then. Re-executing from\
+    \ the recovery point in the duplicate's request would run the foreign call twice\
+    \ in parallel.\n  4. **Retention**: published, at least 24 hours (P2), keys reaped\
+    \ by a scheduled job (PROCESS.1).\n  5. **Long operations and foreign mutations**\
+    \ (ACT.3's few-seconds threshold (MD-09); foreign effects are deferred, PROCESS.2\
+    \ step 3, review M4): 202 with `Location` of a status resource and `Retry-After`\
+    \ (P4, P5); the job record is written by the API function before the 202 goes\
+    \ out (P6, JOB_HOST); the status resource has the closed status set, both timestamps,\
+    \ problem details on failure, an `Expires` retention, 303 to the result when done\
+    \ and DELETE to cancel; clients never poll the target resource (P5).\n\nRejected:\
+    \ - The body field `request_id`: acceptable in RPC-style APIs where headers are\
+    \ awkward (P1).\n  - Replaying stored failures (Stripe v1): never in this stack,\
+    \ because the key commits with the effect (GUARD.6); a separate key store is forbidden\
+    \ by GUARD.6.\n  - Answering 409 to a concurrent duplicate of a single-call operation:\
+    \ rejected, because one-call transactions are short and waiting yields the replay\
+    \ (inferred). 409 with `Retry-After` is the answer for multi-phase operations\
+    \ (step 3, L546; review M3).\n  - Returning the current state (AIP-155): acceptable\
+    \ for naturally idempotent updates, where the current state is the answer (inferred).\n\
+    \  - The 10 s threshold: rejected for ACT.3's few-seconds threshold (MD-09).\n\
+    \nRealizes: ALLOCATION.GUARD.6 (idempotency keys in the HTTP contract); ALLOCATION.ACT.3\
+    \ (deferred operations in the HTTP contract)."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.EXPOSE.3
   - build/research/03_contract/result.md::API-C24
@@ -6920,6 +7027,9 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-LOGIC.EXPOSE.4
   name: Response Caching
   intent: 'Every response is labelled on purpose by a middleware default overridden
@@ -8560,11 +8670,13 @@ nodes:
   intent: An agent has its own identity and acts for a user, with tokens carrying
     subject and actor so both are recorded in logs and in the database; agent-originated
     writes are marked as a class. Tokens are short-lived and audience-bound, sender-constrained
-    tokens are required for consequential scopes, and every agent credential has an
-    owner, is revocable and has a lifecycle.
+    wherever the client can hold a key, and every agent credential has an owner, is
+    revocable and has a lifecycle; a bearer-only client reaches consequential operations
+    only through the owning user's exact-action approval.
   epistemic_state: 'known | unvalidated: "both is the max" inferred (L638); agent
-    parameters of RFC 8693 open (L639); L643 inferred for agents; binding by consequence
-    is a composition of L641'
+    parameters of RFC 8693 open (L639); L643 inferred for agents; bearer-only path
+    through approval inferred; sender-constraining support across agent hosts not
+    read'
   constraints:
   - An agent has its own identity and acts for a user; tokens carry the subject and
     the actor (act claim or its documented equivalent), so downstream services and
@@ -8573,11 +8685,16 @@ nodes:
     as the claimed actor in the transaction-local setting, checked against the backend''s
     role and recorded with the session role; agent-originated writes are marked as
     a class.'
-  - 'Token binding by consequence: tokens are short-lived and audience-bound for every
-    scope; scopes that allow consequential operations (payments, transfers, deletions,
-    bulk exports) require a sender-constrained token (DPoP or mutual TLS); short-lived,
-    narrow bearer tokens are accepted for the rest, which keeps open agent clients
-    able to connect.'
+  - 'Token binding by client capability: tokens are short-lived and audience-bound
+    for every scope. They are sender-constrained (DPoP or mutual TLS) for every client
+    that can hold a key, and the authorization server issues bound tokens to every
+    client that supports them. A client that can hold only bearer tokens keeps consequential
+    scopes, under three conditions: its tokens are short-lived and narrow, revocation
+    is held on the server, and every consequential operation it requests runs only
+    through the exact-action approval of .4, which the writer function checks (inferred).
+    For a bearer-only client, an approved effect whose result returns to the caller
+    (a bulk export) is delivered to the approving user in the application, not to
+    the token holder (inferred).'
   - 'Consequential operations bound to their details: Rich Authorization Requests
     where the authorization server supports them; otherwise the exact-action approval
     of .4 binds the operation (inferred substitution).'
@@ -8608,17 +8725,28 @@ nodes:
 
     Decision (the rules are the constraints):
 
-    Rejected: P1: acceptable for a personal tool where the user and the agent are
-    the same accountable party and no consequential scope is granted (L638 a). P2
-    alone: wins for unattended automation with no delegating user (L638 b), still
-    recorded as the actor. P5 for consequential scopes: wins never; acceptable for
-    the rest. P4 for every scope: wins when every agent client can hold a key (L641).
+    (superseded by MD-09) Rejected: P1: acceptable for a personal tool where the user
+    and the agent are the same accountable party and no consequential scope is granted
+    (L638 a). P2 alone: wins for unattended automation with no delegating user (L638
+    b), still recorded as the actor. (superseded by MD-09) P5 for consequential scopes:
+    wins never; acceptable for the rest. P4 for every scope: wins when every agent
+    client can hold a key (L641).
 
     Realizes: ALLOCATION.GUARD.4 (skeleton link); ALLOCATION.ACT.4 (proposed: both
     identities in the audit, L658); ALLOCATION.GUARD.3 (actor assertion, R1-3).
 
     Hand-offs: actor columns and history (PIG-WEB-DATA.MAINTAIN.3, L685); token issuance
-    (PIG-WEB-LOGIC.SECURE.4).'
+    (PIG-WEB-LOGIC.SECURE.4).
+
+
+    Corrected by MD-09 (re-audit under MD-08): sender-constrained tokens wherever
+    the client can hold a key; otherwise short-lived, revocable bearer tokens with
+    every consequential action behind the owner''s exact-action approval. Rejected:
+    sender-constraining required for consequential scopes: wins when every client
+    that needs those scopes can hold a key (a closed or certified set of agents),
+    or when an approved effect''s result must return to the token holder and cannot
+    be delivered in the application. Bearer tokens for consequential scopes without
+    the server-held approval: never.'
   impl_pointers:
   - build/distill/03_judge/J8_pig_interaction/records.md::PIG-WEB.INTERACTION.AGENT.3
   - build/research/19_agent_users/result.md::AGENT-C08
@@ -8645,6 +8773,13 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections: design notes updated where they restated the old rules'
 - uid: PIG-WEB-INTERACTION.AGENT.4
   name: Approval and Injection Defense
   intent: Reads and reversible writes proceed under ordinary authorization; irreversible
@@ -8664,7 +8799,8 @@ nodes:
     agent-originated operation without a matching approval by the delegating user
     (a rule decidable from the stored rows and the actor, so the writer function''s
     under GUARD.3; inferred). An approval dialog in the agent host is a client hint,
-    never the gate.'
+    never the gate; for a bearer-only client this approval is the gate for consequential
+    operations.'
   - 'Approvals stay rare by scoping: only irreversible or external effects ask, so
     fatigue does not erode them (inferred from a reported 93% approval rate under
     frequent prompts).'
@@ -8735,6 +8871,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T15:54
+    note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
+      token binding, MFA by privilege, deferral threshold, paging by surface'
 - uid: PIG-WEB-INTERACTION.AGENT.5
   name: Agent-Shaped Responses and Limits
   intent: 'Rate limits are nested: each agent identity has its own quota inside its

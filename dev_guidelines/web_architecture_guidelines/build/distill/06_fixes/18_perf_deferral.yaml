@@ -1,0 +1,29 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.PERFORMANCE
+  constraints:
+  - 'Targets: the "good" thresholds of Core Web Vitals at the 75th percentile, per device class, from
+    field data (OPERABILITY.2). They are the user-facing service level indicators of OPERABILITY.3.'
+  - Build budgets per page type on the lab-measurable vitals (LCP, CLS) and on page weight. A build over
+    budget fails or the page is optimised. INP is gated on field data after release. The sample budget
+    numbers of the performance-budget guide (tied to a past device baseline) are not adopted; the budget
+    metrics are Core Web Vitals.
+  - 'The server''s share of each page is visible: Server-Timing carries server and database time to authenticated
+    and authorised audiences only, joined to field data through the trace id (inferred).'
+  - 'Derived server budget (inferred from grounded rows, unvalidated): about 1 s at most for the server''s
+    part of a page at the 75th percentile, and well under 1 s for an interaction''s request. Grounds:
+    the HTML response (TTFB) is about 40% of LCP time against LCP''s 2.5 s; 1 s keeps the flow of thought
+    and 0.1 s feels instantaneous; work expected to exceed a few seconds or the request timeout is deferred,
+    1 s being the interactive target (ACT.3, MD-09). Database time is part of this server share.'
+  design_notes: "Rows: L295, L296. Cited: L015, L381, L376.\nPositions: - P1 Core Web Vitals as the targets,\
+    \ judged at the 75th percentile and split by mobile and desktop: LCP at most 2.5 s, INP at most 200\
+    \ ms, CLS at most 0.1 (L295).\n  - P2 budgets per page type enforced in the build, for example Lighthouse\
+    \ CI (L296), with SRC-174's sample numbers (TTI under 5 s, 170 KB, 3G) tied to an old device baseline.\n\
+    Forces: P1 serves what users experience, measured in the field, after release. P2 serves prevention\
+    \ before release; lab runs cannot measure INP (L015).\nDecision (lead): P1 as the target, P2 as the\
+    \ gate, both on Core Web Vitals.\nRejected: lab-only targets: acceptable before launch or while traffic\
+    \ is too low for a stable 75th percentile (J5). Averages: never (L381). The non-vitals timings of\
+    \ SRC-174 as targets: never (L296).\nRealizes: refines TRANSVERSE.PERFORMANCE (field truth, lab gate);\
+    \ feeds FORCES.3 and FORCES.4 through J5; rests on ACT.3 (deferral of work beyond a few seconds or\
+    \ the request timeout (MD-09)).\nReview fixes: m2 (derived server budget stated as unvalidated from\
+    \ L297, L295, L013 and ACT.3; the gap kept only for the agent surface and a source-stated server target)."

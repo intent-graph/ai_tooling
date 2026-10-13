@@ -180,7 +180,7 @@ One line per responsibility in the default context. The authority decides; copie
 | [Concurrency Control](#concurrency-control-and-conflict-resolution) | database (detection in the writer function); backend carries the version | the version the browser read | browser or agent resolving conflicts; locks across requests | conflict rate, data shape, edit length, offline use |
 | [Duplicate Suppression](#duplicate-suppression) | database (key and effect in one transaction; unique constraint as final arbiter); backend passes the key | browser pending state and form token; agent clients send keys | the browser as the only guard; a key store separate from the effect | automated callers; payment-like or external effects |
 | [Business Rules and State Transitions](#business-rules-and-state-transitions) | database (operations, transitions, invariants, per-user write rules); backend (workflow, product policy not in the data, external calls) | backend check of per-user write rules; browser preview of allowed actions | multi-table writes composed in a backend; a backend transaction wrapping several API calls; rules in the browser, agent adapters or prompts; a second writer of a state column | a single consumer with low SQL skill |
-| [Side Effects and Integrations](#side-effects-and-integrations) | backend (delivery, external calls); database (the [staged intent](glossary.md#staged-intent)) | none | third-party credentials in the browser (inferred); external calls from inside the database; dual writes to database and broker; remote calls inside an open transaction; a foreign call in the request without its intent recorded first; post-commit hooks for foreign effects | an outcome the user must see within about 1 s; a business transaction across services with their own databases |
+| [Side Effects and Integrations](#side-effects-and-integrations) | backend (delivery, external calls); database (the [staged intent](glossary.md#staged-intent)) | none | third-party credentials in the browser (inferred); external calls from inside the database; dual writes to database and broker; remote calls inside an open transaction; a foreign call in the request without its intent recorded first; post-commit hooks for foreign effects | an outcome the user must see within a few seconds, under the request timeout; a business transaction across services with their own databases |
 | [Deferred and Scheduled Work](#deferred-and-scheduled-work) | backend (what is deferred); database (staged intent, data schedules) | the status resource shows the pending state | deferring core writes; foreign effects inside the request, except the in-request phase | duration, foreign effects, set-based data work |
 | [Audit and History](#audit-and-history) | database (history, transitions); backend supplies actor and business events; a separate sink for security events | none | application-only audit; audit only in a model transcript; an actor from a client-supplied id; a write without an actor, or with one its role may not assert | nothing in the default |
 | [Derived Data and Aggregation](#derived-data-and-aggregation) | database | derived columns and tables with a stated staleness | consumers writing derived stores beside the source | number of external derived stores, write rate, staleness tolerance |
@@ -316,7 +316,7 @@ Everything that must hold whoever writes is in the database.
 
 The database function that changes state also writes the intent of its side effects (an outbox row or staged job) in the same transaction; a backend worker delivers it after commit to idempotent consumers. External calls are made by backends, never by the database, and no transaction stays open across a remote call.
 - Foreign mutations (a payment, a remote API write) run as atomic phases with recovery points and an idempotency key, in a worker behind a 202 response with a status resource.
-- In the request only when the user must see the outcome within about 1 s (inferred): the database function records the intent first and commits; the request performs the call as one atomic phase and marks the row done; a worker completer picks the row up if the request dies.
+- In the request only when the user waits for the outcome in the same response and the call is expected to finish within a few seconds, under the request timeout (inferred): the database function records the intent first and commits; the request performs the call as one atomic phase and marks the row done; a worker completer picks the row up if the request dies.
 - Post-commit hooks only for losable work that touches no foreign system, such as cache invalidation.
 - Acceptable when one business transaction spans services with separate databases: a saga with compensation.
 `ALLOCATION.ACT.2`
@@ -324,7 +324,7 @@ The database function that changes state also writes the intent of its side effe
 ### Deferred and Scheduled Work
 
 - Inside the request: validation, authorization, every change atomic with what the user sees next, and the persisted intent of deferred work, in one transaction. Core writes are never asynchronous.
-- Deferred: foreign effects, work that would push the response past the 1 s flow budget (threshold inferred), fan-out, derived data. Foreign mutations follow [Side Effects and Integrations](#side-effects-and-integrations).
+- Deferred: foreign effects, fan-out, derived data, and work expected to last more than a few seconds or past the request timeout. About 1 s stays the design target for interactive responses ([Latency](#latency)), not the cut-off for deferral; a lower cut-off follows measured worker capacity (inferred). Foreign mutations follow [Side Effects and Integrations](#side-effects-and-integrations).
 - Hosts: workers fed from the database-staged queue; scheduled pure data work inside the database.
 - An operation that outlasts the request answers 202 with a status resource; every asynchronous stream states its staleness window and a convergence check.
 - In-process background tasks only for small tasks that may be lost.
@@ -357,7 +357,7 @@ No consumer writes a derived store beside the source. Acceptable with many deriv
 ### Filtering, Sorting, Paging and Search
 
 The database reduces many rows to the few a client needs, set-based, in one statement or read function; only the result travels.
-- Enforce a maximum page size; page by keyset behind an opaque continuation.
+- Enforce a maximum page size. Structured-data and agent collections, and any list over a large or growing set, page by keyset behind an opaque continuation. A human-facing HTML list over a bounded result may page by offset with page numbers; offset never for deep pages or bulk work.
 - The database owns the collation of every order it serves; a browser re-sort over rows already loaded uses the same collation or none. Which collation is open ([Column Types](stack_defaults_data.md#column-types)).
 - Reads that need no domain behaviour may be plain queries; search follows the same placement.
 `ALLOCATION.DERIVE.2`

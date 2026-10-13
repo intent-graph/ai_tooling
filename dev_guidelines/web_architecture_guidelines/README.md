@@ -7,17 +7,17 @@ Architecture decisions for a web application built on JavaScript, Python and Pos
 1. [What This Is](#what-this-is) _(Lines 19-23)_
 1. [Thesis](#thesis) _(Lines 26-47)_
 1. [How to Read](#how-to-read) _(Lines 50-73)_
-1. [Maintainer Decisions](#maintainer-decisions) _(Lines 76-88)_
-1. [The Two Graphs](#the-two-graphs) _(Lines 91-113)_
-1. [Provenance](#provenance) _(Lines 116-120)_
-1. [Related Guidelines](#related-guidelines) _(Lines 123-126)_
+1. [Maintainer Decisions](#maintainer-decisions) _(Lines 76-98)_
+1. [The Two Graphs](#the-two-graphs) _(Lines 101-123)_
+1. [Provenance](#provenance) _(Lines 126-130)_
+1. [Related Guidelines](#related-guidelines) _(Lines 133-136)_
 
 ---
 
 ## What This Is
 <!-- Lines 19-23 -->
 
-- **Is**: a set of decisions between competing practices, each chosen as the most demanding practice that best serves its purpose, and each rejected alternative kept with the condition under which it would win. A stack-neutral philosophy, plus stack defaults for Postgres, Python and browser JavaScript.
+- **Is**: a set of decisions between competing practices, each chosen as the best practice for its purpose (never the average of what sources say, and "best" is not "most demanding"), and each rejected alternative kept with the condition under which it would win. A stack-neutral philosophy, plus stack defaults for Postgres, Python and browser JavaScript.
 - **Is not**: code-level conventions (see [Related Guidelines](#related-guidelines)), a survey of what sources say, or a tutorial.
 - **Default context**: a classic website (documents, forms, CRUD), one team, single tenant, humans and agents as users, and a database shared by several backends and by reporting, admin consoles and scripts. A project that differs moves [placements](glossary.md#placement) in the directions listed in [Context](allocation.md#context).
 
@@ -72,9 +72,9 @@ Conventions in every file:
 - The first use of a defined term in each file links to the [glossary](glossary.md).
 
 ## Maintainer Decisions
-<!-- Lines 76-88 -->
+<!-- Lines 76-98 -->
 
-Seven maintainer decisions are in force and override any other source on their point; they are recorded, in this order, in the [maintainer decisions](build/distill/maintainer_decisions.md). No maintainer question remains open.
+Nine maintainer decisions are in force and override any other source on their point; they are recorded, in this order, in the [maintainer decisions](build/distill/maintainer_decisions.md). No maintainer question remains open.
 
 1. **[Row-level security](glossary.md#row-level-security) is not a default.** Postgres row-level security is acceptable only when the data model is simple, the scoping key (client, tenant or owner id) is present in every table the policy covers, in practice composite primary keys led by that key, and no all-powerful administrator role must cross scopes. Authorization stays a backend decision, with per-role database privileges as the second gate and [writer functions](glossary.md#writer-function) for per-user write rules. See [Row Security Placement](allocation.md#row-security-placement). `PIG-WEB-ALLOCATION.ROW_SECURITY`
 2. **Interface descriptions are always in sync; the origin is chosen per project.** Every description [consumers](glossary.md#consumer) read (HTTP, function API catalogue, agent tool surface) stays in sync with the implementation by process: one origin per fact, the other side generated or conformance-checked, a CI gate that fails on drift. Whether the description or the code originates is recorded per project, with criteria for each direction. See [Type and Contract Definitions](allocation.md#type-and-contract-definitions). `ALLOCATION.RECORD.3`
@@ -84,10 +84,20 @@ Seven maintainer decisions are in force and override any other source on their p
 6. **Hosting is chosen per project.** A prototype takes the fastest path that is secure; an orchestration platform is added when reliability and scaling are needed. The self-managed defaults (a process manager per host, the proxy serving static files, a file fallback for secrets until a managed store is added) are one acceptable route, and each affected section names what changes on an orchestrator. See [Process Placement](stack_defaults_transverse.md#process-placement). `PIG-WEB-TRANSVERSE.TOPOLOGY.3`
 7. **The session cookie is `SameSite=Lax` plus a navigation check.** `Lax` keeps users logged in when they arrive from another site's link. A check of the browser's [Fetch Metadata](glossary.md#fetch-metadata) headers refuses or redirects cross-site navigations to authenticated pages not declared as entry points, which closes what `Lax` lets an attacker's page open. `Strict` applies to operator consoles and other applications never entered from other sites' links. See [Sessions](stack_defaults_logic_security.md#sessions). `PIG-WEB-LOGIC.SECURE.2`
 
+8. **"Best" means the best practice for the purpose, not the most demanding one.** Each decision takes the position the strongest arguments establish for the node's purpose: never the average or most common practice, never a blend, and not the strictest option because it is strict. This is the selection rule stated in [What This Is](#what-this-is); the judges worked under the earlier "most demanding" wording, so their verdicts were re-audited (decision 9).
+9. **Seven verdicts corrected under that rule.** Where strictness rather than fitness for purpose had decided:
+   - [MFA](glossary.md#mfa) is offered on every human account and required on privileged accounts and at step-up; requiring it everywhere follows the project's risk level ([Secured Entry](philosophy.md#secured-entry), [Passwords and Login Throttling](stack_defaults_logic_security.md#passwords-and-login-throttling)).
+   - For client-named fetches the safe fetch helper is required; a network guard is preferred, and required only when the server's network holds internal services or a token-less metadata endpoint ([Server-Side Fetch](stack_defaults_logic_security.md#server-side-fetch)).
+   - Agent tokens are sender-constrained wherever the client can hold a key; a bearer-only client reaches consequential operations only through the owner's exact-action approval ([Identity and Delegation](stack_defaults_agents.md#identity-and-delegation)).
+   - A dependency a Boyce-Codd decomposition would lose is kept in third normal form and enforced by a composite foreign key, with a trigger only where no declarative form exists ([Organized Facts](philosophy.md#organized-facts)).
+   - Work is deferred when it is expected to exceed a few seconds or the request timeout; 1 s stays the interactive target, not the deferral cut-off ([Deferred and Scheduled Work](allocation.md#deferred-and-scheduled-work)).
+   - Keyset paging is used for structured-data and agent interfaces and for large or growing sets; offset with page numbers is acceptable for a human HTML list over a bounded result ([Filtering, Sorting, Paging and Search](allocation.md#filtering-sorting-paging-and-search)).
+   - Threat models are kept per critical flow and trust boundary and revisited when a placement on the flow changes ([Security Across Tiers](philosophy.md#security-across-tiers)).
+
 The six departures from the maintainer's codified practice (CHECK constraints and triggers required, not optional; 8-byte keys by default; no `updated_at` on append-only tables; a trigger-written `updated_at`; a declared parent link for hierarchies; "[deployed together](glossary.md#deployed-together)" narrowed to the same-deployment condition) stand as judged, and each is marked "Departs from the maintainer's practice" where it appears.
 
 ## The Two Graphs
-<!-- Lines 91-113 -->
+<!-- Lines 101-123 -->
 
 The graphs in `intent_graphs/` are the source of truth; these files are their projection. Change a graph first, then re-render the file.
 
@@ -112,14 +122,14 @@ Both graphs have a `ROOT`; every `PIG-WEB-*` uid lives in `web_defaults.ig.yaml`
 To browse both graphs in Obsidian, run `./intent_graphs/export_to_obsidian.sh` and open `intent_graphs/obsidian_export/` as a vault: one note per node, one folder per graph, canvases per branch ([obsidian_export/README.md](intent_graphs/obsidian_export/README.md)).
 
 ## Provenance
-<!-- Lines 116-120 -->
+<!-- Lines 126-130 -->
 
 - [build/RECIPE.md](build/RECIPE.md): how this guideline was built (research, consolidation, maintainer-fixed hierarchy, judging allocation first, adversarial review, graph build, critique), and how to build a sibling guideline the same way.
 - `build/research/`: the evidence, gathered by area from tiered sources.
 - `build/distill/`: the claims ledger, the skeleton, the judge records and their reviews, the [maintainer decisions](build/distill/maintainer_decisions.md), the graph batches, the critique and its fixes.
 
 ## Related Guidelines
-<!-- Lines 123-126 -->
+<!-- Lines 133-136 -->
 
 - [Python guidelines](../python_guidelines/): Python code conventions; shared principles link to its philosophy graph.
 - [JavaScript guidelines](../javascript_guidelines/): JavaScript code conventions.
