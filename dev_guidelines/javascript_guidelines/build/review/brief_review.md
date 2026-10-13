@@ -21,9 +21,10 @@ as a skeptical reader whose job is to find what is wrong, not to approve.
 ## What to check, in order of weight
 
 1. **Max, not average.** For each decision in `decisions_for_review.md` and a sample of other
-   decision nodes across all eight branches: is it the most demanding practice an admitted
-   source supports for the branch's purpose, or a compromise? Name every decision that settles
-   for the middle when a stricter grounded position exists.
+   decision nodes across all eight branches: is it the best practice an admitted source
+   supports for the branch's purpose, or a compromise? Name every decision that settles for the
+   middle when a better grounded position exists, and every decision that is stricter than the
+   best without a stated reason (best is not most demanding).
 2. **Grounding.** For a sample of at least 40 decision nodes spread over the branches, follow
    `impl_pointers` to the claims and their sources: does the claim say what the node says? Is
    a restricted source used beyond its restriction? Is anything invented (a rule no claim

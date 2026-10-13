@@ -246,7 +246,7 @@ ACCEPT = {
     "SUBSET-052": ("the target lacks Object.hasOwn",
                    "obj.hasOwnProperty, because lookup and iteration traverse the prototype chain and one of the two own-property tests is necessary (MDN)"),
     "SUBSET-058": ("the data is JSON-safe only", "the JSON round trip as a deep copy; the belief that it is the way to deep copy is restricted to that condition (MDN structuredClone; folklore audit, restricted)"),
-    "SUBSET-069": ("the property is a cheap, side-effect-free view of stored state on a data-like object", "an accessor property (inferred; no admitted source states this condition)"),
+    "SUBSET-069": ("a team wants a rule that needs no judgment of cost", "no getter or setter properties at all, methods only (Google JS guide position, the stricter form; inferred condition, no admitted source states it)"),
     "SUBSET-070": ("a formatter and lint rules that catch insertion hazards both run in CI and the team adopts a no-semicolon style", "reliance on automatic semicolon insertion (inferred; no admitted source states the hazards or the style)"),
     "CONTROL-057": ("the work cannot move to a worker (condition inferred)", "a long computation that stays on the event loop is partitioned into small steps that yield between them (for instance with setImmediate)"),
     "STRUCTURE-030": ("the application has over about 100 modules or a dependency depth over 5", "keep bundling for production while writing small fine-grained modules (V8's 2018 position, dated and restricted)"),

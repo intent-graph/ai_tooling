@@ -44,8 +44,11 @@ same branches.
 
 ## Selection rule: max, not average
 
-For every node, the guideline states **the most demanding practice that best serves the
-purpose of the node's branch**: predictability for SUBSET, checkability for CONTRACTS,
+For every node, the guideline states **the best practice for the purpose of the node's
+branch**, the one the strongest arguments across all sources establish: the max of the
+collective, never its average, its most common answer, or a blend; "best" is not "most
+demanding" (maintainer correction: "it's nto the most demanding thing, it's the best thing. The
+core idea is to not default to average."). The purposes: predictability for SUBSET, checkability for CONTRACTS,
 explicit failure for CONTROL, locality of change for STRUCTURE, safety for DEFENSE, trust for
 DEPENDENCIES, automation for VERIFICATION, measured behaviour for RUNTIME. Agreement among
 sources is evidence for the judgment, never the verdict. Weaker practices stay only as

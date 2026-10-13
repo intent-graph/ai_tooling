@@ -13,11 +13,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET
@@ -28,11 +28,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS
@@ -42,11 +42,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL
@@ -57,11 +57,11 @@ nodes:
   epistemic_state: known | rolls up six children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE
@@ -72,11 +72,11 @@ nodes:
   epistemic_state: 'known | gap: layering rule undecided (PIG-JS.STRUCTURE.DIRECTION.3)'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE
@@ -88,11 +88,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES
@@ -103,11 +103,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION
@@ -117,11 +117,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME
@@ -132,11 +132,11 @@ nodes:
   epistemic_state: 'known | unvalidated: 83 percent of the branch claims are single-source'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.STRICTNESS
@@ -146,11 +146,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION
@@ -160,11 +160,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.NUMBERS
@@ -174,11 +174,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS
@@ -188,11 +188,11 @@ nodes:
   epistemic_state: 'known | unvalidated: accessor rule rests on a position only'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.MUTATION
@@ -202,11 +202,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION
@@ -217,11 +217,11 @@ nodes:
     only'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER
@@ -230,11 +230,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.STRICT
@@ -246,11 +246,11 @@ nodes:
     for example primitives satisfying object-shaped types.'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE
@@ -260,11 +260,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL
@@ -274,11 +274,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.SIGNATURE
@@ -287,11 +287,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY
@@ -300,11 +300,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES
@@ -314,11 +314,11 @@ nodes:
   epistemic_state: known | rolls up six children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS
@@ -329,11 +329,11 @@ nodes:
   epistemic_state: known | rolls up four children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.BOUNDS
@@ -343,11 +343,11 @@ nodes:
   epistemic_state: known | rolls up three children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING
@@ -357,11 +357,11 @@ nodes:
   epistemic_state: known | rolls up four children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.FLOW
@@ -371,11 +371,11 @@ nodes:
   epistemic_state: known | rolls up three children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS
@@ -385,11 +385,11 @@ nodes:
   epistemic_state: known | rolls up five children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.FORMAT
@@ -399,11 +399,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE
@@ -413,11 +413,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING
@@ -427,11 +427,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE
@@ -441,11 +441,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.DIRECTION
@@ -455,11 +455,11 @@ nodes:
   epistemic_state: 'known | gap: layering undecided'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.PACKAGE
@@ -469,11 +469,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM
@@ -484,11 +484,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN
@@ -500,11 +500,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION
@@ -539,11 +539,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C61
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.PROTOTYPE
@@ -554,11 +554,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS
@@ -569,11 +569,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST
@@ -584,11 +584,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL
@@ -597,11 +597,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE
@@ -612,11 +612,11 @@ nodes:
     source'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.SCREEN
@@ -625,11 +625,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.PUBLISH
@@ -639,11 +639,11 @@ nodes:
   epistemic_state: 'known | gap: target assurance level undecided'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE
@@ -656,25 +656,31 @@ nodes:
     in PIG-JS.DEFENSE.DOM.6.2)'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST
   name: Framework short list
-  intent: 'The candidates a team may choose among, cut by trust evidence under the
-    max rule: the platform first, then four frameworks.'
-  epistemic_state: 'risky | unvalidated: gates are the build''s judgment, no admitted
-    source states them | conflict: keep Vue and drop the platform baseline, an earlier
-    proposal (inferred)'
+  intent: The candidates that show the trust evidence today, the platform first, then
+    four frameworks; another framework joins by showing the same evidence.
+  epistemic_state: 'risky | unvalidated: gates B and C are the build''s judgment,
+    no admitted source states them; gate A is inferred from the supported-versions
+    rule (TYPES-C45, SUPPLY-C36) | unvalidated: the list is a snapshot of what the
+    admitted sources state, not a ranking | conflict: keep Vue and drop the platform
+    baseline, an earlier proposal (inferred)'
   constraints:
-  - MUST admit a framework to the short list only if it states which versions receive
+  - 'MUST admit a framework to the short list when it states which versions receive
     security fixes (gate A, mandatory) and also has a documented escape and sanitization
-    model (gate B) or a stated governance or maintenance body (gate C); the gates
-    are the build's judgment, no admitted source states them.
+    model (gate B) or a stated governance or maintenance body (gate C); treat the
+    list as the candidates that show this evidence today: a framework not on it may
+    be chosen once it shows the same evidence, and absence from the list for lack
+    of evidence is not a rejection. Gate A follows from the guideline''s own rule
+    to run only supported versions (TYPES-C45, SUPPLY-C36, SUPPLY-C28); gates B and
+    C are the build''s judgment, no admitted source states them.'
   design_notes: 'Judge record:
 
     Positions: Candidates and their evidence are in the framework evidence matrix
@@ -682,10 +688,11 @@ nodes:
     React, Angular, Vue, Lit, htmx, no framework as comparator; (b) this note: gates
     on trust evidence; (c) rank by popularity.
 
-    Forces: Purpose is trust: third-party code with your privileges. The most demanding
-    practice states what the code is, who maintains it and for how long it is patched,
-    and adds the least third-party code. Framework documentation grounds facts about
-    that framework only, so the gates are the build''s judgment, recorded here.
+    Forces: Purpose is trust: third-party code with your privileges. The practice
+    that serves trust best states what the code is, who maintains it and for how long
+    it is patched, and adds the least third-party code. Framework documentation grounds
+    facts about that framework only, so the gates are the build''s judgment, recorded
+    here.
 
     Decision: Gate A (mandatory): the candidate states which versions receive security
     fixes, as the guideline itself runs only supported versions (TYPES-C45, SUPPLY-C36,
@@ -698,7 +705,9 @@ nodes:
     C open (FW-C35); Lit A yes (FW-C28), B open (FW-C16), C yes (FW-C34); htmx A yes
     (FW-C21), B yes, C open (FW-C35); Vue A no (FW-C26), B yes, C partial (FW-C32);
     Svelte A no (FW-C27), B yes, C open; Solid A no (FW-C29, FW-C30), B no (FW-C15,
-    FW-C16), C partial (FW-C33).
+    FW-C16), C partial (FW-C33). The list is a snapshot of the admitted evidence,
+    not a closed set: a framework not on it joins when it shows gate A and one of
+    B or C.
 
     Rejected: Vue: wins if an admitted source states a Vue security-fix window, and
     then names a legal entity or funding; it is the closest runner-up. Svelte: wins
@@ -706,14 +715,24 @@ nodes:
     a support policy and a default-escaping description. (c) popularity: rejected,
     the standing rule; only React has a figure. ''A framework is always needed'':
     wins when a requirement is not met by the platform (SUPPLY-C27 test). Left off
-    for missing evidence, not for merit; reopen when sources appear.'
+    for missing evidence, not for merit; reopen when sources appear. A closed approved
+    list (a team may choose only among these): wins where an organisation wants a
+    fixed list for audit, which is a policy and not a trust finding (inferred).
+
+    Re-judged under best (RELAX): the purpose is trust. Gate A has a grounded ancestor,
+    the guideline''s own rule to run only supported versions (TYPES-C45, SUPPLY-C36,
+    SUPPLY-C28). That Vue, Svelte and Solid are absent is a gap in the admitted sources,
+    not a finding about the frameworks, so a closed list claimed more than the evidence
+    gives. Best for trust: state what a candidate must show and what the build found,
+    and let another framework in on the same evidence. Gates B and C stay the build''s
+    judgment, flagged.'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT
@@ -723,11 +742,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.FORMAT
@@ -737,11 +756,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.TESTS
@@ -751,11 +770,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEASURE
@@ -767,11 +786,11 @@ nodes:
     SRC-088)'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.METHOD
@@ -781,11 +800,11 @@ nodes:
   epistemic_state: 'known | unvalidated: figures rest on one T2 harness document'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.DIAGNOSE
@@ -795,11 +814,11 @@ nodes:
   epistemic_state: 'known | unvalidated: single T1 pages, quotes tool-extracted'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY
@@ -810,11 +829,11 @@ nodes:
     sizing open'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.STRICTNESS.1
@@ -853,11 +872,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C03
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.STRICTNESS.2
@@ -889,11 +908,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C21
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.STRICTNESS.3
@@ -924,11 +943,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.STRICTNESS.4
@@ -954,11 +973,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C37
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.1
@@ -998,19 +1017,20 @@ nodes:
   - build/research/01_lang/result.md::LANG-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.2
   name: Null and undefined checks
   intent: A check for absence names the values it tests, with no loose-equality exception.
   epistemic_state: 'known | conflict: Google JS guide and ESLint option null ignore
-    allow == null as the one exception | unvalidated: a rule has no claim of its own,
-    it is the build''s judgment'
+    allow == null as the one exception | unvalidated: a stylistic tie on an exact
+    mechanism, the choice rests on the reader-cost argument (inferred); the acceptable-when
+    row has no claim of its own'
   constraints:
   - 'MUST forbid every ==, the null check included: write x === null or x === undefined
     (ESLint eqeqeq default always); the equality mechanism of == null is exact, but
@@ -1026,20 +1046,30 @@ nodes:
     Forces: both are exact in mechanism (ECMA-262 7.2.13); one uniform rule asks nothing
     of the reader, the exception asks the reader to know the one exception.
 
-    Decision: forbid every ==, the null check included. Max rule: the more demanding
-    of two grounded options.
+    Decision: forbid every ==, the null check included, on the reader-cost argument:
+    both forms are exact, so the only difference left is that the exception costs
+    the reader one more rule to recall.
 
     Rejected: == null as the one exception; would win where the code base already
-    encodes it in lint and values brevity over uniformity (recorded as acceptable-when).'
+    encodes it in lint and values brevity over uniformity (recorded as acceptable-when).
+
+    Re-judged under best (KEEP): "the more demanding option" was the former reason
+    and is withdrawn. The mechanism is a tie (ECMA-262 7.2.13 makes == null exact)
+    and the dissent audit calls the dispute stylistic, so the deciding force is the
+    branch purpose: what an expression does follows from its text without a recalled
+    exception (SUBSET.VISIBLE). The uniform rule is also ESLint''s default and Airbnb''s
+    and needs no configuration; its cost is two comparisons for one. A close call,
+    inferred; == null is best where the code base already encodes null: ignore in
+    lint and values brevity (the acceptable-when row).'
   impl_pointers:
   - build/research/01_lang/result.md::LANG-C19
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.3
@@ -1063,11 +1093,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C21
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.4
@@ -1113,11 +1143,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.5
@@ -1143,11 +1173,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.CONVERSION.6
@@ -1184,11 +1214,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C52
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.NUMBERS.1
@@ -1216,11 +1246,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C28
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.NUMBERS.2
@@ -1244,11 +1274,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C30
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.NUMBERS.3
@@ -1279,11 +1309,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.NUMBERS.4
@@ -1314,11 +1344,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C49
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.1
@@ -1364,11 +1394,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C08
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.2
@@ -1401,11 +1431,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.3
@@ -1436,6 +1466,11 @@ nodes:
     Rejected: TypeScript private; wins on down-levelled targets where the emit cost
     is measured. Underscore convention; wins never as privacy.
 
+    Re-judged under best (KEEP): already the best for its purpose and not the strictest:
+    it applies only wherever privacy must hold, rests on consensus mechanism facts
+    (MDN, TC39), and the one dissent (Google TS) is a compile-target cost carried
+    as acceptable-when. Nothing to relax.
+
     Rejected [consensus]: Belief rejected: a leading underscore keeps a member private.
     Underscore names are ordinary public properties; WeakMap and closure emulations
     cannot match hash fields (MDN; folklore audit, refuted).
@@ -1451,27 +1486,31 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C40
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.4
   name: Accessor properties
-  intent: Properties do not run code on access; behaviour that does work is an explicit
-    method call.
-  epistemic_state: 'known | unvalidated: holder position only (Google JS), no mechanism
-    evidence'
+  intent: 'A property read costs nothing and changes nothing: an accessor is only
+    a cheap view of stored state; behaviour that does work is an explicit method call.'
+  epistemic_state: 'known | unvalidated: holder position only (Google JS, which bans
+    accessors outright); the narrow form is the reading its reason supports, the boundary
+    is inferred'
   constraints:
-  - MUST NOT use getter and setter properties; provide ordinary methods, because properties
-    that run code on access are potentially surprising and hard to reason about. Ground
-    is one style-guide position (Google JS); its compiler-support reason is a tooling
-    point and is not carried.
-  - 'Acceptable only when the property is a cheap, side-effect-free view of stored
-    state on a data-like object: an accessor property (inferred; no admitted source
-    states this condition).'
+  - MUST limit accessor properties to cheap, side-effect-free views of stored state
+    on a data-like object; behaviour that does work (computation, input or output,
+    change of other state) is an ordinary method, because a property read that runs
+    code hides its cost and side effects. Ground is one style-guide position (Google
+    JS, which bans accessors outright) and the reason it gives; the narrow form is
+    the part that reason supports, and its boundary is inferred. The compiler-support
+    reason of the guide is a tooling point and is not carried.
+  - 'Acceptable only when a team wants a rule that needs no judgment of cost: no getter
+    or setter properties at all, methods only (Google JS guide position, the stricter
+    form; inferred condition, no admitted source states it).'
   design_notes: 'Judge record:
 
     Positions: no accessor properties, use methods (STRUCT-C46, Google JS, position
@@ -1480,19 +1519,29 @@ nodes:
     Forces: a property read that runs code hides cost and side effects from the reader,
     which is the predictability purpose; cost is a call-style API.
 
-    Decision: no getter or setter properties; behaviour is a method.
+    Decision: accessor properties only as cheap, side-effect-free views of stored
+    state on a data-like object; behaviour that does work is a method.
 
-    Rejected: accessors; would win for a cheap, side-effect-free view of stored state
-    on a data-like object (inferred). Grounds are one position, flagged for review.'
+    Rejected: no accessors at all (Google JS, the stricter form); would win where
+    a team wants a rule a linter checks without judging cost (inferred condition).
+    Accessors that do work: never, they hide cost and side effects. Grounds are one
+    position, flagged for review.
+
+    Re-judged under best (RELAX): the one ground is Google''s position and the reason
+    it gives, that a property read which runs code is surprising. That reason supports
+    limiting accessors that do work, not banning a cheap read of stored state, which
+    hides nothing. The narrow form is what the reason supports; the ban is mechanically
+    checkable and the narrow form needs judgment, which is why the ban stays as acceptable-when.
+    Inferred boundary, one holder.'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C46
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.5
@@ -1526,11 +1575,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.OBJECTS.6
@@ -1571,11 +1620,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.MUTATION.1
@@ -1608,11 +1657,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C39
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.MUTATION.2
@@ -1640,11 +1689,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C44
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.MUTATION.3
@@ -1672,11 +1721,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION.1
@@ -1704,11 +1753,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION.2
@@ -1743,11 +1792,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION.3
@@ -1775,11 +1824,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C46
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION.4
@@ -1807,11 +1856,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C48
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.SUBSET.EVOLUTION.5
@@ -1841,16 +1890,25 @@ nodes:
 
     Rejected: reliance on automatic insertion; would win where a formatter and hazard-catching
     lint rules both run in CI and the team adopts that style. No admitted source documents
-    the hazards (not extracted: grounds are one position, flagged for review.'
+    the hazards (not extracted: grounds are one position, flagged for review.
+
+    Re-judged under best (KEEP): one holder (Google JS) and no hazard extracted. The
+    two styles are equal in predictability when a formatter and a hazard-catching
+    lint rule both run, and the guideline mandates a formatter and a lint gate (VERIFICATION);
+    the semicolon is then free, since the formatter writes it, and works without either
+    tool. Braces cost two characters and make a later edit safe (inferred); a formatter
+    does not insert them, so they need a lint rule. Kept, flagged as a holder position;
+    the no-semicolon style is best where the team has chosen it together with that
+    tooling (the acceptable-when row).'
   impl_pointers:
   - build/research/08_quality/result.md::QUALITY-C19
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.1
@@ -1897,11 +1955,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C46
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.2
@@ -1938,11 +1996,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.3
@@ -1969,11 +2027,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C03
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.4
@@ -1997,11 +2055,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C04
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.5
@@ -2024,11 +2082,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C05
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.LAYER.6
@@ -2048,11 +2106,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C38
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.STRICT.1
@@ -2084,67 +2142,80 @@ nodes:
   - build/research/02_types/result.md::TYPES-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.STRICT.2
   name: Unchecked index access
   intent: Reads of undeclared keys are typed as possibly undefined
   epistemic_state: 'known | unvalidated: source says consider (TypeScript documentation,
-    typescript-eslint); the MUST is the build''s choice under the max rule; mechanism
-    only, no admitted source mandates the flag | conflict: friction cost (typescript-eslint)'
+    typescript-eslint); SHOULD is the reading the sources support; mechanism only,
+    no admitted source mandates the flag | conflict: friction cost (typescript-eslint)'
   constraints:
-  - 'MUST enable noUncheckedIndexedAccess, outside the strict family: it adds undefined
-    to undeclared index-signature reads, at a friction cost typescript-eslint calls
-    often unwieldy'
+  - 'SHOULD enable noUncheckedIndexedAccess for new code, outside the strict family:
+    it adds undefined to undeclared index-signature reads, at a friction cost typescript-eslint
+    calls often unwieldy; leave it off where index-heavy or legacy code makes the
+    friction exceed the defects found (inferred condition). The sources say consider.'
   design_notes: 'Judge record:
 
     Positions: enable; leave off because the friction is often unwieldy (typescript-eslint,
     SRC-026). Forces: undefined-on-read catches missing keys; friction cost on index-heavy
-    code. Decision: enable for new code. Rejected: off wins where index-heavy legacy
-    code makes the friction exceed the defects found (inferred condition; the friction
-    statement is typescript-eslint''s).
+    code. Decision: SHOULD enable for new code. Rejected: off wins where index-heavy
+    legacy code makes the friction exceed the defects found (inferred condition; the
+    friction statement is typescript-eslint''s); MUST would win where a team has measured
+    that unchecked index reads cause its defects. Re-judged under best (RELAX): both
+    sources say consider and the one friction statement is typescript-eslint''s, often
+    unwieldy; a MUST over a documented cost went beyond what the sources establish,
+    so SHOULD for new code with the off condition inside the rule is the strongest
+    form the evidence supports.
 
     Sources cited: SRC-026'
   impl_pointers:
   - build/research/02_types/result.md::TYPES-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.STRICT.3
   name: Exact optional properties
   intent: An optional property means absent, not possibly undefined
   epistemic_state: 'known | unvalidated: source says consider (TypeScript documentation);
-    the MUST is the build''s choice under the max rule; mechanism only, quote tool-extracted
+    SHOULD is the reading the source supports; mechanism only, quote tool-extracted
     | unvalidated: rests on single-source claims only'
   constraints:
-  - MUST enable exactOptionalPropertyTypes, outside the strict family, so an optional
-    property means absent rather than possibly undefined (TypeScript 4.4)
+  - SHOULD enable exactOptionalPropertyTypes for new code, outside the strict family,
+    so an optional property means absent rather than possibly undefined (TypeScript
+    4.4); leave it off where dependency typings assign undefined to optional properties
+    (inferred condition). The source says consider.
   design_notes: 'Judge record:
 
     Positions: enable; leave off. Forces: exact optionals remove the absent-versus-undefined
     ambiguity; they break libraries typed the old way (not read in a source, not stated).
-    Decision: enable for new code. Rejected: off wins where typings from dependencies
-    assign undefined to optional properties (inferred).'
+    Decision: SHOULD enable for new code. Rejected: off wins where typings from dependencies
+    assign undefined to optional properties (inferred); MUST would win where a team''s
+    typings come from code it controls and absent versus undefined is a source of
+    its defects (inferred). Re-judged under best (RELAX): the source says consider
+    and gives the mechanism only, and no admitted source states the cost to dependency
+    typings; MUST was the build''s choice, SHOULD for new code is what the evidence
+    supports.'
   impl_pointers:
   - build/research/02_types/result.md::TYPES-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.STRICT.4
@@ -2170,11 +2241,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.1
@@ -2197,11 +2268,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C15
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.2
@@ -2225,11 +2296,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C16
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.3
@@ -2253,11 +2324,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.4
@@ -2281,11 +2352,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C24
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.5
@@ -2307,35 +2378,52 @@ nodes:
   - build/research/02_types/result.md::TYPES-C19
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.ESCAPE.6
-  name: No suppression directives
-  intent: Type errors are fixed and never silenced by directive; a lint suppression
-    is allowed only with a comment saying why
-  epistemic_state: 'known | unvalidated: holder position only (Google TS), single
-    T2 source'
+  name: No silent suppression directives
+  intent: Type errors are fixed and never silenced by a silent directive; a suppression
+    that reports when it becomes unnecessary is allowed only with a comment saying
+    why
+  epistemic_state: 'known | unvalidated: holder position only (Google TS, which bans
+    all three), single T2 source; the allowed form of ts-expect-error is inferred
+    and the recommended setting of ban-ts-comment is not extracted | conflict: Google
+    TS guide bans ts-expect-error too (one T2 holder)'
   constraints:
-  - MUST NOT suppress type or lint errors with ts-ignore, ts-expect-error or ts-nocheck;
-    where a lint suppression is legitimate (for example any in a test mock) add a
-    comment documenting why; enforce it with the typescript-eslint rule ban-ts-comment
-    set to ban ts-expect-error, ts-ignore and ts-nocheck, overriding the allow-with-description
-    default of the recommended set (Google TS guide, one T2 holder)
+  - MUST NOT suppress type errors with ts-ignore or ts-nocheck; allow ts-expect-error
+    only with a description that says why, and give every legitimate lint suppression
+    (for example any in a test mock) a comment documenting why; enforce it with the
+    typescript-eslint rule ban-ts-comment at its recommended setting, which bans ts-ignore
+    and ts-nocheck and allows ts-expect-error with a description (the setting is stated
+    in the build's earlier text and in no extracted claim, open). Google TS guide,
+    one T2 holder, bans all three.
   design_notes: 'Judge record:
 
     Positions: ban all three directives (Google TS guide); allow with a reason (no
     admitted holder; the handbook documents the directives). Forces: a ban forces
     the real fix; a directive is the only exit for a third-party typing bug (inferred).
-    Decision: ban, lint suppressions with documented reason. Rejected: allowing with
-    a reason wins for a third-party typing bug that cannot be fixed locally (inferred
-    condition). Scoping: the register restriction on SRC-244 is per slot; it is unrestricted
-    for the quality slot, so QUALITY-C18 may ground the rule, and TYPES-C25 (types
-    slot, position only) is kept as a fact row. Weakness: one T2 holder.
+    Decision: ban ts-ignore and ts-nocheck; ts-expect-error only with a description
+    saying why; lint suppressions with a documented reason. Rejected: banning ts-expect-error
+    too (Google TS guide, one T2 holder) wins where a team writes no type-level tests
+    and wants zero directives (inferred condition); ts-ignore and ts-nocheck stay
+    banned because they are silent (inferred). Scoping: the register restriction on
+    SRC-244 is per slot; it is unrestricted for the quality slot, so QUALITY-C18 may
+    ground the rule, and TYPES-C25 (types slot, position only) is kept as a fact row.
+    Weakness: one T2 holder. Re-judged under best (RELAX): one T2 holder bans all
+    three and no admitted source ranks them. They differ in what they hide: ts-nocheck
+    switches off a whole file and ts-ignore hides an error with no later signal, while
+    ts-expect-error reports when the suppressed line stops failing, so it cannot outlive
+    its cause (inferred; the behaviour is TypeScript''s own and is not extracted as
+    a claim, open: read it from the handbook). Banning ts-expect-error also removes
+    the means of testing that a type rejects a value (inferred). Best for checkability:
+    ban the two silent ones, allow the self-checking one with a stated reason. That
+    is typescript-eslint''s recommended setting of ban-ts-comment as the build earlier
+    described it (not extracted, open), so no override of the recommended set remains.
 
     Fact [single-source]: Same position restated in the types slot: Google holds that
     the three directives must not be used because an error usually has a larger cause
@@ -2348,11 +2436,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL.1
@@ -2378,11 +2466,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C21
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL.2
@@ -2408,11 +2496,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C22
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL.3
@@ -2438,11 +2526,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C53
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL.4
@@ -2475,11 +2563,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.MODEL.5
@@ -2502,17 +2590,23 @@ nodes:
     interface cannot express (inferred). Rejected: alias everywhere wins where accidental
     merging must be impossible (inferred). The restriction (position only) is respected:
     the position is used to choose among positions, not as evidence of a defect class.
+    Re-judged under best (KEEP): one position (Google TS), no admitted dissent, and
+    a handbook fact that interfaces extend and re-open. Not a strict-versus-lenient
+    choice: the rule already sends unions, tuples and mapped types to aliases. No
+    argument in the evidence shows either form checks better, so the sole ranking
+    stands as the default; weak, flagged. It would reverse on an admitted source showing
+    that accidental declaration merging causes defects (the rejected condition).
 
     Sources cited: SRC-043, SRC-244'
   impl_pointers:
   - build/research/02_types/result.md::TYPES-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.SIGNATURE.1
@@ -2542,11 +2636,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C49
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.SIGNATURE.2
@@ -2569,11 +2663,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C50
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.SIGNATURE.3
@@ -2596,11 +2690,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C51
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.SIGNATURE.4
@@ -2623,11 +2717,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C52
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY.1
@@ -2647,11 +2741,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C18
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY.2
@@ -2675,11 +2769,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C30
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY.3
@@ -2700,11 +2794,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY.4
@@ -2725,11 +2819,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTRACTS.BOUNDARY.5
@@ -2774,11 +2868,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.1
@@ -2823,11 +2917,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C15
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.2
@@ -2866,11 +2960,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.3
@@ -2913,11 +3007,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.4
@@ -2963,11 +3057,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.5
@@ -3001,11 +3095,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C51
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.6
@@ -3049,11 +3143,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C52
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS.1
@@ -3085,11 +3179,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C24
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS.2
@@ -3130,11 +3224,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C21
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS.3
@@ -3167,11 +3261,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS.4
@@ -3212,11 +3306,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C33
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.BOUNDS.1
@@ -3257,11 +3351,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.BOUNDS.2
@@ -3305,11 +3399,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.BOUNDS.3
@@ -3342,11 +3436,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING.1
@@ -3390,11 +3484,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING.2
@@ -3439,11 +3533,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C50
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING.3
@@ -3488,11 +3582,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING.4
@@ -3526,11 +3620,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C49
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.FLOW.1
@@ -3565,11 +3659,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C03
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.FLOW.2
@@ -3605,11 +3699,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.FLOW.3
@@ -3647,11 +3741,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS.1
@@ -3689,11 +3783,11 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS.2
@@ -3729,11 +3823,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C38
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS.3
@@ -3764,11 +3858,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C36
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS.4
@@ -3802,11 +3896,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROCESS.5
@@ -3837,11 +3931,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.FORMAT.1
@@ -3873,11 +3967,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.FORMAT.2
@@ -3906,11 +4000,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C58
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.FORMAT.3
@@ -3939,11 +4033,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C37
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.FORMAT.4
@@ -3962,7 +4056,11 @@ nodes:
 
     Forces: Namespaces add a second organising mechanism beside modules
 
-    Decision: Modules only
+    Decision: Modules only. Re-judged under best (KEEP): namespaces are a second way
+    to organise code beside the language''s own modules, so one mechanism serves locality
+    best; the exception for declaration files describing a global-script library is
+    already stated, so the rule is no stricter than its condition needs. One holder,
+    flagged
 
     Rejected: Namespaces: win for declaration files describing a global-script library,
     where no module exists (inferred, not stated by the source)
@@ -3972,11 +4070,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C27
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE.1
@@ -4010,11 +4108,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE.2
@@ -4044,11 +4142,11 @@ nodes:
   - build/research/01_lang/result.md::LANG-C62
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE.3
@@ -4086,11 +4184,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C16
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE.4
@@ -4118,11 +4216,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C15
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.NODE.5
@@ -4148,11 +4246,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.1
@@ -4185,11 +4283,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C05
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.2
@@ -4216,11 +4314,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.3
@@ -4248,11 +4346,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.4
@@ -4292,11 +4390,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C19
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.5
@@ -4319,26 +4417,30 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.LOADING.6
   name: Barrel files
-  intent: Import from the defining module and keep re-exporting modules to a package's
-    public entry point.
+  intent: Import from the defining module where a barrel re-exports many modules,
+    and keep aggregation at a package's public entry point.
   epistemic_state: 'risky | unvalidated: single T3 source, one synthetic measurement
-    on one machine | unvalidated: holder position only (the barrel-file article''s
-    author) | conflict: barrels are a documented use of aggregation, MDN (no recommendation)'
+    on one machine; the scope ''many modules'' is inferred from how the measured cost
+    scales | unvalidated: holder position only (the barrel-file article''s author)
+    | conflict: barrels are a documented use of aggregation, MDN (no recommendation)'
   constraints:
-  - 'MUST NOT use barrel files (re-export-only modules) to aggregate a package''s
-    internals: every importer loads all re-exported modules eagerly (one synthetic
-    measurement, one machine: 0.15 s for 500 modules, 48.44 s for 50,000); aggregation
-    is for a public entry point. The blanket "get rid of all barrel files" is the
-    author''s position and is not adopted.'
+  - 'SHOULD NOT use barrel files (re-export-only modules) to aggregate a package''s
+    internals once they re-export many modules: every importer loads all re-exported
+    modules eagerly, and the one measurement found the cost growing with the count
+    (one synthetic measurement, one machine: 0.15 s for 500 modules, 48.44 s for 50,000);
+    import from the defining module there, and keep a small barrel where the project''s
+    own measurement shows no cost. Aggregation at a package''s public entry point
+    stays. The blanket "get rid of all barrel files" is the author''s position and
+    is not adopted.'
   design_notes: 'Judge record:
 
     Positions: Avoid internal barrels (STRUCT-C29; SRC-315 T3 measurement, SRC-086)
@@ -4348,23 +4450,29 @@ nodes:
     Forces: A barrel couples each importer to every re-exported module; a public entry
     point is the one place aggregation earns its cost
 
-    Decision: Import from the defining module, aggregate at the public entry point
-    only
+    Decision: Import from the defining module where a barrel re-exports many modules
+    (SHOULD NOT aggregate internals there); aggregate at the public entry point. Re-judged
+    under best (RELAX): the cost in the one measurement grows with the module count
+    (0.15 s at 500, 48.44 s at 50,000), so it supports not using large barrels, not
+    never using an internal barrel; the mechanism, eager loading of everything re-exported,
+    is MDN''s (T1); the measurement is T3, one machine, synthetic
 
     Rejected: Barrels everywhere: win where no measurement shows load cost and importers
-    need many members; blanket removal wins if the public entry point is itself the
-    problem
+    need many members, which is now the stated condition for small barrels; blanket
+    removal of internal barrels (the former MUST NOT): best where the package is large
+    enough for the measured cost to apply; blanket removal of all barrels wins if
+    the public entry point is itself the problem
 
     Sources cited: SRC-086, SRC-315'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C29
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE.1
@@ -4384,7 +4492,12 @@ nodes:
 
     Forces: A default export has no canonical name, so renames cannot be found mechanically
 
-    Decision: Named exports only
+    Decision: Named exports only. Re-judged under best (KEEP): the cause is a language
+    fact (an importer picks any name for a default export, so a rename cannot be found
+    mechanically), two guides give it as their reason, and the exception is already
+    conditional (a tool or framework that mandates a default, CommonJS or AMD interop);
+    the one dissent (Airbnb) carries no reason in the claim. Not stricter than its
+    purpose needs
 
     Rejected: Default: wins when a framework or tool mandates a default export, or
     for CommonJS and AMD interop (the purpose MDN names)
@@ -4394,11 +4507,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C24
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE.2
@@ -4415,21 +4528,24 @@ nodes:
 
     Forces: Each extra export is a name that others may start to depend on
 
-    Decision: Minimal export list
+    Decision: Minimal export list. Re-judged under best (KEEP): every extra export
+    is a name others may depend on, Parnas''s information-hiding principle (SRC-257,
+    T2, a principle and not a JavaScript rule) points the same way beyond the one
+    holder, and the toolbox exception is stated
 
     Rejected: Export-all: wins in a package that is explicitly a toolbox whose members
     are its purpose
 
-    Sources cited: SRC-244'
+    Sources cited: SRC-244, SRC-257'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE.3
@@ -4451,7 +4567,13 @@ nodes:
     Forces: Live bindings let an exporter change what importers see, so state has
     hidden writers
 
-    Decision: No mutable exports; initialise once, change only through functions
+    Decision: No mutable exports; initialise once, change only through functions.
+    Re-judged under best (KEEP): the first half is a T1 mechanism (an import is a
+    read-only live view); the second is the position of three guides (Google JS, Google
+    TS, Airbnb) that agree, and what a mutable export gives, an observable value,
+    is available through a function or an exported object at no loss for locality,
+    so the strict form costs little; the documented observable exception stays as
+    the rejected condition
 
     Rejected: Mutable live export: wins for a deliberate observable value owned by
     the exporter, if documented
@@ -4466,11 +4588,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C03
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE.4
@@ -4501,11 +4623,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.SURFACE.5
@@ -4524,7 +4646,10 @@ nodes:
 
     Forces: A module already namespaces and lets importers pick single functions
 
-    Decision: Export functions individually
+    Decision: Export functions individually. Re-judged under best (KEEP): a module
+    already namespaces and lets importers pick one function (MDN, T1), both Google
+    guides agree, and W3C TAG''s opposite is written for web platform APIs where no
+    module namespace exists, a setting the rejected condition already names
 
     Rejected: Static-method groupings: win when designing a platform-style API where
     the host offers no module namespace (W3C TAG''s setting, transfer inferred)
@@ -4540,11 +4665,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.DIRECTION.1
@@ -4584,11 +4709,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C08
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.DIRECTION.2
@@ -4607,7 +4732,12 @@ nodes:
 
     Forces: Automation keeps the rule true; the rule is computationally expensive
 
-    Decision: Enable knowingly, bound with maxDepth
+    Decision: Enable knowingly, bound with maxDepth. Re-judged under best (KEEP):
+    the duty to automate follows from DIRECTION.1 (no cycles) and the guideline''s
+    principle that machines check what people forget (VERIFICATION), inferred; the
+    T3 source supplies the tool and its cost, and the rule already says to enable
+    knowingly and bound with maxDepth. The source''s exemption for a small code base
+    with no cycle issue stays as the rejected condition
 
     Rejected: No check: wins in a small codebase with no cycle issue, as the rule''s
     own documentation says
@@ -4617,11 +4747,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C10
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.DIRECTION.3
@@ -4636,11 +4766,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C61
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.PACKAGE.1
@@ -4674,11 +4804,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.PACKAGE.2
@@ -4705,11 +4835,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.PACKAGE.3
@@ -4738,22 +4868,24 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C36
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.STRUCTURE.PACKAGE.4
   name: Relative paths within a project
   intent: Import files of one logical project by relative path so the project can
     move.
-  epistemic_state: 'known | unvalidated: holder position only (Google TS) | unvalidated:
-    quote not obtained (STRUCT-C28)'
+  epistemic_state: 'known | unvalidated: holder position only (Google TS); the alias
+    exception for deep trees is inferred | unvalidated: quote not obtained (STRUCT-C28)'
   constraints:
-  - MUST import files of the same logical project by relative path, so a project can
-    move without rewriting imports. Holder position of Google TS.
+  - SHOULD import files of the same logical project by relative path, so a project
+    can move without rewriting imports; where a relative path climbs through several
+    directory levels, use an alias from the package.json imports field instead (PIG-JS.STRUCTURE.PACKAGE.3).
+    Holder position of Google TS; the alias exception is inferred.
   design_notes: 'Judge record:
 
     Positions: Relative paths within a project (STRUCT-C28; SRC-244 position) against
@@ -4761,21 +4893,27 @@ nodes:
 
     Forces: Relative paths survive moving the project
 
-    Decision: Relative within a project
+    Decision: Relative within a project; an alias from the imports field where a relative
+    path climbs through several directory levels. Re-judged under best (RELAX): the
+    stated reason (a project can move) holds for the whole project, but a file moved
+    inside the project breaks relative paths while an imports alias survives it (inferred),
+    and PACKAGE.3 already decides the imports field as the alias form (T1, consensus);
+    an unconditional rule contradicted it
 
-    Rejected: Aliases: win for deep trees where relative paths climb many levels,
-    via the imports field (PACKAGE.3)
+    Rejected: Aliases everywhere: win where most files sit deep and cross-directory
+    imports are the norm (inferred); aliases configured only in a bundler or checker:
+    lose to the imports field (PACKAGE.3)
 
     Sources cited: SRC-244'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C28
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.1
@@ -4835,11 +4973,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.2
@@ -4849,11 +4987,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.3
@@ -4909,11 +5047,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.4
@@ -4987,11 +5125,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.5
@@ -5029,11 +5167,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C53
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.6
@@ -5043,11 +5181,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.1
@@ -5088,11 +5226,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.2
@@ -5138,11 +5276,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.3
@@ -5186,11 +5324,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C58
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.4
@@ -5230,11 +5368,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.5
@@ -5296,11 +5434,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.6
@@ -5311,11 +5449,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.1
@@ -5326,11 +5464,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.2
@@ -5369,11 +5507,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C24
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.3
@@ -5429,11 +5567,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4
@@ -5445,11 +5583,11 @@ nodes:
     for canonicalization'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.5
@@ -5459,11 +5597,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.6
@@ -5473,11 +5611,11 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.PROTOTYPE.1
@@ -5513,11 +5651,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C12
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.PROTOTYPE.2
@@ -5554,11 +5692,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C50
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.PROTOTYPE.3
@@ -5603,11 +5741,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.1
@@ -5648,11 +5786,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C04
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.2
@@ -5687,11 +5825,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.3
@@ -5727,11 +5865,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.4
@@ -5785,11 +5923,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.5
@@ -5797,11 +5935,12 @@ nodes:
   intent: Secrets stay out of code, environment variables are a weaker fallback, and
     detection and rotation are routine.
   epistemic_state: 'known | unvalidated: source says consider (secrets detection at
-    the developer level); the MUST is the build''s choice under the max rule; rotation
-    has no quote of its own, single source'
+    the developer level); SHOULD is the reading the source supports; rotation has
+    no quote of its own, single source'
   constraints:
-  - MUST run secret detection before commit (IDE, test cycle or pre-commit hook) and
-    rotate secrets regularly; no JavaScript-specific tooling is grounded.
+  - SHOULD run secret detection before commit (IDE, test cycle or pre-commit hook)
+    and rotate secrets regularly; the source says consider enabling detection, rotation
+    has no quote of its own, and no JavaScript-specific tooling is grounded.
   - 'Acceptable only when no dedicated secrets mechanism is possible: environment
     variables, a weaker channel that every module in the process can read. Belief
     restricted: environment variables are a safe place for secrets.'
@@ -5815,20 +5954,27 @@ nodes:
     Forces: Safety against operational convenience.
 
     Decision: Secrets from a dedicated mechanism; environment variables only when
-    nothing else is possible; detect before commit; rotate.
+    nothing else is possible; SHOULD detect before commit; SHOULD rotate regularly.
 
     Rejected: Environment variables as safe store: refuted as restricted by OWASP
-    and by the Node threat model.'
+    and by the Node threat model. MUST for detection and rotation: best for a repository
+    that can become public or holds production credentials (inferred).
+
+    Re-judged under best (RELAX): OWASP says consider enabling detection, and the
+    rotation half has no quote of its own and lies outside the register''s listed
+    scope for that source (no hardcoded secrets, environment variables as the weaker
+    option, pre-commit detection); a MUST was the build''s choice. SHOULD is what
+    the source supports.'
   impl_pointers:
   - build/research/06_runsec/result.md::RUNSEC-C47
   - build/research/06_runsec/result.md::RUNSEC-C48
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.6
@@ -5871,11 +6017,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C63
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.1
@@ -5921,11 +6067,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.2
@@ -5954,11 +6100,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C40
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.3
@@ -5995,11 +6141,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C59
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.4
@@ -6045,11 +6191,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.5
@@ -6081,11 +6227,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C37
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.6
@@ -6112,11 +6258,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C64
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL.1
@@ -6150,11 +6296,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL.2
@@ -6197,11 +6343,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C09
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL.3
@@ -6233,11 +6379,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL.4
@@ -6267,11 +6413,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.INSTALL.5
@@ -6301,11 +6447,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C51
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE.1
@@ -6346,11 +6492,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE.2
@@ -6394,11 +6540,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE.3
@@ -6441,11 +6587,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C21
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.SCREEN.1
@@ -6476,11 +6622,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C44
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.SCREEN.2
@@ -6496,11 +6642,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.SCREEN.3
@@ -6535,11 +6681,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.PUBLISH.1
@@ -6585,11 +6731,11 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.PUBLISH.2
@@ -6622,11 +6768,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C62
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.PUBLISH.3
@@ -6655,11 +6801,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.PUBLISH.4
@@ -6668,11 +6814,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source recommends a target level'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE.1
@@ -6737,11 +6883,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C30
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE.2
@@ -6775,11 +6921,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C35
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE.3
@@ -6813,11 +6959,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE.4
@@ -6869,11 +7015,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C44
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_EVIDENCE.5
@@ -6908,23 +7054,25 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST.1
   name: Platform baseline
   intent: Framework-free components are the default and the first candidate.
-  epistemic_state: 'known | unvalidated: the platform-first default is the build''s
-    judgment, no claim states it (FW-C46 says only that the platform offers components)
-    | unvalidated: rests on single-source claims only'
+  epistemic_state: 'known | unvalidated: the platform-first default is inferred from
+    SUPPLY-C27 (ask first whether existing components suffice, single-source); FW-C46
+    says only that the platform offers components | unvalidated: rests on single-source
+    claims only'
   constraints:
-  - MUST make the platform, with Web Components and no framework, the default and
-    the first candidate; adopt a framework only when a requirement is not met by the
-    platform (an isolation test confirms it).
+  - 'MUST make the platform, with Web Components and no framework, the default and
+    the first candidate: ask whether the platform suffices before adding a framework,
+    adopt one when a requirement is not met by the platform, and test the adopted
+    framework in isolation for unexpected indirect dependencies in production (SUPPLY-C27).'
   - MUST name custom elements with a hyphen; the standard distinguishes autonomous
     custom elements from customized built-in elements defined with an extends option.
   design_notes: 'Judge record:
@@ -6936,10 +7084,19 @@ nodes:
     Forces: Zero third-party runtime code against the work a framework saves.
 
     Decision: (a) is the default and the first candidate (DEPENDENCIES.ADMISSION.1,
-    SUPPLY-C27); custom element names carry a hyphen (T1).
+    SUPPLY-C27); custom element names carry a hyphen (T1). The question whether the
+    platform suffices comes first (SUPPLY-C27); the isolation test applies to what
+    is adopted.
 
-    Rejected: (b): wins when a requirement exists that the platform does not meet
-    and the SUPPLY-C27 isolation test confirms it.
+    Rejected: (b): wins when a requirement exists that the platform does not meet;
+    the isolation test of SUPPLY-C27 applies to whatever is adopted and does not decide
+    whether the platform suffices.
+
+    Re-judged under best (RELAX): the build made the isolation test a gate on adoption;
+    SUPPLY-C27 asks first whether existing components suffice and then tests the adopted
+    dependency in isolation for unexpected indirect dependencies, so the gate overreached
+    its source. Platform-first is kept: no third-party code is the strongest trust
+    position, and SUPPLY-C27 supports the question (inferred, single-source).
 
     Fact [single-source]: The platform offers framework-free components: Web Components
     combine custom elements, shadow DOM and HTML templates with slot, with no library.
@@ -6950,11 +7107,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.1
@@ -6964,19 +7121,20 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.2
   name: Enforcement
   intent: A finding changes the exit status of the run, so CI can block on it, cheaply
     enough to run every time.
-  epistemic_state: 'known | unvalidated: a rule has no claim of its own, it is the
-    build''s judgment'
+  epistemic_state: 'known | unvalidated: the platform fact is grounded (QUALITY-C43,
+    single T1, held on js-philosophy VERIFICATION.ENFORCEMENT); the practice of an
+    always-run gate job is inferred from it'
   constraints:
   - 'MUST make the CI job that runs the lint gate always run: GitHub required status
     checks pass on successful, skipped or neutral conclusions, so a skipped job lets
@@ -6995,14 +7153,21 @@ nodes:
     platform fact applied to this node (added at stage 7 so the philosophy node stays
     platform-neutral).
 
-    Rejected: a conditionally skipped lint job: wins nowhere for a required check.'
+    Rejected: a conditionally skipped lint job: wins nowhere for a required check.
+
+    Re-judged under best (KEEP): the rule is QUALITY-C43 applied to this node: the
+    platform fact is a T1 quote and always running the gate job is the claim''s own
+    practice (inferred from the fact), so it is not stricter than its source; the
+    cost is one job, and a path-filtered required job would let a merge through. The
+    earlier flag that the rule had no claim was wrong: the claim is held on the philosophy
+    node VERIFICATION.ENFORCEMENT.'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.3
@@ -7032,11 +7197,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C45
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.4
@@ -7077,11 +7242,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.FORMAT.1
@@ -7117,11 +7282,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C12
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.FORMAT.2
@@ -7150,11 +7315,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C16
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.FORMAT.3
@@ -7204,11 +7369,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C15
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.TESTS.1
@@ -7261,11 +7426,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C28
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.TESTS.2
@@ -7296,11 +7461,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.TESTS.3
@@ -7331,11 +7496,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEASURE.1
@@ -7368,11 +7533,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEASURE.2
@@ -7433,11 +7598,11 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEASURE.3
@@ -7471,11 +7636,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C16
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.METHOD.1
@@ -7510,11 +7675,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C59
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.METHOD.2
@@ -7545,11 +7710,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C60
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.DIAGNOSE.1
@@ -7580,11 +7745,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.DIAGNOSE.2
@@ -7625,11 +7790,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C19
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.DIAGNOSE.3
@@ -7669,11 +7834,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C22
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.1
@@ -7705,11 +7870,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C26
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.2
@@ -7743,11 +7908,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.3
@@ -7776,11 +7941,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C45
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.4
@@ -7830,11 +7995,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C57
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.5
@@ -7873,11 +8038,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.6
@@ -7919,11 +8084,11 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C54
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.PROMISES.4.1
@@ -7933,11 +8098,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.ERRORS.2.1
@@ -7947,11 +8112,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.CONTROL.SCHEDULING.2.1
@@ -7961,11 +8126,11 @@ nodes:
     scheduler APIs are a draft, Node exposes only experimental ones)'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.2.1
@@ -7994,11 +8159,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C24
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.2.2
@@ -8026,11 +8191,11 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C56
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.2.3
@@ -8094,11 +8259,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C75
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.6.1
@@ -8160,11 +8325,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C11
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.6.2
@@ -8183,11 +8348,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C08
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.DOM.6.3
@@ -8212,11 +8377,11 @@ nodes:
   - build/research/10_frameworks/result.md::FW-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.2.1
@@ -8269,11 +8434,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C68
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.2.2
@@ -8311,36 +8476,42 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C66
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.6.1
   name: Primary defence
-  intent: A synchronizer or signed double-submit token, unique per session, random
-    and kept out of URLs and logs, is the primary defence, layered with the Sec-Fetch-Site
-    check and an Origin or Referer fallback; tokens are compared in constant time.
-  epistemic_state: 'known | unvalidated: token-first and the layering are stricter
-    than both sources, which list a Fetch Metadata check among the primary defences
-    (OWASP, MDN); the acceptable-when row is the build''s judgment about the condition
-    and has no claim of its own'
+  intent: 'At least one primary defence stands: a synchronizer or signed double-submit
+    token (unique per session, random, kept out of URLs and logs, compared in constant
+    time) or a Sec-Fetch-Site check with an Origin or Referer fallback; the token
+    is preferred, with the other layered behind it, where browsers may not send the
+    header.'
+  epistemic_state: 'known | unvalidated: the preference for the token and the layering
+    behind it go beyond both sources, which list a Fetch Metadata check among the
+    primary defences (OWASP, MDN) and require no token beside it; the acceptable-when
+    row is the build''s judgment about the condition and has no claim of its own'
   constraints:
-  - MUST protect every state-changing request that authenticated cookies can trigger
-    with a synchronizer token or a signed double-submit cookie bound to the session
-    as the primary CSRF defence, and never with a Sec-Fetch-Site check alone.
-  - 'MUST check Sec-Fetch-Site as an additional layer behind the token: allow a state-changing
-    request only when it is same-origin (same-site only where the threat model trusts
-    sibling subdomains), otherwise leave state unchanged, and keep an Origin or Referer
-    check for browsers that do not send the header.'
+  - 'MUST protect every state-changing request that authenticated cookies can trigger
+    with at least one primary CSRF defence: a synchronizer token or a signed double-submit
+    cookie bound to the session, or a Sec-Fetch-Site check with an Origin or Referer
+    fallback; prefer the token where the application serves browsers that may not
+    send the header, and layer the second defence behind it.'
+  - 'MUST apply the Sec-Fetch-Site check, wherever it is used (as the primary defence
+    or as a layer behind the token), as follows: allow a state-changing request only
+    when it is same-origin (same-site only where the threat model trusts sibling subdomains),
+    otherwise leave state unchanged, and keep an Origin or Referer check for browsers
+    that do not send the header.'
   - MUST compare CSRF tokens with a constant-time function.
   - MUST make a synchronizer CSRF token unique per user session, secret and unpredictable
     (a large random value from a secure method), and never let it appear in a URL
     or a server log; do not carry it in a GET request.
   - 'Acceptable only when every browser the application supports sends Sec-Fetch-Site:
-    a Sec-Fetch-Site check as the only primary defence (MDN''s position).'
+    a Sec-Fetch-Site check without the Origin or Referer fallback (inferred condition,
+    no admitted source states it).'
   design_notes: 'Judge record:
 
     Primary defence
@@ -8354,20 +8525,33 @@ nodes:
 
     Forces: Independence from browser support against one fewer mechanism.
 
-    Decision (max rule): a synchronizer or signed double-submit token as the primary
-    defence; the Sec-Fetch-Site check (same-origin, same-site only when the threat
-    model trusts sibling subdomains) and the Origin or Referer fallback layered behind
-    it; tokens unique per session, random, never in a URL, a GET request or a log,
-    compared in constant time. Stricter than both sources, flagged in epistemic_state.
+    Decision: at least one primary defence, the floor both sources set: a synchronizer
+    or signed double-submit token bound to the session, or a Sec-Fetch-Site check
+    (same-origin, same-site only when the threat model trusts sibling subdomains)
+    with an Origin or Referer fallback; the token is preferred, with the other defence
+    layered behind it, where browsers may not send the header; tokens unique per session,
+    random, never in a URL, a GET request or a log, compared in constant time. The
+    preference goes beyond both sources, flagged in epistemic_state.
 
-    Rejected: a Sec-Fetch-Site check as the only primary defence (listed as primary
-    by MDN and OWASP): kept as acceptable-when every supported browser sends the header,
-    a build judgment about the condition.
+    Rejected: a token required beside every Sec-Fetch-Site check (the build''s former
+    choice, stricter than both sources, which list the check as a primary defence):
+    best where the application serves browsers that may not send the header or protects
+    high-value actions (inferred). A Sec-Fetch-Site check without the Origin or Referer
+    fallback: kept as acceptable-when every supported browser sends the header, a
+    build judgment about the condition.
+
+    Re-judged under best (RELAX): both sources and the consensus claims (SECGAP2-C55,
+    C56, C69) establish the floor: one primary defence, a Fetch Metadata check being
+    one of them, with the Origin or Referer fallback for browsers without the header.
+    That the token must be primary and the check only a layer is the build''s own
+    and no source says it; a token works whatever the browser sends, which makes it
+    the better first choice where the browser population is unknown, so it stays as
+    a preference with the layering.
 
     Fact [consensus]: Fact (OWASP CSRF sheet, MDN): both list a Fetch Metadata check
     among the primary CSRF defences, not as defence in depth, and neither says it
-    suffices alone; requiring a token as the primary defence is the build''s stricter
-    choice.'
+    suffices alone; neither requires a token beside it, so the token as required primary
+    defence was the build''s stricter choice and is now a preference.'
   impl_pointers:
   - build/research/14_secgap2/result.md::SECGAP2-C55
   - build/research/14_secgap2/result.md::SECGAP2-C56
@@ -8376,11 +8560,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C92
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.6.2
@@ -8411,11 +8595,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C60
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.ORIGIN.6.3
@@ -8455,11 +8639,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C62
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.1.1
@@ -8509,11 +8693,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C18
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.1.2
@@ -8542,11 +8726,11 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C20
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.1.3
@@ -8588,11 +8772,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.1.4
@@ -8647,11 +8831,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C39
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.1
@@ -8730,11 +8914,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C80
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.2
@@ -8765,11 +8949,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C52
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.3
@@ -8800,11 +8984,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C53
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.4
@@ -8828,11 +9012,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C82
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.5
@@ -8869,11 +9053,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C48
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.4.6
@@ -8920,11 +9104,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.5.1
@@ -8939,11 +9123,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.5.2
@@ -8977,11 +9161,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C42
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.5.3
@@ -9017,6 +9201,16 @@ nodes:
     Rejected: (b): no source says so. (c): no source says so; wins if the Node or
     V8 documentation states that the format is unsafe.
 
+    Re-judged under best (KEEP): the rule applies the class-level mitigations (populate
+    a new object; integrity check where feasible, SRVSEC-C45 and RUNSEC-C44) to one
+    deserializer and claims nothing about the function itself. The MUST NOT is stricter
+    than where feasible, and is kept because the V8 header says the deserializer reads
+    what ValueSerializer wrote (C84), so bytes from an untrusted party are not its
+    stated input; the alternative, a data-only format parsed and validated at the
+    trust boundary, costs little; and the absence of a safety statement is not evidence
+    of safety. It would relax if Node or V8 states that the function is safe for hostile
+    bytes.
+
     Fact [consensus]: Fact: v8.deserialize(buffer) uses a DefaultDeserializer, calls
     readHeader then readValue, and its host-object reader takes a type index and byte
     length from the buffer and builds a typed array over the buffer or an aligned
@@ -9038,11 +9232,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C85
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.5.4
@@ -9089,11 +9283,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C22
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.6.1
@@ -9101,7 +9295,8 @@ nodes:
   intent: Hosts are matched against an allowlist, URLs are parsed with the WHATWG
     URL class, and a deny-list is the weaker fallback.
   epistemic_state: 'known | unvalidated: rests on single-source claims only | unvalidated:
-    a rule has no claim of its own, it is the build''s judgment'
+    the allowlist row has no claim on this node, its claim (SRVSEC-C28, consensus)
+    is held on js-philosophy DEFENSE'
   constraints:
   - 'MUST NOT validate untrusted URLs with legacy url.parse(): it is prone to host
     name spoofing, CVEs are not issued for its flaws; parse with the WHATWG URL class.'
@@ -9123,6 +9318,12 @@ nodes:
 
     Rejected: OWASP minimum deny-list: only when an allowlist is impossible.
 
+    Re-judged under best (KEEP): the two rules mirror quoted text: SRVSEC-C29 quotes
+    Node (do not use url.parse with untrusted input, use the WHATWG URL API), and
+    the allowlist rule is SRVSEC-C28, a consensus claim (OWASP, ASVS 1.3.6) held on
+    the philosophy node DEFENSE. Not stricter than the sources; the deny-list is already
+    the weaker fallback with its condition.
+
     Deferred: On cloud hosts protect the instance metadata service from SSRF: IMDSv2
     on AWS, IMDSv1 disabled. Host configuration, owned by web_architecture.'
   impl_pointers:
@@ -9131,11 +9332,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C38
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.6.2
@@ -9176,11 +9377,11 @@ nodes:
   - build/research/13_srvsec/result.md::SRVSEC-C39
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.6.3
@@ -9205,11 +9406,11 @@ nodes:
     once, on Node fetch redirect semantics.'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.INJECTION.6.4
@@ -9287,11 +9488,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C89
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.2.1
@@ -9301,9 +9502,10 @@ nodes:
     validity time and type; nothing in the token chooses any of them.'
   epistemic_state: 'known | unvalidated: several MUSTs are strict forms of weaker
     wording (ASVS 9.1.2: ideally only symmetric or asymmetric; OWASP JWT sheet: if
-    possible hardcode the algorithm, do not mix), exp on every token is stricter than
-    ASVS 9.2.1 (validity is checked if exp is present), and three rules rest on one
-    source each (SECGAP2-C04, C08, C15)'
+    possible hardcode the algorithm, do not mix), exp is required where tokens grant
+    API access (SECGAP2-C07), which is stricter than ASVS 9.2.1 (validity is checked
+    if exp is present), and three rules rest on one source each (SECGAP2-C04, C08,
+    C15)'
   constraints:
   - MUST verify a JWT against an algorithm allowlist fixed by the caller or by configuration,
     and never let the token's own header choose the verification algorithm.
@@ -9317,7 +9519,7 @@ nodes:
   - 'MUST validate the audience: accept a token only if the recipient is named in
     aud, and reject it when aud is absent.'
   - MUST accept a token only while the verification time lies inside its validity
-    span, and require exp on every token.
+    span, and require exp where tokens grant API access.
   - MUST check that a token is of the correct type and meant for the intended purpose
     before accepting its contents.
   - MUST NOT let one verification call accept both symmetric and asymmetric algorithms
@@ -9336,13 +9538,22 @@ nodes:
     Forces: Forgery resistance against the convenience of letting tokens describe
     themselves.
 
-    Decision: (a), every check as a MUST, exp required on every token (stricter than
-    ASVS 9.2.1); an unsecured token never; one call never accepts both symmetric and
-    asymmetric algorithms for one key.
+    Decision: (a), every check as a MUST; exp required where tokens grant API access
+    (SECGAP2-C07), narrower than the former every-token rule; an unsecured token never;
+    one call never accepts both symmetric and asymmetric algorithms for one key.
 
     Rejected: (b): refuted by the algorithm-confusion and alg-none attacks; wins under
     no grounded condition. Reading RFC 7519 section 8 alone as the algorithm policy:
     it states what libraries implement, not what a consumer accepts.
+
+    Re-judged under best (RELAX, one row): the nine decision rows keep their strength;
+    each mirrors a quoted RFC 8725 or ASVS requirement or a stated attack (algorithm
+    confusion, alg none) and costs the caller one configuration line. The exception
+    is the validity row: require exp on every token went beyond its claim, which scopes
+    the requirement to tokens that grant API access, and ASVS 9.2.1 checks validity
+    only if present. The rows on key source, token type and the memorizable password
+    rest on one source each (SECGAP2-C04, C08, C15) but state RFC or ASVS text; kept,
+    flagged.
 
     Rejected beliefs: a JWT with a valid-looking header can be trusted without a signature
     check (refuted by four sources on algorithm confusion and unsecured tokens).
@@ -9369,11 +9580,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C16
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.SECRETS.2.2
@@ -9428,11 +9639,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C14
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.3.1
@@ -9490,11 +9701,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C28
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEFENSE.HOST.3.2
@@ -9523,11 +9734,11 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C29
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE.1.1
@@ -9536,11 +9747,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source gives a measured duration'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.DEPENDENCIES.UPDATE.3.1
@@ -9549,11 +9760,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source names a level'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.1.1
@@ -9588,11 +9799,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C02
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.1.2
@@ -9602,11 +9813,11 @@ nodes:
   epistemic_state: 'known | unvalidated: baseline suitability inferred | unvalidated:
     rests on single-source claims only'
   constraints:
-  - MUST start from ESLint's recommended config (from @eslint/js) as the baseline
-    rule set, and from typescript-eslint's recommended config for TypeScript code,
+  - 'MUST start from ESLint''s recommended config (from @eslint/js) as the baseline
+    rule set, and from typescript-eslint''s recommended config for TypeScript code,
     with its stylistic set as a separate opt-in that does not affect program logic.
-    The one override is ban-ts-comment, set to ban the three suppression directives
-    (PIG-JS.CONTRACTS.ESCAPE.6). Baseline suitability is inferred from the markers.
+    No rule is overridden: ban-ts-comment stays at its recommended setting (PIG-JS.CONTRACTS.ESCAPE.6).
+    Baseline suitability is inferred from the markers.'
   design_notes: 'Judge record:
 
     Positions: recommended config as baseline (QUALITY-C03; SRC-167); typescript-eslint
@@ -9630,11 +9841,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C04
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.1.3
@@ -9665,11 +9876,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C09
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.1.4
@@ -9707,11 +9918,11 @@ nodes:
   - build/research/02_types/result.md::TYPES-C44
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.2.1
@@ -9740,11 +9951,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C05
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.2.2
@@ -9772,11 +9983,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.2.3
@@ -9805,11 +10016,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.VERIFICATION.LINT.2.4
@@ -9841,11 +10052,11 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C08
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 - uid: PIG-JS.RUNTIME.MEMORY.6.1
@@ -9855,11 +10066,11 @@ nodes:
   epistemic_state: 'undecided | missing: no admitted source'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: tree of the defaults graph from the integrated skeleton (uid check skipped
       on attach)
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: constraints, design notes, impl pointers, epistemic states and links from
       the integrated skeleton and ledger
 treearcs:
