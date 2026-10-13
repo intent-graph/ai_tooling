@@ -1,0 +1,213 @@
+{
+ "claims": 608,
+ "rows_in": 589,
+ "rows_out": 587,
+ "rows_with_claims": 559,
+ "rows_claimless": 28,
+ "merged": [
+  [
+   "SUBSET-051",
+   "DEFENSE-091"
+  ],
+  [
+   "CONTROL-078",
+   "CONTROL-011"
+  ]
+ ],
+ "nodes": {
+  "P": {
+   "1": 8,
+   "2": 40,
+   "3": 59,
+   "0": 1
+  },
+  "D": {
+   "1": 8,
+   "2": 43,
+   "3": 185,
+   "4": 33,
+   "0": 1
+  }
+ },
+ "links": {
+  "P": {
+   "links_inner": 33,
+   "links_cross": 15,
+   "links_python": 23
+  },
+  "D": {
+   "links_inner": 78,
+   "links_cross": 68,
+   "links_inter": 90,
+   "links_inter_within": 87
+  }
+ },
+ "planned": 10,
+ "how": {
+  "flipped": 10,
+  "retargeted": 72,
+  "merged": 9,
+  "dropped": 6,
+  "retyped": 2,
+  "planned": 2
+ },
+ "proposals": 101,
+ "branch_counts": {
+  "P:SUBSET": {
+   "1": 1,
+   "2": 6,
+   "3": 0,
+   "4": 0,
+   "5": 0
+  },
+  "P:CONTRACTS": {
+   "1": 1,
+   "2": 3,
+   "3": 6,
+   "4": 0,
+   "5": 0
+  },
+  "P:CONTROL": {
+   "1": 1,
+   "2": 5,
+   "3": 0,
+   "4": 0,
+   "5": 0
+  },
+  "P:STRUCTURE": {
+   "1": 1,
+   "2": 6,
+   "3": 10,
+   "4": 0,
+   "5": 0
+  },
+  "P:DEFENSE": {
+   "1": 1,
+   "2": 6,
+   "3": 14,
+   "4": 0,
+   "5": 0
+  },
+  "P:DEPENDENCIES": {
+   "1": 1,
+   "2": 6,
+   "3": 16,
+   "4": 0,
+   "5": 0
+  },
+  "P:VERIFICATION": {
+   "1": 1,
+   "2": 5,
+   "3": 11,
+   "4": 0,
+   "5": 0
+  },
+  "P:RUNTIME": {
+   "1": 1,
+   "2": 3,
+   "3": 2,
+   "4": 0,
+   "5": 0
+  },
+  "D:SUBSET": {
+   "1": 1,
+   "2": 6,
+   "3": 28,
+   "4": 0,
+   "5": 0
+  },
+  "D:CONTRACTS": {
+   "1": 1,
+   "2": 6,
+   "3": 30,
+   "4": 0,
+   "5": 0
+  },
+  "D:CONTROL": {
+   "1": 1,
+   "2": 6,
+   "3": 25,
+   "4": 3,
+   "5": 0
+  },
+  "D:STRUCTURE": {
+   "1": 1,
+   "2": 6,
+   "3": 27,
+   "4": 0,
+   "5": 0
+  },
+  "D:DEFENSE": {
+   "1": 1,
+   "2": 6,
+   "3": 32,
+   "4": 19,
+   "5": 0
+  },
+  "D:DEPENDENCIES": {
+   "1": 1,
+   "2": 6,
+   "3": 19,
+   "4": 2,
+   "5": 0
+  },
+  "D:VERIFICATION": {
+   "1": 1,
+   "2": 3,
+   "3": 10,
+   "4": 8,
+   "5": 0
+  },
+  "D:RUNTIME": {
+   "1": 1,
+   "2": 4,
+   "3": 14,
+   "4": 1,
+   "5": 0
+  }
+ },
+ "undecided": [
+  "PIG-JS.CONTROL.ERRORS.2.1",
+  "PIG-JS.CONTROL.PROMISES.4.1",
+  "PIG-JS.CONTROL.SCHEDULING.2.1",
+  "PIG-JS.DEFENSE.DOM.2.3",
+  "PIG-JS.DEFENSE.INJECTION.4.4",
+  "PIG-JS.DEFENSE.INJECTION.5.3",
+  "PIG-JS.DEFENSE.INJECTION.6.4",
+  "PIG-JS.DEPENDENCIES.PUBLISH.4",
+  "PIG-JS.DEPENDENCIES.UPDATE.1.1",
+  "PIG-JS.DEPENDENCIES.UPDATE.3.1",
+  "PIG-JS.RUNTIME.MEMORY.6.1",
+  "PIG-JS.STRUCTURE.DIRECTION.3",
+  "STRUCTURE.DIRECTION.2"
+ ],
+ "t3": [
+  "PIG-JS.STRUCTURE.LOADING.6",
+  "PIG-JS.STRUCTURE.DIRECTION.2",
+  "VERIFICATION.TEST_SUITE.3",
+  "VERIFICATION.TEST_STABILITY.3"
+ ],
+ "mismatches": [],
+ "errors": [],
+ "roles": {
+  "decision": 349,
+  "fact": 137,
+  "acceptable-when": 35,
+  "rejected": 56,
+  "deferred": 10
+ },
+ "graphs": {
+  "js-philosophy": 114,
+  "pig-js-defaults": 473
+ },
+ "jr": {
+  "SUBSET": 28,
+  "CONTRACTS": 23,
+  "CONTROL": 25,
+  "STRUCTURE": 25,
+  "DEFENSE": 39,
+  "DEPENDENCIES": 15,
+  "VERIFICATION": 16,
+  "RUNTIME": 14
+ }
+}

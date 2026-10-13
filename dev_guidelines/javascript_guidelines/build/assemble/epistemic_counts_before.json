@@ -1,0 +1,41 @@
+{
+ "js-philosophy": {
+  "total": 108,
+  "known alone": 54,
+  "known with unvalidated or conflict": 43,
+  "known with other issues (gap, missing, rolls up)": 8,
+  "undecided": 1,
+  "risky": 2,
+  "issue_types": {
+   "unvalidated": 43,
+   "rolls up its five children": 1,
+   "gap": 4,
+   "rolls up PIG-JS.CONTROL.PROMISES and PIG-JS.CONTROL.ERRORS; the asynchronous channel rests on one consensus fact": 1,
+   "rolls up PIG-JS.CONTROL.BOUNDS": 1,
+   "rolls up PIG-JS.CONTROL.SCHEDULING": 1,
+   "rolls up PIG-JS.CONTROL.FLOW; the cost fact is an illustration from one demo": 1,
+   "conflict": 6,
+   "missing": 1,
+   "unclear": 1
+  }
+ },
+ "pig-js-defaults": {
+  "total": 270,
+  "known alone": 99,
+  "known with other issues (gap, missing, rolls up)": 21,
+  "known with unvalidated or conflict": 136,
+  "risky": 2,
+  "undecided": 12,
+  "issue_types": {
+   "rolls up six children": 2,
+   "gap": 16,
+   "unvalidated": 132,
+   "rolls up four children": 2,
+   "rolls up three children": 2,
+   "rolls up five children": 1,
+   "conflict": 20,
+   "missing": 12,
+   "deferred": 1
+  }
+ }
+}

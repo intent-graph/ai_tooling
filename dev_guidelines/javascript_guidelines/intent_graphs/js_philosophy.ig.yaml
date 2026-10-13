@@ -1,0 +1,1605 @@
+meta:
+  name: js-philosophy
+  description: 'Product graph of the JavaScript guideline: eight principles on a predictable
+    language subset, contracts, control of time and failure, locality of change, defense,
+    dependencies, verification and runtime behaviour.'
+nodes:
+- uid: ROOT
+  name: Solid JavaScript
+  intent: JavaScript code whose behaviour is predictable, whose changes stay cheap
+    and which resists attack, in the browser and in Node. JavaScript is permissive
+    and widely misused; with strong principles it is made useful and safe by narrowing
+    it to a checked subset rather than by avoiding it.
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: init the js-philosophy product graph
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET
+  name: Predictable subset
+  intent: 'Code does what its text says: the team writes in a checked subset of a
+    permissive language, so no hidden conversion, silent loss of precision, silent
+    failure, ambient default or surprise mutation decides an outcome.'
+  epistemic_state: 'known | unvalidated: principle inferred as the roll-up of the
+    PIG-JS.SUBSET decisions'
+  design_notes: 'Deferred: Owned by the software development guideline: Reject a fixed
+    tolerance as the general cure for float equality: choosing the tolerance is arbitrary
+    and the relation differs-by-less-than-tolerance is not transitive (Goldberg).
+
+    Deferred: Owned by the software development guideline: Separate immutability (nobody
+    can change the state) from read-only restriction (only some clients may); the
+    source is a taxonomy and shows no effect evidence, so no preference between them
+    is derived.'
+  impl_pointers:
+  - build/research/01_lang/result.md::LANG-C29
+  - build/research/04_struct/result.md::STRUCT-C66
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTRACTS
+  name: Contracts
+  intent: Make intent checkable at build time through a type layer, while holding
+    that the layer is a build-time artefact of a language that has no types at run
+    time, so that what the checker passes says nothing about the data that arrives
+    and is never taken as proof; only parsing that data at the trust boundary attests
+    its shape.
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Validate all
+    data crossing a trust boundary, including data from internal APIs, queues and
+    stored records, before the application uses it
+
+    Deferred: Owned by the software development guideline: Server-side validation
+    as a trusted service layer, never client-side validation as a security control:
+    the architecture half is owned by the web-architecture guideline
+
+    Deferred: Owned by the software development guideline: Use positive validation
+    (allowlist of values, patterns, ranges, or comparison to an expected structure)
+    rather than denylisting bad input
+
+    Deferred: Owned by the software development guideline: Check syntax and semantics,
+    including that combinations of related fields are reasonable (end date after start
+    date)
+
+    Deferred: Owned by the software development guideline: Make input handling a recognizer
+    of valid inputs and keep input languages simple; do not hand-write ad-hoc recognizers
+    (regex allow or deny lists) for complex input languages, which are unreliable
+    (Sassaman et al., position of a 2011 technical report).
+
+    Deferred: Owned by the software development guideline: Cap positional parameters:
+    numerous parameters are hard to read and write because each parameter, its type
+    and its order must be memorised (the rule default of 3 is a configuration default,
+    not evidence)'
+  impl_pointers:
+  - build/research/02_types/result.md::TYPES-C27
+  - build/research/02_types/result.md::TYPES-C29
+  - build/research/02_types/result.md::TYPES-C28
+  - build/research/02_types/result.md::TYPES-C33
+  - build/research/02_types/result.md::TYPES-C48
+  - build/research/04_struct/result.md::STRUCT-C47
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTROL
+  name: Explicit control of time, failure and resources
+  intent: Behaviour under delay, error and load stays predictable because every asynchronous
+    operation, failure and resource of a JavaScript program has an owner, a bound
+    and a defined end.
+  epistemic_state: known | rolls up its five children
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: STRUCTURE
+  name: Structure for locality of change
+  intent: 'Organize code so that a change touches one place: what a module exports
+    is state shared by every importer, because an importer cannot rebind it but can
+    change it, so the sharing is made visible instead of left implicit.'
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Decompose
+    a system into modules by listing the design decisions that are difficult or likely
+    to change and hiding each one inside one module, not by the steps of processing.
+
+    Deferred: Owned by the software development guideline: Distinguish an abstract
+    data type (representation hidden behind operations) from an object (procedural
+    interface, information hidden by procedural abstraction), and do not conflate
+    the two when designing an API.
+
+    Deferred: Owned by the software development guideline: Keep each module''s public
+    surface minimal at every level at which JavaScript can expose a name: named exports
+    of a module, the package entry points, and class members.
+
+    Deferred: Owned by the software development guideline: Keep a module''s top level
+    free of effects other than initialising its own exports, so that importing it
+    is safe in any order and unused code can be dropped by tools.
+
+    Deferred: Owned by the software development guideline: Demoted to fact: a lint
+    rule can forbid imports by path or pattern, which makes mechanical enforcement
+    of import direction possible; the claim that layer direction should be declared
+    and enforced has no admitted ground (the rule documents environment fit, not layering),
+    so the principle stays undecided.
+
+    Deferred: Owned by the software development guideline: Name identifiers with whole
+    words, not single letters or letter-deleting abbreviations: words gave about 19
+    percent faster defect finding than letters or abbreviations in an experiment with
+    72 professional C# developers, with no significant difference between letters
+    and abbreviations. Transfer to JavaScript is inference.
+
+    Deferred: Owned by the software development guideline: Give one concept one word,
+    made of common words and descriptive: holder positions of Google JS, Google TS,
+    W3C TAG and Airbnb agree. Holder positions only, not evidence.
+
+    Deferred: Owned by the software development guideline: Derive a name by selecting
+    the concepts, choosing words per concept, then composing the name; expect two
+    developers to pick the same name only rarely (median 6.9 percent over 47 instances)
+    but a chosen name to be understood.
+
+    Deferred: Owned by the software development guideline: Choose the paradigm per
+    problem by intent: no admitted source supports choosing an object-oriented or
+    a functional style inside JavaScript on defect-rate evidence.
+
+    Deferred: Owned by the software development guideline: Whether a paradigm lowers
+    defects is contested and the studies compare languages, not paradigms inside one
+    language: a modest language effect (Ray et al.), four of eleven languages significant
+    with exceedingly small effects (reproduction), results largely replicated (rebuttal).'
+  impl_pointers:
+  - build/research/04_struct/result.md::STRUCT-C58
+  - build/research/04_struct/result.md::STRUCT-C62
+  - build/research/04_struct/result.md::STRUCT-C59
+  - build/research/04_struct/result.md::STRUCT-C06
+  - build/research/04_struct/result.md::STRUCT-C60
+  - build/research/04_struct/result.md::STRUCT-C55
+  - build/research/04_struct/result.md::STRUCT-C56
+  - build/research/04_struct/result.md::STRUCT-C57
+  - build/research/04_struct/result.md::STRUCT-C64
+  - build/research/04_struct/result.md::STRUCT-C63
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE
+  name: Defense
+  intent: 'Input from outside the trust boundary is hostile; JavaScript sharpens this
+    because a permissive language shares one runtime with untrusted code: hostile
+    data must not become live markup in the page or a string that is compiled and
+    run, code and content from another origin stays behind explicit boundaries, a
+    hostile key must not rewrite what every object inherits, and one hostile input
+    must not exhaust the single-threaded process.'
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Never hardcode
+    secrets in source code or committed configuration files.
+
+    Deferred: Owned by the software development guideline: Prefer built-in library
+    functions to invoking OS commands at all; they cannot be manipulated into other
+    tasks.
+
+    Deferred: Owned by the software development guideline: Allowlist the executable
+    and the arguments and run the process with the least privilege required when an
+    OS command is unavoidable.
+
+    Deferred: Owned by the software development guideline: Build queries with parameters
+    passed separately from the query text; never concatenate or template untrusted
+    values into it, because the database must receive code and data separately.
+
+    Deferred: Owned by the software development guideline: Bind variables carry values
+    only: identifiers, keywords and sort order never come from input; redesign the
+    query or map the input through a fixed allowlist.
+
+    Deferred: Owned by the software development guideline: Rejected: escaping all
+    user input as the primary defence against SQL injection. OWASP calls it strongly
+    discouraged, fragile, and not guaranteed to stop all injections.
+
+    Deferred: Owned by the software development guideline: Run the application''s
+    database account with least privilege as a second layer behind parameterization
+    and validation.
+
+    Deferred: Owned by the software development guideline: Belief rejected: NoSQL
+    stores are immune to injection. A BSON query is an object, so string injection
+    does not apply, but client-supplied objects used as field values inject query
+    operators such as { $ne: "" }.
+
+    Deferred: Owned by the software development guideline: Build file paths from internally
+    generated or trusted names, not user-submitted filenames; where user filenames
+    are unavoidable, apply strict allowlist validation.
+
+    Deferred: Owned by the software development guideline: Exchange data across a
+    trust boundary in a pure data format such as JSON, never in formats that carry
+    types or code, and never deserialize untrusted data into executable structures.
+
+    Deferred: Owned by the software development guideline: Sign serialized data and
+    verify before deserializing (an HMAC where feasible) when the set of expected
+    messages is known; populate a new object from validated fields instead of deserializing
+    into the application''s own types. Language-neutral grounds only.
+
+    Deferred: Owned by the software development guideline: Match the host of an outbound
+    request against an allowlist and build the request yourself when the destination
+    is known.
+
+    Deferred: Owned by the software development guideline: Do not accept complete
+    URLs from users when avoidable: URLs are hard to validate and the parser can be
+    abused; accept validated hosts or addresses instead.
+
+    Deferred: Owned by the software development guideline: Validate the resolved destination
+    addresses against the permitted networks and make the client connect only to the
+    validated addresses; a hostname check alone is not enough.
+
+    Deferred: Owned by the software development guideline: Reject the entire JWT if
+    any cryptographic operation in it fails to validate, and reject it if any validation
+    step of the token specification fails.
+
+    Deferred: Owned by the software development guideline: Disable document type definitions
+    (reject DOCTYPE) when parsing untrusted XML; where DTDs are required, disable
+    external entity resolution and external DTD loading and limit entity expansion.'
+  impl_pointers:
+  - build/research/06_runsec/result.md::RUNSEC-C46
+  - build/research/06_runsec/result.md::RUNSEC-C25
+  - build/research/06_runsec/result.md::RUNSEC-C26
+  - build/research/13_srvsec/result.md::SRVSEC-C15
+  - build/research/13_srvsec/result.md::SRVSEC-C17
+  - build/research/13_srvsec/result.md::SRVSEC-C19
+  - build/research/13_srvsec/result.md::SRVSEC-C22
+  - build/research/13_srvsec/result.md::SRVSEC-C23
+  - build/research/06_runsec/result.md::RUNSEC-C28
+  - build/research/14_secgap2/result.md::SECGAP2-C81
+  - build/research/06_runsec/result.md::RUNSEC-C43
+  - build/research/06_runsec/result.md::RUNSEC-C44
+  - build/research/13_srvsec/result.md::SRVSEC-C45
+  - build/research/13_srvsec/result.md::SRVSEC-C28
+  - build/research/13_srvsec/result.md::SRVSEC-C30
+  - build/research/13_srvsec/result.md::SRVSEC-C32
+  - build/research/14_secgap2/result.md::SECGAP2-C03
+  - build/research/14_secgap2/result.md::SECGAP2-C18
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES
+  name: Dependencies
+  intent: 'Third-party code runs with the application''s full privileges, so each
+    dependency is a trust decision: weighed against the routes by which trust is lost,
+    vetted for maintenance and install-time behaviour before adoption, installed reproducibly,
+    changed deliberately, and judged by evidence whose limits are known.'
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Enable two-factor
+    authentication on registry publishing accounts; phishing-resistant MFA on developer
+    accounts is the response CISA recommends after account compromises.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C17
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: VERIFICATION
+  name: Verification
+  intent: 'Defects that people forget to look for are found by machines on every change,
+    with a result that blocks the change: the checked subset and the type layer hold
+    only while a tool checks them there.'
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Dynamic checks
+    find bad practices that static lint misses: on 200+ web sites in 2015, 28 dynamic
+    checkers detected on average 49 problems per site that static analysis missed.
+    Evidence of occurrence in 2015, not a current-language claim.
+
+    Deferred: Owned by the software development guideline: Enable a linter or a safe
+    language mode and address its warnings; the OpenSSF passing criteria make this
+    a MUST.
+
+    Deferred: Owned by the software development guideline: Apply at least one static-analysis
+    tool beyond compiler warnings and safe modes to every proposed major production
+    release before it ships.
+
+    Deferred: Owned by the software development guideline: Combine several analysis
+    tools in CI but never as the only mechanism, and write negative tests (what must
+    not happen does not) so a passing suite means shipping. Held as the OpenSSF Best
+    Practices Working Group''s position.
+
+    Deferred: Owned by the software development guideline: Keep a policy that new
+    major functionality gets automated tests, keep evidence that recent major changes
+    followed it, and make the suite invocable in the language''s standard way.
+
+    Deferred: Owned by the software development guideline: SHOULD NOT gate on a coverage
+    number or use one as a quality target; use coverage to find under-tested code.
+    Study: correlation with suite effectiveness is low to moderate once suite size
+    is controlled (31,000 suites, five large Java systems); transfer to JavaScript
+    inferred.
+
+    Deferred: Owned by the software development guideline: Rejected position (OpenSSF
+    passing criteria, T1): cover most or all branches, as a suggestion and not a numeric
+    target; it would win for a project that adopts those criteria, and it is compatible
+    with using coverage to locate code no test executes.
+
+    Deferred: Owned by the software development guideline: Folklore rejected (restricted
+    verdict, the dissent audit): high coverage means effective tests. Coverage finds
+    code no test executes; it does not show that tests would detect a fault.
+
+    Deferred: Owned by the software development guideline: Test behaviours through
+    the public API, one test per behaviour rather than per method, DAMP over DRY.
+    Google''s position (T3, single source), taken as the decision for lack of any
+    other admitted position.
+
+    Deferred: Owned by the software development guideline: Prefer real objects over
+    mocks when they are fast and deterministic, because brittle tests fail on unrelated
+    changes. Google''s position (T3, single source), taken as the decision for lack
+    of any other admitted position.
+
+    Deferred: Owned by the software development guideline: Google''s test mix is about
+    80% narrow unit tests, 15% medium integration tests, 5% end-to-end. Acceptable
+    when an organization with Google-like test infrastructure sets a mix; Google''s
+    stated practice, not a general rule.
+
+    Deferred: Owned by the software development guideline: A mutation score is the
+    share of injected faults that tests kill: mutation analysis measures whether tests
+    detect small seeded changes, which coverage cannot show.
+
+    Deferred: Owned by the software development guideline: Run mutation testing incrementally
+    on changed code during code review and filter mutants, instead of mutating the
+    whole code base, when adopting it at scale. Abstract-level source, Google setting
+    (24,000+ developers, 1,000+ projects).
+
+    Deferred: Owned by the software development guideline: Property-based testing
+    replaces hand-picked inputs with generated ones: a property is a checkable statement,
+    inputs are generated at random, failures are shrunk to the smallest reproducing
+    input (shrinking is fast-check''s, absent from the QuickCheck paper).
+
+    Deferred: Owned by the software development guideline: Control the distribution
+    of generated test data with custom generators: random testing is most effective
+    when the distribution follows actual data, and a uniform distribution is often
+    a poor default.
+
+    Deferred: Owned by the software development guideline: The QuickCheck authors
+    write properties in the same module as the functions they test, as checkable documentation.
+    Acceptable when a team wants properties beside the code; the authors'' practice,
+    outside the method the source is admitted for.
+
+    Deferred: Owned by the software development guideline: Check new tests extensively
+    when they are added: flaky tests come mostly from async waits (45% of studied
+    fixes), concurrency and test-order dependency, and are flaky from the first run.
+    Study of 201 commits in 51 mostly Java projects; transfer inferred.
+
+    Deferred: Owned by the software development guideline: Clean the shared state
+    between tests: 74% (14 of 19) of order-dependent flaky tests in the study were
+    fixed that way. Java-dominated study; transfer inferred.
+
+    Deferred: Owned by the software development guideline: Track the flaky-test rate:
+    Google reports about 0.15% and says tests begin to lose value near 1% flakiness;
+    treat approaching 1% as the point to act. Google''s figures (T3, single source),
+    the only admitted threshold.
+
+    Deferred: Owned by the software development guideline: Make the merge gate always
+    run: a skipped required check must not let a merge through.'
+  impl_pointers:
+  - build/research/01_lang/result.md::LANG-C56
+  - build/research/08_quality/result.md::QUALITY-C20
+  - build/research/08_quality/result.md::QUALITY-C21
+  - build/research/08_quality/result.md::QUALITY-C23
+  - build/research/08_quality/result.md::QUALITY-C22
+  - build/research/08_quality/result.md::QUALITY-C36
+  - build/research/08_quality/result.md::QUALITY-C29
+  - build/research/08_quality/result.md::QUALITY-C30
+  - build/research/08_quality/result.md::QUALITY-C31
+  - build/research/08_quality/result.md::QUALITY-C37
+  - build/research/08_quality/result.md::QUALITY-C38
+  - build/research/08_quality/result.md::QUALITY-C39
+  - build/research/08_quality/result.md::QUALITY-C40
+  - build/research/08_quality/result.md::QUALITY-C41
+  - build/research/08_quality/result.md::QUALITY-C33
+  - build/research/08_quality/result.md::QUALITY-C35
+  - build/research/08_quality/result.md::QUALITY-C32
+  - build/research/08_quality/result.md::QUALITY-C43
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: RUNTIME
+  name: Runtime behaviour
+  intent: Code stays well behaved over time because its memory behaviour follows from
+    what the collector can reach and from how long state lives, not from belief or
+    folklore about references.
+  epistemic_state: 'known | unvalidated: most grounds are single-source | unvalidated:
+    intent narrowed at the split by the build, the general part is owned by the software
+    development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Treat performance
+    advice that rests on engine internals as dated single-body evidence that can describe
+    a mechanism but cannot prescribe (no T1 specifies engine performance); make a
+    performance belief a rule only through a measurement of the real workload.
+
+    Deferred: Owned by the software development guideline: Measure performance as
+    a distribution, not a number: report start-up and steady state separately across
+    several fresh VM invocations with several iterations each, give confidence intervals,
+    and vary the experimental setup, because an innocuous setup change can bias results
+    and flip conclusions.'
+  impl_pointers:
+  - build/research/09_runtime/result.md::RUNTIME-C63
+  - build/research/09_runtime/result.md::RUNTIME-C61
+  - build/research/09_runtime/result.md::RUNTIME-C62
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.VISIBLE
+  name: Visible conversion
+  intent: Comparison and conversion are stated where they happen, so what an expression
+    does follows from the declared kind of its operands, not from their values or
+    from a coercion table the reader must recall.
+  epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.CONVERSION'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.FAILURE
+  name: Loud failure
+  intent: 'A mistake stops the program at the mistake: code runs in the strictest
+    mode its language offers, in which a misspelt name, a write to a locked value
+    or an unowned receiver raises an error instead of silently changing state.'
+  epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.STRICTNESS.1,
+    MUTATION.1 and OBJECTS.1'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.BINDING
+  name: Enforced binding and access
+  intent: 'A name''s mutability and reach are declared and enforced by the language,
+    not by naming convention or discipline: bindings are fixed by default, private
+    means unreachable, and the receiver of a call is never implicit.'
+  epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.STRICTNESS.3,
+    STRICTNESS.4, OBJECTS.1 and OBJECTS.3'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.MATURITY
+  name: Settled features
+  intent: Code uses only language features whose meaning is settled and available
+    on every target, retires deprecated ones, and leaves the language's built-in objects
+    unaltered, because later growth of the language would change what the code means.
+  epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.EVOLUTION
+    and OBJECTS.5'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.NUMBERS
+  name: One number type, stated limits
+  intent: 'JavaScript has one numeric type for everyday arithmetic, a 64-bit binary
+    floating-point number, so every count, identifier and amount shares its precision
+    and range and loses exactness silently beyond them: the limits are stated where
+    a value could exceed them, and exactness beyond them comes from another representation.'
+  epistemic_state: 'known | unvalidated: intent restated for JavaScript by the build,
+    the general principle is owned by the software development guideline | unvalidated:
+    inferred roll-up of PIG-JS.SUBSET.NUMBERS'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: SUBSET.STATE
+  name: Immutability is stated, not assumed
+  intent: 'In JavaScript a value is locked only as far as its mechanism reaches: a
+    fixed binding does not freeze the value, a freeze reaches one level and fails
+    silently outside strict code, and some array methods change the array they are
+    called on; so code states which guarantee it relies on, that nobody can change
+    a value or that only some holders may.'
+  epistemic_state: 'known | unvalidated: intent restated for JavaScript by the build,
+    the general principle is owned by the software development guideline | unvalidated:
+    inferred roll-up of PIG-JS.SUBSET.MUTATION and PIG-JS.SUBSET.STRICTNESS.3'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTRACTS.STATIC
+  name: Static contract
+  intent: Express expectations as types that a tool checks before the program runs,
+    while holding that a type layer is a build-time artefact of a language that has
+    no types at run time
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTRACTS.BOUNDARY
+  name: Boundary parse is the only attestation
+  intent: Types are erased before run time and every value from outside (a request,
+    a message, a queue entry, a stored record, parsed text) arrives with no run-time
+    type, so parsing it into the shape the program expects, at every trust boundary
+    and before use, is the only place a value earns that shape; code past the boundary
+    relies on the shape only because the parse happened.
+  epistemic_state: 'known | unvalidated: intent restated for JavaScript by the build,
+    the general principle is owned by the software development guideline | unvalidated:
+    inferred roll-up of PIG-JS.CONTRACTS.BOUNDARY'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTROL.FAILURE
+  name: Failure has an owner
+  intent: A failure in JavaScript travels one of two channels, synchronous throw or
+    asynchronous rejection or event, and a failure nobody observes is lost or escalated
+    by the host; every failure therefore has a named owner who handles it, passes
+    it on with its origin, or lets the program end. Fail fast and never swallow silently
+    are shared with Python and held by the inter link, not copied.
+  epistemic_state: known | rolls up PIG-JS.CONTROL.PROMISES and PIG-JS.CONTROL.ERRORS;
+    the asynchronous channel rests on one consensus fact
+  design_notes: 'Fact [consensus]: An async function returns a new promise and turns
+    every uncaught exception inside it into a rejection, so a failure in asynchronous
+    code reaches callers only through the promise, never through a synchronous catch.'
+  impl_pointers:
+  - build/research/03_async/result.md::ASYNC-C07
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTROL.BOUNDS
+  name: Every wait and every task has a bound and a stopper
+  intent: Waiting has a time limit and running work has a party that can stop it,
+    because a promise cannot be cancelled and an unbounded wait or task holds resources
+    for as long as its slowest peer.
+  epistemic_state: known | rolls up PIG-JS.CONTROL.BOUNDS
+  design_notes: 'Rejected beliefs: Rejected belief: promises can be cancelled. Promise.all,
+    Promise.race and a dropped reference stop nothing; the underlying operation must
+    be cancelled.
+
+    Fact [consensus]: A promise models settlement only and has no cancellation protocol;
+    cancellation belongs to the operation that consumes an abort signal.'
+  impl_pointers:
+  - build/research/03_async/result.md::ASYNC-C25
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTROL.SCHEDULING
+  name: One shared cooperative thread
+  intent: All work of a program shares one thread that nothing preempts, with a fixed
+    order between immediate continuations and later tasks and with time only as a
+    lower bound; long work delays every other client, so code states what it needs
+    and never relies on order or precision.
+  epistemic_state: known | rolls up PIG-JS.CONTROL.SCHEDULING
+  constraints:
+  - 'MUST NOT block the event loop: a few threads serve every client, so a callback
+    that runs long delays all clients and gives an attacker a denial-of-service lever.'
+  design_notes: 'Rejected beliefs: Rejected belief: then on an already resolved promise
+    runs immediately.
+
+    Rejected beliefs: Rejected belief: setTimeout(fn, 0) runs at once or exactly on
+    time.
+
+    Fact [consensus]: Promise reactions never run synchronously, even for an already
+    settled promise: they run as microtasks after the current run and the empty stack,
+    before the event loop returns to timers and I/O.
+
+    Fact [consensus]: A timer delay is a lower bound: the callback may run later and
+    in unspecified relative order, so code never relies on timer precision.'
+  impl_pointers:
+  - build/research/03_async/result.md::ASYNC-C35
+  - build/research/03_async/result.md::ASYNC-C31
+  - build/research/03_async/result.md::ASYNC-C38
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTROL.FLOW
+  name: Producers pace to consumers
+  intent: Data moves only as fast as its slowest consumer can take it; a buffer threshold
+    is a signal to stop, not a memory bound, so unpaced production costs memory, collection
+    time and latency.
+  epistemic_state: known | rolls up PIG-JS.CONTROL.FLOW; the cost fact is an illustration
+    from one demo
+  design_notes: 'Fact [consensus]: highWaterMark is a threshold at which a stream
+    stops asking for more data, not a memory bound; buffering can exceed it.
+
+    Fact [single-source]: Ignoring backpressure costs memory, collection time and
+    latency (Node docs demo, figures from an unstated Node version, illustration only).'
+  impl_pointers:
+  - build/research/09_runtime/result.md::RUNTIME-C04
+  - build/research/09_runtime/result.md::RUNTIME-C12
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: STRUCTURE.STATE
+  name: Shared state is visible
+  intent: 'Make shared state visible as shared: an exported object is state held by
+    every importer.'
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Keep each
+    piece of state in one place: state kept in several places can become inconsistent,
+    consistency being whether the value satisfies declared constraints. Transfer from
+    shared data banks to application state is inference.'
+  impl_pointers:
+  - build/research/04_struct/result.md::STRUCT-C65
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.DOM
+  name: Hostile data in the document
+  intent: Hostile data must never become live markup, script or navigation in the
+    page, and no verdict about it outlives the parse it was made for.
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.ORIGIN
+  name: Boundaries between origins
+  intent: Code and content from another origin stays behind explicit, verified boundaries,
+    because every script in a page, first-party or not, holds the whole page's authority.
+  epistemic_state: known
+  constraints:
+  - 'MUST treat every third-party script as code you run with your page''s authority:
+    it is rarely reviewed, and compromise of its host injects arbitrary content.'
+  - 'MUST NOT treat CSRF defences as sufficient where cross-site scripting exists:
+    script running in the page can read tokens and send same-origin requests, so it
+    defeats every CSRF mitigation.'
+  impl_pointers:
+  - build/research/05_domsec/result.md::DOMSEC-C41
+  - build/research/14_secgap2/result.md::SECGAP2-C59
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.PROTOTYPE
+  name: Hostile keys and the shared object model
+  intent: A permissive object model lets a hostile key rewrite what every object inherits;
+    keys from outside are untrusted data, and the application, not the runtime, answers
+    for them.
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.HOST
+  name: The process under hostile input
+  intent: One hostile input or one hostile peer must not exhaust the single-threaded
+    process or reach what the process can reach; availability and exposure are part
+    of safety.
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.CODE
+  name: Strings become code in many ways
+  intent: JavaScript turns a string into running code through many doors (eval, the
+    Function constructor, string arguments to timers, template engines, the vm module),
+    each running it with the caller's privileges, and a template is code too, so template
+    injection reaches the server like code execution; hostile data is therefore never
+    compiled, evaluated or used as a template, whatever API offers it.
+  epistemic_state: 'known | unvalidated: intent restated for JavaScript by the build,
+    the general principle is owned by the software development guideline'
+  constraints:
+  - 'MUST NOT build code from strings: dynamic code evaluation executes attacker-influenced
+    input as code with the caller''s privileges, whatever API offers it.'
+  design_notes: 'Fact [single-source]: Template injection is a server-side code-execution
+    class, unlike XSS: it reaches server internals and can give remote code execution;
+    one published case study reached arbitrary command execution through a template
+    context (T3 research evidence).'
+  impl_pointers:
+  - build/research/06_runsec/result.md::RUNSEC-C14
+  - build/research/14_secgap2/result.md::SECGAP2-C31
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.TRUST
+  name: Dependencies are trusted code
+  intent: Whatever enters the dependency graph acts with the application's authority
+    and nothing inside the process contains it, so trust is granted by the act of
+    adding.
+  epistemic_state: known
+  design_notes: 'Deferred: Owned by the software development guideline: Layer controls
+    rather than rely on one: attack trees list 107 vectors from code contribution
+    to distribution, mapped to 33 safeguards.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C32
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.THREATS
+  name: How trust is lost
+  intent: 'Controls aim at the routes by which trusted code turns hostile: takeover
+    of the people and accounts behind a package, and confusion about which package
+    is meant.'
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.ADMISSION
+  name: Admission
+  intent: A package's maintenance and what it runs at install are weighed before it
+    enters.
+  epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
+    the general part is owned by the software development guideline'
+  design_notes: 'Deferred: Owned by the software development guideline: Ask whether
+    existing components suffice before adding a dependency, and test the candidate
+    in isolation for unexpected indirect dependencies in production.
+
+    Deferred: Owned by the software development guideline: Check a package''s name
+    for typos and for a more popular look-alike before adding it, and verify that
+    it exists and is authentic.
+
+    Deferred: Owned by the software development guideline: Do not copy README examples
+    into production without a security review.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C27
+  - build/research/07_supply/result.md::SUPPLY-C24
+  - build/research/07_supply/result.md::SUPPLY-C39
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.EVIDENCE
+  name: Evidence and its limits
+  intent: Signals about a package (provenance, signatures, assurance levels, audit
+    findings) are read for what they establish and no further; none is a verdict of
+    safety.
+  epistemic_state: known
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.CHANGE
+  name: Controlled change
+  intent: The tree that was reviewed is the tree that runs, and it changes only by
+    a deliberate, reviewable act.
+  epistemic_state: 'known | conflict: see CHANGE.2'
+  design_notes: 'Deferred: Owned by the software development guideline: Run an automated
+    dependency-update and vulnerability-alert mechanism, with security updates enabled
+    and kept separate from feature updates, because bundled fixes hinder adoption.
+
+    Deferred: Owned by the software development guideline: The effectiveness of a
+    release-age cooldown rests on one T1 assertion and vendor figures; no peer-reviewed
+    measurement of time-to-removal was found.
+
+    Deferred: Owned by the software development guideline: The OpenSSF concise guide
+    recommends a cooldown of about three days and says it counters most malicious
+    releases; the origin of that figure is not found, so it is recorded as the body''s
+    position and never used as evidence.
+
+    Deferred: Owned by the software development guideline: Review lockfiles, rotate
+    all developer credentials and pin to versions published before the incident date
+    after a worm-style compromise (CISA''s position).'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C36
+  - build/research/07_supply/result.md::SUPPLY-C13
+  - build/research/08_quality/result.md::QUALITY-C46
+  - build/research/07_supply/result.md::SUPPLY-C41
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: RUNTIME.MEMORY
+  name: Memory model
+  intent: Memory behaviour follows from what the collector can reach and from how
+    long state lives; this model, not folklore about references, decides what counts
+    as a leak and what bounds it.
+  epistemic_state: 'known | unvalidated: both children rest on single T1 pages with
+    tool-extracted quotes'
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTRACTS.STATIC.1
+  name: Types attest nothing at run time
+  intent: 'Run-time data is checked only by run-time code: types and assertions are
+    erased and say nothing about the values that arrive'
+  epistemic_state: known
+  constraints:
+  - 'MUST check run-time data with run-time code: a type layer is erased before run
+    time, types and assertions emit no check, so values arriving at run time are never
+    checked by them.'
+  design_notes: 'Rejected beliefs: Rejected belief: TypeScript types protect against
+    bad data at runtime (folklore, refuted by the TypeScript handbook, SRC-043)
+
+    Sources cited: SRC-043'
+  impl_pointers:
+  - build/research/02_types/result.md::TYPES-C02
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: CONTRACTS.STATIC.2
+  name: A passing check is evidence, not proof
+  intent: The checker is intentionally unsound in places and detects a measured part
+    of defects, so it complements run-time checks and tests and never replaces them
+  epistemic_state: 'known | unvalidated: quote tool-extracted; measurement single
+    T2 source, 2017'
+  constraints:
+  - 'MUST NOT treat a passing type check as proof of safety: a checker may be intentionally
+    unsound in places.'
+  design_notes: 'Fact [single-source]: Measured: Flow 0.30 and TypeScript 2.0 each
+    detected 15 percent of 400 public JavaScript bugs, a figure the authors call conservative;
+    not a measure of current strict TypeScript'
+  impl_pointers:
+  - build/research/02_types/result.md::TYPES-C23
+  - build/research/02_types/result.md::TYPES-C47
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: STRUCTURE.STATE.2
+  name: Exported state is shared state
+  intent: Treat anything a module exports as state shared by all importers, and freeze
+    it or hide it when sharing is not intended.
+  epistemic_state: 'known | unvalidated: quote tool-extracted'
+  constraints:
+  - 'MUST treat an exported object as state shared by every importer: importers cannot
+    rebind it but can change its properties, so freeze it or hide it behind functions
+    when mutation is not intended.'
+  impl_pointers:
+  - build/research/04_struct/result.md::STRUCT-C02
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.DOM.1
+  name: Sources and sinks
+  intent: Every injection is a flow from an attacker-controlled source to a dangerous
+    sink, so both ends of every flow are audited.
+  epistemic_state: known
+  constraints:
+  - MUST analyse DOM XSS as a flow from an attacker-controlled source to a dangerous
+    sink, and audit both ends of every flow.
+  impl_pointers:
+  - build/research/05_domsec/result.md::DOMSEC-C06
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.DOM.2
+  name: A verdict holds only for its parse
+  intent: A filter, sanitizer or gate decides about one parse of the data; safety
+    is lost when a later parse differs, so verdicts are validated in the consumer.
+  epistemic_state: known
+  design_notes: 'Rejected [consensus]: Belief rejected: a string that passed an HTML
+    filter is safe wherever it is rendered next. A filter verdict holds only for the
+    parse it simulated; mutation XSS exploits the innerHTML round trip, so test the
+    output in the target parser, never by string filtering alone.'
+  impl_pointers:
+  - build/research/05_domsec/result.md::DOMSEC-C13
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.DOM.3
+  name: Script tags are not the only way in
+  intent: Disabling script execution or blocking handlers does not make markup safe;
+    HTML alone can rewrite the page's names and behaviour.
+  epistemic_state: known
+  design_notes: 'Rejected [single-source]: Belief rejected: innerHTML is safe because
+    script elements inserted through it do not run. Script execution is disabled,
+    event-handler attributes still fire, and innerHTML stays on the sink list. Certainty
+    of the belief''s refutation: inferred from three sources.
+
+    Rejected [consensus]: Belief rejected: XSS needs script elements or event handlers.
+    DOM clobbering is HTML-only injection: elements whose id or name matches a global,
+    window property or document property overwrite it, so sanitizing scripts and handlers
+    is not enough.'
+  impl_pointers:
+  - build/research/05_domsec/result.md::DOMSEC-C10
+  - build/research/05_domsec/result.md::DOMSEC-C48
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.PROTOTYPE.1
+  name: The application answers for keys
+  intent: The runtime trusts application input, so validating attacker-influenced
+    keys is the application's job and cannot be left to the platform.
+  epistemic_state: known
+  design_notes: 'Rejected [consensus]: Belief rejected: the runtime will neutralize
+    prototype pollution for the application. Node trusts the inputs of application
+    code and does not classify pollution that needs attacker input as a core vulnerability;
+    validating attacker-influenced input is the application''s job.'
+  impl_pointers:
+  - build/research/06_runsec/result.md::RUNSEC-C01
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.PROTOTYPE.2
+  name: Pollution can be code execution
+  intent: A polluted shared prototype is read later by legitimate code, so the worst
+    outcome is remote code execution, not a logic error.
+  epistemic_state: known
+  design_notes: 'Fact [consensus]: Treat a pollution bug as potentially remote code
+    execution on Node, because universal gadgets in core APIs turn polluted properties
+    into code execution (USENIX Security 2023, abstract read only).'
+  impl_pointers:
+  - build/research/06_runsec/result.md::RUNSEC-C10
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.HOST.1
+  name: One request can stall the process
+  intent: Single-threaded execution means CPU spent on one request is stolen from
+    all; untrusted input must not control the cost of a match.
+  epistemic_state: known
+  constraints:
+  - 'MUST treat regex matching on untrusted input as an availability risk: a match
+    runs uninterrupted on the single thread, so one request with a pathological input
+    can block a Node server for seconds. The 2018 figures (25 new flaws, 339 of 2,846
+    sites) are dated evidence of mechanism only.'
+  impl_pointers:
+  - build/research/03_async/result.md::ASYNC-C40
+  - build/research/06_runsec/result.md::RUNSEC-C36
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.HOST.2
+  name: Heuristics are not proofs
+  intent: A pattern check that flags or misses vulnerable code is a signal, never
+    a proof either way.
+  epistemic_state: known
+  design_notes: 'Rejected [single-source]: Do not treat anti-pattern checks as proof
+    either way: nested-quantifier heuristics are necessary but not sufficient signals
+    of super-linear behaviour (T2 abstract only). Belief rejected: a regex with a
+    nested quantifier is necessarily vulnerable.'
+  impl_pointers:
+  - build/research/06_runsec/result.md::RUNSEC-C32
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEFENSE.HOST.3
+  name: Two parsers must agree
+  intent: Where a proxy and the runtime's own HTTP parser read the same bytes, the
+    runtime does not count spec-consistent behaviour as its own flaw, so the defence
+    against any disagreement belongs at both parsers.
+  epistemic_state: 'known | unvalidated: rests on single-source claims only | unvalidated:
+    intent narrowed at the split by the build, the general part is owned by the software
+    development guideline'
+  constraints:
+  - MUST request smuggling is a parser differential between a front-end proxy and
+    the Node back end; Node does not count spec-consistent behaviour as its flaw,
+    so the defence is shared with the front end.
+  design_notes: 'Deferred: Owned by the software development guideline: Never let
+    CR, LF or NUL reach an HTTP field value: they are invalid and dangerous, and a
+    recipient must reject the message or replace each with a space.'
+  impl_pointers:
+  - build/research/13_srvsec/result.md::SRVSEC-C56
+  - build/research/14_secgap2/result.md::SECGAP2-C23
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.TRUST.1
+  name: Every dependency is trusted code
+  intent: Direct or transitive, development or runtime, every package acts with the
+    application's privileges and is vetted as such.
+  epistemic_state: 'known | unvalidated: dev-versus-runtime figures rest on a single
+    T2 source'
+  constraints:
+  - 'MUST treat every dependency, direct or transitive, as trusted code running with
+    the application''s full privileges: a malicious or compromised dependency is a
+    first-order application risk.'
+  design_notes: 'Rejected [single-source]: Rejected belief: the dependencies versus
+    devDependencies split tells what ships to production. In the studied projects
+    59 percent of runtime-configured dependencies were unused in production and 28.2
+    percent of dev-configured ones were used; vet and audit both groups alike (folklore
+    refuted, single T2 source).
+
+    Fact [single-source]: Injection-capable APIs are common inside dependencies (2018
+    study of 235,850 npm modules: eval in 9,111, exec in 7,686), so trusted code is
+    not benign by default.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C01
+  - build/research/06_runsec/result.md::RUNSEC-C21
+  - build/research/07_supply/result.md::SUPPLY-C23
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.TRUST.2
+  name: No containment inside the process
+  intent: The runtime offers no privilege boundary between application code and its
+    dependencies, so no design relies on one.
+  epistemic_state: known
+  constraints:
+  - 'MUST NOT expect the runtime to contain a dependency: the permission boundary
+    is the application''s, and per-package least privilege is a research proposal,
+    not a shipped default.'
+  design_notes: 'Rejected [consensus]: Rejected belief: dependencies are sandboxed
+    or isolated inside the Node process. The runtime trusts all code in the process;
+    any module can run arbitrary code with eval and write access to the file system
+    achieves the same (folklore refuted by the Node threat model).'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C02
+  - build/research/06_runsec/result.md::RUNSEC-C41
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.THREATS.1
+  name: Takeover of maintainership
+  intent: Four incidents show that control of a maintainer account or of maintainership
+    is a recurring route of compromise, so who maintains a package is a risk to weigh
+    beside flaws in its code.
+  epistemic_state: 'known | unvalidated: four incidents; their weight against code
+    flaws is not measured'
+  constraints:
+  - 'MUST include takeover of maintainer accounts or maintainership among the threats
+    planned for, next to vulnerable libraries: event-stream handover 2018, eslint-scope
+    token theft 2018, debug phishing 2025 and the Shai-Hulud worm 2025 show that it
+    recurs.'
+  design_notes: 'Fact [single-source]: Expired maintainer-email domains are a takeover
+    route: a study found 2,818 maintainer addresses on expired domains, making 8,494
+    packages potentially hijackable.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C31
+  - build/research/07_supply/result.md::SUPPLY-C30
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.THREATS.2
+  name: Confusion is many mechanisms
+  intent: Package confusion is a family of mechanisms, many semantic, so defences
+    address the namespace and not only spelling.
+  epistemic_state: 'known | unvalidated: single T2 source'
+  design_notes: 'Rejected [single-source]: Rejected belief: package confusion is typing
+    mistakes. A study of 1,200+ attacks found 13 confusion mechanisms, many semantic
+    rather than syntactic (folklore refuted, single T2 source).
+
+    Fact [single-source]: Typosquatting is the main technique in published malicious-package
+    data: 61 percent of 174 malicious packages mimicked existing names, across three
+    package ecosystems taken together (DIMVA 2020, T2).'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C25
+  - build/research/14_secgap2/result.md::SECGAP2-C49
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.ADMISSION.2
+  name: Maintenance as a signal
+  intent: Adoption weighs how many people maintain a package, how recently, and what
+    it runs at install.
+  epistemic_state: known
+  constraints:
+  - 'MUST judge maintenance before adoption: recent activity and a release within
+    12 months, more than one maintainer; a few accounts or inactive maintainers are
+    a measured weak link.'
+  design_notes: 'Fact [majority]: Treat install scripts as a risk signal when evaluating
+    a package.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C28
+  - build/research/07_supply/result.md::SUPPLY-C29
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.EVIDENCE.1
+  name: Provenance and signatures
+  intent: Provenance and signatures state origin and integrity; assurance is graded
+    and consumed as such, never read as safety.
+  epistemic_state: 'known | unvalidated: rests on single-source claims only'
+  constraints:
+  - 'MUST read supply-chain assurance as graded: provenance alone is the lowest level,
+    a hosted platform signing it the middle, hardened builds that resist tampering
+    during the build the highest.'
+  - MUST generate and consume SBOMs automatically in CI, and accept only signed components
+    whose signatures are validated before use.
+  design_notes: 'Rejected [single-source]: Rejected belief: a package with provenance
+    is safe. Provenance links a package to its source and build; it does not guarantee
+    absence of malicious code (folklore refuted by the npm documentation).
+
+    Rejected [single-source]: Rejected belief: a signed package is a trustworthy package.
+    Registry signatures detect tampering with tarball content by a mirror or proxy,
+    not a malicious publisher (folklore refuted by the npm documentation).
+
+    Fact [single-source]: Keyless signing with ephemeral keys tied to an OIDC identity
+    and a transparency log lowers the key-management burden of artifact signing.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C18
+  - build/research/07_supply/result.md::SUPPLY-C19
+  - build/research/07_supply/result.md::SUPPLY-C33
+  - build/research/07_supply/result.md::SUPPLY-C37
+  - build/research/07_supply/result.md::SUPPLY-C34
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.EVIDENCE.2
+  name: Audit findings
+  intent: Vulnerability findings are triage input; reachability, not count, measures
+    risk.
+  epistemic_state: known
+  design_notes: 'Rejected [consensus]: Rejected belief: every audit finding is an
+    exploitable risk. Most package-level findings are unreachable (68.28 percent)
+    and most alerts concern dependencies not shipped to production; treat findings
+    as triage input, not as a measure of exploitability.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C22
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.CHANGE.1
+  name: Reproducible tree
+  intent: Every install resolves the same tree because the lockfile, not the manifest,
+    fixes it; lockfile semantics are verified per manager, not assumed.
+  epistemic_state: known
+  constraints:
+  - MUST commit the lockfile to version control so every install, in CI and deployment
+    included, resolves the same tree.
+  - 'MUST NOT rely on exact pins in the manifest alone: pinning a dependency does
+    not pin its transitive dependencies, which only the lockfile fixes.'
+  design_notes: 'Rejected [single-source]: Rejected belief: lockfile semantics are
+    the same across package managers. A study of 7 managers found a wide variety of
+    generation and content decisions; verify the behaviour of the manager in use.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C03
+  - build/research/07_supply/result.md::SUPPLY-C05
+  - build/research/07_supply/result.md::SUPPLY-C40
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.CHANGE.2
+  name: Pin policy
+  intent: 'Which versions may enter is fixed deliberately: the lockfile fixes the
+    tree, direct dependencies of an application are exact, and release type is no
+    guarantee of compatibility.'
+  epistemic_state: 'known | conflict: ranges only, OpenSSF npm guide v1.1 (SRC-154,
+    archived 2023); collective ecosystem pinning, SRC-287 | unclear: library scope
+    is inferred'
+  constraints:
+  - 'MUST fix the installed tree by the committed lockfile (all transitives, integrity
+    hashes) and declare the direct dependencies of an application at exact versions,
+    so every change of a direct dependency is a reviewed diff. Acceptable when: version
+    ranges for a published library, with the lockfile still committed for the application
+    that consumes it; the library scope is inferred.'
+  design_notes: 'Rejected [single-source]: Rejected belief: a minor or patch release
+    of a dependency is non-breaking. 44 percent of manifesting breaking changes arrived
+    in minor and patch releases (study; exact denominator unverified), which weighs
+    against trusting ranges.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C06
+  - build/research/04_struct/result.md::STRUCT-C67
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: DEPENDENCIES.CHANGE.3
+  name: Lockfile review
+  intent: A lockfile change is a code change and is reviewed like one.
+  epistemic_state: 'known | unvalidated: claim is inferred from a listed attack vector
+    | unvalidated: rests on single-source claims only | unvalidated: quote not obtained
+    (SUPPLY-C07)'
+  constraints:
+  - 'MUST review lockfile diffs as part of code review: lockfile poisoning is a listed
+    attack vector and the lockfile carries resolved URLs and integrity hashes.'
+  impl_pointers:
+  - build/research/07_supply/result.md::SUPPLY-C07
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: RUNTIME.MEMORY.1
+  name: Reachability decides leaks
+  intent: A leak is an object kept reachable from a root by a retainer; unreachable
+    objects are collected whatever their mutual references, so cycles alone are not
+    leaks.
+  epistemic_state: 'known | unvalidated: quote tool-extracted | unvalidated: rests
+    on single-source claims only'
+  constraints:
+  - 'MUST reason about leaks as reachability: engines free objects that are unreachable
+    from roots, and circular references do not by themselves leak.'
+  design_notes: 'Rejected beliefs: Belief that circular references cause memory leaks
+    in JavaScript: refuted in the dissent audit on SRC-193, modern engines use mark-and-sweep
+    reachability and no longer use reference counting.
+
+    Sources cited: SRC-193'
+  impl_pointers:
+  - build/research/09_runtime/result.md::RUNTIME-C27
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+- uid: RUNTIME.MEMORY.2
+  name: Bounded long-lived state
+  intent: State that lives long is promoted into the collector's costlier region,
+    so caches, sessions and other long-lived state carry an explicit bound.
+  epistemic_state: 'known | unvalidated: bounding advice inferred, quote tool-extracted'
+  constraints:
+  - 'MUST keep long-lived state (caches, sessions) bounded: most objects die young,
+    so the collector reclaims young objects often and cheaply and old objects rarely
+    and at higher cost, and long-lived state is promoted to the costlier region.'
+  impl_pointers:
+  - build/research/09_runtime/result.md::RUNTIME-C53
+  history:
+  - who: agent:assembler
+    date: 2026-10-13T14:44
+    note: nodes, constraints, design notes, impl pointers and links from the integrated
+      skeleton and ledger
+treearcs:
+- parent: ROOT
+  child: SUBSET
+- parent: ROOT
+  child: CONTRACTS
+- parent: ROOT
+  child: CONTROL
+- parent: ROOT
+  child: STRUCTURE
+- parent: ROOT
+  child: DEFENSE
+- parent: ROOT
+  child: DEPENDENCIES
+- parent: ROOT
+  child: VERIFICATION
+- parent: ROOT
+  child: RUNTIME
+- parent: SUBSET
+  child: SUBSET.VISIBLE
+- parent: SUBSET
+  child: SUBSET.FAILURE
+- parent: SUBSET
+  child: SUBSET.BINDING
+- parent: SUBSET
+  child: SUBSET.MATURITY
+- parent: SUBSET
+  child: SUBSET.NUMBERS
+- parent: SUBSET
+  child: SUBSET.STATE
+- parent: CONTRACTS
+  child: CONTRACTS.STATIC
+- parent: CONTRACTS
+  child: CONTRACTS.BOUNDARY
+- parent: CONTROL
+  child: CONTROL.FAILURE
+- parent: CONTROL
+  child: CONTROL.BOUNDS
+- parent: CONTROL
+  child: CONTROL.SCHEDULING
+- parent: CONTROL
+  child: CONTROL.FLOW
+- parent: STRUCTURE
+  child: STRUCTURE.STATE
+- parent: DEFENSE
+  child: DEFENSE.DOM
+- parent: DEFENSE
+  child: DEFENSE.ORIGIN
+- parent: DEFENSE
+  child: DEFENSE.PROTOTYPE
+- parent: DEFENSE
+  child: DEFENSE.HOST
+- parent: DEFENSE
+  child: DEFENSE.CODE
+- parent: DEPENDENCIES
+  child: DEPENDENCIES.TRUST
+- parent: DEPENDENCIES
+  child: DEPENDENCIES.THREATS
+- parent: DEPENDENCIES
+  child: DEPENDENCIES.ADMISSION
+- parent: DEPENDENCIES
+  child: DEPENDENCIES.EVIDENCE
+- parent: DEPENDENCIES
+  child: DEPENDENCIES.CHANGE
+- parent: RUNTIME
+  child: RUNTIME.MEMORY
+- parent: CONTRACTS.STATIC
+  child: CONTRACTS.STATIC.1
+- parent: CONTRACTS.STATIC
+  child: CONTRACTS.STATIC.2
+- parent: STRUCTURE.STATE
+  child: STRUCTURE.STATE.2
+- parent: DEFENSE.DOM
+  child: DEFENSE.DOM.1
+- parent: DEFENSE.DOM
+  child: DEFENSE.DOM.2
+- parent: DEFENSE.DOM
+  child: DEFENSE.DOM.3
+- parent: DEFENSE.PROTOTYPE
+  child: DEFENSE.PROTOTYPE.1
+- parent: DEFENSE.PROTOTYPE
+  child: DEFENSE.PROTOTYPE.2
+- parent: DEFENSE.HOST
+  child: DEFENSE.HOST.1
+- parent: DEFENSE.HOST
+  child: DEFENSE.HOST.2
+- parent: DEFENSE.HOST
+  child: DEFENSE.HOST.3
+- parent: DEPENDENCIES.TRUST
+  child: DEPENDENCIES.TRUST.1
+- parent: DEPENDENCIES.TRUST
+  child: DEPENDENCIES.TRUST.2
+- parent: DEPENDENCIES.THREATS
+  child: DEPENDENCIES.THREATS.1
+- parent: DEPENDENCIES.THREATS
+  child: DEPENDENCIES.THREATS.2
+- parent: DEPENDENCIES.ADMISSION
+  child: DEPENDENCIES.ADMISSION.2
+- parent: DEPENDENCIES.EVIDENCE
+  child: DEPENDENCIES.EVIDENCE.1
+- parent: DEPENDENCIES.EVIDENCE
+  child: DEPENDENCIES.EVIDENCE.2
+- parent: DEPENDENCIES.CHANGE
+  child: DEPENDENCIES.CHANGE.1
+- parent: DEPENDENCIES.CHANGE
+  child: DEPENDENCIES.CHANGE.2
+- parent: DEPENDENCIES.CHANGE
+  child: DEPENDENCIES.CHANGE.3
+- parent: RUNTIME.MEMORY
+  child: RUNTIME.MEMORY.1
+- parent: RUNTIME.MEMORY
+  child: RUNTIME.MEMORY.2
+intentlinks:
+- uid: CONTROL.SCHEDULING_CONTROL.BOUNDS
+  src: CONTROL.SCHEDULING
+  dst: CONTROL.BOUNDS
+  intent: A shared thread turns unbounded work into a failure for every client, so
+    bounds on time and work are the remedy.
+  shape:
+    type: requires
+- uid: CONTROL.FLOW_CONTROL.BOUNDS
+  src: CONTROL.FLOW
+  dst: CONTROL.BOUNDS
+  intent: Pacing is the bound that stream production has against consumption.
+  shape:
+    type: refines
+- uid: CONTROL.BOUNDS_CONTROL.FAILURE
+  src: CONTROL.BOUNDS
+  dst: CONTROL.FAILURE
+  intent: Timeouts and cancellation end operations with a failure value (an abort
+    or timeout reason) that needs an owner.
+  shape:
+    type: dataflow
+- uid: DEFENSE.DOM.2_DEFENSE.DOM.1
+  src: DEFENSE.DOM.2
+  dst: DEFENSE.DOM.1
+  intent: A verdict about a filter or gate presupposes the flow it guards, so the
+    flow is known before the verdict is trusted.
+  shape:
+    type: requires
+- uid: DEFENSE.ORIGIN_DEFENSE.DOM.1
+  src: DEFENSE.ORIGIN
+  dst: DEFENSE.DOM.1
+  intent: Messages, storage reads and third-party output are sources whose data ends
+    at the same DOM sinks.
+  shape:
+    type: dataflow
+- uid: DEPENDENCIES.THREATS.1_DEPENDENCIES.ADMISSION.2
+  src: DEPENDENCIES.THREATS.1
+  dst: DEPENDENCIES.ADMISSION.2
+  intent: The takeover route makes maintainer count and recency a vetting criterion.
+  shape:
+    type: requires
+- uid: DEPENDENCIES.CHANGE.1_DEPENDENCIES.CHANGE.2
+  src: DEPENDENCIES.CHANGE.1
+  dst: DEPENDENCIES.CHANGE.2
+  intent: A pin policy means something only once the lockfile fixes the tree.
+  shape:
+    type: requires
+- uid: DEPENDENCIES.CHANGE.3_DEPENDENCIES.THREATS.1
+  src: DEPENDENCIES.CHANGE.3
+  dst: DEPENDENCIES.THREATS.1
+  intent: Reviewing lockfile diffs surfaces poisoned resolutions, one of the routes
+    of compromise.
+  shape:
+    type: dataflow
+- uid: RUNTIME.MEMORY.2_RUNTIME.MEMORY.1
+  src: RUNTIME.MEMORY.2
+  dst: RUNTIME.MEMORY.1
+  intent: Bounding long-lived state presumes the reachability model of what counts
+    as retained.
+  shape:
+    type: requires
+- uid: SUBSET.STATE_SUBSET.FAILURE
+  src: SUBSET.STATE
+  dst: SUBSET.FAILURE
+  intent: A lock on state protects only as far as a write to it fails loudly.
+  shape:
+    type: requires
+- uid: CONTRACTS.BOUNDARY_CONTRACTS.STATIC.1
+  src: CONTRACTS.BOUNDARY
+  dst: CONTRACTS.STATIC.1
+  intent: Because a type layer attests nothing about arriving data, the boundary check
+    is what gives the types their truth.
+  shape:
+    type: requires
+- uid: CONTRACTS.STATIC.2_CONTRACTS.BOUNDARY
+  src: CONTRACTS.STATIC.2
+  dst: CONTRACTS.BOUNDARY
+  intent: Since a passing check is not proof, run-time validation stays in place even
+    in fully typed code.
+  shape:
+    type: requires
+- uid: DEFENSE.PROTOTYPE.2_DEFENSE.CODE
+  src: DEFENSE.PROTOTYPE.2
+  dst: DEFENSE.CODE
+  intent: A polluted shared prototype feeds gadgets that compile or run attacker-shaped
+    values, ending in code execution.
+  shape:
+    type: dataflow
+- uid: CONTROL.FAILURE_SUBSET.FAILURE
+  src: CONTROL.FAILURE
+  dst: SUBSET.FAILURE
+  intent: Loud failure at the language level is the base on which explicit error propagation
+    and unhandled-rejection policy stand.
+  shape:
+    type: requires
+- uid: SUBSET.MATURITY_DEPENDENCIES.ADMISSION.2
+  src: SUBSET.MATURITY
+  dst: DEPENDENCIES.ADMISSION.2
+  intent: Settled features and a supported-runtime floor are the language-side counterpart
+    of choosing a supported dependency set.
+  shape:
+    type: requires
+- uid: DEPENDENCIES.TRUST.2_DEFENSE.HOST
+  src: DEPENDENCIES.TRUST.2
+  dst: DEFENSE.HOST
+  intent: The permission model is a seat belt for trusted code, not containment of
+    hostile dependencies (topic 12 of 12_dissent).
+  shape:
+    type: requires
+- uid: DEFENSE.HOST.1_CONTROL.SCHEDULING
+  src: DEFENSE.HOST.1
+  dst: CONTROL.SCHEDULING
+  intent: The single shared thread that makes one request able to stall the process
+    is stated once, in CONTROL.SCHEDULING; this node adds that untrusted input must
+    not control the cost.
+  shape:
+    type: requires
+- uid: STRUCTURE.STATE.2_SUBSET.STATE
+  src: STRUCTURE.STATE.2
+  dst: SUBSET.STATE
+  intent: Freezing is shallow and does not make nested data immutable; the freeze
+    mechanics are owned by SUBSET.
+  shape:
+    type: requires
+- uid: SUBSET.VISIBLE_CONTRACTS.BOUNDARY
+  src: SUBSET.VISIBLE
+  dst: CONTRACTS.BOUNDARY
+  intent: What an expression does follows from the declared kind of its operands;
+    for data from outside, that kind is established by parsing at the boundary.
+  shape:
+    type: requires
+- uid: DEFENSE_CONTRACTS.BOUNDARY
+  src: DEFENSE
+  dst: CONTRACTS.BOUNDARY
+  intent: Treating every input as hostile in DEFENSE presupposes that inputs are parsed
+    at the boundary.
+  shape:
+    type: requires
+inter_intentlinks:
+- src: js-philosophy:SUBSET.VISIBLE
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Explicit over implicit and least surprise, applied to comparison and conversion.
+  uid: js-philosophy:SUBSET.VISIBLE_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:SUBSET.FAILURE
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Fail fast and never swallow errors, applied to the language's strict mode.
+  uid: js-philosophy:SUBSET.FAILURE_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:SUBSET.MATURITY
+  dst: python-kb-philosophy:REPRODUCIBILITY
+  intent: The same code means the same on every target only if it uses settled features
+    (inferred).
+  uid: js-philosophy:SUBSET.MATURITY_python-kb-philosophy:REPRODUCIBILITY
+  shape:
+    type: refines
+- src: js-philosophy:CONTRACTS.STATIC
+  dst: python-kb-philosophy:DATACENTRICITY
+  intent: 'Make invalid states unrepresentable and let a schema be the constraint:
+    the shared principle realised through a separate type layer'
+  uid: js-philosophy:CONTRACTS.STATIC_python-kb-philosophy:DATACENTRICITY
+  shape:
+    type: refines
+- src: js-philosophy:CONTROL.FAILURE
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Fail fast, no silent swallowing and visible errors are the shared principle;
+    this node adds the two JavaScript failure channels.
+  uid: js-philosophy:CONTROL.FAILURE_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:STRUCTURE
+  dst: python-kb-philosophy:STRUCTURE
+  intent: Structure precedes implementation; here it is specialised to the JavaScript
+    module graph, where a change must stay inside one module.
+  uid: js-philosophy:STRUCTURE_python-kb-philosophy:STRUCTURE
+  shape:
+    type: refines
+- src: js-philosophy:DEFENSE
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Defensive design (assume failure, validate at boundaries, trust after validation)
+    is the language-neutral base; this branch adds the JavaScript hazards.
+  uid: js-philosophy:DEFENSE_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:DEPENDENCIES.TRUST.1
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: 'Assume failure and hostility: here the hostile party can be a dependency.'
+  uid: js-philosophy:DEPENDENCIES.TRUST.1_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:DEPENDENCIES.CHANGE.1
+  dst: python-kb-philosophy:REPRODUCIBILITY
+  intent: 'Same inputs, same tree: lockfiles and version pinning.'
+  uid: js-philosophy:DEPENDENCIES.CHANGE.1_python-kb-philosophy:REPRODUCIBILITY
+  shape:
+    type: refines
+- src: js-philosophy:DEPENDENCIES.CHANGE.2
+  dst: python-kb-philosophy:REPRODUCIBILITY
+  intent: Version pinning is a reproducibility rule with a contested scope.
+  uid: js-philosophy:DEPENDENCIES.CHANGE.2_python-kb-philosophy:REPRODUCIBILITY
+  shape:
+    type: refines
+- src: js-philosophy:CONTRACTS.BOUNDARY
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: 'Validate at boundaries and trust after validation: the shared principle,
+    here with the JavaScript-distinct fact that the language has no run-time types.'
+  uid: js-philosophy:CONTRACTS.BOUNDARY_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines

@@ -14,9 +14,11 @@ links from here assume a checkout layout of `../intent_graph`.
   (doc-tree visualization CLI), `codemap` (structural code-graph CLI for Python), and
   `DOCUMENTATION_STANDARD.md` (the doc format these tools maintain).
 - `dev_guidelines/` — `python_guidelines` (a Python knowledge base, LOD-organized),
-  `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU) and
+  `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU),
   `web_architecture_guidelines` (architecture of a JavaScript + Python + Postgres web
-  application: who does what across tiers, held as two IntentGraphs).
+  application: who does what across tiers, held as two IntentGraphs) and
+  `javascript_guidelines` (solid, maintainable, secure JavaScript at the language level, from
+  audited authoritative sources, held as two IntentGraphs).
 - `diagrams_for_humans/` — reference for generating yEd `.graphml` diagrams.
 - `level_of_detail/` — the level-of-detail practice: an agent-facing core plus satellites, and
   the authoring record behind them.
