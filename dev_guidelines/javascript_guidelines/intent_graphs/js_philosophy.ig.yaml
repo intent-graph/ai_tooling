@@ -13,10 +13,10 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: init the js-philosophy product graph
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET
@@ -29,17 +29,18 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Reject a fixed
     tolerance as the general cure for float equality: choosing the tolerance is arbitrary
     and the relation differs-by-less-than-tolerance is not transitive (Goldberg).
+    (software-development-philosophy:CONSTRUCTION.STATE.4)
 
     Deferred: Owned by the software development guideline: Separate immutability (nobody
     can change the state) from read-only restriction (only some clients may); the
     source is a taxonomy and shows no effect evidence, so no preference between them
-    is derived.'
+    is derived. (software-development-philosophy:CONSTRUCTION.STATE.4)'
   impl_pointers:
   - build/research/01_lang/result.md::LANG-C29
   - build/research/04_struct/result.md::STRUCT-C66
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS
@@ -53,29 +54,29 @@ nodes:
     the general part is owned by the software development guideline'
   design_notes: 'Deferred: Owned by the software development guideline: Validate all
     data crossing a trust boundary, including data from internal APIs, queues and
-    stored records, before the application uses it
+    stored records, before the application uses it (software-development-philosophy:CONSTRUCTION.BOUNDARY.1)
 
     Deferred: Owned by the software development guideline: Server-side validation
     as a trusted service layer, never client-side validation as a security control:
-    the architecture half is owned by the web-architecture guideline
+    the architecture half is owned by the web-architecture guideline (software-development-philosophy:CONSTRUCTION.BOUNDARY.1)
 
     Deferred: Owned by the software development guideline: Use positive validation
     (allowlist of values, patterns, ranges, or comparison to an expected structure)
-    rather than denylisting bad input
+    rather than denylisting bad input (software-development-philosophy:CONSTRUCTION.BOUNDARY.2)
 
     Deferred: Owned by the software development guideline: Check syntax and semantics,
     including that combinations of related fields are reasonable (end date after start
-    date)
+    date) (software-development-philosophy:CONSTRUCTION.BOUNDARY.2)
 
     Deferred: Owned by the software development guideline: Make input handling a recognizer
     of valid inputs and keep input languages simple; do not hand-write ad-hoc recognizers
     (regex allow or deny lists) for complex input languages, which are unreliable
-    (Sassaman et al., position of a 2011 technical report).
+    (Sassaman et al., position of a 2011 technical report). (software-development-philosophy:CONSTRUCTION.BOUNDARY.2)
 
     Deferred: Owned by the software development guideline: Cap positional parameters:
     numerous parameters are hard to read and write because each parameter, its type
     and its order must be memorised (the rule default of 3 is a configuration default,
-    not evidence)'
+    not evidence) (software-development-philosophy:CONSTRUCTION.BOUNDARY.5)'
   impl_pointers:
   - build/research/02_types/result.md::TYPES-C27
   - build/research/02_types/result.md::TYPES-C29
@@ -85,7 +86,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL
@@ -96,7 +97,7 @@ nodes:
   epistemic_state: known | rolls up its five children
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE
@@ -109,49 +110,51 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Decompose
     a system into modules by listing the design decisions that are difficult or likely
     to change and hiding each one inside one module, not by the steps of processing.
+    (software-development-philosophy:CONSTRUCTION.HIDING.1)
 
     Deferred: Owned by the software development guideline: Distinguish an abstract
     data type (representation hidden behind operations) from an object (procedural
     interface, information hidden by procedural abstraction), and do not conflate
-    the two when designing an API.
+    the two when designing an API. (software-development-philosophy:CONSTRUCTION.HIDING.1)
 
     Deferred: Owned by the software development guideline: Keep each module''s public
     surface minimal at every level at which JavaScript can expose a name: named exports
-    of a module, the package entry points, and class members.
+    of a module, the package entry points, and class members. (software-development-philosophy:CONSTRUCTION.HIDING.1)
 
     Deferred: Owned by the software development guideline: Keep a module''s top level
     free of effects other than initialising its own exports, so that importing it
-    is safe in any order and unused code can be dropped by tools.
+    is safe in any order and unused code can be dropped by tools. (software-development-philosophy:CONSTRUCTION.STATE.5)
 
     Deferred: Owned by the software development guideline: Demoted to fact: a lint
     rule can forbid imports by path or pattern, which makes mechanical enforcement
     of import direction possible; the claim that layer direction should be declared
     and enforced has no admitted ground (the rule documents environment fit, not layering),
-    so the principle stays undecided.
+    so the principle stays undecided. (software-development-philosophy:CONSTRUCTION.DEPENDENCY_DIRECTION.2)
 
     Deferred: Owned by the software development guideline: Name identifiers with whole
     words, not single letters or letter-deleting abbreviations: words gave about 19
     percent faster defect finding than letters or abbreviations in an experiment with
     72 professional C# developers, with no significant difference between letters
-    and abbreviations. Transfer to JavaScript is inference.
+    and abbreviations. Transfer to JavaScript is inference. (software-development-philosophy:CONSTRUCTION.NAMING.1)
 
     Deferred: Owned by the software development guideline: Give one concept one word,
     made of common words and descriptive: holder positions of Google JS, Google TS,
-    W3C TAG and Airbnb agree. Holder positions only, not evidence.
+    W3C TAG and Airbnb agree. Holder positions only, not evidence. (software-development-philosophy:CONSTRUCTION.NAMING.2)
 
     Deferred: Owned by the software development guideline: Derive a name by selecting
     the concepts, choosing words per concept, then composing the name; expect two
     developers to pick the same name only rarely (median 6.9 percent over 47 instances)
-    but a chosen name to be understood.
+    but a chosen name to be understood. (software-development-philosophy:CONSTRUCTION.NAMING.3)
 
     Deferred: Owned by the software development guideline: Choose the paradigm per
     problem by intent: no admitted source supports choosing an object-oriented or
-    a functional style inside JavaScript on defect-rate evidence.
+    a functional style inside JavaScript on defect-rate evidence. (software-development-philosophy:CONSTRUCTION.PARADIGM.1)
 
     Deferred: Owned by the software development guideline: Whether a paradigm lowers
     defects is contested and the studies compare languages, not paradigms inside one
     language: a modest language effect (Ray et al.), four of eleven languages significant
-    with exceedingly small effects (reproduction), results largely replicated (rebuttal).'
+    with exceedingly small effects (reproduction), results largely replicated (rebuttal).
+    (software-development-philosophy:CONSTRUCTION.PARADIGM.1)'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C58
   - build/research/04_struct/result.md::STRUCT-C62
@@ -165,7 +168,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C63
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE
@@ -179,69 +182,71 @@ nodes:
   epistemic_state: 'known | unvalidated: intent narrowed at the split by the build,
     the general part is owned by the software development guideline'
   design_notes: 'Deferred: Owned by the software development guideline: Never hardcode
-    secrets in source code or committed configuration files.
+    secrets in source code or committed configuration files. (software-development-philosophy:TRANSVERSE.CONFIG.1)
 
     Deferred: Owned by the software development guideline: Prefer built-in library
     functions to invoking OS commands at all; they cannot be manipulated into other
-    tasks.
+    tasks. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1)
 
     Deferred: Owned by the software development guideline: Allowlist the executable
     and the arguments and run the process with the least privilege required when an
-    OS command is unavoidable.
+    OS command is unavoidable. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1)
 
     Deferred: Owned by the software development guideline: Build queries with parameters
     passed separately from the query text; never concatenate or template untrusted
-    values into it, because the database must receive code and data separately.
+    values into it, because the database must receive code and data separately. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2)
 
     Deferred: Owned by the software development guideline: Bind variables carry values
     only: identifiers, keywords and sort order never come from input; redesign the
-    query or map the input through a fixed allowlist.
+    query or map the input through a fixed allowlist. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2)
 
     Deferred: Owned by the software development guideline: Rejected: escaping all
     user input as the primary defence against SQL injection. OWASP calls it strongly
-    discouraged, fragile, and not guaranteed to stop all injections.
+    discouraged, fragile, and not guaranteed to stop all injections. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2)
 
     Deferred: Owned by the software development guideline: Run the application''s
     database account with least privilege as a second layer behind parameterization
-    and validation.
+    and validation. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2)
 
     Deferred: Owned by the software development guideline: Belief rejected: NoSQL
     stores are immune to injection. A BSON query is an object, so string injection
     does not apply, but client-supplied objects used as field values inject query
-    operators such as { $ne: "" }.
+    operators such as { $ne: "" }. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.2)
 
     Deferred: Owned by the software development guideline: Build file paths from internally
     generated or trusted names, not user-submitted filenames; where user filenames
-    are unavoidable, apply strict allowlist validation.
+    are unavoidable, apply strict allowlist validation. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3)
 
     Deferred: Owned by the software development guideline: Exchange data across a
     trust boundary in a pure data format such as JSON, never in formats that carry
     types or code, and never deserialize untrusted data into executable structures.
+    (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4)
 
     Deferred: Owned by the software development guideline: Sign serialized data and
     verify before deserializing (an HMAC where feasible) when the set of expected
     messages is known; populate a new object from validated fields instead of deserializing
-    into the application''s own types. Language-neutral grounds only.
+    into the application''s own types. Language-neutral grounds only. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4)
 
     Deferred: Owned by the software development guideline: Match the host of an outbound
     request against an allowlist and build the request yourself when the destination
-    is known.
+    is known. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3)
 
     Deferred: Owned by the software development guideline: Do not accept complete
     URLs from users when avoidable: URLs are hard to validate and the parser can be
-    abused; accept validated hosts or addresses instead.
+    abused; accept validated hosts or addresses instead. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3)
 
     Deferred: Owned by the software development guideline: Validate the resolved destination
     addresses against the permitted networks and make the client connect only to the
-    validated addresses; a hostname check alone is not enough.
+    validated addresses; a hostname check alone is not enough. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3)
 
     Deferred: Owned by the software development guideline: Reject the entire JWT if
     any cryptographic operation in it fails to validate, and reject it if any validation
-    step of the token specification fails.
+    step of the token specification fails. (software-development-philosophy:CONSTRUCTION.BOUNDARY.2)
 
     Deferred: Owned by the software development guideline: Disable document type definitions
     (reject DOCTYPE) when parsing untrusted XML; where DTDs are required, disable
-    external entity resolution and external DTD loading and limit entity expansion.'
+    external entity resolution and external DTD loading and limit entity expansion.
+    (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4)'
   impl_pointers:
   - build/research/06_runsec/result.md::RUNSEC-C46
   - build/research/06_runsec/result.md::RUNSEC-C25
@@ -263,7 +268,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C18
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES
@@ -276,12 +281,12 @@ nodes:
     the general part is owned by the software development guideline'
   design_notes: 'Deferred: Owned by the software development guideline: Enable two-factor
     authentication on registry publishing accounts; phishing-resistant MFA on developer
-    accounts is the response CISA recommends after account compromises.'
+    accounts is the response CISA recommends after account compromises. (software-development-philosophy:OWNERSHIP.LIFECYCLE.4)'
   impl_pointers:
   - build/research/07_supply/result.md::SUPPLY-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: VERIFICATION
@@ -294,95 +299,95 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Dynamic checks
     find bad practices that static lint misses: on 200+ web sites in 2015, 28 dynamic
     checkers detected on average 49 problems per site that static analysis missed.
-    Evidence of occurrence in 2015, not a current-language claim.
+    Evidence of occurrence in 2015, not a current-language claim. (software-development-philosophy:ASSURANCE.RULES.2)
 
     Deferred: Owned by the software development guideline: Enable a linter or a safe
     language mode and address its warnings; the OpenSSF passing criteria make this
-    a MUST.
+    a MUST. (software-development-philosophy:ASSURANCE.BEHAVIOUR.2)
 
     Deferred: Owned by the software development guideline: Apply at least one static-analysis
     tool beyond compiler warnings and safe modes to every proposed major production
-    release before it ships.
+    release before it ships. (software-development-philosophy:ASSURANCE.BEHAVIOUR.2)
 
     Deferred: Owned by the software development guideline: Combine several analysis
     tools in CI but never as the only mechanism, and write negative tests (what must
     not happen does not) so a passing suite means shipping. Held as the OpenSSF Best
-    Practices Working Group''s position.
+    Practices Working Group''s position. (software-development-philosophy:ASSURANCE.RULES.2)
 
     Deferred: Owned by the software development guideline: Keep a policy that new
     major functionality gets automated tests, keep evidence that recent major changes
-    followed it, and make the suite invocable in the language''s standard way.
+    followed it, and make the suite invocable in the language''s standard way. (software-development-philosophy:ASSURANCE.BEHAVIOUR.1)
 
     Deferred: Owned by the software development guideline: SHOULD NOT gate on a coverage
     number or use one as a quality target; use coverage to find under-tested code.
     Study: correlation with suite effectiveness is low to moderate once suite size
     is controlled (31,000 suites, five large Java systems); transfer to JavaScript
-    inferred.
+    inferred. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Rejected position (OpenSSF
     passing criteria, T1): cover most or all branches, as a suggestion and not a numeric
     target; it would win for a project that adopts those criteria, and it is compatible
-    with using coverage to locate code no test executes.
+    with using coverage to locate code no test executes. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Folklore rejected (restricted
     verdict, the dissent audit): high coverage means effective tests. Coverage finds
-    code no test executes; it does not show that tests would detect a fault.
+    code no test executes; it does not show that tests would detect a fault. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Test behaviours through
     the public API, one test per behaviour rather than per method, DAMP over DRY.
     Google''s position (T3, single source), taken as the decision for lack of any
-    other admitted position.
+    other admitted position. (software-development-philosophy:ASSURANCE.BEHAVIOUR.4)
 
     Deferred: Owned by the software development guideline: Prefer real objects over
     mocks when they are fast and deterministic, because brittle tests fail on unrelated
     changes. Google''s position (T3, single source), taken as the decision for lack
-    of any other admitted position.
+    of any other admitted position. (software-development-philosophy:ASSURANCE.BEHAVIOUR.4)
 
     Deferred: Owned by the software development guideline: Google''s test mix is about
     80% narrow unit tests, 15% medium integration tests, 5% end-to-end. Acceptable
     when an organization with Google-like test infrastructure sets a mix; Google''s
-    stated practice, not a general rule.
+    stated practice, not a general rule. (software-development-philosophy:ASSURANCE.BEHAVIOUR.4)
 
     Deferred: Owned by the software development guideline: A mutation score is the
     share of injected faults that tests kill: mutation analysis measures whether tests
-    detect small seeded changes, which coverage cannot show.
+    detect small seeded changes, which coverage cannot show. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Run mutation testing incrementally
     on changed code during code review and filter mutants, instead of mutating the
     whole code base, when adopting it at scale. Abstract-level source, Google setting
-    (24,000+ developers, 1,000+ projects).
+    (24,000+ developers, 1,000+ projects). (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Property-based testing
     replaces hand-picked inputs with generated ones: a property is a checkable statement,
     inputs are generated at random, failures are shrunk to the smallest reproducing
-    input (shrinking is fast-check''s, absent from the QuickCheck paper).
+    input (shrinking is fast-check''s, absent from the QuickCheck paper). (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Control the distribution
     of generated test data with custom generators: random testing is most effective
     when the distribution follows actual data, and a uniform distribution is often
-    a poor default.
+    a poor default. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: The QuickCheck authors
     write properties in the same module as the functions they test, as checkable documentation.
     Acceptable when a team wants properties beside the code; the authors'' practice,
-    outside the method the source is admitted for.
+    outside the method the source is admitted for. (software-development-philosophy:ASSURANCE.BEHAVIOUR.6)
 
     Deferred: Owned by the software development guideline: Check new tests extensively
     when they are added: flaky tests come mostly from async waits (45% of studied
     fixes), concurrency and test-order dependency, and are flaky from the first run.
-    Study of 201 commits in 51 mostly Java projects; transfer inferred.
+    Study of 201 commits in 51 mostly Java projects; transfer inferred. (software-development-philosophy:ASSURANCE.RULES.1)
 
     Deferred: Owned by the software development guideline: Clean the shared state
     between tests: 74% (14 of 19) of order-dependent flaky tests in the study were
-    fixed that way. Java-dominated study; transfer inferred.
+    fixed that way. Java-dominated study; transfer inferred. (software-development-philosophy:ASSURANCE.RULES.1)
 
     Deferred: Owned by the software development guideline: Track the flaky-test rate:
     Google reports about 0.15% and says tests begin to lose value near 1% flakiness;
     treat approaching 1% as the point to act. Google''s figures (T3, single source),
-    the only admitted threshold.
+    the only admitted threshold. (software-development-philosophy:ASSURANCE.RULES.1)
 
     Deferred: Owned by the software development guideline: Make the merge gate always
-    run: a skipped required check must not let a merge through.'
+    run: a skipped required check must not let a merge through. (software-development-philosophy:ASSURANCE.RULES.3)'
   impl_pointers:
   - build/research/01_lang/result.md::LANG-C56
   - build/research/08_quality/result.md::QUALITY-C20
@@ -404,7 +409,7 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME
@@ -418,20 +423,20 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Treat performance
     advice that rests on engine internals as dated single-body evidence that can describe
     a mechanism but cannot prescribe (no T1 specifies engine performance); make a
-    performance belief a rule only through a measurement of the real workload.
+    performance belief a rule only through a measurement of the real workload. (software-development-philosophy:ASSURANCE.PERFORMANCE.5)
 
     Deferred: Owned by the software development guideline: Measure performance as
     a distribution, not a number: report start-up and steady state separately across
     several fresh VM invocations with several iterations each, give confidence intervals,
     and vary the experimental setup, because an innocuous setup change can bias results
-    and flip conclusions.'
+    and flip conclusions. (software-development-philosophy:ASSURANCE.PERFORMANCE.5)'
   impl_pointers:
   - build/research/09_runtime/result.md::RUNTIME-C63
   - build/research/09_runtime/result.md::RUNTIME-C61
   - build/research/09_runtime/result.md::RUNTIME-C62
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.VISIBLE
@@ -442,7 +447,7 @@ nodes:
   epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.CONVERSION'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.FAILURE
@@ -454,7 +459,7 @@ nodes:
     MUTATION.1 and OBJECTS.1'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.BINDING
@@ -466,7 +471,7 @@ nodes:
     STRICTNESS.4, OBJECTS.1 and OBJECTS.3'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.MATURITY
@@ -478,7 +483,7 @@ nodes:
     and OBJECTS.5'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.NUMBERS
@@ -492,7 +497,7 @@ nodes:
     inferred roll-up of PIG-JS.SUBSET.NUMBERS'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.STATE
@@ -507,7 +512,7 @@ nodes:
     inferred roll-up of PIG-JS.SUBSET.MUTATION and PIG-JS.SUBSET.STRICTNESS.3'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC
@@ -518,7 +523,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.BOUNDARY
@@ -533,7 +538,7 @@ nodes:
     inferred roll-up of PIG-JS.CONTRACTS.BOUNDARY'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.FAILURE
@@ -552,7 +557,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.BOUNDS
@@ -571,7 +576,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.SCHEDULING
@@ -602,7 +607,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C38
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.FLOW
@@ -622,7 +627,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C12
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE.STATE
@@ -634,12 +639,12 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Keep each
     piece of state in one place: state kept in several places can become inconsistent,
     consistency being whether the value satisfies declared constraints. Transfer from
-    shared data banks to application state is inference.'
+    shared data banks to application state is inference. (software-development-philosophy:CONSTRUCTION.STATE.1)'
   impl_pointers:
   - build/research/04_struct/result.md::STRUCT-C65
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM
@@ -649,7 +654,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.ORIGIN
@@ -668,7 +673,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C59
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE
@@ -679,7 +684,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST
@@ -690,7 +695,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.CODE
@@ -714,7 +719,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C31
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST
@@ -725,12 +730,12 @@ nodes:
   epistemic_state: known
   design_notes: 'Deferred: Owned by the software development guideline: Layer controls
     rather than rely on one: attack trees list 107 vectors from code contribution
-    to distribution, mapped to 33 safeguards.'
+    to distribution, mapped to 33 safeguards. (software-development-philosophy:ASSURANCE.RULES.2)'
   impl_pointers:
   - build/research/07_supply/result.md::SUPPLY-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS
@@ -741,7 +746,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.ADMISSION
@@ -752,21 +757,21 @@ nodes:
     the general part is owned by the software development guideline'
   design_notes: 'Deferred: Owned by the software development guideline: Ask whether
     existing components suffice before adding a dependency, and test the candidate
-    in isolation for unexpected indirect dependencies in production.
+    in isolation for unexpected indirect dependencies in production. (software-development-philosophy:OWNERSHIP.SELECTION.6)
 
     Deferred: Owned by the software development guideline: Check a package''s name
     for typos and for a more popular look-alike before adding it, and verify that
-    it exists and is authentic.
+    it exists and is authentic. (software-development-philosophy:OWNERSHIP.SELECTION.5)
 
     Deferred: Owned by the software development guideline: Do not copy README examples
-    into production without a security review.'
+    into production without a security review. (software-development-philosophy:OWNERSHIP.SELECTION.6)'
   impl_pointers:
   - build/research/07_supply/result.md::SUPPLY-C27
   - build/research/07_supply/result.md::SUPPLY-C24
   - build/research/07_supply/result.md::SUPPLY-C39
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE
@@ -777,7 +782,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE
@@ -788,19 +793,20 @@ nodes:
   design_notes: 'Deferred: Owned by the software development guideline: Run an automated
     dependency-update and vulnerability-alert mechanism, with security updates enabled
     and kept separate from feature updates, because bundled fixes hinder adoption.
+    (software-development-philosophy:OWNERSHIP.LIFECYCLE.3)
 
     Deferred: Owned by the software development guideline: The effectiveness of a
     release-age cooldown rests on one T1 assertion and vendor figures; no peer-reviewed
-    measurement of time-to-removal was found.
+    measurement of time-to-removal was found. (software-development-philosophy:OWNERSHIP.LIFECYCLE.3)
 
     Deferred: Owned by the software development guideline: The OpenSSF concise guide
     recommends a cooldown of about three days and says it counters most malicious
     releases; the origin of that figure is not found, so it is recorded as the body''s
-    position and never used as evidence.
+    position and never used as evidence. (software-development-philosophy:OWNERSHIP.LIFECYCLE.3)
 
     Deferred: Owned by the software development guideline: Review lockfiles, rotate
     all developer credentials and pin to versions published before the incident date
-    after a worm-style compromise (CISA''s position).'
+    after a worm-style compromise (CISA''s position). (software-development-philosophy:OWNERSHIP.LIFECYCLE.3)'
   impl_pointers:
   - build/research/07_supply/result.md::SUPPLY-C36
   - build/research/07_supply/result.md::SUPPLY-C13
@@ -808,7 +814,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY
@@ -820,7 +826,7 @@ nodes:
     tool-extracted quotes'
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC.1
@@ -840,7 +846,7 @@ nodes:
   - build/research/02_types/result.md::TYPES-C02
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC.2
@@ -860,7 +866,7 @@ nodes:
   - build/research/02_types/result.md::TYPES-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE.STATE.2
@@ -876,7 +882,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C02
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.1
@@ -891,7 +897,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.2
@@ -907,7 +913,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.3
@@ -929,7 +935,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C48
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE.1
@@ -945,7 +951,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C01
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE.2
@@ -960,7 +966,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C10
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.1
@@ -978,7 +984,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C36
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.2
@@ -994,7 +1000,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.3
@@ -1011,13 +1017,13 @@ nodes:
     so the defence is shared with the front end.
   design_notes: 'Deferred: Owned by the software development guideline: Never let
     CR, LF or NUL reach an HTTP field value: they are invalid and dangerous, and a
-    recipient must reject the message or replace each with a space.'
+    recipient must reject the message or replace each with a space. (software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.4)'
   impl_pointers:
   - build/research/13_srvsec/result.md::SRVSEC-C56
   - build/research/14_secgap2/result.md::SECGAP2-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST.1
@@ -1045,7 +1051,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST.2
@@ -1066,7 +1072,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS.1
@@ -1089,7 +1095,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C30
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS.2
@@ -1109,7 +1115,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C49
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.ADMISSION.2
@@ -1128,7 +1134,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C29
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE.1
@@ -1160,7 +1166,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE.2
@@ -1176,7 +1182,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C22
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.1
@@ -1198,7 +1204,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C40
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.2
@@ -1224,7 +1230,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C67
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.3
@@ -1240,7 +1246,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY.1
@@ -1262,7 +1268,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C27
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY.2
@@ -1278,7 +1284,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C53
   history:
   - who: agent:assembler
-    date: 2026-10-13T15:53
+    date: 2026-10-13T18:37
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 treearcs:
@@ -1601,5 +1607,34 @@ inter_intentlinks:
   intent: 'Validate at boundaries and trust after validation: the shared principle,
     here with the JavaScript-distinct fact that the language has no run-time types.'
   uid: js-philosophy:CONTRACTS.BOUNDARY_python-kb-philosophy:DEFENSIVE
+  shape:
+    type: refines
+- src: js-philosophy:SUBSET.NUMBERS
+  dst: software-development-philosophy:CONSTRUCTION.STATE.4
+  intent: One 64-bit binary float serves counts, identifiers and amounts, so the general
+    limit on a numeric type's exactness is stated here as what breaks first in JavaScript.
+  uid: js-philosophy:SUBSET.NUMBERS_software-development-philosophy:CONSTRUCTION.STATE.4
+  shape:
+    type: refines
+- src: js-philosophy:SUBSET.STATE
+  dst: software-development-philosophy:CONSTRUCTION.STATE.4
+  intent: A fixed binding is not a frozen value and a freeze is shallow and silent
+    outside strict code, so the general distinction between immutable and restricted
+    is only as deep as the JavaScript mechanism.
+  uid: js-philosophy:SUBSET.STATE_software-development-philosophy:CONSTRUCTION.STATE.4
+  shape:
+    type: refines
+- src: js-philosophy:CONTRACTS.BOUNDARY
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.1
+  intent: Types are erased and outside data arrives with no run-time type, so the
+    parse at the boundary is the only place a value earns its shape.
+  uid: js-philosophy:CONTRACTS.BOUNDARY_software-development-philosophy:CONSTRUCTION.BOUNDARY.1
+  shape:
+    type: refines
+- src: js-philosophy:DEFENSE.CODE
+  dst: software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1
+  intent: JavaScript has many doors from a string to running code, which makes the
+    general rule never to build code from strings matter more here.
+  uid: js-philosophy:DEFENSE.CODE_software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.1
   shape:
     type: refines
