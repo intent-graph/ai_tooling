@@ -19,8 +19,8 @@ from audited authoritative sources only.
 ## What This Is
 <!-- Lines 21-31 -->
 
-- **Is**: a set of decisions, each the most demanding practice an admitted source supports for
-  its purpose ("max, not average"), with every rejected alternative kept with the condition under
+- **Is**: a set of decisions, each the best practice an admitted source supports for its purpose
+  ("max, not average": the best of the sources, never their average; best is not most demanding), with every rejected alternative kept with the condition under
   which it would win, and every rule traced to claims and sources.
 - **Is not**: a survey of what the web says, a framework manual, or a project life-cycle guide
   (sourcing, application architecture, UX validation, deploy, operations and development process

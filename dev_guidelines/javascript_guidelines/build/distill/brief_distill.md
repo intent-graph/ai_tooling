@@ -31,8 +31,9 @@ or 5c). Read **Shared** and your step's section.
   JavaScript belongs to `js-philosophy`; otherwise to `pig-js-defaults`. Principles shared with
   any language become inter links to `python-kb-philosophy`
   (`../python_guidelines/intent_graphs/python_kb_philosophy.yaml`, read its uids), not copies.
-- **Max, grounded.** Each decision is the most demanding practice that serves its branch's
-  purpose **and that an admitted source supports**. The build decides contested topics itself,
+- **Max, grounded.** Each decision is the best practice for its branch's purpose (the one the
+  strongest arguments across all sources establish; never their average, nor merely the most
+  demanding) **and one that an admitted source supports**. The build decides contested topics itself,
   the type-layer choice and the framework short list included. Never invent a practice: a gap
   stays `undecided | missing: no admitted source` or a note on the nearest node. A missing
   independent ranking is **not** a reason to leave a node undecided: when admitted sources state

@@ -113,6 +113,7 @@ and the weakness is shown in `epistemic_state`. What changed:
 - Framework-specific and dated facts moved from rules to dated-evidence rows (DOM.6.1, UPDATE.2, FRAMEWORK_EVIDENCE.1, DOM.4, EVOLUTION.2).
 - Philosophy rows tool-neutral (VERIFICATION.ENFORCEMENT, DEPENDENCIES.CHANGE.2, DEPENDENCIES.EVIDENCE.1, DEFENSE.INJECTION.1, CONTRACTS.STATIC.2); the names moved to linked defaults nodes.
 - Every node whose rules rest on inferred or open claims, on single-source claims only, on no claim, or on a claim with no obtained quote carries `unvalidated:` (script `build/assemble/apply_flags.py`).
+- Re-judged under the corrected rule (best, not most demanding): `STRICT.2`, `STRICT.3`, `SECRETS.5`, `ESCAPE.6` and `FRAMEWORK_SHORTLIST` above were relaxed; the decisions above that name them are superseded by section "Re-judged under best (24 rules)".
 
 ## Slot 14_secgap2: second security gap round (90 claims folded by patch)
 
@@ -161,6 +162,7 @@ and marked `known | unvalidated: inferred from <claims>`; where a step has no gr
 - Positions (corrected at the review fixes): OWASP and MDN both list a Fetch Metadata check among the primary defences (OWASP: its own section before "Defense In Depth Techniques"; MDN: the third primary-defence bullet); neither says it suffices alone and neither requires a token beside it. The earlier record that OWASP layers it as defence in depth was a misreading, so there is no conflict between the sources.
 - Rejected: Sec-Fetch-Site alone, kept as an `acceptable-when` row (every supported browser sends the header; the condition is the build's judgment, row without a claim). The consensus claim C55 (at least one primary defence) is the floor.
 - Epistemic: `known | unvalidated: token-first and the layering are stricter than both sources`.
+- Superseded (RELAX): at least one primary defence, token preferred and layered; see section "Re-judged under best".
 
 ### G5. Other decisions
 
@@ -187,6 +189,51 @@ and marked `known | unvalidated: inferred from <claims>`; where a step has no gr
 - Constraints are rules only again: facts, CVE notes and version ranges of `INJECTION.1.4`, `INJECTION.5.4`, `INJECTION.6.4`, `SECRETS.2.2` and `HOST.3.1` moved to claim-less `fact` rows (design notes); `HOST.3.1` rejects instead of sanitizing; `SECRETS.2.1` requires `exp` on every token (stricter than ASVS 9.2.1, flagged).
 - One owner per rule: redirects on `INJECTION.6.4`, URL parsing on `INJECTION.6.1` (`DOM.2.3` keeps the allowlist comparison, row DEFENSE-139 is now a rejected substring-test row), client file names on constraint 1 of `INJECTION.4.6`.
 
+## Re-judged under best (24 rules)
+
+The maintainer corrected the selection rule: "it's nto the most demanding thing, it's the best thing. The core idea is to not default to average. it's a very generic principle, based on the aggregation of sources, the collective intelligence theory." Best is the practice the strongest arguments across all sources establish for the branch's purpose; not the average, not the most common answer, not a blend, and not automatically the strictest (`target_hierarchy.md`, "Selection rule"). The 24 rules below were chosen because their epistemic state says the build went stricter than its sources or decided on one holder's position alone. Each was weighed again on the existing evidence only (no new source); the full judge record of each is in `skeleton.md` (line "Re-judged under best"), the per-rule reasoning in `build/review/rejudge_best/result.md`.
+
+Result: 13 KEEP (the strict form is the best, reason recorded) and 11 RELAX (a weaker form is the best; the stricter form is a rejected position with the condition under which it would be best). No node, link or claim was added or removed; every claim stays placed once.
+
+| node | verdict | rule after | stricter form is best when |
+|---|---|---|---|
+| PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST | RELAX | the list is the candidates that show gate A and one of B or C today; another framework joins on the same evidence | an organisation wants a fixed approved list for audit (a policy, not a trust finding) |
+| PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST.1 | RELAX | platform first, adopt a framework when a requirement is unmet, isolation-test what is adopted (SUPPLY-C27) | not applicable: the isolation test was never a gate on adoption in its source |
+| PIG-JS.SUBSET.CONVERSION.2 | KEEP | forbid every `==`, on the reader-cost argument (the reason "more demanding" is withdrawn) | the code base already encodes `null: ignore` and values brevity |
+| PIG-JS.SUBSET.OBJECTS.3 | KEEP | `#` fields wherever privacy must hold | (relaxed form already recorded: TypeScript `private` on measured down-levelled targets) |
+| PIG-JS.SUBSET.OBJECTS.4 | RELAX | accessors only as cheap, side-effect-free views of stored state; work is a method | a team wants a rule a linter checks without judging cost (no accessors at all) |
+| PIG-JS.SUBSET.EVOLUTION.5 | KEEP | semicolons and braces everywhere | (relaxed form already recorded: no-semicolon style with formatter and hazard lint) |
+| PIG-JS.CONTRACTS.STRICT.2 | RELAX | SHOULD enable for new code; off where friction exceeds defects found | a team measured that unchecked index reads cause its defects (MUST) |
+| PIG-JS.CONTRACTS.STRICT.3 | RELAX | SHOULD enable for new code; off where dependency typings assign undefined | typings come from controlled code and absent-versus-undefined causes defects (MUST) |
+| PIG-JS.CONTRACTS.ESCAPE.6 | RELAX | ban ts-ignore and ts-nocheck; ts-expect-error only with a description; no override of the recommended lint set | no type-level tests and a wish for zero directives (ban all three) |
+| PIG-JS.CONTRACTS.MODEL.5 | KEEP | interface for object types, alias for what an interface cannot express | an admitted source shows accidental declaration merging causes defects (alias) |
+| PIG-JS.STRUCTURE.FORMAT.4 | KEEP | modules only, no namespaces | (relaxed form already recorded: declaration files for global-script libraries) |
+| PIG-JS.STRUCTURE.LOADING.6 | RELAX | SHOULD NOT use large internal barrels; small ones where no cost is measured; public entry point aggregates | the package is large enough for the measured cost to apply (no internal barrels at all) |
+| PIG-JS.STRUCTURE.SURFACE.1 | KEEP | named exports only | (relaxed form already recorded: a tool mandates a default, CommonJS or AMD interop) |
+| PIG-JS.STRUCTURE.SURFACE.2 | KEEP | export only what is used outside | (relaxed form already recorded: a toolbox package) |
+| PIG-JS.STRUCTURE.SURFACE.3 | KEEP | no mutable exports, no write to an import | (relaxed form already recorded: a documented observable value owned by the exporter) |
+| PIG-JS.STRUCTURE.SURFACE.5 | KEEP | module as namespace, no static-only classes | (relaxed form already recorded: platform-style API without module namespace) |
+| PIG-JS.STRUCTURE.DIRECTION.2 | KEEP | enable the cycle lint rule knowingly, bound with maxDepth | (relaxed form already recorded: small code base with no cycle issue) |
+| PIG-JS.STRUCTURE.PACKAGE.4 | RELAX | SHOULD use relative paths in a project; imports-field alias where a relative path climbs several levels | most files sit deep and cross-directory imports are the norm (aliases everywhere) |
+| PIG-JS.DEFENSE.SECRETS.5 | RELAX | SHOULD detect secrets before commit, SHOULD rotate regularly | a repository that can become public or holds production credentials (MUST) |
+| PIG-JS.DEFENSE.SECRETS.2.1 | RELAX | one row: require exp where tokens grant API access (was: every token); the other nine decision rows keep their strength | tokens from an issuer under no control of the deployment (require exp always) |
+| PIG-JS.DEFENSE.ORIGIN.6.1 | RELAX | at least one primary defence, token or Sec-Fetch-Site check with Origin or Referer fallback; token preferred, layered | browsers may not send the header, or high-value actions (token required beside the check) |
+| PIG-JS.DEFENSE.INJECTION.5.3 | KEEP | no untrusted buffer to v8.deserialize without a verified integrity check; copy from validated fields | (relaxes if Node or V8 states the function is safe for hostile bytes) |
+| PIG-JS.DEFENSE.INJECTION.6.1 | KEEP | allowlist, WHATWG URL class, deny-list as the weaker fallback | (relaxed form already recorded: deny-list when no allowlist is possible) |
+| PIG-JS.VERIFICATION.LINT.2 | KEEP | the CI job that runs the lint gate always runs | (none: a skippable required check is no gate) |
+
+Consequences outside the 24 (consistency, no new judgment):
+- `PIG-JS.VERIFICATION.LINT.1.2` (row VERIFICATION-021) said the one override of the recommended lint set is `ban-ts-comment`; with ESCAPE.6 relaxed to the recommended setting no override remains, and the row now says so.
+- Tooling touched (not graph content): `build/assemble/build_batches.py`, the `ACCEPT` entry of row SUBSET-069, so that the acceptable-when constraint of `PIG-JS.SUBSET.OBJECTS.4` states the stricter form instead of the former narrow condition.
+- `PIG-JS.CONTRACTS.ESCAPE.6` was renamed "No silent suppression directives" (the uid is unchanged).
+- Epistemic flags corrected on KEEP nodes where the flag was wrong: `PIG-JS.VERIFICATION.LINT.2` and `PIG-JS.DEFENSE.INJECTION.6.1` (a rule marked "no claim of its own" has its claim held on a philosophy node), `PIG-JS.SUBSET.CONVERSION.2` (the reason now recorded).
+- Other judge records still use "max rule" or "most demanding" wording (nodes that were not among the 24: for example the STRICT parent, UPDATE.1, the RUNTIME and DEPENDENCIES tables). They were not re-judged; their wording predates the correction. Open for the maintainer: re-judge them the same way, or only the ones whose state says stricter than the source.
+
+Open after this pass:
+- `PIG-JS.CONTRACTS.ESCAPE.6`: the recommended setting of `ban-ts-comment` and the self-reporting behaviour of `ts-expect-error` are in no extracted claim; read them from the typescript-eslint rule page and the TypeScript handbook before relying on the text.
+- `PIG-JS.SUBSET.CONVERSION.2` is a close call (stylistic tie): the maintainer may overrule to `== null` allowed through lint with no loss of grounding.
+- The threshold "many modules" (LOADING.6) and "several directory levels" (PACKAGE.4) are deliberately unstated: no admitted source gives a number.
+
 ## Decisions by branch
 
 ### SUBSET
@@ -201,7 +248,7 @@ Epistemic labels: grounded, inferred or open.
 ##### SUBSET: A1. `== null`: forbid every `==` (node PIG-JS.SUBSET.CONVERSION.2, rows SUBSET-016, 017)
 - Decision (grounded as a choice, inferred as the max reading): forbid all `==`, including the null check; write `x === null || x === undefined`. Lint: ESLint `eqeqeq` default `always`.
 - Rejected: `== null` as the one allowed `==` (Google JS guide, eqeqeq option `null: ignore`). It would win where a code base already encodes the exception in lint and prefers brevity over uniformity; the mechanism is exact (ECMA-262 7.2.13), so it is a style loss, not a defect risk.
-- Grounds: eqeqeq (SRC-002, T1) default forbids it; Airbnb (SRC-312) forbids it as a position; MDN (SRC-011) describes the behaviour. Note: the stage-4 dissent slot recommended allowing the exception; this branch chose the more demanding option because predictability means the reader needs no special case. Flagged for the maintainer.
+- Grounds: eqeqeq (SRC-002, T1) default forbids it; Airbnb (SRC-312) forbids it as a position; MDN (SRC-011) describes the behaviour. Note: the stage-4 dissent slot recommended allowing the exception; this branch chose the more demanding option because predictability means the reader needs no special case. Flagged for the maintainer. Re-judged under best (KEEP): the reason "more demanding" is withdrawn, the reader-cost argument carries the decision; see section "Re-judged under best".
 
 ##### SUBSET: A2. Implicit coercion shorthands (node CONVERSION.4, rows SUBSET-019 to 022)
 - Decision: write `Boolean()`, `Number()`, `String()`; enable `no-implicit-coercion`; state the rule as a readability convention and make no claim that it prevents defects.
@@ -255,6 +302,7 @@ No node of this branch is undecided. Both were decided because an admitted posit
 - Grounds: Google JS (SRC-239, T2, position only, QUALITY-C19). Searched: every claim table, the register and the coverage report; no claim states the insertion hazards (slot 01 records that no mechanism was read, G-M02), so the coordinator's note that MDN documents them is not backed by an extracted claim. Would strengthen it: ECMA-262 automatic insertion rules and the MDN lexical-grammar page, extracted as claims.
 
 ##### SUBSET: E2. Accessor properties (node PIG-JS.SUBSET.OBJECTS.4, rows SUBSET-047, 069)
+- Superseded (RELAX): accessors only as cheap, side-effect-free views; see section "Re-judged under best". The decision below is the former one.
 - Decision: no getter or setter properties; behaviour that does work is a method. By predictability: a read that runs code hides cost and side effects.
 - Rejected: accessors. They win for a cheap, side-effect-free view of stored state on a data-like object (inferred, no source).
 - Grounds: Google JS (SRC-239, T2, position only, STRUCT-C46); its compiler-support reason is a Closure tooling point and is not carried. Searched: all claim tables, register and coverage (G-L14); the only other hits are LANG-C13 (class-field Define semantics) and LANG-C42, unrelated. Would strengthen it: MDN Using classes (LC-02) and ECMA-262 accessor semantics.
@@ -303,7 +351,7 @@ Grounds and their strength (honest account):
 
 Decision: enable noUncheckedIndexedAccess and exactOptionalPropertyTypes for new code.
 The source claims say only "consider" and give the mechanism; no admitted source mandates the
-flags. The max rule picks the more checkable setting, marked `unvalidated: mechanism only`.
+flags. The max rule picks the more checkable setting, marked `unvalidated: mechanism only`. Superseded (RELAX): both flags are SHOULD for new code; see section "Re-judged under best".
 
 Rejected: leaving them off. Wins where index-heavy or untyped-dependency code makes the friction
 exceed the defects found; typescript-eslint calls the first flag often unwieldy (SRC-026, T1).
@@ -313,7 +361,7 @@ mandate, or demote both to acceptable-when.
 #### CONTRACTS: D3. No suppression directives (PIG-JS.CONTRACTS.ESCAPE.6, rows CONTRACTS-034, CONTRACTS-035)
 
 Decision: ban ts-ignore, ts-expect-error and ts-nocheck; allow a lint suppression only with a
-comment saying why. Epistemic state `known | unvalidated: single T2 source`.
+comment saying why. Epistemic state `known | unvalidated: single T2 source`. Superseded (RELAX): ts-ignore and ts-nocheck are banned, ts-expect-error is allowed with a description; see section "Re-judged under best".
 
 Weakness to review: the ground is one T2 holder (Google TS guide). The same position appears twice
 (QUALITY-C18, TYPES-C25). The register leaves SRC-244 unrestricted for the quality slot but
@@ -556,6 +604,7 @@ the holder's position and are never counted as evidence. Ledger row ids refer to
 #### STRUCTURE: Weighty choices and single-source decisions
 
 ##### STRUCTURE: D5. Barrel files: aggregate only at a public entry point (PIG-JS.STRUCTURE.LOADING.6; STRUCTURE-031)
+- Superseded in strength (RELAX): SHOULD NOT for large internal barrels; see section "Re-judged under best".
 - Decision: import from the defining module; keep re-exporting modules to a package's public entry point.
 - Rejected, blanket "get rid of all barrel files" (Hagemeister, SRC-315): the register restricts that source to its synthetic measurement (one machine, 500 to 50,000 modules); the blanket is his position and is not adopted. Would win if the public entry point itself shows the load cost in the project's own measurement.
 - Rejected, barrels as a convenience everywhere (MDN documents aggregation, no recommendation): wins where no measurement shows a cost and importers need many members.
@@ -580,6 +629,7 @@ the holder's position and are never counted as evidence. Ledger row ids refer to
 - STRUCTURE.HIDING.3 (minimal surface at three levels) is inferred as a shared form across one T2 principle and T1 mechanisms in SRC-090 and SRC-091.
 
 ##### STRUCTURE: D10. Holder-position-only decisions (flag `holder position only`)
+- Re-judged under best: FORMAT.4 and SURFACE.2 KEEP; PACKAGE.4 RELAX (relative paths by default, imports-field alias where a path climbs several levels); see section "Re-judged under best".
 - FORMAT.4 (no TypeScript namespaces, SRC-244), SURFACE.2 (export only what is used, SRC-244), PACKAGE.4 (relative paths within a project, SRC-244), NAMING.2 (SRC-239, SRC-244, SRC-261, SRC-312). Each wins under the max rule because no weaker admitted practice serves locality better; none has a T1 mechanism behind the rule.
 
 ##### STRUCTURE: D11. Folklore rows (STRUCTURE-020, STRUCTURE-041)
@@ -662,6 +712,7 @@ Selection rule: max, not average (`../../target_hierarchy.md`). Each entry gives
 
 ##### DEPENDENCIES: D1. Framework short list (weighty choice, build judgment)
 
+- Superseded in part (RELAX): the list is a snapshot of the evidence, not a closed set; see section "Re-judged under best".
 - Decision: the short list is (1) the platform with Web Components and no framework, the default and first candidate; (2) htmx; (3) Lit; (4) Angular; (5) React. The four frameworks are unranked: no admitted source can rank them, and framework documentation grounds facts about that framework only. Node `PIG-JS.DEPENDENCIES.FRAMEWORK_SHORTLIST`, rows DEPENDENCIES-048 to DEPENDENCIES-077 (evidence and platform baseline) and the judge record in `skeleton.md`.
 - Status after the stage 7 review: the gates and the platform-first default are the build's judgment, not stated by any admitted source (flagged `risky | unvalidated` on the node).
 - Gates, derived from the guideline's own trust rules: A (mandatory) the candidate states which versions receive security fixes, because the guideline runs only supported versions (TYPES-C45, SUPPLY-C36, SUPPLY-C28); B a documented escape and sanitization model (slot 10 matrix, owned by DEFENSE); C stated governance or maintenance body. A and at least one of B or C. The gates are the build's judgment; no admitted source states them.

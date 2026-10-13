@@ -13,10 +13,10 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: init the js-philosophy product graph
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET
@@ -39,7 +39,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C66
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS
@@ -85,7 +85,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL
@@ -96,7 +96,7 @@ nodes:
   epistemic_state: known | rolls up its five children
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE
@@ -165,7 +165,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C63
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE
@@ -263,7 +263,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C18
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES
@@ -281,7 +281,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C17
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: VERIFICATION
@@ -404,7 +404,7 @@ nodes:
   - build/research/08_quality/result.md::QUALITY-C43
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME
@@ -431,7 +431,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C62
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.VISIBLE
@@ -442,7 +442,7 @@ nodes:
   epistemic_state: 'known | unvalidated: inferred roll-up of PIG-JS.SUBSET.CONVERSION'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.FAILURE
@@ -454,7 +454,7 @@ nodes:
     MUTATION.1 and OBJECTS.1'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.BINDING
@@ -466,7 +466,7 @@ nodes:
     STRICTNESS.4, OBJECTS.1 and OBJECTS.3'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.MATURITY
@@ -478,7 +478,7 @@ nodes:
     and OBJECTS.5'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.NUMBERS
@@ -492,7 +492,7 @@ nodes:
     inferred roll-up of PIG-JS.SUBSET.NUMBERS'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: SUBSET.STATE
@@ -507,7 +507,7 @@ nodes:
     inferred roll-up of PIG-JS.SUBSET.MUTATION and PIG-JS.SUBSET.STRICTNESS.3'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC
@@ -518,7 +518,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.BOUNDARY
@@ -533,7 +533,7 @@ nodes:
     inferred roll-up of PIG-JS.CONTRACTS.BOUNDARY'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.FAILURE
@@ -552,7 +552,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.BOUNDS
@@ -571,7 +571,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C25
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.SCHEDULING
@@ -602,7 +602,7 @@ nodes:
   - build/research/03_async/result.md::ASYNC-C38
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTROL.FLOW
@@ -622,7 +622,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C12
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE.STATE
@@ -639,7 +639,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C65
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM
@@ -649,7 +649,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.ORIGIN
@@ -668,7 +668,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C59
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE
@@ -679,7 +679,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST
@@ -690,7 +690,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.CODE
@@ -714,7 +714,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C31
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST
@@ -730,7 +730,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS
@@ -741,7 +741,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.ADMISSION
@@ -766,7 +766,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C39
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE
@@ -777,7 +777,7 @@ nodes:
   epistemic_state: known
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE
@@ -808,7 +808,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY
@@ -820,7 +820,7 @@ nodes:
     tool-extracted quotes'
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC.1
@@ -840,7 +840,7 @@ nodes:
   - build/research/02_types/result.md::TYPES-C02
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: CONTRACTS.STATIC.2
@@ -860,7 +860,7 @@ nodes:
   - build/research/02_types/result.md::TYPES-C47
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: STRUCTURE.STATE.2
@@ -876,7 +876,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C02
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.1
@@ -891,7 +891,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C06
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.2
@@ -907,7 +907,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C13
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.DOM.3
@@ -929,7 +929,7 @@ nodes:
   - build/research/05_domsec/result.md::DOMSEC-C48
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE.1
@@ -945,7 +945,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C01
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.PROTOTYPE.2
@@ -960,7 +960,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C10
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.1
@@ -978,7 +978,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C36
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.2
@@ -994,7 +994,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C32
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEFENSE.HOST.3
@@ -1017,7 +1017,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST.1
@@ -1045,7 +1045,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C23
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.TRUST.2
@@ -1066,7 +1066,7 @@ nodes:
   - build/research/06_runsec/result.md::RUNSEC-C41
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS.1
@@ -1089,7 +1089,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C30
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.THREATS.2
@@ -1109,7 +1109,7 @@ nodes:
   - build/research/14_secgap2/result.md::SECGAP2-C49
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.ADMISSION.2
@@ -1128,7 +1128,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C29
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE.1
@@ -1160,7 +1160,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C34
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.EVIDENCE.2
@@ -1176,7 +1176,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C22
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.1
@@ -1198,7 +1198,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C40
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.2
@@ -1224,7 +1224,7 @@ nodes:
   - build/research/04_struct/result.md::STRUCT-C67
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: DEPENDENCIES.CHANGE.3
@@ -1240,7 +1240,7 @@ nodes:
   - build/research/07_supply/result.md::SUPPLY-C07
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY.1
@@ -1262,7 +1262,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C27
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 - uid: RUNTIME.MEMORY.2
@@ -1278,7 +1278,7 @@ nodes:
   - build/research/09_runtime/result.md::RUNTIME-C53
   history:
   - who: agent:assembler
-    date: 2026-10-13T14:44
+    date: 2026-10-13T15:53
     note: nodes, constraints, design notes, impl pointers and links from the integrated
       skeleton and ledger
 treearcs:
