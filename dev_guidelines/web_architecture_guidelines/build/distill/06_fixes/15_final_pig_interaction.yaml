@@ -1,0 +1,52 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-INTERACTION
+  design_notes: "Decides: how browser JavaScript and the agent surface realize the interaction share of\
+    \ each placement.\nRows: none (roll-up).\nDecision: roll-up of five children. Browsers get server-rendered\
+    \ HTML from Python, enhanced with JavaScript only where a part is interactive; agents get an OAuth-protected\
+    \ adapter over the same HTTP core. Neither decides anything durable: each holds copies (the version\
+    \ it read, drafts, a server-state cache, its own credential) and every decision reaches a backend\
+    \ and the database's writer functions.\n  - Visualize: per-request HTML from Python, build-time output\
+    \ where the URL set is known, islands only under the rendering placement's criteria; view state in\
+    \ the URL; LCP content in the first HTML; WCAG 2.2 AA (VISUALIZE).\n  - Edit: POST, then 303; the\
+    \ version travels with every edit and a stale write is shown as a conflict with both versions; layered\
+    \ duplicate suppression (EDIT).\n  - Real time: polling, then server-sent events, then WebSocket for\
+    \ two-way traffic; events are hints keyed by a commit-safe cursor; Postgres wakes the connection processes,\
+    \ tables carry the data (REALTIME).\n  - Collaborate: comments anchored by foreign key and target\
+    \ version, threads by parent pointer, tombstones and revisions, notifications as rows written with\
+    \ the comment, moderation as a recorded queue; a text engine only for long collaborative text, server-authoritative\
+    \ (COLLABORATE).\n  - Agent: OpenAPI-described core, an MCP adapter for third-party agent hosts whose\
+    \ tool list and schemas are kept in sync like the description, protected-resource metadata, delegated\
+    \ identity recording user and agent, approval for irreversible effects held on the server, agent-shaped\
+    \ errors and per-agent quotas (AGENT).\n  - Environment: feature detection, back/forward-cache eligibility,\
+    \ input saved on page hide (ENVIRONMENT).\nRealizes: refines INTERACTION (J4); through its children\
+    \ ALLOCATION.PRESENT.1 to .3, GUARD.3 to GUARD.6, ACT.2, ACT.4, RULES.4, PIG-WEB-ALLOCATION.JS_SERVER\
+    \ and POSTGRES_FIRST.\nInherited open clause (from the authorization placement, through REALTIME.4\
+    \ and COLLABORATE.4): awaiting maintainer, read visibility of rows with per-user rules when several\
+    \ backends share the database. Recorded default: each backend filters these reads from one shared\
+    \ written specification, with a shared denial-test suite every backend runs; database read functions\
+    \ that receive the verified actor stay acceptable when a per-user read rule must hold for two or more\
+    \ backends. Consequence: until the maintainer answers, the reporting role gets no SELECT on comment\
+    \ content or narrower-audience comments, the operator role sees every row, and any other role that\
+    \ may SELECT the base tables sees every row unless its own role is restricted.\nMaintainer decisions\
+    \ applied: MD-01 (no row-level security by default; authorization stays a backend decision), MD-02\
+    \ (interface description always in sync, origin per project, extended here to the agent tool surface),\
+    \ MD-03 (several consumers share the database; multi-table operations are database function calls).\n\
+    Contested rows decided by composing positions along conditions the default context fixes: push channel\
+    \ (L436), token binding (L641), agent protocol surface (L635), approval design (L646); automated traffic\
+    \ (L652) carried into AGENT.5. Two owned rows narrowed to fit settled placements: L437 (Redis only\
+    \ at a measured limit, by POSTGRES_FIRST) and L583 (multi-step writes are database functions, by MD-03).\n\
+    Evidence gaps: (1) no ledger row names AA; AA is grounded through the W3C conformance page plus the\
+    \ max rule, one legal floor at AA read (US ADA Title II rule, WCAG 2.1 AA), both sources not yet in\
+    \ the register, other jurisdictions not read; (2) the push-channel debate rests on a T3 guide and\
+    \ a T4 vendor, the SSE buffering claim on one vendor source; (3) the comment model rests mostly on\
+    \ single or inferred sources (L665, L669, L670, L683; L673 has none), legal moderation obligations\
+    \ not read; (4) agent identity and registration rest on moving specifications and drafts, agent-readable\
+    \ content on T4 and secondhand evidence; (5) a separate process type for long-lived connections (L458)\
+    \ and reconnect jitter (L454) are inferred; (6) no owned row chooses the enhancement library or the\
+    \ islands component library: left open; (7) the rate-limit partition (L651) is inferred, its combination\
+    \ a synthesis.\nReview: the adversarial review's findings on this unit are applied (read-visibility\
+    \ notation and consequence, no credentials in URLs, MCP tool schemas under the drift gate, scarce-goods\
+    \ flows, resolve right, POST for state-changing forms, 409 and 412/428 split, AA grounding, tombstones\
+    \ through deletion functions, per-tab drafts on sensitive pages, NOTIFY only for live subscribers,\
+    \ cursor horizon stall)."

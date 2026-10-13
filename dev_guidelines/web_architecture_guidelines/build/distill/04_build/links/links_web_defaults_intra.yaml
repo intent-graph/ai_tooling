@@ -1,0 +1,128 @@
+operations:
+- op: link.create
+  src: PIG-WEB-DATA.INTERFACE.1
+  dst: PIG-WEB-ALLOCATION.DB_API
+  intent: Writes the functions and views the database API placement calls for.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.GUARD.2
+  dst: PIG-WEB-ALLOCATION.DB_API
+  intent: Grants EXECUTE per consumer role as the access path of the database API contract.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.MAINTAIN.1
+  dst: PIG-WEB-ALLOCATION.DB_API
+  intent: Changes to database functions ship as migrations like any structural change.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.ORGANIZE.6
+  dst: PIG-WEB-ALLOCATION.DB_API
+  intent: The schema organization includes the API schema through which consumers call the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.INTERFACE.2
+  dst: PIG-WEB-ALLOCATION.DB_API
+  intent: Defines how consumers connect to the database API, one bounded role per consumer.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.ORGANIZE
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: Supplies the schema the type chain starts from or follows.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.ORGANIZE.4
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: Generated models inherit the naming conventions of the schema.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.ORGANIZE.5
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: Document schemas are stored facts of the contract and enter the type chain.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-LOGIC.EXPOSE.6
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: Publishes payload schemas in the place the type chain assigns.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-LOGIC.EXPOSE.7
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: The always-in-sync gate checks the interface description against its single origin in the type
+    chain.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-INTERACTION.AGENT.1
+  dst: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  intent: The agent interface description and tool surface share one origin per project, the type chain's.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.GUARD.3
+  dst: PIG-WEB-ALLOCATION.ROW_SECURITY
+  intent: Writes the row policies the placement calls for.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-LOGIC.SECURE.1
+  dst: PIG-WEB-ALLOCATION.ROW_SECURITY
+  intent: Keeps or drops backend checks as the row-security placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-LOGIC.PROCESS.1
+  dst: PIG-WEB-ALLOCATION.JOB_HOST
+  intent: Runs jobs and schedules on the host the placement names.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-DATA.DERIVE.2
+  dst: PIG-WEB-ALLOCATION.CACHE_STORE
+  intent: Holds cache tables when the placement keeps caches in Postgres.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-LOGIC.EXPOSE.4
+  dst: PIG-WEB-ALLOCATION.CACHE_STORE
+  intent: Uses the cache store the placement names.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-INTERACTION.VISUALIZE.1
+  dst: PIG-WEB-ALLOCATION.JS_SERVER
+  intent: Renders with or without a JavaScript server as the placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.TOPOLOGY.2
+  dst: PIG-WEB-ALLOCATION.JS_SERVER
+  intent: A JavaScript server is one more runtime tier beside the Python server.
+  shape:
+    type: constrains
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.5
+  dst: PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  intent: Database notifications as wake-up depend on Postgres carrying the notification role.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.1
+  dst: PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  intent: 'No Redis by default: fan-out starts from a Postgres wake-up.'
+  shape:
+    type: realizes
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.3
+  dst: PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  intent: Postgres carries the wake-up role until a measured limit is reached.
+  shape:
+    type: realizes

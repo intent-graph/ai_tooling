@@ -1,0 +1,127 @@
+operations:
+- op: link.create
+  src: PIG-WEB-LOGIC.SECURE.3
+  dst: PIG-WEB-LOGIC.SECURE.2
+  intent: The session cookie's SameSite value is the second CSRF layer, and whatever value is chosen applies here.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.ENFORCE.2
+  dst: PIG-WEB-DATA.CONCURRENCY.1
+  intent: The whole call is retried on a serialization failure, as the concurrency strategy sets.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.ENFORCE.3
+  dst: PIG-WEB-DATA.INTERFACE.1
+  intent: The typed wrappers are generated from the API functions the database offers.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.2
+  dst: PIG-WEB-DATA.CONCURRENCY.5
+  intent: Resume uses the commit-safe cursor the sequence and commit-order rules define.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.4
+  dst: PIG-WEB-LOGIC.SECURE.2
+  intent: The session cookie authenticates the channel, and the session's timeouts bound it.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.OPERABILITY.1
+  dst: PIG-WEB-DATA.MAINTAIN.3
+  intent: The trace id is stamped on history rows.
+  shape:
+    type: dataflow
+- op: link.create
+  src: PIG-WEB-LOGIC.PROCESS.6
+  dst: PIG-WEB-LOGIC.PROCESS.5
+  intent: Only files whose row is available are served.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.PROCESS.7
+  dst: PIG-WEB-LOGIC.PROCESS.2
+  intent: Email and push delivery inherit the side-effect delivery rules.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.PROCESS.7
+  dst: PIG-WEB-LOGIC.SECURE.6
+  intent: Email and push delivery inherit the abuse and rate limits.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.SECURE.6
+  dst: PIG-WEB-TRANSVERSE.TOPOLOGY.1
+  intent: The identity-blind limits are applied at the reverse proxy.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.EXPOSE.7
+  dst: PIG-WEB-LOGIC.SECURE.2
+  intent: The compatibility window is bounded by the absolute session timeout.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.EDIT
+  dst: PIG-WEB-DATA.INTERFACE.1
+  intent: Each edit is one call of the function API, in its own transaction.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.EDIT
+  dst: PIG-WEB-INTERACTION.ENVIRONMENT.1
+  intent: Unsaved input is saved and restored as the page lifecycle rules set.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.VISUALIZE.2
+  dst: PIG-WEB-INTERACTION.ENVIRONMENT.1
+  intent: Form drafts are persisted as the page lifecycle rules set.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.TOPOLOGY.1
+  dst: PIG-WEB-TRANSVERSE.SECURITY.2
+  intent: The open question of proxy-to-application encryption across a network hop is carried by the transport security node.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.EVOLUTION.2
+  dst: PIG-WEB-DATA.INTERFACE.1
+  intent: A cross-domain business operation is one function of the database API.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-LOGIC.ENFORCE.3
+  dst: PIG-WEB-LOGIC.SECURE.1
+  intent: Per-user reads follow the read-visibility default of the access control node.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.REALTIME.4
+  dst: PIG-WEB-LOGIC.SECURE.1
+  intent: Per-event filtering follows the read-visibility default of the access control node.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-INTERACTION.COLLABORATE.4
+  dst: PIG-WEB-LOGIC.SECURE.1
+  intent: The recipient check follows the read-visibility default of the access control node.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.OPERABILITY.5
+  dst: PIG-WEB-LOGIC.SECURE.1
+  intent: The shared denial-test suite is the one the access control node names.
+  shape:
+    type: requires
+- op: link.create
+  src: PIG-WEB-TRANSVERSE.SECURITY.1
+  dst: PIG-WEB-LOGIC.SECURE.1
+  intent: No access-control requirement is marked met beyond the read-visibility default of the access control node.
+  shape:
+    type: requires

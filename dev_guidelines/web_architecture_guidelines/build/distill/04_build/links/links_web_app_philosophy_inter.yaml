@@ -1,0 +1,93 @@
+operations:
+- op: link.create
+  src: web-app-philosophy:ALLOCATION
+  dst: python-kb-philosophy:POLYGLOT
+  intent: 'Each responsibility goes to the tier whose paradigm fits it: set work in SQL, flow in the backend,
+    rendering at the edge.'
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:ALLOCATION.RULES.1
+  dst: python-kb-philosophy:DATACENTRICITY
+  intent: Data is the enduring artifact and has one authority; every other copy is derived.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:ALLOCATION.RULES.3
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Checks that decide run where they cannot be bypassed.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:ALLOCATION.GUARD.1
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Input is checked at the boundary.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:ALLOCATION.GUARD.2
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Invariants fail fast at the data.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:DATA.ORGANIZE
+  dst: python-kb-philosophy:STRUCTURE
+  intent: The data model is designed before the code.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:DATA.ORGANIZE
+  dst: python-kb-philosophy:DATACENTRICITY
+  intent: Facts are stored once, normalized.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:DATA.MAINTAIN
+  dst: python-kb-philosophy:REPRODUCIBILITY
+  intent: Schema changes are versioned and applied by automation.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:LOGIC.EXPOSE
+  dst: python-kb-philosophy:COMMUNICATION
+  intent: The interface is designed for its readers.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.CONTRACTS
+  dst: python-kb-philosophy:COMMUNICATION
+  intent: Contracts are explicit, readable artifacts.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.OPERABILITY.2
+  dst: python-kb-philosophy:DEFENSIVE
+  intent: Tests catch failures at the lowest level that can show them.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: python-kb-philosophy:REPRODUCIBILITY
+  intent: One build is promoted through every environment.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.EVOLUTION.1
+  dst: python-kb-philosophy:INTENTIONALITY
+  intent: The costly decisions are named and recorded with their reasons.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: python-kb-philosophy:ROUGHTOFINE
+  intent: The system grows from a thin whole in increments.
+  shape:
+    type: refines
+- op: link.create
+  src: web-app-philosophy:TRANSVERSE.EVOLUTION.4
+  dst: python-kb-philosophy:POLYGLOT
+  intent: Few technologies on purpose pull against the right paradigm per problem; the choice is made
+    explicitly per case.
+  shape:
+    type: conflicts

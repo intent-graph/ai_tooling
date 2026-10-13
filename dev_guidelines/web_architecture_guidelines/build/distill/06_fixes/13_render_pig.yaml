@@ -1,0 +1,89 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.1
+  constraints:
+  - One policy module per backend; middleware refuses any route that declares no permission.
+  - Every use case calls the module with actor, action and object for each single object it reads or changes.
+  - Collection reads apply a query predicate emitted by the policy module inside the read statement; never a check on rows already loaded.
+  - Product roles for product policy not stored in the data, plus attribute and relationship rules evaluated on the object.
+  - Setting an override flag on a blockable business rule is an action the policy module authorizes per actor; it never comes from client input unchecked and is audited with the actor.
+  - The backend sets the verified actor for every database call.
+  - Per-user write rules decidable from the row are decided by the writer function; the backend's identical check is generated from or tested against that function, and the function's named denial maps to the same response as the backend's.
+  - 'Per-user read visibility is undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database. Recorded default: each backend filters these reads inside the read statement from one shared written specification of the rules, with a shared denial-test suite every backend runs; database read functions receiving the verified actor are acceptable when a per-user read rule must hold for two or more backends (ALLOCATION.GUARD.3 in the philosophy).'
+  - 'Consequence, stated so no line claims more: until the maintainer answers, the reporting role gets no SELECT on comment content or on comments with a narrower audience than their target (it reads comments only through a projection limited to target-wide audiences, or not at all); the operator role (administrators, all-powerful by the maintainer''s model) sees every row, the change table, comments and notification rows included; any other role that may SELECT the base tables sees every row unless its own role is restricted; per-role grants bound which tables and columns a role sees, not which users'' rows.'
+  - A denial test for every rule, at unit level and through the deployed stack against a live database under the backend's real role; shared-data tests run in never-committing transactions, commit-time behaviour in committing sessions in a disposable database.
+  - Every denial goes to the security event log, a sink separate from the business audit, with alerting on bursts.
+  - 'Forbidden: route- or role-only checks; per-view checks without one module; per-object checks on loaded collections; an override flag passed through from client input.'
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (recommendation and recorded default: see web-app-philosophy ALLOCATION.GUARD.3) | unvalidated: P3''s condition taken as met in the default context; collection predicates emitted by the policy module (inferred)'
+- op: node.set
+  uid: PIG-WEB-DATA.GUARD.2
+  constraints:
+  - 'Group roles (NOLOGIN) per functional branch: a read level (SELECT on tables and columns), an API level (USAGE on the API schema, EXECUTE on the functions of that branch), and an admin level. Under MD-03 the "write" level is EXECUTE on writer functions, not table DML; direct INSERT or UPDATE is granted only under DB_API''s single-consumer exception, and never on state columns (web-app-philosophy:ALLOCATION.GUARD.3).'
+  - 'Login roles: one per consumer (each backend, the reporting tool, the console, each script family), neither owner nor superuser, a member of the group roles it needs. One login per consumer is what makes the session role in history rows (MAINTAIN.3) name the consumer (actor trust). Humans have personal login roles, members of the operator or read roles; they assert only themselves as actor.'
+  - 'Owner role: owns tables and the other schema objects (one owner per table), runs migrations and human-run data jobs, never serves requests. It does not own the functions that run with their owner''s rights: a table owner holds rights that cannot be granted separately, including disabling the table''s triggers, so a bug or injectable dynamic SQL in a function running with the owner''s rights could switch off the history and constraint triggers or drop objects.'
+  - 'Narrow function-owner roles (inferred): each family of functions that must write what the caller cannot is owned by its own NOLOGIN role holding only the DML that family executes, for example a deletion role (DELETE on the target tables, INSERT on the archive), a history-writer role (INSERT on the history tables) and a cache-maintenance role (DELETE and upsert on the cache tables and invalidation queue). No consumer role is a member of these roles, and none of them owns a table. This follows the doctrine''s "narrow roles for sensitive features can be granted independently", its "grant the narrow attributes needed" and its own grant of DELETE to one admin role for cache invalidation. It resolves the tension that there is no DELETE grant, yet archive-then-delete needs one: DELETE is held by a narrow non-login role that owns the deletion functions; the caller does not hold it (inferred).'
+  - Functions with their owner's rights run only where they must write what the caller cannot (web-app-philosophy:ALLOCATION.GUARD.3), owned by the narrow role above, with a fixed search_path and schema-qualified references (inferred for this function form).
+  - 'Defaults: EXECUTE on functions, CONNECT and TEMPORARY revoked from PUBLIC; default privileges set so new objects get the right grants; each REVOKE in the creating transaction.'
+  - 'Reporting role: SELECT on the tables and columns it needs, personal-data columns withheld by default; on a replica when its load matters. Until the maintainer answers the read-visibility question it gets no SELECT on comment content or on comments with a narrower audience than their target (PIG-WEB-LOGIC.SECURE.1); the operator role sees every row, and any other role that may SELECT a table sees every row unless its own role is restricted.'
+  - 'Authentication: scram-sha-256, TLS for every remote connection, trust only on local sockets.'
+  - A function lists a role's effective permissions, and CI checks the grant matrix against the role design (inferred).
+  - Per-role settings (timeouts, default isolation) are set here, on the role (CONCURRENCY.1, INTERFACE.2).
+- op: node.set
+  uid: PIG-WEB-INTERACTION.COLLABORATE.4
+  constraints:
+  - 'Notifications are rows written by the comment writer function in the comment''s transaction (MD-03: a multi-table operation; ACT.2''s staged intent), delivered after commit from those rows (in-app read state; the real-time wake-up of REALTIME.5); external delivery (email, push) is the deferred delivery node.'
+  - Mentions are parsed on the server and a notification is created only for a recipient who may see the target (notifications are a secondary surface).
+  - 'Who checks a recipient''s read right across backends: undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see PIG-WEB-LOGIC.SECURE.1). Recorded default: the backend that submits the comment checks each recipient against the shared written specification before passing recipients to the writer function.'
+  - 'Consequence of the default: the recipient check protects the notifications the application sends, nothing stronger; the operator role and any unrestricted role that may SELECT the base tables see notification rows too. Until the question is answered, the reporting role gets no SELECT on comment content or on comments with a narrower audience than their target, and reads comments only through a projection limited to target-wide audiences, or not at all (grants: PIG-WEB-DATA.GUARD.2); otherwise the leak to it is a stated known limit.'
+  - 'Moderation actions are always recorded: hide and restore with reason, actor and time written to history; hide first, remove only under a retention or legal rule; authors edit their own comments within a stated window, each edit a revision (.2). Removal runs through a deletion function, never a DELETE grant; where a legal rule demands erasure rather than an archive copy, the tension with the archive rule is the personal-data node''s (PIG-WEB-DATA.MAINTAIN.6, deferred).'
+  - A report queue (report rows, status, decision) is required whenever comments are visible to people outside the team (customers, the public).
+  - Moderate is a separate ability; agent-authored comments are marked and filterable as a class.
+- op: node.set
+  uid: PIG-WEB-INTERACTION.REALTIME.4
+  constraints:
+  - 'Transport and origin: TLS only; the WebSocket handshake and SSE endpoint check Origin against an explicit allowlist (cross-site WebSocket hijacking); compression off unless measured necessary.'
+  - Authentication by the session cookie (HttpOnly, Secure, SameSite; GUARD.4); no session token, bearer token or long-lived credential ever travels in a URL (web-app-philosophy:INTERACTION.ENVIRONMENT.6, whose one exception, signed file-delivery URLs, does not apply to channels); agent clients use their bearer credential in the header on WebSocket-capable transports (inferred).
+  - 'Authorization per subscription and per event: subscribing to a channel checks the user''s right to read its target; each event is filtered per subscriber against the target''s read rights before it is sent, with the same filter as every other surface. Event payloads carry identifiers, the cursor and a change kind; content is fetched through the normal authorized endpoints (inferred), unless it has passed the same per-recipient filter.'
+  - 'Session end closes the stream: on logout or expiry the connection is closed; the connection process re-checks the session at an interval no longer than the session''s idle timeout (interval inferred).'
+  - 'Bounds: message size, message rate and connections per user and per client capped; every inbound message parsed as untrusted input.'
+  - 'Who filters reads across backends: undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (see PIG-WEB-LOGIC.SECURE.1). Each backend''s connection process filters events from the same shared specification, and the shared denial-test suite covers the real-time channel.'
+  - Per-event filtering protects the channel the application serves, nothing stronger; the comment-grant restriction of PIG-WEB-INTERACTION.COLLABORATE.4 (reporting role) applies until the question is answered.
+- op: node.set
+  uid: PIG-WEB-LOGIC.SECURE.2
+  epistemic_state: 'known | undecided: awaiting maintainer, SameSite value of the session cookie (recommendation: Lax plus a cross-site navigation check, Strict for operator consoles; recorded default: the same) | unvalidated: session table under DB_API''s direct-write exception (inferred); the navigation check (inferred, no ledger row)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.3
+  epistemic_state: 'known | conflict: L157 contested, settled by hosting model | undecided: awaiting maintainer, hosting model of the default context (recommendation: one or a few self-managed hosts without a container orchestrator; recorded default: the same) | unvalidated: roles per kind of process'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.TOPOLOGY.4
+  epistemic_state: 'known | undecided: awaiting maintainer, hosting model of the default context (recommendation: the proxy on the application host serves static files; recorded default: the same) | unvalidated: cumulative asset store across the compatibility window; CDN threshold (L165)'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.SECURITY.4
+  epistemic_state: 'known | conflict: L350 contested (environment variables against a managed store), reconciled by authority and delivery | undecided: awaiting maintainer, hosting model of the default context (recommendation: a managed store, with the file fallback in force until one is added; recorded default: the file fallback) | unvalidated: the reconciliation; credentials per consumer role'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.PERFORMANCE
+  constraints:
+  - 'Targets: the "good" thresholds of Core Web Vitals at the 75th percentile, per device class, from field data (OPERABILITY.2). They are the user-facing service level indicators of OPERABILITY.3.'
+  - Build budgets per page type on the lab-measurable vitals (LCP, CLS) and on page weight. A build over budget fails or the page is optimised. INP is gated on field data after release. The sample budget numbers of the performance-budget guide (tied to a past device baseline) are not adopted; the budget metrics are Core Web Vitals.
+  - 'The server''s share of each page is visible: Server-Timing carries server and database time to authenticated and authorised audiences only, joined to field data through the trace id (inferred).'
+  - 'Derived server budget (inferred from grounded rows, unvalidated): about 1 s at most for the server''s part of a page at the 75th percentile, and well under 1 s for an interaction''s request. Grounds: the HTML response (TTFB) is about 40% of LCP time against LCP''s 2.5 s; 1 s keeps the flow of thought and 0.1 s feels instantaneous; work over about 1 s is deferred (ACT.3, settled). Database time is part of this server share.'
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.OPERABILITY.1
+  constraints:
+  - 'One W3C trace context per user interaction: from the browser (OPERABILITY.2), through the backend, onto every outbound call, and into each job row so workers continue the trace (job carrier inferred).'
+  - 'Into the database: the backend sets the trace id in a transaction-local setting in the reserved namespace, beside the actor. Writer functions and audit triggers write it on transition and history rows (a correlation id is required for agent actions; ACT.4). Inferred carrier; it gives the work MD-03 places in database functions the same id as the request. Owner-run jobs carry the ticket id in the statement comment.'
+  - 'Logs: one JSON event per line on stdout, unbuffered, with trace and span id. Nothing secret or personal in logs or trace headers.'
+  - 'Instrumentation: library instrumentation for the framework, HTTP clients and the Postgres driver; code spans only around business steps.'
+  - 'Public and agent endpoints: an incoming traceparent from an unauthenticated or external caller is recorded but does not decide sampling.'
+  - 'Sampling: every trace is kept while volume allows. When volume forces sampling, tail sampling keeps every error and slow trace. Logs still carry the trace id of every error.'
+  - Server-Timing carries server and database time to authenticated and authorised audiences only.
+- op: node.set
+  uid: PIG-WEB-TRANSVERSE.EVOLUTION.2
+  constraints:
+  - The backend is cut by business concept (orders, billing), each module with a public interface.
+  - The module boundary forbids reaching another domain's **tables** directly. The function API is reachable from every module, within its role's grants, the same as for a backend in another language (RECORD.2). Inferred, unvalidated.
+  - One business operation is one database function call in its own transaction (PIG-WEB-DATA.INTERFACE.1).
+  - A cross-domain business operation (for example an order that also creates an invoice) is therefore one database function. It is called by the module that owns the workflow and owned by the team that owns that workflow, reviewed by the database owner role that holds what spans schemas (web-app-philosophy:TRANSVERSE.EVOLUTION.5).
+  - The Python module interface carries workflow and product policy, never a second path to another domain's data.
+  - 'Module boundaries are checked automatically in the pipeline, as a fitness function: the check fails on a direct read or write of another domain''s tables. The tool is open (gap).'
+  - One place per concept. A business operation lives in its database function; the Python module holds workflow and product policy, with only tested copies of per-user write rules (ACT.1).

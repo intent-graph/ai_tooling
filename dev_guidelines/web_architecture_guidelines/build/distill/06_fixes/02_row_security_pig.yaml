@@ -1,0 +1,13 @@
+operations:
+- op: node.set
+  uid: PIG-WEB-ALLOCATION.ROW_SECURITY
+  intent: 'Postgres row-level security is not used by default; authorization follows the layers of the philosophy''s authorization placement: writer functions for per-user write rules, backend policy for the rest, per-role database privileges as the bound on every consumer. Row security is acceptable only when the data model is simple, the scoping key is present in every table the policy covers, and no all-powerful administrator role must cross scopes (MD-01).'
+  constraints:
+  - No row-level security by default (MD-01).
+  - 'Acceptable only when all three hold: the data model is simple; the scoping key (client, tenant or owner id) is present in every table the policy covers, which in practice means composite primary keys led by that key; no all-powerful administrator role must read or write across scopes.'
+  - 'Where used: keep backend checks (L128); request role is not the table owner and does not bypass policies, with FORCE where the owner connects; context comes from the verified identity in a transaction-local setting; policy columns are indexed; denial is tested through the deployed role (L310, L311, L566).'
+  - 'Authority: writer functions for per-user write rules decidable from the row and the actor; Python backends for product policy not stored in the data and for identity; Postgres per consumer role (ALLOCATION.GUARD.3 in the philosophy).'
+  - 'Forbidden: row security by default; row security replacing backend checks; a request role that owns tables or bypasses policies.'
+- op: node.set
+  uid: PIG-WEB-ALLOCATION
+  intent: In the default stack Postgres carries the data, the function API every consumer calls, the per-role grants and the backing roles (queue, schedules, derived caches, sessions) until a measured limit; Python backends own sessions, identity, product-policy authorization, workflow and HTML rendering; browser JavaScript enhances; there is no JavaScript server tier and no row-level security by default. The database is shared by several consumers (MD-03), so what must hold whoever touches the data lives in Postgres.

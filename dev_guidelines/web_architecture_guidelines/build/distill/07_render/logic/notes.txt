@@ -1,0 +1,2 @@
+stack_defaults_logic.md: 31 nodes rendered (root, 4 areas, 26 leaves incl. deferred PROCESS.7), 645 lines incl. TOC; exceeds the 500 max. Suggested split on the SECURE boundary (lines about 55-300 vs the rest) if the file set may grow.
+Gaps: no ledger ids cited; allocation/philosophy links are file-level, not anchors.

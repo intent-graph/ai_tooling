@@ -1,0 +1,32 @@
+operations:
+- op: node.set
+  uid: ALLOCATION.GUARD.3
+  constraints:
+  - 'Authority: writer function for per-user write rules decidable from the row and the actor; backend for product policy not stored in the data and for identity; database per consumer role'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested, early feedback); the browser hides controls the user may not use (cosmetic)'
+  - 'Forbidden: browser, agent client, model output, client hints; row security by default (MD-01); any consumer role owning tables or bypassing grants; a write without an actor, or with an actor its role may not assert'
+  - Per-user write rules decidable from the stored row and the acting user are decided by the column's writer function; a backend's identical check is a generated or tested copy for early feedback.
+  - 'Each backend decides product policy not stored in the data (product roles, plan limits, feature flags, workflow steps) and identity: one central mechanism, deny by default, object level, on every request from every client.'
+  - Each consumer has its own role, neither owner nor an all-powerful role; grants say which API functions it may call and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path.
+  - Functions read the acting user that the backend asserted for the transaction from its verified identity, treat it as a claim, refuse a write without an actor, check that the session role may assert that kind of actor (a backend an end user, an operator or owner role only itself), and record both the session role and the claimed actor.
+  - No row-level security by default; acceptable only when the data model is simple, the scoping key leads the composite primary key of every table the policy covers, and no all-powerful administrator role must read or write across scopes.
+  - Roles that may read the base tables (reporting, operator) see every row, comments included, unless their own role is restricted.
+  - 'Recorded default for the open clause: each backend filters per-user reads from one shared written specification with a shared denial-test suite; fallback: database read functions that receive the verified actor, acceptable when a per-user read rule must hold for two or more backends.'
+- op: node.set
+  uid: INTERACTION.AGENT
+  constraints:
+  - The agent surface is an adapter to a backend that only translates and shapes; rules, validation, authorization and state transitions never live in the adapter or in prompts (RULES.4).
+  - Agents never connect to the database.
+  - 'Agents never decide access: model output and client-supplied hints (tool annotations, claimed identity, client name) are untrusted input; the backend and the writer functions decide (GUARD.3).'
+  - The server accepts only tokens issued for it and never forwards a caller's token; downstream calls use its own token.
+  - Each agent holds its own short-lived, revocable credential (GUARD.4).
+  - Narrowest scopes, read scopes first, elevation on demand through a precise insufficient-scope challenge, no wildcard or omnibus scope; every request still authorized in server code.
+  - Few purpose-specific tools, each with only the permissions it needs; no raw shell, raw SQL or arbitrary URL fetch on the live system.
+  - Where the application runs or hosts an agent, no session holds untrusted input, private data and the power to change state or send outward together; if all three are needed, a supervised step or a split session.
+  - For agents the team does not run, no tool sends data to an arbitrary destination, and consequential or external effects go through the approval of irreversible or external effects above.
+  - Irreversible or external effects require approval by the owning user, shown the exact action on the application's own page; the effect's writer function refuses an agent-originated operation without it, and an approval dialog in the agent host is a client hint, never the gate.
+  - Agents that identify and authenticate themselves are admitted to every flow their scopes allow and limited by quota per agent identity.
+  - 'Flows whose automation harms the business (purchase, sign-up, booking, referral) are named and protected: per-flow limits for identified agents, anonymous automation denied or challenged.'
+  - On a flow that hands out scarce goods or rewards automation per account, completing the flow requires a human, or agents are excluded, whatever their identity; the list of such flows is a decision recorded per project.
+  - Every mutation offered to agents that is not idempotent by design takes an idempotency key, recorded with the effect (GUARD.6).
+  - Every agent action is logged on the server with acting identity, delegating subject, operation, correlation id and outcome, never only in a model transcript; agent-originated writes are marked in the data (ACT.4).

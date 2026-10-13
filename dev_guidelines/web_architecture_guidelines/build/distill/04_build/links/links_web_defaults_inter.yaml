@@ -1,0 +1,720 @@
+operations:
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION
+  dst: web-app-philosophy:ALLOCATION
+  intent: The stack allocation chooses concrete mechanisms for each stack-neutral placement.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  dst: web-app-philosophy:ALLOCATION.DERIVE.3
+  intent: Postgres carries the shared cache role until a measured limit, within the rule on where shared
+    caches live.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Postgres hosts the queue for deferred work until a measured limit.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.DB_API
+  dst: web-app-philosophy:ALLOCATION.RECORD.2
+  intent: The database function API is the interface through which every consumer reaches data.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.TYPE_CHAIN
+  dst: web-app-philosophy:ALLOCATION.RECORD.3
+  intent: One generated chain from the database definition to client types makes the origin definition
+    concrete.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.ROW_SECURITY
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: Row-level policies are not the default way to place authorization; the default placement is
+    per-role grants plus backend checks.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.JOB_HOST
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Names the host that runs the deferred work.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.CACHE_STORE
+  dst: web-app-philosophy:ALLOCATION.DERIVE.3
+  intent: Names the store that holds shared caches.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-ALLOCATION.JS_SERVER
+  dst: web-app-philosophy:ALLOCATION.PRESENT.1
+  intent: States when a JavaScript server may take part in rendering.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA
+  dst: web-app-philosophy:DATA
+  intent: The Postgres data tier realizes the stack-neutral data tier.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.ORGANIZE
+  dst: web-app-philosophy:DATA.ORGANIZE
+  intent: Schema organization in Postgres realizes the stack-neutral organization of stored facts.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD
+  dst: web-app-philosophy:DATA.GUARD
+  intent: Declared integrity in Postgres realizes the stack-neutral guarded consistency.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY
+  dst: web-app-philosophy:DATA.GUARD
+  intent: The concurrency mechanics of Postgres are the concrete concurrency guard on stored data.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN
+  dst: web-app-philosophy:DATA.MAINTAIN
+  intent: Data maintenance in Postgres realizes the stack-neutral upkeep of data over time.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.DERIVE
+  dst: web-app-philosophy:DATA.DERIVE
+  intent: Derived data in Postgres realizes the stack-neutral rule to derive rather than store.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC
+  dst: web-app-philosophy:LOGIC
+  intent: The Python backend realizes the stack-neutral logic tier.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.SECURE
+  dst: web-app-philosophy:LOGIC.SECURE
+  intent: Backend security realizes the stack-neutral secured entry.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.ENFORCE
+  dst: web-app-philosophy:LOGIC.ENFORCE
+  intent: The backend business-logic realization is the concrete business core.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.PROCESS
+  dst: web-app-philosophy:LOGIC.PROCESS
+  intent: Processing and side effects in the backend realize the stack-neutral processing model.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE
+  dst: web-app-philosophy:LOGIC.EXPOSE
+  intent: The HTTP interface is the concrete backend interface.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.TOPOLOGY
+  dst: web-app-philosophy:LOGIC.PROCESS
+  intent: The runtime topology specializes the stateless process model.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION
+  dst: web-app-philosophy:INTERACTION
+  intent: The server-rendered browser and agent surface realizes the stack-neutral interaction tier.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE
+  dst: web-app-philosophy:INTERACTION.VISUALIZE
+  intent: Browser rendering realizes the stack-neutral perceivable interface.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.REALTIME
+  dst: web-app-philosophy:INTERACTION.COLLABORATE
+  intent: Real-time channels realize the live side of collaboration.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE
+  dst: web-app-philosophy:INTERACTION.COLLABORATE
+  intent: Comments and collaboration realize stack-neutral collaboration on data.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT
+  dst: web-app-philosophy:INTERACTION.AGENT
+  intent: The agent surface realizes stack-neutral agent access.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.ENVIRONMENT
+  dst: web-app-philosophy:INTERACTION.ENVIRONMENT
+  intent: The browser environment practices realize the stack-neutral web environment rules.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE
+  dst: web-app-philosophy:TRANSVERSE
+  intent: Stack-level transverse defaults realize the stack-neutral transverse concerns.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY
+  dst: web-app-philosophy:TRANSVERSE.SECURITY
+  intent: Concrete security defaults realize the cross-tier security properties.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.PERFORMANCE
+  dst: web-app-philosophy:TRANSVERSE.PERFORMANCE
+  intent: Concrete page-experience targets realize measured performance.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.CONTRACTS
+  dst: web-app-philosophy:TRANSVERSE.CONTRACTS
+  intent: Contract verification and meaning realize standards and explicit contracts.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY
+  dst: web-app-philosophy:TRANSVERSE.OPERABILITY
+  intent: Concrete tracing, telemetry, testing and delivery practices realize operability.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION
+  intent: Evolution defaults realize deliberate evolution.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.1
+  dst: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  intent: Concrete tracing and logging realize whole-path observability.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.4
+  dst: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  intent: The security event log is a distinct stream within observability, kept apart from the business
+    audit trail.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.5
+  dst: web-app-philosophy:TRANSVERSE.OPERABILITY.2
+  intent: Concrete test layers realize proportioned testing.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.6
+  dst: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  intent: Concrete delivery and configuration practices realize reproducible delivery.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.1
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION.3
+  intent: Deployables realize the deployable boundaries of the system.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.2
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  intent: The modular monolith lets the system change incrementally inside stable module boundaries.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.2
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION.3
+  intent: Module boundaries are the deployable boundaries should a split become necessary.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.2
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION.5
+  intent: The module structure follows the shape of the team.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.3
+  dst: web-app-philosophy:TRANSVERSE.EVOLUTION.1
+  intent: Decision records are the concrete form of explicit, recorded decisions.
+  shape:
+    type: refines
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD.1
+  dst: web-app-philosophy:ALLOCATION.GUARD.2
+  intent: Declares the invariants the placement gives the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: Per-consumer-role grants are the database layer of authorization.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD.3
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: The actor claim and its pairing feed the authorization decisions the placement assigns.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD.3
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: The actor is recorded so history names who acted.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.GUARD.4
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: Keeps trigger logic within what the business-rules placement allows the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY
+  dst: web-app-philosophy:ALLOCATION.GUARD.5
+  intent: Implements the concurrency control the placement gives the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.1
+  dst: web-app-philosophy:ALLOCATION.GUARD.2
+  intent: The default isolation level is the database share of invariants holding under concurrency.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.3
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Queue claiming lets several workers take deferred work without double execution.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.6
+  intent: Makes mutations idempotent statements.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.5
+  dst: web-app-philosophy:ALLOCATION.ACT.2
+  intent: Outbox relay reads let staged side effects be delivered after commit.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.5
+  dst: web-app-philosophy:ALLOCATION.DERIVE.1
+  intent: Cache workers read changes safely to keep derived copies current.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.CONCURRENCY.6
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: Orders state transitions written by their single authoritative writer.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.1
+  dst: web-app-philosophy:ALLOCATION.RECORD.3
+  intent: Structure changes by migration keep the database structure the origin of stored facts.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.2
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Archive and history are kept in the database where the audit placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.3
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Writes history where the audit placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.4
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Runs bulk data work as the deferred-work placement allows.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
+  dst: web-app-philosophy:ALLOCATION.RECORD.1
+  intent: Backups and recovery let the system of record survive loss.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.DERIVE.1
+  dst: web-app-philosophy:ALLOCATION.DERIVE.1
+  intent: Keeps denormalized copies in sync as the placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.DERIVE.2
+  dst: web-app-philosophy:ALLOCATION.DERIVE.3
+  intent: Cache tables are the shared cache the placement keeps in the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.DERIVE.2
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Scheduled refresh of cache tables runs as deferred work.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.ORGANIZE.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.6
+  intent: Client-generated identifiers in the schema make duplicate suppression possible.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.ORGANIZE.3
+  dst: web-app-philosophy:ALLOCATION.PRESENT.2
+  intent: Values are stored in canonical form and formatted for the reader at the edge.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.ORGANIZE.7
+  dst: web-app-philosophy:ALLOCATION.DERIVE.2
+  intent: Indexes let the database reduce rows set-based, as the placement names.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.INTERFACE
+  dst: web-app-philosophy:ALLOCATION.RECORD.2
+  intent: The database function API is the interface through which consumers reach data.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.INTERFACE.1
+  dst: web-app-philosophy:ALLOCATION.RECORD.2
+  intent: Functions and views are the interface through which consumers reach data.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.INTERFACE.1
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: Operations are written as database functions, so the business-rules placement is honored where
+    it gives rules to the database.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-DATA.INTERFACE.2
+  dst: web-app-philosophy:ALLOCATION.RECORD.2
+  intent: One bounded role per consumer defines how consumers reach the interface.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.1
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: The backend holds its share of authorization.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: Holds sessions as the identity placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: Handles tokens where the identity placement allows them.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.ENFORCE.1
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: Holds the use cases the business-rules placement gives the backend.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.ENFORCE.2
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: One operation is one call in one transaction, so a rule has one writer.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.ENFORCE.3
+  dst: web-app-philosophy:ALLOCATION.DERIVE.2
+  intent: Pushes filtering and aggregation to the tier the placement names.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.PROCESS.2
+  dst: web-app-philosophy:ALLOCATION.ACT.2
+  intent: Stages and delivers side effects as the placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.PROCESS.2
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Foreign effects are deferred to a worker.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.PROCESS.5
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: The upload state has exactly one writer function.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.1
+  dst: web-app-philosophy:ALLOCATION.DERIVE.2
+  intent: Exposes paging and filtering in the contract.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.3
+  dst: web-app-philosophy:ALLOCATION.GUARD.6
+  intent: Expresses idempotency keys in the HTTP contract.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.3
+  dst: web-app-philosophy:ALLOCATION.ACT.3
+  intent: Expresses deferred operations in the HTTP contract.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.6
+  dst: web-app-philosophy:ALLOCATION.GUARD.1
+  intent: Parses payloads at the boundary the validation placement names.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.1
+  dst: web-app-philosophy:ALLOCATION.PRESENT.1
+  intent: HTML comes from the backend; islands appear only under the rendering placement's criteria.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.2
+  dst: web-app-philosophy:ALLOCATION.PRESENT.3
+  intent: Holds client state where the placement says.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.5
+  intent: An island keeps the version it read so that its write carries it.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: No credentials sit in script-readable browser storage.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.3
+  dst: web-app-philosophy:ALLOCATION.FORCES.4
+  intent: Page techniques serve the latency force.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.VISUALIZE.4
+  dst: web-app-philosophy:ALLOCATION.PRESENT.1
+  intent: Native semantics come from server-rendered HTML.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.EDIT
+  dst: web-app-philosophy:ALLOCATION.GUARD.5
+  intent: Shows the conflicts the concurrency placement detects.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.EDIT
+  dst: web-app-philosophy:ALLOCATION.GUARD.6
+  intent: Keeps the browser share of duplicate suppression.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.EDIT
+  dst: web-app-philosophy:ALLOCATION.PRESENT.3
+  intent: Drafts and in-progress input live in the browser.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.REALTIME.3
+  dst: web-app-philosophy:ALLOCATION.RECORD.1
+  intent: The table stays the source; the push carries a copy.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.REALTIME.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: Per-subscriber filtering must follow the authorization placement, its open read clause included.
+  shape:
+    type: requires
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.REALTIME.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: The session cookie authenticates the channel.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.REALTIME.5
+  dst: web-app-philosophy:ALLOCATION.ACT.2
+  intent: The intent is staged in the function's transaction and delivered after commit.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.1
+  dst: web-app-philosophy:ALLOCATION.GUARD.5
+  intent: Reuses the version every user-edited record carries.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.1
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Reuses the history written with every change.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.1
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: A comment is written by one writer function.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.2
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Revisions are history written in the same transaction.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: The right to resolve follows the authorization placement.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.3
+  dst: web-app-philosophy:ALLOCATION.GUARD.5
+  intent: Merges long text where the conflict policy calls for an engine.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.3
+  dst: web-app-philosophy:ALLOCATION.RECORD.1
+  intent: The server stays the authority for shared text.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.3
+  dst: web-app-philosophy:ALLOCATION.PRESENT.3
+  intent: Presence travels on the real-time channel and is never stored in tables.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.4
+  dst: web-app-philosophy:ALLOCATION.ACT.2
+  intent: Creates and delivers notifications as side effects.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: Recipient visibility must follow the authorization placement, its open read clause included.
+  shape:
+    type: requires
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.COLLABORATE.4
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Moderation actions are written to history.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.1
+  dst: web-app-philosophy:ALLOCATION.RULES.4
+  intent: The agent adapter is one more adapter on the same core.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.1
+  dst: web-app-philosophy:ALLOCATION.RECORD.3
+  intent: The agent interface description stays in sync because it derives from the origin definition.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.2
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: Agents hold their own revocable credentials.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.3
+  dst: web-app-philosophy:ALLOCATION.GUARD.4
+  intent: Represents agent identity and delegation as the identity placement sets.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.3
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: Both the agent and the delegating user identities appear in the audit.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.3
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: The actor assertion is made inside the transaction that checks access.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.4
+  dst: web-app-philosophy:ALLOCATION.GUARD.3
+  intent: Approval designs must never replace the authorization authority.
+  shape:
+    type: requires
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.4
+  dst: web-app-philosophy:ALLOCATION.ACT.1
+  intent: The writer function of the effect checks the approval.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.AGENT.5
+  dst: web-app-philosophy:ALLOCATION.GUARD.6
+  intent: Rate-limited retries carry idempotency keys.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.ENVIRONMENT.1
+  dst: web-app-philosophy:ALLOCATION.PRESENT.3
+  intent: In-progress state lives in the browser.
+  shape:
+    type: realizes
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.ENVIRONMENT.2
+  dst: web-app-philosophy:ALLOCATION.RECORD.1
+  intent: Offline use depends on where the system of record is placed.
+  shape:
+    type: requires
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-INTERACTION.ENVIRONMENT.3
+  dst: web-app-philosophy:ALLOCATION.PRESENT.2
+  intent: Translation must follow the formatting placement.
+  shape:
+    type: requires
+- op: link.create
+  src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.4
+  dst: web-app-philosophy:ALLOCATION.ACT.4
+  intent: The security event log must stay apart from the business audit trail.
+  shape:
+    type: conflicts

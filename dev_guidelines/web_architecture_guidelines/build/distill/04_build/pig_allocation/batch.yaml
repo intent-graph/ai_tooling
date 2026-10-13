@@ -1,0 +1,190 @@
+operations:
+- op: node.create
+  uid: PIG-WEB-ALLOCATION
+  name: Stack Allocation
+  intent: In the default stack Postgres carries the data, the function API every consumer calls, the per-role grants and the backing roles (queue, schedules, derived caches, sessions) until a measured limit; Python backends own sessions, per-user authorization, workflow and HTML rendering; browser JavaScript enhances; there is no JavaScript server tier and no row-level security by default. The database is shared by several consumers (MD-03), so what must hold whoever touches the data lives in Postgres.
+  parent: ROOT
+  epistemic_state: 'known | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (GUARD.3, Q1)'
+  constraints:
+  - Postgres hosts the backing roles (queue, schedules, derived caches, sessions, documents) until a measured limit for that role.
+  - The database function API in a dedicated schema is the default contract to the data; no views in the contract.
+  - Stored facts originate in the Postgres schema; the origin of interface-only facts is chosen per project and the description stays in sync by process (MD-02).
+  - No row-level security by default (MD-01).
+  - No request-time JavaScript server in the default; Python renders HTML.
+  - Python backends own sessions, per-user authorization of product policy, workflow and HTML rendering.
+  design_notes: 'Roll-up of the seven placements below; owns no ledger row. Context: MD-03 makes a shared database (several backends, BI, consoles, scripts) the default, replacing the earlier single-consumer context. Maintainer decisions applied: MD-01 (row security), MD-02 (interface description sync, origin per project), MD-03 (shared database, multi-table operations in database functions). Open: one clause, read visibility of rows with per-user rules (Q1, ALLOCATION.GUARD.3 in the philosophy graph); recorded default is each backend filtering from one shared specification with shared denial tests; fallback is database read functions receiving the verified actor, acceptable when a per-user read rule must hold for two or more backends (always the case under MD-03); roles that may SELECT base tables see every row unless their own role is restricted. Revisions: R1 (MD-01, MD-03), R2 and R3 changes sit in the children.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  name: Postgres First for Backing Roles
+  intent: One Postgres carries the job queue, schedules, derived caches, sessions and documents until a measured limit for that role, because fewer components and sharing the data's transaction serve changeability and correctness. NOTIFY is a low-rate wake-up, never the message carrier.
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known | unvalidated: L125 rests on T4 sources and the T1 SKIP LOCKED page; thresholds open (L126, L127)'
+  constraints:
+  - Postgres hosts the job queue, schedules, derived caches, sessions and documents until a measured limit for that role.
+  - 'Each role names its trigger to leave Postgres: queue lock contention or backlog age; NOTIFY commit serialisation under write concurrency; cache latency or cache load on the primary.'
+  - NOTIFY is a low-rate wake-up, never the message carrier (L127).
+  - 'Authority: Postgres per role.'
+  - 'Forbidden: a second store written beside Postgres without staging.'
+  design_notes: 'Positions: P1 one Postgres until a measured limit (L125, L534, L604); P2 specialised services from the start or past the limit (L126, L417, L457). Forces: changeability (fewer components) and correctness (backing roles share the data''s transaction) against scalability. Decision: P1. Rejected: P2, acceptable past a measured limit, or where the framework''s only production backend is a service (Django''s channel layer on Redis, L457). Moved by: write concurrency, queue volume, fan-out processes. Tension: none recorded. Evidence gaps: L125 rests on T4 sources and the T1 SKIP LOCKED page; thresholds for queue contention (L126) and NOTIFY (L127) are open.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.POSTGRES_FIRST
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+  - build/research/11_realtime/result.md::RT-C34
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C28
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C66
+  - build/research/02_app_tier/result.md::APP-C19
+  - build/research/01_data_tier/result.md::DATA-C54
+  - build/research/06_operations/result.md::OPS-C51
+  - build/research/11_realtime/result.md::RT-C21
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.DB_API
+  name: Database Function API
+  intent: 'The default contract to the data is a function API in a dedicated Postgres schema: every multi-table operation and state transition is a function, each consumer role gets EXECUTE on the functions it uses and no write on base tables, and views are never contract objects. This lets the database owner change internals without redeploying consumers (MD-03).'
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known: MD-03 | conflict: views as contract (L187, L518) rejected in favour of L516 (MAINT)'
+  constraints:
+  - A dedicated API schema of functions; each consumer role has EXECUTE on the functions it uses and nothing to write on base tables.
+  - State columns are written only by their writer functions (L596).
+  - 'Writes go through functions: every multi-table operation and every state transition (MD-03, L584, L596).'
+  - A direct single-table write grant is acceptable only for a table that one consumer writes and that has no state column or multi-table effect.
+  - Simple reads may query base tables under SELECT grants; use read functions where a read must apply a rule.
+  - A procedure only where transaction control is needed (L516).
+  - Evolution is additive and breaking changes are coordinated with every consumer (L517); no formal version numbers, a new function name carries the change.
+  - Deployed together is acceptable only when every consumer of the changed object ships in the same deployment as the migration; otherwise expand, migrate, contract.
+  - 'Drift gate: a catalogue diff in CI fails on a removed function or an incompatible signature unless that condition holds; typed wrappers are generated from the same catalogue.'
+  - Each API call runs in its own transaction; consumers do not wrap several calls in one.
+  - Functions live in versioned migrations and are tested against a live database in CI.
+  - 'Authority: the Postgres function API.'
+  - 'Forbidden: direct consumer writes outside the exception above; views as contract; consumer roles owning objects.'
+  design_notes: 'Positions: P1 function API, backend of backends (L515 MAINT, L617); P2 schema as the API, views and functions (L518, L618, L187); P3 ORM over base tables, views off the contract path (L187, L516 MAINT). Forces: changeability against correctness for several consumers. Decision: P1 is the default contract (MD-03; L515, L517, L617; MAINT, max). Direct single-table write exception is inferred (L527''s default). Rejected: P2, because views bind consumers to a name and exact shape (L516); it wins when a CRUD-dominant application is served by a database-as-API server with a strong Postgres team (L618). P3 is rejected for writes (bypasses the operations MD-03 places in the database), kept for simple reads (L516). Would move it: a single consumer (direct queries become the default again, L527); team SQL skill. Maintainer decisions: MD-03, MD-02 (drift gate). Revisions: R1 function API becomes the default (MD-03); R2 drift gate on signatures (R1-7) and no transaction around several calls (R1-4); R3 X2 wording for breaking changes, departure from L517 counted at PIG-WEB-DATA.INTERFACE.1. Conflict recorded: views as contract (L187, L518) against L516. Tension: MD-03 against L044 and L622 (one application owns its database).'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.DB_API
+  - build/research/01_data_tier/result.md::DATA-C20
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C41
+  - build/research/17_data_contracts/result.md::DCON-C22
+  - build/research/18_allocation/result.md::ALLOC-C15
+  - build/research/18_allocation/result.md::ALLOC-C17
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C43
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C47
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C49
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C52
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C42
+  - build/research/18_allocation/result.md::ALLOC-C16
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.TYPE_CHAIN
+  name: Type Definition Chain
+  intent: Stored facts originate in the Postgres schema in migrations, with persistence models and typed function wrappers generated from the live catalogue; the interface description (OpenAPI) and agent tool descriptions are always kept in sync with the Pydantic models by process, and which side is the origin is recorded per project (MD-02). The default chain starts at HTML form and query input parsed into Pydantic models; TypeScript types are generated for client-rendered islands only.
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known: MD-02 | unvalidated: generators not read; no source recommends the whole chain (L549)'
+  constraints:
+  - One origin per fact; stored facts originate in the Postgres schema in migrations.
+  - Python persistence models and typed wrappers of API functions are generated from the live catalogue.
+  - Interface field types that echo a stored fact are generated from it or checked against it in CI.
+  - 'The OpenAPI description, and the agent tool descriptions derived from the same core, are always in sync with the Pydantic models: the other side is generated or conformance-checked, contract diffs are reviewed, and a CI/CD gate fails on drift (MD-02).'
+  - 'Record per project which side is the origin of interface-only facts, with the criteria: OpenAPI first for independent consumers or agent hosts the team does not control; Pydantic first when every consumer ships with the team.'
+  - TypeScript types are generated from the description for client-rendered islands only, at build time only.
+  - 'Authority: the Postgres schema (stored facts); the project''s recorded origin (interface-only facts).'
+  - 'Forbidden: hand-written copies without a CI comparison; drift between description and models.'
+  design_notes: 'Positions: P1 Postgres schema first, one class for table and validation (L549); P2 Pydantic models first, OpenAPI generated and committed (L548); P3 OpenAPI first, checked in CI (L272). Forces: correctness against changeability. Decision (MD-02, F3, F9): per-project origin and sync process; default chain starts at form and query input parsed into Pydantic models (the browser receives HTML), then reaches the agent surface (L634, L635) and any JSON endpoints; TypeScript types for islands only (L555). Rejected: P1''s single class, acceptable for simple CRUD where shapes are equal (L549); the former fixed defaults (Pydantic first, OpenAPI first) are replaced by MD-02''s per-project decision. Would move it: project type (MD-02). Evidence gaps: generators for persistence models, interface fields and function wrappers not read; no source recommends the whole chain database schema to Python models to OpenAPI to TypeScript (L549). Revision R1: per-project origin and sync process; chain starts at HTML forms and the agent surface; stored facts from the catalogue.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.TYPE_CHAIN
+  - build/research/03_contract/result.md::API-C12
+  - build/research/17_data_contracts/result.md::DCON-C06
+  - build/research/17_data_contracts/result.md::DCON-C12
+  - build/research/17_data_contracts/result.md::DCON-C13
+  - build/research/19_agent_users/result.md::AGENT-C03
+  - build/research/19_agent_users/result.md::AGENT-C04
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.ROW_SECURITY
+  name: Row Security Placement
+  intent: Postgres row-level security is not used by default; authorization stays a backend decision with per-role database privileges as the second gate. Row security is acceptable only when the data model is simple, the scoping key is present in every table the policy covers, and no all-powerful administrator role must cross scopes (MD-01).
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known: MD-01 | conflict: L619, L688 favour row security when several consumers share the database (MD-03 default)'
+  constraints:
+  - No row-level security by default (MD-01).
+  - 'Acceptable only when all three hold: the data model is simple; the scoping key (client, tenant or owner id) is present in every table the policy covers, which in practice means composite primary keys led by that key; no all-powerful administrator role must read or write across scopes.'
+  - 'Where used: keep backend checks (L128); request role is not the table owner and does not bypass policies, with FORCE where the owner connects; context comes from the verified identity in a transaction-local setting; policy columns are indexed; denial is tested through the deployed role (L310, L311, L566).'
+  - 'Authority: Python backends per user; Postgres per role.'
+  - 'Forbidden: row security by default; row security replacing backend checks; a request role that owns tables or bypasses policies.'
+  design_notes: 'Positions: P1 row security on every path (L619); P2 row security only with several consumers (L688); P3 row security as a second line (L128). Forces: security (defence in depth per user) against changeability and testability of policy, and against the administrator roles and composite keys row policies require. Decision: MD-01. The review''s recommendation (F1) is replaced by MD-01; the former question on row security is closed. Rejected: P1 and P3 as defaults, they win under MD-01''s three conditions; P2''s condition fires in the default context (MD-03) but is overridden by MD-01. Would move it: MD-01''s three conditions. Tension recorded, not overridden: L619 and L688 favour row security exactly when several applications or agents read the database, which MD-03 makes the default; L310 records that the sources do not settle row security against application-side filtering. Residual risk and mitigation sit with the per-user read visibility clause (Q1, ALLOCATION.GUARD.3). Revision R1: decided by MD-01.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.ROW_SECURITY
+  - build/research/18_allocation/result.md::ALLOC-C18
+  - build/research/20_collaboration/result.md::C33
+  - build/research/05_identity_security/result.md::SEC-C43
+  - build/research/05_identity_security/result.md::SEC-C41
+  - build/research/05_identity_security/result.md::SEC-C44
+  - build/research/01_data_tier/result.md::DATA-C26
+  - build/research/05_identity_security/result.md::SEC-C42
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C40
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.JOB_HOST
+  name: Job and Schedule Host
+  intent: Jobs with Python logic or foreign effects go through a queue table in Postgres, written by the database function in the same transaction as the data change and claimed by Python workers with FOR UPDATE SKIP LOCKED; scheduled pure data work runs inside Postgres with a scheduler extension calling named functions. This keeps the job atomic with the data and one component fewer, until a measured limit.
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known | unvalidated: the contention threshold is open (L126)'
+  constraints:
+  - Queue table in Postgres, written by the database function in the same transaction as the data change, claimed by Python workers with FOR UPDATE SKIP LOCKED.
+  - 'Scheduled pure data work: a Postgres scheduler extension whose entries are thin calls to named functions.'
+  - A schedule that needs Python inserts a job row for the workers.
+  - Jobs are short, idempotent and monitored, whatever the host.
+  - 'Authority: Postgres (queue and data schedules); Python workers execute.'
+  - 'Forbidden: enqueuing to a broker outside the data transaction.'
+  design_notes: 'Positions: P1 queue table in Postgres, SKIP LOCKED (L126, L413); P2 staged in Postgres, drained to a broker (L126, L409); P3 broker from the start (L126, L408); P4 schedules inside Postgres (L604 MAINT). Forces: changeability (one component fewer) and correctness (job atomic with data) against scalability. Decision: P1 plus P4, with the function writing the queue row (MD-03; L413, L409, L604 MAINT, max); a schedule needing Python inserts a job row (inferred); jobs short, idempotent, monitored (L605, L410). Rejected: P3, wins at measured lock contention, backlog or multi-server fan-out; then P2, never an enqueue outside the data transaction (L409). Would move it: job volume, lock contention, multi-server fan-out. Evidence gap: the contention threshold is open (L126).'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.JOB_HOST
+  - build/research/02_app_tier/result.md::APP-C19
+  - build/research/01_data_tier/result.md::DATA-C54
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C66
+  - build/research/01_data_tier/result.md::DATA-C52
+  - build/research/02_app_tier/result.md::APP-C17
+  - build/research/01_data_tier/result.md::DATA-C53
+  - build/research/02_app_tier/result.md::APP-C18
+  - build/research/02_app_tier/result.md::APP-C23
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C67
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.CACHE_STORE
+  name: Cache Store
+  intent: Derived-data caches are Postgres tables invalidated in the source transaction; response and fragment caches shared by processes also default to Postgres, UNLOGGED when rebuildable, because atomic invalidation and one fewer component outweigh cache-service latency until measured otherwise. Per-process memory is never shared beyond one request and a cache is never permanent storage.
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known | unvalidated: response caches in Postgres rest on L125, not on doctrine; hit latency not measured'
+  constraints:
+  - 'Derived-data caches: Postgres tables, invalidated in the source transaction (L534).'
+  - 'Response and fragment caches shared by processes: Postgres by default, UNLOGGED when rebuildable (L125, L420).'
+  - Per-process memory is never shared beyond one request; a cache is never permanent storage (L417).
+  - 'Authority: source data; cache store: Postgres.'
+  - 'Forbidden: per-process memory caches in multi-process production; caches as permanent storage.'
+  design_notes: 'Positions: P1 shared cache service, Redis or Memcached (L417); P2 Postgres cache tables, UNLOGGED for rebuildable data (L534 MAINT, L420). Forces: latency against correctness (atomic invalidation) and changeability. Decision (F7): P2; L534 covers derived-data caches only; response caches in Postgres under POSTGRES_FIRST are inferred, no doctrine row covers them (the ledger''s note on L534 sets L417 and L420 apart). Rejected: P1, wins when measured cache latency or cache load on the primary demands it, or for ephemeral cross-process state the framework requires there. Would move it: number of processes, atomic invalidation need, measured hit latency. Evidence gap: hit latency not measured. Revision R1: L534 limited to derived data.'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.CACHE_STORE
+  - build/research/06_operations/result.md::OPS-C51
+  - build/research/15_maintainer_doctrine/result.md::MAINT-C28
+  - build/research/01_data_tier/result.md::DATA-C56
+  - build/research/07_architecture_styles/result.md::ARCH-C34
+- op: node.create
+  uid: PIG-WEB-ALLOCATION.JS_SERVER
+  name: JavaScript Server Tier
+  intent: 'The default has no request-time JavaScript server: Python renders HTML, and build-time rendering serves pages whose URL set is known. A second server runtime is justified only when a client-rendered application needs server rendering for first load or crawlability.'
+  parent: PIG-WEB-ALLOCATION
+  epistemic_state: 'known | gap: no source weighs the extra tier''s operational cost (L288)'
+  constraints:
+  - No request-time JavaScript server runtime in the default; Python renders HTML (following the rendering placement PRESENT.1).
+  - Build-time rendering is allowed for pages whose URL set is known (L285).
+  - 'Authority: Python backend for HTML.'
+  - 'Forbidden: a second request-time server runtime without the condition that PRESENT.1 picks a client-rendered application for most of the product and first load or crawlability needs server rendering (L290).'
+  design_notes: 'Positions: P1 request-time JavaScript server (L288, L290); P2 Python renders HTML (L288, L252, L629); P3 build-time rendering (L288, L285). Forces: changeability (one server language) against latency. Decision: P2, with P3 for known URL sets. Rejected: P1, wins when PRESENT.1 picks a client-rendered application for most of the product and first load or crawlability needs server rendering (L290). Would move it: SEO and first-load needs, team JavaScript skill, the rendering placement. Evidence gap: the operating cost of the extra tier is unweighed (L288).'
+  impl_pointers:
+  - build/distill/03_judge/J1_allocation/records.md::PIG-WEB-ALLOCATION.JS_SERVER
+  - build/research/04_presentation/result.md::UI-C09
+  - build/research/12_counter_voices/result.md::CV-C05
+  - build/research/04_presentation/result.md::UI-C08
+  - build/research/03_contract/result.md::API-C01
+  - build/research/04_presentation/result.md::UI-C03
+  - build/research/12_counter_voices/result.md::CV-C02
+  - build/research/18_allocation/result.md::ALLOC-C34
+- op: node.set
+  uid: ROOT
+  intent: 'Architecture defaults for a JavaScript + Python + Postgres web application that realize the web-app philosophy under the maintainer decisions MD-01 (no row-level security by default), MD-02 (interface description always in sync, origin per project) and MD-03 (a shared database; multi-table operations belong to it). Postgres is the authority for what must hold whoever touches the data; Python backends own product policy, identity and workflow; the browser enhances server-rendered HTML. Branches: stack allocation (which mechanism hosts which role), the Postgres data tier, the Python application tier, the browser and agent surface, and transverse concerns.'
+  epistemic_state: known

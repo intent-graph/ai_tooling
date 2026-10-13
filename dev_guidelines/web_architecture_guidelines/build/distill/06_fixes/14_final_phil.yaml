@@ -1,0 +1,335 @@
+operations:
+- op: node.set
+  uid: DATA.GUARD
+  design_notes: 'Question: how the database keeps data valid and consistent under concurrent and partial
+    change.
+
+    Positions: P1 model data with the most precise structure available so illegal states cannot be represented:
+    NOT NULL, CHECK, foreign keys and domains in the database, precise types at the boundary (L485; SRC-338
+    T2, SRC-134 T1); placement: ALLOCATION.GUARD.2 requires declarative constraints (L040, L473, L471
+    maintainer doctrine). P2 application-side validation as the guard (common practice, L040''s note;
+    rejected by J1 in GUARD.2: check-then-write is correct only under serializable isolation, L473). P3
+    state the consistency model per operation (L043; SRC-232 T2) against P3'' classifying the datastore
+    as "CP" or "AP" (the practice L043 rejects). P4 a lock that guards correctness carries a fencing token
+    the storage checks; in this stack the row version or a unique constraint is the fencing, preferred
+    to an external lock service (L476; SRC-346 T2); against P4'' a lease-based lock service without fencing;
+    P4'''' a best-effort lock used only to save duplicate work (L476 allows it).
+
+    Forces: P1, P3, P4 serve integrity under concurrency and partial failure. P2 serves changeability
+    (rules tested in memory, L042) and loses integrity whenever a second writer or a concurrent request
+    exists (L473), which MD-03 makes the default. P3'' serves brevity and hides latency and multi-object
+    transactions (L043). P4'' serves availability of the lock and loses correctness when a paused holder
+    acts after its lease expired (L476). P4'''' serves efficiency only.
+
+    Decision: six ways, each the realization of a J1 verdict (GUARD.2 for constraints and procedural rules;
+    RULES.5 and ACT.1 for one transaction per operation, L584 doctrine, MD-03, cross-branch resolution
+    X3: one business operation is one database function call in its own transaction, J1 R1-4, and composition
+    across domains happens in the database; GUARD.5 and L475 for version detection and no lock across
+    think time; L476 for fencing by the store; L043 for the consistency model per operation). Reports
+    on a replica accept snapshot anomalies (L573, via GUARD.2); "no deciding read on a replica" is inferred
+    from L573. Only declarative constraints bind every writer, owner-run migrations and human-run jobs
+    included (J1, GUARD.2); constraints are named so violations map to stable errors (L495).
+
+    Access guarding (realization of GUARD.3''s database layer; not in the node''s question as worded,
+    see gap 1): realized in the defaults graph''s roles and privileges node (J6). MD-01 and MD-03 apply.
+
+    Awaiting maintainer (changed after review, B1, X1): undecided: awaiting maintainer, read visibility
+    of rows with per-user rules when several backends share the database ("a draft is visible only to
+    its author"; J1''s Q1). Not settled here. The graph records J1''s stated default word for word: A
+    provisional, with one written specification per rule and a shared denial suite; B acceptable when
+    a per-user read rule must hold for two or more backends. That is: each backend filters these reads
+    from one shared written specification, with a shared denial-test suite every backend runs; database
+    read functions that receive the verified actor (verified by the backend, still a claim to the database,
+    J1 R1-3) are acceptable when a per-user read rule must hold for two or more backends, which under
+    MD-03 can easily be the case. The database''s part otherwise is the per-role grants. Consequence:
+    until the maintainer answers, the reporting role gets no SELECT on comment content or narrower-audience
+    comments, the operator role sees every row, and any other role that may SELECT the base tables sees
+    every row unless its own role is restricted. Where B''s condition holds, the filter lives in read
+    functions of the database function API and DATA.GUARD''s clause then reads "read functions filter
+    by the acting user" for those tables.
+
+    Maintainer doctrine: L471 adopted on authority (database enforcement is the source of truth; application
+    validation an optimisation). J1''s partial verdict against L471 ("triggers and CHECK constraints optional
+    as defence in depth") is inherited and realized here; no new verdict.
+
+    Rejected: P2 for any rule that must hold for every writer: never (GUARD.2); application validators
+    stay as generated or tested copies, for feedback (RULES.1). P3'': never; a store label hides the per-operation
+    guarantee that matters (L043). P4'' for correctness: never (L476). P4'''': acceptable when the lock
+    only avoids duplicate work and a duplicate is harmless, or is caught by a constraint.
+
+    Realizes: ALLOCATION.GUARD.2 (invariants), ALLOCATION.GUARD.5 (concurrency control). Links proposed,
+    not created: realizes ALLOCATION.GUARD.3 (database layer per consumer role) and ALLOCATION.RULES.5
+    (atomicity ends at the transaction).
+
+
+    The default isolation level is decided by the stack graph (pig-web-defaults PIG-WEB-DATA.CONCURRENCY),
+    judged in the Postgres data unit.'
+- op: node.set
+  uid: INTERACTION.COLLABORATE
+  design_notes: "Decides: how several users discuss and change the same data and learn of each other's\
+    \ changes.\nRows: L006, L435, L664, L682, L686, L687. Cited: L594 (pig-web data), L671, L674, L677,\
+    \ L679, L681, L683, L659.\nPositions:\n- Freshness: P1 delivered events are the client's state (rejected\
+    \ in L682), or a client replica with a sync engine (L302, L677); P2 push is a hint over a correct\
+    \ pull (L682, L006).\n- Channel: P3 the simplest channel that meets the need (L435); P4 one two-way\
+    \ channel for everything (the WebSocket-first side of L436, owned by pig-web).\n- Comment model: P5\
+    \ each comment its own entity with a mandatory target (L664); P6 comments embedded as columns or JSON\
+    \ in the annotated record (rejected in L664).\n- Abilities: P7 five separate abilities, deny by default,\
+    \ per object on every request (L686); P8 the comment right implied by the edit right or the reverse\
+    \ (rejected in L686).\n- Visibility: P9 a comment never more visible than its target, same filter\
+    \ on every secondary surface (L687); P10 the filter on the main list only (the leak L687 warns against).\n\
+    Forces: P2 serves correctness under dropped connections and several tabs, at the cost of a catch-up\
+    \ endpoint; P1 serves latency and offline use, at the cost of every replica becoming an authority\
+    \ (L302). P3 serves simplicity and operability; P4 serves one code path and two-way traffic, at the\
+    \ cost of long-lived connection servers. P5 and P7 serve confidentiality and least privilege (comments\
+    \ are edited, hidden or deleted without touching the data; reviewers and customers may comment without\
+    \ editing), at the cost of one more entity and more checks. P9 serves confidentiality; P10 serves\
+    \ only simplicity.\nDecision grounds:\n1. P2 (L682, L006). L682's \"(sequence id)\" is rejected as\
+    \ stated: a sequence id does not follow commit order, so a reader polling with \"id greater than last\
+    \ seen\" can skip a row forever (L594). Realization: PIG-WEB-DATA.CONCURRENCY.5.\n2. P3 (L435), one\
+    \ T3 source for the order.\n3. Concurrent edits surface the concurrency placement's policy (GUARD.5;\
+    \ L674, L679, L677).\n4. Presence per PRESENT.3 (L681).\n5. P5 (L664); append-only rows need no merge\
+    \ (L679).\n6. P7 (L686). Where each check lives follows GUARD.3 as settled: a rule decidable from\
+    \ the stored row and the actor (an author may edit their own comment; the target's author may resolve\
+    \ its threads, L671) is decided by the writer function; product roles that grant abilities (reviewer,\
+    \ customer, moderator) are each backend's product policy; the browser hides controls cosmetically.\
+    \ The unsourced \"thread's opener may resolve\" was dropped (review m2).\n7. P9 (L686, L687). Who\
+    \ applies the per-user read filter when several backends read the same comments is undecided: awaiting\
+    \ maintainer, read visibility of rows with per-user rules when several backends share the database\
+    \ (ALLOCATION.GUARD.3). Recorded default (MD-01 as written): each backend filters from one shared\
+    \ written specification with a shared denial-test suite. J1's fallback stays acceptable: database\
+    \ read functions that receive the verified actor, when a per-user read rule must hold for two or more\
+    \ backends. This node does not settle it.\n   Consequence of the default (X1): until the maintainer\
+    \ answers, the reporting role gets no SELECT on comment content or narrower-audience comments, the\
+    \ operator role sees every row, and any other role that may SELECT the base tables sees every row\
+    \ unless its own role is restricted; the guarantee covers the surfaces the application serves and\
+    \ claims nothing stronger for those roles.\n   Restriction required for comments until the question\
+    \ is answered (review M1; inferred from the confidentiality purpose of P9 and from the reporting role's\
+    \ column grants excluding personal data by default, J5 TRANSVERSE.SECURITY).\n8. Agents collaborate\
+    \ under the same rules (L659, pig-web).\nRejected:\n- P1, delivered events as state: wins never. A\
+    \ client replica with a sync engine wins under the system-of-record placement's condition (offline\
+    \ use with user-owned data, RECORD.1), and even then catch-up uses a cursor.\n- P4 as the default:\
+    \ wins when traffic is two-way at high frequency (L435); the choice of push channel among server-sent\
+    \ events and WebSocket is the pig-web channel node's (L436).\n- P6: wins never for comments (they\
+    \ nearly always have other readers or writers than the record, L664). A single free-text note edited\
+    \ by exactly the people who edit the record is a field, not a comment (inferred).\n- P8: wins never\
+    \ (L686). P10: wins never (L687).\nRealizes: ALLOCATION.GUARD.5 (shows conflicts with the placement's\
+    \ policy; holds only the version it read); ALLOCATION.PRESENT.3 (presence on a channel with timeout,\
+    \ drafts in the browser, durable comments in the database); requires ALLOCATION.GUARD.3 (abilities\
+    \ and visibility follow the authorization placement, its open read clause included).\nHand-offs: commit-ordered\
+    \ change cursor (PIG-WEB-DATA.CONCURRENCY.5, L594); push channel default (PIG-WEB-INTERACTION.REALTIME.1,\
+    \ L436); anchoring, threads, text engine fields, notification and moderation rows (PIG-WEB-INTERACTION.COLLABORATE.1\
+    \ to .4); comment grants of reporting and operator roles (PIG-WEB-DATA.GUARD.2); comments as a named\
+    \ consequence of the read-visibility question's default (ALLOCATION.GUARD.3, allocation judge).\n\
+    Maintainer decisions: MD-01 respected (no row security by default; the read-visibility default is\
+    \ MD-01 as written); MD-03 shapes the row-decidable comment rules in writer functions.\nEvidence gaps:\
+    \ leak-surface list (L687) is a synthesis; channel order rests on one T3 source (L435); the comment-grant\
+    \ restriction is inferred; L682 conflicts with L594, resolved for L594.\n\nLifted from the stack-neutral\
+    \ clause of PIG-WEB-INTERACTION.EDIT in pig-web-defaults, wording kept; the verdict is that record's,\
+    \ not re-judged here. Clause: a stale write is shown as a conflict with both versions and is never\
+    \ merged silently.\n\nLifted from the stack-neutral clause of PIG-WEB-INTERACTION.COLLABORATE.4 in\
+    \ pig-web-defaults, wording kept; the verdict is that record's, not re-judged here. Clause: a report\
+    \ queue whenever outsiders read comments.\n\nRealized in pig-web-defaults at PIG-WEB-DATA.CONCURRENCY.5\
+    \ (commit-safe cursor)."
+- op: node.set
+  uid: TRANSVERSE.SECURITY
+  design_notes: "POSITIONS:\n  - P1 whole-site HTTPS, never mixed with HTTP in a session, HSTS (L029);\
+    \ HTTPS as the precondition for browser capabilities (L030).\n  - P2 minimal exposure: a visit is\
+    \ safe, only the data the user's goal needs is collected (L035); secrets, session ids, tokens, keys,\
+    \ payment data, connection strings and unneeded personal data never logged, pseudonymised where identity\
+    \ is not needed, logged input sanitised (L036).\n  - P3 the OWASP Top 10:2025 as an awareness map,\
+    \ each category assigned to an owning tier (L303; tier map inferred, SRC-115 does not state it).\n\
+    \  - P4 a catalogue of verifiable requirements (ASVS) at a level chosen by risk (L304, owned by PIG-WEB-TRANSVERSE.SECURITY.1;\
+    \ its level definitions are now read from the ASVS 5.0 text, its chapter list is not).\n\nFORCES:\n\
+    P1 and P2 serve confidentiality and integrity at a low, one-off cost; no position in the evidence\
+    \ opposes them. P3 serves coverage (no threat without an owner); its cost is that an awareness list\
+    \ is not testable. P4 serves verifiability; its cost is effort scaled by the chosen level.\n\nDECISION:\n\
+    P1, P2, and P3 completed by P4's demand.\n  - Transport: every page and every API over HTTPS with\
+    \ HSTS, no mixed content (L029, L030). Database connections from every consumer role are covered by\
+    \ the same property (inferred: MD-03 adds consumers outside the request path).\n  - Exposure: collect\
+    \ the minimum (L035); log no secret or unneeded personal data (L036), trace headers included (L375).\
+    \ The reporting role's column grants exclude personal data by default (J1 access paths), which realizes\
+    \ L035 for the MD-03 consumers.\n  - Threat map: every Top 10 category has an owning tier that the\
+    \ requester cannot modify (RULES.3, L019), named through the allocation placements:\n    - A01 Broken\
+    \ Access Control: backend and database, as GUARD.3 settles it: writer functions decide per-user write\
+    \ rules; the backend decides product policy and identity; the database bounds each consumer by its\
+    \ role (MD-01, MD-03). Undecided: awaiting maintainer, read visibility of rows with per-user rules\
+    \ when several backends share the database (not settled here). Recorded default: each backend filters\
+    \ these reads from one shared written specification, with a shared denial-test suite every backend\
+    \ runs. Database read functions that receive the verified actor are acceptable when a per-user read\
+    \ rule must hold for two or more backends. Consequence: until the maintainer answers, the reporting\
+    \ role gets no SELECT on comment content or narrower-audience comments, the operator role sees every\
+    \ row, and any other role that may SELECT the base tables sees every row unless its own role is restricted;\
+    \ no statement here claims a stronger visibility guarantee.\n    - A04 Cryptographic Failures: the\
+    \ backend (GUARD.4; L303), the proxy's TLS, the database connections of every consumer role, and storage\
+    \ at rest (the review's completion of L303's backend-only assignment; inferred).\n    - A07 Authentication\
+    \ Failures: backend (GUARD.4; L303).\n    - A05 Injection: backend and database (L303): parsing into\
+    \ precise types at every entry and typed function parameters (GUARD.1).\n    - A02 Security Misconfiguration:\
+    \ headers, CSP and deployment; A03 Supply Chain: the pipeline and dependencies (L303; realized in\
+    \ PIG-WEB-TRANSVERSE.SECURITY and OPERABILITY.3).\n    - A09 Logging and Alerting Failures: operations\
+    \ (L303), realized in OPERABILITY.1.\n    - Assigned here, inferred:\n      - A06 Insecure Design:\
+    \ a threat model per placement and per critical flow (authentication, access control, business operations,\
+    \ agent access), with misuse-case tests per tier; OPERABILITY.2's denial tests are their first instance.\
+    \ The allocation records (EVOLUTION.1) are the model's input, not the model. Grounded in the OWASP\
+    \ Top 10:2025 A06 preventions (threat modelling for authentication, access control, business logic\
+    \ and key flows; use-case and misuse-case tests per tier), read by the review.\n      - A08 Software\
+    \ or Data Integrity Failures: the delivery pipeline (signed provenance, trusted sources, review of\
+    \ code and configuration changes, segregated CI/CD; one immutable artifact, L101; realized in PIG-WEB-TRANSVERSE.SECURITY.5)\
+    \ and the parsing tier for untrusted serialized input (GUARD.1). The OWASP 2025 category is untrusted\
+    \ code or data treated as trusted; the database's declarative constraints are not an A08 control and\
+    \ are not assigned here.\n      - A10 Mishandling of Exceptional Conditions: the tier that holds each\
+    \ check, which fails closed (inferred from RULES.3).\n  - Verifiability (max): each property is stated\
+    \ as a verifiable requirement at a level chosen by risk, with requirement ids traceable; the catalogue\
+    \ is a stack choice (P4, PIG-WEB-TRANSVERSE.SECURITY.1). Its level definitions are grounded: ASVS\
+    \ 5.0 says most applications should strive for Level 2, and each organisation decides its level from\
+    \ its risks. The Top 10 stays the awareness map, not the requirement set.\n\nREJECTED:\n  - HTTPS\
+    \ only on login or sensitive pages: never (L029).\n  - Logging raw identifiers or secrets for debugging:\
+    \ never; a hashed session id is acceptable when sessions must be tracked (L036).\n  - The Top 10 as\
+    \ the requirement set or a compliance checklist: it is an awareness document (L303); wins never as\
+    \ the only catalogue.\n  - Security as a per-tier add-on without an owning tier per threat: against\
+    \ RULES.3 and L096.\n  - The recorded allocation decisions as the answer to insecure design: they\
+    \ are the threat model's input; OWASP's A06 asks for threat modelling and misuse-case tests. Wins\
+    \ never as the whole answer.\n\nPLACEMENTS REALIZED:\nrefines RULES.3 (skeleton link). Rests on GUARD.1,\
+    \ GUARD.3, GUARD.4, GUARD.2, ACT.4 and the J1 access paths.\n\nREVIEW FIXES:\nM4 (A08 reassigned to\
+    \ the pipeline and the parsing tier, declarative constraints dropped; A06 as a threat model with misuse-case\
+    \ tests; A04 completed; whole map unvalidated); m1 (ASVS level definitions grounded, L304's level\
+    \ part no longer open); m7 and X1 (one notation for the pending clause, recorded default, fallback\
+    \ and consequence stated)."
+- op: node.set
+  uid: ALLOCATION.GUARD.3
+  design_notes: "Positions: P1 backend only (L020, L620, L305, L306); P2 the database enforces through\
+    \ roles and row-level security (L619, L620, L688); P3 two layers: database permissions limit objects,\
+    \ application permissions decide business actions (L468 MAINT, L620, L128).\n\nForces: security against\
+    \ changeability of policy.\n\nDecision: P3, two layers (MD-01; L468, MAINT, max). With several consumers\
+    \ the work divides by where the rule's facts live (R1-1; inferred from MD-03 and L608).\n  - The writer\
+    \ function decides per-user write rules that can be decided from the stored row and the acting user\
+    \ (author, owner, assignee: \"only the assignee may close a task\") and that must hold for every consumer\
+    \ (MD-03, L596, ACT.1). A backend's identical check is a copy for early feedback, generated or tested\
+    \ under RULES.1.\n  - Each backend decides product policy that is not stored in the data: product\
+    \ roles, plan limits, feature flags, workflow steps; and who the human or agent is. One central mechanism\
+    \ per backend, deny by default, object level, on every request from every client (L020, L305, L306,\
+    \ L644).\n  - The database decides per consumer: each consumer has its own role, neither owner nor\
+    \ superuser. Grants say which API functions it may EXECUTE, which tables and columns it may SELECT,\
+    \ and that it writes no table directly except under DB_API's exception; state columns are revoked\
+    \ from UPDATE so the writer function is the only path (L468, L310, L596). This bounds what every backend,\
+    \ BI tool, console and script can do whatever its code.\n  - Functions run with their owner's rights\
+    \ only where they must write tables the caller cannot. They read the acting user from a transaction-local\
+    \ setting (L311, L566). That actor is the consumer's claim, not a verified fact (R1-3): functions\
+    \ refuse a write without an actor, check that the session role may assert that kind of actor (a backend\
+    \ an end user, an operator or owner role only itself; default-context table), and record both the\
+    \ session role and the claimed actor.\n  - Row-level security is not used by default (MD-01). It is\
+    \ acceptable only when the data model is simple, the scoping key is present in every table the policy\
+    \ covers, in practice composite primary keys led by that key, and no all-powerful administrator role\
+    \ must read or write across scopes (MD-01).\n\nUndecided clause (Q1): `undecided: awaiting maintainer,\
+    \ read visibility of rows with per-user rules when several backends share the database`. Read visibility\
+    \ of rows that carry per-user rules (\"a draft is visible only to its author\"; comments on restricted\
+    \ targets are covered by the same rule). Under MD-01 as written each backend filters reads, one copy\
+    \ per backend, against RULES.4 (L633). Writes are not in the question: they are settled above under\
+    \ MD-03.\n  - Recorded default: each backend filters these reads from one shared written specification,\
+    \ with a shared denial-test suite every backend runs (X1).\n  - Fallback kept, not forbidden: database\
+    \ read functions that receive the verified actor are acceptable when a per-user read rule must hold\
+    \ for two or more backends (X1). Under MD-03 several backends share the database by default, so this\
+    \ condition is always met: the fallback is available wherever MD-03's default holds. The actor is\
+    \ verified by the backend that asserts it and is a claim to the database (R1-3).\n  - Consequence,\
+    \ under either position: until the maintainer answers, the reporting role gets no SELECT on comment\
+    \ content or narrower-audience comments, the operator role sees every row, and any other role that\
+    \ may SELECT the base tables sees every row unless its own role is restricted. No statement in this\
+    \ guideline claims stronger visibility than this (X1).\n\nTension (MD-01 against evidence): L619 and\
+    \ L688 call for row security when several applications or agents read the database, which MD-03 makes\
+    \ the default. MD-01 overrides; the residual risk is that a consumer with SELECT on a table sees every\
+    \ user's rows, and that each backend's read filter is the only per-user gate on reads.\n\nRejected:\
+    \ P1 without the database layer; wins never (L468). P2 as sole authority: loses product policy that\
+    \ lives in application code (L468); row-level security wins only under MD-01's conditions. The backend\
+    \ as authority for per-user write rules decidable from the row: two authorities for one rule (R1-1);\
+    \ the backend keeps a tested copy.\n\nChanged (R1): division of work with several consumers (MD-03);\
+    \ row security per MD-01 (F1 closed); new clause Q1.\n\nChanged (R3): Q1 notation unified; recorded\
+    \ default and fallback reworded; comments covered; visibility of SELECT-capable roles stated (X1).\n\
+    \nChanged (R2): one authority per per-user write rule, the writer function; backend check is a tested\
+    \ copy; backend owns product policy not stored in data (R1-1). Actor treated as a claim, pairing checked,\
+    \ writes without actor refused (R1-3). Q1 narrowed to read visibility, awaiting maintainer (R1-2).\n\
+    \nWould move it: MD-01's three conditions (row security becomes acceptable); Q1's answer (read visibility\
+    \ into read functions)\n\nRecommendation for the open clause: database read functions that receive\
+    \ the verified actor, for data with per-user visibility; each backend filtering stays acceptable for\
+    \ data without per-user rules. Recorded default if unanswered: each backend filters from one shared\
+    \ written specification with a shared denial-test suite. Consequence for roles that read the base\
+    \ tables, until the maintainer answers: the reporting role gets no read access to comment content\
+    \ or narrower-audience comments; the operator role sees every row; any other role sees every row unless\
+    \ its own role is restricted."
+  constraints:
+  - 'Authority: writer function for per-user write rules decidable from the row and the actor; backend
+    for product policy not stored in the data and for identity; database per consumer role'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested, early feedback); the browser
+    hides controls the user may not use (cosmetic)'
+  - 'Forbidden: browser, agent client, model output, client hints; row security by default (MD-01); any
+    consumer role owning tables or bypassing grants; a write without an actor, or with an actor its role
+    may not assert'
+  - Per-user write rules decidable from the stored row and the acting user are decided by the column's
+    writer function; a backend's identical check is a generated or tested copy for early feedback.
+  - 'Each backend decides product policy not stored in the data (product roles, plan limits, feature flags,
+    workflow steps) and identity: one central mechanism, deny by default, object level, on every request
+    from every client.'
+  - Each consumer has its own role, neither owner nor an all-powerful role; grants say which API functions
+    it may call and which tables and columns it may read; state columns are revoked from direct update
+    so the writer function is the only path.
+  - Functions read the acting user that the backend asserted for the transaction from its verified identity,
+    treat it as a claim, refuse a write without an actor, check that the session role may assert that
+    kind of actor (a backend an end user, an operator or owner role only itself), and record both the
+    session role and the claimed actor.
+  - No row-level security by default; acceptable only when the data model is simple, the scoping key is
+    present in every table the policy covers, in practice composite primary keys led by that key, and
+    no all-powerful administrator role must read or write across scopes.
+  - 'Until the maintainer answers: the reporting role gets no read access to comment content or to comments
+    with a narrower audience than their target (it reads comments only through a projection limited to
+    target-wide audiences, or not at all); the operator role (administrators, all-powerful by the maintainer''s
+    model) sees every row; any other role that may read the base tables sees every row unless its own
+    role is restricted.'
+  - 'Recorded default for the open clause: each backend filters per-user reads from one shared written
+    specification with a shared denial-test suite; fallback: database read functions that receive the
+    verified actor, acceptable when a per-user read rule must hold for two or more backends.'
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.2
+  design_notes: "POSITIONS:\n  - P1 a pyramid: many small fast tests, some coarser, very few high-level;\
+    \ ratios team-specific (L099).\n  - P2 if high-level tests are fast, reliable and cheap, fewer low-level\
+    \ tests are needed (Fowler, SRC-198, noted in L099).\n  - P3 test at the lowest level that can catch\
+    \ the failure; when a high-level test finds a bug, add the low-level test (L396); end-to-end tests\
+    \ few, on critical journeys (L397).\n  - P4 integration tests against a real engine of the production\
+    \ kind, never mocks or another engine (L399); a disposable database, each test isolated (L400); a\
+    \ test that mutates shared data runs in a boundary that never commits (L567, MAINT).\n  - Read against\
+    \ FORCES.6 (J1): logic in the application tests in memory; logic in the database needs a database\
+    \ to test (L042, L472 MAINT).\n\nFORCES:\nP1 and P3 serve fast, precise feedback; their cost is many\
+    \ tests to write. P2 serves fewer tests when tooling allows; it fails when high-level tests are slow\
+    \ or flaky (L397). P4 serves fidelity (the constraints, isolation and functions are the real ones);\
+    \ its cost is a running database in every test run.\n\nDECISION:\nP3 as the rule, P1 as its usual\
+    \ result, P4 for every test that touches data.\n  - Proportion follows \"the lowest level that catches\
+    \ the failure\" (L396). The pyramid is what that rule usually yields (L099); ratios are not prescribed.\n\
+    \  - In the MD-03 default the database holds the business operations, the writer functions, the invariants\
+    \ and the audit. Their low-level tests run on the real engine of the production kind (L399). Each\
+    \ test is isolated: a rolled-back transaction by default (L400 gives it as its example). Logic tests\
+    \ on shared data run in never-committing transactions (L567). Behaviour that only shows at commit\
+    \ or between sessions (serialization failures and retries, lock waits, deferred constraints, the outbox)\
+    \ is tested with concurrent committing sessions in a disposable database, never a shared one (L567\
+    \ governs shared environments; X4). They cover constraints, writer functions, the actor pairing and\
+    \ the refusal of writes without an actor (ACT.4).\n  - Every invariant that GUARD.2 enforces procedurally,\
+    \ under Serializable with retry or under a lock, has a concurrent test. These concurrency tests are\
+    \ part of the default test suite, not a gap (inferred from GUARD.2: a placement whose correctness\
+    \ depends on concurrent behaviour needs a test of that behaviour).\n  - Backend product policy and\
+    \ request parsing are tested in memory (L042).\n  - Authorization is tested by denial: each role and\
+    \ actor is refused what it may not do (GUARD.3); these denial tests are the first misuse-case tests\
+    \ the threat model asks for (SECURITY, A06). Undecided: awaiting maintainer, read visibility of rows\
+    \ with per-user rules when several backends share the database (not settled here). Recorded default:\
+    \ each backend filters these reads from one shared written specification, with a shared denial-test\
+    \ suite every backend runs. Database read functions that receive the verified actor are acceptable\
+    \ when a per-user read rule must hold for two or more backends. The denial suite does not cover roles\
+    \ that may SELECT the base tables: until the maintainer answers, the reporting role gets no SELECT\
+    \ on comment content or narrower-audience comments, the operator role sees every row, and any other\
+    \ role that may SELECT the base tables sees every row unless its own role is restricted.\n  - Contract\
+    \ tests at the seams (stack judge); a few end-to-end tests on critical journeys (L397).\n\nREJECTED:\n\
+    \  - P2 as the default: acceptable when high-level tests are measured fast, reliable and cheap (L099's\
+    \ note).\n  - A fixed ratio (for example 70/20/10) as a rule: ratios are team-specific (L099).\n \
+    \ - Mocking the database, or another engine, for logic placed in the database: never (L399, L103).\
+    \ In-memory tests stay for logic the backend owns.\n  - End-to-end-heavy suites: never as the default\
+    \ (L397).\n\nPLACEMENTS REALIZED:\nno skeleton link to a placement; rests on FORCES.6 (L042, L472),\
+    \ GUARD.2, GUARD.3, ACT.1 and ACT.4, whose database realizations it tests.\n\nREVIEW FIXES:\nM2 and\
+    \ X4 (each test isolated, rollback by default; commit-time and concurrent behaviour tested with committing\
+    \ sessions in a disposable database; concurrency tests required by GUARD.2 in the default suite; the\
+    \ gap kept only for the missing source row); m7 and X1 (pending clause added to the state, one notation,\
+    \ default, fallback and consequence stated)."

@@ -1,0 +1,40 @@
+operations:
+- op: node.set
+  uid: ALLOCATION.CONTEXT
+  design_notes: "Positions: L621 (the number of consumers moves allocation; agreed as a variable, contested\
+    \ on the answer); L041 (team skill is a legitimate input).\n\nDecision: the variables below move placements\
+    \ in the stated direction; the default context (above, MD-03) fixes their values. MD-03 settles L621's\
+    \ contested answer for this guideline: with several consumers, rules that must hold for all of them\
+    \ belong in the database, behind the function API.\n\n  | variable | moves toward | placements |\n\
+    \  |---|---|---|\n  | database consumers: several (default, MD-03) / one only | database function\
+    \ API / rules may live in that one backend | RECORD.2, ACT.1, DB_API |\n  | access paths and their\
+    \ roles (backends, BI, consoles, scripts, owner) | per-role privileges and function grants | GUARD.3,\
+    \ RECORD.2 |\n  | per-user rules every consumer must respect | writes: the writer function (R1-1);\
+    \ read visibility: database functions for sensitive reads, direct reads otherwise (MD-05) | GUARD.3,\
+    \ ACT.1 |\n  | which consumer may assert which actor | trusted-actor pairing checked by functions\
+    \ and audit triggers | GUARD.3, ACT.4 (R1-3) |\n  | client kind: same-site browser / mobile, third-party,\
+    \ agent | server session / bearer tokens with server-held revocation | GUARD.4 |\n  | automated callers\
+    \ (agents) | required idempotency keys, audit with delegation | GUARD.6, ACT.4 |\n  | offline need,\
+    \ user-owned data | client replica (local-first) | RECORD.1, PRESENT.3, GUARD.5 |\n  | latency budget\
+    \ | copies near the user | RULES.1, DERIVE.3 |\n  | data volume against result size | the database\
+    \ | DERIVE.2 |\n  | write load near the primary's limit | computation and backing roles off the database\
+    \ | FORCES.5, POSTGRES_FIRST |\n  | team SQL skill: low | application (L041); conflicts with MD-03,\
+    \ which presupposes the skill | ACT.1 |\n  | policy change cadence: fast | backend, for product policy\
+    \ not stored in the data | GUARD.3 |\n  | domain complexity | domain model and use cases in the backend\
+    \ for workflow | ACT.1 (L226) |\n  | DBMS commitment | portability cost sunk | ACT.1, DB_API (L042)\
+    \ |\n  | conflict rate, data shape, edit length | concurrency policy | GUARD.5 |\n  | effect losable;\
+    \ crosses a service with its own database | post-commit hook; saga | ACT.2 |\n  | staleness tolerance\
+    \ | cache tier and lifetime | DERIVE.1, DERIVE.3 |\n  | UI interdependence, update frequency, crawlability\
+    \ | client rendering, JavaScript server | PRESENT.1, JS_SERVER |\n  | consumer outside the owning\
+    \ team | function API published as a contract, or that team's service | RECORD.2 (L622) |\n  | project\
+    \ type | description or code as the interface origin, recorded per project by RECORD.3's criteria;\
+    \ in the default context agents read the description and are often hosts the team does not control,\
+    \ which points to description first, but the project records the choice | RECORD.3, TYPE_CHAIN (MD-02)\
+    \ |\n\nChanged (R1): default per MD-03; access paths, per-user rules and project type added (F5, MD-02).\n\
+    \nChanged (R2): per-user rules split into writes (writer function) and reads (then open, since decided\
+    \ by MD-05) (R1-1, R1-2); actor pairing added (R1-3); project-type row reworded so neither origin\
+    \ is the residual default (R1-8)."
+- op: node.set
+  uid: INTERACTION.COLLABORATE
+  epistemic_state: 'known: MD-05 | unvalidated: leak-surface list (L687, synthesis); channel order from
+    one T3 source (L435) | conflict: L682''s sequence-id cursor against L594, resolved for L594'

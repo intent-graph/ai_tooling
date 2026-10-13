@@ -1,0 +1,25 @@
+# ------------------------------------------------------------------------------
+# intent_resources.yaml — Project resources (IntentGraph framework).
+#   product: product IntentGraphs (WHAT/WHY). projection_by_target: projection
+#   graphs (HOW) per target. Paths are relative to this file.
+# ------------------------------------------------------------------------------
+
+name: "Web Architecture Guidelines Intent Graphs"
+description: "Web-app philosophy (product) + JavaScript/Python/Postgres architecture defaults (projection)."
+
+product:
+  - id: web-app-philosophy
+    name: "Web App Philosophy"
+    description: "Stack-neutral principles: allocation of responsibilities across tiers, then data, logic, interaction, transverse."
+    file: "web_app_philosophy.ig.yaml"
+  - id: python-kb-philosophy
+    name: "Python KB Philosophy"
+    description: "Eight foundational principles of the Python guidelines; shared principles link to it."
+    file: "../../python_guidelines/intent_graphs/python_kb_philosophy.yaml"
+
+projection_by_target:
+  web:
+    - id: pig-web-defaults
+      name: "Web defaults"
+      description: "Architecture defaults for JavaScript + Python + Postgres (PIG-WEB.*)."
+      file: "web_defaults.ig.yaml"

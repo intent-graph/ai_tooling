@@ -1,0 +1,67 @@
+operations:
+- op: node.set
+  uid: TRANSVERSE
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (TRANSVERSE.SECURITY, TRANSVERSE.OPERABILITY.2)'
+- op: node.set
+  uid: ALLOCATION.FORCES
+  epistemic_state: 'known | unvalidated: the order and the repairability criterion are a synthesis of L606-L609, L019, L097, L125'
+- op: node.set
+  uid: ALLOCATION.RULES
+  epistemic_state: 'known | unvalidated: the order is a synthesis'
+- op: node.set
+  uid: TRANSVERSE.SECURITY
+  epistemic_state: 'known | unvalidated: the whole tier map, L303''s 7 categories and the 3 added here (A06, A08, A10), A04 completed | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database'
+- op: node.set
+  uid: TRANSVERSE.PERFORMANCE
+  epistemic_state: 'known | unvalidated: whole-path join to server and database time | gap: owns one row; no row measures server or database time'
+- op: node.set
+  uid: TRANSVERSE.CONTRACTS
+  epistemic_state: 'known | conflict: L517 (MAINT) "deployed together", narrowed to the same-deployment condition, otherwise expand, migrate, contract (L047); counted at PIG-WEB-DATA.INTERFACE.1 | unvalidated: usage known per consumer role'
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY
+  epistemic_state: 'known | gap: owns no row (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (TRANSVERSE.OPERABILITY.2)'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION
+  epistemic_state: 'known | gap: owns no row (roll-up)'
+- op: node.set
+  uid: ALLOCATION.GUARD.1
+  epistemic_state: 'known | unvalidated: the reconciliation of P1 and P2 is a synthesis'
+- op: node.set
+  uid: ALLOCATION.ACT.3
+  epistemic_state: 'known | unvalidated: the 1 s threshold is a choice between L601''s two rules of thumb'
+- op: node.set
+  uid: ALLOCATION.DERIVE.1
+  epistemic_state: 'known | unvalidated: the order of options is a synthesis (L625 inferred)'
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.1
+  epistemic_state: 'known | unvalidated: correlation id carried into the database transaction and audit rows (L371, L566, L658)'
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.2
+  epistemic_state: 'known | unvalidated: concurrency tests required by GUARD.2 | gap: no row on concurrency testing | undecided: awaiting maintainer, read visibility of rows with per-user rules when several backends share the database'
+- op: node.set
+  uid: TRANSVERSE.OPERABILITY.3
+  epistemic_state: 'known | unvalidated: the database''s schema and function API as their own codebase; migrations before code within the release window'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.1
+  epistemic_state: known
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.2
+  epistemic_state: 'known | unvalidated: features against capacity as the split between L108 and L111; L111 rests on one source'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.3
+  epistemic_state: 'known | unvalidated: bounded contexts as domain schemas in the shared database; a later split moves no data | conflict: L044 and L116 (separate data per application or service) against MD-03, recorded by J1 and realized here'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.4
+  epistemic_state: 'known | unvalidated: scope reconciliation with POLYGLOT'
+- op: node.set
+  uid: TRANSVERSE.EVOLUTION.5
+  epistemic_state: 'known | unvalidated: ownership per domain schema when teams multiply; cross-schema business functions owned by the workflow''s team'
+- op: node.set
+  uid: ROOT
+  epistemic_state: 'known (roll-up) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (ALLOCATION.GUARD.3)'
+- op: node.set
+  uid: ALLOCATION
+  epistemic_state: 'known | unvalidated: the record format is a synthesis (L610 inferred) | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (ALLOCATION.GUARD.3)'
+- op: node.set
+  uid: DATA
+  epistemic_state: 'known | gap: no philosophy realizer for RECORD.2, the database share of ACT.1, ACT.4 and the per-role layer of GUARD.3 under MD-03; data lifecycle (retention, recovery) has no principle row | undecided (in children): awaiting maintainer, read visibility of rows with per-user rules when several backends share the database (DATA.GUARD)'

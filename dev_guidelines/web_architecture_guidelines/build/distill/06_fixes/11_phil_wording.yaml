@@ -1,0 +1,51 @@
+operations:
+- op: node.set
+  uid: INTERACTION.COLLABORATE
+  constraints:
+  - Every page is correct on plain load; a client that missed events catches up by fetching changes since a server-issued cursor and never trusts the events it happened to receive.
+  - The catch-up cursor is one no later commit can fall behind; a sequence id is not such a cursor.
+  - 'Use the simplest channel that meets direction of flow, update frequency and tolerable latency: polling, then long polling or server-sent events, then a two-way channel; correctness never depends on the channel.'
+  - A stale write is rejected and shown as a conflict with both versions, so the user sees the other change and reapplies; it is never merged silently and never a silent overwrite of the whole record; the browser and agent clients never resolve a conflict on their own (GUARD.5).
+  - Per-property last-writer-wins only for toggles, status, assignment and ordering; a text engine only for genuinely collaborative long-text fields.
+  - 'Presence is ephemeral: broadcast through a channel with a timeout, never written to tables; a persisted last-seen is a separate, coarse field (PRESENT.3).'
+  - A comment is its own entity with a mandatory target reference, its own author, lifecycle and permissions; comments are append-only rows that need no merge.
+  - Read, comment, edit, resolve and moderate are separate abilities, deny by default, checked per object on every request, streams and exports included; none is implied by another.
+  - 'A comment is never more visible than its target, may have a narrower audience, and the same filter applies on every surface the application serves: counts, notifications, search results, history, exports, ETags and real-time channels.'
+  - Notifications are created only for recipients who may see the target.
+  - A report queue (reports with a status and a decision) is required whenever people outside the team read comments.
+  - Until the read-visibility question is answered, per-user comment reads follow the recorded default of ALLOCATION.GUARD.3, with a shared written specification that lists every secondary surface.
+  - 'Until the read-visibility question is answered: reporting and operator roles get no read access to comment content or to comments whose audience is narrower than their target; they read comments only through a projection limited to target-wide audiences, or not at all. Where a project does not apply this, the leak to those roles is a known limit stated where comments are documented.'
+  - Agent writes are marked as agent-originated and pass the same abilities and visibility filters.
+- op: node.set
+  uid: ALLOCATION.GUARD.3
+  constraints:
+  - 'Authority: writer function for per-user write rules decidable from the row and the actor; backend for product policy not stored in the data and for identity; database per consumer role'
+  - 'Copies: the backend''s check of per-user write rules (generated or tested, early feedback); the browser hides controls the user may not use (cosmetic)'
+  - 'Forbidden: browser, agent client, model output, client hints; row security by default (MD-01); any consumer role owning tables or bypassing grants; a write without an actor, or with an actor its role may not assert'
+  - Per-user write rules decidable from the stored row and the acting user are decided by the column's writer function; a backend's identical check is a generated or tested copy for early feedback.
+  - 'Each backend decides product policy not stored in the data (product roles, plan limits, feature flags, workflow steps) and identity: one central mechanism, deny by default, object level, on every request from every client.'
+  - Each consumer has its own role, neither owner nor an all-powerful role; grants say which API functions it may call and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path.
+  - Functions read the acting user from a value scoped to the transaction, taken from the verified identity, refuse a write without an actor, check that the session role may assert that kind of actor (a backend an end user, an operator or owner role only itself), and record both the session role and the claimed actor.
+  - No row-level security by default; acceptable only when the data model is simple, the scoping key leads the composite primary key of every table the policy covers, and no all-powerful administrator role must read or write across scopes.
+  - Roles that may read the base tables (reporting, operator) see every row, comments included, unless their own role is restricted.
+  - 'Recorded default for the open clause: each backend filters per-user reads from one shared written specification with a shared denial-test suite; fallback: database read functions that receive the verified actor, acceptable when a per-user read rule must hold for two or more backends.'
+- op: node.set
+  uid: DATA.GUARD
+  constraints:
+  - 'Declare every rule a declarative constraint can express: NOT NULL unless absence is a meaningful state; row-local CHECK paired with NOT NULL; foreign keys; unique, partial unique and exclusion constraints for cross-row rules; domains for value types used in several places. Constraints are named, so a violation maps to a stable error. Required, not optional.'
+  - Rules no constraint can express (other multi-row rules, legal transitions, dependencies lost by a Boyce-Codd decomposition) are checked in the writer function or a constraint trigger, under Serializable isolation with retry or after locking the governing row; the function or trigger asserts the isolation it needs, set per consumer role. The default isolation level is the stack's choice.
+  - Each business operation is one function call in its own transaction (ALLOCATION.RULES.5).
+  - Concurrent change is detected inside the writer function, which takes the expected version as a parameter; no transaction or lock is held across user think time.
+  - 'Mutual exclusion that guards correctness is enforced by the store: row version, unique constraint or row lock inside the transaction; a lease is checked by the writer function as a fencing token. A lock outside the database is acceptable only to save duplicate work.'
+  - 'The consistency model is stated per operation: which isolation, whether it reads the primary or a replica, and what staleness it accepts. A check that decides a write never reads a replica. A datastore is never labelled "CP" or "AP".'
+  - 'Access guarding: each consumer has its own role, neither owner nor an all-powerful role; grants bound which functions it may call and which tables and columns it may read; state columns are revoked from direct update so the writer function is the only path. Row-level security is not a default (MD-01).'
+- op: node.set
+  uid: LOGIC.PROCESS
+  constraints:
+  - 'Each process is disposable and replaceable: durable state, sessions (GUARD.4) and shared caches (DERIVE.3) live in backing services; process memory caches nothing beyond one request.'
+  - Several backends may share the database (MD-03); each backend is one deployable, not split into services without a measured need.
+  - 'Distinct process types from one build: web processes serve requests; worker processes run deferred work and schedules, claim jobs from the queue the database holds (ACT.3), and return an unfinished job on SIGTERM.'
+  - Each backend reaches the database as its own role, neither owner nor an all-powerful role, located and credentialled by configuration; a small pool per process; never a connection or an open transaction per connected client, and never a transaction held across a remote call (ACT.1, ACT.2).
+  - A supervisor owns the process lifecycle; a reverse proxy faces the internet and enforces the outermost limits of LOGIC.SECURE; one concern per container.
+  - 'Long-lived connections (real-time channels, agent streams) are the one tolerated per-process state: clients reconnect to any process and resync from the backing services.'
+  - No file is readable before a clean scan.
