@@ -2,7 +2,7 @@
 
 Navigation card for agents designing or reviewing a web application on JavaScript, Python and Postgres.
 
-1. **Read [README.md](README.md) first**: thesis, default context, file map, the nine maintainer decisions, the marker conventions.
+1. **Read [README.md](README.md) first**: thesis, default context, file map, the ten maintainer decisions, the marker conventions.
 2. **Drill one file** for the question at hand:
    - who decides a responsibility, which copies are allowed, what would move it: [allocation.md](allocation.md#allocation-matrix), matrix first;
    - what a tier does, stack-neutral: [philosophy.md](philosophy.md#durable-data);

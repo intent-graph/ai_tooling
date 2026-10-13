@@ -152,3 +152,28 @@ by the re-audit's proposals (full evidence and propagation in `08_reaudit/*/resu
    (ALLOCATION.DERIVE.2 and its stack realization).
 7. Threat modelling per critical flow and trust boundary, revisited when a placement on the flow
    changes, with misuse-case tests per tier (TRANSVERSE.SECURITY).
+
+## MD-10 Alignment with the software development guideline
+
+Status: decided by the maintainer on 2026-10-13, after the linking pass in
+`09_links_software/result.md` (tensions K1 to K12, outdated deferrals S1 to S3, gap G1).
+
+1. **K1 and K2 (reads on base tables, default deletion): the web decisions stand** (MD-05,
+   MD-04). The software guideline's session is asked to amend or scope its nodes; the web side
+   does not change.
+2. **K3 to K12: the web guideline aligns with the software guideline**, keeping its stack
+   realization: secrets through a managed store primary, environment variables an exception
+   with its reason recorded (K3); hardened isolated builds by risk, not by default (K4); host
+   allowlist where the set of hosts is known, private-range refusal where users may name any
+   public host (K5); recovery strategy per workload from its objectives, a copy out of reach of
+   production credentials, automated restore tests (K6); circuit breakers only where a
+   dependency fails slowly or is shared (K7); explicit API versions only for many, external or
+   independently released consumers (K8); independent scaling, fault isolation and a different
+   runtime as reasons to split a deployable (K9); a new technology as a replacement with the
+   older one's retirement planned and owned (K10); accepted decision records may be corrected
+   without changing the decision (K11); a verification level paired with outcome measures
+   (K12).
+3. **S1 to S3: the deferred web nodes point to the software guideline** for incident response,
+   personal data erasure and high availability.
+4. **G1 (rollback): recorded as a gap only.** No web realization of a rollback or fix-forward
+   rule is added now.

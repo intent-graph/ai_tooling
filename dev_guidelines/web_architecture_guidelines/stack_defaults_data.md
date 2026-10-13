@@ -8,10 +8,10 @@ Defaults for the Postgres data tier of a web application on this stack: how the 
 1. [Schema Organization](#schema-organization) _(Lines 55-134)_
 1. [Declared Integrity](#declared-integrity) _(Lines 137-192)_
 1. [Concurrency Mechanics](#concurrency-mechanics) _(Lines 195-251)_
-1. [Data Maintenance](#data-maintenance) _(Lines 254-321)_
-1. [Derived Data](#derived-data) _(Lines 324-347)_
-1. [Database Interface](#database-interface) _(Lines 350-382)_
-1. [Deferred Topics](#deferred-topics) _(Lines 385-390)_
+1. [Data Maintenance](#data-maintenance) _(Lines 254-323)_
+1. [Derived Data](#derived-data) _(Lines 326-349)_
+1. [Database Interface](#database-interface) _(Lines 352-384)_
+1. [Deferred Topics](#deferred-topics) _(Lines 387-392)_
 
 ---
 
@@ -34,7 +34,7 @@ flowchart LR
 | [Schema organization](#schema-organization) | Normalized tables, scope-leading keys, precise types, readable names, bounded validated JSON, domain schemas, justified indexes |
 | [Declared integrity](#declared-integrity) | Every expressible rule is a named constraint; one role per consumer, no DELETE; no [row-level security](glossary.md#row-level-security) by default; triggers for a closed list |
 | [Concurrency mechanics](#concurrency-mechanics) | Serializable with caller retry for every writer; version checks on edited rows; transaction-scoped locks |
-| [Data maintenance](#data-maintenance) | Online-safe versioned migrations with a [drift gate](glossary.md#drift-gate); deletion per table, basic soft delete by default; trigger-written history; proven restores |
+| [Data maintenance](#data-maintenance) | Online-safe versioned migrations with a [drift gate](glossary.md#drift-gate); deletion per table, basic soft delete by default; trigger-written history; restores proven by automated tests |
 | [Derived data](#derived-data) | [Derived copies](glossary.md#copy) only with a sync plan and drift guard; caches classified and invalidated in the source transaction |
 | [Database interface](#database-interface) | Function API through a transaction-mode pooler with per-role limits |
 
@@ -45,8 +45,8 @@ flowchart LR
 
 ### Gaps and Deferred Topics
 
-- Gap: collation (no evidence grounds a choice); tamper-detection mechanism for history; recovery objectives (how much loss, how long a restore).
-- Deferred, recorded only: personal-data erasure, high availability and replication, search. See [Deferred Topics](#deferred-topics).
+- Gap: collation (no evidence grounds a choice); tamper-detection mechanism for history; the values of the recovery objectives (set per project, none given here).
+- Deferred, recorded only: personal-data erasure, high availability and replication (the principle is decided in the software development guidelines), search. See [Deferred Topics](#deferred-topics).
 
 ---
 
@@ -250,9 +250,9 @@ Where one fact spans several places, the single writer function of the state col
 ---
 
 ## Data Maintenance
-<!-- Lines 254-321 -->
+<!-- Lines 254-323 -->
 
-Structure changes only through small, re-runnable, online-safe versioned migrations with a CI drift gate; every change leaves append-only history; deletion is chosen per table, basic soft delete by default; recovery is proven by rehearsal. `PIG-WEB-DATA.MAINTAIN`
+Structure changes only through small, re-runnable, online-safe versioned migrations with a CI drift gate; every change leaves append-only history; deletion is chosen per table, basic soft delete by default; recovery follows per-workload objectives and is proven by automated restore tests. `PIG-WEB-DATA.MAINTAIN`
 
 ### Migrations
 
@@ -308,19 +308,21 @@ Principle: [Running and Watching a Production Data Job](../software_development_
 
 ### Backup and Recovery
 
-- Point-in-time recovery by default: base backups plus continuous [WAL](glossary.md#wal) archiving to a repository on another host, with retention and tracked chains. Test and monitor archiving before the first base backup.
-- A backup counts only once a restore of it has been rehearsed, and restores are rehearsed on a schedule.
+- Objectives first: a recovery point objective (how much data may be lost) and a recovery time objective (how long a restore may take) are set per workload or data class from the impact of loss and downtime, and each project records them. The strategy follows them and is never stricter than needed.
+- Where the objective on data loss is shorter than the interval between base backups, the strategy is point-in-time recovery: base backups plus continuous [WAL](glossary.md#wal) archiving, with retention and tracked chains; the usual case for the shared system of record (inferred). Rebuildable data, such as derived caches, is recovered by rebuild or a periodic backup (inferred). Test and monitor archiving before the first base backup.
+- Independence: at least one copy of the base backups and the WAL archive lies outside the failure and attack domain of production and cannot be reached with production credentials (another account, region or provider, or platform-enforced immutable retention). No single credential or person can delete every copy or shorten its retention; backups are encrypted.
+- A backup counts only once a restore from it is tested end to end, regularly and automatically, against criteria fixed beforehand (data present, uncorrupted and within the recovery point; complete within the recovery time). The restore runs by its own path, independent of the migration tooling.
 - Logical dumps (roles dumped separately) serve portability and partial copies, never as the recovery plan. Configuration is in version control.
 - `fsync` on, write caches safe. `synchronous_commit` on by default; off only per transaction or role for data that may be lost on a crash, such as rebuildable caches (per-transaction scope inferred).
-- Gap: recovery objectives (how much loss, how long a restore) are not set here; each project states them.
+- Gap: the values of the recovery objectives are set per project, none is given here; no tool for the automated restore test is chosen.
 
-Principle: [Backup Scope and Design](../software_development_guidelines/operation_recovery_and_feedback.md#backup-scope-and-design), [Backup Protection and Isolation](../software_development_guidelines/operation_recovery_and_feedback.md#backup-protection-and-isolation).
+Principle: [Recovery Objectives](../software_development_guidelines/operation_recovery_and_feedback.md#recovery-objectives), [Backup Scope and Design](../software_development_guidelines/operation_recovery_and_feedback.md#backup-scope-and-design), [Backup Protection and Isolation](../software_development_guidelines/operation_recovery_and_feedback.md#backup-protection-and-isolation).
 `PIG-WEB-DATA.MAINTAIN.5`
 
 ---
 
 ## Derived Data
-<!-- Lines 324-347 -->
+<!-- Lines 326-349 -->
 
 Postgres stores the minimum and derives the rest. A stored derived value is a copy, chosen in the order generated column, same-transaction trigger, cache table with stated staleness; every copy has a sync plan and a drift guard. `PIG-WEB-DATA.DERIVE`
 
@@ -346,7 +348,7 @@ Postgres stores the minimum and derives the rest. A stored derived value is a co
 ---
 
 ## Database Interface
-<!-- Lines 350-382 -->
+<!-- Lines 352-384 -->
 
 The database offers a function API in its own schema, with one business operation per call, reached through a transaction-mode pooler. Refines [Database Function API](allocation.md#database-function-api) and [Offered Contract](philosophy.md#offered-contract). `PIG-WEB-DATA.INTERFACE`
 
@@ -381,10 +383,10 @@ Acceptable when a consumer needs session state the design cannot avoid: session-
 ---
 
 ## Deferred Topics
-<!-- Lines 385-390 -->
+<!-- Lines 387-392 -->
 
-Out of scope for this guideline; recorded only, not decided.
+Recorded only, not decided. Where the software development guidelines decide the principle, only the web-specific realization stays deferred.
 
-- **Personal Data Erasure**: how personal data is erased or anonymized on request. `PIG-WEB-DATA.MAINTAIN.6`
-- **High Availability and Replication**: how the database survives the loss of its primary. `PIG-WEB-DATA.MAINTAIN.7`
+- **Personal Data Erasure**: how personal data is erased or anonymized on request. Principle: [Erasure and Deletion Mechanism](../software_development_guidelines/transverse_privacy.md#erasure-and-deletion-mechanism). `PIG-WEB-DATA.MAINTAIN.6`
+- **High Availability and Replication**: how the database survives the loss of its primary. Principle: [Recovery Strategy, Failover and Failback](../software_development_guidelines/operation_recovery_and_feedback.md#recovery-strategy-failover-and-failback), [Tolerating a Degraded Dependency](../software_development_guidelines/assurance_performance_availability.md#tolerating-a-degraded-dependency). `PIG-WEB-DATA.MAINTAIN.7`
 - **Search**: how full-text and faceted search is provided. `PIG-WEB-DATA.DERIVE.3`

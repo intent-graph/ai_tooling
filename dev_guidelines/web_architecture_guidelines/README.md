@@ -7,10 +7,10 @@ Architecture decisions for a web application built on JavaScript, Python and Pos
 1. [What This Is](#what-this-is) _(Lines 19-23)_
 1. [Thesis](#thesis) _(Lines 26-47)_
 1. [How to Read](#how-to-read) _(Lines 50-73)_
-1. [Maintainer Decisions](#maintainer-decisions) _(Lines 76-98)_
-1. [The Two Graphs](#the-two-graphs) _(Lines 101-123)_
-1. [Provenance](#provenance) _(Lines 126-130)_
-1. [Related Guidelines](#related-guidelines) _(Lines 133-137)_
+1. [Maintainer Decisions](#maintainer-decisions) _(Lines 76-99)_
+1. [The Two Graphs](#the-two-graphs) _(Lines 102-124)_
+1. [Provenance](#provenance) _(Lines 127-131)_
+1. [Related Guidelines](#related-guidelines) _(Lines 134-138)_
 
 ---
 
@@ -72,9 +72,9 @@ Conventions in every file:
 - The first use of a defined term in each file links to the [glossary](glossary.md).
 
 ## Maintainer Decisions
-<!-- Lines 76-98 -->
+<!-- Lines 76-99 -->
 
-Nine maintainer decisions are in force and override any other source on their point; they are recorded, in this order, in the [maintainer decisions](build/distill/maintainer_decisions.md). No maintainer question remains open.
+Ten maintainer decisions are in force and override any other source on their point; they are recorded, in this order, in the [maintainer decisions](build/distill/maintainer_decisions.md). No maintainer question remains open.
 
 1. **[Row-level security](glossary.md#row-level-security) is not a default.** Postgres row-level security is acceptable only when the data model is simple, the scoping key (client, tenant or owner id) is present in every table the policy covers, in practice composite primary keys led by that key, and no all-powerful administrator role must cross scopes. Authorization stays a backend decision, with per-role database privileges as the second gate and [writer functions](glossary.md#writer-function) for per-user write rules. See [Row Security Placement](allocation.md#row-security-placement). `PIG-WEB-ALLOCATION.ROW_SECURITY`
 2. **Interface descriptions are always in sync; the origin is chosen per project.** Every description [consumers](glossary.md#consumer) read (HTTP, function API catalogue, agent tool surface) stays in sync with the implementation by process: one origin per fact, the other side generated or conformance-checked, a CI gate that fails on drift. Whether the description or the code originates is recorded per project, with criteria for each direction. See [Type and Contract Definitions](allocation.md#type-and-contract-definitions). `ALLOCATION.RECORD.3`
@@ -93,11 +93,12 @@ Nine maintainer decisions are in force and override any other source on their po
    - Work is deferred when it is expected to exceed a few seconds or the request timeout; 1 s stays the interactive target, not the deferral cut-off ([Deferred and Scheduled Work](allocation.md#deferred-and-scheduled-work)).
    - Keyset paging is used for structured-data and agent interfaces and for large or growing sets; offset with page numbers is acceptable for a human HTML list over a bounded result ([Filtering, Sorting, Paging and Search](allocation.md#filtering-sorting-paging-and-search)).
    - Threat models are kept per critical flow and trust boundary and revisited when a placement on the flow changes ([Security Across Tiers](philosophy.md#security-across-tiers)).
+10. **The web guideline follows the [software development guidelines](../software_development_guidelines/README.md) where both decide a principle.** Ten positions were aligned, keeping the stack realization: secrets come from a managed store, an environment variable being a recorded exception; hardened builds ([SLSA](glossary.md#slsa) Build L3) are chosen by risk, not by default; a server-side fetch uses an allowlist where the hosts are known; recovery follows per-workload objectives, with a copy out of reach of production credentials and automated restore tests; circuit breakers guard only slow or shared dependencies; the JSON interface is versioned by consumer reach; a deployable is split only for a named force; a new technology replaces an older one on a plan; an accepted decision record may be corrected without changing its decision; an [ASVS](glossary.md#asvs) level is paired with outcome measures. Decisions 4 and 5 stand unchanged, and the software guideline is asked to scope its own rules on them. Incident response, personal data erasure and high availability stay deferred here and point to the software guideline; a missing rollback rule is recorded as a gap only. See [Maintainer decisions](build/distill/maintainer_decisions.md#md-10-alignment-with-the-software-development-guideline).
 
 The six departures from the maintainer's codified practice (CHECK constraints and triggers required, not optional; 8-byte keys by default; no `updated_at` on append-only tables; a trigger-written `updated_at`; a declared parent link for hierarchies; "[deployed together](glossary.md#deployed-together)" narrowed to the same-deployment condition) stand as judged, and each is marked "Departs from the maintainer's practice" where it appears.
 
 ## The Two Graphs
-<!-- Lines 101-123 -->
+<!-- Lines 102-124 -->
 
 The graphs in `intent_graphs/` are the source of truth; these files are their projection. Change a graph first, then re-render the file.
 
@@ -122,14 +123,14 @@ Both graphs have a `ROOT`; every `PIG-WEB-*` uid lives in `web_defaults.ig.yaml`
 To browse both graphs in Obsidian, run `./intent_graphs/export_to_obsidian.sh` and open `intent_graphs/obsidian_export/` as a vault: one note per node, one folder per graph, canvases per branch ([obsidian_export/README.md](intent_graphs/obsidian_export/README.md)).
 
 ## Provenance
-<!-- Lines 126-130 -->
+<!-- Lines 127-131 -->
 
 - [build/RECIPE.md](build/RECIPE.md): how this guideline was built (research, consolidation, maintainer-fixed hierarchy, judging allocation first, adversarial review, graph build, critique), and how to build a sibling guideline the same way.
 - `build/research/`: the evidence, gathered by area from tiered sources.
 - `build/distill/`: the claims ledger, the skeleton, the judge records and their reviews, the [maintainer decisions](build/distill/maintainer_decisions.md), the graph batches, the critique and its fixes.
 
 ## Related Guidelines
-<!-- Lines 133-137 -->
+<!-- Lines 134-138 -->
 
 - [Software development guidelines](../software_development_guidelines/README.md): the stack-neutral principles (ownership, assurance, construction, change flow, operation, evolution, transverse) that this guideline applies to a web stack; a node that applies one carries an inter link to its graph and a "Principle:" pointer in its section.
 - [Python guidelines](../python_guidelines/): Python code conventions; shared principles link to its philosophy graph.

@@ -137,7 +137,7 @@ Acceptable when the user must see the foreign outcome in the same response and t
 
 - Every outbound call has a timeout shorter than the caller's remaining deadline.
 - Retry only idempotent or keyed calls, exponential backoff with jitter, at exactly one layer: in the request path the outbound client (within the deadline, at most three attempts, 10% retry budget per client); for deferred work the job runner, with a failed state monitoring shows. HTTP client libraries do not retry beneath either.
-- A circuit breaker per external dependency called from the request path; business errors stay business errors. Database retries follow [Transactions](#transactions).
+- A circuit breaker, its state changes logged, only for an external dependency called from the request path that fails slowly or is shared by many callers; business errors stay business errors. Database retries follow [Transactions](#transactions).
 - Forbidden: unbounded or immediate retries; retries at several layers; unkeyed retry of a non-idempotent call.
 
 Principle: [Protecting Remote Calls](../software_development_guidelines/assurance_performance_availability.md#protecting-remote-calls).
@@ -275,12 +275,12 @@ Acceptable when input and output shapes are equal (simple CRUD): one model for b
 
 The compatibility window is set by [Non-Atomic Deployment](philosophy.md#non-atomic-deployment).
 - CI fails on drift between description and implementation and on a breaking diff not released as a new version; contract tests cover behaviour. Gate and window cover every description consumers read: HTTP, function catalogue, agent tool surface.
-- JSON under `/v1` from the start (inferred: chosen among contested positions); the major version holds while changes are compatible; no minor version; HTML routes carry no version.
-- Unavoidable break: `/v2` beside `/v1` through a published window, announced with `Deprecation`, `Sunset`, a documentation link and the OpenAPI deprecated flag.
+- Versioning follows consumer reach. For many, external or independently released consumers: JSON under `/v1` from the start (inferred: chosen among contested positions), the major version holds while changes are compatible, no minor version. For few, in-house, reachable consumers released with the API: additive change and a coordinated deploy, no version numbers. The default context is the first case: pages open in tabs outlive a deploy and agent clients run code the team does not release (inferred). HTML routes carry no version.
+- Unavoidable break of a versioned interface: `/v2` beside `/v1` through a published window, announced with `Deprecation`, `Sunset`, a documentation link and the OpenAPI deprecated flag.
 - Additive across a window at least as long as the absolute session timeout (inferred); clients tolerate unknown fields; new request fields ship server first, then client (inferred).
-- Forbidden: unversioned JSON paths until the first break.
+- Forbidden: unversioned JSON paths for consumers the team does not release together with the API.
 
 Acceptable when joining an ecosystem that uses it: media-type versioning, a dated query parameter or a dated header; the dated header with account pinning also when many external integrators must keep working indefinitely and the team can maintain version transformations.
 
-Principle: [Announcing Retirement](../software_development_guidelines/evolution.md#announcing-retirement), [Support Window Before Removal](../software_development_guidelines/evolution.md#support-window-before-removal).
+Principle: [What Counts as Compatible](../software_development_guidelines/assurance_interfaces_data.md#what-counts-as-compatible), [Announcing Retirement](../software_development_guidelines/evolution.md#announcing-retirement), [Support Window Before Removal](../software_development_guidelines/evolution.md#support-window-before-removal).
 `PIG-WEB-LOGIC.EXPOSE.7`

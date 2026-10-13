@@ -11,7 +11,7 @@ How the Django backend secures entry for every caller, human or agent: one centr
 1. [Federated Login and Tokens](#federated-login-and-tokens) _(Lines 86-99)_
 1. [Passwords and Login Throttling](#passwords-and-login-throttling) _(Lines 102-111)_
 1. [Abuse and Rate Limits](#abuse-and-rate-limits) _(Lines 114-126)_
-1. [Server-Side Fetch](#server-side-fetch) _(Lines 129-137)_
+1. [Server-Side Fetch](#server-side-fetch) _(Lines 129-139)_
 
 ---
 
@@ -23,7 +23,7 @@ The Python backend is the one gate every caller passes and decides nothing on th
 - Humans hold an opaque, revocable, server-side session in Postgres after a delegated [OpenID Connect](glossary.md#oidc) login, with [MFA](glossary.md#mfa) offered on every account and required by privilege and risk level; its cookie is `SameSite=Lax` plus a cross-site navigation check, `Strict` for operator consoles. Agents hold short-lived, audience-bound, revocable tokens.
 - No session token, bearer token or long-lived credential travels in a URL. The signed upload policy and the signed download URL are both cases of the single signed-file-URL exception of [URL as Public Interface](philosophy.md#url-as-public-interface).
 - Limits apply at two depths: identity-blind at the proxy, identity-aware per identity and operation in the backend.
-- Server-side fetches of client- or agent-named URLs cannot reach private, loopback or link-local addresses.
+- Server-side fetches of client- or agent-named URLs reach only allowed destinations: a host allowlist where the hosts are known, a refusal of private, loopback and link-local addresses where users may name any public host.
 - Per-user read visibility: simple reads are written by the backend directly; sensitive, complex, high-impact or shared reads, per-user visibility rules included, go through database functions that receive the verified actor ([Access Control Enforcement](#access-control-enforcement)).
 
 `PIG-WEB-LOGIC.SECURE`
@@ -125,13 +125,15 @@ Two depths (the split is inferred). Refines the consumption limits of [Secured E
 `PIG-WEB-LOGIC.SECURE.6`
 
 ## Server-Side Fetch
-<!-- Lines 129-137 -->
+<!-- Lines 129-139 -->
 
-One helper for every fetch of a client- or agent-named URL is the required control, so a client cannot make the server reach internal services or metadata endpoints; a network guard backs it where the hosting allows.
-- It refuses private, loopback and link-local ranges, checking the address actually connected to rather than the hostname (inferred); it validates every redirect hop the same way.
+One helper for every fetch of a client- or agent-named URL is the required control: it fetches only destinations it allows, so a client cannot make the server reach internal services or metadata endpoints; a network guard backs it where the hosting allows.
+- Where the set of destinations is known (the provider and partner hosts a feature calls), the host is matched against an allowlist and the resolved addresses are validated against the permitted networks.
+- Where users may name any public host (link previews, webhooks registered by users, a client's metadata document; examples inferred), no allowlist can exist: the helper refuses private, loopback and link-local addresses and the metadata endpoint instead.
+- In both cases it connects only to the validated address, checking the address actually connected to rather than the hostname (inferred), and re-checks every redirect target, hop by hop.
 - Timeout and size cap; in a worker when the response does not need the result.
 - Network guard, preferred: where the hosting can enforce outbound rules, fetches leave through an egress proxy with direct egress blocked, or outbound rules deny the application's processes the private, loopback, link-local and metadata ranges. It is required when the server's network holds internal services or a metadata endpoint that answers without a token (inferred). Where the hosting cannot enforce outbound rules, the helper is the guard.
-- Forbidden: fetching without range checks.
+- Forbidden: fetching without a destination rule (an allowlist, or the range refusal where users may name any public host).
 
 Principle: [Paths and Destinations](../software_development_guidelines/construction.md#paths-and-destinations).
 `PIG-WEB-LOGIC.SECURE.7`

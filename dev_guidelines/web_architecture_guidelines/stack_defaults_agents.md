@@ -37,7 +37,7 @@ The HTTP interface is described by OpenAPI kept in sync with the implementation;
 The application publishes OAuth protected-resource metadata and answers unauthenticated calls with `WWW-Authenticate` carrying `resource_metadata`. Agent clients prove identity through client ID metadata documents or signed requests, never a User-Agent string; identity keys the per-agent quota and the agent marking in data. These mechanisms rest on drafts and a moving specification (inferred).
 - Client ID metadata documents first; dynamic registration only for compatibility; pre-registration for closed sets; consent per client and exact redirect URI matching always.
 - Only single-use, short-lived, [PKCE](glossary.md#pkce)-bound codes travel in redirects (binding inferred); no session, bearer or long-lived token in a URL.
-- Fetching a client's metadata document is a server-side fetch of a client-named URL: block private, loopback and link-local ranges and validate every redirect hop ([Server-Side Fetch](stack_defaults_logic_security.md#server-side-fetch)).
+- Fetching a client's metadata document is a server-side fetch of a client-named URL through the fetch helper: any public host may be named, so private, loopback and link-local ranges are refused and every redirect hop validated ([Server-Side Fetch](stack_defaults_logic_security.md#server-side-fetch)).
 
 Refines [Identity and Session State](allocation.md#identity-and-session-state).
 `PIG-WEB-INTERACTION.AGENT.2`

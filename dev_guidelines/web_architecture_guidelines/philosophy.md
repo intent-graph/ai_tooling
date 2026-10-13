@@ -7,7 +7,7 @@ How each tier carries the share the [allocation](allocation.md#overview) gives i
 1. [Durable Data](#durable-data) _(Lines 16-79)_
 1. [Business Logic Tier](#business-logic-tier) _(Lines 82-153)_
 1. [Interaction](#interaction) _(Lines 156-259)_
-1. [Transverse Concerns](#transverse-concerns) _(Lines 262-396)_
+1. [Transverse Concerns](#transverse-concerns) _(Lines 262-397)_
 
 ---
 
@@ -55,7 +55,7 @@ Schema and data evolve without breaking running code. Migrations are the only or
 - Documentation, persistence models and function wrappers are generated from the live database; a structure the migrations would not produce is a defect to reconcile, not a new truth (the drift check inferred).
 - An incompatible change keeps every running consumer working: add the new structure or function beside the old, move every consumer, then remove the old in a change marked coordinated once no deployed consumer references it. Tables and the [function API](glossary.md#function-api) alike; with a shared database this is the only route (inferred).
 - Conventions evolve forward only: new objects follow the new rule, legacy ones are not renamed in bulk.
-- Point-in-time recovery is the default; a backup counts only once a restore of it has been rehearsed.
+- Recovery follows objectives set per workload or data class and is never stricter than needed; at least one backup copy lies out of reach of production credentials; a backup counts only once a restore from it was tested end to end, regularly and automatically, against criteria fixed beforehand.
 
 Realizes Type and Contract Definitions and Audit and History ([allocation](allocation.md#data-authority-placements)). Principle: [Data and Schema Change](../software_development_guidelines/change_flow_data_and_measure.md#data-and-schema-change), [Conventions Applied Forward Only](../software_development_guidelines/evolution.md#conventions-applied-forward-only), [Proving Restore](../software_development_guidelines/assurance_performance_availability.md#proving-restore). `DATA.MAINTAIN`
 
@@ -94,7 +94,7 @@ The backend is the one gate every caller passes, human or agent, and decides not
 - Bound consumption at two depths: identity-blind size, rate, read-rate and time limits at the outermost layer (413 or 408), with the client's size check as a feedback copy; identity-aware limits in the backend per operation, tighter for operations that cost money, call third parties or are expensive for agents to loop on.
 - Protect harmful automation by flow (sign-up, purchase, booking, referral), not by client kind; no blanket bot blocking, because agents are intended users.
 - Defend logins in layers: [MFA](glossary.md#mfa) first, then breached-password checks, then device signals and challenges known to be spoofable; never IP blocking alone. Offer MFA on every human account, phishing-resistant authenticators (passkeys, WebAuthn) preferred; require it on privileged accounts (operator, owner, administrator) and before sensitive operations (step-up). Whether it is required on every account follows the security level the project chooses by risk ([Security Across Tiers](#security-across-tiers); scope inferred). Acceptable when the project's chosen risk level requires it, or when one account's exposure is severe: MFA required on every human account.
-- Server-side fetches of client- or agent-named URLs never reach private, loopback or link-local addresses.
+- Server-side fetches of client- or agent-named URLs reach only destinations they allow: a host allowlist where the hosts are known, otherwise a refusal of private, loopback and link-local addresses; the connection goes only to the validated address and redirect targets are re-checked.
 - Per-user read visibility: simple reads that carry no logic are written by the backend directly; sensitive, complex, high-impact or shared reads, per-user visibility rules included, go through database functions that receive the verified actor ([Authorization](allocation.md#authorization)).
 
 Realizes Validation, Authorization and Identity and Session State ([Guarding Placements](allocation.md#guarding-placements)). `LOGIC.SECURE`
@@ -258,7 +258,7 @@ Script in the page holds the application's privileges, so assume it may be hosti
 `INTERACTION.ENVIRONMENT.7`
 
 ## Transverse Concerns
-<!-- Lines 262-396 -->
+<!-- Lines 262-397 -->
 
 Properties that span every tier are stated once and designed in across browser, backend, database and every other consumer of the data, not added per tier. Each becomes an automated check where one exists: the interface [drift gate](glossary.md#drift-gate), the function-API catalogue diff, page budgets, module-boundary checks, tests at every tier. Stack: [Transverse Concerns](stack_defaults_transverse.md#transverse-overview). `TRANSVERSE`
 
@@ -267,7 +267,7 @@ Properties that span every tier are stated once and designed in across browser, 
 - Serve every page and every API over encrypted transport with strict transport enforcement and no mixed content; database connections of every consumer role included.
 - Collect only the data the user's goal needs. Never log secrets, session ids, tokens, keys, payment data, connection strings or unneeded personal data, trace headers included; a hashed session id is acceptable when sessions must be tracked.
 - Give every threat category an owning tier the requester cannot modify (table below). Answer insecure design with a threat model per critical flow and trust boundary (authentication, access control, business operations, agent access), revisited when a placement on that flow changes, with misuse-case tests per tier; the allocation records are the model's input, not the model.
-- State each property as a verifiable requirement with a traceable id, at a level chosen by risk; the threat list is an awareness map, never the requirement set.
+- State each property as a verifiable requirement with a traceable id, at a level chosen by risk and paired with outcome measures (a level measures coverage, not outcomes); the threat list is an awareness map, never the requirement set.
 
 | Threat category | Owning tier |
 |---|---|
@@ -340,6 +340,7 @@ Principle: [Test Level Mix](../software_development_guidelines/assurance_behavio
 - Every environment runs the production database engine and version, with no adapters hiding differences.
 - Schema and function-API changes are versioned migrations promoted through the same pipeline, run once per release before the new code starts, additive across the release window (inferred).
 - Release in small, frequent increments.
+- Gap: no rollback or fix-forward rule for releases or data changes; principle in [Rollback](../software_development_guidelines/change_flow_delivery.md#rollback) (MD-10).
 
 Principle: [Build Once, Promote One Artifact](../software_development_guidelines/change_flow_delivery.md#build-once-promote-one-artifact), [Separation of Configuration from Code and Secrets](../software_development_guidelines/transverse_config_environments.md#separation-of-configuration-from-code-and-secrets), [Environment Parity](../software_development_guidelines/change_flow_delivery.md#environment-parity), [Delivery Path and Gating of Database Change](../software_development_guidelines/change_flow_data_and_measure.md#delivery-path-and-gating-of-database-change), [Cadence and Batch Size](../software_development_guidelines/change_flow_delivery.md#cadence-and-batch-size).
 `TRANSVERSE.OPERABILITY.3`
@@ -370,7 +371,7 @@ Principle: [Step Size and Feedback](../software_development_guidelines/evolution
 #### Deployable Boundaries
 
 - Each backend is one deployable, modular by business concept. Several backends may share the database, but that does not by itself license splitting a backend.
-- Split off a further deployable only when a team needs independent releases, the boundary has proven stable and the distribution premium is budgeted. A later split moves no data, since the data seam is already the function API (inferred).
+- Split off a further deployable only when a named force requires it: independent scaling, independent release by separate teams, fault isolation that matters, or a different runtime need. The boundary has proven stable, the distribution premium is budgeted and the force is stated. A later split moves no data, since the data seam is already the function API (inferred).
 - Bounded contexts map to domain schemas in the shared database, each with its own functions and roles (inferred).
 - A new deployable reaches data only through the function API with its own role; it never writes tables beside it or holds a second system of record.
 - Acceptable when the domain is well known, the size requires distribution, the parts develop and deploy independently and the team already runs distributed systems: services first. The evidence for services first is anecdotal.
@@ -381,7 +382,7 @@ Principle: [Initial Shape, One Unit or Several](../software_development_guidelin
 #### Few Mature Technologies
 
 - Adopt few, mature technologies with known failure modes: novelty is a scarce budget, and simplicity is a reliability property.
-- A new technology enters only when an existing one's measured limit is reached and its perpetual operating cost is budgeted. The rule counts runtimes, stores, services and frameworks, not the paradigm chosen inside an adopted language (inferred).
+- A new technology enters as a replacement, with the retirement of the older one planned and owned, and only when an existing one's measured limit is reached and its perpetual operating cost is budgeted. The rule counts runtimes, stores, services and frameworks, not the paradigm chosen inside an adopted language (inferred).
 
 Realized in the stack by [Stack Placements](allocation.md#stack-placements) (Postgres first). Principle: [Adding as Replacing](../software_development_guidelines/evolution.md#adding-as-replacing). `TRANSVERSE.EVOLUTION.4`
 

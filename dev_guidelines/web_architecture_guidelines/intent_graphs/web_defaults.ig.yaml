@@ -135,7 +135,8 @@ nodes:
     readers.'
   - 'Maintain: online-safe versioned migrations with a drift gate, deletion chosen
     per table (default basic soft delete), trigger-written append-only history, human-run
-    bulk jobs under a checklist, point-in-time recovery proven by restore.'
+    bulk jobs under a checklist, recovery from per-workload objectives proven by automated
+    restore tests.'
   - 'Derive: derived copies only with a sync plan and a drift guard, kept by a same-transaction
     trigger where any other writer exists; caches in classified, commented tables.'
   - 'Interface: the function API with its conventions and its compatibility rule,
@@ -191,6 +192,10 @@ nodes:
     date: 2026-10-13T15:54
     note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
       token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-LOGIC
   name: Python Application Tier
   intent: 'The Python backend is the gate every caller passes and the workflow tier
@@ -400,10 +405,12 @@ nodes:
     each backend is one deployable, not split without a measured need.'
   epistemic_state: 'known | gap: owns no row (roll-up)'
   constraints:
-  - 'security: ASVS 5.0 as the requirement catalogue; TLS and the header set at one
-    edge, HSTS preload only as a recorded decision; secrets from a managed store once
-    one exists, a file fallback until then; a pinned, scanned supply chain with signed
-    provenance at SLSA Build L3;'
+  - 'security: ASVS 5.0 as the requirement catalogue, at a recorded level paired with
+    outcome measures; TLS and the header set at one edge, HSTS preload only as a recorded
+    decision; secrets from a managed store injected at runtime (an environment variable
+    only as a recorded exception), a file fallback until a store exists; a pinned,
+    scanned supply chain with signed build provenance verified before deploy (SLSA
+    Build L3 where insider or credential-compromise risk matters);'
   - 'performance: Core Web Vitals at the 75th percentile as targets, budgets in the
     build;'
   - 'contracts: one verification per seam (catalogue diff and consumer suites for
@@ -449,6 +456,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-ALLOCATION.POSTGRES_FIRST
   name: Postgres First for Backing Roles
   intent: One Postgres carries the job queue, schedules, derived caches, sessions
@@ -463,6 +474,9 @@ nodes:
   - 'Each role names its trigger to leave Postgres: queue lock contention or backlog
     age; NOTIFY commit serialisation under write concurrency; cache latency or cache
     load on the primary.'
+  - 'A move out of Postgres is a replacement: the Postgres implementation of that
+    role is retired by plan, with an owner, or the ADR says why it replaces nothing
+    (web-app-philosophy:TRANSVERSE.EVOLUTION.4).'
   - NOTIFY is a low-rate wake-up, never the message carrier.
   - 'Authority: Postgres per role.'
   - 'Forbidden: a second store written beside Postgres without staging.'
@@ -474,7 +488,14 @@ nodes:
     (Django''s channel layer on Redis, L457). Moved by: write concurrency, queue volume,
     fan-out processes. Tension: none recorded. Evidence gaps: L125 rests on T4 sources
     and the T1 SKIP LOCKED page; thresholds for queue contention (L126) and NOTIFY
-    (L127) are open.'
+    (L127) are open.
+
+
+    MD-10: a move of a role out of Postgres follows web-app-philosophy:TRANSVERSE.EVOLUTION.4,
+    aligned with software-development-philosophy:EVOLUTION.TECHNOLOGY.1 by MD-10:
+    the older implementation is retired by plan and owner, or the record states why
+    it replaces nothing (for example a framework whose only production backend is
+    a service).'
   impl_pointers:
   - build/distill/03_judge/J1_allocation/records.md::PIG-WEB.ALLOCATION.POSTGRES_FIRST
   - build/research/07_architecture_styles/result.md::ARCH-C34
@@ -498,6 +519,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-ALLOCATION.DB_API
   name: Database Function API
   intent: 'The default contract to the data is a function API in a dedicated Postgres
@@ -1018,8 +1043,10 @@ nodes:
     migrations with a CI drift gate, and every change leaves trigger-written append-only
     history. Deletion is chosen per table from the reason the data is kept (the default
     is basic soft delete, MD-04), large data changes are human-run batched jobs, and
-    recovery to a moment is proven by rehearsed restores.
-  epistemic_state: 'known | gap: personal-data erasure and high availability deferred'
+    recovery follows per-workload objectives and is proven by automated restore tests.
+  epistemic_state: 'known | gap: personal-data erasure and high availability: the
+    web realization is deferred, the principle is owned by the software development
+    guideline (MD-10)'
   constraints:
   - 'Migrations: structure changes only through small, re-runnable, online-safe versioned
     migrations, with incompatible changes as expand, migrate, contract and a CI gate
@@ -1030,8 +1057,9 @@ nodes:
     the consumer role and the claimed actor.'
   - 'Bulk Data Jobs: large data changes are human-run, batched, idempotent jobs with
     a convergence query.'
-  - 'Backup and Recovery: recovery to a moment is possible and proven by rehearsed
-    restores.'
+  - 'Backup and Recovery: recovery follows per-workload objectives (point-in-time
+    recovery for the shared system of record, inferred), keeps a copy out of reach
+    of production credentials and is proven by automated restore tests.'
   design_notes: 'Question: how Postgres schema and data are changed, retired, recorded
     and recovered over time.
 
@@ -1075,6 +1103,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: wording cleanup after closing the open
       questions'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-DATA.DERIVE
   name: Derived Data in Postgres
   intent: 'Postgres stores the minimum and derives the rest: a stored derived value
@@ -1186,7 +1218,8 @@ nodes:
     hold an opaque server-side session in Postgres after a delegated OpenID Connect
     login with MFA offered and required by privilege and risk level, every CSRF layer
     is applied, no credential travels in a URL, consumption is bounded at the proxy
-    and per identity, and fetches of client-named URLs cannot reach internal addresses.'
+    and per identity, and fetches of client-named URLs reach only allowed destinations,
+    never internal addresses.'
   epistemic_state: 'known (roll-up): MD-05'
   constraints:
   - Access checks are central, deny by default and object level; the backend's checks
@@ -1199,8 +1232,9 @@ nodes:
   - Agents hold short-lived, audience-bound, revocable tokens.
   - 'Limits apply at two depths: identity-blind at the proxy, identity-aware per identity
     and operation in the backend.'
-  - Server-side fetches of client- or agent-named URLs cannot reach private, loopback
-    or link-local addresses.
+  - 'Server-side fetches of client- or agent-named URLs reach only allowed destinations:
+    a host allowlist where the hosts are known, a refusal of private, loopback and
+    link-local addresses where users may name any public host.'
   design_notes: "Positions: owns no row; roll-up of SECURE.1 to .7.\n\nForces: security\
     \ (all children); availability and cost control (SECURE.6); the session's function,\
     \ carrying a login across arrivals into the application (SECURE.2: served by that\
@@ -1251,6 +1285,10 @@ nodes:
   - who: agent:steward
     date: 2026-10-13T15:54
     note: 'MD-09 corrections: design notes updated where they restated the old rules'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-LOGIC.ENFORCE
   name: Business Logic Realization
   intent: Each backend is one Django deployable whose use-case layer is what every
@@ -1374,8 +1412,8 @@ nodes:
   epistemic_state: known (roll-up)
   constraints:
   - HTML for browsers; resource-oriented JSON under `/v1` from the start for programs
-    and agents, with named resources, custom methods for state transitions and keyset
-    continuation paging.
+    and agents (versioning follows consumer reach, EXPOSE.7), with named resources,
+    custom methods for state transitions and keyset continuation paging.
   - Errors are RFC 9457 problem details with stable types; function error codes map
     to them.
   - Idempotency by design or by key recorded with the effect; 202 status resources
@@ -1419,6 +1457,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-INTERACTION.VISUALIZE
   name: Browser Rendering
   intent: Python renders HTML per request and ships JavaScript only for interactive
@@ -1794,24 +1836,29 @@ nodes:
       (PIG-WEB.AREA) so they resolve'
 - uid: PIG-WEB-TRANSVERSE.SECURITY
   name: Security Defaults
-  intent: Security is verified against ASVS 5.0 at a recorded level, with HTTPS terminated
-    at the proxy, a strict nonce-based CSP rolled out report-only first, secrets held
-    in a managed store per consumer role (file fallback until one exists), and a pinned,
-    scanned supply chain with signed SLSA Build L3 provenance. The point is that each
-    security property is testable and has one owner.
+  intent: Security is verified against ASVS 5.0 at a recorded level paired with outcome
+    measures, with HTTPS terminated at the proxy, a strict nonce-based CSP rolled
+    out report-only first, secrets held in a managed store per consumer role and injected
+    at runtime (file fallback until one exists), and a pinned, scanned supply chain
+    with signed, verified build provenance whose level follows the risk. The point
+    is that each security property is testable and has one owner.
   epistemic_state: 'known | gap: owns no row (roll-up)'
   constraints:
   - ASVS 5.0 as the verifiable catalogue at a recorded level (Level 2 by default,
-    grounded in the ASVS 5.0 text).
+    grounded in the ASVS 5.0 text), paired with outcome measures; the level measures
+    coverage, not outcomes.
   - HTTPS terminated at the proxy, HSTS with a long max-age on the application's host,
     includeSubDomains once its subdomains serve HTTPS, preload only as a recorded
     decision.
   - a strict nonce-based CSP rolled out report-only first, plus a small header baseline.
-  - secrets held in a managed store, per consumer role, rotated and audited, with
-    a file fallback in force until a store is added on self-managed hosting (MD-06).
+  - secrets held in a managed store, per consumer role, rotated and audited, injected
+    at runtime as a mounted file or through the store's interface, an environment
+    variable only as a recorded exception, with a file fallback in force until a store
+    is added on self-managed hosting (MD-06).
   - dependencies pinned with hashes, an SBOM scanned continuously, signed provenance
-    at SLSA Build L3 verified before deploy, Build L2 acceptable when the build platform
-    cannot isolate runs.
+    from a hosted build platform verified before deploy (SLSA Build L2 as the floor,
+    Build L3 where insider or credential-compromise risk matters or the software is
+    distributed).
   design_notes: 'Rows: none (roll-up).
 
     Decision (lead): the roll-up of its five children: ASVS 5.0 as the verifiable
@@ -1849,6 +1896,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.PERFORMANCE
   name: Page Experience Targets
   intent: Core Web Vitals at the 75th percentile, per device class and from field
@@ -2102,8 +2153,8 @@ nodes:
     tables, every module may call the function API within its role''s grants, and
     a cross-domain business operation is one database function.'
   - Every architecturally significant decision, the per-project ones the guideline
-    leaves open included (HSTS preload among them), is a short ADR, superseded and
-    never edited.
+    leaves open included (HSTS preload among them), is a short ADR, superseded rather
+    than rewritten.
   design_notes: 'Rows: none (roll-up).
 
     Decision (lead): the roll-up of its three children. Several backends may share
@@ -2134,6 +2185,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-DATA.ORGANIZE.1
   name: Tables and Normalization
   intent: Repeating groups become child tables with a foreign key, vertical splits
@@ -4307,19 +4362,42 @@ nodes:
       ledger rows, correct attributions and link meaning'
 - uid: PIG-WEB-DATA.MAINTAIN.5
   name: Backup and Recovery
-  intent: 'Recovery to a chosen moment is the default: base backups plus continuous
-    WAL archiving to a repository on another host, with a backup counting only once
-    a restore of it has been rehearsed on a schedule. Logical dumps serve portability
+  intent: Recovery is designed from objectives set per workload or data class (how
+    much data may be lost, how long a restore may take) and is never stricter than
+    they need; for the shared system of record that is usually point-in-time recovery,
+    base backups plus continuous WAL archiving to a repository outside the failure
+    and attack domain of production and out of reach of production credentials. A
+    backup counts only once a restore from it is tested end to end, regularly and
+    automatically, against criteria fixed beforehand. Logical dumps serve portability
     only, fsync is never off, and synchronous_commit is relaxed only for data that
-    may be lost on a crash.'
-  epistemic_state: 'known | unvalidated: per-transaction synchronous_commit scope
-    | gap: recovery objectives (how much loss, how long a restore) have no row'
+    may be lost on a crash.
+  epistemic_state: 'known: MD-10 | unvalidated: per-transaction synchronous_commit
+    scope; point-in-time recovery as the usual strategy for the shared system of record
+    (inferred) | gap: the objectives'' values are set per project, none is given here;
+    no tool for the automated restore test is chosen'
   constraints:
-  - 'Point-in-time recovery by default: base backups plus continuous WAL archiving
-    to a repository on another host, with retention and tracked chains; the archive
-    command strict.'
-  - Archiving tested and monitored before the first base backup; a backup counts only
-    once a restore of it has been rehearsed, and restores are rehearsed on a schedule.
+  - 'Objectives: a recovery point objective (how much data may be lost) and a recovery
+    time objective (how long a restore may take) are set per workload or data class
+    from the impact of data loss and downtime, and recorded per project; data recovery
+    and service recovery are stated separately. The strategy follows the objectives
+    and is never stricter than needed.'
+  - 'Where the objective on data loss is shorter than the interval between base backups,
+    the strategy is point-in-time recovery: base backups plus continuous WAL archiving,
+    with retention and tracked chains, the archive command strict. This is the usual
+    case for the shared system of record (inferred). Data that can be rebuilt (derived
+    caches) is recovered by rebuild or a periodic backup (inferred).'
+  - 'Independence: at least one copy of the base backups and of the WAL archive lies
+    outside the failure and attack domain of production and cannot be reached with
+    production credentials (another account, region or provider, or platform-enforced
+    immutable retention); the threat model and who can delete a copy or shorten its
+    retention are stated; backups are encrypted with restricted rights; no single
+    credential or person can delete every copy or shorten its retention.'
+  - Archiving is tested and monitored before the first base backup. A backup counts
+    only once a restore from it is tested end to end, regularly and automatically,
+    by the procedure of a real recovery, against criteria fixed beforehand (data present,
+    uncorrupted and within the recovery point; restore complete within the recovery
+    time). The restore runs by its own path, independent of the migration tooling,
+    and backup integrity is verified before restore.
   - Logical dumps (with roles dumped separately) only for portability and partial
     copies, never as the recovery plan.
   - Configuration in version control.
@@ -4349,7 +4427,25 @@ nodes:
     \ on a crash, such as rebuildable caches (L223's trade-off made explicit; per-transaction\
     \ scope inferred).\nRejected: logical dumps as the only backup: rejected (L220).\
     \ fsync off: never (L223).\nRealizes: ALLOCATION.RECORD.1 (the system of record\
-    \ survives loss). High availability is deferred (MAINTAIN.7)."
+    \ survives loss). High availability is deferred (MAINTAIN.7).\n\nMD-10: aligned\
+    \ with software-development-philosophy:OPERATION.RECOVERY.1, OPERATION.RECOVERY.3,\
+    \ OPERATION.RECOVERY.4 and ASSURANCE.AVAILABILITY.4 by MD-10. The Decision lines\
+    \ above that make point-in-time recovery the default, place the repository 'on\
+    \ another host' and rehearse restores 'on a schedule' are superseded; the question's\
+    \ earlier gap (objectives have no row) is closed by OPERATION.RECOVERY.1.\nReplaced\
+    \ positions: point-in-time recovery as the unconditional default; a repository\
+    \ on another host as the independence rule; restores rehearsed on a schedule.\n\
+    Rejected: point-in-time recovery as an unconditional default: still best for the\
+    \ shared system of record whenever the objective on data loss is shorter than\
+    \ the interval between base backups, the usual case for business data of several\
+    \ consumers (inferred). A repository on another host as the independence rule:\
+    \ sufficient only where that host cannot be reached with production credentials\
+    \ and no single credential can delete every copy. A schedule without automation\
+    \ or fixed criteria: acceptable only where the recovery objectives are loose and\
+    \ the data can be recreated (inferred).\nKept: strict archive command, archiving\
+    \ tested before the first base backup, logical dumps for portability only, configuration\
+    \ in version control, fsync and synchronous_commit rules. High availability stays\
+    \ deferred (MAINTAIN.7)."
   impl_pointers:
   - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA.MAINTAIN.5
   - build/research/01_data_tier/result.md::DATA-C46
@@ -4371,17 +4467,31 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-DATA.MAINTAIN.6
   name: Personal Data Erasure
-  intent: 'How personal data is erased or anonymized on request. Deferred: out of
-    scope for this guideline, recorded only.'
-  epistemic_state: 'deferred: scope out of round 2, recorded only, not judged; personal-data
+  intent: How personal data is erased or anonymized on request. The principle (deletion
+    decided per entity from the reason the data is kept, an inventory of copies, erased
+    data in a backup put beyond use) is owned by software-development-philosophy:TRANSVERSE.PRIVACY.3;
+    this node stays deferred for the web-specific realization, which is not researched
+    or judged.
+  epistemic_state: 'deferred: web-specific realization not researched or judged; the
+    principle is decided in software-development-philosophy (MD-10); personal-data
     erasure has one maintainer-doctrine paragraph (L526) as input'
   design_notes: 'Judge record: not judged (deferred node). L526 (maintainer doctrine,
     a one-paragraph sketch: a timestamp marks the forgotten subject; a background
     job anonymizes identifying fields and keeps the row for audit) is recorded as
     input. Dependency noted by MAINTAIN.2 and MAINTAIN.3: erasure must reach soft-deleted
-    rows, archives and history rows.'
+    rows, archives and history rows.
+
+
+    MD-10: the principle is owned by software-development-philosophy:TRANSVERSE.PRIVACY.3;
+    the inter link records that this node depends on it. The node adds nothing to
+    the principle and remains deferred for the web realization. It interacts with
+    the deletion default of MAINTAIN.2 (MD-04), which MD-10 leaves unchanged.'
   impl_pointers:
   - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA.MAINTAIN.6
   - build/research/15_maintainer_doctrine/result.md::MAINT-C23
@@ -4398,15 +4508,31 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-DATA.MAINTAIN.7
   name: High Availability and Replication
-  intent: 'How the database survives the loss of its primary. Deferred: out of scope
-    for this guideline, recorded only.'
-  epistemic_state: 'deferred: scope out of round 2, recorded only, not judged; no
-    ledger row covers it'
+  intent: How the database survives the loss of its primary. The principle (recovery
+    strategy chosen per tier from the objectives, failover and failback, tolerating
+    a degraded dependency) is owned by software-development-philosophy:OPERATION.RECOVERY.4
+    and software-development-philosophy:ASSURANCE.AVAILABILITY.1; this node stays
+    deferred for the web-specific realization (replication on Postgres), which is
+    not researched or judged.
+  epistemic_state: 'deferred: web-specific realization not researched or judged; the
+    principle is decided in software-development-philosophy (MD-10); no ledger row
+    covers it'
   design_notes: 'Judge record: not judged (deferred node). No ledger row; related
     to ALLOCATION.FORCES.5. Dependency noted: reports on replicas (CONCURRENCY.1)
-    and UNLOGGED caches (DERIVE.2).'
+    and UNLOGGED caches (DERIVE.2).
+
+
+    MD-10: the principle is owned by software-development-philosophy:OPERATION.RECOVERY.4
+    and software-development-philosophy:ASSURANCE.AVAILABILITY.1; the inter links
+    record that this node depends on them. The node adds nothing to the principle
+    and remains deferred for the Postgres realization. Backup and recovery are decided
+    in MAINTAIN.5.'
   impl_pointers:
   - build/distill/03_judge/J6_pig_data/records.md::PIG-WEB.DATA.MAINTAIN.7
   history:
@@ -4422,6 +4548,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-DATA.DERIVE.1
   name: Denormalization and Sync
   intent: A denormalized copy exists only when computing on read is measured too costly,
@@ -5657,18 +5787,29 @@ nodes:
 - uid: PIG-WEB-LOGIC.SECURE.7
   name: Server-Side Fetch
   intent: 'Every server-side fetch of a client- or agent-named URL goes through one
-    fetch helper that refuses private, loopback and link-local addresses, checks the
-    address actually connected to, validates every redirect hop the same way, so a
-    client cannot make the server reach internal services or metadata endpoints. Where
-    the hosting can enforce outbound rules, a network guard backs the helper: an egress
-    proxy with direct egress blocked, or rules that deny the application those ranges.'
-  epistemic_state: 'known | unvalidated: connect-time address check inferred; the
-    network guard''s ''required when'' condition inferred'
+    fetch helper that fetches only destinations it allows: where the set of hosts
+    is known the host is matched against an allowlist, and where users may name any
+    public host the helper refuses private, loopback and link-local addresses instead;
+    in both cases it validates the resolved addresses, connects only to the validated
+    address and re-checks every redirect hop, so a client cannot make the server reach
+    internal services or metadata endpoints. Where the hosting can enforce outbound
+    rules, a network guard backs the helper: an egress proxy with direct egress blocked,
+    or rules that deny the application those ranges.'
+  epistemic_state: 'known: MD-10 | unvalidated: connect-time address check inferred;
+    the network guard''s ''required when'' condition inferred; the examples of known
+    and open destination sets inferred'
   constraints:
   - One fetch helper for every fetch of a client- or agent-named URL.
-  - Refuse private, loopback and link-local ranges, checking the address actually
-    connected to rather than the hostname.
-  - Validate every redirect hop the same way.
+  - 'Destination rule where the set of destinations is known (the provider and partner
+    hosts a feature calls): the host is matched against an allowlist and the resolved
+    addresses are validated against the permitted networks.'
+  - 'Destination rule where users may name any public host (link previews, webhooks
+    registered by users, a client''s metadata document; examples inferred): no allowlist
+    can exist, so the helper refuses private, loopback, link-local and metadata-endpoint
+    addresses instead.'
+  - In both cases the helper connects only to the validated address and checks the
+    address actually connected to rather than the hostname.
+  - Re-check every redirect target the same way, hop by hop.
   - 'Network guard, preferred: where the hosting can enforce outbound rules, fetches
     leave through an egress proxy with direct egress blocked, or outbound rules deny
     the application''s processes the private, loopback, link-local and metadata ranges.
@@ -5677,7 +5818,8 @@ nodes:
     rules, the helper is the guard.'
   - Run with a timeout and a size cap, and in a worker when the response does not
     need the result.
-  - 'Forbidden: fetching without range checks.'
+  - 'Forbidden: fetching without a destination rule (an allowlist, or the range refusal
+    where users may name any public host).'
   design_notes: 'Positions: one. P1 any server-side fetch of an agent- or client-supplied
     URL blocks private, loopback and link-local ranges, validates each redirect hop
     and preferably goes through an egress proxy (L662).
@@ -5710,7 +5852,22 @@ nodes:
     egress is blocked; it is required only where an internal service or an unprotected
     metadata endpoint is reachable (inferred). Rejected: a proxy required for every
     deployment: wins when the server''s network holds internal services or a token-less
-    metadata endpoint. Fetching without range checks: never.'
+    metadata endpoint. Fetching without range checks: never.
+
+
+    MD-10: aligned with software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3
+    by MD-10. The Decision and Rejected lines above that apply one range refusal to
+    every fetch are superseded.
+
+    Replaced position: one helper refusing private, loopback and link-local ranges
+    for every fetch, every other host allowed.
+
+    Rejected: range refusal alone where the destinations are known: it is the best,
+    and the only possible, rule where users may name any public host (no allowlist
+    can be written); where the set of hosts is known an allowlist is the rule.
+
+    Kept: the connect-time address check, the redirect re-check, the network guard
+    and its ''required when'' condition, the timeout and size cap.'
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.SECURE.7
   - build/research/19_agent_users/result.md::AGENT-C37
@@ -5726,6 +5883,10 @@ nodes:
     date: 2026-10-13T15:54
     note: 'MD-09 corrections (re-audit under MD-08): client-named fetch guard, agent
       token binding, MFA by privilege, deferral threshold, paging by surface'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-LOGIC.ENFORCE.1
   name: Use-Case Layer
   intent: 'Application operations are defined once in a use-case layer that every
@@ -6417,7 +6578,8 @@ nodes:
   name: Resilience
   intent: Every outbound call has a timeout and is retried at exactly one layer with
     bounded, backed-off, jittered retries and only when idempotent or keyed; a circuit
-    breaker guards each external dependency called from the request path.
+    breaker, with its state changes logged, guards a dependency called from the request
+    path only where it fails slowly or is shared by many callers.
   epistemic_state: known
   constraints:
   - Every outbound call has a timeout shorter than its caller's remaining deadline.
@@ -6427,7 +6589,8 @@ nodes:
     request''s deadline, at most three attempts and a 10% retry budget per client;
     for deferred work the job runner is the one retrying layer, with a failed state
     that monitoring shows; HTTP client libraries do not retry beneath either layer.'
-  - A circuit breaker per external dependency called from the request path; business
+  - A circuit breaker, its state changes logged, only for an external dependency called
+    from the request path that fails slowly or is shared by many callers; business
     errors are handled as business errors.
   - Foreign mutations carry keys and recovery points; database retries follow ENFORCE.2.
   - 'Forbidden: unbounded or immediate retries; retries at several layers; retrying
@@ -6459,7 +6622,16 @@ nodes:
     \ failure, unknown commit) follow ENFORCE.2.\n\nRejected: unbounded or immediate\
     \ retries: never (P1). Retries at several layers: never (P2). Retrying a non-idempotent\
     \ call without a key: never (P1).\n\nRealizes: no skeleton link; follows ALLOCATION.ACT.2\
-    \ and GUARD.6."
+    \ and GUARD.6.\n\nMD-10: aligned with software-development-philosophy:ASSURANCE.AVAILABILITY.2\
+    \ by MD-10. Decision item 4 above (a breaker per external dependency) is superseded.\n\
+    Replaced position: a circuit breaker on every external dependency called from\
+    \ the request path (P3 as adopted).\nRejected: a breaker on every external dependency:\
+    \ still best wherever a failing dependency can exhaust workers or connections\
+    \ despite its timeout, that is a dependency that fails slowly or is shared by\
+    \ many callers (inferred: with synchronous workers a slow dependency holds a worker\
+    \ until its timeout, TOPOLOGY.2). Elsewhere timeouts and the single retry layer\
+    \ bound the damage.\nKept: timeouts, one retry layer, retry budget, idempotency\
+    \ keys, recovery points."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.PROCESS.3
   - build/research/02_app_tier/result.md::APP-C43
@@ -6475,6 +6647,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-LOGIC.PROCESS.4
   name: File Upload Path
   intent: File bytes go directly from the browser to object storage under a constrained
@@ -7254,30 +7430,40 @@ nodes:
       (PIG-WEB.AREA) so they resolve'
 - uid: PIG-WEB-LOGIC.EXPOSE.7
   name: API Evolution
-  intent: 'The API evolves additively: the JSON interface is served under `/v1` from
-    the start and its major version does not change while every change is compatible,
-    CI fails on drift between description and implementation and on a breaking diff
-    not released as a new version, and an unavoidable break ships as `/v2` beside
-    `/v1` through a published window announced with `Deprecation` and `Sunset`.'
-  epistemic_state: 'known: MD-02 for the gate (X7: every interface description) |
-    unvalidated: the URL-path major version, v1 from the start, chosen among contested
-    positions; the skew window bound and server-first field rollout (inferred)'
+  intent: 'The API evolves additively: CI fails on drift between description and implementation
+    and on a breaking diff not released as a new version; where consumers are many,
+    external or independently released, as in the default context (pages that outlive
+    a deploy, agent clients), the JSON interface is served under `/v1` from the start
+    and its major version does not change while every change is compatible; an unavoidable
+    break ships as `/v2` beside `/v1` through a published window announced with `Deprecation`
+    and `Sunset`. For few, in-house, reachable consumers released with the API, additive
+    change and a coordinated deploy need no version numbers.'
+  epistemic_state: 'known: MD-02 for the gate (X7: every interface description), MD-10
+    for versioning by consumer reach | unvalidated: the URL-path major version chosen
+    among contested positions; the default context''s consumers counted as independently
+    released (inferred); the skew window bound and server-first field rollout (inferred)'
   constraints:
   - CI fails on drift between the description and the implementation and on a breaking
     diff not released as a new version; contract tests cover behaviour; the written
     list of breaking changes is the diff's policy.
   - 'The gate and the compatibility window cover every interface description consumers
     read: the HTTP description, the function API catalogue and the agent tool surface.'
-  - JSON served under `/v1` from the start; its major version does not change while
-    every change is compatible; no minor version; HTML routes carry no version.
-  - 'An unavoidable break: `/v2` beside `/v1`, both served through a published window,
-    the old one announced with `Deprecation` and `Sunset`, a documentation link and
-    the OpenAPI deprecated flag.'
+  - 'Versioning follows consumer reach. For many, external or independently released
+    consumers the JSON is served under `/v1` from the start, its major version does
+    not change while every change is compatible, and there is no minor version. For
+    few, in-house, reachable consumers released together with the API, additive change
+    and a coordinated deploy without version numbers is enough. The default context
+    is the first case: pages open in browser tabs outlive a deploy, and agent clients
+    run code the team does not release (inferred). HTML routes carry no version.'
+  - 'An unavoidable break of a versioned interface: `/v2` beside `/v1`, both served
+    through a published window, the old one announced with `Deprecation` and `Sunset`,
+    a documentation link and the OpenAPI deprecated flag.'
   - Changes stay additive across a window at least as long as a page can live with
     a valid session (the absolute session timeout); clients tolerate unknown fields.
   - 'A new request field ships server first, then client: clients send it only once
     every server instance accepts it.'
-  - 'Forbidden: unversioned JSON paths until the first break.'
+  - 'Forbidden: unversioned JSON paths for consumers the team does not release together
+    with the API.'
   design_notes: "Positions: - P1 check in CI that the implementation conforms to its\
     \ OpenAPI description; design inside what OpenAPI can express (L273).\n  - P2\
     \ write down what counts as breaking: removing or renaming, a new required request\
@@ -7331,7 +7517,20 @@ nodes:
     \ it (P5; snippets only).\n  - Unversioned JSON paths until the first break: rejected,\
     \ because they would leave unversioned paths beside `/v2` (review m5); \"no version\"\
     \ stays acceptable for HTML routes.\n\nRealizes: no skeleton link; follows ALLOCATION.RECORD.3\
-    \ and PIG-WEB-ALLOCATION.TYPE_CHAIN under MD-02 (proposed link to TYPE_CHAIN)."
+    \ and PIG-WEB-ALLOCATION.TYPE_CHAIN under MD-02 (proposed link to TYPE_CHAIN).\n\
+    \nMD-10: aligned with software-development-philosophy:ASSURANCE.CONTRACTS.1 (and\
+    \ CHANGE_FLOW.RELEASE.2: a version number promises compatibility only for a declared\
+    \ public interface consumed by others) by MD-10. Decision item 2 above and the\
+    \ rejection of unversioned paths are superseded where they differ.\nReplaced position:\
+    \ `/v1` from the start for every JSON interface, unversioned JSON paths forbidden\
+    \ until the first break.\nRejected: version numbers whatever the consumers: still\
+    \ best where consumers are many, external or independently released, as in the\
+    \ default context (pages open in tabs outlive a deploy, agent clients are not\
+    \ released by the team). Unversioned JSON with additive change and a coordinated\
+    \ deploy: acceptable for few, in-house, reachable consumers that deploy with the\
+    \ API; not the default context. The earlier rejection (unversioned paths would\
+    \ sit beside `/v2`) applies only to an interface that is versioned.\nKept: the\
+    \ MD-02 gate, the skew window, server-first field rollout, the deprecation signals."
   impl_pointers:
   - build/distill/03_judge/J7_pig_logic/records.md::PIG-WEB.LOGIC.EXPOSE.7
   - build/research/03_contract/result.md::API-C13
@@ -7351,6 +7550,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-INTERACTION.VISUALIZE.1
   name: Rendering Technique
   intent: Pages whose content depends on the request are rendered per request by Python,
@@ -8614,9 +8817,10 @@ nodes:
     URL is single-use, short-lived and bound to the client by PKCE; no session token,
     bearer token or long-lived credential ever travels in a URL (web-app-philosophy:INTERACTION.ENVIRONMENT.6;
     PKCE binding inferred as the condition).'
-  - 'Fetching a client''s metadata document is a server-side fetch of a client-named
-    URL: private, loopback and link-local ranges are blocked and every redirect hop
-    validated.'
+  - Fetching a client's metadata document is a server-side fetch of a client-named
+    URL through the fetch helper of PIG-WEB-LOGIC.SECURE.7; any public host may be
+    named, so private, loopback and link-local ranges are refused and every redirect
+    hop validated.
   design_notes: 'Decides: how agent clients discover the authorization server and
     register.
 
@@ -8665,6 +8869,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-INTERACTION.AGENT.3
   name: Identity and Delegation
   intent: An agent has its own identity and acts for a user, with tokens carrying
@@ -9083,10 +9291,13 @@ nodes:
   name: Security Requirement Catalogue
   intent: 'ASVS 5.0 is the catalogue of verifiable security requirements, cited by
     versioned id, at a verification level recorded per project by risk: Level 2 by
-    default, Level 3 for critical data, never Level 1. A catalogue without a recorded
-    level cannot be verified, and the OWASP Top 10 stays an awareness map only.'
-  epistemic_state: 'known: MD-05 | gap: ASVS chapter list not read (L304''s level
-    part now grounded)'
+    default, Level 3 for critical data, never Level 1. The level measures activity
+    and coverage, not outcomes, so it is paired with outcome measures and never reported
+    as proof that the system is safer. A catalogue without a recorded level cannot
+    be verified, and the OWASP Top 10 stays an awareness map only.'
+  epistemic_state: 'known: MD-05, MD-10 | gap: ASVS chapter list not read (L304''s
+    level part now grounded); the outcome measures are chosen per project, none is
+    given here'
   constraints:
   - ASVS 5.0 is the catalogue. Requirements are cited by their versioned id in this
     guideline's traces and in the project's tests and reviews.
@@ -9097,6 +9308,11 @@ nodes:
     Level 3 when a breach would be critical (payments, health, safety; the source''s
     "highest levels of security", the examples inferred). Level 1 is never the default,
     consistent with the source''s "starting point".'
+  - 'The level measures activity and coverage, not security outcomes: it is recorded
+    beside outcome measures chosen per project (for example open findings by severity
+    and age, time to fix a vulnerability, incidents and their causes; examples inferred,
+    no target values are given) and is never reported as proof that the system is
+    safer.'
   - 'Each requirement is verified at the tier the placements name. Access control
     is checked where GUARD.3 puts it: writer functions for per-user write rules, the
     backend for product policy and identity, Postgres roles per consumer (MD-01, MD-03),
@@ -9123,7 +9339,12 @@ nodes:
     \ decision); rests on GUARD.3, MD-01, MD-03.\nReview fixes: m1 (Level 2 default\
     \ grounded in the ASVS 5.0 text; L304's level part moved from open to grounded;\
     \ \"recorded per project by risk\" kept); m7 and X1 (one notation for the pending\
-    \ clause; default, fallback and consequence stated)."
+    \ clause; default, fallback and consequence stated).\n\nMD-10: aligned with software-development-philosophy:TRANSVERSE.SECURITY.2\
+    \ by MD-10 (K12).\nReplaced position: the recorded level alone as the verifiability\
+    \ claim.\nRejected: the level alone: acceptable as the reporting form where a\
+    \ contract or regulation demands the level as such; it is then reported as coverage,\
+    \ not as an outcome (inferred).\nKept: ASVS 5.0 as catalogue, Level 2 by default,\
+    \ Level 3 for critical data, never Level 1, requirements cited by id."
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.SECURITY.1
   - build/research/05_identity_security/result.md::SEC-C60
@@ -9152,6 +9373,10 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.SECURITY.2
   name: Transport Security
   intent: TLS terminates at the single reverse proxy, with a permanent HTTP redirect,
@@ -9308,14 +9533,17 @@ nodes:
   name: Secrets
   intent: 'A managed store is the authority for every secret, with least privilege
     per service and per database consumer role, automated rotation and audited access;
-    secrets reach the process at start by file or a non-shared environment. The hosting
-    model is a per-project choice (MD-06): on self-managed hosts without an orchestrator,
+    secrets reach the process by runtime injection, as a mounted file readable only
+    by the service account or through the store''s own interface, and an environment
+    variable is an exception with its channel and reason recorded. The hosting model
+    is a per-project choice (MD-06): on self-managed hosts without an orchestrator,
     one acceptable route, the store is a technology to add and until then a file outside
-    source control readable only by the service account is in force; on an orchestrated
-    platform its secret store is the managed store.'
-  epistemic_state: 'known: MD-06 | conflict: L350 contested (environment variables
-    against a managed store), reconciled by authority and delivery | unvalidated:
-    the reconciliation; credentials per consumer role'
+    source control readable only by the service account is the recorded exception;
+    on an orchestrated platform its secret store is the managed store.'
+  epistemic_state: 'known: MD-06, MD-10 | conflict: L350 contested (environment variables
+    against a managed store), settled by MD-10 for the store | unvalidated: credentials
+    per consumer role; the file fallback as the recorded exception on self-managed
+    hosting without a store'
   constraints:
   - 'Every secret is held in one managed store: the platform''s secret store, or a
     secrets manager. Access is granted per service and per consumer role, least privilege,
@@ -9323,10 +9551,16 @@ nodes:
   - 'Each database consumer role of MD-03 has its own credentials: each backend, the
     reporting role, the operator role and the owner role. They are rotated automatically;
     short-lived dynamic credentials are preferred where the store issues them.'
-  - 'Delivery: the secret reaches the process at start, as a file readable only by
-    the service account or as an environment variable. The environment is acceptable
-    when no other process can read it and the framework never dumps it (debug off).
-    The delivery rule is reconciled between the two positions (inferred).'
+  - 'Delivery: the secret reaches the process at start by runtime injection from the
+    store, as a mounted file readable only by the service account or through the store''s
+    own interface; it is never inside the artifact or the repository. An environment
+    variable is an exception, allowed only where the platform offers neither channel
+    or where the process environment is shown not to leak (no other process can read
+    it, the framework never dumps it, debug off); the channel and the reason are recorded
+    as an ADR.'
+  - Without a store on self-managed hosting (MD-06), a file outside source control
+    readable only by the service account is the recorded exception, rotated by a scheduled
+    task, until the store is added.
   - The framework signing secret is held like any other, never committed, and rotated.
   - 'CI/CD: least-privilege service accounts, secrets scoped per environment, none
     in pipeline output.'
@@ -9358,7 +9592,20 @@ nodes:
     \ role per consumer, MD-03).\nReview fixes: m6 (the default under the assumed\
     \ hosting stated plainly: the store is a technology to add, the file fallback\
     \ in force until then; folded into Q1).\n\nMaintainer answer MD-06 applies: hosting\
-    \ is a per-project choice; the file fallback is the self-managed route."
+    \ is a per-project choice; the file fallback is the self-managed route.\n\nMD-10:\
+    \ aligned with software-development-philosophy:TRANSVERSE.CONFIG.2 and software-development-philosophy:TRANSVERSE.CONFIG.4\
+    \ by MD-10. The Decision and Rejected lines above are superseded where they differ.\n\
+    Replaced position: file and environment variable as equal delivery channels, reconciled\
+    \ by authority and delivery (inferred). Decision now: the store is authority and\
+    \ primary source; delivery is runtime injection as a mounted file or through the\
+    \ store's interface; the environment variable is an exception with channel and\
+    \ reason recorded.\nRejected: the environment variable as an equal channel: acceptable,\
+    \ and then the simplest and most portable choice (P1), where the platform offers\
+    \ neither a mounted file nor a store interface, or where the process environment\
+    \ is shown not to leak; the exception is recorded as an ADR.\nKept as stack realization:\
+    \ the file outside source control, readable only by the service account, is what\
+    \ the exception looks like on self-managed hosting without a store (MD-06); the\
+    \ software node does not cover a host without a store."
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.SECURITY.4
   - build/research/05_identity_security/result.md::SEC-C51
@@ -9396,27 +9643,33 @@ nodes:
     date: 2026-10-13T14:13
     note: 'maintainer answers MD-04 to MD-07: deletion, read visibility, hosting and
       SameSite decided, open clauses closed'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.SECURITY.5
   name: Supply Chain
   intent: Every artifact the system runs has hash-pinned dependencies, an SBOM scanned
-    continuously, components from official sources, and signed build provenance at
-    SLSA Build L3 verified before deploy. Build L2 is acceptable only when the build
-    platform cannot isolate runs or keep the signing key from the build steps.
-  epistemic_state: 'known | unvalidated: extensions and JavaScript lockfile practice
-    by extension of L354'
+    continuously, components from official sources, and signed build provenance from
+    a hosted build platform, verified before deploy. The build is hardened and isolated
+    (SLSA Build L3) where insider or credential-compromise risk matters or the software
+    is distributed to others; otherwise Build L2 is the level, and the level is recorded
+    per project.
+  epistemic_state: 'known: MD-10 | unvalidated: extensions and JavaScript lockfile
+    practice by extension of L354; which projects of the default context meet the
+    risk condition for Build L3 (decided per project)'
   constraints:
   - 'Python: lockfile with hashes, --require-hashes over the whole tree. JavaScript
     build dependencies: lockfile, installed from it exactly (per-ecosystem flag inferred).
     Container base images pinned.'
   - SBOM per release artifact, scanned continuously, not only at build. Updates go
     through the staged pipeline, then a staged or canary rollout (OPERABILITY.6).
-  - 'Provenance: signed provenance at SLSA Build L3, verified before deploy: a hardened
-    build platform where runs cannot influence one another and the signing secrets
-    are out of the build steps'' reach. The cited default sets Build L2 as the floor;
-    its source (the SLSA v1.0 levels page) describes Build L3 as "Intended for: Most
-    software releases", while noting it "usually requires significant changes to existing
-    build platforms". Under the max rule L3 is the target for the node''s purpose,
-    the integrity of what runs.'
+  - 'Provenance: signed provenance from a hosted build platform, verified before deploy;
+    SLSA Build L2 is the floor. A hardened, isolated build (Build L3: runs cannot
+    influence one another and the signing secrets are out of the build steps'' reach)
+    where insider or credential-compromise risk matters or the software is distributed
+    to others. The level is recorded per project as an ADR, with the level reached
+    and the gap to the stated floor where below it.'
   - 'Database extensions and the Postgres packages come from official sources at a
     pinned version (inferred: Postgres hosts the queue scheduler and other backing
     roles, POSTGRES_FIRST and JOB_HOST).'
@@ -9436,7 +9689,16 @@ nodes:
     \ review); rests on OPERABILITY.3 of J5 (one immutable artifact).\nReview fixes:\
     \ M5 (Build L3 as the target, L2 under its condition; the \"levels above L2 not\
     \ weighed\" gap removed: the evidence is in the cited source); M4 (A08 pipeline\
-    \ owner named)."
+    \ owner named).\n\nMD-10: aligned with software-development-philosophy:ASSURANCE.ARTIFACT.1\
+    \ by MD-10. The Decision, Rejected and constraint wording above that make Build\
+    \ L3 the default are superseded.\nReplaced position: signed provenance at Build\
+    \ L3 by default (the max rule applied to the cited default, review fix M5), Build\
+    \ L2 only when the platform cannot isolate runs.\nRejected: Build L3 as the default\
+    \ for every project: best, and then required, where insider or credential-compromise\
+    \ risk matters (a platform on which one run could alter another or reach the signing\
+    \ key) or the software is distributed to others; the level is then recorded as\
+    \ an ADR.\nKept: verification before deploy, hash-pinned dependencies, the SBOM\
+    \ and official sources are unchanged."
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.SECURITY.5
   - build/research/05_identity_security/result.md::SEC-C55
@@ -9460,6 +9722,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.CONTRACTS.1
   name: Contract Verification
   intent: 'One verification per seam: the function API gets a provider-side catalogue
@@ -10027,7 +10293,9 @@ nodes:
     the owner role's migrations ship before dependent consumers and stay additive
     across the compatibility window.
   epistemic_state: 'known | conflict: L251 contested, reconciled by kind of value
-    | unvalidated: migration release order across separately deployed consumers'
+    | unvalidated: migration release order across separately deployed consumers |
+    gap: no rollback or fix-forward rule for releases or data changes; principle in
+    software-development-philosophy:CHANGE_FLOW.ROLLBACK (MD-10)'
   constraints:
   - 'Settings: one typed, validated object built at start and injected. With Django,
     the settings module reads it from the environment (framework choice is PIG-WEB-LOGIC.ENFORCE.5''s).'
@@ -10103,13 +10371,29 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.OPERABILITY.7
   name: Incident Response
-  intent: Incident response (how incidents are detected, handled and reviewed) is
-    out of scope for this guideline and is recorded only; no practice is decided.
-  epistemic_state: 'deferred: scope out, recorded only (not researched, not judged)'
+  intent: Incident response (how incidents are declared, handled and reviewed) is
+    owned as a principle by the software development guideline (software-development-philosophy:OPERATION.INCIDENTS,
+    OPERATION.READINESS and OPERATION.RUNBOOKS); this node stays deferred for the
+    web-specific realization, which is not researched or judged, and no web practice
+    is decided here.
+  epistemic_state: 'deferred: web-specific realization not researched or judged; the
+    principle is decided in software-development-philosophy (MD-10)'
   design_notes: 'Deferred in the skeleton: scope out, recorded only. Judge record:
-    not judged. No related placement.'
+    not judged. No related placement.
+
+
+    MD-10: the principle is owned by software-development-philosophy:OPERATION.INCIDENTS,
+    software-development-philosophy:OPERATION.READINESS and software-development-philosophy:OPERATION.RUNBOOKS;
+    the inter links record that this node depends on them. The node adds nothing to
+    the principle and remains deferred for what the stack would add, if anything.
+    It replaces the earlier statement that incident response is out of scope for this
+    guideline.'
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.OPERABILITY.7
   history:
@@ -10120,6 +10404,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.TOPOLOGY.1
   name: Reverse Proxy Edge
   intent: One reverse proxy is the only public entry, buffering requests and responses
@@ -10438,10 +10726,12 @@ nodes:
       SameSite decided, open clauses closed'
 - uid: PIG-WEB-TRANSVERSE.EVOLUTION.1
   name: Deployables
-  intent: Each backend is one deployable, split only on a proven boundary where the
-    single unit is the bottleneck; a split reaches data through the function API and
-    moves no data. No BFF, no micro frontends and no request-time JavaScript server
-    by default; likely future services get a domain schema, not a database.
+  intent: Each backend is one deployable, split only where a named force requires
+    it (independent scaling that process types cannot give, independent release by
+    separate teams, fault isolation that matters, or a different runtime need) on
+    a proven boundary; a split reaches data through the function API and moves no
+    data. No BFF, no micro frontends and no request-time JavaScript server by default;
+    likely future services get a domain schema, not a database.
   epistemic_state: 'known | conflict: L117 (services first) contested, rejected as
     default | unvalidated: future services as domain schemas (MD-03); a split moves
     no data'
@@ -10451,10 +10741,12 @@ nodes:
     The team's own backend is one Python deployable over the shared database; MD-03's
     several backends do not by themselves license splitting it. The schema and function
     API are the database owner's codebase and pipeline (web-app-philosophy:TRANSVERSE.OPERABILITY.3).
-  - A further deployable is split only when size, complexity or the number of teams
-    make the single unit the bottleneck, on a proven boundary. It reaches the data
-    through the function API with its own role (RECORD.2) and never holds a second
-    system of record (RECORD.1).
+  - 'A further deployable is split only when a named force requires it: independent
+    scaling that the process types of one deployable cannot give, independent release
+    by separate teams, fault isolation that matters, or a different runtime need;
+    on a proven boundary, with the distribution premium budgeted and the force stated
+    in the ADR. It reaches the data through the function API with its own role (RECORD.2)
+    and never holds a second system of record (RECORD.1).'
   - Because the data seam is already the function API, such a split moves no data;
     only deploy independence and the distribution premium remain to be weighed (web-app-philosophy:TRANSVERSE.EVOLUTION.3;
     inferred).
@@ -10489,7 +10781,15 @@ nodes:
     Realizes: refines TRANSVERSE.EVOLUTION.3 (J5); rests on RECORD.1, RECORD.2, RULES.4,\
     \ JS_SERVER.\nReview fixes: M3 and X5 (\"one Python backend deployable\" replaced:\
     \ several backends may share the database, each backend one deployable, not split\
-    \ into services without a measured need; a later split moves no data, inferred)."
+    \ into services without a measured need; a later split moves no data, inferred).\n\
+    \nMD-10: aligned with software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1\
+    \ by MD-10, through web-app-philosophy:TRANSVERSE.EVOLUTION.3. The condition 'size,\
+    \ complexity or the number of teams make the single unit the bottleneck' is superseded\
+    \ by the named forces.\nReplaced position: a split when size, complexity or the\
+    \ number of teams make the single unit the bottleneck.\nRejected: that bottleneck\
+    \ test as the only reason: still best as the trigger to look for a split, since\
+    \ a named force only matters once the single unit is the constraint; the force\
+    \ must then be named (inferred)."
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.EVOLUTION.1
   - build/research/07_architecture_styles/result.md::ARCH-C05
@@ -10522,6 +10822,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 - uid: PIG-WEB-TRANSVERSE.EVOLUTION.2
   name: Modular Monolith
   intent: 'The backend is cut by business concept with public module interfaces, and
@@ -10605,9 +10909,11 @@ nodes:
   name: Decision Records
   intent: Every architecturally significant decision is a short, numbered Markdown
     ADR in the repository it governs, with context, decision, status, consequences,
-    alternatives with confidence and the reversing condition; accepted ADRs are superseded,
-    never edited. Each decision the guideline leaves to the project (ASVS level, HSTS
-    preload, secret delivery, replication, CDN) gets one.
+    alternatives with confidence and the reversing condition; an accepted ADR is not
+    rewritten to change its decision but superseded by a new one, and only corrections
+    that do not change the decision edit it. Each decision the guideline leaves to
+    the project (ASVS level, HSTS preload, secret delivery, build level, replication,
+    CDN) gets one.
   epistemic_state: known
   constraints:
   - One ADR per significant decision, one to two pages, in the repository it governs,
@@ -10615,14 +10921,19 @@ nodes:
     live with the database's codebase (inferred).
   - 'Fields: context with forces, decision, status, consequences, the alternatives
     with pros and cons, the confidence, and the condition that would reverse it (web-app-philosophy:TRANSVERSE.EVOLUTION.1).'
-  - Accepted ADRs are never edited, only superseded.
+  - 'An accepted ADR is not rewritten to change its decision: a changed decision is
+    a new ADR that supersedes the old one, which stays in place marked superseded
+    with a link to its successor. Only corrections that do not change the decision
+    (a typo, a broken link) edit an accepted ADR.'
   - 'The guideline leaves these decisions to each project, and each gets an ADR: the
     interface origin direction (MD-02); row-level security under MD-01''s three conditions;
-    the ASVS level (SECURITY.1); secret delivery (SECURITY.4); process replication
-    (TOPOLOGY.3); the CDN (TOPOLOGY.4); HSTS preload, under its condition (SECURITY.2);
-    adding a managed secret store under the assumed hosting (SECURITY.4); a build
-    platform held at SLSA Build L2 rather than L3 (SECURITY.5); every move of a Postgres-first
-    role past its measured limit.'
+    the ASVS level and its outcome measures (SECURITY.1); each environment variable
+    used for a secret, with its channel and reason, and the secret delivery in general
+    (SECURITY.4); process replication (TOPOLOGY.3); the CDN (TOPOLOGY.4); HSTS preload,
+    under its condition (SECURITY.2); adding a managed secret store under the assumed
+    hosting (SECURITY.4); the build level, SLSA Build L2 or L3 by risk (SECURITY.5);
+    every move of a Postgres-first role past its measured limit, with what it replaces
+    and who retires it; every split of a deployable, with its named force (EVOLUTION.1).'
   design_notes: 'Rows: L129, L130, L131, L132, L133.
 
     Positions: (consensus, one majority): one short ADR per architecturally significant
@@ -10642,7 +10953,26 @@ nodes:
 
     Review fixes: M6 (HSTS preload added to the per-project ADRs); with M5 and m6,
     the L2 build-level exception and the secret-store addition, which those fixes
-    make per-project decisions.'
+    make per-project decisions.
+
+
+    MD-10: aligned with software-development-philosophy:EVOLUTION.DECISIONS.4 by MD-10
+    (K11). The Rejected line above ''editing an accepted record: never'' and the constraint
+    ''never edited'' are superseded.
+
+    Replaced position: accepted ADRs are never edited, only superseded.
+
+    Rejected: the absolute never-edit rule: still best where the ADR set must be a
+    tamper-evident record (an audit or regulatory trail), where even a correction
+    goes in a new record (inferred).
+
+    Kept: a changed decision is a new record, the old one stays marked superseded
+    with a link to its successor.
+
+    The per-project list now also covers the build level (K4), each environment variable
+    used for a secret (K3), the outcome measures beside the ASVS level (K12), the
+    retirement owner of a replaced technology (K10) and the named force of a split
+    (K9).'
   impl_pointers:
   - build/distill/03_judge/J9_pig_transverse/records.md::PIG-WEB.TRANSVERSE.EVOLUTION.3
   - build/research/07_architecture_styles/result.md::ARCH-C35
@@ -10667,6 +10997,10 @@ nodes:
     date: 2026-10-13T09:46
     note: 'critic fix M4: judge-record pointers use the record headings'' notation
       (PIG-WEB.AREA) so they resolve'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K3-K12, point deferred S1-S3 to the software guideline, record
+      G1 gap'
 treearcs:
 - parent: ROOT
   child: PIG-WEB-ALLOCATION
@@ -12013,13 +12347,15 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.7
   dst: web-app-philosophy:LOGIC.SECURE
-  intent: Realizes the rule that server-side fetches cannot reach internal addresses.
+  intent: Realizes the rule that server-side fetches reach only allowed destinations
+    and cannot reach internal addresses.
   uid: pig-web-defaults:PIG-WEB-LOGIC.SECURE.7_web-app-philosophy:LOGIC.SECURE
   shape:
     type: refines
 - src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
   dst: web-app-philosophy:DATA.MAINTAIN
-  intent: Realizes recovery to a chosen moment, proven by rehearsed restores.
+  intent: Realizes recovery from per-workload objectives, with a copy out of reach
+    of production credentials, proven by automated restore tests.
   uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5_web-app-philosophy:DATA.MAINTAIN
   shape:
     type: refines
@@ -12034,7 +12370,7 @@ inter_intentlinks:
   dst: software-development-philosophy:TRANSVERSE.SECURITY.1
   intent: The requirements standard is ASVS 5.0, cited by versioned id, at a level
     recorded per project by risk (Level 2 by default, Level 3 for critical data, never
-    Level 1).
+    Level 1) and paired with outcome measures.
   uid: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.1_software-development-philosophy:TRANSVERSE.SECURITY.1
   shape:
     type: refines
@@ -12049,9 +12385,10 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.4
   dst: software-development-philosophy:TRANSVERSE.CONFIG.2
-  intent: A secret reaches the process at start as a file readable only by the service
-    account or as an environment variable that no other process can read and the framework
-    never dumps.
+  intent: A secret reaches the process at start by runtime injection, as a mounted
+    file readable only by the service account or through the store's interface; an
+    environment variable is a recorded exception where the platform offers neither
+    or the process environment is shown not to leak.
   uid: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.4_software-development-philosophy:TRANSVERSE.CONFIG.2
   shape:
     type: refines
@@ -12079,9 +12416,10 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.5
   dst: software-development-philosophy:ASSURANCE.ARTIFACT.1
-  intent: Signed provenance at SLSA Build L3 is verified before deploy; Build L2 is
-    acceptable only when the build platform cannot isolate runs or keep the signing
-    key from the build steps.
+  intent: Signed provenance from a hosted build platform is verified before deploy,
+    at SLSA Build L2 as the floor and Build L3 where insider or credential-compromise
+    risk matters or the software is distributed to others; the level is recorded per
+    project.
   uid: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.5_software-development-philosophy:ASSURANCE.ARTIFACT.1
   shape:
     type: refines
@@ -12192,7 +12530,9 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.3
   dst: software-development-philosophy:EVOLUTION.DECISIONS.4
-  intent: Accepted ADRs are never edited, only superseded.
+  intent: An accepted ADR is not rewritten to change its decision, only superseded
+    by a new ADR that it links to; corrections that do not change the decision (a
+    typo, a broken link) edit it.
   uid: pig-web-defaults:PIG-WEB-TRANSVERSE.EVOLUTION.3_software-development-philosophy:EVOLUTION.DECISIONS.4
   shape:
     type: refines
@@ -12239,8 +12579,9 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
   dst: software-development-philosophy:OPERATION.RECOVERY.2
-  intent: 'Point-in-time recovery by default: base backups plus continuous WAL archiving
-    to a repository on another host with retention and tracked chains; logical dumps
+  intent: 'Point-in-time copies are kept: where the objective on data loss is shorter
+    than the interval between base backups, base backups plus continuous WAL archiving
+    give recovery to a chosen moment, with retention and tracked chains; logical dumps
     serve portability only, fsync is never off and synchronous_commit is relaxed only
     for data that may be lost on a crash.'
   uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5_software-development-philosophy:OPERATION.RECOVERY.2
@@ -12248,8 +12589,9 @@ inter_intentlinks:
     type: refines
 - src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
   dst: software-development-philosophy:OPERATION.RECOVERY.3
-  intent: The WAL and base-backup repository lies on another host; restores are rehearsed
-    on a schedule.
+  intent: At least one copy of the base backups and WAL archive lies outside the failure
+    and attack domain of production and cannot be reached with production credentials;
+    no single credential or person can delete every copy or shorten its retention.
   uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5_software-development-philosophy:OPERATION.RECOVERY.3
   shape:
     type: refines
@@ -12265,7 +12607,8 @@ inter_intentlinks:
   intent: Every outbound call has a timeout shorter than its caller's remaining deadline,
     retries run at exactly one layer (at most three attempts and a 10% retry budget
     per client in the request path) only for idempotent or keyed calls, and a circuit
-    breaker guards each external dependency called from the request path.
+    breaker with logged state changes guards a request-path dependency only where
+    it fails slowly or is shared by many callers.
   uid: pig-web-defaults:PIG-WEB-LOGIC.PROCESS.3_software-development-philosophy:ASSURANCE.AVAILABILITY.2
   shape:
     type: refines
@@ -12296,9 +12639,10 @@ inter_intentlinks:
 - src: pig-web-defaults:PIG-WEB-LOGIC.SECURE.7
   dst: software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3
   intent: Every server-side fetch of a client- or agent-named URL goes through one
-    helper that refuses private, loopback and link-local addresses, checks the address
-    actually connected to and validates every redirect hop; an egress proxy or outbound
-    rules back it where the hosting can enforce them.
+    helper that matches the host against an allowlist where the hosts are known and
+    refuses private, loopback and link-local addresses where users may name any public
+    host, connects only to the validated address and re-checks every redirect hop;
+    an egress proxy or outbound rules back it where the hosting can enforce them.
   uid: pig-web-defaults:PIG-WEB-LOGIC.SECURE.7_software-development-philosophy:CONSTRUCTION.DATA_NOT_CODE.3
   shape:
     type: refines
@@ -12309,5 +12653,76 @@ inter_intentlinks:
     server-rendered forms, synchronous handlers, password hashing); FastAPI wins when
     the backend serves only programs and agents.
   uid: pig-web-defaults:PIG-WEB-LOGIC.ENFORCE.5_software-development-philosophy:OWNERSHIP.SELECTION.1
+  shape:
+    type: refines
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7
+  dst: software-development-philosophy:OPERATION.INCIDENTS
+  intent: The web realization of incident response is deferred; it depends on the
+    incident rules (declaration on written conditions, named roles, blameless review)
+    that the software guideline owns.
+  uid: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7_software-development-philosophy:OPERATION.INCIDENTS
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7
+  dst: software-development-philosophy:OPERATION.READINESS
+  intent: The web realization of incident response is deferred; it depends on the
+    operational readiness review that the software guideline owns.
+  uid: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7_software-development-philosophy:OPERATION.READINESS
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7
+  dst: software-development-philosophy:OPERATION.RUNBOOKS
+  intent: The web realization of incident response is deferred; it depends on the
+    owned, validated runbooks that the software guideline owns.
+  uid: pig-web-defaults:PIG-WEB-TRANSVERSE.OPERABILITY.7_software-development-philosophy:OPERATION.RUNBOOKS
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.6
+  dst: software-development-philosophy:TRANSVERSE.PRIVACY.3
+  intent: The web realization of personal data erasure is deferred; it depends on
+    the erasure and deletion mechanism (deletion decided per entity, an inventory
+    of copies, erased data in a backup put beyond use) that the software guideline
+    owns.
+  uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.6_software-development-philosophy:TRANSVERSE.PRIVACY.3
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.7
+  dst: software-development-philosophy:OPERATION.RECOVERY.4
+  intent: The web realization of high availability and replication is deferred; it
+    depends on the recovery strategy, failover and failback rules that the software
+    guideline owns.
+  uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.7_software-development-philosophy:OPERATION.RECOVERY.4
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.7
+  dst: software-development-philosophy:ASSURANCE.AVAILABILITY.1
+  intent: The web realization of high availability and replication is deferred; it
+    depends on the degraded-mode and overload rules for dependencies that the software
+    guideline owns.
+  uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.7_software-development-philosophy:ASSURANCE.AVAILABILITY.1
+  shape:
+    type: requires
+- src: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5
+  dst: software-development-philosophy:OPERATION.RECOVERY.1
+  intent: Recovery point and recovery time objectives are set per workload or data
+    class from the impact of loss and downtime, and the strategy is never stricter
+    than they need.
+  uid: pig-web-defaults:PIG-WEB-DATA.MAINTAIN.5_software-development-philosophy:OPERATION.RECOVERY.1
+  shape:
+    type: refines
+- src: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.7
+  dst: software-development-philosophy:ASSURANCE.CONTRACTS.1
+  intent: 'Versioning follows consumer reach: the JSON interface is versioned under
+    /v1 for many, external or independently released consumers (open pages and agent
+    clients in the default context), and additive with a coordinated deploy for few
+    in-house consumers.'
+  uid: pig-web-defaults:PIG-WEB-LOGIC.EXPOSE.7_software-development-philosophy:ASSURANCE.CONTRACTS.1
+  shape:
+    type: refines
+- src: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.1
+  dst: software-development-philosophy:TRANSVERSE.SECURITY.2
+  intent: 'The ASVS level measures activity and coverage, not outcomes: it is recorded
+    beside outcome measures and never reported as proof that the system is safer.'
+  uid: pig-web-defaults:PIG-WEB-TRANSVERSE.SECURITY.1_software-development-philosophy:TRANSVERSE.SECURITY.2
   shape:
     type: refines

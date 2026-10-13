@@ -14,7 +14,7 @@ Who does what across database, backends and browsers, decided per responsibility
 1. [Acting Placements](#acting-placements) _(Lines 309-354)_
 1. [Derivation Placements](#derivation-placements) _(Lines 357-388)_
 1. [Presentation Placements](#presentation-placements) _(Lines 391-414)_
-1. [Stack Placements](#stack-placements) _(Lines 417-489)_
+1. [Stack Placements](#stack-placements) _(Lines 417-490)_
 
 ---
 
@@ -413,7 +413,7 @@ Interaction state is placed by lifetime and sharing (the four kinds are inferred
 `ALLOCATION.PRESENT.3`
 
 ## Stack Placements
-<!-- Lines 417-489 -->
+<!-- Lines 417-490 -->
 
 For JavaScript, Python and Postgres; refines the [Overview](#overview). Postgres carries the data, the function API every consumer calls, the per-role grants and the backing roles (queue, schedules, derived caches, sessions, documents) until a measured limit. Python backends own sessions, identity, product-policy authorization, workflow and HTML rendering; browser JavaScript enhances. No JavaScript server tier and no row-level security by default. The tiers are realized in [Postgres Data Tier](stack_defaults_data.md#data-tier-overview), [Python Application Tier](stack_defaults_logic.md#python-tier-overview) with [Backend Security](stack_defaults_logic_security.md#backend-security-overview), [Browser Surface](stack_defaults_interaction.md#browser-surface-overview) with [Agent Surface](stack_defaults_agents.md#agent-surface-overview), and [Transverse Concerns](stack_defaults_transverse.md#transverse-overview).
 
@@ -423,6 +423,7 @@ For JavaScript, Python and Postgres; refines the [Overview](#overview). Postgres
 
 One Postgres carries the job queue, schedules, derived caches, sessions and documents until a measured limit for that role: fewer components, and the backing roles share the data's transaction. Realizes [Caching](#caching) and [Deferred and Scheduled Work](#deferred-and-scheduled-work).
 - Each role names its trigger to leave Postgres (inferred: rests on secondary sources): queue lock contention or backlog age; NOTIFY commit serialisation under write concurrency; cache latency or cache load on the primary.
+- A move out of Postgres is a replacement: the Postgres implementation of that role is retired by plan, with an owner, or the ADR says why it replaces nothing.
 - NOTIFY is a low-rate wake-up, never the message carrier. No second store is written beside Postgres without staging.
 - Acceptable past a measured limit, or where the framework's only production backend is a service (Django's channel layer on Redis): specialised services.
 - Open: the thresholds for queue contention and NOTIFY.

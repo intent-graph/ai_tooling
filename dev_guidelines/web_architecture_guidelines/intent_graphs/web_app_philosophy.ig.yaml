@@ -1042,8 +1042,10 @@ nodes:
     and the function API alike.'
   - 'Conventions evolve forward only: new objects follow the new rule, legacy ones
     are not renamed in bulk.'
-  - Recovery to a chosen moment is the default, and a backup counts only once a restore
-    of it has been rehearsed.
+  - Recovery follows objectives set per workload or data class and is never stricter
+    than needed; at least one backup copy lies out of reach of production credentials;
+    a backup counts only once a restore from it was tested end to end, regularly and
+    automatically, against criteria fixed beforehand.
   design_notes: 'Question: how schema and data evolve without breaking running code,
     and what is the source of truth for structure.
 
@@ -1136,6 +1138,9 @@ nodes:
     date: 2026-10-13T09:37
     note: 'critic fixes M7a,M8,m7,m8: philosophy intentlinks among placements and
       tiers, DATA.INTERFACE links, stale annotations'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: DATA.DERIVE
   name: Derived, Not Stored
   intent: 'Store the minimum and derive the rest: a value that is not stored cannot
@@ -1291,8 +1296,10 @@ nodes:
     by the backend directly; sensitive, complex, high-impact or shared reads, per-user
     visibility rules included, go through database functions that receive the verified
     actor (ALLOCATION.GUARD.3).'
-  - Server-side fetches of client- or agent-named URLs cannot reach private, loopback
-    or link-local addresses.
+  - 'Server-side fetches of client- or agent-named URLs reach only destinations they
+    allow: a host allowlist where the hosts are known, otherwise a refusal of private,
+    loopback and link-local addresses; the connection goes only to the validated address
+    and redirect targets are re-checked.'
   design_notes: 'Decision: the backend is the one gate every caller passes, human
     or agent, and decides nothing on the caller''s word.
 
@@ -1426,6 +1433,9 @@ nodes:
     date: 2026-10-13T15:54
     note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
       enforcement, deferral threshold, paging by surface, threat model per flow'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: LOGIC.ENFORCE
   name: Business Core
   intent: 'One business core per backend, separable from transport and storage, holds
@@ -2284,7 +2294,8 @@ nodes:
   - Assign software and data integrity failures to the delivery pipeline and the parsing
     tier for untrusted serialized input; declarative constraints are not that control.
   - State each property as a verifiable requirement with a traceable id, at a level
-    chosen by risk; the threat list is an awareness map, never the requirement set.
+    chosen by risk and paired with outcome measures (a level measures coverage, not
+    outcomes); the threat list is an awareness map, never the requirement set.
   - 'Never claim a stronger read-visibility guarantee than the rule of ALLOCATION.GUARD.3
     gives: roles that may read the base tables see every row unless their own role
     is restricted.'
@@ -2416,6 +2427,9 @@ nodes:
     date: 2026-10-13T15:54
     note: 'MD-09 corrections (re-audit under MD-08): MFA scope, declarative dependency
       enforcement, deferral threshold, paging by surface, threat model per flow'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: TRANSVERSE.PERFORMANCE
   name: Measured Performance
   intent: Performance is judged on field measurement of real users at the 75th percentile,
@@ -2686,7 +2700,8 @@ nodes:
   - Name, choose from required properties, and record the costly decisions.
   - Grow in small tested increments with fit checked automatically.
   - Never split a backend into services without a measured need.
-  - Adopt a new technology only past a measured limit of an existing one.
+  - Adopt a new technology only past a measured limit of an existing one, as a replacement
+    whose older technology is retired by plan, with an owner.
   - Cut teams by capability, with a cross-schema business function owned by the team
     that owns the workflow and reviewed by the database owner role.
   design_notes: "DECISION:\nthe roll-up of its five children:\n  - the costly decisions\
@@ -2719,6 +2734,9 @@ nodes:
     date: 2026-10-13T10:24
     note: 'render-review fixes 3,4,17: one comment-visibility consequence, recommendation
       stored, owner and reviewer of cross-schema functions named'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: ALLOCATION.FORCES.1
   name: Correctness
   intent: Correctness demands that the deciding tier sees every writer and every fact
@@ -5740,7 +5758,9 @@ nodes:
     are versioned migrations promoted through the same pipeline, and releases are
     small and frequent.
   epistemic_state: 'known | unvalidated: the database''s schema and function API as
-    their own codebase; migrations before code within the release window'
+    their own codebase; migrations before code within the release window | gap: no
+    rollback or fix-forward rule for releases or data changes; principle in software-development-philosophy:CHANGE_FLOW.ROLLBACK
+    (MD-10)'
   constraints:
   - Keep one codebase per application in version control with many deploys.
   - Separate build, release and run; build once, assets included, and promote the
@@ -5793,6 +5813,9 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: TRANSVERSE.EVOLUTION.1
   name: Explicit Decisions
   intent: The decisions that are costly to get wrong are identified early, chosen
@@ -5922,19 +5945,23 @@ nodes:
 - uid: TRANSVERSE.EVOLUTION.3
   name: Deployable Boundaries
   intent: 'One deployable per backend first: several backends may share the database,
-    but a backend is split into services only when a team needs independent releases,
-    the boundary has proven stable and the distribution premium is budgeted. Bounded
-    contexts map to domain schemas in the shared database, and any new deployable
-    reaches data through the function API with its own role, never holding a second
-    system of record.'
-  epistemic_state: 'known | unvalidated: bounded contexts as domain schemas in the
-    shared database; a later split moves no data | conflict: L044 and L116 (separate
-    data per application or service) against MD-03, recorded by J1 and realized here'
+    but a backend is split into services only when a named force requires it (independent
+    scaling, independent release by separate teams, fault isolation that matters,
+    or a different runtime need), the boundary has proven stable and the distribution
+    premium is budgeted. Bounded contexts map to domain schemas in the shared database,
+    and any new deployable reaches data through the function API with its own role,
+    never holding a second system of record.'
+  epistemic_state: 'known: MD-10 for the reasons to split | unvalidated: bounded contexts
+    as domain schemas in the shared database; a later split moves no data | conflict:
+    L044 and L116 (separate data per application or service) against MD-03, recorded
+    by J1 and realized here'
   constraints:
   - Make each backend one deployable, modular by business concept; never split it
     into services without a measured need.
-  - Split off a further deployable only when a team needs independent releases, the
-    boundary has proven stable and the distribution premium is budgeted.
+  - 'Split off a further deployable only when a named force requires it: independent
+    scaling, independent release by separate teams, fault isolation that matters,
+    or a different runtime need. The boundary has proven stable and the distribution
+    premium is budgeted, and the force is stated.'
   - Map bounded contexts to domain schemas in the shared database, each with its own
     functions and roles.
   - Give a new deployable access to data only through the function API with its own
@@ -5983,7 +6010,19 @@ nodes:
     \ to a placement; rests on RECORD.1 and RECORD.2 (MD-03).\n\nREVIEW FIXES:\nM3\
     \ and X5 (\"one backend deployable first\" replaced by: several backends may share\
     \ the database, each backend one deployable, not split into services without a\
-    \ measured need; the lower cost of a later split weighed, inferred)."
+    \ measured need; the lower cost of a later split weighed, inferred).\n\nMD-10:\
+    \ aligned with software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1 by\
+    \ MD-10. The Decision line above that names independent release as the reason\
+    \ to split is superseded.\nReplaced position: a split only when a team needs independent\
+    \ releases (P1 and P3 read as independent deployability alone).\nRejected: independent\
+    \ release as the only reason: still best where scaling, fault isolation and runtime\
+    \ needs are met inside one deployable (process types of one deployable already\
+    \ scale web, worker and long-lived connections separately; inferred), and a split\
+    \ would add distribution cost for no named force.\nKept: proven stable boundary,\
+    \ budgeted distribution premium, domain schemas, function API with its own role,\
+    \ no second system of record. Statements elsewhere that a backend is not split\
+    \ 'without a measured need' stay true: a named force is the need and its benefit\
+    \ is measured."
   impl_pointers:
   - build/distill/03_judge/J5_phil_transverse/records.md::TRANSVERSE.EVOLUTION.3
   - build/research/01_data_tier/result.md::DATA-C01
@@ -6017,10 +6056,14 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: TRANSVERSE.EVOLUTION.4
   name: Few Mature Technologies
   intent: The system adopts few, mature technologies, because novelty is a scarce
-    budget and simplicity is a reliability property. A new technology enters only
+    budget and simplicity is a reliability property. A new technology enters as a
+    replacement, with the retirement of the older one planned and owned, and only
     when an existing one's measured limit is reached and its perpetual operating cost
     is budgeted; this counts runtimes, stores, services and frameworks, not the choice
     of paradigm inside an adopted language.
@@ -6029,6 +6072,8 @@ nodes:
   - Adopt few, mature technologies with known failure modes.
   - Let a new technology in only when an existing one's measured limit is reached
     and its perpetual operating cost is budgeted.
+  - 'Introduce it as a replacement: record what it replaces, or why it replaces nothing,
+    and plan the retirement of the older one with a named owner.'
   - Count runtimes, stores, services and frameworks; the paradigm inside an adopted
     language is not limited by this rule.
   design_notes: "POSITIONS:\n  - P1 novelty is a scarce budget, spent on what differentiates\
@@ -6051,7 +6096,18 @@ nodes:
     \ measured limit is reached and the added operating cost is budgeted (L084; POSTGRES_FIRST's\
     \ \"would move it\").\n\nPLACEMENTS REALIZED:\nno skeleton link to a philosophy\
     \ placement; realized in the stack graph by PIG-WEB-ALLOCATION.POSTGRES_FIRST,\
-    \ CACHE_STORE and JOB_HOST (J1)."
+    \ CACHE_STORE and JOB_HOST (J1).\n\nMD-10: aligned with software-development-philosophy:EVOLUTION.TECHNOLOGY.1\
+    \ by MD-10. The Decision above, admission by measured limit and budgeted cost\
+    \ alone, is superseded.\nReplaced position: a new technology enters when an existing\
+    \ one's measured limit is reached and its operating cost is budgeted, with no\
+    \ statement of what it retires.\nRejected: addition alongside the older technology\
+    \ without a retirement plan: still best when the new technology replaces nothing\
+    \ because it serves a role no adopted technology serves; the record then says\
+    \ why it replaces nothing. The software guideline's allowance for a few independently\
+    \ operated components (EVOLUTION.TECHNOLOGY.3) is not carried: the default context\
+    \ shares one database, one platform and one on-call (inferred).\nKept: the measured-limit\
+    \ and operating-cost conditions, the scope (runtimes, stores, services, frameworks;\
+    \ not the paradigm), POSTGRES_FIRST."
   impl_pointers:
   - build/distill/03_judge/J5_phil_transverse/records.md::TRANSVERSE.EVOLUTION.4
   - build/research/07_architecture_styles/result.md::ARCH-C29
@@ -6071,6 +6127,9 @@ nodes:
     date: 2026-10-13T09:36
     note: 'critic fixes M6,M8,M9,M12,m3,m4,m9,m10,m11,m12: state rules once, add DATA.INTERFACE,
       lift stack-neutral clauses, neutral wording, one constraint form'
+  - who: agent:steward
+    date: 2026-10-13T22:54
+    note: 'MD-10: align K5, K6, K9, K10, K12 and record G1 gap'
 - uid: TRANSVERSE.EVOLUTION.5
   name: Team-Shaped Structure
   intent: Teams are cross-functional around a capability, not organised by layer,
@@ -6943,8 +7002,9 @@ inter_intentlinks:
     type: refines
 - src: web-app-philosophy:DATA.MAINTAIN
   dst: software-development-philosophy:ASSURANCE.AVAILABILITY.4
-  intent: Recovery to a chosen moment is the default for the database, and a backup
-    counts only once a restore of it has been rehearsed.
+  intent: Recovery follows objectives set per workload, and a backup counts only once
+    a restore from it was tested end to end, regularly and automatically, against
+    criteria fixed beforehand.
   uid: web-app-philosophy:DATA.MAINTAIN_software-development-philosophy:ASSURANCE.AVAILABILITY.4
   shape:
     type: refines
@@ -7133,9 +7193,10 @@ inter_intentlinks:
     type: refines
 - src: web-app-philosophy:TRANSVERSE.EVOLUTION.3
   dst: software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1
-  intent: Each backend is one deployable modular by business concept and is not split
-    into services without a measured need; web adds that several backends may share
-    one database.
+  intent: Each backend is one deployable modular by business concept and is split
+    into services only when a named force requires it (independent scaling, independent
+    release by separate teams, fault isolation that matters, a different runtime need);
+    web adds that several backends may share one database.
   uid: web-app-philosophy:TRANSVERSE.EVOLUTION.3_software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1
   shape:
     type: refines
@@ -7157,7 +7218,8 @@ inter_intentlinks:
     type: refines
 - src: web-app-philosophy:TRANSVERSE.EVOLUTION.4
   dst: software-development-philosophy:EVOLUTION.TECHNOLOGY.1
-  intent: Few mature technologies are adopted, and a new one enters only when an existing
+  intent: Few mature technologies are adopted, and a new one enters as a replacement
+    with the retirement of the older one planned and owned, only when an existing
     one's measured limit is reached and its perpetual operating cost is budgeted;
     runtimes, stores, services and frameworks are counted.
   uid: web-app-philosophy:TRANSVERSE.EVOLUTION.4_software-development-philosophy:EVOLUTION.TECHNOLOGY.1
