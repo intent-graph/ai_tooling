@@ -5,12 +5,12 @@ Defaults for the properties that cut across the data, logic and interaction tier
 ## Table of Contents
 
 1. [Transverse Overview](#transverse-overview) _(Lines 19-27)_
-1. [Security Defaults](#security-defaults) _(Lines 30-86)_
-1. [Page Experience Targets](#page-experience-targets) _(Lines 89-98)_
-1. [Contract Verification and Meaning](#contract-verification-and-meaning) _(Lines 101-131)_
-1. [Operations](#operations) _(Lines 134-205)_
-1. [Runtime Topology](#runtime-topology) _(Lines 208-251)_
-1. [Evolution Defaults](#evolution-defaults) _(Lines 254-284)_
+1. [Security Defaults](#security-defaults) _(Lines 30-91)_
+1. [Page Experience Targets](#page-experience-targets) _(Lines 94-103)_
+1. [Contract Verification and Meaning](#contract-verification-and-meaning) _(Lines 106-136)_
+1. [Operations](#operations) _(Lines 139-215)_
+1. [Runtime Topology](#runtime-topology) _(Lines 218-261)_
+1. [Evolution Defaults](#evolution-defaults) _(Lines 264-296)_
 
 ---
 
@@ -26,7 +26,7 @@ The hosting model is a per-project choice, recorded as an ADR: a prototype takes
 `PIG-WEB-TRANSVERSE`
 
 ## Security Defaults
-<!-- Lines 30-86 -->
+<!-- Lines 30-91 -->
 
 Security is verified against ASVS 5.0 at a recorded level. Each security property is testable and has one owner. Refines [Security Across Tiers](philosophy.md#security-across-tiers). `PIG-WEB-TRANSVERSE.SECURITY`
 
@@ -38,6 +38,8 @@ ASVS 5.0 is the catalogue of verifiable requirements, cited by versioned id in t
 - Where a requirement has an automated check, it runs in the pipeline ([Delivery and Configuration](#delivery-and-configuration)).
 
 Changes when: the project's risk class changes; record the level as an ADR.
+
+Principle: [Anchor Framework](../software_development_guidelines/transverse_security.md#anchor-framework).
 `PIG-WEB-TRANSVERSE.SECURITY.1`
 
 ### Transport Security
@@ -71,6 +73,7 @@ A managed store is the [authority](glossary.md#authority) for every secret.
 - CI/CD: least-privilege service accounts, secrets scoped per environment, none in pipeline output. Secret-access logs kept as long as obligations require, at least 90 days where none exists.
 - Hosting is a per-project choice: on self-managed hosts without an orchestrator, one acceptable route, the store is a technology to add, and until then a file outside source control, readable only by the service account and rotated by a scheduled task, is in force; on an orchestrated platform its secret store is the managed store.
 
+Principle: [Central Secret Custody and Lifecycle](../software_development_guidelines/transverse_config_environments.md#central-secret-custody-and-lifecycle), [Delivery Channel to the Running Software](../software_development_guidelines/transverse_config_environments.md#delivery-channel-to-the-running-software).
 `PIG-WEB-TRANSVERSE.SECURITY.4`
 
 ### Supply Chain
@@ -82,10 +85,12 @@ Every artifact the system runs has hash-pinned dependencies, a continuously scan
 - Database extensions and Postgres packages come from official sources at a pinned version (inferred).
 
 Acceptable when the build platform cannot isolate runs or keep the signing key from the build steps: Build L2, recorded as an ADR.
+
+Principle: [Declare and Lock](../software_development_guidelines/ownership_lifecycle_containment.md#declare-and-lock), [Channels, Mirrors and Supply-Chain Integrity](../software_development_guidelines/ownership_lifecycle_containment.md#channels-mirrors-and-supply-chain-integrity), [Inventory, Watching and End of Life](../software_development_guidelines/ownership_lifecycle_containment.md#inventory-watching-and-end-of-life), [Build Provenance and Match to Source](../software_development_guidelines/assurance_rules.md#build-provenance-and-match-to-source).
 `PIG-WEB-TRANSVERSE.SECURITY.5`
 
 ## Page Experience Targets
-<!-- Lines 89-98 -->
+<!-- Lines 94-103 -->
 
 Core Web Vitals at the 75th percentile, per device class, from field data, are the targets: [LCP](glossary.md#lcp) 2.5 s, [INP](glossary.md#inp) 200 ms, [CLS](glossary.md#cls) 0.1. Build budgets per page type are the gate before release. Refines [Measured Performance](philosophy.md#measured-performance).
 - Build budgets cover the lab-measurable vitals (LCP, CLS) and page weight (inferred); a build over budget fails or the page is optimised. INP is gated on field data after release.
@@ -97,7 +102,7 @@ Core Web Vitals at the 75th percentile, per device class, from field data, are t
 `PIG-WEB-TRANSVERSE.PERFORMANCE`
 
 ## Contract Verification and Meaning
-<!-- Lines 101-131 -->
+<!-- Lines 106-136 -->
 
 Every contract has a verification matched to its seam, run in the pipeline, and a written meaning, owner and lifecycle. The contracts are the [function API](glossary.md#function-api), the tables granted to BI, the HTTP interface, the agent tool surface and external services. Breaking changes go [expand, migrate, contract](glossary.md#expand-migrate-contract); "[deployed together](glossary.md#deployed-together)" holds only when every consumer of the changed object ships in the same deployment as the migration. Refines [Standards and Contracts](philosophy.md#standards-and-contracts). `PIG-WEB-TRANSVERSE.CONTRACTS`
 
@@ -130,7 +135,7 @@ A schema is necessary, not sufficient.
 `PIG-WEB-TRANSVERSE.CONTRACTS.2`
 
 ## Operations
-<!-- Lines 134-205 -->
+<!-- Lines 139-215 -->
 
 One W3C trace context runs from the browser through backend and workers into the database transaction, with logs, client telemetry and the four golden signals correlated to it. Refines [Operability](philosophy.md#operability). `PIG-WEB-TRANSVERSE.OPERABILITY`
 
@@ -144,6 +149,7 @@ One W3C trace context runs from the browser through backend and workers into the
 - Keep every trace while volume allows; then tail sampling keeps every error and slow trace (inferred). Logs still carry the trace id of every error.
 - Server-Timing carries server and database time to authenticated and authorised audiences only.
 
+Principle: [Instrumentation and Log Emission](../software_development_guidelines/operation_objectives_and_signals.md#instrumentation-and-log-emission), [Trace Sampling](../software_development_guidelines/operation_objectives_and_signals.md#trace-sampling).
 `PIG-WEB-TRANSVERSE.OPERABILITY.1`
 
 ### Client Telemetry
@@ -153,6 +159,7 @@ One W3C trace context runs from the browser through backend and workers into the
 - A Reporting API endpoint receives CSP violations, deprecations, crashes and interventions; it is the report sink of the CSP rollout.
 - The collection endpoint treats every event as untrusted input (validated, sanitised before logging) and collects no personal data.
 
+Principle: [Vantage Points](../software_development_guidelines/operation_objectives_and_signals.md#vantage-points).
 `PIG-WEB-TRANSVERSE.OPERABILITY.2`
 
 ### Monitoring
@@ -163,6 +170,7 @@ One W3C trace context runs from the browser through backend and workers into the
 - `pg_stat_statements` on from the first deploy; its per-role figures give database load per consumer role (backends, BI, operators) (inferred).
 - The triggers that move the Postgres-first placements are measured, not guessed (inferred): queue backlog age and claim contention, commit latency under NOTIFY, cache hit latency and load on the primary. Job failures, durations and missed runs are monitored; the drift guard on denormalised data alerts on divergence.
 
+Principle: [What Is Measured - Service and Resource Signals](../software_development_guidelines/operation_objectives_and_signals.md#what-is-measured---service-and-resource-signals), [Paging Criterion and Rule Hygiene](../software_development_guidelines/operation_objectives_and_signals.md#paging-criterion-and-rule-hygiene), [Indicators](../software_development_guidelines/operation_objectives_and_signals.md#indicators).
 `PIG-WEB-TRANSVERSE.OPERABILITY.3`
 
 ### Security Event Log
@@ -172,6 +180,7 @@ One W3C trace context runs from the browser through backend and workers into the
 - Refusals made inside writer functions and Postgres privilege checks reach it two ways (inferred): the backend logs each refusal it receives with actor, role and trace id, and Postgres's own log (authentication failures, privilege errors, role changes) is shipped to the same collector. This covers consumers outside a backend: BI, operators, scripts.
 - Business history stays in the database; the two records stay apart.
 
+Principle: [Entry Content, Time and Format](../software_development_guidelines/transverse_security.md#entry-content-time-and-format).
 `PIG-WEB-TRANSVERSE.OPERABILITY.4`
 
 ### Testing
@@ -196,6 +205,7 @@ One W3C trace context runs from the browser through backend and workers into the
 - Static assets are collected at build into the artifact, not at release.
 - Release toggles are short-lived, each with a removal task created with it.
 
+Principle: [Shape of Per-Environment Configuration](../software_development_guidelines/transverse_config_environments.md#shape-of-per-environment-configuration), [Separating Release From Deployment](../software_development_guidelines/change_flow_delivery.md#separating-release-from-deployment), [Staged Pipeline and Human Gates](../software_development_guidelines/change_flow_delivery.md#staged-pipeline-and-human-gates).
 `PIG-WEB-TRANSVERSE.OPERABILITY.6`
 
 ### Incident Response
@@ -204,7 +214,7 @@ Deferred: out of scope, recorded only. How incidents are detected, handled and r
 `PIG-WEB-TRANSVERSE.OPERABILITY.7`
 
 ## Runtime Topology
-<!-- Lines 208-251 -->
+<!-- Lines 218-261 -->
 
 One buffering reverse proxy is the only public entry and terminates TLS. A WSGI server runs under a process manager. Web and worker processes start from one image; static assets are built once and served outside Python. `PIG-WEB-TRANSVERSE.TOPOLOGY`
 
@@ -250,7 +260,7 @@ Changes when: users are distant or origin load justifies a CDN (threshold inferr
 `PIG-WEB-TRANSVERSE.TOPOLOGY.4`
 
 ## Evolution Defaults
-<!-- Lines 254-284 -->
+<!-- Lines 264-296 -->
 
 Several backends may share the database; each backend is one deployable. It is modular by business concept with automatically checked boundaries, and every significant decision is an ADR. The team's Python backend is one deployable over the shared database, with the schema and function API as the database owner's codebase. Refines [Deliberate Evolution](philosophy.md#deliberate-evolution). `PIG-WEB-TRANSVERSE.EVOLUTION`
 
@@ -272,6 +282,7 @@ Changes when: size, complexity or number of teams make the single unit the bottl
 - The Python module holds workflow and product policy, with only tested copies of per-user write rules; never a second path to another domain's data.
 - Boundaries are checked in the pipeline as a fitness function that fails on a direct access to another domain's tables. Gap: the tool is not chosen.
 
+Principle: [Declared Layering](../software_development_guidelines/construction.md#declared-layering), [Cut by Business Concept or by Layer](../software_development_guidelines/construction.md#cut-by-business-concept-or-by-layer).
 `PIG-WEB-TRANSVERSE.EVOLUTION.2`
 
 ### Decision Records
@@ -281,4 +292,5 @@ Changes when: size, complexity or number of teams make the single unit the bottl
 - Accepted ADRs are never edited, only superseded.
 - Decisions the guideline leaves to each project, one ADR each: interface description origin direction; [row-level security](glossary.md#row-level-security) under its three conditions; ASVS level; secret delivery; process replication; CDN; HSTS preload; adding a managed secret store; a build platform held at SLSA Build L2; every move of a Postgres-first role past its measured limit.
 
+Principle: [Form and Storage](../software_development_guidelines/evolution.md#form-and-storage), [Changing an Accepted Record](../software_development_guidelines/evolution.md#changing-an-accepted-record).
 `PIG-WEB-TRANSVERSE.EVOLUTION.3`

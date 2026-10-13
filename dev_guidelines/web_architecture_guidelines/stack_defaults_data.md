@@ -8,10 +8,10 @@ Defaults for the Postgres data tier of a web application on this stack: how the 
 1. [Schema Organization](#schema-organization) _(Lines 55-134)_
 1. [Declared Integrity](#declared-integrity) _(Lines 137-192)_
 1. [Concurrency Mechanics](#concurrency-mechanics) _(Lines 195-251)_
-1. [Data Maintenance](#data-maintenance) _(Lines 254-316)_
-1. [Derived Data](#derived-data) _(Lines 319-342)_
-1. [Database Interface](#database-interface) _(Lines 345-377)_
-1. [Deferred Topics](#deferred-topics) _(Lines 380-385)_
+1. [Data Maintenance](#data-maintenance) _(Lines 254-321)_
+1. [Derived Data](#derived-data) _(Lines 324-347)_
+1. [Database Interface](#database-interface) _(Lines 350-382)_
+1. [Deferred Topics](#deferred-topics) _(Lines 385-390)_
 
 ---
 
@@ -250,7 +250,7 @@ Where one fact spans several places, the single writer function of the state col
 ---
 
 ## Data Maintenance
-<!-- Lines 254-316 -->
+<!-- Lines 254-321 -->
 
 Structure changes only through small, re-runnable, online-safe versioned migrations with a CI drift gate; every change leaves append-only history; deletion is chosen per table, basic soft delete by default; recovery is proven by rehearsal. `PIG-WEB-DATA.MAINTAIN`
 
@@ -263,6 +263,7 @@ Structure changes only through small, re-runnable, online-safe versioned migrati
 - Incompatible changes: expand, migrate, contract (dual write, verified read switch, write switch, removal). Drops and renames only in the contract phase, once no deployed consumer references the old object. "Deployed consumer" covers backends, BI queries, consoles and scripts.
 - Drift gate: CI applies every migration to an empty database and compares its catalogue with production's (schema objects, grants, function signatures; mechanism inferred). A difference fails the release and is reconciled by a migration, never by editing the live database.
 
+Principle: [Locks and Online Schema Change](../software_development_guidelines/change_flow_data_and_measure.md#locks-and-online-schema-change), [Bulk and Backfill Design](../software_development_guidelines/change_flow_data_and_measure.md#bulk-and-backfill-design).
 `PIG-WEB-DATA.MAINTAIN.1`
 
 ### Deletion, Retention and Partitioning
@@ -279,6 +280,8 @@ Deletion is a design choice per table, weighed on the data's importance, whether
   - Safeguards (inferred): (1) a constraint trigger on the child table refuses an active row whose parent is soft-deleted, under Serializable or with a lock on the parent row, since no foreign key does; (2) the active-row predicate is written once in the shared specification every consumer reads with, and the reporting role's documentation names it; (3) a restore re-checks the row against current constraints; (4) soft deletion propagates down a hierarchy of soft-deleting tables as the model requires, by database functions or triggers, children in order.
 
 Acceptable for some cache profiles, and when consumers must be guaranteed unable to reach past, historical or outdated data: hard delete plus a same-transaction archive. Its weaknesses are a performance cost at scale and, the biggest, keeping the current and archive table schemas in sync.
+
+Principle: [Layered Protection and Deletion Form](../software_development_guidelines/assurance_interfaces_data.md#layered-protection-and-deletion-form).
 `PIG-WEB-DATA.MAINTAIN.2`
 
 ### History Tables
@@ -300,6 +303,7 @@ Acceptable when one application is the only writer: application-written audit in
 - Four decisions, in order: batching key (primary-key part or indexed foreign key, then numeric range over an indexed surrogate, modulo last; keyset rather than offset paging); work list generated from the data, with batches per entity = ceiling of count over batch size; fan-out over disjoint rows, pool sized by the smallest of connection headroom, IO headroom and tolerable lag, ramped from one batch to one worker to four; observe and recover on lock waits, dead tuples and replica lag.
 - Each batch is its own Serializable transaction and idempotent by form (a procedure with transaction control is the tool for per-batch commits). Keep a job log so only failures resume. A convergence query must reach zero before the job is done; state the stop plan.
 
+Principle: [Running and Watching a Production Data Job](../software_development_guidelines/change_flow_data_and_measure.md#running-and-watching-a-production-data-job).
 `PIG-WEB-DATA.MAINTAIN.4`
 
 ### Backup and Recovery
@@ -310,12 +314,13 @@ Acceptable when one application is the only writer: application-written audit in
 - `fsync` on, write caches safe. `synchronous_commit` on by default; off only per transaction or role for data that may be lost on a crash, such as rebuildable caches (per-transaction scope inferred).
 - Gap: recovery objectives (how much loss, how long a restore) are not set here; each project states them.
 
+Principle: [Backup Scope and Design](../software_development_guidelines/operation_recovery_and_feedback.md#backup-scope-and-design), [Backup Protection and Isolation](../software_development_guidelines/operation_recovery_and_feedback.md#backup-protection-and-isolation).
 `PIG-WEB-DATA.MAINTAIN.5`
 
 ---
 
 ## Derived Data
-<!-- Lines 319-342 -->
+<!-- Lines 324-347 -->
 
 Postgres stores the minimum and derives the rest. A stored derived value is a copy, chosen in the order generated column, same-transaction trigger, cache table with stated staleness; every copy has a sync plan and a drift guard. `PIG-WEB-DATA.DERIVE`
 
@@ -341,7 +346,7 @@ Postgres stores the minimum and derives the rest. A stored derived value is a co
 ---
 
 ## Database Interface
-<!-- Lines 345-377 -->
+<!-- Lines 350-382 -->
 
 The database offers a function API in its own schema, with one business operation per call, reached through a transaction-mode pooler. Refines [Database Function API](allocation.md#database-function-api) and [Offered Contract](philosophy.md#offered-contract). `PIG-WEB-DATA.INTERFACE`
 
@@ -376,7 +381,7 @@ Acceptable when a consumer needs session state the design cannot avoid: session-
 ---
 
 ## Deferred Topics
-<!-- Lines 380-385 -->
+<!-- Lines 385-390 -->
 
 Out of scope for this guideline; recorded only, not decided.
 

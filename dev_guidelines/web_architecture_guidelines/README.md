@@ -10,7 +10,7 @@ Architecture decisions for a web application built on JavaScript, Python and Pos
 1. [Maintainer Decisions](#maintainer-decisions) _(Lines 76-98)_
 1. [The Two Graphs](#the-two-graphs) _(Lines 101-123)_
 1. [Provenance](#provenance) _(Lines 126-130)_
-1. [Related Guidelines](#related-guidelines) _(Lines 133-136)_
+1. [Related Guidelines](#related-guidelines) _(Lines 133-137)_
 
 ---
 
@@ -105,7 +105,7 @@ The graphs in `intent_graphs/` are the source of truth; these files are their pr
 |---|---|---|
 | `intent_graphs/web_app_philosophy.ig.yaml` | stack-neutral philosophy, 80 nodes: allocation, data, logic, interaction, transverse | `ROOT`, `ALLOCATION.*`, `DATA.*`, `LOGIC.*`, `INTERACTION.*`, `TRANSVERSE.*` |
 | `intent_graphs/web_defaults.ig.yaml` | stack projection for JavaScript, Python and Postgres, 132 nodes | `ROOT`, `PIG-WEB-*` |
-| `intent_graphs/intent_resources.yaml` | manifest linking both graphs and the Python guidelines' philosophy graph | |
+| `intent_graphs/intent_resources.yaml` | manifest linking both graphs and the philosophy graphs of the Python and software development guidelines | |
 
 Each node carries its intent, the constraints a reader acts on, an epistemic state (known, inferred or unvalidated, undecided, conflict, gap), design notes (positions considered, forces, decision, alternatives with the condition under which each wins) and pointers into `build/`. Query one node at a time; never load a graph file whole, since each runs to thousands of lines:
 
@@ -129,8 +129,9 @@ To browse both graphs in Obsidian, run `./intent_graphs/export_to_obsidian.sh` a
 - `build/distill/`: the claims ledger, the skeleton, the judge records and their reviews, the [maintainer decisions](build/distill/maintainer_decisions.md), the graph batches, the critique and its fixes.
 
 ## Related Guidelines
-<!-- Lines 133-136 -->
+<!-- Lines 133-137 -->
 
+- [Software development guidelines](../software_development_guidelines/README.md): the stack-neutral principles (ownership, assurance, construction, change flow, operation, evolution, transverse) that this guideline applies to a web stack; a node that applies one carries an inter link to its graph and a "Principle:" pointer in its section.
 - [Python guidelines](../python_guidelines/): Python code conventions; shared principles link to its philosophy graph.
-- [JavaScript guidelines](../javascript_guidelines/): JavaScript code conventions.
+- [JavaScript guidelines](../javascript_guidelines/README.md): JavaScript code conventions and language-level practice.
 - [Documentation standard](../../documentation_tools/DOCUMENTATION_STANDARD.md): the format of these files.

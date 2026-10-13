@@ -6,8 +6,8 @@ How each tier carries the share the [allocation](allocation.md#overview) gives i
 
 1. [Durable Data](#durable-data) _(Lines 16-79)_
 1. [Business Logic Tier](#business-logic-tier) _(Lines 82-153)_
-1. [Interaction](#interaction) _(Lines 156-257)_
-1. [Transverse Concerns](#transverse-concerns) _(Lines 260-383)_
+1. [Interaction](#interaction) _(Lines 156-259)_
+1. [Transverse Concerns](#transverse-concerns) _(Lines 262-396)_
 
 ---
 
@@ -57,7 +57,7 @@ Schema and data evolve without breaking running code. Migrations are the only or
 - Conventions evolve forward only: new objects follow the new rule, legacy ones are not renamed in bulk.
 - Point-in-time recovery is the default; a backup counts only once a restore of it has been rehearsed.
 
-Realizes Type and Contract Definitions and Audit and History ([allocation](allocation.md#data-authority-placements)). `DATA.MAINTAIN`
+Realizes Type and Contract Definitions and Audit and History ([allocation](allocation.md#data-authority-placements)). Principle: [Data and Schema Change](../software_development_guidelines/change_flow_data_and_measure.md#data-and-schema-change), [Conventions Applied Forward Only](../software_development_guidelines/evolution.md#conventions-applied-forward-only), [Proving Restore](../software_development_guidelines/assurance_performance_availability.md#proving-restore). `DATA.MAINTAIN`
 
 ### Derived, Not Stored
 
@@ -108,7 +108,7 @@ One business core per backend, separable from transport and storage, holds only 
 - Behaviour lives with its authority: rules about stored data in the database's writer functions; complex backend policy and workflow in behaviour-rich domain objects inside a thin use-case layer; a simple share is a transaction script.
 - Data in, decision out: gather the data in as few calls as possible (one read function or statement, never queries in loops), then decide in code that does no fetching, testable without I/O and runnable from any driver (inferred: one exploratory source).
 
-Realizes Business Rules, One Core for Every Client and Atomicity Ends at the Transaction ([allocation](allocation.md#rules)). `LOGIC.ENFORCE`
+Realizes Business Rules, One Core for Every Client and Atomicity Ends at the Transaction ([allocation](allocation.md#rules)). Principle: [Separating Presentation, Domain and Data Access](../software_development_guidelines/construction.md#separating-presentation-domain-and-data-access). `LOGIC.ENFORCE`
 
 ### Processing Model
 
@@ -121,11 +121,11 @@ Stateless, disposable processes of distinct types (web, worker) built once, with
 - Long-lived connections (real-time channels, agent streams) are the one tolerated per-process state: clients reconnect to any process and resync from the backing services (inferred).
 - No file is readable before a clean scan.
 
-Realizes Identity and Session State, Caching, Side Effects and Deferred Work ([allocation](allocation.md#acting-placements)). `LOGIC.PROCESS`
+Realizes Identity and Session State, Caching, Side Effects and Deferred Work ([allocation](allocation.md#acting-placements)). Principle: [Stateless Processes](../software_development_guidelines/construction.md#stateless-processes), [Fast Start and Graceful Stop](../software_development_guidelines/construction.md#fast-start-and-graceful-stop). `LOGIC.PROCESS`
 
 ### Backend Interface
 
-Each backend offers one HTTP interface over its one core: server-rendered HTML whose links and forms are the contract for browsers; a resource-oriented structured-data interface and an agent adapter on the same use cases for programs and agents. Every interface description consumers read (HTTP description, function API catalogue, agent tool surface) stays in sync by process, its origin recorded per project. Repeated requests are safe: safe methods change nothing, PUT and DELETE are idempotent, non-idempotent mutations offered to agents carry an [idempotency key](glossary.md#idempotency-key) the database function records. `LOGIC.EXPOSE`
+Each backend offers one HTTP interface over its one core: server-rendered HTML whose links and forms are the contract for browsers; a resource-oriented structured-data interface and an agent adapter on the same use cases for programs and agents. Every interface description consumers read (HTTP description, function API catalogue, agent tool surface) stays in sync by process, its origin recorded per project. Repeated requests are safe: safe methods change nothing, PUT and DELETE are idempotent, non-idempotent mutations offered to agents carry an [idempotency key](glossary.md#idempotency-key) the database function records. Principle: [Call Shape and Evolvable Interfaces](../software_development_guidelines/construction.md#call-shape-and-evolvable-interfaces). `LOGIC.EXPOSE`
 
 #### Protocol Semantics
 
@@ -152,7 +152,7 @@ Each backend offers one HTTP interface over its one core: server-rendered HTML w
 `LOGIC.EXPOSE.3`
 
 ## Interaction
-<!-- Lines 156-257 -->
+<!-- Lines 156-259 -->
 
 The interaction tier lets humans and agents see, edit and discuss the data through clients the team does not control, and decides nothing durable: it holds copies for feedback and latency, and every decision reaches a backend. Agents are users through an adapter on the same core, never a second implementation of the rules. Stack: [Browser Surface](stack_defaults_interaction.md#browser-surface-overview) and [Agent Surface](stack_defaults_agents.md#agent-surface-overview). `INTERACTION`
 
@@ -221,6 +221,8 @@ Tabs keep old code for days, so every client-server contract has an explicit com
 - Within the window, changes are additive and readers ignore what they do not know; before removing or changing a behaviour, its current use is found per consumer role.
 - The window covers every surface used by code the team does not redeploy at once: structured-data endpoints, HTML form fields and URLs posted by old pages, the agent tools and their schemas (the last three inferred). Each interface description stays in sync by process.
 - A breaking change goes [expand, migrate, contract](glossary.md#expand-migrate-contract). "[Deployed together](glossary.md#deployed-together)" only when every consumer of the changed object ships in the same deployment; a browser tab never does.
+
+Principle: [Reversible by Design](../software_development_guidelines/change_flow_delivery.md#reversible-by-design).
 `INTERACTION.ENVIRONMENT.3`
 
 #### Caches Beyond Reach
@@ -256,7 +258,7 @@ Script in the page holds the application's privileges, so assume it may be hosti
 `INTERACTION.ENVIRONMENT.7`
 
 ## Transverse Concerns
-<!-- Lines 260-383 -->
+<!-- Lines 262-396 -->
 
 Properties that span every tier are stated once and designed in across browser, backend, database and every other consumer of the data, not added per tier. Each becomes an automated check where one exists: the interface [drift gate](glossary.md#drift-gate), the function-API catalogue diff, page budgets, module-boundary checks, tests at every tier. Stack: [Transverse Concerns](stack_defaults_transverse.md#transverse-overview). `TRANSVERSE`
 
@@ -282,7 +284,7 @@ Properties that span every tier are stated once and designed in across browser, 
 
 Never claim a stronger read-visibility guarantee than [Authorization](allocation.md#authorization) gives: roles that may read the base tables see every row unless their own role is restricted.
 
-The tier map is inferred. Rests on [Trust Boundary](allocation.md#trust-boundary). `TRANSVERSE.SECURITY`
+The tier map is inferred. Rests on [Trust Boundary](allocation.md#trust-boundary). Principle: [Design-Time Risk Modelling](../software_development_guidelines/transverse_security.md#design-time-risk-modelling), [Verification Depth and Design Review](../software_development_guidelines/assurance_docs_security.md#verification-depth-and-design-review), [Minimisation, Classification and Design-In](../software_development_guidelines/transverse_privacy.md#minimisation-classification-and-design-in). `TRANSVERSE.SECURITY`
 
 ### Measured Performance
 
@@ -291,7 +293,7 @@ The tier map is inferred. Rests on [Trust Boundary](allocation.md#trust-boundary
 - Optimise only after measurement has named the critical path.
 - Join field page metrics through the correlation id to server timing and database time per request, so work placed in database functions stays visible (inferred).
 
-Feeds the Performance and Latency forces ([allocation](allocation.md#forces)). `TRANSVERSE.PERFORMANCE`
+Feeds the Performance and Latency forces ([allocation](allocation.md#forces)). Principle: [Performance](../software_development_guidelines/assurance_performance_availability.md#performance). `TRANSVERSE.PERFORMANCE`
 
 ### Standards and Contracts
 
@@ -303,7 +305,7 @@ Every contract between tiers or consumers is an explicit artifact, readable with
 - A breaking change goes expand, migrate, contract, coordinated with every consumer, unless every consumer of the changed object ships in the same deployment as the change. For the function API the new function name is the expand step; no formal version number.
 - Departs from the maintainer's practice, where "deployed together" is the general rule for breaking changes: it holds only under that same-deployment condition.
 
-Requires [Type and Contract Definitions](allocation.md#type-and-contract-definitions). `TRANSVERSE.CONTRACTS`
+Requires [Type and Contract Definitions](allocation.md#type-and-contract-definitions). Principle: [What Counts as Compatible](../software_development_guidelines/assurance_interfaces_data.md#what-counts-as-compatible), [Contract Tests](../software_development_guidelines/assurance_interfaces_data.md#contract-tests), [What a Contract States](../software_development_guidelines/construction.md#what-a-contract-states), [Expand, Migrate, Contract](../software_development_guidelines/evolution.md#expand-migrate-contract). `TRANSVERSE.CONTRACTS`
 
 ### Operability
 
@@ -316,7 +318,7 @@ The running system is observed, tested and delivered as one whole across every t
 - A retention decision per record type (application logs, traces, security event log, audit trail), set by legal, regulatory and contractual obligations, no shorter and no longer; recorded even where no obligation exists.
 - Nothing secret or unneeded and personal is logged or placed in trace context.
 
-Kept apart from [Audit and History](allocation.md#audit-and-history). `TRANSVERSE.OPERABILITY.1`
+Kept apart from [Audit and History](allocation.md#audit-and-history). Principle: [Correlation and Context Propagation](../software_development_guidelines/operation_objectives_and_signals.md#correlation-and-context-propagation), [Events Logged](../software_development_guidelines/transverse_security.md#events-logged), [Log Protection and Sanitising](../software_development_guidelines/transverse_security.md#log-protection-and-sanitising), [Retention Periods](../software_development_guidelines/transverse_privacy.md#retention-periods). `TRANSVERSE.OPERABILITY.1`
 
 #### Proportioned Testing
 
@@ -328,6 +330,7 @@ Test at the lowest level that can catch the failure, and add the low-level test 
 - Authorization is tested by denial: each role and actor is refused what it may not do. End-to-end tests are few, on critical journeys.
 - Per-user read visibility: [sensitive reads](glossary.md#sensitive-read) in database functions are tested by denial against the functions themselves ([Authorization](allocation.md#authorization)).
 
+Principle: [Test Level Mix](../software_development_guidelines/assurance_behaviour.md#test-level-mix), [Tests Without Durable Effect on Data](../software_development_guidelines/assurance_behaviour.md#tests-without-durable-effect-on-data), [Placement of Domain Logic](../software_development_guidelines/construction.md#placement-of-domain-logic).
 `TRANSVERSE.OPERABILITY.2`
 
 #### Reproducible Delivery
@@ -337,6 +340,8 @@ Test at the lowest level that can catch the failure, and add the low-level test 
 - Every environment runs the production database engine and version, with no adapters hiding differences.
 - Schema and function-API changes are versioned migrations promoted through the same pipeline, run once per release before the new code starts, additive across the release window (inferred).
 - Release in small, frequent increments.
+
+Principle: [Build Once, Promote One Artifact](../software_development_guidelines/change_flow_delivery.md#build-once-promote-one-artifact), [Separation of Configuration from Code and Secrets](../software_development_guidelines/transverse_config_environments.md#separation-of-configuration-from-code-and-secrets), [Environment Parity](../software_development_guidelines/change_flow_delivery.md#environment-parity), [Delivery Path and Gating of Database Change](../software_development_guidelines/change_flow_data_and_measure.md#delivery-path-and-gating-of-database-change), [Cadence and Batch Size](../software_development_guidelines/change_flow_delivery.md#cadence-and-batch-size).
 `TRANSVERSE.OPERABILITY.3`
 
 ### Deliberate Evolution
@@ -348,6 +353,8 @@ The system changes deliberately: costly decisions named and recorded, growth in 
 - Identify the decisions that are costly to get wrong early; decide each when enough is known, not all up front.
 - Record each with its forces, alternatives and the condition that would reverse it, per-project decisions included: the interface origin direction with its criteria, any adoption of row-level security with its conditions.
 - Test changes against the constraints a decision set, automatically where a check exists.
+
+Principle: [Content of a Record](../software_development_guidelines/evolution.md#content-of-a-record), [Effort and Timing on Costly Decisions](../software_development_guidelines/construction.md#effort-and-timing-on-costly-decisions).
 `TRANSVERSE.EVOLUTION.1`
 
 #### Incremental Change
@@ -356,6 +363,8 @@ The system changes deliberately: costly decisions named and recorded, growth in 
 - Design capacity headroom for about 10x the current load; reaching about 100x is planned as a rewrite of the part concerned, not anticipated in code (inferred).
 - Make fit explicit as automated fitness functions, non-functional ones included.
 - Take debt only prudently, deliberately and recorded. Replace at seams, never by big-bang rewrite.
+
+Principle: [Step Size and Feedback](../software_development_guidelines/evolution.md#step-size-and-feedback), [Taking Debt Versus Investing in Quality](../software_development_guidelines/evolution.md#taking-debt-versus-investing-in-quality), [Growth Horizon](../software_development_guidelines/construction.md#growth-horizon), [Gates That Cannot Be Skipped](../software_development_guidelines/assurance_rules.md#gates-that-cannot-be-skipped), [Replacement Versus Rewrite](../software_development_guidelines/evolution.md#replacement-versus-rewrite).
 `TRANSVERSE.EVOLUTION.2`
 
 #### Deployable Boundaries
@@ -365,6 +374,8 @@ The system changes deliberately: costly decisions named and recorded, growth in 
 - Bounded contexts map to domain schemas in the shared database, each with its own functions and roles (inferred).
 - A new deployable reaches data only through the function API with its own role; it never writes tables beside it or holds a second system of record.
 - Acceptable when the domain is well known, the size requires distribution, the parts develop and deploy independently and the team already runs distributed systems: services first. The evidence for services first is anecdotal.
+
+Principle: [Initial Shape, One Unit or Several](../software_development_guidelines/construction.md#initial-shape-one-unit-or-several), [Distribution Premium and Its Reversal](../software_development_guidelines/construction.md#distribution-premium-and-its-reversal), [Placing Service Boundaries](../software_development_guidelines/construction.md#placing-service-boundaries).
 `TRANSVERSE.EVOLUTION.3`
 
 #### Few Mature Technologies
@@ -372,7 +383,7 @@ The system changes deliberately: costly decisions named and recorded, growth in 
 - Adopt few, mature technologies with known failure modes: novelty is a scarce budget, and simplicity is a reliability property.
 - A new technology enters only when an existing one's measured limit is reached and its perpetual operating cost is budgeted. The rule counts runtimes, stores, services and frameworks, not the paradigm chosen inside an adopted language (inferred).
 
-Realized in the stack by [Stack Placements](allocation.md#stack-placements) (Postgres first). `TRANSVERSE.EVOLUTION.4`
+Realized in the stack by [Stack Placements](allocation.md#stack-placements) (Postgres first). Principle: [Adding as Replacing](../software_development_guidelines/evolution.md#adding-as-replacing). `TRANSVERSE.EVOLUTION.4`
 
 #### Team-Shaped Structure
 
@@ -380,4 +391,6 @@ Realized in the stack by [Stack Placements](allocation.md#stack-placements) (Pos
 - When teams multiply, each capability team owns its domain schema, functions and backend; one named [owner role](glossary.md#owner-role) holds conventions, roles, grants and review of the function API catalogue diff (inferred). A cross-schema business function belongs to the team that owns the workflow, reviewed by the database owner role (inferred).
 - Cross-domain business operations are composed inside the database through published functions, never by direct access to another domain's tables.
 - Module and schema boundaries are cut with the team boundaries.
+
+Principle: [Teams and Structure](../software_development_guidelines/construction.md#teams-and-structure), [Data Ownership by One Application](../software_development_guidelines/construction.md#data-ownership-by-one-application).
 `TRANSVERSE.EVOLUTION.5`

@@ -16,6 +16,10 @@ product:
     name: "Python KB Philosophy"
     description: "Eight foundational principles of the Python guidelines; shared principles link to it."
     file: "../../python_guidelines/intent_graphs/python_kb_philosophy.yaml"
+  - id: software-development-philosophy
+    name: "Software Development Philosophy"
+    description: "Stack-neutral software development principles (ownership, assurance, construction, change flow, operation, evolution, transverse); stack-specific nodes link to it."
+    file: "../../software_development_guidelines/intent_graphs/software_development_philosophy.ig.yaml"
 
 projection_by_target:
   web:

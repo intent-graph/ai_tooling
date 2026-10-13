@@ -11,7 +11,7 @@ How the Django backend secures entry for every caller, human or agent: one centr
 1. [Federated Login and Tokens](#federated-login-and-tokens) _(Lines 86-99)_
 1. [Passwords and Login Throttling](#passwords-and-login-throttling) _(Lines 102-111)_
 1. [Abuse and Rate Limits](#abuse-and-rate-limits) _(Lines 114-126)_
-1. [Server-Side Fetch](#server-side-fetch) _(Lines 129-136)_
+1. [Server-Side Fetch](#server-side-fetch) _(Lines 129-137)_
 
 ---
 
@@ -125,7 +125,7 @@ Two depths (the split is inferred). Refines the consumption limits of [Secured E
 `PIG-WEB-LOGIC.SECURE.6`
 
 ## Server-Side Fetch
-<!-- Lines 129-136 -->
+<!-- Lines 129-137 -->
 
 One helper for every fetch of a client- or agent-named URL is the required control, so a client cannot make the server reach internal services or metadata endpoints; a network guard backs it where the hosting allows.
 - It refuses private, loopback and link-local ranges, checking the address actually connected to rather than the hostname (inferred); it validates every redirect hop the same way.
@@ -133,4 +133,5 @@ One helper for every fetch of a client- or agent-named URL is the required contr
 - Network guard, preferred: where the hosting can enforce outbound rules, fetches leave through an egress proxy with direct egress blocked, or outbound rules deny the application's processes the private, loopback, link-local and metadata ranges. It is required when the server's network holds internal services or a metadata endpoint that answers without a token (inferred). Where the hosting cannot enforce outbound rules, the helper is the guard.
 - Forbidden: fetching without range checks.
 
+Principle: [Paths and Destinations](../software_development_guidelines/construction.md#paths-and-destinations).
 `PIG-WEB-LOGIC.SECURE.7`

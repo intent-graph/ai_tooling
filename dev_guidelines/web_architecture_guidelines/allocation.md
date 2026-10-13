@@ -7,14 +7,14 @@ Who does what across database, backends and browsers, decided per responsibility
 1. [Overview](#overview) _(Lines 23-52)_
 1. [Forces](#forces) _(Lines 55-89)_
 1. [Context](#context) _(Lines 92-124)_
-1. [Rules](#rules) _(Lines 127-165)_
-1. [Allocation Matrix](#allocation-matrix) _(Lines 168-192)_
-1. [Data Authority Placements](#data-authority-placements) _(Lines 195-227)_
-1. [Guarding Placements](#guarding-placements) _(Lines 230-296)_
-1. [Acting Placements](#acting-placements) _(Lines 299-342)_
-1. [Derivation Placements](#derivation-placements) _(Lines 345-374)_
-1. [Presentation Placements](#presentation-placements) _(Lines 377-400)_
-1. [Stack Placements](#stack-placements) _(Lines 403-473)_
+1. [Rules](#rules) _(Lines 127-167)_
+1. [Allocation Matrix](#allocation-matrix) _(Lines 170-194)_
+1. [Data Authority Placements](#data-authority-placements) _(Lines 197-233)_
+1. [Guarding Placements](#guarding-placements) _(Lines 236-306)_
+1. [Acting Placements](#acting-placements) _(Lines 309-354)_
+1. [Derivation Placements](#derivation-placements) _(Lines 357-388)_
+1. [Presentation Placements](#presentation-placements) _(Lines 391-414)_
+1. [Stack Placements](#stack-placements) _(Lines 417-489)_
 
 ---
 
@@ -123,7 +123,7 @@ Project variables move a placement in a stated direction; the [default context](
 `ALLOCATION.CONTEXT`
 
 ## Rules
-<!-- Lines 127-165 -->
+<!-- Lines 127-167 -->
 
 Five rules turn forces and context into a placement, applied to every responsibility in this order: [Trust Boundary](#trust-boundary) (who may decide at all), [End-to-End Placement](#end-to-end-placement) (which end can complete it), [Authority and Copies](#authority-and-copies), [One Core for Every Client](#one-core-for-every-client), [Atomicity Ends at the Transaction](#atomicity-ends-at-the-transaction). The first two are the security and correctness vetoes; the order is inferred. `ALLOCATION.RULES`
 
@@ -134,6 +134,8 @@ Exactly one tier is the authority for each responsibility; every other copy is a
 - A copy that rejects input early (a validator) is generated from or tested against the authority, never hand-maintained, so it cannot refuse what the authority accepts (inferred).
 - Store the minimum and derive the rest.
 - Where a second copy exists, after an asynchronous step show the pending state from the [status resource](glossary.md#status-resource) or the optimistic local value.
+
+Principle: [One Place per Fact](../software_development_guidelines/construction.md#one-place-per-fact).
 `ALLOCATION.RULES.1`
 
 ### End-to-End Placement
@@ -142,7 +144,7 @@ Place a function at the end that has the knowledge and finality to complete it, 
 
 ### Trust Boundary
 
-Any check that grants access or protects integrity runs in a tier the requester cannot modify: the backend or the database. The browser, agent clients, model output and client-supplied hints never decide; browser checks are feedback, and every submitted value is re-checked on the server. `ALLOCATION.RULES.3`
+Any check that grants access or protects integrity runs in a tier the requester cannot modify: the backend or the database. The browser, agent clients, model output and client-supplied hints never decide; browser checks are feedback, and every submitted value is re-checked on the server. Principle: [Parse or Validate at the Edge](../software_development_guidelines/construction.md#parse-or-validate-at-the-edge). `ALLOCATION.RULES.3`
 
 ### One Core for Every Client
 
@@ -164,7 +166,7 @@ Atomicity exists only inside one database transaction.
 `ALLOCATION.RULES.5`
 
 ## Allocation Matrix
-<!-- Lines 168-192 -->
+<!-- Lines 170-194 -->
 
 One line per responsibility in the default context. The authority decides; copies serve feedback or latency and never decide; forbidden tiers may not hold it; the last column names what would move it. The seven stack placements follow in [Stack Placements](#stack-placements).
 
@@ -191,7 +193,7 @@ One line per responsibility in the default context. The authority decides; copie
 | [UI and Ephemeral State](#ui-and-ephemeral-state) | by kind: browser, URL, database, channel | the browser's server-state cache | presence in database tables; durable state held only in the browser | offline use; sharing between users or tabs |
 
 ## Data Authority Placements
-<!-- Lines 195-227 -->
+<!-- Lines 197-233 -->
 
 The server database is the one system of record; consumers reach it through the function API and their own roles; each fact has one origin; every interface description consumers read stays in sync with the implementation by process. `ALLOCATION.RECORD`
 
@@ -212,6 +214,8 @@ Every consumer reaches the data through a database function API owned by the dat
 - A consumer outside the owning team gets the function API as a published contract; a service interface wins where that team needs deploys independent of the database.
 - Acceptable when one backend is truly the only consumer and the team wants no SQL interface: one application owns the database and others go through its service.
 - Tension recorded: research favours one application owning its database; the shared-database default overrides it.
+
+Principle: [Data Ownership by One Application](../software_development_guidelines/construction.md#data-ownership-by-one-application), [The Contract Over Stored Data](../software_development_guidelines/construction.md#the-contract-over-stored-data).
 `ALLOCATION.RECORD.2`
 
 ### Type and Contract Definitions
@@ -223,10 +227,12 @@ Every fact has one origin. Facts about stored data (type, nullability, enum valu
 - Record the origin direction per project: description first when consumers are independent of the team (third parties, other teams, agent hosts the team does not control), when several implementations must agree, or when the contract is agreed before the code; code first when every consumer is code the team ships together.
 - Acceptable when the API shape equals the storage shape, as in simple CRUD: one class for table and API.
 - Open: which generators to use; none was read.
+
+Principle: [One Source of Description](../software_development_guidelines/assurance_interfaces_data.md#one-source-of-description).
 `ALLOCATION.RECORD.3`
 
 ## Guarding Placements
-<!-- Lines 230-296 -->
+<!-- Lines 236-306 -->
 
 Deciding checks run in the database for rules about stored data, multi-table operations, concurrent change, duplicate suppression and per-role access; in the backend for meaning and access that need the end user's identity, policy or request context, and for sessions. Browsers and agent clients echo checks only, for feedback. Reads that are sensitive, complex or shared, per-user visibility rules included, go through database functions. `ALLOCATION.GUARD`
 
@@ -236,6 +242,8 @@ Input is parsed into the most precise type once, at every point where data enter
 - Entry points: browser to backend, agent to backend, queue or stored payload to worker, any consumer to a database function, whose parameter types and domains are the precise types.
 - Meaning sits with the tier that holds the state: constraints and functions for stored rows; the backend for rules that need the end user or policy (inferred).
 - Checks in the browser or an agent client are feedback copies, generated from or tested against the authority.
+
+Principle: [What Counts as Valid](../software_development_guidelines/construction.md#what-counts-as-valid).
 `ALLOCATION.GUARD.1`
 
 ### Invariants
@@ -247,6 +255,8 @@ Rules that must hold whatever writes the data are enforced by the database. Only
 - Set the default isolation per consumer role; reports on a replica accept snapshot anomalies.
 - Backend and browser validators are generated from or tested against the constraints; named constraints map violations to stable errors.
 - Departs from the maintainer's practice, which treats CHECK constraints and triggers as optional defence in depth: declarative constraints are required for every rule they can express.
+
+Principle: [Where Integrity Rules Live](../software_development_guidelines/assurance_interfaces_data.md#where-integrity-rules-live).
 `ALLOCATION.GUARD.2`
 
 ### Authorization
@@ -295,7 +305,7 @@ Layered, and the database decides. Exactly-once is unavailable across a process 
 Browser measures (disabled resubmission, 303 after POST, a form token minted at render) only reduce repeats. `ALLOCATION.GUARD.6`
 
 ## Acting Placements
-<!-- Lines 299-342 -->
+<!-- Lines 309-354 -->
 
 The database carries the business operations that change data (functions behind the API, one writer per state column), the invariants, the staged intent of side effects and deferred work, and the history. The backends orchestrate operations into workflows, call the outside world and decide what to defer. `ALLOCATION.ACT`
 
@@ -338,10 +348,12 @@ Business history is written by the database in the same transaction as the chang
 - Agent actions record acting identity, delegating subject, operation, correlation id and outcome, on the server; agent-originated writes are marked in the data.
 - Business events that row changes do not express (reason, intent) are passed by the backend to the function, which records them in the same transaction.
 - Acceptable when only one application writes and business events matter more than row changes: application-level history. Never in the default context.
+
+Principle: [Business Audit Trail](../software_development_guidelines/transverse_security.md#business-audit-trail).
 `ALLOCATION.ACT.4`
 
 ## Derivation Placements
-<!-- Lines 345-374 -->
+<!-- Lines 357-388 -->
 
 Derived data is computed where its source is, as close to the source transaction as its freshness requires; queries reduce data where it lives, with the database's collation; every derived copy states its staleness. `ALLOCATION.DERIVE`
 
@@ -352,7 +364,7 @@ Choose by required freshness and atomicity, in this order:
 2. When it must change atomically with the source: maintain it in the database in the same transaction (generated column, trigger).
 3. When a stated staleness is acceptable: database cache tables with an invalidation queue or scheduled refresh.
 
-No consumer writes a derived store beside the source. Acceptable with many derived stores outside the database, a high write rate and a team able to run stream infrastructure: derivation from an ordered log by a dedicated process. `ALLOCATION.DERIVE.1`
+No consumer writes a derived store beside the source. Acceptable with many derived stores outside the database, a high write rate and a team able to run stream infrastructure: derivation from an ordered log by a dedicated process. Principle: [Derived Data Sync and Staleness](../software_development_guidelines/assurance_interfaces_data.md#derived-data-sync-and-staleness). `ALLOCATION.DERIVE.1`
 
 ### Filtering, Sorting, Paging and Search
 
@@ -370,10 +382,12 @@ Every cache is a copy with a stated staleness bound and an expiry or invalidatio
 - Server state in client-rendered parts: a client cache with background refresh.
 - Response and fragment caches shared by processes: the database by default, a cache service on measured need.
 - Never process memory shared beyond one request; never a cache as permanent storage.
+
+Principle: [Shared Derived State](../software_development_guidelines/construction.md#shared-derived-state).
 `ALLOCATION.DERIVE.3`
 
 ## Presentation Placements
-<!-- Lines 377-400 -->
+<!-- Lines 391-414 -->
 
 Backends render HTML and format what they render; the browser enhances, holds ephemeral and in-progress state and formats what it renders itself; durable and shared state stays in the database. `ALLOCATION.PRESENT`
 
@@ -399,7 +413,7 @@ Interaction state is placed by lifetime and sharing (the four kinds are inferred
 `ALLOCATION.PRESENT.3`
 
 ## Stack Placements
-<!-- Lines 403-473 -->
+<!-- Lines 417-489 -->
 
 For JavaScript, Python and Postgres; refines the [Overview](#overview). Postgres carries the data, the function API every consumer calls, the per-role grants and the backing roles (queue, schedules, derived caches, sessions, documents) until a measured limit. Python backends own sessions, identity, product-policy authorization, workflow and HTML rendering; browser JavaScript enhances. No JavaScript server tier and no row-level security by default. The tiers are realized in [Postgres Data Tier](stack_defaults_data.md#data-tier-overview), [Python Application Tier](stack_defaults_logic.md#python-tier-overview) with [Backend Security](stack_defaults_logic_security.md#backend-security-overview), [Browser Surface](stack_defaults_interaction.md#browser-surface-overview) with [Agent Surface](stack_defaults_agents.md#agent-surface-overview), and [Transverse Concerns](stack_defaults_transverse.md#transverse-overview).
 
@@ -412,6 +426,8 @@ One Postgres carries the job queue, schedules, derived caches, sessions and docu
 - NOTIFY is a low-rate wake-up, never the message carrier. No second store is written beside Postgres without staging.
 - Acceptable past a measured limit, or where the framework's only production backend is a service (Django's channel layer on Redis): specialised services.
 - Open: the thresholds for queue contention and NOTIFY.
+
+Principle: [One General-Purpose Store for Several Roles](../software_development_guidelines/evolution.md#one-general-purpose-store-for-several-roles).
 `PIG-WEB-ALLOCATION.POSTGRES_FIRST`
 
 ### Database Function API

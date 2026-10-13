@@ -6778,3 +6778,405 @@ inter_intentlinks:
   uid: web-app-philosophy:TRANSVERSE.EVOLUTION.4_python-kb-philosophy:POLYGLOT
   shape:
     type: conflicts
+- src: web-app-philosophy:TRANSVERSE.SECURITY
+  dst: software-development-philosophy:TRANSVERSE.SECURITY.3
+  intent: Threat models are kept per critical flow and trust boundary of a web application
+    (authentication, access control, business operations, agent access) and revisited
+    when a placement on the flow changes; each threat category also names an owning
+    tier the requester cannot modify.
+  uid: web-app-philosophy:TRANSVERSE.SECURITY_software-development-philosophy:TRANSVERSE.SECURITY.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.SECURITY
+  dst: software-development-philosophy:ASSURANCE.SECURITY.1
+  intent: Each security property is stated as a verifiable requirement with a traceable
+    id at a level chosen by risk, and insecure design is answered with misuse-case
+    tests per tier; the threat list is an awareness map, never the requirement set.
+  uid: web-app-philosophy:TRANSVERSE.SECURITY_software-development-philosophy:ASSURANCE.SECURITY.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.SECURITY
+  dst: software-development-philosophy:TRANSVERSE.PRIVACY.1
+  intent: A web site collects only the data the user's goal needs and exposes only
+    the minimum its purpose needs; web adds that this holds for every page, API and
+    trace header.
+  uid: web-app-philosophy:TRANSVERSE.SECURITY_software-development-philosophy:TRANSVERSE.PRIVACY.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.PERFORMANCE
+  dst: software-development-philosophy:ASSURANCE.PERFORMANCE
+  intent: Web performance is judged on field data of real users at the 75th percentile
+    by device class; lab budgets gate each change but never override field data, and
+    field metrics are joined through the correlation id to server and database time.
+  uid: web-app-philosophy:TRANSVERSE.PERFORMANCE_software-development-philosophy:ASSURANCE.PERFORMANCE
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.CONTRACTS
+  dst: software-development-philosophy:ASSURANCE.CONTRACTS.1
+  intent: Contracts between tiers change by compatible additions with tolerant readers,
+    and usage is known before anything is removed; web adds that consumers deploy
+    separately and old clients linger, so the compatibility window is explicit.
+  uid: web-app-philosophy:TRANSVERSE.CONTRACTS_software-development-philosophy:ASSURANCE.CONTRACTS.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.CONTRACTS
+  dst: software-development-philosophy:ASSURANCE.CONTRACTS.2
+  intent: The provider's contract is authoritative and consumer-driven contracts are
+    tests, never the origin; web adds that consumers are several backends, consoles
+    and scripts of one shared database.
+  uid: web-app-philosophy:TRANSVERSE.CONTRACTS_software-development-philosophy:ASSURANCE.CONTRACTS.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.CONTRACTS
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.3
+  intent: Every contract between tiers or consumers states names, types, nullability,
+    units, invariants, owner and version, readable without the producer's code.
+  uid: web-app-philosophy:TRANSVERSE.CONTRACTS_software-development-philosophy:CONSTRUCTION.BOUNDARY.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.CONTRACTS
+  dst: software-development-philosophy:EVOLUTION.INCREMENTAL.2
+  intent: A breaking change takes expand, migrate, contract unless every consumer
+    ships in the same deployment as the change; web adds that browsers and agent clients
+    never do.
+  uid: web-app-philosophy:TRANSVERSE.CONTRACTS_software-development-philosophy:EVOLUTION.INCREMENTAL.2
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.RECORD.3
+  dst: software-development-philosophy:ASSURANCE.CONTRACTS.3
+  intent: Every interface description consumers read (HTTP description, function API
+    catalogue, agent tool surface) has one origin per fact with the other side generated
+    or conformance-checked and a CI gate that fails on drift; the origin direction
+    is recorded per project with criteria.
+  uid: web-app-philosophy:ALLOCATION.RECORD.3_software-development-philosophy:ASSURANCE.CONTRACTS.3
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.RULES.1
+  dst: software-development-philosophy:CONSTRUCTION.STATE.1
+  intent: Exactly one tier is the authority for each responsibility; every copy carries
+    a version or timestamp that detects staleness and never decides, and a rejecting
+    copy is generated from or tested against the authority.
+  uid: web-app-philosophy:ALLOCATION.RULES.1_software-development-philosophy:CONSTRUCTION.STATE.1
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.RULES.3
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.1
+  intent: Deciding checks run only in the backend or the database; the browser, agent
+    clients, model output and client-supplied hints never decide, and every submitted
+    value is re-checked on the server.
+  uid: web-app-philosophy:ALLOCATION.RULES.3_software-development-philosophy:CONSTRUCTION.BOUNDARY.1
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.GUARD.1
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.2
+  intent: Meaning is checked by the tier that holds the state (constraints and functions
+    for stored rows, the backend for rules needing the end user or policy), and at
+    the database function API the parameter types and domains are the precise types
+    for every consumer.
+  uid: web-app-philosophy:ALLOCATION.GUARD.1_software-development-philosophy:CONSTRUCTION.BOUNDARY.2
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.GUARD.2
+  dst: software-development-philosophy:ASSURANCE.DATA_INTEGRITY.1
+  intent: Every rule that must hold whatever writes the data is declared in the database,
+    CHECK constraints included; rules beyond declarative constraints run under serializable
+    isolation with retry or after locking the governing row, and backend and browser
+    validators are generated from or tested against the constraints.
+  uid: web-app-philosophy:ALLOCATION.GUARD.2_software-development-philosophy:ASSURANCE.DATA_INTEGRITY.1
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.ACT.4
+  dst: software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.5
+  intent: Business history is written by the database in the same transaction as the
+    change and records both the verified consumer role and the claimed actor; the
+    security event log stays a separate record with its own store, integrity and retention.
+  uid: web-app-philosophy:ALLOCATION.ACT.4_software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.5
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.DERIVE.1
+  dst: software-development-philosophy:ASSURANCE.DATA_INTEGRITY.4
+  intent: Derived data is computed where its source is, in the order compute on read,
+    same-transaction maintenance in the database, then cache tables with a stated
+    staleness; consumers never write derived stores beside the source.
+  uid: web-app-philosophy:ALLOCATION.DERIVE.1_software-development-philosophy:ASSURANCE.DATA_INTEGRITY.4
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.DERIVE.3
+  dst: software-development-philosophy:CONSTRUCTION.STATE.3
+  intent: Every cache states its staleness bound and an expiry or invalidation plan;
+    derived-data caches are database tables invalidated in the source transaction,
+    HTTP responses are labelled on purpose, and a cache is never permanent storage.
+  uid: web-app-philosophy:ALLOCATION.DERIVE.3_software-development-philosophy:CONSTRUCTION.STATE.3
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.RECORD.2
+  dst: software-development-philosophy:CONSTRUCTION.HIDING.4
+  intent: The database owner alone changes the schema, and every consumer reaches
+    the data through the owner's published function API with its own role; simple
+    reads may query granted base tables.
+  uid: web-app-philosophy:ALLOCATION.RECORD.2_software-development-philosophy:CONSTRUCTION.HIDING.4
+  shape:
+    type: refines
+- src: web-app-philosophy:ALLOCATION.RECORD.2
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.4
+  intent: The published contract over the shared database is a function API, never
+    views, with one business operation per call; it evolves additively and breaking
+    changes are coordinated with every consumer.
+  uid: web-app-philosophy:ALLOCATION.RECORD.2_software-development-philosophy:CONSTRUCTION.BOUNDARY.4
+  shape:
+    type: refines
+- src: web-app-philosophy:DATA.MAINTAIN
+  dst: software-development-philosophy:CHANGE_FLOW.DATA_CHANGE
+  intent: Schema changes are versioned migrations applied only by automation as a
+    step of every release, long-running data work is a human-launched script under
+    a checklist with a ticket id, and an incompatible change goes expand, migrate,
+    contract.
+  uid: web-app-philosophy:DATA.MAINTAIN_software-development-philosophy:CHANGE_FLOW.DATA_CHANGE
+  shape:
+    type: refines
+- src: web-app-philosophy:DATA.MAINTAIN
+  dst: software-development-philosophy:EVOLUTION.INCREMENTAL.6
+  intent: 'Conventions evolve forward only: new objects follow the new rule and legacy
+    objects are not renamed in bulk.'
+  uid: web-app-philosophy:DATA.MAINTAIN_software-development-philosophy:EVOLUTION.INCREMENTAL.6
+  shape:
+    type: refines
+- src: web-app-philosophy:DATA.MAINTAIN
+  dst: software-development-philosophy:ASSURANCE.AVAILABILITY.4
+  intent: Recovery to a chosen moment is the default for the database, and a backup
+    counts only once a restore of it has been rehearsed.
+  uid: web-app-philosophy:DATA.MAINTAIN_software-development-philosophy:ASSURANCE.AVAILABILITY.4
+  shape:
+    type: refines
+- src: web-app-philosophy:LOGIC.PROCESS
+  dst: software-development-philosophy:CONSTRUCTION.PROCESS.3
+  intent: 'Backend processes are disposable: durable state, sessions and shared caches
+    live in backing services and process memory caches nothing beyond one request;
+    long-lived connections are the one tolerated per-process state.'
+  uid: web-app-philosophy:LOGIC.PROCESS_software-development-philosophy:CONSTRUCTION.PROCESS.3
+  shape:
+    type: refines
+- src: web-app-philosophy:LOGIC.PROCESS
+  dst: software-development-philosophy:CONSTRUCTION.PROCESS.1
+  intent: Worker processes return an unfinished job on SIGTERM, so releases and scaling
+    lose no work.
+  uid: web-app-philosophy:LOGIC.PROCESS_software-development-philosophy:CONSTRUCTION.PROCESS.1
+  shape:
+    type: refines
+- src: web-app-philosophy:LOGIC.ENFORCE
+  dst: software-development-philosophy:CONSTRUCTION.HIDING.3
+  intent: 'One business core per backend, separable from transport and storage: adapters
+    hold no rule and every external system, the database function API included, is
+    reached through a port.'
+  uid: web-app-philosophy:LOGIC.ENFORCE_software-development-philosophy:CONSTRUCTION.HIDING.3
+  shape:
+    type: refines
+- src: web-app-philosophy:LOGIC.EXPOSE
+  dst: software-development-philosophy:CONSTRUCTION.BOUNDARY.5
+  intent: Browsers get server-rendered hypermedia and programs and agents a resource-oriented
+    structured interface over the same use cases, each described machine-readably
+    and evolved additively.
+  uid: web-app-philosophy:LOGIC.EXPOSE_software-development-philosophy:CONSTRUCTION.BOUNDARY.5
+  shape:
+    type: refines
+- src: web-app-philosophy:INTERACTION.ENVIRONMENT.3
+  dst: software-development-philosophy:CHANGE_FLOW.ROLLBACK.2
+  intent: Client and server changes coexist because every client-server contract has
+    a compatibility window at least as long as an old page can stay open; lockstep
+    deployment is acceptable only when every consumer ships in the same deployment,
+    which a browser tab never does.
+  uid: web-app-philosophy:INTERACTION.ENVIRONMENT.3_software-development-philosophy:CHANGE_FLOW.ROLLBACK.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  dst: software-development-philosophy:OPERATION.TELEMETRY.4
+  intent: One correlation id per user interaction runs from the browser through the
+    backend into the database transaction and is stamped on every log record, span,
+    client event and audit row; database consumers outside the request path carry
+    their identity and ticket id in the session.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.1_software-development-philosophy:OPERATION.TELEMETRY.4
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  dst: software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.1
+  intent: Validation failures, authentication results, authorization failures, session
+    failures, application errors and use of higher-risk functions go to a security
+    event log; changes to privileges, roles, credentials and grants count as security
+    events.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.1_software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  dst: software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.3
+  intent: Secrets, session ids, tokens and unneeded personal data are never logged
+    or placed in trace context, trace headers included.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.1_software-development-philosophy:TRANSVERSE.SECURITY_MONITORING.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.1
+  dst: software-development-philosophy:TRANSVERSE.PRIVACY.2
+  intent: Retention is a recorded decision per record type, set by legal, regulatory
+    and contractual obligations, no shorter and no longer.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.1_software-development-philosophy:TRANSVERSE.PRIVACY.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.2
+  dst: software-development-philosophy:ASSURANCE.BEHAVIOUR.3
+  intent: Tests sit at the lowest level that catches the failure, ratios are not prescribed
+    and end-to-end tests are few on critical journeys; web adds that logic placed
+    in the database is tested on a real engine of the production kind.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.2_software-development-philosophy:ASSURANCE.BEHAVIOUR.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.2
+  dst: software-development-philosophy:ASSURANCE.BEHAVIOUR.7
+  intent: Data tests are isolated by a rolled-back transaction by default, and behaviour
+    visible only at commit or between sessions is tested with committing sessions
+    in a disposable database, never a shared one.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.2_software-development-philosophy:ASSURANCE.BEHAVIOUR.7
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.2
+  dst: software-development-philosophy:CONSTRUCTION.PARADIGM.2
+  intent: Logic placed in the database is tested against a real engine, never a mock
+    or another engine, and every invariant enforced procedurally has a concurrent
+    test in the default suite.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.2_software-development-philosophy:CONSTRUCTION.PARADIGM.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: software-development-philosophy:CHANGE_FLOW.BUILD.2
+  intent: Build, release and run are separate and one immutable artifact, assets included,
+    is built once and promoted everywhere; web adds that the database changes ship
+    in the same pipeline.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.3_software-development-philosophy:CHANGE_FLOW.BUILD.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: software-development-philosophy:TRANSVERSE.CONFIG.1
+  intent: Configuration is kept apart from code and secrets out of source, so one
+    build serves every deploy.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.3_software-development-philosophy:TRANSVERSE.CONFIG.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: software-development-philosophy:CHANGE_FLOW.DEPLOY.3
+  intent: Every environment runs the same database engine and version as production,
+    with no adapters hiding differences.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.3_software-development-philosophy:CHANGE_FLOW.DEPLOY.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: software-development-philosophy:CHANGE_FLOW.DATA_CHANGE.3
+  intent: Schema and function-API changes are versioned migrations promoted through
+    the same pipeline as application code, run once per release before the new code
+    starts and additive across the release window.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.3_software-development-philosophy:CHANGE_FLOW.DATA_CHANGE.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.OPERABILITY.3
+  dst: software-development-philosophy:CHANGE_FLOW.RELEASE.1
+  intent: Releases are small and frequent increments.
+  uid: web-app-philosophy:TRANSVERSE.OPERABILITY.3_software-development-philosophy:CHANGE_FLOW.RELEASE.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.1
+  dst: software-development-philosophy:EVOLUTION.DECISIONS.1
+  intent: Each costly decision is recorded with its forces, alternatives and the condition
+    that would reverse it; web adds the per-project decisions the guideline leaves
+    open (interface origin direction, row-level security adoption).
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.1_software-development-philosophy:EVOLUTION.DECISIONS.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.1
+  dst: software-development-philosophy:CONSTRUCTION.DESIGN.2
+  intent: Costly, hard-to-reverse choices are identified early and decided when enough
+    is known, not up front for every one.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.1_software-development-philosophy:CONSTRUCTION.DESIGN.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: software-development-philosophy:EVOLUTION.INCREMENTAL.1
+  intent: The system grows in small tested increments with internal quality kept from
+    the start and no capability built for presumed future features.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.2_software-development-philosophy:EVOLUTION.INCREMENTAL.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: software-development-philosophy:EVOLUTION.DEBT.2
+  intent: Debt is taken only as prudent, deliberate and recorded, and internal quality
+    is invested in from the start.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.2_software-development-philosophy:EVOLUTION.DEBT.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: software-development-philosophy:CONSTRUCTION.DESIGN.4
+  intent: Capacity has headroom for about ten times the current load, and reaching
+    about a hundred times is planned as a rewrite of the part concerned rather than
+    anticipated in code.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.2_software-development-philosophy:CONSTRUCTION.DESIGN.4
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: software-development-philosophy:ASSURANCE.RULES.3
+  intent: Fit is made explicit as automated fitness functions, non-functional ones
+    included, that run as gates.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.2_software-development-philosophy:ASSURANCE.RULES.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.2
+  dst: software-development-philosophy:EVOLUTION.INCREMENTAL.3
+  intent: Replacement happens at seams behind the existing interface, never by big-bang
+    rewrite.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.2_software-development-philosophy:EVOLUTION.INCREMENTAL.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.3
+  dst: software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1
+  intent: Each backend is one deployable modular by business concept and is not split
+    into services without a measured need; web adds that several backends may share
+    one database.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.3_software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.3
+  dst: software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.2
+  intent: A further deployable is split off only when the distribution premium is
+    budgeted; web adds that a new deployable reaches data only through the function
+    API with its own role.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.3_software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.2
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.3
+  dst: software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.3
+  intent: A boundary is placed only once it has proven stable; web adds that bounded
+    contexts map to domain schemas in the shared database, so a later split moves
+    no data.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.3_software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.3
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.4
+  dst: software-development-philosophy:EVOLUTION.TECHNOLOGY.1
+  intent: Few mature technologies are adopted, and a new one enters only when an existing
+    one's measured limit is reached and its perpetual operating cost is budgeted;
+    runtimes, stores, services and frameworks are counted.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.4_software-development-philosophy:EVOLUTION.TECHNOLOGY.1
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.5
+  dst: software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.4
+  intent: Teams are cross-functional around a capability and system structure is cut
+    together with team structure; web adds the database owner as a named role inside
+    the team and a domain schema, functions and backend per capability team.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.5_software-development-philosophy:CONSTRUCTION.SYSTEM_SHAPE.4
+  shape:
+    type: refines
+- src: web-app-philosophy:TRANSVERSE.EVOLUTION.5
+  dst: software-development-philosophy:CONSTRUCTION.HIDING.4
+  intent: When teams multiply each capability team owns its domain schema, and one
+    named owner role holds what spans schemas; cross-domain operations are composed
+    inside the database by published functions, never by direct access to another
+    domain's tables.
+  uid: web-app-philosophy:TRANSVERSE.EVOLUTION.5_software-development-philosophy:CONSTRUCTION.HIDING.4
+  shape:
+    type: refines

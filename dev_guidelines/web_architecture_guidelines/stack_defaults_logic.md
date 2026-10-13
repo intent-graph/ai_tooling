@@ -5,9 +5,9 @@ How a Django backend carries the business logic tier above the Postgres [functio
 ## Table of Contents
 
 1. [Python Tier Overview](#python-tier-overview) _(Lines 16-40)_
-1. [Business Logic Realization](#business-logic-realization) _(Lines 43-103)_
-1. [Processing and Side Effects](#processing-and-side-effects) _(Lines 106-180)_
-1. [HTTP Interface](#http-interface) _(Lines 183-278)_
+1. [Business Logic Realization](#business-logic-realization) _(Lines 43-105)_
+1. [Processing and Side Effects](#processing-and-side-effects) _(Lines 108-184)_
+1. [HTTP Interface](#http-interface) _(Lines 187-286)_
 
 ---
 
@@ -39,7 +39,7 @@ flowchart LR
 `PIG-WEB-LOGIC`
 
 ## Business Logic Realization
-<!-- Lines 43-103 -->
+<!-- Lines 43-105 -->
 
 One use-case layer called by every entry point, writes only through generated wrappers, reads gathered in one statement with filtering, sorting and paging in Postgres. Refines [Business Core](philosophy.md#business-core). `PIG-WEB-LOGIC.ENFORCE`
 
@@ -99,10 +99,12 @@ Django, recorded as a decision with criteria (inferred from settled decisions; n
 - Gap: how Pydantic models and the OpenAPI 3.1 description are produced under Django was not read (candidate to verify: Django Ninja, Pydantic v2); the always-in-sync gate depends on it.
 
 Changes when: the backend serves only programs and agents with bearer tokens; FastAPI then wins.
+
+Principle: [Evaluation Process and Admission Gate](../software_development_guidelines/ownership_stance_selection.md#evaluation-process-and-admission-gate).
 `PIG-WEB-LOGIC.ENFORCE.5`
 
 ## Processing and Side Effects
-<!-- Lines 106-180 -->
+<!-- Lines 108-184 -->
 
 Deferred work and side effects are rows written by database functions in the transaction of the change, claimed by Python workers, delivered at least once to idempotent consumers; no enqueue outside the data transaction. Refines [Processing Model](philosophy.md#processing-model) and [Side Effects and Integrations](allocation.md#side-effects-and-integrations). `PIG-WEB-LOGIC.PROCESS`
 
@@ -116,6 +118,7 @@ Realizes [Job and Schedule Host](allocation.md#job-and-schedule-host).
 - In-process background work only for small work that may be lost. A framework task backend that enqueues by its own insert outside the function's transaction is not used for work that must not be lost.
 - Open: which Python runner; none was read over a queue table written by database functions.
 
+Principle: [Scheduled Work Signals](../software_development_guidelines/operation_objectives_and_signals.md#scheduled-work-signals).
 `PIG-WEB-LOGIC.PROCESS.1`
 
 ### Side Effects and Delivery
@@ -137,6 +140,7 @@ Acceptable when the user must see the foreign outcome in the same response and t
 - A circuit breaker per external dependency called from the request path; business errors stay business errors. Database retries follow [Transactions](#transactions).
 - Forbidden: unbounded or immediate retries; retries at several layers; unkeyed retry of a non-idempotent call.
 
+Principle: [Protecting Remote Calls](../software_development_guidelines/assurance_performance_availability.md#protecting-remote-calls).
 `PIG-WEB-LOGIC.PROCESS.3`
 
 ### File Upload Path
@@ -179,7 +183,7 @@ Deferred: out of scope, recorded only, not researched. When taken up it inherits
 `PIG-WEB-LOGIC.PROCESS.7`
 
 ## HTTP Interface
-<!-- Lines 183-278 -->
+<!-- Lines 187-286 -->
 
 HTML to browsers, resource-oriented JSON under `/v1` to programs and agents, problem details, idempotency, 202 status resources, labelled caches, one origin, Pydantic at every entry, additive evolution under a CI gate. Refines [Backend Interface](philosophy.md#backend-interface). `PIG-WEB-LOGIC.EXPOSE`
 
@@ -213,6 +217,8 @@ Acceptable when many clients need different field subsets of one graph and the t
 - Forbidden: messages as the only error signal.
 
 Acceptable when the API joins an ecosystem that uses them: Google's or Azure's error formats.
+
+Principle: [Errors at the Boundary](../software_development_guidelines/construction.md#errors-at-the-boundary).
 `PIG-WEB-LOGIC.EXPOSE.2`
 
 ### Retries and Asynchronous Operations
@@ -275,4 +281,6 @@ The compatibility window is set by [Non-Atomic Deployment](philosophy.md#non-ato
 - Forbidden: unversioned JSON paths until the first break.
 
 Acceptable when joining an ecosystem that uses it: media-type versioning, a dated query parameter or a dated header; the dated header with account pinning also when many external integrators must keep working indefinitely and the team can maintain version transformations.
+
+Principle: [Announcing Retirement](../software_development_guidelines/evolution.md#announcing-retirement), [Support Window Before Removal](../software_development_guidelines/evolution.md#support-window-before-removal).
 `PIG-WEB-LOGIC.EXPOSE.7`
