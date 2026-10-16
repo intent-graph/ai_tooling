@@ -13,7 +13,7 @@
    1. [Levels of Detail](#levels-of-detail) _(Lines 91-104)_
    1. [Stages](#stages) _(Lines 107-120)_
    1. [Philosophy Foundations](#philosophy-foundations) _(Lines 123-138)_
-1. [Notation and Related Files](#notation-and-related-files) _(Lines 141-145)_
+1. [Notation and Related Files](#notation-and-related-files) _(Lines 141-147)_
 
 
 
@@ -137,9 +137,11 @@ Each stage traces back to foundational principles in [LOD_0](LOD_0_philosophy/0_
 ---
 
 ## Notation and Related Files
-<!-- Lines 141-145 -->
+<!-- Lines 141-147 -->
 
 Cross-references in KB files use: `↑` parent, `↓` child, `→` sibling/forward, `←` back.
 
 - [CLAUDE.md](CLAUDE.md) — LLM navigation protocol (rough-to-fine, token budget, anti-patterns)
 - [intent_graphs/](intent_graphs/README.md) — IntentGraph representation (philosophy + guidelines/style)
+- [../software_development_guidelines/](../software_development_guidelines/README.md) — stack-neutral principles (ownership, assurance, change flow, operation, evolution); this KB keeps only the Python realization
+- [../](../README.md) — index of all development guidelines
