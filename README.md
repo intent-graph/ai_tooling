@@ -23,31 +23,32 @@ git clone https://github.com/intent-graph/intent_graph.git
 ```
 
 ## Layout
-<!-- Lines 27-48 -->
+<!-- Lines 27-49 -->
 
-- `documentation_tools/` — `md_structure_sync` (TOC/line-range sync CLI), `md_structure_viz`
-  (doc-tree visualization CLI), `codemap` (structural code-graph CLI for Python), and
-  `DOCUMENTATION_STANDARD.md` (the doc format these tools maintain).
-- `dev_guidelines/` — `software_development_guidelines` (stack-neutral principles: what a team
+- [`documentation_tools/`](documentation_tools/) — [`md_structure_sync`](documentation_tools/md_structure_sync/) (TOC/line-range sync CLI), [`md_structure_viz`](documentation_tools/md_structure_viz/)
+  (doc-tree visualization CLI), [`codemap`](documentation_tools/codemap/) (structural code-graph CLI for Python), and
+  [`DOCUMENTATION_STANDARD.md`](documentation_tools/DOCUMENTATION_STANDARD.md) (the doc format these tools maintain).
+- [`dev_guidelines/`](dev_guidelines/) — [`software_development_guidelines`](dev_guidelines/software_development_guidelines/) (stack-neutral principles: what a team
   writes, adopts or rents, how it assures, changes, operates and evolves a system, held as one
-  IntentGraph), `python_guidelines` (a Python knowledge base, LOD-organized),
-  `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU),
-  `web_architecture_guidelines` (architecture of a JavaScript + Python + Postgres web
+  IntentGraph), [`python_guidelines`](dev_guidelines/python_guidelines/) (a Python knowledge base, LOD-organized),
+  [`cli_guidelines`](dev_guidelines/cli_guidelines/) (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU),
+  [`web_architecture_guidelines`](dev_guidelines/web_architecture_guidelines/) (architecture of a JavaScript + Python + Postgres web
   application: who does what across tiers, held as two IntentGraphs) and
-  `javascript_guidelines` (solid, maintainable, secure JavaScript at the language level, from
+  [`javascript_guidelines`](dev_guidelines/javascript_guidelines/) (solid, maintainable, secure JavaScript at the language level, from
   audited authoritative sources, held as two IntentGraphs).
-- `diagrams_for_humans/` — reference for generating yEd `.graphml` diagrams.
-- `level_of_detail/` — the level-of-detail practice: an agent-facing core plus satellites, and
+- [`diagrams_for_humans/`](diagrams_for_humans/) — reference for generating yEd `.graphml` diagrams.
+- [`level_of_detail/`](level_of_detail/) — the level-of-detail practice: an agent-facing core plus satellites, and
   the authoring record behind them.
-- `howto/` — short how-tos (exposing a Python tool system-wide, writing a structured subagent).
-- `global_skills/` — Claude Code skills meant for every project, installed user-wide by symlink
-  (`subagent-orchestration`: brief sub-agents by pointer, fixed I/O, three-level returns).
-- `ai_evolution/` — notes on AI evolution and method (in French).
-- `.claude/` — agents (`doc-manifest-agent`, `diagram-agent`, `python-kb-agent`) and skills
+- [`howto/`](howto/) — short how-tos (exposing a Python tool system-wide, writing a structured subagent).
+- [`global_skills/`](global_skills/) — Claude Code skills meant for every project, installed user-wide by symlink
+  ([`subagent-orchestration`](global_skills/subagent-orchestration/): brief sub-agents by pointer, fixed I/O, three-level returns;
+  [`session-handoff`](global_skills/session-handoff/): hand a task to a new session, intent first, pointers to disk).
+- [`ai_evolution/`](ai_evolution/) — notes on AI evolution and method (in French).
+- [`.claude/`](.claude/) — agents (`doc-manifest-agent`, `diagram-agent`, `python-kb-agent`) and skills
   (`md-doc-tools`, `codemap`) that wrap the CLIs above for agent use.
 
 ## Installing the CLIs
-<!-- Lines 51-69 -->
+<!-- Lines 52-70 -->
 
 Each CLI is a standalone Python project (Python 3.11+) installed system-wide with
 [`uv`](https://docs.astral.sh/uv/), from the root of this repository:
@@ -68,13 +69,13 @@ codemap overview documentation_tools/md_structure_sync   # structural map of a P
 ```
 
 ## Contributing
-<!-- Lines 72-75 -->
+<!-- Lines 73-76 -->
 
 Issues are welcome. A pull request gives its content entirely to the owner: read
 [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## License
-<!-- Lines 78-86 -->
+<!-- Lines 79-87 -->
 
 - **CC BY 4.0** — `level_of_detail/`, `ai_evolution/`, `dev_guidelines/`, `howto/`,
   `documentation_tools/DOCUMENTATION_STANDARD.md` (intellectual/creative work).
