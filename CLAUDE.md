@@ -37,5 +37,8 @@ base here documents itself:
 This repository is public. It must never reference private material: no links or paths
 outside the public repos, no absolute or home paths, no names of private projects, folders,
 employers or clients. Cross-repo links to the sibling
-public `intent_graph` repository are fine as relative links (`../intent_graph/...`), since both
-repos sit side by side on a checkout.
+public `intent_graph` repository are relative links (`../intent_graph/...`), since both
+repos sit side by side on a checkout; they do not resolve on GitHub. For a few chosen
+high-level links (a folder's entry README pointing at the other repo's entry doc), add the
+GitHub URL after the local link: `[X](../intent_graph/X.md) ([GitHub](https://github.com/intent-graph/intent_graph/blob/main/X.md))`.
+Deep documents keep the local link only.
