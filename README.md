@@ -4,11 +4,26 @@ Generic, reusable tooling and knowledge bases for working with AI coding agents:
 navigating and documenting codebases, a transverse level-of-detail practice, and guideline
 knowledge bases an agent can consult mid-task.
 
-This repository is designed to sit beside the sibling `intent_graph` repository on disk; relative
-links from here assume a checkout layout of `../intent_graph`.
+> **Status:** the working toolkit of the [IntentGraph](https://github.com/intent-graph/intent_graph)
+> project, open source (MIT for code, CC BY 4.0 for the knowledge bases). The three CLIs are small
+> standalone Python projects with their own tests; the guidelines are living documents. Interfaces
+> and content may change without notice.
+
+## Getting It
+<!-- Lines 14-24 -->
+
+This repository is designed to sit beside the sibling
+[`intent_graph`](https://github.com/intent-graph/intent_graph) repository: relative links from
+here assume a checkout layout of `../intent_graph`. Clone both into the same folder (the second
+one is optional, the CLIs below do not need it):
+
+```bash
+git clone https://github.com/intent-graph/ai_tooling.git
+git clone https://github.com/intent-graph/intent_graph.git
+```
 
 ## Layout
-<!-- Lines 12-29 -->
+<!-- Lines 27-48 -->
 
 - `documentation_tools/` — `md_structure_sync` (TOC/line-range sync CLI), `md_structure_viz`
   (doc-tree visualization CLI), `codemap` (structural code-graph CLI for Python), and
@@ -32,9 +47,10 @@ links from here assume a checkout layout of `../intent_graph`.
   (`md-doc-tools`, `codemap`) that wrap the CLIs above for agent use.
 
 ## Installing the CLIs
-<!-- Lines 32-44 -->
+<!-- Lines 51-69 -->
 
-Each CLI is a standalone Python project installed system-wide with `uv`:
+Each CLI is a standalone Python project (Python 3.11+) installed system-wide with
+[`uv`](https://docs.astral.sh/uv/), from the root of this repository:
 
 ```bash
 uv tool install -e documentation_tools/codemap
@@ -44,10 +60,21 @@ uv tool install -e documentation_tools/md_structure_viz
 
 This puts `codemap`, `md-structure-sync`, `md-doc-tree-simple`, `md-doc-tree-rich`, and
 `md-doc-tree-full` on `PATH`, callable from any directory. Check each tool's own README for
-test setup and alternative install methods.
+test setup and alternative install methods. Check the install from the repository root:
+
+```bash
+md-doc-tree-rich howto                                   # Markdown files with line counts and titles
+codemap overview documentation_tools/md_structure_sync   # structural map of a Python project (YAML)
+```
+
+## Contributing
+<!-- Lines 72-75 -->
+
+Issues are welcome. A pull request gives its content entirely to the owner: read
+[CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## License
-<!-- Lines 47-55 -->
+<!-- Lines 78-86 -->
 
 - **CC BY 4.0** — `level_of_detail/`, `ai_evolution/`, `dev_guidelines/`, `howto/`,
   `documentation_tools/DOCUMENTATION_STANDARD.md` (intellectual/creative work).
