@@ -24,7 +24,7 @@ Read this when producing anything a person or another agent will read: an answer
 - do → the steps they will execute in full; rationale at claim.
 - trust or verify → the grounds in full (what you ran, where, when); the story at label.
 - find or orient → the map at claim across the whole; nothing in full.
-- resume or hand off → the state: done (claim plus pointer), open (full), next (steps).
+- resume or hand off → the requester's intent in full; the state as claims plus pointers; open in full; next as goal and constraints.
 Name the actual capability; do not pick from this list.
 
 **2. Receiver**, modelled as an outline.
@@ -63,7 +63,7 @@ The most frequent view you set, and the costliest for the receiver.
 <!-- Lines 64-67 -->
 
 - Progress: what changed since last time, at claim; what is next, one line; open branches named. Nothing about how the work felt.
-- Hand-off or recap: done (claim plus pointer), open (full), next (steps). A reader with none of your context must be able to resume from it.
+- Hand-off or recap: the requester's intent first, in full: what they asked, what they ruled out, what their corrections imply, each with its evidence, inferences marked inferred. It is the one branch that exists only in the conversation. Then done (claim plus pointer), open (full), next (goal and constraints; steps only where the requester dictated them). Point to what is on disk; never restate it, and never say how to read it: the receiver sets its own view. A reader with none of your context must be able to resume from it.
 
 ## Records: tickets, wiki pages, long documents
 <!-- Lines 70-74 -->
