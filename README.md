@@ -13,7 +13,9 @@ links from here assume a checkout layout of `../intent_graph`.
 - `documentation_tools/` — `md_structure_sync` (TOC/line-range sync CLI), `md_structure_viz`
   (doc-tree visualization CLI), `codemap` (structural code-graph CLI for Python), and
   `DOCUMENTATION_STANDARD.md` (the doc format these tools maintain).
-- `dev_guidelines/` — `python_guidelines` (a Python knowledge base, LOD-organized),
+- `dev_guidelines/` — `software_development_guidelines` (stack-neutral principles: what a team
+  writes, adopts or rents, how it assures, changes, operates and evolves a system, held as one
+  IntentGraph), `python_guidelines` (a Python knowledge base, LOD-organized),
   `cli_guidelines` (CLI interface-design consensus: clig.dev/12-Factor/POSIX/GNU),
   `web_architecture_guidelines` (architecture of a JavaScript + Python + Postgres web
   application: who does what across tiers, held as two IntentGraphs) and
