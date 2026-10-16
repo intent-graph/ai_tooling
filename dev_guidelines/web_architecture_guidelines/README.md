@@ -118,7 +118,7 @@ ig-tool query -g intent_graphs/web_defaults.ig.yaml --projection-links PIG-WEB-A
 ig-tool validate -g intent_graphs/web_defaults.ig.yaml -m intent_graphs/intent_resources.yaml
 ```
 
-Both graphs have a `ROOT`; every `PIG-WEB-*` uid lives in `web_defaults.ig.yaml`, every other uid in `web_app_philosophy.ig.yaml`. Tool guide: [PRIMER_TOOLS.md](../../../intent_graph/agents/PRIMER_TOOLS.md).
+Both graphs have a `ROOT`; every `PIG-WEB-*` uid lives in `web_defaults.ig.yaml`, every other uid in `web_app_philosophy.ig.yaml`. Tool guide: [PRIMER_TOOLS.md](../../../intent_graph/agents/PRIMER_TOOLS.md) ([GitHub](https://github.com/intent-graph/intent_graph/blob/main/agents/PRIMER_TOOLS.md)).
 
 To browse both graphs in Obsidian, run `./intent_graphs/export_to_obsidian.sh` and open `intent_graphs/obsidian_export/` as a vault: one note per node, one folder per graph, canvases per branch ([obsidian_export/README.md](intent_graphs/obsidian_export/README.md)).
 

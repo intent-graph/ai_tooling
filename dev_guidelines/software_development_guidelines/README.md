@@ -104,7 +104,7 @@ These override any source on their point.
   dataflow, conflicts).
 - Query, never load whole: `ig-tool tree -g <graph> --root OWNERSHIP`;
   `ig-tool query -g <graph> --node ASSURANCE.RULES.4`; `ig-tool query -g <graph> --links <UID>`.
-  Command guide: [../../../intent_graph/agents/PRIMER_TOOLS.md](../../../intent_graph/agents/PRIMER_TOOLS.md).
+  Command guide: [../../../intent_graph/agents/PRIMER_TOOLS.md](../../../intent_graph/agents/PRIMER_TOOLS.md) ([GitHub](https://github.com/intent-graph/intent_graph/blob/main/agents/PRIMER_TOOLS.md)).
 
 ## Provenance
 <!-- Lines 111-118 -->

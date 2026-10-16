@@ -300,7 +300,7 @@ mypy src/
 ## Why This Is a Separate Project
 <!-- Lines 302-312 -->
 
-Extracted from [IntentGraph](../../../intent_graph/) during implementation of code-generation agents. The Generator needs to *read* existing code structurally. The Extractor needs to *reverse-engineer* intent from code. Both need a representation that is richer than text, leaner than AST, and independent of intent.
+Extracted from [IntentGraph](../../../intent_graph/README.md) ([GitHub](https://github.com/intent-graph/intent_graph)) during implementation of code-generation agents. The Generator needs to *read* existing code structurally. The Extractor needs to *reverse-engineer* intent from code. Both need a representation that is richer than text, leaner than AST, and independent of intent.
 
 ```text
 IntentGraph  (what the system should do)
