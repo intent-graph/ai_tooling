@@ -3,7 +3,7 @@
 Generate pairs of images of the same view, clean and cluttered, as ground-truth data for decluttering tools
 (for instance [virtual_unstaging](../virtual_unstaging/README.md)).
 
-> **Status:** design stage: high-level design agreed, slice 1's detailed design proposed; no code yet. Read
+> **Status:** high-level design agreed; slice 1's detailed design to be implemented; no code yet. Read
 > [architecture.md](architecture.md) (the contract: only pairs are required; two routes, generation preferred;
 > room ontology, clutter taxonomy, pipeline, quality checks, risks, prior work), then
 > [design/README.md](design/README.md) (data flow, stored data, the choices, agreed; slice 1's detailed design).
