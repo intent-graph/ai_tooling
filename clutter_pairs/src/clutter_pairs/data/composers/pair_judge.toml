@@ -1,4 +1,5 @@
-# The pair judge's request: its instruction, the clutter spec, the clean image, the cluttered image, the change mask.
+# The pair judge's request: its instruction, the clutter spec, the clean image, the cluttered image, and the cluttered
+# image with the change mask's numbered regions drawn (judge aid A2).
 role = "judge"
 request = "chat"
 renderer = "spec_text"
@@ -16,5 +17,5 @@ content = [
   { slot = "spec", header = "Specification:" },
   { slot = "clean", header = "The clean image:" },
   { slot = "cluttered", header = "The cluttered image:" },
-  { slot = "mask", header = "The change mask (white where the images differ):" },
+  { slot = "regions", header = "The cluttered image with the numbered regions where the two images differ:" },
 ]

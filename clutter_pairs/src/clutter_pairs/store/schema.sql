@@ -199,12 +199,25 @@ CREATE TABLE iteration (
 CREATE UNIQUE INDEX iteration_one_accept ON iteration (loop_run_id) WHERE verdict = 'accept';
 
 -- clean loop: generated; clutter loop: raw_edit, corrected_edit (after the global colour correction),
--- change_mask (soft alpha in [0, 1] as an 8-bit image), composite (the cluttered image).
+-- change_mask (soft alpha in [0, 1] as an 8-bit image), composite (the cluttered image), regions (the composite with
+-- the mask's numbered regions drawn, for the pair judge).
 CREATE TABLE iteration_image (
   iteration_id  INTEGER NOT NULL REFERENCES iteration,
-  role          TEXT NOT NULL CHECK (role IN ('generated', 'raw_edit', 'corrected_edit', 'change_mask', 'composite')),
+  role          TEXT NOT NULL CHECK (role IN ('generated', 'raw_edit', 'corrected_edit', 'change_mask', 'composite',
+                                              'regions')),
   image_sha     TEXT NOT NULL REFERENCES image,
   PRIMARY KEY (iteration_id, role)
+);
+
+-- The numbered regions of a clutter iteration's change mask (pieces grouped, specks dropped, largest first): a pure
+-- function of the mask and the pixel thresholds recorded on the iteration's pixel assessment; audit recomputes them.
+CREATE TABLE mask_region (
+  iteration_id  INTEGER NOT NULL REFERENCES iteration,
+  n             INTEGER NOT NULL CHECK (n >= 1),
+  x0 DOUBLE PRECISION NOT NULL, y0 DOUBLE PRECISION NOT NULL, x1 DOUBLE PRECISION NOT NULL, y1 DOUBLE PRECISION NOT NULL,
+  px            INTEGER NOT NULL CHECK (px > 0),     -- mask pixels in the region
+  PRIMARY KEY (iteration_id, n),
+  CHECK (0 <= x0 AND x0 < x1 AND x1 <= 1 AND 0 <= y0 AND y0 < y1 AND y1 <= 1)
 );
 
 -- === Models, calls, exchanges, and what each request was built from ======================================
@@ -291,13 +304,20 @@ CREATE TABLE finding (
       OR (0 <= x0 AND x0 < x1 AND x1 <= 1 AND 0 <= y0 AND y0 < y1 AND y1 <= 1))
 );
 
--- The pair judge locates each specified item; every component of the change mask must fall in one (F1 of review).
-CREATE TABLE located_item (
+-- The regions of the change mask a finding cites (pair judge).
+CREATE TABLE finding_region (
+  finding_id  INTEGER NOT NULL REFERENCES finding,
+  n           INTEGER NOT NULL CHECK (n >= 1),
+  PRIMARY KEY (finding_id, n)
+);
+
+-- The pair judge's assignment: the items each numbered region holds. A region of the iteration's mask_region with
+-- no row here holds no item: an unexplained change (judge aid A2).
+CREATE TABLE region_item (
   assessment_id    INTEGER NOT NULL REFERENCES assessment,
+  n                INTEGER NOT NULL CHECK (n >= 1),
   clutter_item_id  INTEGER NOT NULL REFERENCES clutter_item,
-  x0 DOUBLE PRECISION NOT NULL, y0 DOUBLE PRECISION NOT NULL, x1 DOUBLE PRECISION NOT NULL, y1 DOUBLE PRECISION NOT NULL,
-  PRIMARY KEY (assessment_id, clutter_item_id),
-  CHECK (0 <= x0 AND x0 < x1 AND x1 <= 1 AND 0 <= y0 AND y0 < y1 AND y1 <= 1)
+  PRIMARY KEY (assessment_id, n, clutter_item_id)
 );
 
 CREATE TABLE guidance (

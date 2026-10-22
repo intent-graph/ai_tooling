@@ -22,7 +22,6 @@ import numpy as np
 from PIL import Image
 from virtual_unstaging.domain import sha256_bytes, sha256_text
 
-from clutter_pairs.pairs import label_components
 from clutter_pairs.space import size_for_aspect
 
 MARKER = "[[good]]"
@@ -35,7 +34,7 @@ SIZE_MULTIPLE = 32
 @dataclass
 class FakeBehaviour:
     """Switches for tests: answer 503 after a number of model requests; shift the first edit of each clean image;
-    locate no item (every change is unexplained); a judge that answers prose instead of JSON."""
+    assign no item to any region (every change is unexplained); a judge that answers prose instead of JSON."""
 
     down_after: int | None = None
     misalign_first_edit: bool = False
@@ -154,22 +153,15 @@ class FakeModelServer:
                 "guidance": [f"Write {MARKER} in the prompt."]}
 
     def _judge_pair(self, text: str, images: list[np.ndarray]) -> dict[str, Any]:
-        _, cluttered, mask = images
+        _, cluttered, _ = images
         count = len(_ITEM_LINE.findall(text))
-        labels, found = label_components(mask[..., 0] > 0)
-        located = []
-        if self.behaviour.locate_items:
-            h, w = labels.shape
-            for label in range(1, min(found, count) + 1):
-                ys, xs = np.nonzero(labels == label)
-                located.append({"item": label, "box": [int(xs.min() * 1000 / w), int(ys.min() * 1000 / h),
-                                                       int(np.ceil((xs.max() + 1) * 1000 / w)),
-                                                       int(np.ceil((ys.max() + 1) * 1000 / h))]})
+        items = list(range(1, count + 1)) if self.behaviour.locate_items else []
+        regions = [{"region": n, "items": items} for n in range(1, 13)]  # numbers past the drawn ones are dropped
         marked = np.all(np.abs(cluttered.astype(int) - np.array(MARKER_RGB)) <= 2, axis=-1).sum() > 100
         if marked:
-            return {"located": located, "findings": [], "guidance": []}
-        return {"located": located,
-                "findings": [{"code": "clutter_off_spec", "severity": "blocking", "box": None,
+            return {"regions": regions, "findings": [], "guidance": []}
+        return {"regions": regions,
+                "findings": [{"code": "clutter_off_spec", "severity": "blocking", "regions": [], "box": None,
                               "comment": "the items are not the ones listed"}],
                 "guidance": [f"Write {MARKER} in the instruction."]}
 

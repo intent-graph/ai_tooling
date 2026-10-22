@@ -17,11 +17,11 @@ from clutter_pairs.domain import (
     Finding,
     Judgment,
     Lesson,
-    LocatedItem,
     Measure,
     ModelId,
     NewLesson,
     Part,
+    RegionItems,
 )
 from clutter_pairs.space import Space, Target
 
@@ -520,10 +520,28 @@ def clear_iteration_results(conn: sqlite3.Connection, iteration_id: int) -> None
     """Before an unfinished iteration is redone: its images and assessments go; its calls stay, answered again from
     the store."""
     for aid in [int(r[0]) for r in conn.execute("SELECT id FROM assessment WHERE iteration_id = ?", (iteration_id,))]:
-        for table in ("finding", "guidance", "located_item", "measure"):
+        conn.execute("DELETE FROM finding_region WHERE finding_id IN (SELECT id FROM finding WHERE assessment_id = ?)",
+                     (aid,))
+        for table in ("finding", "guidance", "region_item", "measure"):
             conn.execute(f"DELETE FROM {table} WHERE assessment_id = ?", (aid,))
         conn.execute("DELETE FROM assessment WHERE id = ?", (aid,))
+    conn.execute("DELETE FROM mask_region WHERE iteration_id = ?", (iteration_id,))
     conn.execute("DELETE FROM iteration_image WHERE iteration_id = ?", (iteration_id,))
+
+
+def add_mask_regions(conn: sqlite3.Connection, iteration_id: int, regions: Sequence[tuple[int, Box, int]]) -> None:
+    """The numbered regions of an iteration's change mask: (number, box, mask pixels)."""
+    conn.executemany("INSERT INTO mask_region (iteration_id, n, x0, y0, x1, y1, px) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                     [(iteration_id, n, b.x0, b.y0, b.x1, b.y1, px) for n, b, px in regions])
+
+
+def mask_regions(conn: sqlite3.Connection, iteration_id: int) -> list[tuple[int, Box, int]]:
+    return [(int(r[0]), Box(r[1], r[2], r[3], r[4]), int(r[5])) for r in conn.execute(
+        "SELECT n, x0, y0, x1, y1, px FROM mask_region WHERE iteration_id = ? ORDER BY n", (iteration_id,))]
+
+
+def iterations_with_regions(conn: sqlite3.Connection) -> list[int]:
+    return [int(r[0]) for r in conn.execute("SELECT DISTINCT iteration_id FROM mask_region ORDER BY iteration_id")]
 
 
 def accepted_clean_image(conn: sqlite3.Connection, scene_id: int) -> str | None:
@@ -659,15 +677,14 @@ def add_assessment(conn: sqlite3.Connection, iteration_id: int, kind: str, verdi
                            (iteration_id, kind, verdict, call_id)).lastrowid or 0)
     for f in judgment.findings:
         box = (None,) * 4 if f.box is None else (f.box.x0, f.box.y0, f.box.x1, f.box.y1)
-        conn.execute("INSERT INTO finding (assessment_id, code, judged_severity, x0, y0, x1, y1, comment)"
-                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (aid, f.code, f.judged_severity, *box, f.comment))
+        fid = conn.execute("INSERT INTO finding (assessment_id, code, judged_severity, x0, y0, x1, y1, comment)"
+                           " VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (aid, f.code, f.judged_severity, *box, f.comment)).lastrowid
+        conn.executemany("INSERT INTO finding_region (finding_id, n) VALUES (?, ?)", [(fid, n) for n in f.regions])
     for rank, guidance in enumerate(judgment.guidance, start=1):
         conn.execute("INSERT INTO guidance (assessment_id, rank, text_sha) VALUES (?, ?, ?)",
                      (aid, rank, record_text(conn, guidance)))
-    for item in judgment.located:
-        b = item.box
-        conn.execute("INSERT INTO located_item (assessment_id, clutter_item_id, x0, y0, x1, y1) VALUES (?, ?, ?, ?, ?, ?)",
-                     (aid, item_ids[item.ordinal - 1], b.x0, b.y0, b.x1, b.y1))
+    conn.executemany("INSERT INTO region_item (assessment_id, n, clutter_item_id) VALUES (?, ?, ?)",
+                     [(aid, r.region, item_ids[i - 1]) for r in judgment.regions for i in r.items])
     for m in measures:
         conn.execute("INSERT INTO measure (assessment_id, name, kind, value) VALUES (?, ?, 'value', ?)", (aid, m.name, m.value))
         if m.threshold is not None:
@@ -690,14 +707,21 @@ def assessment(conn: sqlite3.Connection, assessment_id: int) -> AssessmentRow:
     if row is None:
         raise LookupError(f"no assessment {assessment_id}")
     findings = tuple(
-        Finding(str(r[0]), r[1], None if r[2] is None else Box(r[2], r[3], r[4], r[5]), str(r[6] or ""))
-        for r in conn.execute("SELECT code, judged_severity, x0, y0, x1, y1, comment FROM finding"
-                              " WHERE assessment_id = ? ORDER BY id", (assessment_id,)))
+        Finding(str(r[0]), r[1], None if r[2] is None else Box(r[2], r[3], r[4], r[5]), str(r[6] or ""),
+                tuple(int(n[0]) for n in conn.execute("SELECT n FROM finding_region WHERE finding_id = ? ORDER BY n",
+                                                      (r[7],))))
+        for r in conn.execute("SELECT code, judged_severity, x0, y0, x1, y1, comment, id FROM finding"
+                              " WHERE assessment_id = ? ORDER BY id", (assessment_id,)).fetchall())
     guidance = tuple(str(text(conn, r[0])) for r in
                      conn.execute("SELECT text_sha FROM guidance WHERE assessment_id = ? ORDER BY rank", (assessment_id,)))
-    located = tuple(LocatedItem(int(r[0]), Box(r[1], r[2], r[3], r[4])) for r in conn.execute(
-        "SELECT i.ordinal, l.x0, l.y0, l.x1, l.y1 FROM located_item l JOIN clutter_item i ON i.id = l.clutter_item_id"
-        " WHERE l.assessment_id = ? ORDER BY i.ordinal", (assessment_id,)))
+    held: dict[int, list[int]] = {}
+    if row[2] == "judge":  # every numbered region of the iteration, with or without an item
+        held = {int(r[0]): [] for r in conn.execute("SELECT n FROM mask_region WHERE iteration_id = ? ORDER BY n",
+                                                    (row[1],))}
+    for n, ordinal in conn.execute("SELECT r.n, i.ordinal FROM region_item r JOIN clutter_item i ON i.id = r.clutter_item_id"
+                                   " WHERE r.assessment_id = ? ORDER BY r.n, i.ordinal", (assessment_id,)):
+        held.setdefault(int(n), []).append(int(ordinal))
+    regions = tuple(RegionItems(n, tuple(held[n])) for n in sorted(held))
     values: dict[str, list[float | None]] = {}
     for name, kind, value in conn.execute("SELECT name, kind, value FROM measure WHERE assessment_id = ?"
                                           " ORDER BY rowid", (assessment_id,)):
@@ -705,7 +729,7 @@ def assessment(conn: sqlite3.Connection, assessment_id: int) -> AssessmentRow:
     measures = tuple(Measure(n, v[0], v[1]) for n, v in values.items() if v[0] is not None)
     thresholds = {n: float(v[1]) for n, v in values.items() if v[0] is None and v[1] is not None}
     return AssessmentRow(int(row[0]), int(row[1]), str(row[2]), str(row[3]), row[4],
-                         Judgment(findings, guidance, located), measures, thresholds)
+                         Judgment(findings, guidance, regions), measures, thresholds)
 
 
 def all_assessment_ids(conn: sqlite3.Connection) -> list[int]:

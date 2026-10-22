@@ -33,7 +33,7 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
    1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 284-287)_
    1. [C10 Loop code](#c10-loop-code) _(Lines 290-295)_
 1. [Build order](#build-order) _(Lines 298-311)_
-1. [Open](#open) _(Lines 314-324)_
+1. [Open](#open) _(Lines 314-325)_
 
 
 ---
@@ -45,8 +45,8 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
   a planner samples scenes where coverage is thinnest.
 - **Two inner loops** (owner): generator and judge iterate on one image until the judge accepts, once to make the
   clean image, once to add the clutter. A pair is built by **edit, then composite**: outside the change mask the two
-  images are identical by construction; inside it, every change must be one of the specified items, located by the
-  judge.
+  images are identical by construction; inside it, every change must be one of the specified items, assigned by
+  the judge to the mask's numbered regions.
 - **Carry-forward** (owner): lessons distilled from each image's iterations feed the next images' first prompt; whether
   they help is measured against a comparison group that runs without them (owner).
 - **Full auditability** (owner): every model instruction is a versioned Markdown file; every exchange with a model is
@@ -75,7 +75,7 @@ Each is checkable; each check becomes a test or an `audit` check.
 
 | # | Property | Check |
 |---|---|---|
-| P1 | **Pair truth:** clean and cluttered images are equal wherever the mask's alpha is 0, and every change inside the mask is a specified item | audit compares the pixels; a mask component outside every located item fails the pair (`unexplained_change`) |
+| P1 | **Pair truth:** clean and cluttered images are equal wherever the mask's alpha is 0, and every change inside the mask is a specified item | audit compares the pixels; a numbered mask region the judge assigns no item fails the pair (`unexplained_change`) |
 | P2 | Every image is **replayable** | a finished run started again makes zero model calls |
 | P3 | Every model is **swappable**: no model name, weight path or provider in code outside adapters and configuration | the test suite runs end to end on fake adapters |
 | P4 | **No GPU without a deadline;** a run stops at its pair target or at the rental's deadline | provisioning refuses to start without a limit; no call starts that the deadline would cut |
@@ -229,7 +229,7 @@ access by approval). Detail: [state of the art](../../virtual_unstaging/state_of
 
 Free edit, then colour correction and composite: the change mask is measured from the difference between the clean
 image and the corrected edit (so it includes shadows and reflections); outside it the clean image is kept, so P1
-holds there by construction; inside it, every component must be explained by an item the judge located. Slice 1
+holds there by construction; inside it, every numbered region must hold an item the judge assigns to it. Slice 1
 uses one model for clean image and edit (one VAE); slice 2's second family makes its own clean images. Rejected: the
 edit as returned (editors repaint slightly everywhere); masked inpainting (needs segmentation first, bounds the
 clutter to the mask's shape).
@@ -310,7 +310,7 @@ The whole flow end to end at small scale first, then depth where it fails.
    room, several rooms per building.
 
 ## Open
-<!-- Lines 314-324 -->
+<!-- Lines 314-325 -->
 
 - Whether FLUX.2 klein 4B makes an image from text alone, and its condition-image size limit: read before the
   rental, then checked by the smoke wave.
@@ -320,5 +320,6 @@ The whole flow end to end at small scale first, then depth where it fails.
 - Name of the project and of its command (architecture, "Open questions").
 - Granularity of the ontology and the taxonomy beyond slice 1: set from slice 1's report.
 - **Helping the judges** (owner's idea, 2026-10-22): explored in [judge_aids.md](judge_aids.md): knowledge as text
-  (implemented), numbered mask components, crops, detection and segmentation through virtual_unstaging's tools, and
-  a judge bench that measures each aid on stored iterations against the owner's marks. Which to build: open.
+  and numbered mask regions with a blocking code for changed openings (both implemented), crops, detection and
+  segmentation through virtual_unstaging's tools, and a judge bench that measures each aid on stored iterations
+  against the owner's marks. Which to build next: open.

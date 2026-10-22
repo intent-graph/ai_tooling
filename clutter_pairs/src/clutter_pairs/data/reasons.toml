@@ -4,6 +4,8 @@
 # the pixel tests raise the codes marked `by = "pixels"`.
 # Split (owner, 2026-10-22): a judge code that can be serious or slight has a `_minor` twin with its own meaning, so
 # the judge's choice of code carries the severity and the verdict still reads it here.
+# Openings (owner, 2026-10-22: "inventing openings ... is the biggest no no"): `opening_changed` never has a
+# `_minor` twin.
 
 [not_empty]
 stage = "clean"
@@ -93,4 +95,10 @@ meaning = "the edit changed colour or levels across the whole image"
 stage = "clutter"
 severity = "blocking"
 by = "pixels"
-meaning = "a changed region of the mask lies outside every item the judge located"
+meaning = "a numbered region of the change mask holds no listed item by the judge's answer"
+
+[opening_changed]
+stage = "clutter"
+severity = "blocking"
+by = "judge"
+meaning = "a door, window or passage appeared, vanished, moved, changed size or changed kind; one partly hidden behind an added item is not a change"

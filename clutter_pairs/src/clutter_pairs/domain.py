@@ -119,19 +119,25 @@ class Finding:
     judged_severity: Severity | None  # the judge's own call, recorded, never scored
     box: Box | None
     comment: str
+    regions: tuple[int, ...] = ()  # the numbered mask regions it cites (pair judge)
 
 
 @dataclass(frozen=True)
-class LocatedItem:
-    ordinal: int  # the clutter item's ordinal in its spec
-    box: Box
+class RegionItems:
+    """The pair judge's answer for one numbered region of the change mask: the items it holds, possibly none."""
+
+    region: int
+    items: tuple[int, ...]  # the clutter items' ordinals in their spec
 
 
 @dataclass(frozen=True)
 class Judgment:
     findings: tuple[Finding, ...]
     guidance: tuple[str, ...]
-    located: tuple[LocatedItem, ...] = ()
+    regions: tuple[RegionItems, ...] = ()
+
+    def assigned(self) -> dict[int, tuple[int, ...]]:
+        return {r.region: r.items for r in self.regions}
 
 
 @dataclass(frozen=True)

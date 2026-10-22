@@ -1,8 +1,9 @@
 """Audit: every check of the data model (data_model.md, "Checks run by `audit`"), and a pair's lineage.
 
 Requests are recomposed from their recorded parts (P9), bodies rebuilt from their stored form (P8), images checked
-against their hashes, the denormalized verdicts recomputed, the values checked against their space versions, and every
-pair's clean and cluttered images compared outside the mask (P1).
+against their hashes, the denormalized verdicts recomputed, the values checked against their space versions, each
+iteration's numbered regions and their image recomputed from its mask, and every pair's clean and cluttered images
+compared outside the mask (P1).
 """
 
 from __future__ import annotations
@@ -10,7 +11,7 @@ from __future__ import annotations
 import io
 import sqlite3
 from collections.abc import Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Any
 
 import numpy as np
@@ -18,6 +19,7 @@ from PIL import Image
 from virtual_unstaging import imaging
 from virtual_unstaging.domain import sha256_bytes
 
+from clutter_pairs import pairs
 from clutter_pairs.compose import (
     ComposeError,
     answer_text,
@@ -70,7 +72,7 @@ def audit(ds: Dataset) -> AuditResult:
     conn = ds.conn
     known = _Known(conn, images=set(repo.all_image_shas(conn)),
                    numbers={it.id: it.n for it in repo.all_iterations(conn)})
-    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _pairs):
+    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _regions, _pairs):
         check(conn, ds, result, known)
     return result
 
@@ -207,6 +209,34 @@ def _values(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _
         extra = held.get((kind, owner), set()) - axes.get(kind, set())
         if missing or extra:
             result.problems.append(f"{kind} {owner}: missing axes {sorted(missing)}, foreign axes {sorted(extra)}")
+
+
+def _regions(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
+    """Each iteration's numbered regions recompute from its change mask with the thresholds recorded beside them, and
+    its regions image redraws pixel for pixel from its composite (judge aid A2)."""
+    known_names = {f.name for f in fields(pairs.Thresholds)}
+    for iteration_id in repo.iterations_with_regions(conn):
+        result.count("regions checked")
+        recorded = {}
+        for a in repo.assessments(conn, iteration_id):
+            drawing = {m.name: m.value for m in a.measures}.get("region_drawing")
+            if a.kind == "pixel" and drawing is not None:
+                recorded = a.thresholds
+                if drawing != pairs.REGION_DRAWING:
+                    result.problems.append(f"iteration {iteration_id}: regions drawn by version {drawing:g}, "
+                                           f"this code draws version {pairs.REGION_DRAWING}")
+        t = pairs.Thresholds.of({k: v for k, v in recorded.items() if k in known_names})
+        images = repo.iteration_images(conn, iteration_id)
+        alpha = np.asarray(Image.open(io.BytesIO(ds.blobs.get(images["change_mask"]))).convert("L"))
+        found = pairs.regions(alpha == 255, t)
+        if [(r.n, r.box, r.px) for r in found.numbered] != repo.mask_regions(conn, iteration_id):
+            result.problems.append(f"iteration {iteration_id}: its regions do not recompute from its mask")
+            continue
+        if "regions" in images:
+            cluttered = np.asarray(imaging.decode(ds.blobs.get(images["composite"])).convert("RGB"))
+            drawn = np.asarray(imaging.decode(ds.blobs.get(images["regions"])).convert("RGB"))
+            if not np.array_equal(pairs.draw_regions(cluttered, found, t), drawn):
+                result.problems.append(f"iteration {iteration_id}: its regions image does not redraw from its composite")
 
 
 def _pairs(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:

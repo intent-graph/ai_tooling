@@ -1,4 +1,4 @@
-"""The pixel side: shift, global repaint, mask, composite (P1 by construction), explained change."""
+"""The pixel side: shift, global repaint, mask, composite (P1 by construction), numbered regions, explained change."""
 
 from __future__ import annotations
 
@@ -44,13 +44,51 @@ def test_mask_share_outside_the_density_range_is_off_spec() -> None:
     assert [f.code for f in result.findings] == ["clutter_off_spec"]
 
 
-def test_a_change_outside_every_located_item_is_unexplained() -> None:
+def _two_patches_and_a_speck() -> np.ndarray:
     mask = np.zeros((100, 100), dtype=bool)
-    mask[10:30, 10:30] = True
-    mask[60:90, 60:90] = True
-    result = pairs.explain(mask, [Box(0.05, 0.05, 0.35, 0.35)], Thresholds())
-    assert [f.code for f in result.findings] == ["unexplained_change"]
-    assert abs(result.measures[0].value - 900 / 1300) < 1e-6
+    mask[10:30, 10:30] = True  # 400 px
+    mask[60:90, 60:90] = True  # 900 px
+    mask[10:13, 90:93] = True  # 9 px: a speck
+    return mask
+
+
+def test_regions_are_grouped_numbered_by_size_and_specks_dropped() -> None:
+    mask = _two_patches_and_a_speck()
+    mask[32:34, 10:30] = True  # a shadow under the first patch, 2 px away: same region
+    found = pairs.regions(mask, Thresholds(region_group_px=3, region_min_px=100))
+    assert [(r.n, r.px) for r in found.numbered] == [(1, 900), (2, 440)]
+    assert found.numbered[0].box == Box(0.6, 0.6, 0.9, 0.9)
+    assert found.speck_px == 9
+    assert int(found.labels[11, 11]) == 2 and int(found.labels[11, 91]) == 0
+
+
+def test_a_region_holding_no_item_is_unexplained() -> None:
+    t = Thresholds(region_group_px=3, region_min_px=100)
+    found = pairs.regions(_two_patches_and_a_speck(), t)
+    result = pairs.explain(found, {1: (), 2: (1,)}, t)
+    assert [(f.code, f.box) for f in result.findings] == [("unexplained_change", Box(0.6, 0.6, 0.9, 0.9))]
+    measures = {m.name: m.value for m in result.measures}
+    assert abs(measures["unexplained_share"] - 900 / 1309) < 1e-6 and measures["regions"] == 2
+    assert [f.code for f in pairs.explain(found, {1: (2,)}, t).findings] == ["unexplained_change"]  # no answer
+
+
+def test_regions_past_the_cap_are_unexplained_and_not_drawn() -> None:
+    t = Thresholds(region_group_px=3, region_min_px=100, max_regions=1)
+    found = pairs.regions(_two_patches_and_a_speck(), t)
+    assert len(pairs.explain(found, {1: (1,), 2: (1,)}, t).findings) == 1
+    cluttered = np.full((100, 100, 3), 128, dtype=np.uint8)
+    drawn = pairs.draw_regions(cluttered, found, t)
+    assert (drawn[60:90, 60:90] != 128).any() and (drawn[10:30, 10:30] == 128).all()
+
+
+def test_the_regions_image_outlines_and_numbers_each_region() -> None:
+    t = Thresholds(region_group_px=3, region_min_px=100)
+    found = pairs.regions(_two_patches_and_a_speck(), t)
+    cluttered = np.full((100, 100, 3), 128, dtype=np.uint8)
+    drawn = pairs.draw_regions(cluttered, found, t)
+    assert (drawn[75, 59] == (255, 214, 0)).all()  # the outline of region 1, on its left edge
+    assert (drawn[60:80, 60:75] == 255).all(axis=-1).any()  # a white digit in the label box on its first pixel
+    assert np.array_equal(drawn, pairs.draw_regions(cluttered, found, t))
 
 
 def test_components_are_eight_connected() -> None:

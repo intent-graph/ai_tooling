@@ -20,10 +20,10 @@ from clutter_pairs.domain import (
     Finding,
     Judgment,
     Lesson,
-    LocatedItem,
     Measure,
     ModelId,
     Part,
+    RegionItems,
     Role,
     SubjectSpec,
 )
@@ -191,9 +191,11 @@ def render_assessment(iteration: int, kind: str, judgment: Judgment, measures: S
         lines.append(f"- measure {m.name} = {m.value:.4g}{bound}")
     for f in judgment.findings:
         where = "" if f.box is None else f" at {_thousandths(f.box)}"
-        lines.append(f"- finding {f.code}{where}: {f.comment}")
-    for item in judgment.located:
-        lines.append(f"- item {item.ordinal} located at {_thousandths(item.box)}")
+        cited = "" if not f.regions else " in region" + ("s " if len(f.regions) > 1 else " ") + _numbers(f.regions)
+        lines.append(f"- finding {f.code}{where}{cited}: {f.comment}")
+    for r in judgment.regions:
+        held = f"items {_numbers(r.items)}" if r.items else "no item"
+        lines.append(f"- region {r.region} holds {held}")
     for rank, text in enumerate(judgment.guidance, start=1):
         lines.append(f"- guidance {rank}: {text}")
     if len(lines) == 1:
@@ -233,10 +235,11 @@ def parse_json_answer(answer: str) -> Any:
         raise ComposeError("the answer is not JSON") from None
 
 
-def parse_judgment(answer: str, stage: str, item_count: int, allowed_codes: set[str]) -> Judgment:
+def parse_judgment(answer: str, stage: str, item_count: int, allowed_codes: set[str], region_count: int = 0) -> Judgment:
     """A judge's answer, at the trust boundary: codes from the stage's reasons, boxes in thousandths turned into
-    [0, 1]. A degenerate finding box becomes no box; a degenerate or unknown located item is left out (it counts as
-    not located). Anything else malformed rejects the answer."""
+    [0, 1]. A degenerate finding box becomes no box; an unknown item or region number is left out, as is a region's
+    second answer. Every region 1..region_count is in the result; one without an answer holds no item. Anything else
+    malformed rejects the answer."""
     data = parse_json_answer(answer)
     try:
         findings = []
@@ -247,21 +250,32 @@ def parse_judgment(answer: str, stage: str, item_count: int, allowed_codes: set[
             severity = raw.get("severity")
             if severity not in ("blocking", "minor"):
                 raise ComposeError(f"severity {severity!r}")
-            findings.append(Finding(code, severity, _box(raw.get("box")), str(raw.get("comment", ""))[:1000]))
+            cited = _ordinals(raw.get("regions", []), region_count)
+            findings.append(Finding(code, severity, _box(raw.get("box")), str(raw.get("comment", ""))[:1000], cited))
         guidance = tuple(str(g)[:1000] for g in data["guidance"])
-        located: list[LocatedItem] = []
+        regions: dict[int, RegionItems] = {}
         if stage == "clutter":
-            seen: set[int] = set()
-            for raw in data["located"]:
-                ordinal, box = int(raw["item"]), _box(raw["box"])
-                if 1 <= ordinal <= item_count and box is not None and ordinal not in seen:
-                    seen.add(ordinal)
-                    located.append(LocatedItem(ordinal, box))
+            for raw in data["regions"]:
+                n = int(raw["region"])
+                if 1 <= n <= region_count and n not in regions:
+                    regions[n] = RegionItems(n, _ordinals(raw["items"], item_count))
     except (KeyError, TypeError, ValueError) as error:
         if isinstance(error, ComposeError):
             raise
         raise ComposeError(f"malformed judgment: {error!r}") from None
-    return Judgment(tuple(findings), guidance, tuple(sorted(located, key=lambda i: i.ordinal)))
+    every = tuple(regions.get(n, RegionItems(n, ())) for n in range(1, region_count + 1)) if stage == "clutter" else ()
+    return Judgment(tuple(findings), guidance, every)
+
+
+def _ordinals(raw: object, count: int) -> tuple[int, ...]:
+    """Distinct numbers in 1..count, sorted; others dropped."""
+    if not isinstance(raw, list):
+        raise ComposeError(f"a list of numbers: {raw!r}")
+    return tuple(sorted({int(v) for v in raw if isinstance(v, int) and 1 <= v <= count}))
+
+
+def _numbers(values: Sequence[int]) -> str:
+    return ", ".join(str(v) for v in values)
 
 
 def _box(raw: object) -> Box | None:

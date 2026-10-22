@@ -176,9 +176,7 @@ def thresholds(cfg: Config, decided: dict[str, float]) -> Thresholds:
     unknown = set(values) - {f.name for f in fields(Thresholds)}
     if unknown:
         raise ConfigError(f"unknown pixel thresholds {sorted(unknown)}")
-    kinds = {f.name: f.type for f in fields(Thresholds)}
-    typed: dict[str, Any] = {k: (int(v) if kinds[k] in ("int", int) else float(v)) for k, v in values.items()}
-    return Thresholds(**typed)
+    return Thresholds.of(values)
 
 
 def read_data_file(cfg: Config, packaged: str) -> tuple[str, str]:
