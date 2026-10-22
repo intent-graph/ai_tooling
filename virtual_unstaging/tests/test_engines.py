@@ -1,8 +1,11 @@
-"""Engines on a known landscape: poll orders, acceptance, no progress, determinism under replay."""
+"""Engines on a known landscape: poll orders, acceptance, no progress, determinism under replay; the replay of a
+stored history, for an engine of any kind."""
 
 from __future__ import annotations
 
 from collections.abc import Callable
+
+import pytest
 
 from virtual_unstaging.domain import (
     DefectStep,
@@ -20,8 +23,10 @@ from virtual_unstaging.engines import (
     CoordinateSearch,
     GuidedSearch,
     PatternSearch,
+    ReplayMismatch,
     SingleAttempt,
     make_engine,
+    replay,
 )
 
 
@@ -114,3 +119,43 @@ def test_replay_reproduces_the_same_asks() -> None:
     for point in first:
         assert replayed.ask() == point
         replayed.tell(point, landscape(point, with_moves=True))
+
+
+class TextEngine:
+    """An engine of another kind: its candidates are texts, numbered by the evaluations it was told."""
+
+    name = "text"
+
+    def start(self, problem: str) -> None:
+        self.prefix, self.told = problem, 0
+
+    def ask(self) -> str | Stop:
+        return Stop("engine") if self.told == 3 else f"{self.prefix}{self.told}"
+
+    def tell(self, candidate: str, evaluation: int | None) -> None:
+        self.told += 1
+
+
+def test_replay_tells_a_stored_history_to_an_engine_of_another_kind() -> None:
+    engine, evaluated = TextEngine(), []
+    engine.start("draft ")
+
+    def evaluation_of(candidate: str) -> int:
+        evaluated.append(candidate)
+        return 1
+
+    replay(engine, ["draft 0", "draft 1"], lambda candidate: candidate, evaluation_of)
+    assert engine.told == 2 and evaluated == ["draft 0", "draft 1"] and engine.ask() == "draft 2"
+
+
+def test_replay_stops_at_the_first_candidate_the_engine_does_not_ask_again() -> None:
+    engine, evaluated = TextEngine(), []
+    engine.start("draft ")
+
+    def evaluation_of(candidate: str) -> int:
+        evaluated.append(candidate)
+        return 1
+
+    with pytest.raises(ReplayMismatch, match="run 4: replay asked draft 1, stored other"):
+        replay(engine, ["draft 0", "other"], lambda candidate: candidate, evaluation_of, label="run 4: ")
+    assert evaluated == ["draft 0"]  # nothing past the mismatch is evaluated

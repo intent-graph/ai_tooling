@@ -8,13 +8,16 @@ function of the problem and the sequence of `tell`, so a run resumes by replayin
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Iterator
-from typing import Protocol, TypeVar
+from typing import Any, Protocol, TypeVar
 
 from virtual_unstaging.domain import Dimension, Evaluation, Point, Problem, Severity, Stop, is_better
 
 ProblemT = TypeVar("ProblemT", contravariant=True)
 CandidateT = TypeVar("CandidateT")
 EvaluationT = TypeVar("EvaluationT", contravariant=True)
+C = TypeVar("C")
+E = TypeVar("E")
+H = TypeVar("H")
 
 
 class SearchEngine(Protocol[ProblemT, CandidateT, EvaluationT]):
@@ -32,6 +35,27 @@ class SearchEngine(Protocol[ProblemT, CandidateT, EvaluationT]):
 
 
 Engine = SearchEngine[Problem, Point, Evaluation]  # the engines of this module: points of the lattice of levels
+
+
+class ReplayMismatch(RuntimeError):
+    """A resumed engine asked another candidate than the stored one: it is not deterministic."""
+
+
+def replay(
+    engine: SearchEngine[Any, C, E],
+    history: Iterable[H],
+    candidate_of: Callable[[H], C],
+    evaluation_of: Callable[[H], E | None],
+    label: str = "",
+) -> None:
+    """Tell a started engine its stored history, in order. Before each `tell`, the engine's `ask` must return the
+    stored candidate (design D10); `evaluation_of` is called only after that check."""
+    for entry in history:
+        stored = candidate_of(entry)
+        asked = engine.ask()
+        if asked != stored:
+            raise ReplayMismatch(f"{label}replay asked {asked}, stored {stored}")
+        engine.tell(stored, evaluation_of(entry))
 
 
 class PatternSearch:
