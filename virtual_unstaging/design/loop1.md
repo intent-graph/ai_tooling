@@ -124,7 +124,8 @@ A pure function: `compile(point, photo_context, release, instruction_stack) -> G
 ## Automatic tool runs
 <!-- Lines 126-136 -->
 
-Up to three tools run on every attempt before it is judged (design D6): `change_map` always, `class_diff` and
+Up to three tools run on every attempt before it is judged (design D6): a change map always, `structure_map` (the
+default, needs the tool server) or the colour `change_map` (`[tools] structure_map = false`); `class_diff` and
 `element_inventory` when the project's `[tools]` section turns them on (`class_diff = true`, `inventory = true`).
 Each returns derived images, measures and a short text summary; each run is cached by its key and linked to the
 judgment that read it.
@@ -133,6 +134,7 @@ judgment that read it.
 |---|---|---|
 | `class_diff` | semantic segmentation of original and candidate; inside the dilated removal region, the share of pixels whose class became an opening (door, window, passage) or a class absent from the original; outside it, fixed-element classes that vanished. *Proposal* (2026-10-22): a class the original shows on the region's edge and the candidate extends into it is `continued`, not `appeared`, and an opening that continues one at the edge is said to (revealed or extended, not necessarily invented) | a colour map of class changes; e.g. "inside the removed region, 3.1 % of pixels became door, at (0.42, 0.30)-(0.55, 0.81), continuing a door at the region's edge in the original" |
 | `change_map` | outside the removal region: colour difference ΔE, a heat map. *Proposal* (2026-10-22): a uniform colour shift (the median Lab difference outside the region) is measured apart and removed before the local change is counted, so a slight global tone change no longer reads as change everywhere | the heat map of local change; e.g. "a uniform colour shift of ΔE 6.2 (lighter); after it, 1.4 % of the pixels outside the region changed visibly" |
+| `structure_map` | the candidate aligned to the original when the difference is a small reframing (else reported as a viewpoint sign); outside the removal region, the regions whose structure changed, robust to small shifts, resampling and tone ([tool server API](tool_server_api.md#structure-map)) | the aligned candidate with those regions outlined; e.g. "outside the removal region, the structure changed in 2 places, together 3.1% of that area: …" |
 | `element_inventory` | detection and segmentation of the room's elements in original and candidate, matched by place: each element `kept`, `revealed`, `changed`, `removed`, `new` or `left`, inside or outside the region ([tool server API](tool_server_api.md#element-inventory)). Names: the photo's fixed elements (project-wide and group), the generic fixed building elements of the package (`data/building_elements.txt`: door, window, radiator, socket, switch, light, fireplace, beam, built-in cupboard) and its movable elements; a leading "the" dropped, lower case, each name once, fixed winning over movable; surfaces (a name ending in wall, floor, ceiling, tiles…) left to `change_map`, as a detector's box for a surface moves from one picture to the next | the candidate with its elements boxed by status; the inventory as a short table |
 
 Tools locate and measure; the judge decides ([architecture](../architecture.md#judge-tool-library)).
@@ -143,7 +145,7 @@ Tools locate and measure; the judge decides ([architecture](../architecture.md#j
 One call per attempt, with two sections in the answer (design D7).
 
 **Images, in order, each named in the text:** the original; the candidate; the original with the removal region
-outlined; the `change_map` heat map; the `class_diff` map; the candidate annotated by `element_inventory`. The last
+outlined; the structure map (or the `change_map` heat map); the `class_diff` map; the candidate annotated by `element_inventory`. The last
 two only when the project turns their tool on.
 
 **Text:** the judge's instruction stack (base, then project overlay), rendered with: the content rules of the

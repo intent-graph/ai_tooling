@@ -136,6 +136,9 @@ class FakeRemoteTools:
             labels = list(params.get("labels", []))
             found = {label: (0.11 if i == 0 else 0.0) for i, label in enumerate(labels)}
             return ToolResult(name, "fake-1", {"mask": imaging.mask_png(mask)}, {"found": found}, "fake segmentation")
+        if name == "structure_map":
+            return ToolResult(name, "fake-1", {"changes": fetch(inputs[1])}, {"regions": []},
+                              "framing: the candidate matches the original (fake); outside the removal region, no structural change")
         if name == "element_inventory":
             candidate = fetch(inputs[1])
             elements = [{"n": 1, "label": params["movable"][0] if params.get("movable") else "element", "status": "removed"}]

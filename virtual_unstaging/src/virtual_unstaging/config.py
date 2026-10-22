@@ -62,6 +62,7 @@ critique_chars = 0
 [tools]
 class_diff = true                 # needs the tool server
 inventory = false                 # the judge reads an element inventory (needs the tool server)
+structure_map = true              # the judge's change map shows structure (needs the tool server); false: colour
 
 [budget]
 max_attempts = 6
@@ -163,6 +164,7 @@ class ProjectConfig:
     minor_tolerance: int
     workers: int
     inventory: bool = False
+    structure_map: bool = True
 
 
 _SECTIONS = {
@@ -172,7 +174,7 @@ _SECTIONS = {
     "judge": {"adapter", "endpoint", "key_file", "key_command", "model", "revision", "box_scale", "temperature",
               "max_tokens", "timeout_seconds", "instructions", "overlay", "extra", "image_side", "image_format", "max_findings", "max_moves",
               "comment_chars", "critique_chars"},
-    "tools": {"class_diff", "inventory", "endpoint", "key_file", "key_command"},
+    "tools": {"class_diff", "inventory", "structure_map", "endpoint", "key_file", "key_command"},
     "budget": {"max_attempts", "max_gpu_seconds", "max_judge_calls"},
     "search": {"minor_tolerance", "workers"},
 }
@@ -304,6 +306,7 @@ def load(project_dir: Path, overrides: Sequence[Path] = ()) -> ProjectConfig:
         judge=judge,
         class_diff=bool(t.get("class_diff", True)),
         inventory=bool(t.get("inventory", False)),
+        structure_map=bool(t.get("structure_map", True)),
         tools_endpoint=tools_endpoint,
         tools_secret=_secret(t) if ("key_file" in t or "key_command" in t) else generator.secret,
         budget=Budget(_int(b, "max_attempts", 6, 1), float(b.get("max_gpu_seconds", 900)), _int(b, "max_judge_calls", 14, 1)),
