@@ -1,0 +1,21 @@
+# clutter_pairs
+
+Generate pairs of images of the same view, clean and cluttered, as ground-truth data for decluttering tools
+(for instance [virtual_unstaging](../virtual_unstaging/README.md)).
+
+> **Status:** design stage: a high-level design awaits the owner's agreement; no code. Read
+> [architecture.md](architecture.md) (the contract: only pairs are required; two routes, generation preferred;
+> room ontology, clutter taxonomy, pipeline, quality checks, risks, prior work), then
+> [design/README.md](design/README.md) (data flow, stored data, the choices to agree on).
+
+## Files
+<!-- Lines 13-16 -->
+
+- [`architecture.md`](architecture.md) — the architecture and its open questions.
+- [`CLAUDE.md`](CLAUDE.md) — agent entry point for this folder.
+
+## Sub-folders
+<!-- Lines 19-21 -->
+
+- [`design/`](design/README.md) — the high-level design of the generation route: usage, properties, data flow,
+  stored data, choices.
