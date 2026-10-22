@@ -3,10 +3,10 @@
 Generate pairs of images of the same view, clean and cluttered, as ground-truth data for decluttering tools
 (for instance [virtual_unstaging](../virtual_unstaging/README.md)).
 
-> **Status:** design stage: a high-level design awaits the owner's agreement; no code. Read
+> **Status:** design stage: high-level design agreed, slice 1's detailed design proposed; no code yet. Read
 > [architecture.md](architecture.md) (the contract: only pairs are required; two routes, generation preferred;
 > room ontology, clutter taxonomy, pipeline, quality checks, risks, prior work), then
-> [design/README.md](design/README.md) (data flow, stored data, the choices to agree on).
+> [design/README.md](design/README.md) (data flow, stored data, the choices, agreed; slice 1's detailed design).
 
 ## Files
 <!-- Lines 13-16 -->
@@ -17,5 +17,5 @@ Generate pairs of images of the same view, clean and cluttered, as ground-truth 
 ## Sub-folders
 <!-- Lines 19-21 -->
 
-- [`design/`](design/README.md) — the high-level design of the generation route: usage, properties, data flow,
-  stored data, choices.
+- [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model (schema),
+  loops (composition, pixel tests, composite, lessons), use of virtual_unstaging, components, build order.
