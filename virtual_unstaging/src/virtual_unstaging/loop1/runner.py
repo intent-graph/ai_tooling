@@ -31,7 +31,7 @@ from virtual_unstaging.domain import (
     Stop,
     canonical_json,
 )
-from virtual_unstaging.engines import make_engine
+from virtual_unstaging.engines import make_engine, replay
 from virtual_unstaging.instructions import InstructionStack
 from virtual_unstaging.judge import Chat, ContractError, Judge, JudgeImage, JudgeInput, JudgeOutput
 from virtual_unstaging.loop1.compile import Guide, PhotoContext, compile_request
@@ -49,10 +49,6 @@ PAUSING = {"endpoint_unreachable", "deadline_reached", "unauthorized", "api_vers
 
 class RunPaused(RuntimeError):
     """An endpoint is unreachable or past its deadline: the run stops, resumable with `run --resume`."""
-
-
-class ReplayMismatch(RuntimeError):
-    """A resumed engine asked another point than the stored one: it is not deterministic."""
 
 
 @dataclass(frozen=True)
@@ -225,15 +221,8 @@ class Optimization:
         )
         engine = make_engine(self.run_row["engine"])
         engine.start(problem)
-        for entry in repo.history(self.conn, opt_id, self.judge_model_id, self.judge_instr_id):
-            asked = engine.ask()
-            if asked != entry.point:
-                raise ReplayMismatch(f"optimization {opt_id}: replay asked {asked}, stored {entry.point}")
-            if not entry.judged and entry.output_sha256 is not None:
-                evaluation = self._judge(entry.attempt_id, entry.point, entry.output_sha256)
-            else:
-                evaluation = self._stored_evaluation(entry.judgment_id, entry.gpu_seconds)
-            engine.tell(entry.point, evaluation)
+        history = repo.history(self.conn, opt_id, self.judge_model_id, self.judge_instr_id)
+        replay(engine, history, lambda entry: entry.point, self._replayed_evaluation, label=f"optimization {opt_id}: ")
         while True:
             if repo.spent(self.conn, opt_id).exhausts(self.budget):
                 return self._finish("budget")
@@ -243,6 +232,12 @@ class Optimization:
             attempt_id, output = self._generate(asked)
             evaluation = self._judge(attempt_id, asked, output) if output else None
             engine.tell(asked, evaluation)
+
+    def _replayed_evaluation(self, entry: repo.HistoryEntry) -> Evaluation | None:
+        """A stored attempt's evaluation; an attempt never judged by this run's judge is judged now."""
+        if not entry.judged and entry.output_sha256 is not None:
+            return self._judge(entry.attempt_id, entry.point, entry.output_sha256)
+        return self._stored_evaluation(entry.judgment_id, entry.gpu_seconds)
 
     def _finish(self, reason: str) -> str:
         with transaction(self.conn):

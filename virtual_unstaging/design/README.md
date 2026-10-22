@@ -22,14 +22,14 @@ usage, required properties, functions, system shape, stored data, components, th
 1. [Trust boundaries](#trust-boundaries) _(Lines 192-207)_
 1. [Dependencies](#dependencies) _(Lines 210-227)_
 1. [Design decisions](#design-decisions) _(Lines 230-249)_
-1. [Extension points](#extension-points) _(Lines 252-263)_
-1. [Command line](#command-line) _(Lines 266-289)_
-1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 292-336)_
-1. [Review page](#review-page) _(Lines 339-352)_
-1. [Build order](#build-order) _(Lines 355-367)_
-1. [Guidelines applied](#guidelines-applied) _(Lines 370-385)_
-1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 388-399)_
-1. [Open](#open) _(Lines 402-409)_
+1. [Extension points](#extension-points) _(Lines 252-264)_
+1. [Command line](#command-line) _(Lines 267-290)_
+1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 293-337)_
+1. [Review page](#review-page) _(Lines 340-353)_
+1. [Build order](#build-order) _(Lines 356-368)_
+1. [Guidelines applied](#guidelines-applied) _(Lines 371-386)_
+1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 389-400)_
+1. [Open](#open) _(Lines 403-410)_
 
 
 ---
@@ -248,21 +248,22 @@ All *proposal*. The ones costly to reverse first; each names the alternative and
 | D14 | A **speed version** is recorded with what it shapes: generator settings in each attempt's settings (as today); the judge's request options as a suffix of the judge's recorded revision (`+jpeg@1024+answer:6/2/100/200`, findings / moves / comment / critique), as a generator's `+fp8` storage is: a judge that sees smaller images and must answer shorter is another judge, and reports group by it | A column on `run`: once the schema has migrations (it has none: version 1) |
 
 ## Extension points
-<!-- Lines 252-263 -->
+<!-- Lines 252-264 -->
 
-For a program that imports this package. Each one defaults to the behaviour described above, and none names its
-callers.
+For a program that imports this package. The owner's rule: a change made for such a program only adds modularity or
+an override; it defaults to the behaviour described above and names no caller.
 
-| Point | What a caller can change |
+| Point | What a caller can change or reuse |
 |---|---|
 | `engines.SearchEngine[ProblemT, CandidateT, EvaluationT]` | the ask / tell contract with its candidate as a type parameter; `Engine` binds it to points of the lattice, and `make_engine` returns that binding |
-| `clients.http.Endpoint.observer` | sees every attempt of every request (`Exchange`: the request as sent, without the key, and the answer as received) |
+| `engines.replay` | tells a started engine its stored history and raises `ReplayMismatch` when it asks another candidate (D10); the runner uses it for its own resume |
+| `clients.http.Endpoint.observer` | sees every attempt of every request (`Exchange`: the request as sent, without the key, and the answer as received); what it raises fails the call |
 | `provision.lifecycle.Context.plan_source` | where a rental's plan comes from: the project folder's files by default; `project` is then only the folder of the session file |
 | `provision.plan.ProjectPlan.tools` | the tool server's tools, by name; the server's default set when unset |
-| recipe field `inputs.text_only` | a generator that also makes an image from the prompt alone ([tool server API](tool_server_api.md#generate), version 1.2) |
+| recipe field `inputs.text_only` | a generator that also makes an image from the prompt alone ([tool server API](tool_server_api.md#generate), version 1.2). Not an extension point but a new request form, accepted by the owner as the one exception to the rule: opt-in per recipe, nothing changes without it |
 
 ## Command line
-<!-- Lines 266-289 -->
+<!-- Lines 267-290 -->
 
 Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_guidelines.md):
 
@@ -288,7 +289,7 @@ Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_gu
   machine. This is the recorded exception the configuration guideline requires.
 
 ## Model services and provisioning
-<!-- Lines 292-336 -->
+<!-- Lines 293-337 -->
 
 Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with polled jobs) and
 [provisioning.md](provisioning.md) (renting, the self-delete guard, keys). The default models are the owner's choice.
@@ -335,7 +336,7 @@ Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with po
   one GPU rental service; others plug in.
 
 ## Review page
-<!-- Lines 339-352 -->
+<!-- Lines 340-353 -->
 
 Detailed in [review_page.md](review_page.md) (views, keys, security, data written).
 
@@ -351,7 +352,7 @@ Detailed in [review_page.md](review_page.md) (views, keys, security, data writte
   and the request is same-origin (Fetch Metadata or `Origin`).
 
 ## Build order
-<!-- Lines 355-367 -->
+<!-- Lines 356-368 -->
 
 Thin end to end first, then the riskiest branch to full.
 
@@ -366,7 +367,7 @@ Slice 1 answers one question: **at equal budget, does a findings-driven search f
 and more than a fixed-order search?** Engines and the experiment: [loop1.md](loop1.md#engines).
 
 ## Guidelines applied
-<!-- Lines 370-385 -->
+<!-- Lines 371-386 -->
 
 Where this design meets the repository's guidelines, and where it departs from them on purpose.
 
@@ -384,7 +385,7 @@ Where this design meets the repository's guidelines, and where it departs from t
   column. Changes when a second consumer reads the database directly.
 
 ## Changes proposed to the architecture
-<!-- Lines 388-399 -->
+<!-- Lines 389-400 -->
 
 Not applied; for the owner to accept.
 
@@ -398,7 +399,7 @@ Not applied; for the owner to accept.
   (so *project overlay*). *Probe* stays a verb (try a neighbour); the deterministic checks are *tools*.
 
 ## Open
-<!-- Lines 402-409 -->
+<!-- Lines 403-410 -->
 
 - **Default generator and judge:** the owner's choice, from the open-weight survey; it sets the capability
   profile, the endpoint protocol, and whether generator and judge share one GPU.
