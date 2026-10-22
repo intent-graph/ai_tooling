@@ -8,7 +8,7 @@ settings = ["temperature", "max_tokens"]
 
 [[messages]]
 role = "system"
-content = [{ slot = "instruction" }]
+content = [{ slot = "instruction" }, { slot = "knowledge" }]
 
 [[messages]]
 role = "user"

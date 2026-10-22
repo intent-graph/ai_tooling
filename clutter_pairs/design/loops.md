@@ -11,14 +11,14 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 ## Table of Contents
 
 1. [Vocabulary](#vocabulary) _(Lines 28-39)_
-1. [Files in the package](#files-in-the-package) _(Lines 42-54)_
-1. [Composition and recording](#composition-and-recording) _(Lines 57-89)_
-1. [The clean loop](#the-clean-loop) _(Lines 92-124)_
-1. [The clutter loop](#the-clutter-loop) _(Lines 127-158)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 161-174)_
-1. [Lessons](#lessons) _(Lines 177-193)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 196-209)_
-1. [The run](#the-run) _(Lines 212-225)_
+1. [Files in the package](#files-in-the-package) _(Lines 42-55)_
+1. [Composition and recording](#composition-and-recording) _(Lines 58-90)_
+1. [The clean loop](#the-clean-loop) _(Lines 93-125)_
+1. [The clutter loop](#the-clutter-loop) _(Lines 128-159)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 162-178)_
+1. [Lessons](#lessons) _(Lines 181-197)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 200-213)_
+1. [The run](#the-run) _(Lines 216-229)_
 
 
 ---
@@ -38,7 +38,7 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 | wave | the subjects run in parallel; lessons distilled in one wave become active in the next |
 
 ## Files in the package
-<!-- Lines 42-54 -->
+<!-- Lines 42-55 -->
 
 Versioned by git, copied into the store by content hash at first use (`source_file`). A dataset's configuration may
 name another file for any of them (the override); it is recorded the same way.
@@ -46,6 +46,7 @@ name another file for any of them (the override); it is recorded the same way.
 | Folder | Files | Read by |
 |---|---|---|
 | `instructions/` | `clean_writer.md`, `clean_judge.md`, `clean_reviser.md`, `clutter_writer.md`, `pair_judge.md`, `clutter_reviser.md`, `distiller.md` | the model of each role, as its instructions |
+| `knowledge/` | `fixed_and_movable.md`: what is part of the building and what is movable, ambiguous cases ruled | both judges, as an instruction part ([judge_aids.md](judge_aids.md), A1) |
 | `composers/` | one TOML per role: message blocks, each a list of slots; the spec renderer and its version | the composer |
 | `schemas/` | `clean_judgment.json`, `pair_judgment.json`, `lessons.json`, `text.json` (one field: free text) | the judge, the distiller, the writer and the reviser, as the required answer format |
 | `space/` | `ontology.toml`, `taxonomy.toml`, `targets.toml` (a generic default space) | the planner |
@@ -53,7 +54,7 @@ name another file for any of them (the override); it is recorded the same way.
 | `decision_rules/` | `carry_forward.md`: how the arms are compared, written before a rental | the report |
 
 ## Composition and recording
-<!-- Lines 57-89 -->
+<!-- Lines 58-90 -->
 
 ```mermaid
 flowchart LR
@@ -88,7 +89,7 @@ flowchart LR
   answer.
 
 ## The clean loop
-<!-- Lines 92-124 -->
+<!-- Lines 93-125 -->
 
 ```mermaid
 sequenceDiagram
@@ -123,7 +124,7 @@ sequenceDiagram
   rental).
 
 ## The clutter loop
-<!-- Lines 127-158 -->
+<!-- Lines 128-159 -->
 
 Same shape. The subject is a clutter spec; its input image C is one accepted clean image of the scene, recorded on
 the loop (`input_image`).
@@ -157,14 +158,17 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 161-174 -->
+<!-- Lines 162-178 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
   thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
   judge, the located items. A degenerate box is dropped (a finding without a region; an item counted as not
   located). An iteration is
   accepted when no finding's code is blocking: the severity is the code's, from `reasons.toml`, so the verdict does not
-  rest on the judge's severity call (which is recorded).
+  rest on the judge's severity call (which is recorded). A judge code that can be serious or slight has a `_minor`
+  twin with its own meaning (`room_off_spec_minor`, `clutter_off_spec_minor`, `placement_violation_minor`,
+  `scene_changed_minor`; owner, 2026-10-22): the judge's choice of code carries the severity. `not_empty` and
+  `item_missing` have no twin: either breaks the pair's ground truth.
 - **Score and no progress:** each assessed iteration scores (blocking findings, minor findings). The loop stops with
   `no_progress` when its best score has not strictly improved for 2 iterations; a pixel failure (`misaligned`,
   `global_repaint`) is answered first by a reseed, since a prompt rarely fixes it. The rule's name and version are
@@ -173,7 +177,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 177-193 -->
+<!-- Lines 181-197 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -192,7 +196,7 @@ which keeps one VAE per pair.
   prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 196-209 -->
+<!-- Lines 200-213 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
@@ -208,7 +212,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 212-225 -->
+<!-- Lines 216-229 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
   before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`

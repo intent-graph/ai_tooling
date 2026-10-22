@@ -33,7 +33,7 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
    1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 284-287)_
    1. [C10 Loop code](#c10-loop-code) _(Lines 290-295)_
 1. [Build order](#build-order) _(Lines 298-311)_
-1. [Open](#open) _(Lines 314-321)_
+1. [Open](#open) _(Lines 314-324)_
 
 
 ---
@@ -310,7 +310,7 @@ The whole flow end to end at small scale first, then depth where it fails.
    room, several rooms per building.
 
 ## Open
-<!-- Lines 314-321 -->
+<!-- Lines 314-324 -->
 
 - Whether FLUX.2 klein 4B makes an image from text alone, and its condition-image size limit: read before the
   rental, then checked by the smoke wave.
@@ -319,9 +319,6 @@ The whole flow end to end at small scale first, then depth where it fails.
   furnished and staged bedroom dataset (access requested).
 - Name of the project and of its command (architecture, "Open questions").
 - Granularity of the ontology and the taxonomy beyond slice 1: set from slice 1's report.
-- **Helping the judges** (owner: "explore passing helpful info to a judge, like rough segmentation mask or object
-  detection outputs"): brainstorm, nothing decided. The first rental showed the small judge (Qwen3-VL-8B) rejecting
-  fixed elements as movable and drawing tight boxes. Candidates: a segmentation of the clean image (fixed vs movable
-  classes) for the clean judge; detector boxes for the pair judge; the change mask's components drawn numbered on an
-  overlay, so the pair judge assigns each component to an item instead of drawing boxes, which would make the
-  explained-change test exact. Each aid is a part of the request like any other, recorded and recomposable.
+- **Helping the judges** (owner's idea, 2026-10-22): explored in [judge_aids.md](judge_aids.md): knowledge as text
+  (implemented), numbered mask components, crops, detection and segmentation through virtual_unstaging's tools, and
+  a judge bench that measures each aid on stored iterations against the owner's marks. Which to build: open.

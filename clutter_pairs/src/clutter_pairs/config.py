@@ -18,8 +18,8 @@ from clutter_pairs.pairs import Thresholds
 
 CONFIG_NAME = "clutter_pairs.toml"
 TEMPLATE = "config_template.toml"
-DATA_FOLDERS = {"instructions": "instruction", "composers": "composer", "schemas": "schema", "space": None,
-                "decision_rules": "decision_rule"}
+DATA_FOLDERS = {"instructions": "instruction", "knowledge": "instruction", "composers": "composer", "schemas": "schema",
+                "space": None, "decision_rules": "decision_rule"}
 SPACE_KINDS = {"space/ontology.toml": "ontology", "space/taxonomy.toml": "taxonomy", "space/targets.toml": "targets"}
 _SECTIONS: dict[str, set[str]] = {
     "dataset": {"seed"},

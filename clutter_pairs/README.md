@@ -79,5 +79,5 @@ schemas, default space, reason codes and the carry-forward decision rule are the
 
 - [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model, loops
   (composition and recording, pixel tests, composite, lessons and their measurement), components (use of
-  virtual_unstaging, layering, command line).
+  virtual_unstaging, layering, command line); aids for the judges (exploration).
 - [`src/clutter_pairs/`](src/clutter_pairs/) — the package; [`tests/`](tests/) — one test per property, on fakes.
