@@ -13,9 +13,9 @@ rejected, what was sent to every model and what each request was built from. Ref
 
 1. [Principles](#principles) _(Lines 26-42)_
 1. [Entities](#entities) _(Lines 45-76)_
-1. [Schema](#schema) _(Lines 79-116)_
-1. [Views](#views) _(Lines 119-130)_
-1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 133-152)_
+1. [Schema](#schema) _(Lines 79-117)_
+1. [Views](#views) _(Lines 120-131)_
+1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 134-155)_
 
 
 
@@ -75,9 +75,9 @@ Left out of the diagram: the value tables, each linking its owner to one axis va
 `measure`, `reason`, `model`, `decision`, and the files, texts and images every table points to.
 
 ## Schema
-<!-- Lines 79-116 -->
+<!-- Lines 79-117 -->
 
-The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 42 tables in dependency order and the views below,
+The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 44 tables in dependency order and the views below,
 loaded in SQLite and in Postgres 18. One line per
 table here; each table's comments in the file carry its rules.
 
@@ -98,13 +98,14 @@ table here; each table's comments in the file carry its rules.
 | | `wave` | ordered across runs; the smoke wave flagged |
 | | `loop_run` | stage, subject, the clean image a clutter loop received, the lessons arm, the engine and its stop rule, the stop reason |
 | | `iteration`, `iteration_image` | the engine's action and the seed per iteration; the images it made by role; its verdict (a named denormalization) |
+| | `mask_region` | the numbered regions of a clutter iteration's change mask: box and mask pixels ([judge aids](judge_aids.md#a2-and-openings-in-detail)) |
 | calls | `model` | name, revision, family, licence |
 | | `model_call` | role, model, composer, canonical request (the cache key), answer, output image, reuse, timings, error |
 | | `exchange` | every HTTP exchange of a call as sent and answered: bodies with images by hash, the wire hash |
 | | `composition_part` | the ordered parts of a request, each with its source: file, lesson, assessment, earlier call, image, setting, seed |
 | assessments | `reason` | reason codes with their stage and fixed severity |
 | | `assessment` | pixel, judge, detector or human; its verdict (a named denormalization) |
-| | `finding`, `guidance`, `located_item` | the judge's findings (with its own severity recorded), its suggestions, the boxes of the items it located |
+| | `finding`, `finding_region`, `guidance`, `region_item` | the judge's findings (with its own severity recorded) and the regions each cites, its suggestions, the items it assigns to each region |
 | | `measure` | pixel tests' values and the thresholds in force |
 | lessons and decisions | `lesson`, `lesson_evidence`, `lesson_scope` | the text, the call that wrote it, what it replaces, the waves it is valid for, its evidence and scope |
 | | `decision` | the owner's acts and every automatic rule's act (the lesson activation at each wave: the lessons added from a distill answer, the ones dropped and why) |
@@ -115,7 +116,7 @@ images' hashes; a scene's, a room's and a building's are the hash of their axis 
 or a building, of their children's ids). They survive a rebuild of the store.
 
 ## Views
-<!-- Lines 119-130 -->
+<!-- Lines 120-131 -->
 
 | View | Gives | How |
 |---|---|---|
@@ -129,7 +130,7 @@ or a building, of their children's ids). They survive a rebuild of the store.
 | `pair_value` | every axis value of a pair: its room's, its scene's, its clutter spec's | used by `coverage` |
 
 ## Checks run by `audit`
-<!-- Lines 133-152 -->
+<!-- Lines 134-155 -->
 
 Requests and records:
 - **P9:** every request recomposes: the composer file, the call's model and the parts in order give the request
@@ -144,6 +145,8 @@ Denormalizations and rules:
   severities; `stop_reason = 'accepted'` exactly when the loop has an iteration with verdict `accept`.
 - A clutter loop's `input_image` is the `generated` image of an accepted iteration of a clean loop of the same scene.
 - An image role fits its loop's stage (`generated` on clean loops only; the other roles on clutter loops only).
+- A clutter iteration's regions recompute from its stored change mask with the thresholds recorded beside them, and
+  its `regions` image redraws byte for byte from its composite and those regions.
 
 Space and exports:
 - Every owner holds exactly one value for every axis that applies to its kind, and each value is declared by its

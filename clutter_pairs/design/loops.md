@@ -14,11 +14,11 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 1. [Files in the package](#files-in-the-package) _(Lines 42-55)_
 1. [Composition and recording](#composition-and-recording) _(Lines 58-90)_
 1. [The clean loop](#the-clean-loop) _(Lines 93-125)_
-1. [The clutter loop](#the-clutter-loop) _(Lines 128-159)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 162-178)_
-1. [Lessons](#lessons) _(Lines 181-197)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 200-213)_
-1. [The run](#the-run) _(Lines 216-229)_
+1. [The clutter loop](#the-clutter-loop) _(Lines 128-163)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 166-182)_
+1. [Lessons](#lessons) _(Lines 185-201)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 204-217)_
+1. [The run](#the-run) _(Lines 220-233)_
 
 
 ---
@@ -124,7 +124,7 @@ sequenceDiagram
   rental).
 
 ## The clutter loop
-<!-- Lines 128-159 -->
+<!-- Lines 128-163 -->
 
 Same shape. The subject is a clutter spec; its input image C is one accepted clean image of the scene, recorded on
 the loop (`input_image`).
@@ -142,12 +142,16 @@ the loop (`input_image`).
    otherwise `clutter_off_spec`.
 5. **Composite:** K = C where the alpha is 0, the corrected E where it is 1, blended between. K is the cluttered image;
    C stays the clean one (P1: equal wherever the alpha is 0).
-6. **Judge, pair:** C, K and the mask; the clutter matches its spec and its placement rules, nothing else in the
-   room changed, K is plausible as a photograph; the judge **locates each specified item** (a box per item).
-7. **Explained change:** every connected component of the mask must fall in a located item's box; a component that
+6. **Regions:** the mask's pieces grouped into numbered regions, drawn on K (the `regions` image; aid A2,
+   [judge aids](judge_aids.md#a2-and-openings-in-detail)).
+7. **Judge, pair:** C, K and the regions image; openings first (no door, window or passage added, removed, moved,
+   resized or changed in kind: `opening_changed`), then the clutter matches its spec and its placement rules,
+   nothing else in the room changed, K is plausible as a photograph; the judge **assigns the specified items to the
+   numbered regions** (per region, the items it holds, possibly none).
+8. **Explained change:** every numbered region must hold at least one item by the judge's assignment; a region that
    does not is an `unexplained_change` (a repainted patch, a removed fixture, a changed frame pasted along with the
    clutter). Identity outside the mask is necessary, not sufficient: this test guards the inside.
-8. **Revise** or accept, as in the clean loop; then distill.
+9. **Revise** or accept, as in the clean loop; then distill.
 
 Every threshold in force is recorded with what it was compared to (`measure`, kind `threshold`). The owner looks at
 20 to 30 pairs early in the rental and sets the thresholds (a `decision` row each).
@@ -158,17 +162,17 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 162-178 -->
+<!-- Lines 166-182 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
   thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
-  judge, the located items. A degenerate box is dropped (a finding without a region; an item counted as not
-  located). An iteration is
+  judge, the items per numbered region and the regions each finding cites. A degenerate box is dropped (a finding
+  without a box); an unknown item or region number is dropped. An iteration is
   accepted when no finding's code is blocking: the severity is the code's, from `reasons.toml`, so the verdict does not
   rest on the judge's severity call (which is recorded). A judge code that can be serious or slight has a `_minor`
   twin with its own meaning (`room_off_spec_minor`, `clutter_off_spec_minor`, `placement_violation_minor`,
-  `scene_changed_minor`; owner, 2026-10-22): the judge's choice of code carries the severity. `not_empty` and
-  `item_missing` have no twin: either breaks the pair's ground truth.
+  `scene_changed_minor`; owner, 2026-10-22): the judge's choice of code carries the severity. `not_empty`,
+  `item_missing` and `opening_changed` have no twin: each breaks the pair's ground truth.
 - **Score and no progress:** each assessed iteration scores (blocking findings, minor findings). The loop stops with
   `no_progress` when its best score has not strictly improved for 2 iterations; a pixel failure (`misaligned`,
   `global_repaint`) is answered first by a reseed, since a prompt rarely fixes it. The rule's name and version are
@@ -177,7 +181,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 181-197 -->
+<!-- Lines 185-201 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -196,7 +200,7 @@ which keeps one VAE per pair.
   prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 200-213 -->
+<!-- Lines 204-217 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
@@ -212,7 +216,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 216-229 -->
+<!-- Lines 220-233 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
   before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`

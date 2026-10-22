@@ -2,31 +2,30 @@
   "title": "pair_judgment",
   "type": "object",
   "properties": {
-    "located": {
+    "regions": {
       "type": "array",
       "maxItems": 12,
       "items": {
         "type": "object",
         "properties": {
-          "item": {
+          "region": {
             "type": "integer",
             "minimum": 1,
             "maximum": 12
           },
-          "box": {
+          "items": {
             "type": "array",
+            "maxItems": 12,
             "items": {
               "type": "integer",
-              "minimum": 0,
-              "maximum": 1000
-            },
-            "minItems": 4,
-            "maxItems": 4
+              "minimum": 1,
+              "maximum": 12
+            }
           }
         },
         "required": [
-          "item",
-          "box"
+          "region",
+          "items"
         ],
         "additionalProperties": false
       }
@@ -40,6 +39,7 @@
           "code": {
             "type": "string",
             "enum": [
+              "opening_changed",
               "clutter_off_spec",
               "clutter_off_spec_minor",
               "item_missing",
@@ -57,6 +57,15 @@
               "blocking",
               "minor"
             ]
+          },
+          "regions": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
           },
           "box": {
             "anyOf": [
@@ -83,6 +92,7 @@
         "required": [
           "code",
           "severity",
+          "regions",
           "box",
           "comment"
         ],
@@ -99,7 +109,7 @@
     }
   },
   "required": [
-    "located",
+    "regions",
     "findings",
     "guidance"
   ],

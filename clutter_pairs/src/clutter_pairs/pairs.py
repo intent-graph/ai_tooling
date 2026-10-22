@@ -1,13 +1,14 @@
-"""The pixel side of a pair: shift and colour checks, correction, change mask, composite, explained change.
+"""The pixel side of a pair: shift and colour checks, correction, change mask, composite, numbered regions, explained
+change.
 
-Pure functions on arrays (design/loops.md, "The clutter loop", steps 3 to 7). Images are float RGB arrays in [0, 1];
+Pure functions on arrays (design/loops.md, "The clutter loop", steps 3 to 8; regions: design/judge_aids.md, A2). Images are float RGB arrays in [0, 1];
 the mask's alpha is an 8-bit array, so "alpha is 0" is exact and the composite equals the clean image there (P1).
 """
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import dataclass
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, fields
 
 import numpy as np
 from numpy.typing import NDArray
@@ -20,6 +21,7 @@ Mask = NDArray[np.bool_]
 Alpha = NDArray[np.uint8]
 MIN_SPREAD = 0.05  # standard deviation of a far-field channel, in [0, 1], below which no gain is fitted
 GAIN_RANGE = (0.8, 1.25)
+REGION_DRAWING = 1  # the version of draw_regions, recorded as a measure beside the regions it drew
 
 
 @dataclass(frozen=True)
@@ -36,12 +38,19 @@ class Thresholds:
     close_px: int = 3
     dilate_px: int = 4
     feather_px: int = 4
-    explained_min_share: float = 0.6  # a component is explained when this share of it lies in a located box
-    box_margin: float = 0.02  # each located box widened by this share of the image's side (shadows, loose boxes)
-    min_component_px: int = 64
+    region_group_px: int = 16  # mask pieces closer than this are one region (an item and its shadow)
+    region_min_px: int = 500  # a region with fewer mask pixels is a speck: not numbered, measured
+    max_regions: int = 12  # regions past it are not drawn and count as unexplained
 
     def as_dict(self) -> dict[str, float]:
         return {name: float(getattr(self, name)) for name in self.__dataclass_fields__}
+
+    @classmethod
+    def of(cls, values: Mapping[str, float]) -> Thresholds:
+        """The defaults overridden by named values, each cast to its field's type; an unknown name raises KeyError."""
+        kinds = {f.name: f.type for f in fields(cls)}
+        typed = {k: (int(v) if kinds[k] in ("int", int) else float(v)) for k, v in values.items()}
+        return cls(**typed)  # type: ignore[arg-type]
 
 
 @dataclass(frozen=True)
@@ -143,31 +152,107 @@ def composite(clean: FloatImage, corrected: FloatImage, alpha: Alpha) -> NDArray
     return ((c8 * (255 - a) + e8 * a + 127) // 255).astype(np.uint8)
 
 
-def explain(mask: Mask, located: Sequence[Box], t: Thresholds) -> PixelResult:
-    """Step 7: every connected component of the change mask must lie in a located item's box."""
-    labels, count = label_components(mask)
+@dataclass(frozen=True)
+class Region:
+    """A numbered region of the change mask: number (largest first), box in [0, 1], mask pixels."""
+
+    n: int
+    box: Box
+    px: int
+
+
+@dataclass(frozen=True)
+class Regions:
+    labels: NDArray[np.int32]  # per pixel: its region's number, 0 off the mask and on specks
+    numbered: tuple[Region, ...]  # every region, numbered; those past max_regions are not drawn
+    speck_px: int
+
+
+def regions(mask: Mask, t: Thresholds) -> Regions:
+    """Step 6: the mask's pieces grouped when closer than region_group_px, specks dropped, numbered by size."""
+    grouped = imaging.dilate(mask, t.region_group_px) if t.region_group_px > 0 else mask
+    groups, count = label_components(grouped)
+    groups = np.where(mask, groups, 0)
+    sizes = np.bincount(groups.ravel(), minlength=count + 1)
+    kept = sorted((g for g in range(1, count + 1) if sizes[g] >= t.region_min_px), key=lambda g: (-sizes[g], g))
+    number = np.zeros(count + 1, dtype=np.int32)
     h, w = mask.shape
-    boxes = np.zeros((h, w), dtype=bool)
-    m = t.box_margin
-    for box in located:
-        boxes[int(max(box.y0 - m, 0) * h):int(np.ceil(min(box.y1 + m, 1) * h)),
-              int(max(box.x0 - m, 0) * w):int(np.ceil(min(box.x1 + m, 1) * w))] = True
+    numbered = []
+    for n, g in enumerate(kept, start=1):
+        number[g] = n
+        ys, xs = np.nonzero(groups == g)
+        numbered.append(Region(n, Box(xs.min() / w, ys.min() / h, (xs.max() + 1) / w, (ys.max() + 1) / h),
+                               int(sizes[g])))
+    speck_px = int(mask.sum()) - sum(r.px for r in numbered)
+    return Regions(number[groups], tuple(numbered), speck_px)
+
+
+def explain(found: Regions, assigned: Mapping[int, Sequence[int]], t: Thresholds) -> PixelResult:
+    """Step 8: every numbered region must hold at least one item by the judge's assignment; a region with no item,
+    with no answer, or past max_regions is an unexplained change, whatever finding cites it (P1)."""
     unexplained_px, findings = 0, []
-    for label in range(1, count + 1):
-        component = labels == label
-        size = int(component.sum())
-        if size < t.min_component_px:
+    for r in found.numbered:
+        if r.n > t.max_regions:
+            why = f"region {r.n} of {r.px} px is past the {t.max_regions} regions drawn"
+        elif not assigned.get(r.n):
+            why = f"region {r.n} of {r.px} px holds no listed item by the judge's answer"
+        else:
             continue
-        inside = float((component & boxes).sum()) / size
-        if inside < t.explained_min_share:
-            unexplained_px += size
-            ys, xs = np.nonzero(component)
-            region = Box(xs.min() / w, ys.min() / h, (xs.max() + 1) / w, (ys.max() + 1) / h)
-            findings.append(Finding("unexplained_change", None, region,
-                                    f"a changed region of {size} px is {inside:.0%} inside the located items"))
-    total = max(int(mask.sum()), 1)
-    measures = (Measure("unexplained_share", unexplained_px / total, 0.0),)
+        unexplained_px += r.px
+        findings.append(Finding("unexplained_change", None, r.box, why))
+    total = max(sum(r.px for r in found.numbered) + found.speck_px, 1)
+    measures = (Measure("unexplained_share", unexplained_px / total, 0.0),
+                Measure("speck_share", found.speck_px / total, None),
+                Measure("regions", float(len(found.numbered)), float(t.max_regions)),
+                Measure("region_drawing", float(REGION_DRAWING), None))
     return PixelResult(measures, tuple(findings))
+
+
+# --- The regions image ------------------------------------------------------------------------------------------
+
+_DIGITS = {  # 3 x 5 bitmaps, top row first: drawn without a font, so the bytes never depend on the machine
+    "0": ("111", "101", "101", "101", "111"), "1": ("010", "110", "010", "010", "111"),
+    "2": ("111", "001", "111", "100", "111"), "3": ("111", "001", "111", "001", "111"),
+    "4": ("101", "101", "111", "001", "001"), "5": ("111", "100", "111", "001", "111"),
+    "6": ("111", "100", "111", "101", "111"), "7": ("111", "001", "010", "010", "010"),
+    "8": ("111", "101", "111", "101", "111"), "9": ("111", "101", "111", "001", "111"),
+}
+_OUTLINE = (255, 214, 0)
+_HALO = (0, 0, 0)
+
+
+def draw_regions(cluttered: NDArray[np.uint8], found: Regions, t: Thresholds) -> NDArray[np.uint8]:
+    """The cluttered image with each drawn region outlined (yellow on a black halo) and its number in a black box on
+    the region's first pixel (topmost row, then leftmost), white digits. Regions past max_regions are not drawn."""
+    out = cluttered.copy()
+    h, w = found.labels.shape
+    drawn = [r for r in found.numbered if r.n <= t.max_regions]
+    edges = np.zeros((h, w), dtype=bool)
+    for r in drawn:
+        inside = found.labels == r.n
+        edges |= inside & ~erode(inside, 1)
+    out[imaging.dilate(edges, 2)] = _HALO
+    out[imaging.dilate(edges, 1)] = _OUTLINE
+    scale = max(2, min(h, w) // 120)
+    flat = found.labels.ravel()
+    for r in drawn:
+        y, x = divmod(int(np.argmax(flat == r.n)), w)
+        _label(out, str(r.n), x, y, scale)
+    return out
+
+
+def _label(image: NDArray[np.uint8], text: str, x: int, y: int, scale: int) -> None:
+    h, w = image.shape[:2]
+    pad = scale
+    width, height = len(text) * 4 * scale - scale + 2 * pad, 5 * scale + 2 * pad
+    x, y = min(max(x, 0), max(w - width, 0)), min(max(y, 0), max(h - height, 0))
+    image[y:y + height, x:x + width] = _HALO
+    for i, char in enumerate(text):
+        for row, bits in enumerate(_DIGITS[char]):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    y0, x0 = y + pad + row * scale, x + pad + (i * 4 + col) * scale
+                    image[y0:y0 + scale, x0:x0 + scale] = 255
 
 
 # --- Array helpers -------------------------------------------------------------------------------------------

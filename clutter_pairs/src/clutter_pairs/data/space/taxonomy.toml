@@ -51,7 +51,7 @@ placements = ["against_wall"]
 [axes.category.values.textiles]
 text = "textiles (rug, throw, curtains, bedding, coat, towel, clothes)"
 rooms = ["living_room", "bedroom", "kitchen"]
-placements = ["freestanding", "on_surface", "hanging_on_door"]
+placements = ["freestanding", "on_surface"]
 
 [axes.category.values.objects]
 text = "small objects and decoration (lamp, books, plants, frames, toys, dishes)"
@@ -70,6 +70,8 @@ placements = ["against_wall", "freestanding"]
 
 [axes.placement]
 applies_to = "clutter_item"
+# No "hanging on a door" (owner, 2026-10-22): asked for it where the clean image showed no door, the editor drew one
+# (14 of the 30 first-rental iterations that had it, against 8 of the 122 that did not).
 
 [axes.placement.values.against_wall]
 text = "standing against a wall"
@@ -86,10 +88,6 @@ rule = "An item on a surface rests on another item or on a fitted worktop, with 
 [axes.placement.values.on_wall]
 text = "on a wall (frame, shelf, clock, mirror)"
 rule = "An item on a wall hangs flat on it, never across a door or a window."
-
-[axes.placement.values.hanging_on_door]
-text = "hanging on a door (coat, towel, bag)"
-rule = "An item hanging on a door hides part of the door, never the whole of it."
 
 [axes.placement.values.inside_open_storage]
 text = "inside open storage (on shelves, in baskets)"

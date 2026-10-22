@@ -417,29 +417,35 @@ class SceneWork:
         prepared = pairs.prepare(clean, edit, mask_share_range(space_of(self.conn, self.ds, self._version(loop)),
                                                                 subject.density), self.t)
         images = {"raw_edit": edited.output_image}
+        judged_ok = not prepared.result.findings
+        found = pairs.regions(prepared.alpha == 255, self.t)
         with transaction(self.conn):
             if clean.shape == edit.shape:
                 images["corrected_edit"] = self._image(pairs.to_uint8(prepared.corrected))
                 images["change_mask"] = self._image(prepared.alpha)
-                images["composite"] = self._image(pairs.composite(clean, prepared.corrected, prepared.alpha))
+                cluttered = pairs.composite(clean, prepared.corrected, prepared.alpha)
+                images["composite"] = self._image(cluttered)
+                if judged_ok:
+                    images["regions"] = self._image(pairs.draw_regions(cluttered, found, self.t))
+                    repo.add_mask_regions(self.conn, iteration.id, [(r.n, r.box, r.px) for r in found.numbered])
             for role, sha in images.items():
                 repo.add_iteration_image(self.conn, iteration.id, role, sha)
         assessments: list[tuple[str, int | None, Judgment, tuple[Measure, ...]]] = [
             ("pixel", None, Judgment(prepared.result.findings, ()), prepared.result.measures)]
-        if not prepared.result.findings:
+        if judged_ok:
             parts = [self._file("instruction", "instruction", "instructions/pair_judge.md"),
                      self._file("knowledge", "instruction", KNOWLEDGE),
                      self._file("schema", "schema", "schemas/pair_judgment.json"),
                      self._spec(subject, "pair_judge"),
                      Part("clean", "image", None, loop.input_image),
                      Part("cluttered", "image", None, images["composite"]),
-                     Part("mask", "image", None, images["change_mask"])]
+                     Part("regions", "image", None, images["regions"])]
             parts += self._chat_settings(self.ds.cfg.judge.judge_temperature, subject, "judge", iteration.n)
             judged = self.call(loop, iteration.id, "judge", "pair_judge", self.models.chat, parts)
-            judgment = self._parse(judged, "clutter", len(subject.item_ids))
+            judgment = self._parse(judged, "clutter", len(subject.item_ids), len(found.numbered))
             if judgment is None:
                 return None
-            explained: PixelResult = pairs.explain(prepared.mask, [i.box for i in judgment.located], self.t)
+            explained: PixelResult = pairs.explain(found, judgment.assigned(), self.t)
             assessments.append(("judge", judged.id, judgment, ()))
             assessments.append(("pixel", None, Judgment(explained.findings, ()), explained.measures))
         return self._conclude(iteration.id, assessments, subject)
@@ -530,10 +536,10 @@ class SceneWork:
                                        exchanges=exchanges, **common)
         return repo.call(conn, call_id)
 
-    def _parse(self, call: repo.CallRow, stage: str, items: int) -> Judgment | None:
+    def _parse(self, call: repo.CallRow, stage: str, items: int, regions: int = 0) -> Judgment | None:
         allowed = {c for c, r in self.ds.reasons.items() if r.stage in (stage, "both") and r.by in ("judge", "both")}
         try:
-            return parse_judgment(call.answer or "", stage, items, allowed)
+            return parse_judgment(call.answer or "", stage, items, allowed, regions)
         except ComposeError as error:
             self._bad_answer(call.id, error)
             return None

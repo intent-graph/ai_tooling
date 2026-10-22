@@ -36,7 +36,8 @@ expected_call_seconds = 90     # no call starts that the deadline would cut
 max_shift_px = 2.0
 max_global_delta_e = 6.0
 change_delta_e = 8.0
-explained_min_share = 0.6
+region_group_px = 16           # mask pieces closer than this are one numbered region (judge aid A2)
+region_min_px = 500            # fewer mask pixels: a speck, not numbered
 
 [files]                        # replace a packaged file: "instructions/clean_writer.md" = "my/clean_writer.md"
 

@@ -23,8 +23,12 @@ def test_a_run_reaches_its_pair_target_and_passes_every_audit_check(folder: Path
     assert summary.stopped == "pair_target" and summary.pairs >= 6
     result = audit.audit(ds)
     assert result.ok, result.problems
-    for check in ("requests recomposed", "exchanges rebuilt", "pairs compared", "images checked"):
+    for check in ("requests recomposed", "exchanges rebuilt", "pairs compared", "images checked", "regions checked"):
         assert result.checked[check] > 0
+    assert ds.conn.execute("SELECT COUNT(*) FROM region_item").fetchone()[0] > 0
+    with ds.conn:
+        ds.conn.execute("UPDATE mask_region SET px = px + 1 WHERE rowid = (SELECT MIN(rowid) FROM mask_region)")
+    assert any("do not recompute" in p for p in audit.audit(ds).problems)
     pairs = repo.query(ds.conn, "pair")
     assert {p["clean_family"] for p in pairs} == {"flux2"} and {p["editor_family"] for p in pairs} == {"flux2"}
 
