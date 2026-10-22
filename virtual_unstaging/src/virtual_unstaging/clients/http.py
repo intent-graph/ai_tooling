@@ -82,9 +82,7 @@ def request(
         started = time.monotonic()
         try:
             with urllib.request.urlopen(req, timeout=endpoint.timeout) as response:
-                data, kind = response.read(), response.headers.get("Content-Type", "")
-                _observe(endpoint, sent, started, response.status, data, kind, None)
-                return response.status, data, kind
+                status, data, kind = response.status, response.read(), response.headers.get("Content-Type", "")
         except urllib.error.HTTPError as error:
             payload = error.read()
             last = _error_from(error.code, payload)
@@ -92,9 +90,14 @@ def request(
             _observe(endpoint, sent, started, error.code, payload, kind, last.code)
             if error.code not in RETRY_STATUSES or last.code == "deadline_reached":
                 raise last from None
+            continue
         except (urllib.error.URLError, TimeoutError, ConnectionError) as error:
             last = EndpointError("endpoint_unreachable", f"{endpoint.url(path)}: {error}")
             _observe(endpoint, sent, started, None, b"", "", last.code)
+            continue
+        # Outside the try: whatever the observer raises fails the call, and is never taken for a transport failure.
+        _observe(endpoint, sent, started, status, data, kind, None)
+        return status, data, kind
     assert last is not None
     raise last
 
