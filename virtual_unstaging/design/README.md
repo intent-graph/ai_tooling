@@ -291,7 +291,8 @@ Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_gu
   `[budget]`, `[search]`) and those of `gpu.toml` under `gpu` (`[gpu.machine]`, `[gpu.judge]`); the loaders check
   the merged result as they check the files. Refused in an override file: `[project]`, and any endpoint or key
   (`endpoint`, `key_file`, `key_command`), which come only from the project and its GPU session. No project file is
-  ever rewritten, so a variant (another judge, a speed version) cannot leak into the next command or into another
+  ever rewritten, so a variant (another judge, a speed version, an instruction overlay named by `overlay` in
+  `[generator]` or `[judge]` in place of the project's `instructions/<role>.md`) cannot leak into the next command or into another
   session working on the same project. Precedence, lowest first: `project.toml` and `gpu.toml`, the session's
   endpoints and keys, the override files in order.
 - **Secrets** (endpoint keys): read from a file (mode 600) or from a secret-manager command named in the user

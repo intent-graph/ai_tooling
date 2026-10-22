@@ -331,9 +331,9 @@ def cmd_run(args: argparse.Namespace) -> int:
             defects=defects,
             generator_stack=InstructionStack("generator", adapters.generator.model.name,
                                              load_base("generator", cfg.generator.instructions),
-                                             config.overlay_text(args.project, "generator")),
+                                             config.overlay_text(args.project, "generator", cfg.generator.overlay)),
             judge_stack=InstructionStack("judge", adapters.judge_model.name, load_base("judge", cfg.judge.instructions),
-                                         config.overlay_text(args.project, "judge")),
+                                         config.overlay_text(args.project, "judge", cfg.judge.overlay)),
             rule_set_id=rule_set_id,
         )
         run_id = create_run(conn, adapters, versions, names)

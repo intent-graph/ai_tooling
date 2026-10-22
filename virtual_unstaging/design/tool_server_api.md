@@ -208,6 +208,12 @@ element, what became of each thing the room's rules name.
 - **Limits:** the detector misses and mislabels elements; an element hidden whole in the original and completed in
   the candidate is `new`, with what stood there, and whether it was revealed or invented stays the judge's call.
   Tools locate and measure; the judge decides.
+- **Measured** (2026-10, 16 photos, three judges in three speed versions, against the owner's blind review): as built,
+  the judges invent more defects with the inventory than without it (+22%), because most of its `removed` and `new`
+  claims are false. Two causes, found on stored detections: low-confidence detections (scores under 0.4) changing
+  status between the pictures, and names of elements the room has but the photo does not show, which the detector
+  finds anyway in the original. Next, before a judge reads it again: a confidence threshold for any status change, and
+  only the fixed elements visible in the photo as names. `[tools] inventory` stays off by default until then.
 
 ## Asynchronous jobs
 <!-- Lines 176-199 -->

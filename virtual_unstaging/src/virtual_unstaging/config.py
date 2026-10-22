@@ -131,6 +131,7 @@ class GeneratorConfig:
     instructions: str
     settings: dict[str, Any] = field(default_factory=dict)
     fields: dict[str, str] = field(default_factory=dict)
+    overlay: str = ""
 
 
 @dataclass(frozen=True)
@@ -147,6 +148,7 @@ class JudgeConfig:
     extra: dict[str, Any] = field(default_factory=dict)
     request: JudgeRequestOptions = field(default_factory=lambda: JudgeRequestOptions())
     timeout_seconds: int = 600
+    overlay: str = ""
 
 
 @dataclass(frozen=True)
@@ -166,9 +168,9 @@ class ProjectConfig:
 _SECTIONS = {
     "project": {"name"},
     "generator": {"adapter", "endpoint", "key_file", "key_command", "model", "revision", "licence", "max_images",
-                  "native_mask", "roles", "instructions", "settings", "fields"},
+                  "native_mask", "roles", "instructions", "overlay", "settings", "fields"},
     "judge": {"adapter", "endpoint", "key_file", "key_command", "model", "revision", "box_scale", "temperature",
-              "max_tokens", "timeout_seconds", "instructions", "extra", "image_side", "image_format", "max_findings", "max_moves",
+              "max_tokens", "timeout_seconds", "instructions", "overlay", "extra", "image_side", "image_format", "max_findings", "max_moves",
               "comment_chars", "critique_chars"},
     "tools": {"class_diff", "inventory", "endpoint", "key_file", "key_command"},
     "budget": {"max_attempts", "max_gpu_seconds", "max_judge_calls"},
@@ -271,6 +273,7 @@ def load(project_dir: Path, overrides: Sequence[Path] = ()) -> ProjectConfig:
         instructions=str(g.get("instructions", "default")),
         settings=dict(g.get("settings", {})),
         fields={str(k): str(v) for k, v in dict(g.get("fields", {})).items()},
+        overlay=str(g.get("overlay", "")),
     )
     judge = JudgeConfig(
         adapter=_choice(j, "adapter", "openai_chat", ("openai_chat", "fake")),
@@ -282,6 +285,7 @@ def load(project_dir: Path, overrides: Sequence[Path] = ()) -> ProjectConfig:
         temperature=float(j.get("temperature", 0.0)),
         max_tokens=_int(j, "max_tokens", 4096, 256),
         timeout_seconds=_within(j, "timeout_seconds", 600, 10, 3600),
+        overlay=str(j.get("overlay", "")),
         instructions=str(j.get("instructions", "default")),
         extra=dict(j.get("extra", {})),
         request=JudgeRequestOptions(
@@ -316,8 +320,15 @@ def write_template(project_dir: Path, name: str) -> Path:
     return path
 
 
-def overlay_text(project_dir: Path, role: str) -> str | None:
-    """The project overlay of a role's instructions, from `instructions/<role>.md` in the project, if any."""
+def overlay_text(project_dir: Path, role: str, named: str = "") -> str | None:
+    """The project overlay of a role's instructions: the file the configuration names (`overlay`, relative to the
+    project or absolute, so an override file can switch it), else `instructions/<role>.md` in the project, if any."""
+    if named:
+        path = Path(named).expanduser()
+        path = path if path.is_absolute() else project_dir / path
+        if not path.is_file():
+            raise ConfigError(f"{role} overlay {path} is not a file")
+        return path.read_text(encoding="utf-8")
     path = project_dir / "instructions" / f"{role}.md"
     return path.read_text(encoding="utf-8") if path.is_file() else None
 
