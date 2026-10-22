@@ -18,9 +18,9 @@ etc."; "giving ready-made knowledge about what is movable or not might help, as 
 1. [A2 and openings in detail](#a2-and-openings-in-detail) _(Lines 74-127)_
 1. [Forms and costs](#forms-and-costs) _(Lines 130-140)_
 1. [What changes in the data model](#what-changes-in-the-data-model) _(Lines 143-155)_
-1. [Measuring an aid: the judge bench](#measuring-an-aid-the-judge-bench) _(Lines 158-176)_
-1. [Proposed order](#proposed-order) _(Lines 179-186)_
-1. [Open](#open) _(Lines 189-193)_
+1. [Measuring an aid: the judge bench](#measuring-an-aid-the-judge-bench) _(Lines 158-180)_
+1. [Proposed order](#proposed-order) _(Lines 183-190)_
+1. [Open](#open) _(Lines 193-197)_
 
 
 ---
@@ -154,7 +154,7 @@ empty for clutter_pairs). Their memory beside klein 4B (20 GB) and the 27B judge
   role, or a table of its own.
 
 ## Measuring an aid: the judge bench
-<!-- Lines 158-176 -->
+<!-- Lines 158-180 -->
 
 The images of every iteration are stored, so a judge variant can be tried without generating anything:
 
@@ -172,10 +172,14 @@ time on one rental, less in parallel. This needs a `rejudge` command, and the ow
 in which the 27B judge described a changed opening (27) and about as many in which no judge mentioned one are judged
 again with the openings checklist, by a one-off script kept with the run's results that stores each request and
 answer. It gives the checklist's rate of catching known changed openings; the iterations without a mention are only
-weak negatives until the owner marks them.
+weak negatives until the owner marks them. Result (27B judge, 2026-10-22): the checklist caught 25 of the 27 known
+changed openings and all 27 pairs were rejected (the other two by a region flagged `other_change`); none of the 25
+weak negatives reported an opening. In the run that followed, 41 of 394 judged clutter iterations carried
+`opening_changed`, and at least one was false (a door "vanished" from a wall that has none): its false-positive rate
+needs the owner's marks.
 
 ## Proposed order
-<!-- Lines 179-186 -->
+<!-- Lines 183-190 -->
 
 *Proposal*, cheapest and most targeted first:
 
@@ -185,7 +189,7 @@ weak negatives until the owner marks them.
 4. A4 to A6, if a gap remains that only a detector closes; then the data model's tool-run record first.
 
 ## Open
-<!-- Lines 189-193 -->
+<!-- Lines 193-197 -->
 
 - Which aids to build after A2, in which order (owner).
 - The owner's marks for the judge bench: when, on which sample.
