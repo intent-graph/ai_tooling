@@ -13,6 +13,7 @@
             "enum": [
               "not_empty",
               "room_off_spec",
+              "room_off_spec_minor",
               "implausible",
               "artifact"
             ]

@@ -63,6 +63,7 @@ PIXEL_FAILURES = {"misaligned", "global_repaint"}  # answered by a reseed first
 RESUMABLE = (None, "deadline")
 SMOKE_SCENES = 2
 ACTIVATION_RULE = "rule:activate_lessons@1"
+KNOWLEDGE = "knowledge/fixed_and_movable.md"  # what is part of the building, given to both judges
 
 
 class RunPaused(RuntimeError):
@@ -390,6 +391,7 @@ class SceneWork:
         with transaction(self.conn):
             repo.add_iteration_image(self.conn, iteration.id, "generated", generated.output_image)
         parts = [self._file("instruction", "instruction", "instructions/clean_judge.md"),
+                 self._file("knowledge", "instruction", KNOWLEDGE),
                  self._file("schema", "schema", "schemas/clean_judgment.json"),
                  self._spec(subject, "clean_judge"),
                  Part("image", "image", None, generated.output_image)]
@@ -426,6 +428,7 @@ class SceneWork:
             ("pixel", None, Judgment(prepared.result.findings, ()), prepared.result.measures)]
         if not prepared.result.findings:
             parts = [self._file("instruction", "instruction", "instructions/pair_judge.md"),
+                     self._file("knowledge", "instruction", KNOWLEDGE),
                      self._file("schema", "schema", "schemas/pair_judgment.json"),
                      self._spec(subject, "pair_judge"),
                      Part("clean", "image", None, loop.input_image),

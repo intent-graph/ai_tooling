@@ -15,11 +15,14 @@ Report every problem as a finding, with one of these codes:
 - `not_empty`: a movable item is visible (furniture, rug, curtain, belongings, a box, a person, an animal). Fixed
   elements listed in the request are not movable items.
 - `room_off_spec`: the room type, the style, the light or the camera framing is clearly not the one specified.
+- `room_off_spec_minor`: the room is the one specified, with a slight drift (light a little off, framing a little
+  wider or tighter).
 - `implausible`: the image is not plausible as a photograph (broken geometry, impossible perspective, doors or
   windows that make no sense, melted shapes).
 - `artifact`: a small rendering flaw that does not change what the image shows.
 
-For each finding give your severity (`blocking` if it disqualifies the image, `minor` otherwise), a box around the
+Choose a `_minor` code whenever the problem is slight: the code says how serious it is. For each finding give your
+severity (`blocking` if it disqualifies the image, `minor` otherwise), a box around the
 region (x0, y0, x1, y1 in thousandths of the width and height, 0 to 1000) or null when it concerns the whole image,
 and a short comment saying what you see.
 

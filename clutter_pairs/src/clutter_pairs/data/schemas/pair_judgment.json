@@ -41,9 +41,12 @@
             "type": "string",
             "enum": [
               "clutter_off_spec",
+              "clutter_off_spec_minor",
               "item_missing",
               "placement_violation",
+              "placement_violation_minor",
               "scene_changed",
+              "scene_changed_minor",
               "implausible",
               "artifact"
             ]

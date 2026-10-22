@@ -2,6 +2,8 @@
 # here, never the judge's own call (design/loops.md, "The verdict and the stop rule"). A code's severity never
 # changes once used: a different severity is a new code. The judges' answer schemas list the codes of their stage;
 # the pixel tests raise the codes marked `by = "pixels"`.
+# Split (owner, 2026-10-22): a judge code that can be serious or slight has a `_minor` twin with its own meaning, so
+# the judge's choice of code carries the severity and the verdict still reads it here.
 
 [not_empty]
 stage = "clean"
@@ -14,6 +16,12 @@ stage = "clean"
 severity = "blocking"
 by = "judge"
 meaning = "the room type, style, light or camera is not the one specified"
+
+[room_off_spec_minor]
+stage = "clean"
+severity = "minor"
+by = "judge"
+meaning = "the room is the one specified, with a slight drift: light a little off, framing a little wider or tighter"
 
 [implausible]
 stage = "both"
@@ -33,6 +41,12 @@ severity = "blocking"
 by = "both"
 meaning = "the clutter does not match its spec: wrong items, wrong density, or a change mask outside the density's range"
 
+[clutter_off_spec_minor]
+stage = "clutter"
+severity = "minor"
+by = "judge"
+meaning = "the clutter matches its spec, with a slight drift: an item of a close kind (an armchair for a sofa), a density a little off"
+
 [item_missing]
 stage = "clutter"
 severity = "blocking"
@@ -45,11 +59,23 @@ severity = "blocking"
 by = "judge"
 meaning = "an item breaks its placement rule"
 
+[placement_violation_minor]
+stage = "clutter"
+severity = "minor"
+by = "judge"
+meaning = "an item's placement is debatable but not wrong: close to a window or a door without blocking it"
+
 [scene_changed]
 stage = "clutter"
 severity = "blocking"
 by = "judge"
 meaning = "something other than the added clutter changed: a wall, a fixture, the light, the framing"
+
+[scene_changed_minor]
+stage = "clutter"
+severity = "minor"
+by = "judge"
+meaning = "a slight change outside the clutter that changes nothing a decluttering tool must learn: a reflection, a shadow on the floor next to an item"
 
 [misaligned]
 stage = "clutter"
