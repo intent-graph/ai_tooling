@@ -1,0 +1,20 @@
+# The clean reviser's request: its instruction, the spec, the previous prompt, its assessment, the lessons of its arm.
+role = "revise"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "The room to photograph:" },
+  { slot = "previous", header = "The previous prompt:" },
+  { slot = "assessment", header = "What the image it made was found to have:" },
+  { slot = "lesson", header = "Lessons learned from earlier images, to follow:" },
+]

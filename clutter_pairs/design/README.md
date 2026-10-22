@@ -5,10 +5,10 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
 [construction guideline](../../dev_guidelines/software_development_guidelines/construction.md#derivation-order).
 
 > **Status:** the high-level design (this page) is agreed by the owner, with the owner's later answers folded in.
-> Slice 1's detailed design, revised after an independent review, is to be implemented (the owner's request): [data_model.md](data_model.md) (the
+> Slice 1's detailed design, revised after an independent review, is implemented and tested offline: [data_model.md](data_model.md) (the
 > schema, its views and audit checks), [loops.md](loops.md) (composition and recording, both loops, pixel tests and
 > composite, verdict and stop rule, lessons and how their effect is measured), [components.md](components.md) (use of
-> virtual_unstaging, layering, configuration, command line). Implementation of slice 1 starting.
+> virtual_unstaging, layering, configuration, command line). The rental of slice 1 is next.
 
 ## Table of Contents
 
@@ -192,7 +192,7 @@ The owner's requirement: full auditability.
 <!-- Lines 193-198 -->
 
 One store per dataset: a SQLite file and an image store addressed by SHA-256, the pattern of virtual_unstaging. The
-schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](schema.sql) (42 tables;
+schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](../src/clutter_pairs/store/schema.sql) (42 tables;
 the DDL loads in SQLite and in Postgres 18). The export is plain files: `clean/`, `cluttered/` and `mask/` PNGs and a JSONL manifest, one line per
 pair: public ids (content hashes that survive a rebuild of the store), split, specs, families, licences, checks.
 
@@ -319,3 +319,9 @@ The whole flow end to end at small scale first, then depth where it fails.
   furnished and staged bedroom dataset (access requested).
 - Name of the project and of its command (architecture, "Open questions").
 - Granularity of the ontology and the taxonomy beyond slice 1: set from slice 1's report.
+- **Helping the judges** (owner: "explore passing helpful info to a judge, like rough segmentation mask or object
+  detection outputs"): brainstorm, nothing decided. The first rental showed the small judge (Qwen3-VL-8B) rejecting
+  fixed elements as movable and drawing tight boxes. Candidates: a segmentation of the clean image (fixed vs movable
+  classes) for the clean judge; detector boxes for the pair judge; the change mask's components drawn numbered on an
+  overlay, so the pair judge assigns each component to an item instead of drawing boxes, which would make the
+  explained-change test exact. Each aid is a part of the request like any other, recorded and recomposable.

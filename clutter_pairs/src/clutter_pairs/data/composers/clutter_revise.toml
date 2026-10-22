@@ -1,0 +1,20 @@
+# The clutter reviser's request: its instruction, the spec, the previous instruction, its assessments, the lessons.
+role = "revise"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "The room, the view and the clutter to add:" },
+  { slot = "previous", header = "The previous instruction:" },
+  { slot = "assessment", header = "What the result was found to have:" },
+  { slot = "lesson", header = "Lessons learned from earlier images, to follow:" },
+]

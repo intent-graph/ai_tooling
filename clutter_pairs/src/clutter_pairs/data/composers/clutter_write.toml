@@ -1,0 +1,18 @@
+# The clutter writer's request: its instruction, the clutter spec with its items and rules, the lessons of its arm.
+role = "write"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "The room, the view and the clutter to add:" },
+  { slot = "lesson", header = "Lessons learned from earlier images, to follow:" },
+]

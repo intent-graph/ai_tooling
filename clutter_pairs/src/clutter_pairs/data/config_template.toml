@@ -1,0 +1,48 @@
+# clutter_pairs dataset configuration (design/components.md, "The dataset folder").
+# Never holds a key: name a key file (mode 600) or a key command. Endpoints come from the GPU session file that
+# `cpairs gpu up` writes beside this file; set them here only for servers you run yourself.
+
+[dataset]
+seed = 1                       # every scene, clutter spec and arm is drawn from it
+
+[generator]                    # makes the clean images from text and edits them (one family in slice 1)
+recipe = "flux2_klein_4b"      # a recipe packaged with the tool server
+family = "flux2"               # the editor-family rule (choice C8)
+licence = "Apache-2.0"         # recorded with every image; never a filter
+size_multiple = 32             # the recipe's output multiple
+condition_max_pixels = 1048576 # the editor's condition-image limit: clean images stay within it
+# endpoint = "https://..."     # from the GPU session file when a rental is up
+# key_file = "~/.config/..."
+
+[judge]                        # judges, writes, revises and distills (OpenAI-compatible chat server)
+model = "Qwen/Qwen3-VL-8B-Instruct"
+revision = "unpinned"
+family = "qwen3_vl"
+licence = "Apache-2.0"
+judge_temperature = 0.0
+writer_temperature = 0.8
+max_tokens = 2048
+
+[run]
+pair_target = 50               # the run stops here, or at the rental's deadline
+output_side = 1024             # about side x side pixels per image
+max_iterations = 6             # per loop
+wave_width = 4                 # scenes in parallel
+lessons_per_request = 5
+variants = 3                   # clutter specs per scene (choice C3), one per density in taxonomy order
+expected_call_seconds = 90     # no call starts that the deadline would cut
+
+[pixels]                       # the pixel tests' thresholds; `cpairs decide threshold` overrides them
+max_shift_px = 2.0
+max_global_delta_e = 6.0
+change_delta_e = 8.0
+explained_min_share = 0.6
+
+[files]                        # replace a packaged file: "instructions/clean_writer.md" = "my/clean_writer.md"
+
+[gpu]
+provider = "runpod"
+# gpu = "NVIDIA A100-SXM4-80GB"  # default: the first in stock of the preference list
+
+[gpu.machine]                  # as virtual_unstaging's gpu.toml [machine]
+[gpu.judge]                    # as virtual_unstaging's gpu.toml [judge]: quantization, max_model_len, ...

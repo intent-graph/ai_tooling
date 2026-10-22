@@ -22,14 +22,14 @@ usage, required properties, functions, system shape, stored data, components, th
 1. [Trust boundaries](#trust-boundaries) _(Lines 192-207)_
 1. [Dependencies](#dependencies) _(Lines 210-227)_
 1. [Design decisions](#design-decisions) _(Lines 230-249)_
-1. [Extension points](#extension-points) _(Lines 252-272)_
-1. [Command line](#command-line) _(Lines 275-298)_
-1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 301-345)_
-1. [Review page](#review-page) _(Lines 348-361)_
-1. [Build order](#build-order) _(Lines 364-376)_
-1. [Guidelines applied](#guidelines-applied) _(Lines 379-394)_
-1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 397-408)_
-1. [Open](#open) _(Lines 411-418)_
+1. [Extension points](#extension-points) _(Lines 252-274)_
+1. [Command line](#command-line) _(Lines 277-300)_
+1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 303-347)_
+1. [Review page](#review-page) _(Lines 350-363)_
+1. [Build order](#build-order) _(Lines 366-378)_
+1. [Guidelines applied](#guidelines-applied) _(Lines 381-396)_
+1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 399-410)_
+1. [Open](#open) _(Lines 413-420)_
 
 
 ---
@@ -248,7 +248,7 @@ All *proposal*. The ones costly to reverse first; each names the alternative and
 | D14 | A **speed version** is recorded with what it shapes: generator settings in each attempt's settings (as today); the judge's request options as a suffix of the judge's recorded revision (`+jpeg@1024+answer:6/2/100/200`, findings / moves / comment / critique), as a generator's `+fp8` storage is: a judge that sees smaller images and must answer shorter is another judge, and reports group by it | A column on `run`: once the schema has migrations (it has none: version 1) |
 
 ## Extension points
-<!-- Lines 252-272 -->
+<!-- Lines 252-274 -->
 
 For a program that imports this package. The owner's rule: a change made for such a program only adds modularity or
 an override; it defaults to the behaviour described above and names no caller.
@@ -263,15 +263,17 @@ an override; it defaults to the behaviour described above and names no caller.
 | recipe field `inputs.text_only` | a generator that also makes an image from the prompt alone ([tool server API](tool_server_api.md#generate), version 1.2). Not an extension point but a new request form, accepted by the owner as the one exception to the rule: opt-in per recipe, nothing changes without it |
 
 **The surface an importing program may rely on**, beyond the points above: `provision.lifecycle` (`Context`, `up`,
-`down`) and `provision.plan` (`ProjectPlan`, `JudgePlan`); `clients.toolserver.ToolServerClient`,
-`clients.generators.ToolServerGenerator`, `clients.openai_compatible.chat_json`, `clients.http` (`Endpoint`,
-`EndpointError`, `Exchange`), `clients.fakes.FakeGenerator`; `engines.ReplayMismatch`; `imaging`;
-`domain.sha256_text`, `domain.canonical_json` and the generator request types; `store.blobs.BlobStore`,
-`store.db.connect`, `store.db.transaction`; `config.Secret`; the packaged recipes. A change to one of these names is a
+`down`, `SESSION_FILE`), `provision.plan` (`ProjectPlan`, `JudgePlan`, the `DEFAULT_*` machine settings),
+`provision.userfiles` (`config_dir`, `state_dir`), `provision.errors.ProvisionError`, `provision.switch.switch_judge`;
+`clients.toolserver.ToolServerClient`, `clients.generators.ToolServerGenerator`, `clients.openai_compatible`
+(`chat_json`, `image_part`, `text_part`), `clients.http` (`Endpoint`, `EndpointError`, `Exchange`),
+`clients.fakes.FakeGenerator`; `engines.ReplayMismatch`; `imaging`; `serve.images.output_size` (the sizing rule, no
+server dependency); `domain.sha256_text`, `domain.sha256_bytes`, `domain.canonical_json` and the generator request
+types; `store.blobs.BlobStore`, `store.db.connect`, `store.db.transaction`; `config.Secret`; the packaged recipes. A change to one of these names is a
 change of contract: the repository's instructions say which other tests run with it.
 
 ## Command line
-<!-- Lines 275-298 -->
+<!-- Lines 277-300 -->
 
 Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_guidelines.md):
 
@@ -297,10 +299,12 @@ Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_gu
   machine. This is the recorded exception the configuration guideline requires.
 
 ## Model services and provisioning
-<!-- Lines 301-345 -->
+<!-- Lines 303-347 -->
 
 Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with polled jobs) and
-[provisioning.md](provisioning.md) (renting, the self-delete guard, keys). The default models are the owner's choice.
+[provisioning.md](provisioning.md) (renting, the self-delete guard, keys). The default models are the owner's choice:
+generator FLUX.2 klein 4B (owner, 2026-10-22, after a clocking and a blind review: the fastest, and the one whose
+images the owner kept most); judge open.
 
 - **Judge:** any OpenAI-compatible chat endpoint with image input and JSON-schema output. Images travel as data
   URLs. Coordinates are normalized to [0, 1] by the judge adapter (models differ: absolute pixels, 0-1000 grid).
@@ -318,10 +322,13 @@ Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with po
   sizes, not measured.
 - **Generation in a few seconds, 10 s at most** (owner): the method explores many versions of a photo under the
   judge's guidance, so a generator is chosen for its seconds per image on the rented GPU as much as for its quality.
-  Distilled few-step models qualify; 40-50-step models do not (measured on an 80 GB A100: a 7B editor at 40 steps
-  took about a minute per image, a 4B editor at 4 steps 5-6 s). The judge is held to the same bound (owner): a few
-  seconds per judgment, 10 s at most (measured on an A100: 14-28 s for a 27B dense judge, 7-11 s for an 8B dense or
-  a 3B-active mixture-of-experts judge, of which 1-4.5 s is the upload of five 2-megapixel PNGs, 9 MB as data URLs).
+  Distilled few-step models qualify; 40-50-step models do not (measured on an 80 GB A100, about 1 megapixel out: a
+  7B editor at 40 steps took about a minute per image; at 4-8 steps a 4B editor 5-6 s, a 7B 7.5-8 s, a 20B kept whole
+  on the GPU 7-8 s at 0.55 megapixel; the 20B offloaded 42-55 s). The judge is held to the same bound (owner): a few
+  seconds per judgment, 10 s at most (measured on an A100, one judgment at a time, full request: 14-20 s for a 27B
+  dense judge, 6-10 s for an 8B dense or a 3B-active mixture-of-experts judge, of which 1-4.5 s is the upload of five
+  2-megapixel PNGs, 9 MB as data URLs; two judgments sharing the GPU take up to twice as long). Speed versions halve
+  these: with JPEG images at 768-1024 px and a capped answer, 7-9 s for the 27B and 3.5-5 s for the others.
 - **Speed versions** (owner: "for each model 3 versions [...] with more and more compromise for speed", D14): the
   same model asked for less. Judge, in `[judge]`: `image_side` (long side of every image sent, 0 = as stored),
   `image_format` (`png` or `jpeg`), and caps on the answer, `max_findings`, `max_moves`, `comment_chars` (each finding's
@@ -344,7 +351,7 @@ Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with po
   one GPU rental service; others plug in.
 
 ## Review page
-<!-- Lines 348-361 -->
+<!-- Lines 350-363 -->
 
 Detailed in [review_page.md](review_page.md) (views, keys, security, data written).
 
@@ -360,7 +367,7 @@ Detailed in [review_page.md](review_page.md) (views, keys, security, data writte
   and the request is same-origin (Fetch Metadata or `Origin`).
 
 ## Build order
-<!-- Lines 364-376 -->
+<!-- Lines 366-378 -->
 
 Thin end to end first, then the riskiest branch to full.
 
@@ -375,7 +382,7 @@ Slice 1 answers one question: **at equal budget, does a findings-driven search f
 and more than a fixed-order search?** Engines and the experiment: [loop1.md](loop1.md#engines).
 
 ## Guidelines applied
-<!-- Lines 379-394 -->
+<!-- Lines 381-396 -->
 
 Where this design meets the repository's guidelines, and where it departs from them on purpose.
 
@@ -393,7 +400,7 @@ Where this design meets the repository's guidelines, and where it departs from t
   column. Changes when a second consumer reads the database directly.
 
 ## Changes proposed to the architecture
-<!-- Lines 397-408 -->
+<!-- Lines 399-410 -->
 
 Not applied; for the owner to accept.
 
@@ -407,7 +414,7 @@ Not applied; for the owner to accept.
   (so *project overlay*). *Probe* stays a verb (try a neighbour); the deterministic checks are *tools*.
 
 ## Open
-<!-- Lines 411-418 -->
+<!-- Lines 413-420 -->
 
 - **Default generator and judge:** the owner's choice, from the open-weight survey; it sets the capability
   profile, the endpoint protocol, and whether generator and judge share one GPU.

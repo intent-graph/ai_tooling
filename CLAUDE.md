@@ -15,9 +15,9 @@ base here documents itself:
 - `global_skills/` — user-wide skills; read its `CLAUDE.md` (self-contained folders, no
   links leaving a skill folder).
 - `virtual_unstaging/`, `clutter_pairs/` — English only; read each one's `architecture.md` and `CLAUDE.md` before any
-  change (`virtual_unstaging`: design and implementation open; `clutter_pairs`: design agreed, slice 1 being implemented; it may
+  change (`virtual_unstaging`: design and implementation open; `clutter_pairs`: design agreed, slice 1 implemented; it may
   change `virtual_unstaging` only by adding modularity or override mechanisms). `clutter_pairs` imports
-  `virtual_unstaging`: a change there also runs `clutter_pairs`' tests, once they exist.
+  `virtual_unstaging`: a change there also runs `clutter_pairs`' gates.
 - `diagrams_for_humans/`, `howto/`, `ai_evolution/`
 
 ## Agents and skills (`.claude/`)

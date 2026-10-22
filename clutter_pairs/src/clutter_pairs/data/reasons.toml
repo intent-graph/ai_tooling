@@ -1,0 +1,70 @@
+# Reason codes for findings: the stage they apply to and their fixed severity. The verdict rule reads the severity
+# here, never the judge's own call (design/loops.md, "The verdict and the stop rule"). A code's severity never
+# changes once used: a different severity is a new code. The judges' answer schemas list the codes of their stage;
+# the pixel tests raise the codes marked `by = "pixels"`.
+
+[not_empty]
+stage = "clean"
+severity = "blocking"
+by = "judge"
+meaning = "a movable item (furniture, belonging) is in the clean image"
+
+[room_off_spec]
+stage = "clean"
+severity = "blocking"
+by = "judge"
+meaning = "the room type, style, light or camera is not the one specified"
+
+[implausible]
+stage = "both"
+severity = "blocking"
+by = "judge"
+meaning = "the image is not plausible as a photograph: broken geometry, impossible light, melted objects"
+
+[artifact]
+stage = "both"
+severity = "minor"
+by = "judge"
+meaning = "a small rendering flaw that does not change what the image shows"
+
+[clutter_off_spec]
+stage = "clutter"
+severity = "blocking"
+by = "both"
+meaning = "the clutter does not match its spec: wrong items, wrong density, or a change mask outside the density's range"
+
+[item_missing]
+stage = "clutter"
+severity = "blocking"
+by = "judge"
+meaning = "a specified item is not in the cluttered image"
+
+[placement_violation]
+stage = "clutter"
+severity = "blocking"
+by = "judge"
+meaning = "an item breaks its placement rule"
+
+[scene_changed]
+stage = "clutter"
+severity = "blocking"
+by = "judge"
+meaning = "something other than the added clutter changed: a wall, a fixture, the light, the framing"
+
+[misaligned]
+stage = "clutter"
+severity = "blocking"
+by = "pixels"
+meaning = "the edit is shifted against the clean image, or not at its size"
+
+[global_repaint]
+stage = "clutter"
+severity = "blocking"
+by = "pixels"
+meaning = "the edit changed colour or levels across the whole image"
+
+[unexplained_change]
+stage = "clutter"
+severity = "blocking"
+by = "pixels"
+meaning = "a changed region of the mask lies outside every item the judge located"

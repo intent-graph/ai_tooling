@@ -1,0 +1,8 @@
+# The editor's request: the instruction a writer or reviser call returned, the clean image as the original.
+role = "edit"
+request = "generator"
+renderer = "spec_text"
+renderer_version = 1
+prompt = "prompt"
+settings = ["output_side"]
+images = [{ slot = "original", role = "original" }]

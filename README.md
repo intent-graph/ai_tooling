@@ -46,7 +46,7 @@ git clone https://github.com/intent-graph/intent_graph.git
 - [`virtual_unstaging/`](virtual_unstaging/) — empty a building's photos of their furniture with an image-editing
   model steered by a judge model and a second review level (design written, first slice implemented and tested).
 - [`clutter_pairs/`](clutter_pairs/) — generate clean and cluttered image pairs of the same view, as ground-truth
-  data for decluttering tools (high-level design agreed, no code yet).
+  data for decluttering tools (design agreed, first slice implemented and tested offline).
 - [`ai_evolution/`](ai_evolution/) — notes on AI evolution and method (in French).
 - [`.claude/`](.claude/) — agents (`doc-manifest-agent`, `diagram-agent`, `python-kb-agent`) and skills
   (`md-doc-tools`, `codemap`) that wrap the CLIs above for agent use.

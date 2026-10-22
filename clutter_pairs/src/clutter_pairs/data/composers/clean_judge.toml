@@ -1,0 +1,18 @@
+# The clean judge's request: its instruction, the scene's spec, the generated image; the clean judgment schema.
+role = "judge"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "Specification:" },
+  { slot = "image", header = "The generated image:" },
+]

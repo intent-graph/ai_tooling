@@ -1,4 +1,4 @@
--- clutter_pairs — store schema (slice 1, proposal). Explained in data_model.md, beside this file.
+-- clutter_pairs — store schema (slice 1). Explained in design/data_model.md.
 -- SQLite now; moving to Postgres changes the ids only (INTEGER PRIMARY KEY here, an identity column there).
 -- Tables are in dependency order: no forward reference.
 
@@ -416,3 +416,95 @@ CREATE TABLE export_pair (
   iteration_id  INTEGER NOT NULL REFERENCES iteration,
   PRIMARY KEY (export_id, iteration_id)
 );
+
+-- === Views: derived, never stored (data_model.md, "Views") ===============================================
+
+-- Accepted clean images, per scene: the generated image of a clean loop's accepted iteration.
+CREATE VIEW clean_image AS
+SELECT lr.scene_id, lr.id AS loop_run_id, it.id AS iteration_id, ii.image_sha
+FROM loop_run lr
+JOIN iteration it ON it.loop_run_id = lr.id AND it.verdict = 'accept'
+JOIN iteration_image ii ON ii.iteration_id = it.id AND ii.role = 'generated'
+WHERE lr.stage = 'clean';
+
+-- One row per accepted pair; its id is the accepted clutter iteration. The families come from the call that made
+-- the clean image and from the edit call (one generate or edit call per iteration).
+CREATE VIEW pair AS
+SELECT it.id AS pair_id, b.id AS building_id, r.id AS room_id, s.id AS scene_id, cs.id AS clutter_spec_id,
+       lr.id AS loop_run_id, lr.input_image AS clean_image, comp.image_sha AS cluttered_image,
+       mask.image_sha AS mask_image, gm.id AS clean_model_id, gm.family AS clean_family,
+       em.id AS editor_model_id, em.family AS editor_family
+FROM iteration it
+JOIN loop_run lr ON lr.id = it.loop_run_id AND lr.stage = 'clutter'
+JOIN clutter_spec cs ON cs.id = lr.clutter_spec_id
+JOIN scene s ON s.id = cs.scene_id
+JOIN room r ON r.id = s.room_id
+JOIN building b ON b.id = r.building_id
+JOIN iteration_image comp ON comp.iteration_id = it.id AND comp.role = 'composite'
+JOIN iteration_image mask ON mask.iteration_id = it.id AND mask.role = 'change_mask'
+JOIN model_call ec ON ec.iteration_id = it.id AND ec.role = 'edit'
+JOIN model em ON em.id = ec.model_id
+JOIN clean_image ci ON ci.scene_id = s.id AND ci.image_sha = lr.input_image
+JOIN model_call gc ON gc.iteration_id = ci.iteration_id AND gc.role = 'generate'
+JOIN model gm ON gm.id = gc.model_id
+WHERE it.verdict = 'accept';
+
+-- Every axis value of a pair: its room's, its scene's and its clutter spec's.
+CREATE VIEW pair_value AS
+SELECT p.pair_id, v.axis, v.value FROM pair p JOIN room_value v ON v.room_id = p.room_id
+UNION ALL
+SELECT p.pair_id, v.axis, v.value FROM pair p JOIN scene_value v ON v.scene_id = p.scene_id
+UNION ALL
+SELECT p.pair_id, v.axis, v.value FROM pair p JOIN clutter_spec_value v ON v.clutter_spec_id = p.clutter_spec_id;
+
+-- Per target: pairs wanted and pairs accepted, by relational division on (axis, value), whatever the space version.
+CREATE VIEW coverage AS
+SELECT t.target_set_id, t.id AS target_id, t.pairs AS wanted,
+       (SELECT COUNT(*) FROM pair p
+        WHERE NOT EXISTS (SELECT 1 FROM target_value tv
+                          WHERE tv.target_id = t.id
+                            AND NOT EXISTS (SELECT 1 FROM pair_value pv
+                                            WHERE pv.pair_id = p.pair_id AND pv.axis = tv.axis AND pv.value = tv.value)))
+         AS accepted
+FROM target t;
+
+-- Per loop, in wave order: its iterations and how it stopped. Descriptive.
+CREATE VIEW iteration_curve AS
+SELECT lr.stage, w.run_id, w.id AS wave_id, w.ordinal AS wave_ordinal, lr.id AS loop_run_id, lr.lessons_arm,
+       (SELECT COUNT(*) FROM iteration it WHERE it.loop_run_id = lr.id) AS iterations, lr.stop_reason
+FROM loop_run lr JOIN wave w ON w.id = lr.wave_id;
+
+-- The loops the carry-forward comparison counts: finished, in waves from the stage's first active lesson on, not
+-- evidence of a lesson. The decision rule (decision_rules/carry_forward.md) is applied to these rows by the report.
+CREATE VIEW carry_forward_loop AS
+SELECT ic.*
+FROM iteration_curve ic
+WHERE ic.stop_reason IS NOT NULL AND ic.stop_reason NOT IN ('deadline', 'error')
+  AND ic.wave_id >= (SELECT MIN(l.active_from_wave_id) FROM lesson l WHERE l.stage = ic.stage)
+  AND NOT EXISTS (SELECT 1 FROM lesson_evidence le JOIN iteration it ON it.id = le.iteration_id
+                  WHERE it.loop_run_id = ic.loop_run_id);
+
+CREATE VIEW carry_forward AS
+SELECT stage, lessons_arm, COUNT(*) AS loops,
+       AVG(CASE WHEN stop_reason = 'accepted' THEN 1.0 ELSE 0.0 END) AS accepted_share,
+       AVG(CASE WHEN stop_reason = 'accepted' THEN 1.0 * iterations END) AS mean_iterations_to_accept
+FROM carry_forward_loop
+GROUP BY stage, lessons_arm;
+
+-- Per lesson: the loops whose first request (the write call) cited it. Descriptive.
+CREATE VIEW lesson_use AS
+SELECT DISTINCT cp.lesson_id, mc.loop_run_id
+FROM composition_part cp JOIN model_call mc ON mc.id = cp.model_call_id
+WHERE cp.source_kind = 'lesson' AND mc.role = 'write';
+
+-- Per run, stage, role and model: calls, reused calls, wall and generator seconds. The rental's price times its wall
+-- clock, and the cost per accepted pair, are computed by the report from `run` and `rental`.
+CREATE VIEW call_cost AS
+SELECT w.run_id, lr.stage, mc.role, m.name AS model, COUNT(*) AS calls,
+       SUM(CASE WHEN mc.reused_call_id IS NULL THEN 0 ELSE 1 END) AS reused,
+       SUM(COALESCE(mc.wall_seconds, 0)) AS wall_seconds, SUM(COALESCE(mc.gpu_seconds, 0)) AS gpu_seconds
+FROM model_call mc
+JOIN loop_run lr ON lr.id = mc.loop_run_id
+JOIN wave w ON w.id = lr.wave_id
+JOIN model m ON m.id = mc.model_id
+GROUP BY w.run_id, lr.stage, mc.role, m.name;

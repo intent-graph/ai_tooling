@@ -1,0 +1,14 @@
+{
+  "title": "text",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "text"
+  ],
+  "additionalProperties": false
+}
