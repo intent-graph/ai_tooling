@@ -54,7 +54,7 @@ reports its API version and the client refuses a different major version.
 
 | Method and path | Request | Response |
 |---|---|---|
-| `GET /health` | — | `{"status": "ok", "api_version": "1.0", "deadline": "<ISO 8601 UTC>", "seconds_left": 1234, "busy": false, "jobs": 0, "models": {"generator": "ready", "tools": {"class_diff": "not_loaded"}}}`; `status` is `deadline_reached` past the deadline; a model is `not_loaded`, `loading`, `ready` or `failed` |
+| `GET /health` | — | `{"status": "ok", "api_version": "1.2", "deadline": "<ISO 8601 UTC>", "seconds_left": 1234, "busy": false, "jobs": 0, "models": {"generator": "ready", "tools": {"class_diff": "not_loaded"}}}`; `status` is `deadline_reached` past the deadline; a model is `not_loaded`, `loading`, `ready` or `failed` |
 | `GET /capabilities` | — | `{"api_version", "server_version", "generator": {...} or null, "tools": [{"name", "version", "model", "inputs", "state"}]}` |
 | `HEAD /blobs/{sha256}` | — | 200 if present, 404 otherwise |
 | `PUT /blobs/{sha256}` | raw bytes, `Content-Type: image/png` or `image/jpeg` | 201 with `{"sha256", "bytes"}`; 400 `hash_mismatch` if the bytes do not hash to the path; 400 `bad_request` if the bytes are not the declared type, not a decodable image, or above 64 MiB |

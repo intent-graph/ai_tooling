@@ -91,6 +91,19 @@ def test_an_observer_sees_each_exchange_as_sent_without_the_key(server: Endpoint
     assert "Authorization" not in exchange.headers and b"[DONE]" in exchange.response and exchange.error is None
 
 
+def test_an_observer_that_raises_fails_the_call_without_a_retry(server: Endpoint) -> None:
+    Handler.mode = "stream"
+    calls: list[Exchange] = []
+
+    def refuse(exchange: Exchange) -> None:
+        calls.append(exchange)
+        raise ConnectionError("the record could not be written")
+
+    with pytest.raises(ConnectionError):
+        chat_json(replace(server, retries=2, observer=refuse), "judge", [], {"type": "object"}, 0.0, 512)
+    assert len(calls) == 1 and calls[0].status == 200  # one request sent, its answer seen, nothing re-sent
+
+
 def test_an_observer_sees_a_failed_attempt() -> None:
     seen: list[Exchange] = []
     unreachable = Endpoint("http://127.0.0.1:9/v1", "session-key", timeout=2, retries=0, observer=seen.append)
