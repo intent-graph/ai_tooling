@@ -124,13 +124,16 @@ A pure function: `compile(point, photo_context, release, instruction_stack) -> G
 ## Automatic tool runs
 <!-- Lines 126-136 -->
 
-Two tools run on every attempt before it is judged (design D6). Each returns derived images, measures and a
-short text summary; each run is cached by its key and linked to the judgment that read it.
+Up to three tools run on every attempt before it is judged (design D6): `change_map` always, `class_diff` and
+`element_inventory` when the project's `[tools]` section turns them on (`class_diff = true`, `inventory = true`).
+Each returns derived images, measures and a short text summary; each run is cached by its key and linked to the
+judgment that read it.
 
 | Tool | Computes | The judge receives |
 |---|---|---|
-| `class_diff` | semantic segmentation of original and candidate; inside the dilated removal region, the share of pixels whose class became an opening (door, window, passage) or a class absent from the original; outside it, fixed-element classes that vanished | a colour map of class changes; e.g. "inside the removed region, 3.1 % of pixels became door, at (0.42, 0.30)-(0.55, 0.81)" |
-| `change_map` | outside the removal region: optical-flow displacement (median and 95th percentile, in % of the long side), colour difference ΔE (median), a heat map | the heat map; e.g. "outside the region: median shift 0.2 %, 95th percentile 0.9 %, ΔE 1.8" |
+| `class_diff` | semantic segmentation of original and candidate; inside the dilated removal region, the share of pixels whose class became an opening (door, window, passage) or a class absent from the original; outside it, fixed-element classes that vanished. *Proposal* (2026-10-22): a class the original shows on the region's edge and the candidate extends into it is `continued`, not `appeared`, and an opening that continues one at the edge is said to (revealed or extended, not necessarily invented) | a colour map of class changes; e.g. "inside the removed region, 3.1 % of pixels became door, at (0.42, 0.30)-(0.55, 0.81), continuing a door at the region's edge in the original" |
+| `change_map` | outside the removal region: colour difference ΔE, a heat map. *Proposal* (2026-10-22): a uniform colour shift (the median Lab difference outside the region) is measured apart and removed before the local change is counted, so a slight global tone change no longer reads as change everywhere | the heat map of local change; e.g. "a uniform colour shift of ΔE 6.2 (lighter); after it, 1.4 % of the pixels outside the region changed visibly" |
+| `element_inventory` | detection and segmentation of the room's elements in original and candidate, matched by place: each element `kept`, `revealed`, `changed`, `removed`, `new` or `left`, inside or outside the region ([tool server API](tool_server_api.md#element-inventory)). Names: the photo's fixed elements (project-wide and group), the generic fixed building elements of the package (`data/building_elements.txt`: door, window, radiator, socket, switch, light, fireplace, beam, built-in cupboard) and its movable elements; a leading "the" dropped, lower case, each name once, fixed winning over movable; surfaces (a name ending in wall, floor, ceiling, tiles…) left to `change_map`, as a detector's box for a surface moves from one picture to the next | the candidate with its elements boxed by status; the inventory as a short table |
 
 Tools locate and measure; the judge decides ([architecture](../architecture.md#judge-tool-library)).
 
@@ -140,11 +143,12 @@ Tools locate and measure; the judge decides ([architecture](../architecture.md#j
 One call per attempt, with two sections in the answer (design D7).
 
 **Images, in order, each named in the text:** the original; the candidate; the original with the removal region
-outlined; the `class_diff` map; the `change_map` heat map.
+outlined; the `change_map` heat map; the `class_diff` map; the candidate annotated by `element_inventory`. The last
+two only when the project turns their tool on.
 
 **Text:** the judge's instruction stack (base, then project overlay), rendered with: the content rules of the
 photo's group (fixed and movable elements) and the fixed elements found in it; the defect taxonomy, codes and
-descriptions from `defect_type`; the tool summaries; the history of this photo (per earlier attempt: which
+descriptions from `defect_type`; the tool summaries (the inventory's as its table); the history of this photo (per earlier attempt: which
 dimensions differ from the start point, its findings and score), text only; the dimensions of the run with their
 levels and the current point, for the guidance section.
 
@@ -172,7 +176,8 @@ schema constrains decoding on the server and parses the answer here:
 ```
 
 - At most 12 findings and 4 moves; `box` may be `null` (the whole image). A move changes one dimension, to any
-  of its levels other than the current one.
+  of its levels other than the current one; the schema lists only those levels, so constrained decoding cannot
+  produce a move to the current level.
 - **Parsing at the edge:** the adapter converts the model's coordinate convention to [0, 1]; every finding and
   move is checked against the contract; a failure stores the judgment with its raw text and parse error, and the
   call is retried once; a second failure gives the attempt no evaluation.

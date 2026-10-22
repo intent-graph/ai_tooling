@@ -49,6 +49,7 @@ revision = "unpinned"
 box_scale = "per_mille"           # per_mille (0-1000 grid) | unit (0-1)
 temperature = 0.0
 max_tokens = 4096
+timeout_seconds = 600             # longest wait for the judge's answer; a stalled stream fails after it
 instructions = "default"
 # Speed: what the judge is sent and how long it may answer (0 = as stored, no cap)
 image_side = 0                    # long side of every image sent, in pixels
@@ -60,6 +61,7 @@ critique_chars = 0
 
 [tools]
 class_diff = true                 # needs the tool server
+inventory = false                 # the judge reads an element inventory (needs the tool server)
 
 [budget]
 max_attempts = 6
@@ -144,6 +146,7 @@ class JudgeConfig:
     instructions: str
     extra: dict[str, Any] = field(default_factory=dict)
     request: JudgeRequestOptions = field(default_factory=lambda: JudgeRequestOptions())
+    timeout_seconds: int = 600
 
 
 @dataclass(frozen=True)
@@ -157,6 +160,7 @@ class ProjectConfig:
     budget: Budget
     minor_tolerance: int
     workers: int
+    inventory: bool = False
 
 
 _SECTIONS = {
@@ -164,9 +168,9 @@ _SECTIONS = {
     "generator": {"adapter", "endpoint", "key_file", "key_command", "model", "revision", "licence", "max_images",
                   "native_mask", "roles", "instructions", "settings", "fields"},
     "judge": {"adapter", "endpoint", "key_file", "key_command", "model", "revision", "box_scale", "temperature",
-              "max_tokens", "instructions", "extra", "image_side", "image_format", "max_findings", "max_moves",
+              "max_tokens", "timeout_seconds", "instructions", "extra", "image_side", "image_format", "max_findings", "max_moves",
               "comment_chars", "critique_chars"},
-    "tools": {"class_diff", "endpoint", "key_file", "key_command"},
+    "tools": {"class_diff", "inventory", "endpoint", "key_file", "key_command"},
     "budget": {"max_attempts", "max_gpu_seconds", "max_judge_calls"},
     "search": {"minor_tolerance", "workers"},
 }
@@ -277,6 +281,7 @@ def load(project_dir: Path, overrides: Sequence[Path] = ()) -> ProjectConfig:
         box_scale=_choice(j, "box_scale", "per_mille", ("per_mille", "unit")),
         temperature=float(j.get("temperature", 0.0)),
         max_tokens=_int(j, "max_tokens", 4096, 256),
+        timeout_seconds=_within(j, "timeout_seconds", 600, 10, 3600),
         instructions=str(j.get("instructions", "default")),
         extra=dict(j.get("extra", {})),
         request=JudgeRequestOptions(
@@ -294,6 +299,7 @@ def load(project_dir: Path, overrides: Sequence[Path] = ()) -> ProjectConfig:
         generator=generator,
         judge=judge,
         class_diff=bool(t.get("class_diff", True)),
+        inventory=bool(t.get("inventory", False)),
         tools_endpoint=tools_endpoint,
         tools_secret=_secret(t) if ("key_file" in t or "key_command" in t) else generator.secret,
         budget=Budget(_int(b, "max_attempts", 6, 1), float(b.get("max_gpu_seconds", 900)), _int(b, "max_judge_calls", 14, 1)),

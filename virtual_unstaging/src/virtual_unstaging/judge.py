@@ -115,7 +115,7 @@ class Judge:
             identity.append([image.label, sha256_bytes(data)])
         text = _request_text(judge_input) + _brevity(options)
         content.append(self.text_part(text))
-        schema = output_schema(self.defects, judge_input.dimensions, options)
+        schema = output_schema(self.defects, judge_input.dimensions, options, judge_input.point)
         messages: list[dict[str, object]] = [
             {"role": "system", "content": system},
             {"role": "user", "content": content},
@@ -146,7 +146,7 @@ _BOX_TEXT: dict[str, str] = {
 
 def _request_text(judge_input: JudgeInput) -> str:
     lines = ["Tool measurements:"]
-    lines += [f"- {tool}: {summary}" for tool, summary in judge_input.tool_summaries] or ["- none"]
+    lines += [_tool_line(tool, summary) for tool, summary in judge_input.tool_summaries] or ["- none"]
     lines += ["", "Earlier attempts on this photo:"]
     lines += [f"- {entry}" for entry in judge_input.history] or ["- none, this is the first"]
     lines += ["", "Dimensions you may move, with their levels; the current level is marked with *:"]
@@ -155,6 +155,13 @@ def _request_text(judge_input: JudgeInput) -> str:
         levels = ", ".join(("*" if lv.ordinal == current.get(dim.key) else "") + lv.label for lv in dim.levels)
         lines.append(f"- {dim.key} ({dim.input}): {levels}")
     return "\n".join(lines)
+
+
+def _tool_line(tool: str, summary: str) -> str:
+    """One line per tool; a summary of several lines (the inventory's table) follows its name, indented."""
+    if "\n" not in summary:
+        return f"- {tool}: {summary}"
+    return f"- {tool}:\n" + "\n".join(f"  {line}" for line in summary.splitlines())
 
 
 def _brevity(options: JudgeRequestOptions) -> str:
@@ -174,10 +181,15 @@ def _text_schema(chars: int) -> dict[str, object]:
 
 
 def output_schema(
-    defects: Sequence[DefectType], dimensions: Sequence[Dimension], options: JudgeRequestOptions | None = None
+    defects: Sequence[DefectType],
+    dimensions: Sequence[Dimension],
+    options: JudgeRequestOptions | None = None,
+    point: Point | None = None,
 ) -> dict[str, object]:
-    """The output contract, generated from the run's defects and dimensions: one source for decoding and parsing."""
+    """The output contract, generated from the run's defects and dimensions: one source for decoding and parsing. With
+    the current point, a move lists only the levels other than the current one, as the parser requires."""
     options = options or JudgeRequestOptions()
+    current = point.as_dict() if point is not None else {}
     codes = [d.code for d in defects]
     box = {"anyOf": [{"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4}, {"type": "null"}]}
     finding = {
@@ -196,7 +208,7 @@ def output_schema(
             "type": "object",
             "properties": {
                 "dimension": {"type": "string", "enum": [dim.key]},
-                "to_level": {"type": "string", "enum": [lv.label for lv in dim.levels]},
+                "to_level": {"type": "string", "enum": [lv.label for lv in dim.levels if lv.ordinal != current.get(dim.key)]},
                 "targets": {"anyOf": [{"type": "string", "enum": codes}, {"type": "null"}]},
                 "reason": _text_schema(options.comment_chars),
             },
@@ -204,6 +216,7 @@ def output_schema(
             "additionalProperties": False,
         }
         for dim in dimensions
+        if any(lv.ordinal != current.get(dim.key) for lv in dim.levels)
     ]
     moves: dict[str, object] = {"type": "array", "maxItems": options.max_moves}
     moves["items"] = {"anyOf": move_variants} if move_variants else {"type": "object"}

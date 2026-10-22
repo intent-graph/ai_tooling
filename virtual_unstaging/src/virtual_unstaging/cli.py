@@ -8,6 +8,7 @@ import logging
 import sqlite3
 import sys
 from collections.abc import Sequence
+from dataclasses import replace
 from pathlib import Path
 
 from virtual_unstaging import __version__, config, imaging, stage0
@@ -118,7 +119,7 @@ def _parser() -> argparse.ArgumentParser:
     p.add_argument("--key-file", type=Path)
     p.add_argument("--key-env", help="name of the environment variable holding the key (rented-machine exception)")
     p.add_argument("--recipe", help="generator recipe name or TOML file; none: tools only")
-    p.add_argument("--tools", default="segment_elements,class_diff,change_map")
+    p.add_argument("--tools", default="segment_elements,class_diff,change_map,element_inventory")
     p.add_argument("--data-dir", type=Path, default=Path("/tmp/unstage-serve"))
     p.set_defaults(handler=cmd_serve)
 
@@ -235,10 +236,10 @@ def _toolbox(cfg: config.ProjectConfig) -> ToolBox:
     routes: dict[str, ToolProvider] = {name: local for name in local.names}
     if cfg.generator.adapter == "fake":
         fake = FakeRemoteTools()
-        routes |= {"segment_elements": fake, "class_diff": fake}
+        routes |= {"segment_elements": fake, "class_diff": fake, "element_inventory": fake}
     elif cfg.tools_endpoint:
         remote = RemoteTools(_toolserver(cfg))
-        routes |= {"segment_elements": remote, "class_diff": remote}
+        routes |= {"segment_elements": remote, "class_diff": remote, "element_inventory": remote}
     return ToolBox(routes)
 
 
@@ -270,7 +271,7 @@ def _chat(cfg: config.ProjectConfig) -> tuple[Chat, ModelRef]:
     j = cfg.judge
     if j.adapter == "fake":
         return FakeChat(), ModelRef("fake/judge", "1")
-    endpoint = _endpoint(j.endpoint, j.secret)
+    endpoint = replace(_endpoint(j.endpoint, j.secret), timeout=float(j.timeout_seconds))
 
     def chat(messages: list[dict[str, object]], schema: dict[str, object]) -> str:
         return chat_json(endpoint, j.model, messages, schema, j.temperature, j.max_tokens, j.extra)
@@ -291,6 +292,7 @@ def _adapters(project: Path, cfg: config.ProjectConfig) -> Adapters:
         text_part=text_part,
         tools=_toolbox(cfg),
         use_class_diff=cfg.class_diff,
+        use_inventory=cfg.inventory,
         workers=cfg.workers,
         fixed_settings=tuple(sorted(cfg.generator.settings.items())),
         judge_request=cfg.judge.request,

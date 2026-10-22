@@ -955,7 +955,8 @@ def test_the_project_narrows_what_the_recipe_accepts(gpu_project: Path, tmp_path
 
 
 @pytest.mark.parametrize("line", ["image_side = 100", 'image_format = "webp"', "max_findings = 13", "max_findings = 0",
-                                  "max_moves = 5", "comment_chars = 5", "critique_chars = 900", "image_side = true"])
+                                  "max_moves = 5", "comment_chars = 5", "critique_chars = 900", "image_side = true",
+                                  "timeout_seconds = 5", "timeout_seconds = 1.5"])
 def test_judge_speed_options_are_checked(gpu_project: Path, tmp_path: Path, line: str) -> None:
     from virtual_unstaging import config
 
@@ -963,6 +964,15 @@ def test_judge_speed_options_are_checked(gpu_project: Path, tmp_path: Path, line
     path.write_text(f"[judge]\n{line}\n", encoding="utf-8")
     with pytest.raises(config.ConfigError):
         config.load(gpu_project, (path,))
+
+
+def test_the_judge_waits_as_long_as_the_project_says(gpu_project: Path, tmp_path: Path) -> None:
+    from virtual_unstaging import config
+
+    assert config.load(gpu_project).judge.timeout_seconds == 600
+    path = tmp_path / "patient.toml"
+    path.write_text("[judge]\ntimeout_seconds = 120\n", encoding="utf-8")
+    assert config.load(gpu_project, (path,)).judge.timeout_seconds == 120
 
 
 @pytest.mark.parametrize("model", ["--help", "a b/c", "org/model; id", "../x", "no-slash", "org/-x"])

@@ -14,7 +14,7 @@ from PIL import Image
 
 from virtual_unstaging.serve import images as imaging
 from virtual_unstaging.serve.errors import ApiError
-from virtual_unstaging.serve.pixels import BoolArray, ByteArray, box_of, grey
+from virtual_unstaging.serve.pixels import BoolArray, ByteArray, box_of, dilate_square, grey
 from virtual_unstaging.serve.tools.base import (
     IMAGE,
     MASK,
@@ -34,11 +34,13 @@ ALIASES: dict[str, tuple[str, ...]] = {
     "window": ("windowpane",),
 }
 WORK_SIDE = 1024  # long side the images are compared at
+EDGE = 0.03  # width of the region's edge, as a fraction of the long side: what the original shows there continues inside
 LEGEND = {
     "red": "pixels that became an opening class",
     "blue": "pixels that stopped being an opening class",
     "yellow": "pixels of a class that appeared (absent from the original in that zone)",
     "cyan": "pixels (original) of a class that vanished (absent from the candidate in that zone)",
+    "uncoloured inside the region": "a class the original shows on the region's edge, continued into it",
     "brightness": "the region keeps full brightness; outside it the picture is dimmed",
 }
 _COLOURS = {"red": (255, 40, 40), "blue": (60, 120, 255), "yellow": (255, 210, 0), "cyan": (0, 210, 210)}
@@ -91,17 +93,27 @@ def _present(ids: IntArray, zone: BoolArray, count: int) -> NDArray[np.float64]:
 
 
 def _class_changes(
-    original: IntArray, candidate: IntArray, zone: BoolArray, names: Mapping[int, str], min_share: float
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], BoolArray, BoolArray]:
-    """Classes present in one picture and absent in the other, within a zone, with a box around their pixels."""
+    original: IntArray,
+    candidate: IntArray,
+    zone: BoolArray,
+    names: Mapping[int, str],
+    min_share: float,
+    continued_ids: frozenset[int] = frozenset(),
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], BoolArray, BoolArray, list[dict[str, Any]]]:
+    """Classes present in one picture and absent in the other, within a zone, with a box around their pixels; a class in
+    `continued_ids` (shown by the original next to the zone) is continued, not appeared."""
     count = max(names) + 1
     before, after = _present(original, zone, count), _present(candidate, zone, count)
     appeared: list[dict[str, Any]] = []
     vanished: list[dict[str, Any]] = []
+    continued: list[dict[str, Any]] = []
     appeared_pixels = np.zeros(zone.shape, dtype=bool)
     vanished_pixels = np.zeros(zone.shape, dtype=bool)
     for class_id, name in names.items():
-        if after[class_id] >= min_share and before[class_id] < min_share:
+        if after[class_id] >= min_share and before[class_id] < min_share and class_id in continued_ids:
+            pixels = (candidate == class_id) & zone
+            continued.append({"class": short_name(name), "share": round(float(after[class_id]), 4), "box": box_of(pixels)})
+        elif after[class_id] >= min_share and before[class_id] < min_share:
             pixels = (candidate == class_id) & zone
             appeared.append({"class": short_name(name), "share": round(float(after[class_id]), 4), "box": box_of(pixels)})
             appeared_pixels |= pixels
@@ -111,7 +123,8 @@ def _class_changes(
             vanished_pixels |= pixels
     appeared.sort(key=lambda item: -item["share"])
     vanished.sort(key=lambda item: -item["share"])
-    return appeared[:8], vanished[:8], appeared_pixels, vanished_pixels
+    continued.sort(key=lambda item: -item["share"])
+    return appeared[:8], vanished[:8], appeared_pixels, vanished_pixels, continued[:8]
 
 
 def compare_classes(
@@ -128,8 +141,13 @@ def compare_classes(
     was_opening = np.isin(original, list(opening_ids))
     became, lost = opening & ~was_opening, was_opening & ~opening
     region_size, outside_size = int(region.sum()), int(outside.sum())
-    inside_appeared, inside_vanished, appeared_in, vanished_in = _class_changes(original, candidate, region, names, min_share)
-    outside_appeared, outside_vanished, appeared_out, vanished_out = _class_changes(
+    edge = dilate_square(region, max(1, round(EDGE * max(region.shape)))) & outside
+    on_edge = _present(original, edge, max(names) + 1)
+    continued_ids = frozenset(int(i) for i in np.flatnonzero(on_edge >= min_share))
+    inside_appeared, inside_vanished, appeared_in, vanished_in, inside_continued = _class_changes(
+        original, candidate, region, names, min_share, continued_ids
+    )
+    outside_appeared, outside_vanished, appeared_out, vanished_out, _ = _class_changes(
         original, candidate, outside, names, min_share
     )
     measures: dict[str, Any] = {
@@ -138,7 +156,8 @@ def compare_classes(
         "opening_share_of_region": round(int((became & region).sum()) / region_size, 4) if region_size else 0.0,
         "opening_box": box_of(became & region),
         "opening_share_outside": round(int((became & outside).sum()) / outside_size, 4) if outside_size else 0.0,
-        "inside": {"appeared": inside_appeared, "vanished": inside_vanished},
+        "opening_at_edge": bool(any(i in continued_ids for i in opening_ids)),
+        "inside": {"appeared": inside_appeared, "vanished": inside_vanished, "continued": inside_continued},
         "outside": {"appeared": outside_appeared, "vanished": outside_vanished},
         "min_share": min_share,
         "legend": LEGEND,
@@ -177,6 +196,11 @@ def summarize(measures: Mapping[str, Any]) -> str:
             f"inside the removed region, {measures['opening_share_of_region']:.1%} of pixels became {opening_names}, "
             f"at ({box[0]:.2f}, {box[1]:.2f})-({box[2]:.2f}, {box[3]:.2f})"
         )
+        if measures.get("opening_at_edge"):
+            inside += (
+                f", continuing a {opening_names} the original shows at the region's edge (revealed or extended, "
+                "not necessarily invented)"
+            )
     else:
         inside = f"inside the removed region, no pixel became {opening_names}"
     notes = []
@@ -185,6 +209,12 @@ def summarize(measures: Mapping[str, Any]) -> str:
             items = measures[zone][kind][:3]
             if items:
                 notes.append(f"{where}, class {kind}: " + "; ".join(_describe(item) for item in items))
+    continued = measures["inside"].get("continued", [])[:3]
+    if continued:
+        notes.append(
+            "inside the region, class continued from the region's edge in the original: "
+            + "; ".join(_describe(item) for item in continued)
+        )
     if not notes:
         notes.append("no class appeared or vanished in or outside the region")
     return "; ".join([inside, *notes])
@@ -193,7 +223,7 @@ def summarize(measures: Mapping[str, Any]) -> str:
 @dataclass
 class ClassDiff(ServerTool):
     name: ClassVar[str] = "class_diff"
-    code_version: ClassVar[str] = "1"
+    code_version: ClassVar[str] = "2"
     input_kinds: ClassVar[tuple[str, ...]] = (IMAGE, IMAGE, MASK)
 
     def parse_params(self, params: Mapping[str, Any]) -> dict[str, Any]:
