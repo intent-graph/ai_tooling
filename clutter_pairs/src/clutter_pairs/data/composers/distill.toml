@@ -1,0 +1,21 @@
+# The distiller's request: its instruction, the subject's spec, the loop's history (prompts and assessments in
+# order, then how the loop stopped), the lessons in use for this subject; the lessons schema.
+role = "distill"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "The subject:" },
+  { slot = "history", header = "The loop's history, in order (each prompt, then the assessments of the image it made):" },
+  { slot = "outcome", header = "How the loop ended:" },
+  { slot = "lesson", header = "Lessons already in use:" },
+]

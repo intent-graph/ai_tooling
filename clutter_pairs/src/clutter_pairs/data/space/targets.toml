@@ -1,0 +1,9 @@
+# Coverage targets: cells of axis values and the accepted pairs wanted in each (choice C9: 3 room types x 2 styles
+# x 3 densities, other axes at random, about 50 pairs). A [[cross]] table expands to every combination of its lists;
+# a [[target]] table names one cell. A cell may name any subset of the axes.
+
+[[cross]]
+pairs = 3
+room_type = ["living_room", "kitchen", "bedroom"]
+style = ["rustic", "modern"]
+density = ["lived_in", "cluttered", "moving_day"]

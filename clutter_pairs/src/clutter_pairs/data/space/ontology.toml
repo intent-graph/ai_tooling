@@ -1,0 +1,57 @@
+# Room ontology: the axes a room and a view of it are sampled on (architecture: room ontology).
+# Each axis applies to one kind of owner (room or scene); each value carries the text the spec renderer gives the
+# models. A value's name is its identity across versions: rename only by adding a new value.
+# Camera values carry the output's aspect ratio (width / height); `cpairs` checks at load that each one is a fixed
+# point of the generator's sizing rule (design/loops.md, "Image size").
+
+[axes.room_type]
+applies_to = "room"
+
+[axes.room_type.values.living_room]
+text = "a living room of a family home"
+
+[axes.room_type.values.kitchen]
+text = "a domestic kitchen with its fitted units"
+
+[axes.room_type.values.bedroom]
+text = "a bedroom of a family home"
+
+[axes.style]
+applies_to = "room"
+
+[axes.style.values.rustic]
+text = "an old country house: lime-plastered or stone walls, exposed timber beams, terracotta tiles or worn floorboards"
+
+[axes.style.values.modern]
+text = "a recent house: smooth painted plaster walls, flat white ceiling, light wood or concrete floor, large windows"
+
+[axes.light]
+applies_to = "scene"
+
+[axes.light.values.morning_sun]
+text = "morning daylight, low sun through the windows, soft shadows"
+
+[axes.light.values.overcast]
+text = "overcast daylight, even and diffuse"
+
+[axes.light.values.evening_lamps]
+text = "evening, ceiling and wall lamps on, warm light"
+
+[axes.camera]
+applies_to = "scene"
+
+[axes.camera.values.wide_landscape]
+text = "eye level (about 1.6 m), wide lens, from a corner of the room, landscape frame"
+aspect = 1.5
+
+[axes.camera.values.standard_landscape]
+text = "eye level, standard lens, facing a wall from the middle of the room, landscape frame"
+aspect = 1.3333
+
+[axes.camera.values.portrait]
+text = "eye level, standard lens, portrait frame, a wall with a door or a window"
+aspect = 0.75
+
+[axes.camera.values.close_up]
+text = "chest height, close to one wall (about 2 m), a corner or a door in the frame"
+aspect = 1.3333

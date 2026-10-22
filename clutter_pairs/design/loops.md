@@ -5,20 +5,20 @@ the two loops, the pixel tests and the composite, the verdict and the stop rule,
 image and how their effect is measured. Refines [Inner loops and carry-forward](README.md#inner-loops-and-carry-forward)
 and [Auditability](README.md#auditability); tables are in [data_model.md](data_model.md).
 
-> **Status:** *proposal* for slice 1, revised after review; not accepted. Owner's decisions applied: a comparison
-> group without lessons (about one subject in three), the decision rule written before the rental.
+> **Status:** slice 1, implemented as written here; tested offline on stand-in models. Owner's decisions applied: a
+> comparison group without lessons (about one subject in three), the decision rule written before the rental.
 
 ## Table of Contents
 
 1. [Vocabulary](#vocabulary) _(Lines 28-39)_
 1. [Files in the package](#files-in-the-package) _(Lines 42-54)_
-1. [Composition and recording](#composition-and-recording) _(Lines 57-83)_
-1. [The clean loop](#the-clean-loop) _(Lines 86-118)_
-1. [The clutter loop](#the-clutter-loop) _(Lines 121-152)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 155-166)_
-1. [Lessons](#lessons) _(Lines 169-181)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 184-195)_
-1. [The run](#the-run) _(Lines 198-206)_
+1. [Composition and recording](#composition-and-recording) _(Lines 57-89)_
+1. [The clean loop](#the-clean-loop) _(Lines 92-124)_
+1. [The clutter loop](#the-clutter-loop) _(Lines 127-158)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 161-174)_
+1. [Lessons](#lessons) _(Lines 177-193)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 196-209)_
+1. [The run](#the-run) _(Lines 212-225)_
 
 
 ---
@@ -53,7 +53,7 @@ name another file for any of them (the override); it is recorded the same way.
 | `decision_rules/` | `carry_forward.md`: how the arms are compared, written before a rental | the report |
 
 ## Composition and recording
-<!-- Lines 57-83 -->
+<!-- Lines 57-89 -->
 
 ```mermaid
 flowchart LR
@@ -69,20 +69,26 @@ flowchart LR
 
 - **Pure composition (P9).** A composer is a function of its file, the call's model and the ordered parts; nothing
   else enters a request. Settings and seeds are parts with their origin (run configuration, subject's spec, engine
-  move), so `audit` recomposes every request and compares it with the stored canonical request, byte for byte.
+  move), so `audit` recomposes every request and compares it with the stored canonical request, byte for byte. A
+  setting part in the slot `setting` is a request setting (temperature, answer length, output size); in any other
+  slot it is text the model reads (the distiller's `outcome`: how the loop stopped).
 - **What was sent (P8).** Requests go through virtual_unstaging's clients; its endpoint observer hands every exchange
   to clutter_pairs' recorder: blob uploads, the request, job polls, downloads. A text body is stored with each data
   URL `data:<type>;base64,<…>` replaced by `data:<type>;sha256,<hex>` and the decoded bytes kept in the image store;
   an image body is stored as an image; the hash of the bytes on the wire is kept. Rebuilding a body is base64 and a
   substitution, independent of any library version; `audit` checks every rebuilt body against its wire hash.
-- **Seeds for every model.** The generator and the editor take the iteration's seed. Writers, revisers and the
-  distiller take a sampling seed derived from the subject's seed and the iteration, sent as the chat server's `seed`:
-  two scenes with equal values get different prompts, and a new attempt can sample anew, while replay stays exact.
+- **Seeds for every model.** The generator and the editor take the iteration's seed: the subject's seed at the
+  first iteration, kept by a revision (only the prompt changes), drawn anew by a reseed. Writers, revisers, judges and
+  the distiller take a sampling seed derived from the subject's seed, the role and the iteration, sent as the chat
+  server's `seed`: two scenes with equal values get different prompts, while replay stays exact.
 - **Cache.** A call whose canonical request and model revision equal an earlier one's returns the stored answer
-  (`reused_call_id`): a finished run started again makes no call (P2).
+  (`reused_call_id`): a finished run started again makes no call (P2). A step redone in the same iteration (a resume
+  after a pause) finds its own call and adds no row. A model that answers off its contract (no JSON, a foreign code)
+  keeps its answer, the call is marked `bad_answer`, and the loop stops with `error`; a replay meets the same
+  answer.
 
 ## The clean loop
-<!-- Lines 86-118 -->
+<!-- Lines 92-124 -->
 
 ```mermaid
 sequenceDiagram
@@ -117,7 +123,7 @@ sequenceDiagram
   rental).
 
 ## The clutter loop
-<!-- Lines 121-152 -->
+<!-- Lines 127-158 -->
 
 Same shape. The subject is a clutter spec; its input image C is one accepted clean image of the scene, recorded on
 the loop (`input_image`).
@@ -151,10 +157,12 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 155-166 -->
+<!-- Lines 161-174 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
-  [0, 1], a comment), guidance (ranked suggestions), and, for the pair judge, the located items. An iteration is
+  thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
+  judge, the located items. A degenerate box is dropped (a finding without a region; an item counted as not
+  located). An iteration is
   accepted when no finding's code is blocking: the severity is the code's, from `reasons.toml`, so the verdict does not
   rest on the judge's severity call (which is recorded).
 - **Score and no progress:** each assessed iteration scores (blocking findings, minor findings). The loop stops with
@@ -165,7 +173,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 169-181 -->
+<!-- Lines 177-193 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -173,33 +181,44 @@ which keeps one VAE per pair.
   evidence (iteration numbers), and the lessons it replaces.
 - **Validity:** a lesson is active from the wave after the one that distilled it until it is replaced, retired or
   promoted (`active_from_wave_id`, `ended_wave_id`); the active set at any wave is derivable, so replay is exact.
+  When a wave is created, each distill answer not yet processed is parsed once: its lessons are added (a text
+  already active for the stage, or just added, is dropped), and the rule's act is a `decision` row
+  (`rule:activate_lessons@1`: the lessons added, the ones dropped and why). The owner's retirements and promotions
+  take effect at that wave too.
 - **Use:** the first request of a loop in the `on` arm gets the active lessons of its stage whose scope is included in
   the subject's values, most specific first, at most a configured number; the `off` arm gets none. Revisions follow
   the loop's arm.
-- **Retire and promote:** by the owner through the command line (`decision` rows); promotion copies a lesson into an
-  instruction file, a new file version in git.
+- **Retire and promote:** by the owner through the command line (`decision` rows); promotion ends the lesson and
+  prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 184-195 -->
+<!-- Lines 196-209 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
 
-- **Arms:** each subject is drawn `off` with probability 1/3, `on` otherwise, by a seeded draw recorded on the loop.
+- **Arms:** each subject is drawn `off` with probability 1/3 (`off_share` in the decision rule's file), `on`
+  otherwise, by a draw seeded from the subject's seed, recorded on the loop.
 - **Compared loops:** those in waves after the stage's first lesson became active, the lessons' evidence loops
   excluded (they were selected for being hard).
-- **Decision rule** (`decision_rules/carry_forward.md`, written and committed before the rental; proposal): per stage,
-  carry-forward helps if the `on` arm's mean iterations to acceptance is lower than the `off` arm's by at least 0.5,
-  with a one-sided permutation test at p < 0.1, and its acceptance share is not lower. Slice 1 has about 17 clean and
+- **Decision rule** (`decision_rules/carry_forward.md`, written before the rental, as proposed; its parameters in a
+  TOML block the report reads): per stage, carry-forward helps if the `on` arm's mean iterations to acceptance is
+  lower than the `off` arm's by at least 0.5, with a one-sided permutation test at p < 0.1, and its acceptance share
+  is not lower; with fewer than 3 accepted loops in an arm, undecided. Slice 1 has about 17 clean and
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 198-206 -->
+<!-- Lines 212-225 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
-  before the other waves: text-to-image on the chosen model, sizes, recording, the composite.
-- **Waves:** a few subjects run in parallel so the GPU alternates generation and judgment; one generator (or editor)
-  and one judge are loaded; the writer, the reviser and the distiller run on the judge's model.
+  before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`
+  runs the smoke wave only and stops; the next `run` goes on.
+- **Stop:** between waves, at the pair target or when the next call would pass the deadline; inside a wave, no
+  clutter loop starts once the target is reached. A loop the deadline stops resumes on the next rental; a loop an
+  endpoint failure interrupts stays unfinished and resumes on the next `run`.
+- **Waves:** a few scenes run in parallel (`wave_width`), each its clean loop then its clutter loops, so the GPU
+  alternates generation and judgment; one generator (or editor) and one judge are loaded; the writer, the reviser
+  and the distiller run on the judge's model. Before each wave the planner tops up the scenes whose loops failed.
 - **Resume:** the loop's policy is an engine behind virtual_unstaging's generic ask / tell contract
   (`engines.SearchEngine`); its candidate is the next action (write, revise from an assessment, reseed). A resumed
   loop replays its stored history through virtual_unstaging's `engines.replay`, which checks that the engine asks

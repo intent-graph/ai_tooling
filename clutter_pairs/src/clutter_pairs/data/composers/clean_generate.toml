@@ -1,0 +1,7 @@
+# The generator's request from text alone: the prompt a writer or reviser call returned, the size from the camera.
+role = "generate"
+request = "generator"
+renderer = "spec_text"
+renderer_version = 1
+prompt = "prompt"
+settings = ["output_side", "output_aspect"]

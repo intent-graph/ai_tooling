@@ -1,0 +1,20 @@
+# The pair judge's request: its instruction, the clutter spec, the clean image, the cluttered image, the change mask.
+role = "judge"
+request = "chat"
+renderer = "spec_text"
+renderer_version = 1
+schema = "schema"
+settings = ["temperature", "max_tokens"]
+
+[[messages]]
+role = "system"
+content = [{ slot = "instruction" }]
+
+[[messages]]
+role = "user"
+content = [
+  { slot = "spec", header = "Specification:" },
+  { slot = "clean", header = "The clean image:" },
+  { slot = "cluttered", header = "The cluttered image:" },
+  { slot = "mask", header = "The change mask (white where the images differ):" },
+]

@@ -1,0 +1,69 @@
+{
+  "title": "lessons",
+  "type": "object",
+  "properties": {
+    "lessons": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "scope": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "axis": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "axis",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "replaces": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "scope",
+          "evidence",
+          "replaces"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "lessons"
+  ],
+  "additionalProperties": false
+}

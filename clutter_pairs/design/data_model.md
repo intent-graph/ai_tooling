@@ -4,32 +4,25 @@ The store of one dataset: what is declared, what is planned, what each loop made
 rejected, what was sent to every model and what each request was built from. Refines
 [Stored data](README.md#stored-data) of the high-level design.
 
-> **Status:** *proposal* for slice 1, revised after review; not accepted. The DDL is [schema.sql](schema.sql): SQLite
+> **Status:** slice 1, implemented. The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): SQLite
 > now; it avoids forward references and uses `BIGINT` and `DOUBLE PRECISION`, so moving to Postgres changes the ids
 > only (`INTEGER PRIMARY KEY` here, an identity column there). Normalized to 3NF; the two denormalizations kept are
 > named in the schema, each with the audit check that guards it.
 
 ## Table of Contents
 
-1. [Principles](#principles) _(Lines 33-49)_
-1. [Entities](#entities) _(Lines 52-84)_
-1. [Schema](#schema) _(Lines 87-87)_
-   1. [Declared files, texts, images](#declared-files-texts-images) _(Lines 90-115)_
-   1. [The declared space and the targets](#the-declared-space-and-the-targets) _(Lines 118-162)_
-   1. [Buildings, rooms, scenes, clutter specs](#buildings-rooms-scenes-clutter-specs) _(Lines 165-208)_
-   1. [Rentals, runs, waves, loops, iterations](#rentals-runs-waves-loops-iterations) _(Lines 211-281)_
-   1. [Models, calls, exchanges, and what each request was built from](#models-calls-exchanges-and-what-each-request-was-built-from) _(Lines 284-336)_
-   1. [Assessments](#assessments) _(Lines 339-396)_
-   1. [Lessons, decisions, and the parts of each request](#lessons-decisions-and-the-parts-of-each-request) _(Lines 399-476)_
-   1. [Exports](#exports) _(Lines 479-507)_
-1. [Views](#views) _(Lines 510-520)_
-1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 523-542)_
+1. [Principles](#principles) _(Lines 26-42)_
+1. [Entities](#entities) _(Lines 45-76)_
+1. [Schema](#schema) _(Lines 79-116)_
+1. [Views](#views) _(Lines 119-130)_
+1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 133-152)_
+
 
 
 ---
 
 ## Principles
-<!-- Lines 33-49 -->
+<!-- Lines 26-42 -->
 
 - **Facts once.** Every text a request is built from or answered with is stored once (`text_blob`, by hash); every
   declared file once (`source_file`); every image once (`image`; the bytes in the image store, by hash).
@@ -44,11 +37,11 @@ rejected, what was sent to every model and what each request was built from. Ref
 - **Derived, not stored:** the pair, coverage, the iteration curve, the carry-forward comparison, costs are views.
 - **Polymorphic references are avoided:** a row that can point to one of several kinds of source has one nullable
   foreign key per kind and a check that exactly the one matching its kind is set.
-- **The dataset folder:** `store.sqlite`, `images/<first two hex>/<sha256>.<ext>`, `exports/<name>/`. Nothing in
-  the package.
+- **The dataset folder:** `store.sqlite`, `images/<first two hex>/<sha256>` (virtual_unstaging's `BlobStore`; the
+  media type is in `image`), `exports/<name>/`. Nothing in the package.
 
 ## Entities
-<!-- Lines 52-84 -->
+<!-- Lines 45-76 -->
 
 ```mermaid
 erDiagram
@@ -82,8 +75,10 @@ Left out of the diagram: the value tables, each linking its owner to one axis va
 `measure`, `reason`, `model`, `decision`, and the files, texts and images every table points to.
 
 ## Schema
+<!-- Lines 79-116 -->
 
-The DDL is [schema.sql](schema.sql): 42 tables in dependency order, loaded in SQLite and in Postgres 18. One line per
+The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 42 tables in dependency order and the views below,
+loaded in SQLite and in Postgres 18. One line per
 table here; each table's comments in the file carry its rules.
 
 | Group | Table | Holds |
@@ -112,7 +107,7 @@ table here; each table's comments in the file carry its rules.
 | | `finding`, `guidance`, `located_item` | the judge's findings (with its own severity recorded), its suggestions, the boxes of the items it located |
 | | `measure` | pixel tests' values and the thresholds in force |
 | lessons and decisions | `lesson`, `lesson_evidence`, `lesson_scope` | the text, the call that wrote it, what it replaces, the waves it is valid for, its evidence and scope |
-| | `decision` | the owner's acts and every automatic rule's act |
+| | `decision` | the owner's acts and every automatic rule's act (the lesson activation at each wave: the lessons added from a distill answer, the ones dropped and why) |
 | exports | `export`, `export_building`, `export_pair` | a named snapshot; the split per building; its pairs |
 
 **Public ids.** The export never publishes store-local integers. A pair's id is the hash of its clean and cluttered
@@ -120,7 +115,7 @@ images' hashes; a scene's, a room's and a building's are the hash of their axis 
 or a building, of their children's ids). They survive a rebuild of the store.
 
 ## Views
-<!-- Lines 510-520 -->
+<!-- Lines 119-130 -->
 
 | View | Gives | How |
 |---|---|---|
@@ -128,12 +123,13 @@ or a building, of their children's ids). They survive a rebuild of the store.
 | `pair` | one row per accepted pair: id (the accepted clutter iteration), building, room, scene, clutter spec; clean image (the loop's `input_image`), cluttered (`composite`), mask (`change_mask`); the clean generator's family and the editor's | the clutter loop's accepted iteration; the families from the call that made `input_image` and from the edit call |
 | `coverage` | per target of a target set: pairs wanted, pairs accepted | relational division on (axis, value): pairs whose room, scene and clutter values include every value of the target, whatever the space version |
 | `iteration_curve` | per stage, loops in wave order with their iterations and stop reason | descriptive only |
-| `carry_forward` | per stage and arm (`on`, `off`): loops, accepted share, mean iterations to acceptance | loops in waves after the stage's first lesson became active, the lessons' evidence loops excluded; the decision rule is in [loops.md](loops.md#measuring-carry-forward) |
+| `carry_forward_loop`, `carry_forward` | the compared loops; per stage and arm (`on`, `off`): loops, accepted share, mean iterations to acceptance | finished loops (not stopped by a deadline or an error) in waves from the stage's first active lesson on, the lessons' evidence loops excluded; the decision rule is applied by the report ([loops.md](loops.md#measuring-carry-forward)) |
 | `lesson_use` | per lesson: the loops whose first request cited it | `composition_part` rows of kind `lesson`; descriptive (per-lesson effects: slice 2) |
-| `cost` | per run: rental price × wall clock; per stage and model: calls, wall seconds, generator GPU-seconds, reused calls; cost per accepted pair | `rental`, `model_call` |
+| `call_cost` | per run, stage, role and model: calls, reused calls, wall seconds, generator GPU-seconds | `model_call`; the rental's price times the run's wall clock and the cost per accepted pair are computed by the report (date arithmetic differs between SQLite and Postgres) |
+| `pair_value` | every axis value of a pair: its room's, its scene's, its clutter spec's | used by `coverage` |
 
 ## Checks run by `audit`
-<!-- Lines 523-542 -->
+<!-- Lines 133-152 -->
 
 Requests and records:
 - **P9:** every request recomposes: the composer file, the call's model and the parts in order give the request

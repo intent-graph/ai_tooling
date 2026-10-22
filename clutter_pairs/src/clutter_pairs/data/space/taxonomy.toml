@@ -1,0 +1,96 @@
+# Clutter taxonomy: the axes a clutter spec and its items are sampled on (architecture: clutter taxonomy).
+# Density applies to a clutter spec: how many items it lists and the share of the image the change mask may cover.
+# Category and placement apply to each item; a category names the room types it fits and the placements it takes;
+# a placement carries the rule the clutter writer and the pair judge are given.
+# `fixed` is what may stay in a clean image: elements fixed to the building; `fixed.rooms` replaces the text for a
+# room type whose fixed elements differ (a kitchen keeps its fitted units).
+
+[fixed]
+text = "Elements fixed to the building may stay in a clean image: doors, windows, radiators, light fittings, switches and sockets, a built-in fireplace where the style has one. Nothing movable may stay."
+
+[fixed.rooms]
+kitchen = "Elements fixed to the building may stay in a clean image: doors, windows, radiators, light fittings, switches and sockets, fitted kitchen units with their worktop, sink and built-in hob. Nothing movable may stay: no stool, no table, no appliance standing free, no object on the worktop."
+bedroom = "Elements fixed to the building may stay in a clean image: doors, windows, radiators, light fittings, switches and sockets, built-in wardrobes with closed doors. Nothing movable may stay."
+
+[axes.density]
+applies_to = "clutter_spec"
+
+[axes.density.values.lived_in]
+text = "lived-in: furnished as people live in it, a few belongings out"
+items = [2, 4]
+mask_share = [0.03, 0.40]
+
+[axes.density.values.cluttered]
+text = "cluttered: much furniture and many belongings, surfaces covered"
+items = [4, 6]
+mask_share = [0.08, 0.55]
+
+[axes.density.values.moving_day]
+text = "moving day: boxes, bags and furniture waiting to be moved, some of it in the way"
+items = [5, 7]
+mask_share = [0.10, 0.65]
+
+[axes.category]
+applies_to = "clutter_item"
+
+[axes.category.values.large_furniture]
+text = "a large piece of furniture (sofa, bed, wardrobe, dining table, dresser)"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["against_wall", "freestanding"]
+
+[axes.category.values.small_furniture]
+text = "a small piece of furniture (chair, stool, side table, bedside table, shelf unit)"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["against_wall", "freestanding"]
+
+[axes.category.values.storage]
+text = "open storage (bookcase, open shelving, baskets) with its contents"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["against_wall"]
+
+[axes.category.values.textiles]
+text = "textiles (rug, throw, curtains, bedding, coat, towel, clothes)"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["freestanding", "on_surface", "hanging_on_door"]
+
+[axes.category.values.objects]
+text = "small objects and decoration (lamp, books, plants, frames, toys, dishes)"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["on_surface", "on_wall", "inside_open_storage"]
+
+[axes.category.values.appliances]
+text = "a movable appliance (fridge, microwave, television, fan, vacuum cleaner)"
+rooms = ["living_room", "kitchen"]
+placements = ["against_wall", "on_surface"]
+
+[axes.category.values.boxes]
+text = "boxes and bags (moving boxes, crates, laundry bags)"
+rooms = ["living_room", "bedroom", "kitchen"]
+placements = ["against_wall", "freestanding"]
+
+[axes.placement]
+applies_to = "clutter_item"
+
+[axes.placement.values.against_wall]
+text = "standing against a wall"
+rule = "Furniture stands against a wall, never in front of a door, a window or a radiator."
+
+[axes.placement.values.freestanding]
+text = "freestanding on the floor"
+rule = "A freestanding item leaves a passage to every door."
+
+[axes.placement.values.on_surface]
+text = "on a surface (table, worktop, shelf, bed)"
+rule = "An item on a surface rests on another item or on a fitted worktop, with its shadow."
+
+[axes.placement.values.on_wall]
+text = "on a wall (frame, shelf, clock, mirror)"
+rule = "An item on a wall hangs flat on it, never across a door or a window."
+
+[axes.placement.values.hanging_on_door]
+text = "hanging on a door (coat, towel, bag)"
+rule = "An item hanging on a door hides part of the door, never the whole of it."
+
+[axes.placement.values.inside_open_storage]
+text = "inside open storage (on shelves, in baskets)"
+rule = "An item inside open storage sits on the storage's shelves; the storage itself is also listed."

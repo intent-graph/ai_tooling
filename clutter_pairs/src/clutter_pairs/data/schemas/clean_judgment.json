@@ -1,0 +1,72 @@
+{
+  "title": "clean_judgment",
+  "type": "object",
+  "properties": {
+    "findings": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "not_empty",
+              "room_off_spec",
+              "implausible",
+              "artifact"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "blocking",
+              "minor"
+            ]
+          },
+          "box": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000
+                },
+                "minItems": 4,
+                "maxItems": 4
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "box",
+          "comment"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "guidance": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "string",
+        "maxLength": 300
+      }
+    }
+  },
+  "required": [
+    "findings",
+    "guidance"
+  ],
+  "additionalProperties": false
+}
