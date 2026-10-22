@@ -5,8 +5,8 @@ Generate pairs of images of the same view, one **clean** (an empty or tidy room)
 tools such as [virtual_unstaging](../virtual_unstaging/README.md): the clean image is the ground truth of
 what a decluttered photo should look like.
 
-> **Status:** high-level design drafted in [design/README.md](design/README.md), awaiting the owner's agreement;
-> code not started. The scope (only pairs are required), the two routes, the
+> **Status:** the high-level design is agreed ([design/README.md](design/README.md)); slice 1's detailed design is a
+> proposal; code not started. The scope (only pairs are required), the two routes, the
 > preference for the generation route, the room ontology, the clutter taxonomy and the three-model pipeline
 > are the owner's; items marked *proposal* are the assistant's and not decided.
 
@@ -18,10 +18,10 @@ what a decluttered photo should look like.
    1. [Room ontology](#room-ontology) _(Lines 63-77)_
    1. [Clutter taxonomy](#clutter-taxonomy) _(Lines 80-94)_
    1. [Pipeline](#pipeline) _(Lines 97-121)_
-   1. [Quality assessment](#quality-assessment) _(Lines 124-136)_
-1. [Simulation route](#simulation-route) _(Lines 139-145)_
-1. [Risks](#risks) _(Lines 148-158)_
-1. [Prior work](#prior-work) _(Lines 161-181)_
+   1. [Quality assessment](#quality-assessment) _(Lines 124-137)_
+1. [Simulation route](#simulation-route) _(Lines 140-146)_
+1. [Risks](#risks) _(Lines 149-159)_
+1. [Prior work](#prior-work) _(Lines 162-181)_
 1. [Open questions](#open-questions) _(Lines 184-190)_
 
 ---
@@ -100,7 +100,7 @@ flowchart LR
   O[(room ontology)] --> S[sample a spec<br/>room × light × camera × clutter]
   T[(clutter taxonomy)] --> S
   S --> C[model 1<br/>generate clean]
-  E[real empty photos<br/><i>proposal</i>] --> K
+  E[real empty photos<br/><i>preferred, once found</i>] --> K
   C --> K[model 2<br/>add clutter]
   K --> Q[judge or pixel test]
   Q -- accept --> P[(pairs)]
@@ -112,30 +112,31 @@ flowchart LR
 - **Inner loops with carry-forward** (owner): generator and judge iterate in two places, when generating the
   empty image and when cluttering it. The first images may need many iterations; what improves one image is passed
   to the next, so later images start with a better prompt and need fewer. Mechanics: [design](design/README.md).
-- *Proposal:* **real empty photos** as a second source of clean images (moving-day photos, licensed listing
-  photos), cluttered by the same model 2; closer to real cameras than generated clean images.
-- Ruled out by the owner: grounding the clean images on clusters of real empty rooms from ZInD (licensed for
-  academic use only, access by manual approval).
+- **Real empty photos** (owner: "if we can find empty pictures, real, it would be actually perfect"): the preferred
+  source of clean images once a usable one is found, cluttered by the same model 2; closer to real cameras than
+  generated clean images. Candidates and their licences: [state of the art](../virtual_unstaging/state_of_the_art.md),
+  branch A. Ruled out by the owner: ZInD (licensed for academic use only, access by manual approval).
 - *Proposal:* **coverage tracking**: count accepted pairs per cell of ontology × taxonomy, and sample the
   thin cells next.
 
 ### Quality assessment
-<!-- Lines 124-136 -->
+<!-- Lines 124-137 -->
 
-Model 3 is a judge, or a pixel-based test. *Proposal* for what each checks:
+Model 3 is a judge, or a pixel-based test. *Proposal* for what each checks (made concrete in
+[design/loops.md](design/loops.md)):
 
 | Check | Test |
 |---|---|
-| clean image is empty and matches its spec | judge; an object detector finds no movable item |
-| cluttered image changes **only** where clutter was added | pixel test: difference outside the clutter mask below a tolerance |
+| clean image is empty and matches its spec | judge; an object detector only if the judge misses movable items |
+| cluttered image changes **only** where clutter was added | outside the change mask: equal by construction (composite); inside: every changed region is an item the judge located; before both: no global repaint |
 | clutter matches its spec and its placement rules | judge |
 | the pair is plausible as a photo | judge |
 
-The pixel test is the one that makes a pair usable as ground truth: if model 2 repaints a wall while adding a
-sofa, the clean image is no longer the truth of the cluttered one.
+These tests are what make a pair usable as ground truth: if model 2 repaints a wall while adding a sofa, the clean
+image is no longer the truth of the cluttered one.
 
 ## Simulation route
-<!-- Lines 139-145 -->
+<!-- Lines 140-146 -->
 
 - 3D models of rooms, 3D cameras, clutter placed at random under the placement rules; render the same
   camera with and without the clutter.
@@ -144,7 +145,7 @@ sofa, the clean image is no longer the truth of the cluttered one.
 - *Proposal:* a procedural generator such as Infinigen Indoors (BSD licence) as the 3D source.
 
 ## Risks
-<!-- Lines 148-158 -->
+<!-- Lines 149-159 -->
 
 *Proposals.*
 - **Shortcut cues:** anything that marks where clutter was pasted (seams, different noise or sharpness, a
@@ -157,11 +158,10 @@ sofa, the clean image is no longer the truth of the cluttered one.
 - **Licences:** of the models used to generate (outputs may carry terms), and of any real photos.
 
 ## Prior work
-<!-- Lines 161-181 -->
+<!-- Lines 162-181 -->
 
 The full survey, with licences and certainty per work, is
 [virtual_unstaging/state_of_the_art.md](../virtual_unstaging/state_of_the_art.md) (branch A).
-<!-- Lines 154-165 -->
 
 - **No existing benchmark fits the contract** (photographic pairs of the same view, many room types, open
   terms). Nearest: rendered panorama pairs (Structured3D, ShanghaiTech-Kujiale); a gated set of empty,

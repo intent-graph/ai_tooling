@@ -1,98 +1,93 @@
-# clutter_pairs — high-level design
+# clutter_pairs — design
 
-How the [architecture](../architecture.md) becomes a program, at the level the owner agrees on before any code:
-usage, required properties, functions, data flow, loops, auditability, stored data, and the choices that shape them.
-Derived in the order of the repository's
+How the [architecture](../architecture.md) becomes a program: usage, required properties, functions, data flow, the
+two loops, auditability, stored data, and the choices that shape them. Derived in the order of the repository's
 [construction guideline](../../dev_guidelines/software_development_guidelines/construction.md#derivation-order).
 
-> **Status:** high-level design agreed by the owner: two inner loops with carry-forward, full auditability, building,
-> room and scene ids, and choices C1 to C10. Detailed design of slice 1, a *proposal*: [data_model.md](data_model.md)
-> (the schema), [loops.md](loops.md) (composition, both loops, pixel tests and composite, lessons), and below, the
-> use of virtual_unstaging, components and build order. The extension points it needs in virtual_unstaging are in
-> place; no clutter_pairs code yet.
+> **Status:** the high-level design (this page) is agreed by the owner, with the owner's later answers folded in.
+> Slice 1's detailed design is a *proposal*, revised after an independent review: [data_model.md](data_model.md) (the
+> schema, its views and audit checks), [loops.md](loops.md) (composition and recording, both loops, pixel tests and
+> composite, verdict and stop rule, lessons and how their effect is measured), [components.md](components.md) (use of
+> virtual_unstaging, layering, configuration, command line). No clutter_pairs code yet.
 
 ## Table of Contents
 
-1. [N0](#n0) _(Lines 47-61)_
-1. [Usage scenarios](#usage-scenarios) _(Lines 64-75)_
-1. [Required properties](#required-properties) _(Lines 78-93)_
-1. [Functional hierarchy](#functional-hierarchy) _(Lines 96-116)_
-1. [Data flow](#data-flow) _(Lines 119-160)_
-1. [Inner loops and carry-forward](#inner-loops-and-carry-forward) _(Lines 163-190)_
-1. [Auditability](#auditability) _(Lines 193-211)_
-1. [Stored data](#stored-data) _(Lines 214-252)_
-1. [System shape](#system-shape) _(Lines 255-265)_
-1. [Choices](#choices) _(Lines 268-268)_
-   1. [C1 Clean sources](#c1-clean-sources) _(Lines 271-275)_
-   1. [C2 How clutter is added](#c2-how-clutter-is-added) _(Lines 278-286)_
-   1. [C3 Clutter variants per clean image](#c3-clutter-variants-per-clean-image) _(Lines 289-292)_
-   1. [C4 Writing prompts and instructions](#c4-writing-prompts-and-instructions) _(Lines 295-298)_
-   1. [C5 The checks, cheapest first](#c5-the-checks-cheapest-first) _(Lines 301-306)_
-   1. [C6 Speed and cost](#c6-speed-and-cost) _(Lines 309-315)_
-   1. [C7 Model serving](#c7-model-serving) _(Lines 318-323)_
-   1. [C8 Editor families](#c8-editor-families) _(Lines 326-340)_
-   1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 343-346)_
-   1. [C10 Loop code](#c10-loop-code) _(Lines 349-357)_
-1. [Use of virtual_unstaging](#use-of-virtual_unstaging) _(Lines 360-375)_
-1. [Components and layering](#components-and-layering) _(Lines 378-396)_
-1. [Build order](#build-order) _(Lines 399-413)_
-1. [Open](#open) _(Lines 416-421)_
-
+1. [N0](#n0) _(Lines 43-58)_
+1. [Usage scenarios](#usage-scenarios) _(Lines 61-70)_
+1. [Required properties](#required-properties) _(Lines 73-88)_
+1. [Functional hierarchy](#functional-hierarchy) _(Lines 91-112)_
+1. [Data flow](#data-flow) _(Lines 115-156)_
+1. [Inner loops and carry-forward](#inner-loops-and-carry-forward) _(Lines 159-174)_
+1. [Auditability](#auditability) _(Lines 177-190)_
+1. [Stored data](#stored-data) _(Lines 193-198)_
+1. [System shape](#system-shape) _(Lines 201-211)_
+1. [Choices](#choices) _(Lines 214-216)_
+   1. [C1 Clean sources](#c1-clean-sources) _(Lines 219-226)_
+   1. [C2 How clutter is added](#c2-how-clutter-is-added) _(Lines 229-236)_
+   1. [C3 Clutter variants per clean image](#c3-clutter-variants-per-clean-image) _(Lines 239-241)_
+   1. [C4 Writing prompts and instructions](#c4-writing-prompts-and-instructions) _(Lines 244-247)_
+   1. [C5 The checks, cheapest first](#c5-the-checks-cheapest-first) _(Lines 250-254)_
+   1. [C6 Speed and cost](#c6-speed-and-cost) _(Lines 257-263)_
+   1. [C7 Model serving](#c7-model-serving) _(Lines 266-271)_
+   1. [C8 Editor families](#c8-editor-families) _(Lines 274-281)_
+   1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 284-287)_
+   1. [C10 Loop code](#c10-loop-code) _(Lines 290-295)_
+1. [Build order](#build-order) _(Lines 298-311)_
+1. [Open](#open) _(Lines 314-321)_
 
 
 ---
 
 ## N0
-<!-- Lines 47-61 -->
+<!-- Lines 43-58 -->
 
 - A **declared space** (room ontology, clutter taxonomy, placement rules, coverage targets) lives in versioned files;
-  a planner samples specs where coverage is thinnest.
-- **Two inner loops** (owner): generator and judge iterate on one image until the judge accepts. One loop makes the
-  clean image, the other adds the clutter. A pair is built by **edit, then composite**: outside the change mask
-  the two images are identical by construction.
-- **Carry-forward** (owner): lessons distilled from each image's iterations feed the next image's first prompt, so
-  the first images take many iterations and the later ones few; this is measured.
-- **Full auditability** (owner): every model instruction is a versioned Markdown file; every request is stored as
-  sent, with its response; every request can be recomposed from its recorded parts.
-- **Ids** (owner): building, room, scene. In the first version each scene is its own room and building; later,
-  coherent views of one virtual room and coherent rooms of one virtual house.
-- Accepted pairs are exported as a dataset version split by building, with a coverage and cost report. One local
-  store holds everything; models run on a rented GPU with a deadline.
+  a planner samples scenes where coverage is thinnest.
+- **Two inner loops** (owner): generator and judge iterate on one image until the judge accepts, once to make the
+  clean image, once to add the clutter. A pair is built by **edit, then composite**: outside the change mask the two
+  images are identical by construction; inside it, every change must be one of the specified items, located by the
+  judge.
+- **Carry-forward** (owner): lessons distilled from each image's iterations feed the next images' first prompt; whether
+  they help is measured against a comparison group that runs without them (owner).
+- **Full auditability** (owner): every model instruction is a versioned Markdown file; every exchange with a model is
+  stored as sent; every request can be recomposed from its recorded parts.
+- **Ids** (owner): building, room, scene. In slice 1 each scene is its own room and building; later, coherent views
+  of one virtual room and coherent rooms of one virtual house.
+- Accepted pairs are exported as a dataset version split by building, with coverage, carry-forward and cost reports.
+  One local store holds everything; models run on a rented GPU with a deadline.
 
 ## Usage scenarios
-<!-- Lines 64-75 -->
-
-What the owner does with the tool; every later section serves one of these.
+<!-- Lines 61-70 -->
 
 | # | Scenario | Steps |
 |---|---|---|
-| S1 | **Build a dataset version**: choose the space version, the targets and the budget; start a GPU with a limit; run the loops; read the report; export | plan, run, report, export |
-| S2 | **Grow it**: raise the targets or add a room type; the planner fills the thin cells; nothing already made is made again | edit targets, plan, run |
+| S1 | **Build a dataset version**: choose the space and targets; start a GPU with a deadline; run (a smoke wave, then waves); read the reports; export | plan, gpu up, run, report, export |
+| S2 | **Grow it**: raise the targets or add a room type; the planner fills the thin cells; nothing already made is made again, and earlier pairs still count | edit targets, plan, run |
 | S3 | **Compare models or instructions**: same specs and seeds, one factor changed; compare iterations, acceptance and cost per accepted pair | run per variant, report |
-| S4 | **Review a sample**: mark the judge's and the checks' mistakes; the marks calibrate thresholds and instructions | review (later slice) |
-| S5 | **Import clean images** from another source (real empty photos, renders): they enter the clean loop at the judge | import (later slice) |
-| S6 | **Audit**: from any pair or image, trace every instruction version, lesson, finding and model call behind it | audit |
+| S4 | **Review a sample**: look at pairs, mark the checks' mistakes, set thresholds; in slice 1, 20 to 30 pairs early in the rental | review, decide |
+| S5 | **Import real empty photos** (the owner's preferred clean source, once one is usable): they enter the clean loop at the judge | import (later slice) |
+| S6 | **Audit**: from any pair or image, trace every instruction version, lesson, assessment, exchange and decision behind it | audit |
 
 ## Required properties
-<!-- Lines 78-93 -->
+<!-- Lines 73-88 -->
 
-Each is checkable; each check becomes a test.
+Each is checkable; each check becomes a test or an `audit` check.
 
 | # | Property | Check |
 |---|---|---|
-| P1 | **Pair truth:** outside the change mask, the cluttered image equals the clean image | per pair, the difference outside the mask is zero |
+| P1 | **Pair truth:** clean and cluttered images are equal wherever the mask's alpha is 0, and every change inside the mask is a specified item | audit compares the pixels; a mask component outside every located item fails the pair (`unexplained_change`) |
 | P2 | Every image is **replayable** | a finished run started again makes zero model calls |
 | P3 | Every model is **swappable**: no model name, weight path or provider in code outside adapters and configuration | the test suite runs end to end on fake adapters |
-| P4 | The **budget** is never exceeded; no GPU runs without a time limit | a call beyond the budget is refused; provisioning refuses to start without a limit |
-| P5 | **Coverage** is measurable: every pair carries its room spec and clutter spec | the report counts accepted pairs per cell of the targets |
-| P6 | **Split safety:** an export never puts one building in two splits (its rooms, scenes and pairs follow it) | export check |
-| P7 | The public code carries **no dataset**: stores and exports live outside the package | the package ships no images |
-| P8 | **Every request is stored as sent**, with its raw response | on fake adapters, the requests received equal the requests stored |
-| P9 | **Every request is recomposable** from its recorded parts | `audit` recomposes every stored request and compares hashes |
-| P10 | **No instruction text in code:** every instruction a model receives comes from a versioned file | every part of kind "instruction" cites a file version; a lint finds no prompt text in code |
+| P4 | **No GPU without a deadline;** a run stops at its pair target or at the rental's deadline | provisioning refuses to start without a limit; no call starts that the deadline would cut |
+| P5 | **Coverage** is measurable, across versions of the targets and the space | the report counts accepted pairs per target cell, matching on (axis, value) |
+| P6 | **Split safety:** an export never puts one building in two splits | the split is stored per building only |
+| P7 | The public code carries **no dataset** | the package ships no images |
+| P8 | **Every exchange is stored as sent**, with its answer | audit rebuilds each body from the store and matches the hash of the bytes sent |
+| P9 | **Every request recomposes** from its composer, its model and its recorded parts | audit recomposes every request and compares it byte for byte |
+| P10 | **No instruction text in code** | every instruction or template part cites a file; a test fails on any prompt-like literal (multi-line, or over 200 characters) in the package's Python sources |
 
 ## Functional hierarchy
-<!-- Lines 96-116 -->
+<!-- Lines 91-112 -->
 
 **L0** — produce a dataset of pairs (clean, cluttered) of the same view, the clean image being the truth of the
 cluttered one, covering a declared space of rooms and clutter, every image traceable to what made it, at a known cost
@@ -102,20 +97,21 @@ per accepted pair.
 
 | Flow | Does |
 |---|---|
-| F1 Declare | room ontology, clutter taxonomy with placement rules, coverage targets, model instructions: versioned files |
-| F2 Plan | sample scenes into the thinnest cells; then K clutter specs per accepted clean image |
-| F3 Clean loop | write, generate, judge, revise until accepted or out of budget |
-| F4 Clutter loop | write, edit, build the pair, pixel tests, judge, revise until accepted or out of budget |
-| F5 Carry forward | distill lessons from each loop; feed them to the next image's writer; measure and retire them |
-| F6 Publish | export a dataset version: images, manifest, splits by building, coverage and cost report |
-| F7 Serve models | generator, editor and judge on a rented GPU with a deadline ([C7](#c7-model-serving)) |
-| F8 Audit | trace any image to its parts; recompose every request (P9); later, dataset audits (shortcut cues, near-copies) |
+| F1 Declare | room ontology, clutter taxonomy with placement rules, coverage targets, model instructions, decision rules: versioned files |
+| F2 Plan | sample scenes into the thinnest cells; then K clutter specs per accepted clean image; draw each subject's arm |
+| F3 Clean loop | write, generate, judge, revise until accepted, no progress, or a limit |
+| F4 Clutter loop | write, edit, correct, mask, composite, pixel tests, judge, explained change, revise until accepted or a limit |
+| F5 Carry forward | distill lessons after each loop; give them to the next waves' `on` arm; compare the arms |
+| F6 Publish | export a dataset version: images, manifest with public ids and licences, splits by building, reports |
+| F7 Serve models | generator, editor and judge on a rented GPU with a deadline ([components.md](components.md)) |
+| F8 Audit | trace any image to its parts; rebuild every exchange and recompose every request; later, dataset audits |
 
 **L2** — one pair: `plan scene` → clean loop [`compose` → `generate` → `judge` → `revise`]* → `plan clutter` (×K) →
-clutter loop [`compose` → `edit` → `build pair` → `pixel tests` → `judge` → `revise`]* → accept → `distill lessons`.
+clutter loop [`compose` → `edit` → `correct` → `mask` → `composite` → `pixel tests` → `judge` → `explain` →
+`revise`]* → accept → `distill lessons`.
 
 ## Data flow
-<!-- Lines 119-160 -->
+<!-- Lines 115-156 -->
 
 ```mermaid
 flowchart LR
@@ -125,7 +121,7 @@ flowchart LR
     TG[coverage targets]
     INS[model instructions]
   end
-  ZI[(ZInD clusters<br/><i>slice 2, C1</i>)] -.-> PS
+  IMP[import real empty photos<br/><i>later slice</i>] -.-> J1
   ON --> PS[plan scenes<br/>thinnest cells first]
   TG --> PS
   PS --> W1
@@ -137,121 +133,71 @@ flowchart LR
   TX --> PC
   PC --> W2
   subgraph LK[clutter loop]
-    W2[compose instruction] --> E2[edit] --> B2[build pair] --> T2[pixel tests] --> J2{judge}
+    W2[compose instruction] --> E2[edit] --> B2[correct, mask,<br/>composite] --> T2[pixel tests] --> J2{judge,<br/>explained change}
     J2 -- revise --> W2
-    T2 -- revise --> W2
+    T2 -- reseed or revise --> W2
   end
   J2 -- accept --> PA[(accepted pairs)]
   J1 -- history --> DL[distill lessons]
   J2 -- history --> DL
   DL --> LS[(lessons)]
-  LS -- carried forward --> W1
-  LS -- carried forward --> W2
+  LS -- arm on --> W1
+  LS -- arm on --> W2
   INS --> W1
   INS --> W2
   PA --> EX[export<br/>splits by building]
-  PA --> RP[coverage, iterations, cost] -.-> PS
+  PA --> RP[coverage, carry-forward, cost] -.-> PS
 ```
 
 - **The store is the queue:** each stage takes every item in its input state and moves it on; an interrupted run
   resumes from the states.
-- **Rejects carry a typed reason** (not empty, off spec, implausible, misaligned, change outside the clutter, clutter
-  off spec, placement rule broken); the report counts them per stage, model and instruction version (S3).
+- **Rejects carry a typed reason** with a severity fixed per reason; the reports count them per stage, model and
+  instruction version (S3).
 
 ## Inner loops and carry-forward
-<!-- Lines 163-190 -->
+<!-- Lines 159-174 -->
 
 The owner's shape: in both places, generator and judge iterate on one image; the first images may need many
-iterations, and what they teach makes the next images start better. Mechanics below are *proposals*.
+iterations, and what they teach makes the next images start better.
 
 | | Clean loop | Clutter loop |
 |---|---|---|
-| subject | a scene: room spec, light, camera | a clutter spec on an accepted clean image |
-| make | the generator, from the prompt | the editor, from the clean image and the instruction; then build the pair and run the pixel tests |
-| the judge asks | empty or tidy (only items fixed to the building), on spec, plausible | clutter on spec and on its placement rules, one room, plausible |
-| revise | the reviser rewrites the prompt from the findings and the judge's guidance | the same, for the instruction |
+| subject | a scene: room spec, light, camera | a clutter spec on one accepted clean image of the scene, recorded on the loop |
+| make | the generator, from the prompt | the editor, from the clean image and the instruction; then correct, mask, composite, pixel tests |
+| the judge asks | empty or tidy (only items fixed to the building), on spec, plausible | clutter on spec and on its placement rules, nothing else changed, plausible; it locates each item |
+| revise | the reviser rewrites the prompt from the findings and the guidance | the same, for the instruction; a pixel failure is answered by a reseed first |
 
-- **An iteration:** compose the request → make → (pixel tests) → judge → stop or revise. Stop reasons: accepted,
-  budget spent, no progress. A loop that ends without acceptance rejects the subject with its last reason.
-- **Lessons:** after each loop, the distiller turns its iteration history into lessons. A lesson is a short
-  instruction fragment, with its scope (stage, and cell: room type, style, density, clutter category) and its
-  evidence (the iterations it came from). The writer's first request for the next image includes the active lessons
-  in scope.
-- **Measured, not assumed:** iterations per accepted image along the run, per stage (the curve should fall); per
-  lesson, iterations with and without it in scope. A lesson that does not help is retired. The owner promotes a
-  lasting one into an instruction file, which makes a new version of that file.
-- **Waves:** a few images run in parallel so the GPU alternates generation and judgment; lessons update between
-  waves.
-- **Models on the GPU:** one generator (or editor) and one judge; the writer, the reviser and the distiller run on
-  the judge's model, so no third model is loaded. A model that does both text-to-image and editing serves both
-  loops without a switch.
-- Same pattern as virtual_unstaging's per-image loop and its retuning step; whether the code is shared is
-  [C10](#c10-loop-code).
+- **Lessons:** after each loop, the distiller turns its history into lessons (a short instruction fragment, its scope
+  in axis values, its evidence); a lesson is active from the next wave until it is replaced, retired or promoted.
+- **Arms** (owner): about one subject in three runs without lessons, by a recorded seeded draw. The `carry_forward`
+  report compares the arms under a decision rule written before the rental. Mechanics: [loops.md](loops.md).
 
 ## Auditability
-<!-- Lines 193-211 -->
+<!-- Lines 177-190 -->
 
-The owner's requirement: full auditability. How it is met (*proposal*):
+The owner's requirement: full auditability.
 
-- **Instructions are files.** One Markdown file per model role in `instructions/`: clean writer, clean judge,
-  clutter writer, pair judge, reviser, lesson distiller; the composers' templates are files too. Versioned by git;
-  every use records the file's content hash, and the content is copied into the store at first use, so an audit
-  needs no checkout. No instruction text lives in code (P10).
-- **Every request is stored as sent** (P8): the messages in full, the images by hash in their order, the settings,
-  the seed, the model and its revision; and the raw response.
-- **Every request is recomposable** (P9). A request is built by a named, versioned composer, a pure function of
-  ordered parts. Each part records its slot, its source and the hash of its text. Source kinds: an instruction
-  version; a spec field, rendered; a lesson; a judge finding or guidance; the previous request (for a revision);
-  the output of a writer or reviser call. Recomposing from the parts must give the stored request byte for byte.
-- **The trace never stops at a text of unknown origin.** A prompt written by a model is the output of a call whose
-  own request is composed and recorded the same way; a lesson points to the iterations it was distilled from.
-- **Lineage is a query.** `audit <pair>` walks from a pair to its iteration, its model calls, their parts, and each
-  part's origin, recursively, and prints the tree. The export carries per pair the ids and hashes that reach it.
-- **Human acts are records:** review marks, threshold changes, lesson promotions and retirements, with who and when.
+- **Instructions are files:** one Markdown file per model role; composers, answer schemas, reasons and decision rules
+  are files too. Every use records the file's hash; its content is copied into the store at first use.
+- **Every exchange is stored as sent (P8):** virtual_unstaging's endpoint observer hands each HTTP exchange to the
+  recorder; bodies are kept with embedded images replaced by their hash and the image bytes kept, plus the hash of
+  the bytes on the wire.
+- **Every request recomposes (P9):** a request is a pure function of its composer file, its model and its ordered
+  parts (instruction files, spec, lessons, earlier assessments, earlier outputs, images, settings, seeds), each part
+  recorded with its source. A prompt written by a model is the output of a call recorded the same way.
+- **Lineage is a query:** `audit <pair>` walks from a pair to its iterations, calls, exchanges and parts, and each
+  part's origin, recursively. Human acts (thresholds, reviews, lesson retirements and promotions) are `decision` rows.
 
 ## Stored data
-<!-- Lines 214-252 -->
+<!-- Lines 193-198 -->
 
-One store per dataset: a SQLite file and an image store addressed by SHA-256, the pattern of virtual_unstaging.
-Entities at claim level; the schema is in [data_model.md](data_model.md).
-
-```mermaid
-erDiagram
-  BUILDING ||--o{ ROOM : has
-  ROOM ||--o{ SCENE : "seen from"
-  SCENE ||--o{ CLUTTER_SPEC : "K per scene"
-  CLUTTER_SPEC ||--o{ CLUTTER_ITEM : lists
-  SCENE ||--o{ LOOP_RUN : "clean loop"
-  CLUTTER_SPEC ||--o{ LOOP_RUN : "clutter loop"
-  LOOP_RUN ||--o{ ITERATION : runs
-  ITERATION ||--o{ MODEL_CALL : makes
-  ITERATION ||--o{ CHECK : "checked by"
-  MODEL_CALL ||--|| COMPOSITION : "request built by"
-  COMPOSITION ||--o{ PART : "ordered parts"
-  PART }o--o| INSTRUCTION_VERSION : cites
-  PART }o--o| LESSON : cites
-  LESSON }o--o{ ITERATION : "distilled from"
-  ITERATION ||--o| PAIR : "accepted as"
-  EXPORT }o--o{ PAIR : contains
-```
-
-| Entity | Holds |
-|---|---|
-| building, room, scene | the hierarchy (owner). The room carries the room spec (type, geometry, style); the scene the light, the camera and its accepted clean image. First version: one scene per room, one room per building |
-| clutter spec, clutter item | density; per item: taxonomy category, placement, attachment |
-| loop run, iteration | stage (clean or clutter), stop reason; per iteration the images made (raw edit, composite, change mask) |
-| check | kind (pixel, judge, detector, human), verdict, typed reason, scores, findings |
-| model call | role, model and revision, the request exactly as sent, the raw response, seconds, error, request hash; an identical request returns the stored result (P2) |
-| composition, part | the composer (name, version) and the ordered parts of one request: slot, source kind, source id, text hash |
-| instruction version | file path, content hash, content |
-| lesson | text, scope, evidence, the call that wrote it, status (active, retired, promoted), measured effect |
-| pair, export | the accepted iteration with its clean image; a named version, its pairs, its splits by building |
-
-The export is plain files: `clean/`, `cluttered/` and `mask/` PNGs, and a JSONL manifest (one line per pair:
-building, room and scene ids, split, specs, provenance ids and hashes, checks), loadable by common dataset libraries.
+One store per dataset: a SQLite file and an image store addressed by SHA-256, the pattern of virtual_unstaging. The
+schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](schema.sql) (42 tables;
+the DDL loads in SQLite and in Postgres 18). The export is plain files: `clean/`, `cluttered/` and `mask/` PNGs and a JSONL manifest, one line per
+pair: public ids (content hashes that survive a rebuild of the store), split, specs, families, licences, checks.
 
 ## System shape
-<!-- Lines 255-265 -->
+<!-- Lines 201-211 -->
 
 Same shape as virtual_unstaging: a local orchestrator owns the store; models run as services on a rented GPU that
 deletes itself at its deadline and holds nothing that cannot be lost.
@@ -264,158 +210,112 @@ flowchart LR
 ```
 
 ## Choices
-<!-- Lines 268-268 -->
+<!-- Lines 214-216 -->
+
+All decided by the owner, except where marked *proposal*.
 
 ### C1 Clean sources
-<!-- Lines 271-275 -->
+<!-- Lines 219-226 -->
 
-**Decided:** clean images are generated from the written prompt; imported clean images (real or rendered) enter
-the clean loop at the judge in a later slice (S5). Ruled out by the owner: grounding the generation on clusters of
-ZInD's real empty rooms (licensed for academic use only, access by manual approval).
+Generated from the written prompt in slice 1. **Real empty photos are the owner's preferred source** ("if we can find
+empty pictures, real, it would be actually perfect"): imported through S5 in a later slice. Candidate found:
+Wikimedia Commons, category "Empty rooms" and its sub-categories, about 700 to 800 real photos under per-file open
+licences (CC BY, CC BY-SA, CC0, public domain), of mixed buildings (classrooms, offices, homes) and uneven sizes, to be
+sorted before use; licences are recorded per image and carried into the manifest. Ruled out: ZInD (academic use only,
+access by approval). Detail: [state of the art](../../virtual_unstaging/state_of_the_art.md), branch A.
 
 ### C2 How clutter is added
-<!-- Lines 278-286 -->
+<!-- Lines 229-236 -->
 
-**Decided:** free edit, then composite. The change mask is computed from the difference between the clean image and
-the edit (so it includes shadows and reflections), cleaned, dilated and feathered; the edited pixels are pasted onto
-the clean image inside it, so P1 holds by construction. Possible shortcut cues (the seam, the model's image signature
-inside the mask): both images pass through the same encode-decode round trip (or the clean generator and the editor
-share one VAE), and the dataset audit checks that a detector cannot find the mask from them. Rejected: the edit as
-returned (editors repaint slightly everywhere, so the clean image is only approximately the truth); masked
-inpainting (needs floor and wall segmentation first, bounds the clutter to the mask's shape).
+Free edit, then colour correction and composite: the change mask is measured from the difference between the clean
+image and the corrected edit (so it includes shadows and reflections); outside it the clean image is kept, so P1
+holds there by construction; inside it, every component must be explained by an item the judge located. Slice 1
+uses one model for clean image and edit (one VAE); slice 2's second family makes its own clean images. Rejected: the
+edit as returned (editors repaint slightly everywhere); masked inpainting (needs segmentation first, bounds the
+clutter to the mask's shape).
 
 ### C3 Clutter variants per clean image
-<!-- Lines 289-292 -->
+<!-- Lines 239-241 -->
 
-**Decided:** K = 3 independent variants at different densities (lived-in, cluttered, moving day), sharing the scene.
-Nested variants (clutter added onto the previous edit) stay a later option.
+K = 3 independent variants at different densities (lived-in, cluttered, moving day), sharing the scene.
 
 ### C4 Writing prompts and instructions
-<!-- Lines 295-298 -->
+<!-- Lines 244-247 -->
 
-**Decided:** a language model writes them from the spec, the lessons and its instruction file; its call is recorded
-like any other, so the trace goes one level deeper (see [Auditability](#auditability)).
+A language model writes them from the spec, the lessons and its instruction file, with a sampling seed per subject;
+its call is recorded like any other.
 
 ### C5 The checks, cheapest first
-<!-- Lines 301-306 -->
+<!-- Lines 250-254 -->
 
-**Decided:** in the clutter loop, pixel tests before the judge (alignment of the edit with the clean image, change
-area within the range the density implies, drift outside the mask before compositing); the judge on a fixed schema
-in both loops; an object detector only if the judge misses leftover clutter; thresholds calibrated on a reviewed
-sample (S4).
+Pixel tests before the judge (size, shift, global repaint, mask share); the judge on a fixed schema, locating each
+item in the clutter loop; the explained-change test; an object detector only if the judge misses leftover clutter.
+Thresholds are set by the owner on 20 to 30 pairs early in the rental (S4).
 
 ### C6 Speed and cost
-<!-- Lines 309-315 -->
+<!-- Lines 257-263 -->
 
-**Decided:** the 10-second figure of virtual_unstaging is a guideline. Measured instead: seconds and iterations per
-accepted image per stage, and cost per accepted pair. Arithmetic, *inferred* from the measured A100 80 GB figures
-at $1.79 an hour: one iteration costs about 14 s for a clean image and 15 s for a clutter edit (generation or
-edit, plus judgment), plus a few seconds of writing or revising. At two to three iterations per accepted image,
-about 1,000 pairs take 15 to 25 hours, $25 to $45, start-up excluded.
+The 10-second figure of virtual_unstaging is a guideline. Measured: iterations and wall seconds per accepted image per
+stage; cost per accepted pair from the rental's price and wall clock. Arithmetic, *inferred* from the measured A100
+80 GB figures at $1.79 an hour: one iteration costs about 14 s for a clean image and 15 s for a clutter edit, plus a
+few seconds of writing or revising; at two to three iterations per accepted image, about 1,000 pairs take 15 to 25
+hours, $25 to $45, start-up excluded.
 
 ### C7 Model serving
-<!-- Lines 318-323 -->
+<!-- Lines 266-271 -->
 
-**Decided:** virtual_unstaging's serving (rental with a self-deleting deadline, generator service with recipes and
-switching, judge service). The owner's rule: virtual_unstaging changes only by **adding modularity or override
-mechanisms** that default to its own behaviour and never name clutter_pairs. Those in place, with what clutter_pairs
-uses them for, are in [Use of virtual_unstaging](#use-of-virtual_unstaging).
+virtual_unstaging's serving: rental with a self-deleting deadline, generator service with recipes, judge service.
+The owner's rule: virtual_unstaging changes only by **adding modularity or override mechanisms** that keep its own
+behaviour by default and never name clutter_pairs; text-to-image (a new request form, opt-in per recipe) is the one
+exception the owner accepted. What is used, and how: [components.md](components.md).
 
 ### C8 Editor families
-<!-- Lines 326-340 -->
+<!-- Lines 274-281 -->
 
-A model family is the models of one lab and architecture: FLUX models (Black Forest Labs), Qwen-Image
-models (Alibaba's Qwen team). virtual_unstaging will test removal generators on these pairs, some from the same
-families as the editors. If a test pair's clutter was painted by the remover's own family, the remover may undo it
-more easily than real clutter (it shares that family's way of drawing objects and its image signature), and the
-test overrates it.
-
-**Decided: two editor families, each pair tagged with its editor's family.** A remover is tested on the other
-family's pairs, and the gap between its scores on the two halves measures the bias. Slice 1 runs one family; the
-second comes in slice 2. Rejected: one family (the bias would stay, unmeasured).
-
-Slice 1 starts with the proposed defaults (the owner said go): FLUX.2 klein 4B makes the clean image and edits it
-(edits in 5 to 6 s, measured; text-to-image not yet run), Qwen3-VL-8B judges and writes (7 to 10 s per judgment,
-measured); Qwen-Image-Edit-2511 is the second family in slice 2 (not clocked). All are configuration, never code.
+A model family is the models of one lab and architecture (FLUX, Black Forest Labs; Qwen-Image, Alibaba's Qwen team).
+A remover tested on clutter painted by its own family may undo it more easily than real clutter, and the test then
+overrates it. **Two editor families**; each pair records the families of its clean generator and of its editor; a
+remover is tested on the other family's pairs, and the gap between the two halves measures the bias. Slice 1 runs one
+family: FLUX.2 klein 4B makes and edits the clean images, Qwen3-VL-8B judges and writes (the owner said go). Slice 2
+adds Qwen-Image-Edit-2511 with its own family's text-to-image model for its clean images. All are configuration.
 
 ### C9 Size of the first slice
-<!-- Lines 343-346 -->
+<!-- Lines 284-287 -->
 
-**Decided:** 3 room types (living room, kitchen, bedroom) × 2 styles × 3 densities, other axes at random; about 50
-accepted pairs; one rental of at most 2 hours.
+3 room types (living room, kitchen, bedroom) × 2 styles × 3 densities, other axes at random; about 50 accepted pairs;
+one rental of at most 2 hours.
 
 ### C10 Loop code
-<!-- Lines 349-357 -->
+<!-- Lines 290-295 -->
 
-**Decided: import virtual_unstaging**, which changes only by adding modularity or override mechanisms (owner). The
-dependency is one-way: clutter_pairs uses virtual_unstaging, never the reverse. The shared part is the engine
-contract (`SearchEngine`: the engine proposes the next candidate, is told its evaluation, and resumes by replay), now
-generic over what a candidate is. The first engine here is the reviser; virtual_unstaging's dimension engines fit
-the same contract. Not shared: virtual_unstaging's runner and judge, which are bound to its own store and defect
-types; clutter_pairs has its own small driver under the same replay rule (design D10 there). Rejected by the owner:
-a separate shared library (overengineering at this stage); a second loop engine in clutter_pairs.
-
-## Use of virtual_unstaging
-<!-- Lines 360-375 -->
-
-Imported as a package (path dependency). What clutter_pairs takes, and the extension points it relies on; each
-defaults to virtual_unstaging's own behaviour.
-
-| Need | Taken from virtual_unstaging | Extension point |
-|---|---|---|
-| rent one GPU with a deadline, serving the generator and the judge | `provision.lifecycle` (`up`, `down`), with a plan built from clutter_pairs' configuration; the session file lands in the dataset folder | `Context.plan_source`; `ProjectPlan.tools = ()` (no segmentation models loaded) |
-| make a clean image from text, edit it | `clients.toolserver.ToolServerClient`, `clients.generators.ToolServerGenerator`, the packaged recipes | recipe `text_only` (tool server API 1.2) |
-| judge, write, revise, distill | `clients.openai_compatible.chat_json` (streamed, JSON-schema answers; free text wrapped in a one-field schema) | none |
-| record every request as sent, with its answer | — | `Endpoint.observer`: the bytes sent and received per attempt; their hash is stored beside the canonical request |
-| the loop's policy | — | `engines.SearchEngine[Problem, Candidate, Evaluation]` |
-| images, hashes, store plumbing | `imaging`, `domain.sha256_text` and `canonical_json`, `store.blobs.BlobStore`, `store.db.connect` and `transaction`, `config.Secret` | none |
-| tests | `clients.fakes.FakeGenerator` (also from text alone) | none |
-
-Not used: virtual_unstaging's project configuration, store schema, runner, judge, registry, review and command line.
-
-## Components and layering
-<!-- Lines 378-396 -->
-
-One package, `clutter_pairs`, layered like virtual_unstaging and checked the same way (`lint-imports`):
-
-| Layer | Modules |
-|---|---|
-| presentation | `cli` |
-| application | `run` (waves of loops, the driver with replay), `plan` (sampling into target cells), `export`, `audit`, `report`, `gpu` (provisioning glue) |
-| adapters | `models` (generator, judge and writer callers that record every call), `store` (schema, queries, views) |
-| pure core | `compose` (composers and spec rendering), `pairs` (pixel tests, change mask, composite), `lessons` (selection by scope), `engine` (the reviser's policy), `space` (ontology, taxonomy, targets) |
-| domain | the types |
-
-Data files ship in the package: `instructions/`, `composers/`, `schemas/`, `space/`, `reasons.toml`. A dataset is a
-folder outside the package: `clutter_pairs.toml` (models, endpoints by session file, budget, loop settings, file
-overrides; secrets only by key file or key command), `store.sqlite`, `images/`, `exports/`.
-
-**Command line** (name `cpairs` provisional): `init`, `plan`, `gpu up` / `gpu down`, `run`, `report`, `audit`, `lessons`
-(list, retire, promote), `export`. Data on stdout, messages on stderr, `--json` on reports, no interactivity
-required: the repository's CLI guidelines.
+clutter_pairs imports virtual_unstaging. Shared: the ask / tell contract (`engines.SearchEngine`, generic over the
+candidate) and the replay check (`engines.replay`, extracted at the owner's request and used by virtual_unstaging's own
+runner). clutter_pairs' engine is the reviser's policy; its driver is the short loop around `replay`. Rejected by the
+owner: a separate shared library (overengineering at this stage); duplicated loop code.
 
 ## Build order
-<!-- Lines 399-413 -->
+<!-- Lines 298-311 -->
 
 The whole flow end to end at small scale first, then depth where it fails.
 
-1. **Slice 1:** both loops with lessons, edit-then-composite, pixel tests, full audit records and the recomposition
-   check, export of about 50 pairs, a report with iterations per image along the run. Order: domain, space, store;
-   composer and the data files; model callers with recording, and fakes; both loops, the pairs module, the reviser
-   engine and the driver; lessons and the views; audit, export, report, command line; then one rental of at most
-   2 hours. Tests on fakes, each a property: P1 (composite identical outside the mask), P2 (a finished run started
-   again makes no call), P6 (an export never splits a building), P8 (the bytes sent re-render from the stored
-   request), P9 (every request recomposes), and the carry-forward itself (a scripted fake judge that rejects until a
-   lesson is present: the next scene is accepted at its first iteration).
-2. **Slice 2:** coverage planner, second editor family, review of a sample, lesson promotion.
-3. **Slice 3:** dataset audits (shortcut-cue detector, near-copies), imports, scale-up; then coherence: several scenes
-   per room, several rooms per building.
+1. **Slice 1.** Domain, space (with the image-size check), store; composer and the data files, with the decision rule
+   for carry-forward; the recorder and the model callers, and fakes; both loops, the pairs module, the engine with
+   replay; lessons, arms, views; audit, export, reports, command line. Tests on fakes, one per property: P1, P2, P6,
+   P8, P9, P10, the size check, and carry-forward itself (a scripted fake judge that rejects until a lesson is
+   present: the `on` arm's next scene is accepted at its first iteration, the `off` arm's is not). Then one rental of at
+   most 2 hours: a smoke wave, the owner's threshold setting on 20 to 30 pairs, waves to about 50 pairs.
+2. **Slice 2.** Coverage planner, the second family with its own text-to-image model, per-lesson effects, import of
+   real empty photos (S5), a review page.
+3. **Slice 3.** Dataset audits (shortcut-cue detector, near-copies), scale-up; then coherence: several scenes per
+   room, several rooms per building.
 
 ## Open
-<!-- Lines 416-421 -->
+<!-- Lines 314-321 -->
 
-- Whether FLUX.2 klein 4B accepts a call with no image (declared from its documentation, not yet run).
-- A gated dataset of empty, furnished and staged bedroom images (state of the art, branch A, "Existing pair
-  benchmarks"): access requested; once readable, it says whether its pipeline is generated and may serve as a check.
+- Whether FLUX.2 klein 4B makes an image from text alone, and its condition-image size limit: read before the
+  rental, then checked by the smoke wave.
+- Real empty photos: sort the Commons candidates (residential, tidy, large enough); two more leads to look at: a
+  furniture-synthesis benchmark with real test images (RoomBench++, training data by request) and the gated empty,
+  furnished and staged bedroom dataset (access requested).
 - Name of the project and of its command (architecture, "Open questions").
 - Granularity of the ontology and the taxonomy beyond slice 1: set from slice 1's report.

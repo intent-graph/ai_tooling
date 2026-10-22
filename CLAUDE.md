@@ -16,7 +16,8 @@ base here documents itself:
   links leaving a skill folder).
 - `virtual_unstaging/`, `clutter_pairs/` — English only; read each one's `architecture.md` and `CLAUDE.md` before any
   change (`virtual_unstaging`: design and implementation open; `clutter_pairs`: high-level design agreed, detailed design before code; it may
-  change `virtual_unstaging` only by adding modularity or override mechanisms).
+  change `virtual_unstaging` only by adding modularity or override mechanisms). `clutter_pairs` imports
+  `virtual_unstaging`: a change there also runs `clutter_pairs`' tests, once they exist.
 - `diagrams_for_humans/`, `howto/`, `ai_evolution/`
 
 ## Agents and skills (`.claude/`)
