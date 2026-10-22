@@ -1,0 +1,43 @@
+# Qwen-Image-2.1-Turbo: the 8-step checkpoint of Qwen-Image-2.1; condition images in a list, no mask argument.
+# Verified: pipeline class (model_index.json), the card's call (8-step schedule saved with the checkpoint, CFG 1,
+# `use_kv_cache`), commit and licence. Unverified: see `unverified`.
+name = "qwen_image_2_1_turbo"
+adapter = "diffusers"
+licence = "Qwen Research License (non-commercial)"
+unverified = ["placement", "fp8_storage", "max_images", "output_side", "defaults", "text_only"]
+notes = [
+  "The 8-step schedule is saved with the checkpoint: num_inference_steps alone does not change it (card). Needs diffusers with pipeline-configured sigmas (PR 14950, merged before 0.41.0).",
+  "use_kv_cache reuses the text and reference-image context across denoising steps (card).",
+  "A 7.1B transformer stored in FP8 (7 GB) and an 8.8B text encoder (17.5 GB) stay on the GPU: about 25 GB of weights, under the 36 GB a generator has beside the judge (inferred, not run).",
+]
+
+[pipeline]
+class = "QwenImage21Pipeline"
+repository = "Qwen/Qwen-Image-2.1-Turbo"
+revision = "fc13ba1986fcb905854dc8de2f52eee395f49b5b"
+dtype = "bfloat16"
+placement = "cuda"
+fp8_storage = ["transformer"]
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 4
+native_mask = false
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+text_only = true            # also text to image (no image sent): the image argument is left out; not run yet
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 8
+use_kv_cache = true

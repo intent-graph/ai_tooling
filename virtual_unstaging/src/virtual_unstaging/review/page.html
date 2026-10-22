@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review results</title>
+<style nonce="__NONCE__">
+:root {
+  --bg: #f6f6f3; --panel: #ffffff; --ink: #1d1d1b; --muted: #66665f; --line: #d4d4cc;
+  --accent: #1f5fbf; --good: #1b7a3a; --bad: #b3261e; --judge: #b25e00; --mine: #0a7c8c; --focus: #1f5fbf;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17171a; --panel: #212125; --ink: #ececea; --muted: #a0a098; --line: #3a3a40;
+    --accent: #6aa3ff; --good: #5ad17f; --bad: #ff8a80; --judge: #ffb454; --mine: #4fd1e3; --focus: #6aa3ff;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, sans-serif; }
+header { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 8px 16px; background: var(--panel);
+  border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+header .tabs { display: flex; gap: 4px; }
+header .count { margin-left: auto; color: var(--muted); }
+main { padding: 12px 16px 80px; max-width: 1800px; margin: 0 auto; }
+button, select, input { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 6px; padding: 5px 10px; }
+button { cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button[aria-pressed="true"], button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px;
+  padding: 0 5px; background: var(--bg); color: var(--ink); }
+.status { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin-bottom: 8px; }
+.status .name { font-weight: 600; }
+.muted { color: var(--muted); }
+.good { color: var(--good); } .bad { color: var(--bad); }
+#msg { min-height: 1.4em; margin: 0 0 6px; }
+.panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; align-items: start; }
+.panels.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.panels.one { grid-template-columns: minmax(0, 45%); justify-content: center; }
+.panels.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.panels.three figure > img { max-height: calc(100vh - 220px); object-fit: contain; }
+figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+figcaption { color: var(--muted); font-size: 13px; padding: 0 2px 4px; display: flex; justify-content: space-between; gap: 8px; }
+.stage { position: relative; line-height: 0; touch-action: none; user-select: none; }
+.stage img, figure > img { width: 100%; height: auto; display: block; border-radius: 4px; }
+.stage.draw { cursor: crosshair; }
+.box { position: absolute; pointer-events: none; border: 2px solid; }
+.box.judge { border-style: dashed; border-color: var(--judge); }
+.box.mine { border-style: solid; border-color: var(--mine); }
+.box.blocking { border-width: 3px; }
+.box.minor { border-width: 1.5px; }
+.box.rubber { border-style: dotted; border-color: var(--bad); }
+.box .tag { position: absolute; left: -2px; top: 0; transform: translateY(-100%); font: 11px/1.2 ui-monospace, monospace;
+  background: var(--panel); color: var(--ink); padding: 1px 4px; white-space: nowrap; border: 1px solid var(--line); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin-top: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.card h3 { margin: 0 0 4px; font-size: 14px; color: var(--muted); font-weight: 600; }
+ul.list { margin: 0; padding: 0; list-style: none; }
+ul.list li { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; }
+.sev { font-size: 12px; padding: 0 6px; border-radius: 10px; border: 1px solid var(--line); }
+.sev.blocking { border-color: var(--bad); color: var(--bad); }
+.defects { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.row input[type="text"] { flex: 1 1 240px; }
+.big { padding: 10px 18px; font-weight: 600; }
+.big.ok { border-color: var(--good); } .big.no { border-color: var(--bad); }
+.hints { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line);
+  padding: 6px 16px; color: var(--muted); font-size: 13px; z-index: 5; }
+.hints span { margin-right: 14px; white-space: nowrap; }
+.pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <span id="controls"></span>
+  <span class="count" id="count" aria-live="polite"></span>
+</header>
+<main>
+  <p id="msg" role="status" aria-live="polite"></p>
+  <div id="view"></div>
+</main>
+<div class="hints" id="hints"></div>
+<script nonce="__NONCE__">
+(() => {
+'use strict';
+
+const token = new URLSearchParams(location.search).get('token') || '';
+const $ = (id) => document.getElementById(id);
+const S = {
+  meta: null, view: 'review', chord: false, busy: false, seq: 0,
+  run: null, queue: null, idx: 0, detail: null, drafts: {}, draft: null, swapped: false,
+  cmpA: null, cmpB: null, cmp: null, cmpIdx: 0,
+  del: null, delIdx: 0, delPick: 0,
+};
+
+// --- plumbing -----------------------------------------------------------------------------------------------
+
+async function api(path, body) {
+  const options = { headers: { 'X-Review-Token': token } };
+  if (body !== undefined) {
+    options.method = 'POST';
+    options.headers['Content-Type'] = 'application/json';
+    options.body = JSON.stringify(body);
+  }
+  const response = await fetch(path, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error((data.error && data.error.code) || ('http_' + response.status));
+    error.code = error.message;
+    throw error;
+  }
+  return data;
+}
+const imageUrl = (sha) => '/image/' + sha + '?token=' + encodeURIComponent(token);
+const preload = (sha) => { if (sha) { new Image().src = imageUrl(sha); } };
+
+function h(tag, props, ...kids) {
+  const element = document.createElement(tag);
+  for (const [key, value] of Object.entries(props || {})) {
+    if (key === 'class') { element.className = value; }
+    else if (key.startsWith('on')) { element.addEventListener(key.slice(2), value); }
+    else if (value === true) { element.setAttribute(key, ''); }
+    else if (value !== false && value != null) { element.setAttribute(key, value); }
+  }
+  for (const kid of kids.flat()) {
+    if (kid != null && kid !== false) { element.append(kid.nodeType ? kid : document.createTextNode(String(kid))); }
+  }
+  return element;
+}
+const kbd = (text) => h('kbd', {}, text);
+function say(text, bad) { const m = $('msg'); m.textContent = text || ''; m.className = bad ? 'bad' : 'muted'; }
+function fail(error) { say('Refused: ' + (error.code || error.message), true); }
+function figure(caption, ...content) { return h('figure', {}, h('figcaption', {}, caption), ...content); }
+function plainImage(sha, alt) { return h('img', { src: imageUrl(sha), alt, draggable: 'false' }); }
+
+function boxElement(finding, kind) {
+  const b = finding.box;
+  const element = h('div', { class: 'box ' + kind + ' ' + finding.severity }, h('span', { class: 'tag' }, finding.defect_code));
+  element.style.left = (b.x0 * 100) + '%';
+  element.style.top = (b.y0 * 100) + '%';
+  element.style.width = ((b.x1 - b.x0) * 100) + '%';
+  element.style.height = ((b.y1 - b.y0) * 100) + '%';
+  return element;
+}
+
+// --- typed review -------------------------------------------------------------------------------------------
+
+function pending() {
+  const id = S.detail ? S.detail.attempt_id : 0;
+  if (!S.drafts[id]) { S.drafts[id] = []; }
+  return S.drafts[id];
+}
+
+async function loadQueue(runId) {
+  S.run = runId;
+  S.queue = await api('/api/review/queue?run=' + runId);
+  const first = S.queue.items.findIndex((item) => item.my_verdict === null);
+  await openItem(first >= 0 ? first : 0);
+}
+
+async function openItem(index) {
+  const items = S.queue.items;
+  if (!items.length) { S.detail = null; S.draft = null; render(); return; }
+  const mine = ++S.seq;
+  const wanted = Math.max(0, Math.min(items.length - 1, index));
+  const detail = await api('/api/attempt/' + items[wanted].attempt_id);
+  if (mine !== S.seq) { return; }
+  S.idx = wanted; S.detail = detail; S.draft = null; S.swapped = false;
+  render();
+  const next = items[wanted + 1];
+  if (next) { preload(next.original); preload(next.candidate); }
+}
+
+function countLeft() { S.queue.left = S.queue.items.filter((item) => item.my_verdict === null).length; }
+
+async function submitReview(verdict) {
+  if (!S.detail || S.busy) { return; }
+  S.busy = true;
+  try {
+    const comment = $('vcomment') ? $('vcomment').value : '';
+    const body = {
+      attempt_id: S.detail.attempt_id, verdict, comment: comment || null,
+      findings: pending().map((f) => ({ defect_code: f.defect_code, severity: f.severity, box: f.box, comment: f.comment || null })),
+    };
+    const saved = await api('/api/review', body);
+    delete S.drafts[S.detail.attempt_id];
+    S.queue.items[S.idx].my_verdict = verdict;
+    countLeft();
+    say('Saved review ' + saved.review_id + ': ' + verdict + ', ' + saved.findings + ' findings.');
+    const items = S.queue.items;
+    let next = -1;
+    for (let step = 1; step <= items.length; step++) {
+      const candidate = (S.idx + step) % items.length;
+      if (items[candidate].my_verdict === null) { next = candidate; break; }
+    }
+    if (next < 0) { say('Every photo of this run has your review.'); render(); } else { await openItem(next); }
+  } catch (error) { fail(error); } finally { S.busy = false; }
+}
+
+function defectKeyList() { return S.meta.defects.slice(0, 9); }
+
+function commitDraft() {
+  const d = S.draft;
+  if (!d || !d.code) { say('Pick a defect first (keys 1 to 9).', true); return; }
+  pending().push({ defect_code: d.code, severity: d.severity, box: d.box, comment: d.comment.trim() });
+  S.draft = null;
+  paintMine();
+}
+
+function paintMine() {
+  const stage = $('stage');
+  if (stage) {
+    for (const el of stage.querySelectorAll('.box.mine, .box.rubber')) { el.remove(); }
+    const mine = (S.detail.mine ? S.detail.mine.findings : []).concat(pending());
+    for (const f of mine) { if (f.box) { stage.append(boxElement(f, 'mine')); } }
+    if (S.draft && S.draft.box) { stage.append(boxElement({ box: S.draft.box, severity: S.draft.severity, defect_code: S.draft.code || '?' }, 'rubber')); }
+  }
+  const list = $('pending');
+  if (list) {
+    list.replaceChildren(...pending().map((f, i) => h('li', {}, h('span', { class: 'sev ' + f.severity }, f.severity), f.defect_code,
+      f.box ? ' (box)' : ' (whole image)', f.comment ? ' - ' + f.comment : '',
+      h('button', { onclick: () => { pending().splice(i, 1); paintMine(); } }, 'remove'))));
+    if (!pending().length) { list.append(h('li', { class: 'muted' }, 'none yet')); }
+  }
+  paintDraft();
+}
+
+function paintDraft() {
+  const host = $('draft');
+  if (!host) { return; }
+  if (!S.draft) {
+    host.replaceChildren(h('p', { class: 'muted' }, 'Drag a box on the candidate, or press ', kbd('f'), ' for a defect of the whole image.'));
+    return;
+  }
+  const d = S.draft;
+  const buttons = defectKeyList().map((defect, i) => h('button', {
+    'aria-pressed': d.code === defect.code ? 'true' : 'false', title: defect.description,
+    onclick: () => { d.code = defect.code; paintDraft(); },
+  }, kbd(i + 1), ' ' + defect.label));
+  const severity = h('button', { class: 'sev ' + d.severity, onclick: () => { toggleSeverity(); } }, d.severity);
+  const comment = h('input', { type: 'text', id: 'dcomment', placeholder: 'comment (optional)', maxlength: '2000', value: d.comment });
+  comment.addEventListener('input', () => { d.comment = comment.value; });
+  comment.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') { ev.preventDefault(); commitDraft(); }
+    if (ev.key === 'Escape') { ev.preventDefault(); comment.blur(); }
+  });
+  host.replaceChildren(
+    h('div', { class: 'defects' }, buttons),
+    h('div', { class: 'row' }, 'Severity ', kbd('s'), ' ', severity, h('span', { class: 'muted' }, d.box ? 'box drawn' : 'whole image'),
+      comment, h('button', { onclick: commitDraft }, h('span', {}, 'Add '), kbd('Enter')),
+      h('button', { onclick: () => { S.draft = null; paintMine(); } }, h('span', {}, 'Cancel '), kbd('Esc'))),
+  );
+}
+
+function toggleSeverity() { if (S.draft) { S.draft.severity = S.draft.severity === 'blocking' ? 'minor' : 'blocking'; paintDraft(); paintMine(); } }
+
+function attachDrawing(stage) {
+  let start = null; let rubber = null;
+  const point = (ev) => {
+    const r = stage.getBoundingClientRect();
+    return { x: Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (ev.clientY - r.top) / r.height)) };
+  };
+  const rect = (a, b) => ({ x0: Math.min(a.x, b.x), y0: Math.min(a.y, b.y), x1: Math.max(a.x, b.x), y1: Math.max(a.y, b.y) });
+  const place = (el, box) => {
+    el.style.left = (box.x0 * 100) + '%'; el.style.top = (box.y0 * 100) + '%';
+    el.style.width = ((box.x1 - box.x0) * 100) + '%'; el.style.height = ((box.y1 - box.y0) * 100) + '%';
+  };
+  stage.addEventListener('pointerdown', (ev) => {
+    if (ev.button !== 0) { return; }
+    ev.preventDefault();
+    stage.setPointerCapture(ev.pointerId);
+    start = point(ev);
+    rubber = h('div', { class: 'box rubber' });
+    stage.append(rubber);
+  });
+  stage.addEventListener('pointermove', (ev) => { if (start) { place(rubber, rect(start, point(ev))); } });
+  stage.addEventListener('pointerup', (ev) => {
+    if (!start) { return; }
+    const box = rect(start, point(ev));
+    start = null; rubber.remove(); rubber = null;
+    if (box.x1 - box.x0 < 0.01 || box.y1 - box.y0 < 0.01) { return; }
+    S.draft = { box, code: null, severity: 'blocking', comment: '' };
+    paintMine();
+  });
+  stage.addEventListener('pointercancel', () => { if (rubber) { rubber.remove(); } start = null; rubber = null; });
+}
+
+function renderReview(view) {
+  const d = S.detail;
+  if (!d) { view.append(h('p', {}, S.queue && S.queue.items.length ? 'Loading.' : 'This run has no result to review.')); return; }
+  const item = S.queue.items[S.idx];
+  view.append(h('div', { class: 'status' },
+    h('span', { class: 'name' }, d.name), d.group ? h('span', { class: 'muted' }, d.group) : null,
+    h('span', { class: 'muted' }, 'attempt ' + d.attempt_id + ' (' + (d.is_best ? 'best' : 'not the best') + ' of run ' + d.run_id + ')'),
+    h('span', { class: 'muted' }, 'photo ' + (S.idx + 1) + ' of ' + S.queue.items.length),
+    item.my_verdict ? h('span', { class: item.my_verdict === 'usable' ? 'good' : 'bad' }, 'you said ' + item.my_verdict) : null));
+  const stage = h('div', { class: 'stage draw', id: 'stage' }, h('img', { id: 'cand', src: imageUrl(d.candidate), alt: 'candidate', draggable: 'false' }));
+  for (const f of (d.judge ? d.judge.findings : [])) { if (f.box) { stage.append(boxElement(f, 'judge')); } }
+  attachDrawing(stage);
+  const region = d.region.image ? plainImage(d.region.image, 'removal region') : h('p', { class: 'muted' }, 'No outline or mask stored.');
+  view.append(h('div', { class: 'panels' },
+    figure('Original', plainImage(d.original, 'original')),
+    figure([h('span', {}, 'Candidate: judge dashed, yours solid'), h('span', {}, kbd('Space'), ' shows the original')], stage),
+    figure(d.region.kind === 'outline' ? 'Original, removal region outlined' : 'Removal mask', region)));
+  const judge = d.judge;
+  view.append(h('div', { class: 'cols' },
+    h('div', { class: 'card' }, h('h3', {}, 'Judge'),
+      judge ? h('div', {}, h('p', {}, 'verdict: ' + (judge.own_verdict || 'none'), judge.critique ? ' - ' + judge.critique : ''),
+        h('ul', { class: 'list' }, judge.findings.map((f) => h('li', {}, h('span', { class: 'sev ' + f.severity }, f.severity), f.defect_code,
+          f.comment ? ' - ' + f.comment : '')), judge.findings.length ? null : h('li', { class: 'muted' }, 'no findings')))
+        : h('p', { class: 'muted' }, 'No judgment stored for this attempt.'),
+      d.mine ? h('p', { class: 'muted' }, 'Your earlier review: ' + d.mine.verdict + ', ' + d.mine.findings.length + ' findings (drawn solid). A new one adds to it.') : null),
+    h('div', { class: 'card' }, h('h3', {}, 'Your findings (not saved until you give a verdict)'), h('ul', { class: 'list', id: 'pending' }), h('div', { id: 'draft' })),
+    h('div', { class: 'card' }, h('h3', {}, 'Verdict'),
+      h('div', { class: 'row' },
+        h('button', { class: 'big ok', onclick: () => submitReview('usable') }, kbd('u'), ' Usable'),
+        h('button', { class: 'big no', onclick: () => submitReview('unusable') }, kbd('x'), ' Unusable')),
+      h('div', { class: 'row' }, h('input', { type: 'text', id: 'vcomment', placeholder: 'comment on the verdict (optional), key m', maxlength: '2000' })))));
+  paintMine();
+}
+
+// --- blind comparison ---------------------------------------------------------------------------------------
+
+async function loadCompare(a, b) {
+  S.cmpA = a; S.cmpB = b; S.cmpIdx = 0;
+  S.cmp = await api('/api/compare?run_a=' + a + '&run_b=' + b);
+  const url = new URL(location.href);
+  url.searchParams.set('compare', a + ',' + b);
+  history.replaceState(null, '', url);
+  render();
+  const first = S.cmp.items[0];
+  if (first) { preload(first.left); preload(first.right); }
+}
+
+async function answer(kind) {
+  const item = S.cmp && S.cmp.items[S.cmpIdx];
+  if (!item || S.busy) { return; }
+  S.busy = true;
+  const leftIsA = item.shown_left === item.attempt_a;
+  const choice = kind === 'left' ? (leftIsA ? 'a' : 'b') : kind === 'right' ? (leftIsA ? 'b' : 'a') : kind;
+  try {
+    await api('/api/preference', { attempt_a: item.attempt_a, attempt_b: item.attempt_b, shown_left: item.shown_left, choice });
+    say('Saved.');
+  } catch (error) {
+    if (error.code !== 'already_compared') { fail(error); S.busy = false; return; }
+    say('Already compared; skipped.');
+  }
+  S.cmp.items.splice(S.cmpIdx, 1);
+  S.cmp.left = S.cmp.items.length;
+  S.cmpIdx = Math.min(S.cmpIdx, S.cmp.items.length - 1);
+  S.busy = false;
+  render();
+  const next = S.cmp.items[S.cmpIdx];
+  if (next) { preload(next.left); preload(next.right); }
+}
+
+function renderCompare(view) {
+  if (!S.cmp) {
+    const runs = S.meta.runs;
+    const first = h('select', { id: 'runa' }, runs.map((r) => h('option', { value: r.run_id }, 'run ' + r.run_id)));
+    const second = h('select', { id: 'runb' }, runs.map((r) => h('option', { value: r.run_id }, 'run ' + r.run_id)));
+    if (runs.length > 1) { second.value = String(runs[1].run_id); }
+    view.append(h('div', { class: 'card' }, h('h3', {}, 'Blind comparison of two runs'),
+      h('p', {}, 'For each photo in both runs whose best results differ, you see them side by side, in an order fixed for you, without the engine.'),
+      h('div', { class: 'row' }, first, second,
+        h('button', { class: 'big', onclick: () => loadCompare(Number(first.value), Number(second.value)).catch(fail) }, 'Start'))));
+    return;
+  }
+  const item = S.cmp.items[S.cmpIdx];
+  if (!item) { view.append(h('div', { class: 'card' }, h('p', {}, S.cmp.total ? 'Every pair is compared. Thank you.' : 'No photo has differing results in these two runs.'))); return; }
+  view.append(h('div', { class: 'status' }, h('span', { class: 'name' }, item.name), h('span', { class: 'muted' }, 'pair ' + (S.cmpIdx + 1) + ' of ' + S.cmp.items.length + ' still open')));
+  // one row, so both candidates are visible without scrolling, each beside the original
+  view.append(h('div', { class: 'panels three' },
+    figure([h('span', {}, 'Left'), h('span', {}, kbd('1'), ' better')], plainImage(item.left, 'left candidate')),
+    figure('Original', plainImage(item.original, 'original')),
+    figure([h('span', {}, 'Right'), h('span', {}, kbd('2'), ' better')], plainImage(item.right, 'right candidate'))));
+  view.append(h('div', { class: 'row' },
+    h('button', { class: 'big', onclick: () => answer('left') }, kbd('1'), ' Left is better'),
+    h('button', { class: 'big', onclick: () => answer('right') }, kbd('2'), ' Right is better'),
+    h('button', { class: 'big', onclick: () => answer('equal') }, kbd('='), ' Equal'),
+    h('button', { class: 'big no', onclick: () => answer('both_unusable') }, kbd('0'), ' Both unusable')));
+}
+
+// --- delivery -----------------------------------------------------------------------------------------------
+
+async function loadDelivery() {
+  S.del = await api('/api/delivery');
+  const first = S.del.items.findIndex((item) => !isHuman(item));
+  setDelivery(first >= 0 ? first : 0);
+}
+
+const isHuman = (item) => item.decision && String(item.decision.decided_by).startsWith('human:');
+
+function setDelivery(index) {
+  const items = S.del.items;
+  S.delIdx = Math.max(0, Math.min(items.length - 1, index));
+  const item = items[S.delIdx];
+  S.delPick = 0;
+  if (item) {
+    const chosen = item.decision && item.decision.attempt_id ? item.candidates.findIndex((c) => c.attempt_id === item.decision.attempt_id) : -1;
+    if (chosen >= 0) { S.delPick = chosen; }
+    else {
+      const score = (c) => (c.blocking == null ? 1e9 : c.blocking * 1000 + c.minor);
+      let best = 0;
+      item.candidates.forEach((c, i) => { if (score(c) < score(item.candidates[best])) { best = i; } });
+      S.delPick = best;
+    }
+    const next = items[S.delIdx + 1];
+    if (next) { preload(next.original); if (next.candidates[0]) { preload(next.candidates[0].image); } }
+  }
+  render();
+}
+
+async function decide(outcome) {
+  const item = S.del && S.del.items[S.delIdx];
+  if (!item || S.busy) { return; }
+  const pick = item.candidates[S.delPick];
+  if (outcome === 'emptied' && !pick) { say('This photo has no candidate to deliver.', true); return; }
+  S.busy = true;
+  try {
+    const reason = $('reason') ? $('reason').value : '';
+    const attemptId = outcome === 'emptied' ? pick.attempt_id : null;
+    await api('/api/delivery', { photo_id: item.photo_id, outcome, attempt_id: attemptId, reason: reason || null });
+    item.decision = { outcome, attempt_id: attemptId, decided_by: 'human:' + S.meta.reviewer, reason: reason || null };
+    S.del.left = S.del.items.filter((i) => !isHuman(i)).length;
+    say('Decided: ' + item.name + ' is ' + outcome + '.');
+    const items = S.del.items;
+    let next = -1;
+    for (let step = 1; step <= items.length; step++) {
+      const candidate = (S.delIdx + step) % items.length;
+      if (!isHuman(items[candidate])) { next = candidate; break; }
+    }
+    setDelivery(next >= 0 ? next : S.delIdx);
+  } catch (error) { fail(error); } finally { S.busy = false; }
+}
+
+function renderDelivery(view) {
+  const item = S.del.items[S.delIdx];
+  if (!item) { view.append(h('p', {}, 'No photo in the project.')); return; }
+  const d = item.decision;
+  view.append(h('div', { class: 'status' },
+    h('span', { class: 'name' }, item.name), item.group ? h('span', { class: 'muted' }, item.group) : null,
+    h('span', { class: 'muted' }, 'photo ' + (S.delIdx + 1) + ' of ' + S.del.items.length),
+    d ? h('span', { class: isHuman(item) ? 'good' : 'muted' }, 'now: ' + d.outcome + (d.attempt_id ? ' (attempt ' + d.attempt_id + ')' : '') + ' by ' + d.decided_by)
+      : h('span', { class: 'muted' }, 'no decision yet')));
+  const pick = item.candidates[S.delPick];
+  view.append(h('div', { class: 'panels two' }, figure('Original', plainImage(item.original, 'original')),
+    figure(pick ? 'Candidate: attempt ' + pick.attempt_id + ', run ' + pick.run_id : 'No candidate', pick ? plainImage(pick.image, 'candidate') : null)));
+  view.append(h('div', { class: 'pick' }, item.candidates.map((c, i) => h('button', {
+    'aria-pressed': i === S.delPick ? 'true' : 'false', onclick: () => { S.delPick = i; render(); },
+  }, i < 9 ? kbd(i + 1) : null, ' attempt ' + c.attempt_id + ' (run ' + c.run_id + ')',
+  c.blocking == null ? '' : ', judge: ' + c.blocking + ' blocking, ' + c.minor + ' minor', c.my_verdict ? ', yours: ' + c.my_verdict : ''))));
+  view.append(h('div', { class: 'row' },
+    h('button', { class: 'big ok', onclick: () => decide('emptied') }, kbd('e'), ' Emptied'),
+    h('button', { class: 'big', onclick: () => decide('original') }, kbd('o'), ' Keep original'),
+    h('button', { class: 'big no', onclick: () => decide('excluded') }, kbd('x'), ' Exclude'),
+    h('input', { type: 'text', id: 'reason', placeholder: 'reason (optional), key r', maxlength: '2000' })));
+}
+
+// --- frame --------------------------------------------------------------------------------------------------
+
+function render() {
+  const view = $('view');
+  view.replaceChildren();
+  $('tabs').replaceChildren(...[['review', 'Review', 'g r'], ['compare', 'Compare', 'g c'], ['delivery', 'Delivery', 'g d']].map(([id, label, keys]) =>
+    h('button', { 'aria-pressed': S.view === id ? 'true' : 'false', title: keys, onclick: () => setView(id) }, label)));
+  const controls = $('controls');
+  controls.replaceChildren();
+  let count = '';
+  if (S.view === 'review') {
+    controls.append(h('select', { 'aria-label': 'run', onchange: (ev) => loadQueue(Number(ev.target.value)).catch(fail) },
+      S.meta.runs.map((r) => h('option', { value: r.run_id, selected: r.run_id === S.run }, 'run ' + r.run_id + (r.label ? ' ' + r.label : '') + ' (' + r.candidates + ' results)'))));
+    if (S.queue) { count = S.queue.left + ' left of ' + S.queue.total; }
+    renderReview(view);
+  } else if (S.view === 'compare') {
+    if (S.cmp) { count = S.cmp.left + ' pairs left of ' + S.cmp.total; }
+    renderCompare(view);
+  } else {
+    if (S.del) { count = S.del.left + ' photos left of ' + S.del.total; renderDelivery(view); }
+  }
+  $('count').textContent = count;
+  const hints = {
+    review: [['u', 'usable'], ['x', 'unusable'], ['f', 'finding on the whole image'], ['1-9', 'defect'], ['s', 'severity'], ['c', 'comment'], ['Enter', 'add'], ['Esc', 'cancel'], ['Backspace', 'remove last'], ['Space', 'show original'], ['m', 'verdict comment'], ['← →', 'move']],
+    compare: [['1', 'left better'], ['2', 'right better'], ['=', 'equal'], ['0', 'both unusable'], ['← →', 'move']],
+    delivery: [['e', 'emptied'], ['o', 'original'], ['x', 'excluded'], ['1-9', 'pick candidate'], ['r', 'reason'], ['← →', 'move']],
+  }[S.view];
+  $('hints').replaceChildren(...hints.map(([key, label]) => h('span', {}, kbd(key), ' ' + label)), h('span', {}, kbd('g'), ' then ', kbd('r'), '/', kbd('c'), '/', kbd('d'), ' switch view'));
+}
+
+async function setView(view) {
+  S.view = view;
+  try {
+    if (view === 'delivery') { await loadDelivery(); return; }
+    if (view === 'review' && !S.queue && S.run !== null) { await loadQueue(S.run); return; }
+  } catch (error) { fail(error); }
+  render();
+}
+
+// --- keyboard -----------------------------------------------------------------------------------------------
+
+function digitOf(ev) {
+  const match = /^(?:Digit|Numpad)([0-9])$/.exec(ev.code || '');
+  if (match) { return Number(match[1]); }
+  return /^[0-9]$/.test(ev.key) ? Number(ev.key) : null;
+}
+
+function move(delta) {
+  if (S.view === 'review' && S.queue) { openItem(S.idx + delta).catch(fail); }
+  else if (S.view === 'compare' && S.cmp && S.cmp.items.length) {
+    S.cmpIdx = Math.max(0, Math.min(S.cmp.items.length - 1, S.cmpIdx + delta)); render();
+  } else if (S.view === 'delivery' && S.del) { setDelivery(S.delIdx + delta); }
+}
+
+document.addEventListener('keydown', (ev) => {
+  if (ev.ctrlKey || ev.metaKey || ev.altKey) { return; }
+  const target = ev.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) {
+    if (ev.key === 'Escape') { target.blur(); }
+    return;
+  }
+  const key = ev.key.length === 1 ? ev.key.toLowerCase() : ev.key;
+  if (S.chord) {
+    S.chord = false;
+    const to = { r: 'review', c: 'compare', d: 'delivery' }[key];
+    if (to) { ev.preventDefault(); setView(to); return; }
+  }
+  if (key === 'g') { S.chord = true; setTimeout(() => { S.chord = false; }, 900); return; }
+  if (key === 'ArrowLeft') { ev.preventDefault(); move(-1); return; }
+  if (key === 'ArrowRight') { ev.preventDefault(); move(1); return; }
+  const digit = digitOf(ev);
+  if (S.view === 'review' && S.detail) {
+    if (S.draft && digit !== null && digit >= 1 && digit <= defectKeyList().length) { ev.preventDefault(); S.draft.code = defectKeyList()[digit - 1].code; paintDraft(); paintMine(); return; }
+    if (key === 'u') { ev.preventDefault(); submitReview('usable'); }
+    else if (key === 'x') { ev.preventDefault(); submitReview('unusable'); }
+    else if (key === 'f') { ev.preventDefault(); S.draft = { box: null, code: null, severity: 'blocking', comment: '' }; paintMine(); }
+    else if (key === 's') { ev.preventDefault(); toggleSeverity(); }
+    else if (key === 'c' && S.draft) { ev.preventDefault(); const input = $('dcomment'); if (input) { input.focus(); } }
+    else if (key === 'm') { ev.preventDefault(); $('vcomment').focus(); }
+    else if (key === 'Enter' && S.draft) { ev.preventDefault(); commitDraft(); }
+    else if (key === 'Escape' && S.draft) { ev.preventDefault(); S.draft = null; paintMine(); }
+    else if (key === 'Backspace' && pending().length) { ev.preventDefault(); pending().pop(); paintMine(); }
+    else if (key === ' ') {
+      ev.preventDefault(); S.swapped = !S.swapped;
+      $('cand').src = imageUrl(S.swapped ? S.detail.original : S.detail.candidate);
+    }
+  } else if (S.view === 'compare' && S.cmp) {
+    if (digit === 1) { ev.preventDefault(); answer('left'); }
+    else if (digit === 2) { ev.preventDefault(); answer('right'); }
+    else if (digit === 0) { ev.preventDefault(); answer('both_unusable'); }
+    else if (ev.key === '=' || ev.code === 'Equal') { ev.preventDefault(); answer('equal'); }
+  } else if (S.view === 'delivery' && S.del) {
+    const item = S.del.items[S.delIdx];
+    if (item && digit !== null && digit >= 1 && digit <= Math.min(9, item.candidates.length)) { ev.preventDefault(); S.delPick = digit - 1; render(); }
+    else if (key === 'e') { ev.preventDefault(); decide('emptied'); }
+    else if (key === 'o') { ev.preventDefault(); decide('original'); }
+    else if (key === 'x') { ev.preventDefault(); decide('excluded'); }
+    else if (key === 'r') { ev.preventDefault(); const input = $('reason'); if (input) { input.focus(); } }
+  }
+});
+
+document.addEventListener('click', (ev) => { if (ev.target instanceof HTMLButtonElement) { ev.target.blur(); } });
+
+// --- start --------------------------------------------------------------------------------------------------
+
+(async () => {
+  if (!token) { say('Open the link printed by the review command: it carries the session token.', true); return; }
+  try {
+    S.meta = await api('/api/meta');
+    const params = new URLSearchParams(location.search);
+    const withResults = S.meta.runs.filter((r) => r.candidates > 0);
+    const wanted = Number(params.get('run'));
+    S.run = S.meta.runs.some((r) => r.run_id === wanted) ? wanted : (withResults.length ? withResults[withResults.length - 1].run_id : null);
+    const compare = /^(\d+),(\d+)$/.exec(params.get('compare') || '');
+    if (compare) { S.view = 'compare'; await loadCompare(Number(compare[1]), Number(compare[2])); return; }
+    if (S.run === null) { render(); say('No run has a result to review yet.'); return; }
+    await loadQueue(S.run);
+  } catch (error) { fail(error); }
+})();
+})();
+</script>
+</body>
+</html>

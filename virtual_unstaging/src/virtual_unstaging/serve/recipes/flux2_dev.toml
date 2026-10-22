@@ -1,0 +1,42 @@
+# FLUX.2 [dev]: 32B rectified-flow editor with multi-reference input, no mask argument.
+# Verified: pipeline class (model_index.json), the __call__ arguments (diffusers source), the card's defaults
+# (50 steps, guidance 4.0), commit and licence. Unverified: see `unverified`.
+name = "flux2_dev"
+adapter = "diffusers"
+licence = "FLUX Non-Commercial License (the card allows personal, scientific and commercial use of the outputs)"
+unverified = ["placement", "max_images", "output_side"]
+notes = [
+  "The repository is gated: accept its terms with the account whose token the server uses.",
+  "A 32B transformer and a 24B text encoder do not fit one 80 GB card in bfloat16: the recipe offloads whole models to the CPU; two cards or a quantized build are the alternatives.",
+  "Does not fit one 80 GB GPU beside a judge: the text encoder alone is 48 GB in bfloat16 and FP8 storage applies only to the transformer.",
+  "Reference count: the diffusers announcement says up to ten, the vendor's documentation recommends at most six; the recipe takes six.",
+]
+
+[pipeline]
+class = "Flux2Pipeline"
+repository = "black-forest-labs/FLUX.2-dev"
+revision = "26afe3a78bb242c0a8bb181dcc8937bb16e5c66c"
+dtype = "bfloat16"
+placement = "model_cpu_offload"
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 6
+native_mask = false
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 50
+guidance_scale = 4.0

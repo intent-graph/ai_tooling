@@ -1,0 +1,88 @@
+"""A small HTTP client on the standard library: bearer key, own User-Agent, timeouts, bounded retries."""
+
+from __future__ import annotations
+
+import json
+import time
+import urllib.error
+import urllib.request
+from dataclasses import dataclass
+from typing import Any
+
+from virtual_unstaging import __version__
+
+USER_AGENT = f"virtual-unstaging/{__version__}"
+RETRY_STATUSES = {429, 502, 503, 504}
+
+
+class EndpointError(RuntimeError):
+    """A failed call, with a stable code: the server's error code, or one of ours for transport failures."""
+
+    def __init__(self, code: str, message: str, status: int | None = None) -> None:
+        super().__init__(f"{code}: {message}")
+        self.code = code
+        self.status = status
+
+
+@dataclass(frozen=True)
+class Endpoint:
+    base_url: str
+    key: str | None
+    timeout: float = 600.0
+    retries: int = 3
+
+    def url(self, path: str) -> str:
+        return self.base_url.rstrip("/") + "/" + path.lstrip("/")
+
+
+def request(
+    endpoint: Endpoint,
+    method: str,
+    path: str,
+    body: bytes | None = None,
+    content_type: str | None = None,
+    accept: str = "application/json",
+    extra_headers: dict[str, str] | None = None,
+) -> tuple[int, bytes, str]:
+    """Send one request; retry transport failures and 429 / 502-504 with backoff. Returns status, body, type."""
+    headers = {"User-Agent": USER_AGENT, "Accept": accept, **(extra_headers or {})}
+    if endpoint.key:
+        headers["Authorization"] = f"Bearer {endpoint.key}"
+    if content_type:
+        headers["Content-Type"] = content_type
+    last: EndpointError | None = None
+    for attempt in range(endpoint.retries + 1):
+        if attempt:
+            time.sleep(min(2.0**attempt, 30.0))
+        req = urllib.request.Request(endpoint.url(path), data=body, method=method, headers=headers)
+        try:
+            with urllib.request.urlopen(req, timeout=endpoint.timeout) as response:
+                return response.status, response.read(), response.headers.get("Content-Type", "")
+        except urllib.error.HTTPError as error:
+            payload = error.read()
+            last = _error_from(error.code, payload)
+            if error.code not in RETRY_STATUSES or last.code == "deadline_reached":
+                raise last from None
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as error:
+            last = EndpointError("endpoint_unreachable", f"{endpoint.url(path)}: {error}")
+    assert last is not None
+    raise last
+
+
+def request_json(endpoint: Endpoint, method: str, path: str, payload: object | None = None) -> Any:
+    body = None if payload is None else json.dumps(payload).encode("utf-8")
+    _, data, _ = request(endpoint, method, path, body, "application/json" if body is not None else None)
+    try:
+        return json.loads(data)
+    except json.JSONDecodeError as error:
+        raise EndpointError("bad_response", f"{path}: not JSON ({error})") from None
+
+
+def _error_from(status: int, payload: bytes) -> EndpointError:
+    try:
+        error = json.loads(payload)["error"]
+        return EndpointError(str(error["code"]), str(error.get("message", "")), status)
+    except (ValueError, KeyError, TypeError):
+        text = payload[:300].decode("utf-8", "replace")
+        code = "unauthorized" if status == 401 else "http_error"
+        return EndpointError(code, f"HTTP {status}: {text}", status)

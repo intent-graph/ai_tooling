@@ -1,0 +1,107 @@
+[project]
+name = "virtual-unstaging"
+version = "0.1.0"
+description = "Empty interior photos of their furniture with an image-editing model steered by a judge model"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26",
+    "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+# GPU side: the tool server, its generator adapters and tools.
+serve = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "torch>=2.6",
+    "torchvision",
+    "diffusers>=0.41",
+    "transformers>=4.56",
+    "accelerate>=1.0",
+    "peft>=0.17",  # diffusers' LoRA loading (recipe key `lora`)
+    "opencv-python-headless>=4.9",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "import-linter>=2.1",
+    "fastapi>=0.110",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+unstage = "virtual_unstaging.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/virtual_unstaging"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["virtual_unstaging"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["torch", "torch.*", "transformers", "transformers.*", "diffusers", "diffusers.*", "cv2", "cv2.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["virtual_unstaging.serve.*"]
+ignore_missing_imports = true
+disallow_untyped_calls = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra -q --strict-markers"
+
+# Declared layering (design: components and layering), checked by `lint-imports` with the tests.
+[tool.importlinter]
+root_package = "virtual_unstaging"
+
+[[tool.importlinter.contracts]]
+name = "Layers: presentation, application, adapters, pure core, domain"
+type = "layers"
+layers = [
+    "virtual_unstaging.cli",
+    "virtual_unstaging.review",
+    "virtual_unstaging.loop1 | virtual_unstaging.stage0 | virtual_unstaging.report | virtual_unstaging.provision",
+    "virtual_unstaging.judge | virtual_unstaging.clients | virtual_unstaging.store | virtual_unstaging.config",
+    "virtual_unstaging.registry | virtual_unstaging.instructions | virtual_unstaging.engines | virtual_unstaging.tools",
+    "virtual_unstaging.imaging",
+    "virtual_unstaging.domain",
+]
+ignore_imports = ["virtual_unstaging.cli -> virtual_unstaging.serve.app"]
+unmatched_ignore_imports_alerting = "warn"
+
+[[tool.importlinter.contracts]]
+name = "The GPU side depends on the domain only"
+type = "forbidden"
+source_modules = ["virtual_unstaging.serve"]
+forbidden_modules = [
+    "virtual_unstaging.store",
+    "virtual_unstaging.loop1",
+    "virtual_unstaging.stage0",
+    "virtual_unstaging.judge",
+    "virtual_unstaging.engines",
+    "virtual_unstaging.registry",
+    "virtual_unstaging.review",
+    "virtual_unstaging.report",
+]

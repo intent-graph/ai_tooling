@@ -16,3 +16,4 @@ doc_manifest_*
 *.code-workspace
 **/.claude/settings.local.json
 *.env
+.import_linter_cache/

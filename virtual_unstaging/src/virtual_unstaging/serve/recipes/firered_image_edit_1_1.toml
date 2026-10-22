@@ -1,0 +1,44 @@
+# FireRed-Image-Edit-1.1: shares the Qwen-Image-Edit-Plus pipeline class; one to three condition images natively.
+# Verified: pipeline class (model_index.json), the __call__ arguments (diffusers source), commit and licence.
+# Unverified: the card gives no steps or guidance values, so the defaults are the Qwen-Image-Edit-Plus ones.
+name = "firered_image_edit_1_1"
+adapter = "diffusers"
+licence = "Apache-2.0"
+unverified = ["defaults", "placement", "fp8_storage", "max_images", "output_side"]
+notes = [
+  "The card's example is `pipe(image=input_image, prompt=prompt)` with DiffusionPipeline, bfloat16, device_map cuda.",
+  "The 20.4B transformer (40.9 GB in bfloat16) is stored in FP8 (20.4 GB) and whole models move to the GPU in turn: the peak is about one 20 GB model plus activations (inferred, not run). Sized to share one 80 GB GPU with an FP8 judge (about 36 GB): the generator must peak under about 40 GB.",
+  "No mask argument and no documented mask handling: the mask rides as a condition image, in request order.",
+]
+
+[pipeline]
+class = "QwenImageEditPlusPipeline"
+repository = "FireRedTeam/FireRed-Image-Edit-1.1"
+revision = "3bc3f2a12722fd9883eb6357500de191d56baaf5"
+dtype = "bfloat16"
+placement = "model_cpu_offload"  # a 20B transformer plus an 8B text encoder (inferred, not run)
+fp8_storage = ["transformer"]
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 3              # the survey reports one to three natively
+native_mask = false
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 40
+true_cfg_scale = 4.0
+guidance_scale = 1.0
+negative_prompt = " "

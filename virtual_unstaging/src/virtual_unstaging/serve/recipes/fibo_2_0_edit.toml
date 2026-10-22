@@ -1,0 +1,45 @@
+# Fibo 2.0 Edit (the distilled "edit turbo" weights): native mask, four reference images, four steps, no guidance.
+# Verified: pipeline class (model_index.json), the __call__ arguments including `mask` and `generator` (diffusers source: white = the
+# region to regenerate, exactly one image in `image` when a mask is given, same size as that image), the card's call
+# (4 steps, guidance 1.0), commit and licence. Unverified: see `unverified`.
+name = "fibo_2_0_edit"
+adapter = "diffusers"
+licence = "CC BY-NC 4.0 (bria-fibo); commercial use needs an agreement with the vendor"
+unverified = ["placement", "output_side"]
+notes = [
+  "The class BriaFibo2Pipeline is in diffusers' main branch, not in release 0.41.0: install diffusers from main.",
+  "The repository is gated behind a form.",
+  "The card builds its prompt as a JSON caption with the vendor's bria-vgl package, which calls a hosted model. The pipeline's source also accepts a plain edit instruction; whether that is as good is not verified, and the recipe sends the plain text.",
+  "With the native mask only the original may be sent: a request with a mask and a further image is refused as bad_request.",
+]
+
+[pipeline]
+class = "BriaFibo2Pipeline"
+repository = "briaai/Fibo-2.0-edit-turbo"
+revision = "7a7f8221ccec999ccac0ea309b93e859e1f49ab5"
+dtype = "bfloat16"
+placement = "cuda"          # 8B transformer plus a text encoder (inferred, not run)
+
+[inputs]
+roles = ["original", "reference", "removal_mask"]
+max_images = 4
+native_mask = true
+mask_argument = "mask"
+max_images_with_native_mask = 1
+image_argument = "image"
+image_passing = "single_when_one"
+prompt_argument = "prompt"
+seed_argument = "generator"
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 4
+guidance_scale = 1.0
