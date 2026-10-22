@@ -194,8 +194,12 @@ def render_assessment(iteration: int, kind: str, judgment: Judgment, measures: S
         cited = "" if not f.regions else " in region" + ("s " if len(f.regions) > 1 else " ") + _numbers(f.regions)
         lines.append(f"- finding {f.code}{where}{cited}: {f.comment}")
     for r in judgment.regions:
+        if not r.answered:
+            lines.append(f"- region {r.region}: no single answer")
+            continue
         held = f"items {_numbers(r.items)}" if r.items else "no item"
-        lines.append(f"- region {r.region} holds {held}")
+        other = " and another change" if r.other_change else ""
+        lines.append(f"- region {r.region} holds {held}{other}")
     for rank, text in enumerate(judgment.guidance, start=1):
         lines.append(f"- guidance {rank}: {text}")
     if len(lines) == 1:
@@ -235,36 +239,59 @@ def parse_json_answer(answer: str) -> Any:
         raise ComposeError("the answer is not JSON") from None
 
 
+DERIVED_CODES = frozenset({"opening_changed"})  # written by the code from the openings checklist, never by a judge
+CHANGED_OPENING = ("changed", "vanished")
+
+
 def parse_judgment(answer: str, stage: str, item_count: int, allowed_codes: set[str], region_count: int = 0) -> Judgment:
     """A judge's answer, at the trust boundary: codes from the stage's reasons, boxes in thousandths turned into
-    [0, 1]. A degenerate finding box becomes no box; an unknown item or region number is left out, as is a region's
-    second answer. Every region 1..region_count is in the result; one without an answer holds no item. Anything else
-    malformed rejects the answer."""
+    [0, 1]. A degenerate finding box becomes no box; an unknown item or region number is left out. For the pair
+    judge: every region 1..region_count is in the result, and one left out or answered twice is not answered (it
+    fails the explained-change test); each opening of the checklist `changed` or `vanished`, and each one that
+    `appeared`, becomes an `opening_changed` finding. Anything else malformed rejects the answer."""
     data = parse_json_answer(answer)
     try:
         findings = []
+        if stage == "clutter":
+            for raw in data["openings"]:
+                status = str(raw["status"])
+                if status not in ("unchanged", "partly_hidden", *CHANGED_OPENING):
+                    raise ComposeError(f"opening status {status!r}")
+                if status in CHANGED_OPENING:
+                    findings.append(_opening(raw, status, region_count))
+            findings += [_opening(raw, "appeared", region_count) for raw in data["appeared"]]
         for raw in data["findings"]:
             code = str(raw["code"])
-            if code not in allowed_codes:
-                raise ComposeError(f"finding code {code!r} is not a {stage} code")
+            if code not in allowed_codes or code in DERIVED_CODES:
+                raise ComposeError(f"finding code {code!r} is not a {stage} code a judge writes")
             severity = raw.get("severity")
             if severity not in ("blocking", "minor"):
                 raise ComposeError(f"severity {severity!r}")
             cited = _ordinals(raw.get("regions", []), region_count)
             findings.append(Finding(code, severity, _box(raw.get("box")), str(raw.get("comment", ""))[:1000], cited))
         guidance = tuple(str(g)[:1000] for g in data["guidance"])
-        regions: dict[int, RegionItems] = {}
+        answers: dict[int, list[RegionItems]] = {}
         if stage == "clutter":
             for raw in data["regions"]:
                 n = int(raw["region"])
-                if 1 <= n <= region_count and n not in regions:
-                    regions[n] = RegionItems(n, _ordinals(raw["items"], item_count))
+                other = raw["other_change"]
+                if not isinstance(other, bool):
+                    raise ComposeError(f"other_change {other!r}")
+                if 1 <= n <= region_count:
+                    answers.setdefault(n, []).append(RegionItems(n, _ordinals(raw["items"], item_count), other))
     except (KeyError, TypeError, ValueError) as error:
         if isinstance(error, ComposeError):
             raise
         raise ComposeError(f"malformed judgment: {error!r}") from None
-    every = tuple(regions.get(n, RegionItems(n, ())) for n in range(1, region_count + 1)) if stage == "clutter" else ()
-    return Judgment(tuple(findings), guidance, every)
+    regions = tuple(given[0] if len(given := answers.get(n, [])) == 1 else RegionItems(n, (), False, answered=False)
+                    for n in range(1, region_count + 1)) if stage == "clutter" else ()
+    return Judgment(tuple(findings), guidance, regions)
+
+
+def _opening(raw: dict[str, Any], status: str, region_count: int) -> Finding:
+    kind, where = str(raw["kind"])[:20], str(raw["where"])[:200]
+    return Finding("opening_changed", "blocking", None, f"{kind}, {where}: {status}",
+                   _ordinals(raw["regions"], region_count))
 
 
 def _ordinals(raw: object, count: int) -> tuple[int, ...]:

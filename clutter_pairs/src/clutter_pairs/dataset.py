@@ -23,6 +23,7 @@ from clutter_pairs.store import repo
 from clutter_pairs.store.db import DB_NAME, connect, open_store, transaction, utc_now
 
 DECISION_RULE = "decision_rules/carry_forward.md"
+ALWAYS_BLOCKING = ("opening_changed",)  # owner, 2026-10-22: a changed opening is the worst defect a pair can carry
 
 
 @dataclass(frozen=True)
@@ -61,6 +62,10 @@ class Dataset:
 
     def severities(self) -> dict[str, str]:
         return {code: r.severity for code, r in self.reasons.items()}
+
+    def judge_codes(self, stage: str) -> set[str]:
+        """The codes a judge's answer may carry at a stage."""
+        return {c for c, r in self.reasons.items() if r.stage in (stage, "both") and r.by in ("judge", "both")}
 
 
 def packaged_files() -> list[str]:
@@ -103,6 +108,9 @@ def parse_reasons(text: str) -> dict[str, Reason]:
                 or body.get("severity") not in ("blocking", "minor") or body.get("by") not in ("judge", "pixels", "both")):
             raise ConfigError(f"reasons.toml [{code}]: stage, severity and by are required")
         out[code] = Reason(body["stage"], body["severity"], body["by"])
+    for code in ALWAYS_BLOCKING:
+        if code not in out or out[code].severity != "blocking" or f"{code}_minor" in out:
+            raise ConfigError(f"reasons.toml: {code} is blocking and has no _minor twin (owner's rule)")
     return out
 
 

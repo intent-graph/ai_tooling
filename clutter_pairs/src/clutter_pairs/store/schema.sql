@@ -209,10 +209,21 @@ CREATE TABLE iteration_image (
   PRIMARY KEY (iteration_id, role)
 );
 
+-- A clutter iteration's regions, computed before the pair judge (judge aid A2): the thresholds and the drawing's
+-- version used, the mask pixels left in specks. A row even when no region was numbered; audit recomputes from it.
+CREATE TABLE region_set (
+  iteration_id     INTEGER PRIMARY KEY REFERENCES iteration,
+  region_group_px  INTEGER NOT NULL CHECK (region_group_px >= 0),
+  region_min_px    INTEGER NOT NULL CHECK (region_min_px >= 1),
+  max_regions      INTEGER NOT NULL CHECK (max_regions >= 1),
+  drawing          INTEGER NOT NULL,                -- version of the regions image's drawing
+  speck_px         INTEGER NOT NULL CHECK (speck_px >= 0)
+);
+
 -- The numbered regions of a clutter iteration's change mask (pieces grouped, specks dropped, largest first): a pure
--- function of the mask and the pixel thresholds recorded on the iteration's pixel assessment; audit recomputes them.
+-- function of the mask and its region set's thresholds.
 CREATE TABLE mask_region (
-  iteration_id  INTEGER NOT NULL REFERENCES iteration,
+  iteration_id  INTEGER NOT NULL REFERENCES region_set,
   n             INTEGER NOT NULL CHECK (n >= 1),
   x0 DOUBLE PRECISION NOT NULL, y0 DOUBLE PRECISION NOT NULL, x1 DOUBLE PRECISION NOT NULL, y1 DOUBLE PRECISION NOT NULL,
   px            INTEGER NOT NULL CHECK (px > 0),     -- mask pixels in the region
@@ -311,13 +322,22 @@ CREATE TABLE finding_region (
   PRIMARY KEY (finding_id, n)
 );
 
--- The pair judge's assignment: the items each numbered region holds. A region of the iteration's mask_region with
--- no row here holds no item: an unexplained change (judge aid A2).
+-- The pair judge's answer per numbered region: whether it also holds a change that is not a listed item. A region of
+-- the iteration's mask_region with no row here was left out or answered twice: an unexplained change (judge aid A2).
+CREATE TABLE region_answer (
+  assessment_id  INTEGER NOT NULL REFERENCES assessment,
+  n              INTEGER NOT NULL CHECK (n >= 1),
+  other_change   INTEGER NOT NULL CHECK (other_change IN (0, 1)),
+  PRIMARY KEY (assessment_id, n)
+);
+
+-- The items the pair judge assigns to a region; none: the region holds no listed item.
 CREATE TABLE region_item (
-  assessment_id    INTEGER NOT NULL REFERENCES assessment,
-  n                INTEGER NOT NULL CHECK (n >= 1),
+  assessment_id    INTEGER NOT NULL,
+  n                INTEGER NOT NULL,
   clutter_item_id  INTEGER NOT NULL REFERENCES clutter_item,
-  PRIMARY KEY (assessment_id, n, clutter_item_id)
+  PRIMARY KEY (assessment_id, n, clutter_item_id),
+  FOREIGN KEY (assessment_id, n) REFERENCES region_answer
 );
 
 CREATE TABLE guidance (

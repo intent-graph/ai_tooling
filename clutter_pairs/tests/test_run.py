@@ -26,6 +26,14 @@ def test_a_run_reaches_its_pair_target_and_passes_every_audit_check(folder: Path
     for check in ("requests recomposed", "exchanges rebuilt", "pairs compared", "images checked", "regions checked"):
         assert result.checked[check] > 0
     assert ds.conn.execute("SELECT COUNT(*) FROM region_item").fetchone()[0] > 0
+    assert result.checked["judgments parsed again"] > 0
+    with ds.conn:
+        ds.conn.execute("UPDATE region_answer SET other_change = 1 WHERE rowid = (SELECT MIN(rowid) FROM region_answer)")
+    problems = audit.audit(ds).problems
+    assert any("not its call's answer parsed again" in p for p in problems)
+    assert any("explained-change assessment does not recompute" in p for p in problems)
+    with ds.conn:
+        ds.conn.execute("UPDATE region_answer SET other_change = 0")
     with ds.conn:
         ds.conn.execute("UPDATE mask_region SET px = px + 1 WHERE rowid = (SELECT MIN(rowid) FROM mask_region)")
     assert any("do not recompute" in p for p in audit.audit(ds).problems)
@@ -101,6 +109,21 @@ def test_a_change_no_item_explains_fails_the_pair(tmp_path: Path) -> None:
         ds, summary = run_dataset(tmp_path, smoke=True)
     assert summary.pairs == 0
     assert "unexplained_change" in {r[0] for r in ds.conn.execute("SELECT code FROM finding")}
+
+
+def test_an_invented_opening_fails_the_pair_and_reaches_the_reviser(tmp_path: Path) -> None:
+    with FakeModelServer(FakeBehaviour(invent_door=True)) as server:
+        write_config(tmp_path, server, pair_target=2)
+        ds, summary = run_dataset(tmp_path, smoke=True)
+    assert summary.pairs == 0
+    rows = ds.conn.execute("SELECT f.code, f.judged_severity, f.comment, fr.n FROM finding f"
+                           " LEFT JOIN finding_region fr ON fr.finding_id = f.id WHERE f.code = 'opening_changed'").fetchall()
+    assert rows and {tuple(r) for r in rows} == {("opening_changed", "blocking", "door, left wall: appeared", 1)}
+    revised = [r[0] for r in ds.conn.execute(
+        "SELECT t.content FROM composition_part cp JOIN model_call mc ON mc.id = cp.model_call_id"
+        " JOIN text_blob t ON t.sha256 = cp.text_sha WHERE mc.role = 'revise' AND cp.slot = 'assessment'")]
+    assert any("finding opening_changed in region 1: door, left wall: appeared" in t for t in revised)
+    assert audit.audit(ds).ok
 
 
 def test_a_judge_answer_off_its_contract_stops_the_loop(tmp_path: Path) -> None:

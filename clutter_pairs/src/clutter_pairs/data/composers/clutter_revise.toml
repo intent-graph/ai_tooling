@@ -1,4 +1,5 @@
-# The clutter reviser's request: its instruction, the spec, the previous instruction, its assessments, the lessons.
+# The clutter reviser's request: its instruction, the spec, the clean image, the previous instruction, its
+# assessments, the lessons.
 role = "revise"
 request = "chat"
 renderer = "spec_text"
@@ -14,6 +15,7 @@ content = [{ slot = "instruction" }]
 role = "user"
 content = [
   { slot = "spec", header = "The room, the view and the clutter to add:" },
+  { slot = "clean", header = "The photograph of the empty room:" },
   { slot = "previous", header = "The previous instruction:" },
   { slot = "assessment", header = "What the result was found to have:" },
   { slot = "lesson", header = "Lessons learned from earlier images, to follow:" },

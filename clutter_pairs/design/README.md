@@ -75,7 +75,7 @@ Each is checkable; each check becomes a test or an `audit` check.
 
 | # | Property | Check |
 |---|---|---|
-| P1 | **Pair truth:** clean and cluttered images are equal wherever the mask's alpha is 0, and every change inside the mask is a specified item | audit compares the pixels; a numbered mask region the judge assigns no item fails the pair (`unexplained_change`) |
+| P1 | **Pair truth:** clean and cluttered images are equal wherever the mask's alpha is 0, and every change inside the mask is a specified item | audit compares the pixels; a numbered mask region the judge assigns no item, or another change, fails the pair, as do specks above their limit (`unexplained_change`) |
 | P2 | Every image is **replayable** | a finished run started again makes zero model calls |
 | P3 | Every model is **swappable**: no model name, weight path or provider in code outside adapters and configuration | the test suite runs end to end on fake adapters |
 | P4 | **No GPU without a deadline;** a run stops at its pair target or at the rental's deadline | provisioning refuses to start without a limit; no call starts that the deadline would cut |
@@ -248,8 +248,8 @@ its call is recorded like any other.
 ### C5 The checks, cheapest first
 <!-- Lines 250-254 -->
 
-Pixel tests before the judge (size, shift, global repaint, mask share); the judge on a fixed schema, locating each
-item in the clutter loop; the explained-change test; an object detector only if the judge misses leftover clutter.
+Pixel tests before the judge (size, shift, global repaint, mask share); the judge on a fixed schema, answering a checklist
+of openings and the items of each numbered mask region in the clutter loop; the explained-change test; an object detector only if the judge misses leftover clutter.
 Thresholds are set by the owner on 20 to 30 pairs early in the rental (S4).
 
 ### C6 Speed and cost

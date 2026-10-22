@@ -366,6 +366,9 @@ class SceneWork:
         parts = [self._file("instruction", "instruction", f"instructions/{stage}_{'writer' if role == 'write' else 'reviser'}.md"),
                  self._file("schema", "schema", "schemas/text.json"),
                  self._spec(subject, f"{stage}_{role}")]
+        if stage == "clutter":
+            assert loop.input_image is not None
+            parts.append(Part("clean", "image", None, loop.input_image))
         if role == "revise":
             previous = repo.prompt_call_of(self.conn, done[-1].id)
             assert previous is not None
@@ -427,7 +430,10 @@ class SceneWork:
                 images["composite"] = self._image(cluttered)
                 if judged_ok:
                     images["regions"] = self._image(pairs.draw_regions(cluttered, found, self.t))
-                    repo.add_mask_regions(self.conn, iteration.id, [(r.n, r.box, r.px) for r in found.numbered])
+                    params = {"region_group_px": self.t.region_group_px, "region_min_px": self.t.region_min_px,
+                              "max_regions": self.t.max_regions, "drawing": pairs.REGION_DRAWING}
+                    repo.add_region_set(self.conn, iteration.id, params, found.speck_px,
+                                        [(r.n, r.box, r.px) for r in found.numbered])
             for role, sha in images.items():
                 repo.add_iteration_image(self.conn, iteration.id, role, sha)
         assessments: list[tuple[str, int | None, Judgment, tuple[Measure, ...]]] = [
@@ -445,7 +451,7 @@ class SceneWork:
             judgment = self._parse(judged, "clutter", len(subject.item_ids), len(found.numbered))
             if judgment is None:
                 return None
-            explained: PixelResult = pairs.explain(found, judgment.assigned(), self.t)
+            explained: PixelResult = pairs.explain(found, judgment.regions, len(subject.item_ids), self.t)
             assessments.append(("judge", judged.id, judgment, ()))
             assessments.append(("pixel", None, Judgment(explained.findings, ()), explained.measures))
         return self._conclude(iteration.id, assessments, subject)
@@ -537,9 +543,8 @@ class SceneWork:
         return repo.call(conn, call_id)
 
     def _parse(self, call: repo.CallRow, stage: str, items: int, regions: int = 0) -> Judgment | None:
-        allowed = {c for c, r in self.ds.reasons.items() if r.stage in (stage, "both") and r.by in ("judge", "both")}
         try:
-            return parse_judgment(call.answer or "", stage, items, allowed, regions)
+            return parse_judgment(call.answer or "", stage, items, self.ds.judge_codes(stage), regions)
         except ComposeError as error:
             self._bad_answer(call.id, error)
             return None

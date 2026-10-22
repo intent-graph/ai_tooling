@@ -124,10 +124,13 @@ class Finding:
 
 @dataclass(frozen=True)
 class RegionItems:
-    """The pair judge's answer for one numbered region of the change mask: the items it holds, possibly none."""
+    """The pair judge's answer for one numbered region of the change mask: the items it holds, possibly none, and
+    whether it also holds a change that is not a listed item. A region left out or answered twice is not answered."""
 
     region: int
     items: tuple[int, ...]  # the clutter items' ordinals in their spec
+    other_change: bool = False
+    answered: bool = True
 
 
 @dataclass(frozen=True)
@@ -135,9 +138,6 @@ class Judgment:
     findings: tuple[Finding, ...]
     guidance: tuple[str, ...]
     regions: tuple[RegionItems, ...] = ()
-
-    def assigned(self) -> dict[int, tuple[int, ...]]:
-        return {r.region: r.items for r in self.regions}
 
 
 @dataclass(frozen=True)

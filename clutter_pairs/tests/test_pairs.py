@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from clutter_pairs import pairs
-from clutter_pairs.domain import Box
+from clutter_pairs.domain import Box, RegionItems
 from clutter_pairs.pairs import Thresholds
 
 
@@ -63,22 +63,40 @@ def test_regions_are_grouped_numbered_by_size_and_specks_dropped() -> None:
 
 
 def test_a_region_holding_no_item_is_unexplained() -> None:
-    t = Thresholds(region_group_px=3, region_min_px=100)
+    t = Thresholds(region_group_px=3, region_min_px=100, max_speck_share=0.01)
     found = pairs.regions(_two_patches_and_a_speck(), t)
-    result = pairs.explain(found, {1: (), 2: (1,)}, t)
-    assert [(f.code, f.box) for f in result.findings] == [("unexplained_change", Box(0.6, 0.6, 0.9, 0.9))]
+    result = pairs.explain(found, [RegionItems(1, ()), RegionItems(2, (1,))], 2, t)
+    assert [(f.code, f.box, f.regions) for f in result.findings] == [("unexplained_change", Box(0.6, 0.6, 0.9, 0.9), (1,))]
     measures = {m.name: m.value for m in result.measures}
     assert abs(measures["unexplained_share"] - 900 / 1309) < 1e-6 and measures["regions"] == 2
-    assert [f.code for f in pairs.explain(found, {1: (2,)}, t).findings] == ["unexplained_change"]  # no answer
+    assert measures["regions_unanswered"] == 0 and measures["regions_holding_every_item"] == 0
+    assert len(pairs.explain(found, [RegionItems(1, (2,))], 2, t).findings) == 1  # region 2 not answered
+    assert len(pairs.explain(found, [RegionItems(1, (2,), answered=False), RegionItems(2, (1,))], 2, t).findings) == 1
+
+
+def test_a_region_holding_an_item_and_another_change_is_unexplained() -> None:
+    """An invented door merged with the coat in front of it: the item does not explain the door."""
+    t = Thresholds(region_group_px=3, region_min_px=100, max_speck_share=0.01)
+    found = pairs.regions(_two_patches_and_a_speck(), t)
+    result = pairs.explain(found, [RegionItems(1, (1,), other_change=True), RegionItems(2, (2,))], 2, t)
+    assert [f.regions for f in result.findings] == [(1,)]
+    assert pairs.explain(found, [RegionItems(1, (1,)), RegionItems(2, (2,))], 2, t).findings == ()
+
+
+def test_specks_above_their_share_of_the_mask_are_an_unexplained_change() -> None:
+    t = Thresholds(region_group_px=3, region_min_px=100, max_speck_share=0.005)  # the speck is 9 / 1309 = 0.7 %
+    found = pairs.regions(_two_patches_and_a_speck(), t)
+    result = pairs.explain(found, [RegionItems(1, (1,)), RegionItems(2, (2,))], 2, t)
+    assert [(f.code, f.box) for f in result.findings] == [("unexplained_change", None)]
 
 
 def test_regions_past_the_cap_are_unexplained_and_not_drawn() -> None:
-    t = Thresholds(region_group_px=3, region_min_px=100, max_regions=1)
+    t = Thresholds(region_group_px=3, region_min_px=100, max_regions=1, max_speck_share=0.01)
     found = pairs.regions(_two_patches_and_a_speck(), t)
-    assert len(pairs.explain(found, {1: (1,), 2: (1,)}, t).findings) == 1
+    assert len(pairs.explain(found, [RegionItems(1, (1,)), RegionItems(2, (1,))], 1, t).findings) == 1
     cluttered = np.full((100, 100, 3), 128, dtype=np.uint8)
     drawn = pairs.draw_regions(cluttered, found, t)
-    assert (drawn[60:90, 60:90] != 128).any() and (drawn[10:30, 10:30] == 128).all()
+    assert (drawn[56:94, 56:94] != 128).any() and (drawn[6:34, 6:34] == 128).all()  # region 1 drawn, region 2 not
 
 
 def test_the_regions_image_outlines_and_numbers_each_region() -> None:
@@ -86,8 +104,10 @@ def test_the_regions_image_outlines_and_numbers_each_region() -> None:
     found = pairs.regions(_two_patches_and_a_speck(), t)
     cluttered = np.full((100, 100, 3), 128, dtype=np.uint8)
     drawn = pairs.draw_regions(cluttered, found, t)
-    assert (drawn[75, 59] == (255, 214, 0)).all()  # the outline of region 1, on its left edge
-    assert (drawn[60:80, 60:75] == 255).all(axis=-1).any()  # a white digit in the label box on its first pixel
+    mask = _two_patches_and_a_speck()
+    assert (drawn[mask] == 128).all()  # nothing drawn over a pixel of the mask
+    assert (drawn[75, 58] == (255, 214, 0)).all()  # the outline of region 1, just outside its left edge
+    assert (drawn[40:60, 55:80] == 255).all(axis=-1).any()  # a white digit in the label above region 1
     assert np.array_equal(drawn, pairs.draw_regions(cluttered, found, t))
 
 
