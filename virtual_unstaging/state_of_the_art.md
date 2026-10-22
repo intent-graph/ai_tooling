@@ -5,36 +5,38 @@ What exists for each branch of [architecture.md](architecture.md), [training.md]
 editors, prompt optimization; what it changes for the open questions.
 
 > **Status:** a budgeted literature search (23 web searches, 8 primary pages read), then a second pass on existing
-> pair benchmarks (8 searches, 10 pages read). Most per-paper facts come from search summaries and are marked
+> pair benchmarks (8 searches, 10 pages read) and a third on real empty-room photos (8 searches, 13 fetches). Most per-paper facts come from search summaries and are marked
 > *inferred*; open the paper before relying on a number.
 
 ## Table of Contents
 
-1. [Summary](#summary) _(Lines 38-54)_
-1. [Findings by branch](#findings-by-branch) _(Lines 57-57)_
-   1. [A. Paired clean/cluttered data](#a-paired-cleancluttered-data) _(Lines 60-68)_
-   1. [B. Defurnishing and object removal](#b-defurnishing-and-object-removal) _(Lines 71-75)_
-   1. [C. Judging image edits](#c-judging-image-edits) _(Lines 78-83)_
-   1. [D. Judge-guided refinement and tool-augmented agents](#d-judge-guided-refinement-and-tool-augmented-agents) _(Lines 86-90)_
-   1. [E. Prompt optimization and free-text feedback](#e-prompt-optimization-and-free-text-feedback) _(Lines 93-103)_
-1. [Detail](#detail) _(Lines 106-106)_
-   1. [0. Method and plan (written before the first search)](#0-method-and-plan-written-before-the-first-search) _(Lines 109-123)_
-   1. [1. Branch A. Paired clean/cluttered data](#1-branch-a-paired-cleancluttered-data) _(Lines 126-153)_
-      1. [Existing pair benchmarks (second pass)](#existing-pair-benchmarks-second-pass) _(Lines 156-181)_
-   1. [2. Branch B. Defurnishing and object removal](#2-branch-b-defurnishing-and-object-removal) _(Lines 184-210)_
-   1. [3. Branch C. Judging image edits](#3-branch-c-judging-image-edits) _(Lines 213-235)_
-   1. [4. Branch D. Judge-guided iterative refinement](#4-branch-d-judge-guided-iterative-refinement) _(Lines 238-257)_
-   1. [5. Branch E. Prompt optimization and free-text feedback](#5-branch-e-prompt-optimization-and-free-text-feedback) _(Lines 260-279)_
-   1. [6. Cross-branch implications (kept short)](#6-cross-branch-implications-kept-short) _(Lines 282-286)_
-   1. [7. Search log](#7-search-log) _(Lines 289-354)_
-   1. [8. Not checked, and why](#8-not-checked-and-why) _(Lines 357-371)_
+1. [Summary](#summary) _(Lines 40-56)_
+1. [Findings by branch](#findings-by-branch) _(Lines 59-59)_
+   1. [A. Paired clean/cluttered data](#a-paired-cleancluttered-data) _(Lines 62-71)_
+   1. [B. Defurnishing and object removal](#b-defurnishing-and-object-removal) _(Lines 74-78)_
+   1. [C. Judging image edits](#c-judging-image-edits) _(Lines 81-86)_
+   1. [D. Judge-guided refinement and tool-augmented agents](#d-judge-guided-refinement-and-tool-augmented-agents) _(Lines 89-93)_
+   1. [E. Prompt optimization and free-text feedback](#e-prompt-optimization-and-free-text-feedback) _(Lines 96-106)_
+1. [Detail](#detail) _(Lines 109-109)_
+   1. [0. Method and plan (written before the first search)](#0-method-and-plan-written-before-the-first-search) _(Lines 112-126)_
+   1. [1. Branch A. Paired clean/cluttered data](#1-branch-a-paired-cleancluttered-data) _(Lines 129-156)_
+      1. [Existing pair benchmarks (second pass)](#existing-pair-benchmarks-second-pass) _(Lines 159-184)_
+      1. [Real empty-room photos (third pass)](#real-empty-room-photos-third-pass) _(Lines 187-203)_
+   1. [2. Branch B. Defurnishing and object removal](#2-branch-b-defurnishing-and-object-removal) _(Lines 206-232)_
+   1. [3. Branch C. Judging image edits](#3-branch-c-judging-image-edits) _(Lines 235-257)_
+   1. [4. Branch D. Judge-guided iterative refinement](#4-branch-d-judge-guided-iterative-refinement) _(Lines 260-279)_
+   1. [5. Branch E. Prompt optimization and free-text feedback](#5-branch-e-prompt-optimization-and-free-text-feedback) _(Lines 282-301)_
+   1. [6. Cross-branch implications (kept short)](#6-cross-branch-implications-kept-short) _(Lines 304-308)_
+   1. [7. Search log](#7-search-log) _(Lines 311-386)_
+   1. [8. Not checked, and why](#8-not-checked-and-why) _(Lines 389-404)_
+
 
 
 
 ---
 
 ## Summary
-<!-- Lines 38-54 -->
+<!-- Lines 40-56 -->
 
 The field has the parts but not the assembly. Nothing found does what the design does end to end (indoor removal, steered by a tool-using VLM judge, with prompts trained offline), and no public benchmark measures it. Every branch has usable building blocks:
 
@@ -46,17 +48,17 @@ The field has the parts but not the assembly. Nothing found does what the design
 - **Generator licence:** Qwen-Image-Edit-2511 is Apache-2.0 (read on its model card); FLUX.1 Kontext [dev] is non-commercial (read).
 
 > **PIN.**
-> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused).
+> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused). Third pass on real empty-room photos (A): 8 searches (one extended), 13 fetches.
 > - Branches with no relevant work found: none came back empty; four sub-topics did: a public clutter or room taxonomy (A); an indoor defurnishing benchmark or released defurnishing code and data (B); an editing-specific study of VLM-judge bias and human agreement (C); prompt optimization against a VLM-judge objective for an image-editing generator (E).
 > - Licence or release not verified that the design depends on: 3D-FRONT licence (official page unreachable); Structured3D Terms of Use text (linked, not read); Infinigen Indoors-specific licence and furniture-off pair rendering (docs unreachable; only the repository-level BSD-3-Clause was read); HSSD licence; PIPE, PIPE_Masks and paint-by-inpaint model licences; ObjectDrop data release; OmniEraser data and code release; ObjectClear weights release (licence NTU S-Lab 1.0, non-commercial, read); EditScore weights licence (code is Apache-2.0, read); BAGEL and Step1X-Edit licences; ADE-CoT code licence; the 2026 Qwen licence claims (secondary sites only); released code or data for the Matterport defurnishing papers and for the 3D-FRONT pair-rendering paper (arXiv 2512.17955, none linked on its abstract page).
 
 ---
 
 ## Findings by branch
-<!-- Lines 57-57 -->
+<!-- Lines 59-59 -->
 
 ### A. Paired clean/cluttered data
-<!-- Lines 60-68 -->
+<!-- Lines 62-71 -->
 - Exact pairs come from 3D sources. Structured3D ships empty/simple/full configurations (inferred; 21,835 pairs over 3,500 scenes reported by a third paper) but data is gated by a Terms-of-Use form (grounded). 3D-FRONT has no pairs; render them with the recipe of arXiv 2512.17955 (BlenderProc, remove foreground furniture, same camera), whose data and code are not linked (grounded: absent on abstract page). Informs clutter_pairs open question "Which models and licences for a public dataset" and the simulation route.
 - Infinigen is BSD-3-Clause at repository level (grounded); whether Indoors renders the same camera without furniture, and the licence of its assets, are unverified (docs unreachable).
 - Real counterfactual pairs: ObjectDrop (~2,500 real before/after samples enough for removal, not for insertion; 350K bootstrapped) (inferred). Release not confirmed.
@@ -65,16 +67,17 @@ The field has the parts but not the assembly. Nothing found does what the design
 - Shortcut risk is real: inpainting detectors lean on global VAE-induced artifacts (INP-X, inferred). Informs the "shortcut cues" risk: give the clean image the same encode-decode round trip as the cluttered one (inferred proposal, untested).
 - No public clutter taxonomy or tidiness dataset found; nearest is SpatialLM's 59 furniture categories (inferred).
 - No existing benchmark to adopt (second pass): rendered panorama pairs (Structured3D, ShanghaiTech-Kujiale); a gated set of 15,471 empty, furnished, shadowed and staged bedroom images of unknown provenance and licence (ApplyDesign); small real before/after captures at object scale (Remove360, OBER-Test). Real empty rooms at scale: ZInD, academic use only (grounded). Informs clutter_pairs: building is justified; the ApplyDesign set is the one to inspect before designing.
+- Real empty-room photos (third pass): no large open real-estate-style collection; Wikimedia Commons' "Empty rooms" tree holds about 700 to 800 real photos under per-file open licences, mixed buildings, to sort before use (counts grounded). Informs clutter_pairs' real-photo clean source.
 
 ### B. Defurnishing and object removal
-<!-- Lines 71-75 -->
+<!-- Lines 74-78 -->
 - Indoor defurnishing: "An Empty Room is All We Want" (Matterport, CVPRW 2024, Stable Diffusion inpainting on panoramas) and "Defurnishing with X-Ray Vision" (CVPRW 2025, mesh-derived depth/normal edges as ControlNet guide) (inferred). Code and data not found. A CoStar patent covers a diffusion defurnishing method (commercial context only). No 2026 indoor paper and no public indoor benchmark found.
 - Removal measurement: PROVE (2026) argues one ground truth per hole is ill-posed and that common metrics disagree with perception; VOR-Bench scores completeness, mask-background consistency, logical plausibility (inferred). This supports the structural, per-defect measure of training.md and maps onto `movable_left`, `drift`, `surface_implausible`.
 - Open removal model: ObjectClear (code, training code, OBER dataset public; NTU S-Lab License 1.0, non-commercial) (grounded). Usable as a baseline, not as the default generator.
 - Default generator (design open question): Qwen-Image-Edit-2511 is Apache-2.0 (grounded); FLUX.1 Kontext [dev] model is under a non-commercial licence though outputs may be used commercially (grounded). BAGEL and Step1X-Edit unchecked.
 
 ### C. Judging image edits
-<!-- Lines 78-83 -->
+<!-- Lines 81-86 -->
 - Open edit judges exist: EditScore reward models 7B-72B (4B/8B Qwen3-VL variants), with EditReward-Bench; code Apache-2.0 (grounded), claims the largest model plus self-ensemble beats GPT-5 on its own benchmark (grounded as a claim); human-agreement numbers not read. Informs "judge model class".
 - Standard judging recipe is VIEScore-style: original + instruction + result, scores for semantic consistency and perceptual quality, with GPT-4o/4.1 or Qwen2.5-VL-72B as judges in GEdit-Bench and ImgEdit-Bench (inferred).
 - Small local changes are the weak spot: on VDiff-Bench 7-8B open MLLMs reach 8.7-33.3% on low-level changes and often answer "no difference" (inferred, secondary summary). This explains the prototype missing invented doors and argues for giving the judge a difference mask and crops.
@@ -82,30 +85,30 @@ The field has the parts but not the assembly. Nothing found does what the design
 - No editing-specific study of judge bias or agreement with human raters found.
 
 ### D. Judge-guided refinement and tool-augmented agents
-<!-- Lines 86-90 -->
+<!-- Lines 89-93 -->
 - Critic-in-the-loop editors with tools: IMAGAgent (plan, execute, reflect; retrieval, segmentation, detection tools), LOCI (locator-critic), an LLM-LVLM agent (feedback changes tool parameters), GenArtist (planning tree with self-correction), UniEdit-I (converges in 1-2 iterations on GEdit-Bench) (inferred).
 - Search policy (design open question 1): ADE-CoT (CVPR 2026) allocates budget by estimated edit difficulty, prunes early with region-localization and caption checks, and stops depth-first at the first intent-aligned result; >2x faster than best-of-N on Step1X-Edit, BAGEL, FLUX Kontext; code public, licence unchecked (inferred).
 - Tool library (open question 6): SAM 3 Agent pairs a VLM with SAM 3 as a tool; DepthLM reports frontier VLMs still weak at 3D from 2D, a reason to call a depth tool (inferred).
 - No loop found that feeds the critic a removal mask plus protected fixed elements, and no ablation of which tool helps a judge most.
 
 ### E. Prompt optimization and free-text feedback
-<!-- Lines 93-103 -->
+<!-- Lines 96-106 -->
 - GEPA (ICLR 2026) beats MIPROv2 (+14 vs +7 aggregate gain) and GRPO on text tasks with natural-language reflection (inferred). No multimodal or image-editing-generator benchmark of GEPA or MIPRO found.
 - Closest multimodal precedents are text-to-image prompt rewriters with a VLM judge (ConceptMix++, TextGrad-style, GPT-4o as judge and rewriter, 5 rounds; self-rewarding LVLM; VisualPrompter) (inferred).
 - Judge tuning from reviewer comments (design 2b): practitioner sources describe a label-comments-rewrite loop with 100-200 gold labels and corrected cases as few-shot (vendor documentation, unverified). One 2026 paper finds strict judge feedback causes judge-specific overfitting (inferred). Informs "how big the calibration sample must be".
 
 > **PIN.**
-> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused).
+> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused). Third pass on real empty-room photos (A): 8 searches (one extended), 13 fetches.
 > - Branches with no relevant work found: none came back empty; four sub-topics did: a public clutter or room taxonomy (A); an indoor defurnishing benchmark or released defurnishing code and data (B); an editing-specific study of VLM-judge bias and human agreement (C); prompt optimization against a VLM-judge objective for an image-editing generator (E).
 > - Licence or release not verified that the design depends on: 3D-FRONT licence (official page unreachable); Structured3D Terms of Use text (linked, not read); Infinigen Indoors-specific licence and furniture-off pair rendering (docs unreachable; only the repository-level BSD-3-Clause was read); HSSD licence; PIPE, PIPE_Masks and paint-by-inpaint model licences; ObjectDrop data release; OmniEraser data and code release; ObjectClear weights release (licence NTU S-Lab 1.0, non-commercial, read); EditScore weights licence (code is Apache-2.0, read); BAGEL and Step1X-Edit licences; ADE-CoT code licence; the 2026 Qwen licence claims (secondary sites only); released code or data for the Matterport defurnishing papers and for the 3D-FRONT pair-rendering paper (arXiv 2512.17955, none linked on its abstract page).
 
 ---
 
 ## Detail
-<!-- Lines 106-106 -->
+<!-- Lines 109-109 -->
 
 ### 0. Method and plan (written before the first search)
-<!-- Lines 109-123 -->
+<!-- Lines 112-126 -->
 
 Strategy: one query per branch first, then fill named gaps; prefer a survey or benchmark over single papers; stop a branch when results repeat. Fetch only where a design decision hinges on a licence or a release.
 
@@ -122,7 +125,7 @@ Taxonomy of the field per branch, known works going in, and the question each se
 Certainty note: the plan was written in the working notes before searching and is reproduced here.
 
 ### 1. Branch A. Paired clean/cluttered data
-<!-- Lines 126-153 -->
+<!-- Lines 129-156 -->
 
 | Work | Year | What it does | Relevance to our design | Availability and licence | Certainty |
 |---|---|---|---|---|---|
@@ -152,7 +155,7 @@ Implications for the design (clutter_pairs):
 - **Taxonomy granularity** (open question): no external source tells how many values per axis; HSSD's 466 categories and SpatialLM's 59 bracket the range.
 
 #### Existing pair benchmarks (second pass)
-<!-- Lines 156-181 -->
+<!-- Lines 159-184 -->
 
 Question: does a benchmark of clean/cluttered pairs of the same view already exist, so that clutter_pairs could adopt or extend it? 8 searches (one extended, for 2026 work), 11 fetches.
 
@@ -179,8 +182,27 @@ Implications for clutter_pairs:
 - Real clean images at scale: ZInD, academic use only; a public dataset cannot ship them, a recipe can point to them.
 - Exact rendered pairs to calibrate the pixel test: Structured3D, ShanghaiTech-Kujiale (terms unresolved for both).
 
+#### Real empty-room photos (third pass)
+<!-- Lines 187-203 -->
+
+Question: is there a source of real photographs of empty or tidy rooms, usable as clean images (the owner prefers
+them to generated ones; ZInD is ruled out: academic use only)? 8 searches (one extended), 12 fetches.
+
+| Source | What it holds | Access and licence | Certainty |
+|---|---|---|---|
+| Wikimedia Commons, Category "Empty rooms" and sub-categories, https://commons.wikimedia.org/wiki/Category:Empty_rooms | real perspective photos: "Empty rooms" 272 files and 22 sub-categories, "Empty classrooms" 236, "Empty bedrooms" 57 (about 700 to 800 in all, overlaps not removed); mixed buildings (homes, classrooms, offices, halls, some abandoned); widths from about 500 to over 5,000 px; a few videos to filter out | open (API, bulk download); licence per file: in two 50-file samples, CC BY-SA 4.0 and 3.0 most often, then CC BY 2.0 to 4.0, public domain, CC0 | counts grounded (category API, checked twice); licence shares grounded on the samples only; residential share inferred from file names, images not viewed |
+| wunderkinds07/empty-room, https://huggingface.co/datasets/wunderkinds07/empty-room | 70 rows, each an empty room and a furnished one with captions | open; no card, no licence, provenance unknown | grounded (size, columns) |
+| RoomBench++ (RoomEditor++), https://arxiv.org/abs/2512.17573 | 112,851 training and 1,832 test pairs for furniture synthesis, from real indoor videos and renderings; whether any are empty rooms is not stated | test images shared; training data by e-mail request; no licence stated | grounded (size, access sentence); content open |
+| LIFULL HOME'S (NII IDR), https://www.nii.ac.jp/dsc/idr/en/lifull | about 83 million real rental-listing images, but at most 120 × 120 px | academic institutions only; academic research use | inferred (search summaries) |
+| Free stock photo sites | single empty-room photos, no collection | per site | open |
+
+Gap: no large open collection of real-estate-style empty rooms. Implications for clutter_pairs: Commons can seed the
+real-photo clean source (S5 of its design) after sorting (residential, tidy, large enough), with each file's licence
+carried into the pairs' manifest (attribution, share-alike for BY-SA); anything larger means scraping listings, a
+separate decision.
+
 ### 2. Branch B. Defurnishing and object removal
-<!-- Lines 184-210 -->
+<!-- Lines 206-232 -->
 
 | Work | Year | What it does | Relevance to our design | Availability and licence | Certainty |
 |---|---|---|---|---|---|
@@ -209,7 +231,7 @@ Implications:
 - Defurnishing work is panorama and mesh based (Matterport has the mesh); perspective photos without a mesh, as in our case, are not covered by published work (inferred).
 
 ### 3. Branch C. Judging image edits
-<!-- Lines 213-235 -->
+<!-- Lines 235-257 -->
 
 | Work | Year | What it does | Relevance to our design | Availability and licence | Certainty |
 |---|---|---|---|---|---|
@@ -234,7 +256,7 @@ Implications:
 - **Hallucination detection**: SpotEdit's "target absent, output must equal input" is a ready test for the "views with nothing to remove" case of stage 0.
 
 ### 4. Branch D. Judge-guided iterative refinement
-<!-- Lines 238-257 -->
+<!-- Lines 260-279 -->
 
 | Work | Year | What it does | Relevance to our design | Availability and licence | Certainty |
 |---|---|---|---|---|---|
@@ -256,7 +278,7 @@ Implications:
 - **Tool library** (open question): tools as locators and measurers, VLM as decider, agrees with IMAGAgent and GenArtist; DepthLM-type results argue for keeping depth as an external tool. How the judge chooses a tool and what each call costs is not answered by the literature found.
 
 ### 5. Branch E. Prompt optimization and free-text feedback
-<!-- Lines 260-279 -->
+<!-- Lines 282-301 -->
 
 | Work | Year | What it does | Relevance to our design | Availability and licence | Certainty |
 |---|---|---|---|---|---|
@@ -278,14 +300,14 @@ Implications:
 - **Reviewer comment style**: the legal-QA result suggests tracking whether strict reviewer comments over-narrow the judge, and measuring on held-out buildings.
 
 ### 6. Cross-branch implications (kept short)
-<!-- Lines 282-286 -->
+<!-- Lines 304-308 -->
 
 - Generator licence: Qwen-Image-Edit-2511 (Apache-2.0, read) is the only candidate verified as compatible; the others are unverified or non-commercial.
 - The same VLM weakness (small differences) appears in C and in the prototype, and tools (D) are the published remedy.
 - Pair construction by removal-first (PIPE) and counterfactual capture (ObjectDrop) are mirror images of our two projects: it suggests that a good removal model can seed the clutter project's insertion data, but also that circularity (same-family bias) needs the different-family rule already in the risks.
 
 ### 7. Search log
-<!-- Lines 289-354 -->
+<!-- Lines 311-386 -->
 
 Format: number, branch, query (short), purpose, yield. All searches in "standard" mode except 31 ("extended").
 
@@ -322,6 +344,14 @@ Format: number, branch, query (short), purpose, yield. All searches in "standard
 | 29 | A | Hugging Face empty and furnished room pairs, virtual staging | Community datasets | ApplyDesign bedroom-dataset |
 | 30 | A | multi-object removal benchmark, cluttered scene, declutter | Multi-object ground truth | Wei 2023, Seeing Through Clutter, ICOREval (110 single-object), PROVE-H, OCID |
 | 31 | A | synthetic paired empty/cluttered by editing model, decluttering benchmark 2026 | Newest work | ShanghaiTech-Kujiale, MRoom-30k, Room Envelopes, ICLR 2026 artifact caution; no 2026 benchmark |
+| 32 | A | real photos empty unfurnished rooms, real estate, virtual staging, Hugging Face | Real empty photos (third pass) | commercial tools and one demo Space only |
+| 33 | A | Wikimedia Commons empty rooms | Open photo pools | Commons "Empty rooms" category |
+| 34 | A | Kaggle dataset empty room unfurnished | Community datasets | no Kaggle hit; ApplyDesign, ZInD, one stock photo |
+| 35 | A | indoor dataset real photos vacant homes, layout annotation | Layout datasets with empty rooms | ZInD only; a RealEstate10K layout paper |
+| 36 | A | virtual staging diffusion paper, dataset of empty room photos | Staging research data | RoomEditor++ / RoomBench++, VISPI (Structured3D) |
+| 37 | A | free stock photos "empty room" CC0 | Stock collections | generic lists, no collection |
+| 38 | A | LIFULL HOME'S dataset | Listing photos | 120 px images, academic only |
+| 39 | A | empty apartments CC BY layout estimation perspective (extended) | Anything newer | nothing new; Room Envelopes is synthetic |
 
 WebFetch log (11 calls, 8 returned content):
 
@@ -349,11 +379,13 @@ WebFetch log (11 calls, 8 returned content):
 | 20 | https://arxiv.org/abs/2511.03970 | Room Envelopes | Pointmaps, no empty-room image; no data link |
 | 21 | https://svip-lab.github.io/dataset/indoor_360.html | ShanghaiTech-Kujiale | 1,775 rooms with and without furniture; no terms |
 | 22 | https://arxiv.org/abs/2509.22628 | MRoom-30k | One sentence only |
+| 23-34 | Commons category page and API (counts, file licences of two samples); Hugging Face API (searches: empty room, unfurnished, virtual staging, real estate, furniture removal); wunderkinds07/empty-room; ApplyDesign README; arXiv 2512.17573; github.com/stonecutter-21/roomeditor | Third pass: real empty photos | as in the third-pass table; the "unfurnished" and "furniture removal" searches returned nothing |
+| 35 | https://commons.wikimedia.org/w/api.php (categoryinfo, three categories) | Re-check of the Commons counts | 272 files and 22 sub-categories; 236; 57 |
 
 Stop rules applied: A stopped at 7 of 8 (results began repeating known pair-quality and synthetic-source works); C stopped at 4 of 5; D, E, B spent in full. Two searches of the 25 stayed unspent.
 
 ### 8. Not checked, and why
-<!-- Lines 357-371 -->
+<!-- Lines 389-404 -->
 
 - Full text of any paper: none was read; only abstract pages and repos (8 fetches). All per-paper numbers are from search summaries and are unverified. Reason: budget and the instruction to fetch only for decision-hinging facts.
 - Licences listed as open in the pin: not reached or not worth a search; each needs one fetch of the official page before the design relies on it.
@@ -363,9 +395,10 @@ Stop rules applied: A stopped at 7 of 8 (results began repeating known pair-qual
 - Content of the design docs' own prior work (Infinigen Indoors, Structured3D, 3D-FRONT pairs, Matterport pair): not re-read except for licence and release checks, as instructed.
 - Public datasets of real photographs for the benchmark (consent, licence): not searched; the OBER dataset (gated, non-commercial) was noted but not assessed.
 - Date caveat: several sources carry 2026 arXiv identifiers (26xx) that I could not cross-check beyond search results.
+- Third pass, not checked: the Commons images themselves (residential and tidy share), licences beyond the two 50-file samples, overlaps between sub-categories; RoomBench++'s content and terms; Stanford 2D-3D-S, PanoContext, Library of Congress HABS and Openverse as further pools.
 - Second pass, not checked: the ApplyDesign set's provenance (real or generated), resolution, room types and terms (gated, needs an access request); Wei 2023's clutter category list (project server refused the connection); MRoom-30k's content and release; data release of Room Envelopes and of 2512.17955; ShanghaiTech-Kujiale terms and whether its two panoramas share the camera; whether Remove360's before and after views share poses; the ICLR 2026 paper's title and argument.
 
 > **PIN.**
-> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused).
+> - Searches used: 23 of the 25 budgeted (A 7 of 8, B 5 of 5, C 4 of 5, D 4 of 4, E 3 of 3); plus 11 WebFetch calls (8 returned content, 3 returned HTTP 404). Second pass on existing pair benchmarks (A): 8 searches (one extended), 11 WebFetch calls (10 returned content, 1 refused). Third pass on real empty-room photos (A): 8 searches (one extended), 13 fetches.
 > - Branches with no relevant work found: none came back empty; four sub-topics did: a public clutter or room taxonomy (A); an indoor defurnishing benchmark or released defurnishing code and data (B); an editing-specific study of VLM-judge bias and human agreement (C); prompt optimization against a VLM-judge objective for an image-editing generator (E).
 > - Licence or release not verified that the design depends on: 3D-FRONT licence (official page unreachable); Structured3D Terms of Use text (linked, not read); Infinigen Indoors-specific licence and furniture-off pair rendering (docs unreachable; only the repository-level BSD-3-Clause was read); HSSD licence; PIPE, PIPE_Masks and paint-by-inpaint model licences; ObjectDrop data release; OmniEraser data and code release; ObjectClear weights release (licence NTU S-Lab 1.0, non-commercial, read); EditScore weights licence (code is Apache-2.0, read); BAGEL and Step1X-Edit licences; ADE-CoT code licence; the 2026 Qwen licence claims (secondary sites only); released code or data for the Matterport defurnishing papers and for the 3D-FRONT pair-rendering paper (arXiv 2512.17955, none linked on its abstract page).

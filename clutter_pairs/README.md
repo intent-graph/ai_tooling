@@ -15,7 +15,8 @@ Generate pairs of images of the same view, clean and cluttered, as ground-truth 
 - [`CLAUDE.md`](CLAUDE.md) — agent entry point for this folder.
 
 ## Sub-folders
-<!-- Lines 19-21 -->
+<!-- Lines 19-22 -->
 
-- [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model (schema),
-  loops (composition, pixel tests, composite, lessons), use of virtual_unstaging, components, build order.
+- [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model and
+  `schema.sql`, loops (composition and recording, pixel tests, composite, lessons and their measurement), components
+  (use of virtual_unstaging, layering, command line).
