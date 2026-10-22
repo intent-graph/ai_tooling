@@ -11,7 +11,7 @@ from __future__ import annotations
 import io
 import sqlite3
 from collections.abc import Iterator
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
@@ -26,6 +26,7 @@ from clutter_pairs.compose import (
     canonical,
     compose,
     parse_composer,
+    parse_judgment,
     render_assessment,
     render_lesson,
     render_spec,
@@ -72,7 +73,7 @@ def audit(ds: Dataset) -> AuditResult:
     conn = ds.conn
     known = _Known(conn, images=set(repo.all_image_shas(conn)),
                    numbers={it.id: it.n for it in repo.all_iterations(conn)})
-    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _regions, _pairs):
+    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _regions, _judgments, _pairs):
         check(conn, ds, result, known)
     return result
 
@@ -212,31 +213,67 @@ def _values(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _
 
 
 def _regions(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
-    """Each iteration's numbered regions recompute from its change mask with the thresholds recorded beside them, and
-    its regions image redraws pixel for pixel from its composite (judge aid A2)."""
-    known_names = {f.name for f in fields(pairs.Thresholds)}
-    for iteration_id in repo.iterations_with_regions(conn):
+    """Every clutter iteration the pair judge was called on has a region set and a regions image; its regions
+    recompute from its change mask with the region set's thresholds, the image redraws pixel for pixel from its
+    composite, and its explained-change assessment equals the test run again on the judge's region answers (A2)."""
+    for iteration_id in repo.pair_judged_iterations(conn):
         result.count("regions checked")
-        recorded = {}
-        for a in repo.assessments(conn, iteration_id):
-            drawing = {m.name: m.value for m in a.measures}.get("region_drawing")
-            if a.kind == "pixel" and drawing is not None:
-                recorded = a.thresholds
-                if drawing != pairs.REGION_DRAWING:
-                    result.problems.append(f"iteration {iteration_id}: regions drawn by version {drawing:g}, "
-                                           f"this code draws version {pairs.REGION_DRAWING}")
-        t = pairs.Thresholds.of({k: v for k, v in recorded.items() if k in known_names})
+        stored = repo.region_set(conn, iteration_id)
         images = repo.iteration_images(conn, iteration_id)
+        if stored is None or not {"change_mask", "composite", "regions"} <= set(images):
+            result.problems.append(f"iteration {iteration_id}: judged without a region set and its images")
+            continue
+        params, speck_px = stored
+        if params["drawing"] != pairs.REGION_DRAWING:
+            result.problems.append(f"iteration {iteration_id}: regions drawn by version {params['drawing']}, "
+                                   f"this code draws version {pairs.REGION_DRAWING}")
+            continue
+        t = pairs.Thresholds.of({k: v for k, v in params.items() if k != "drawing"})
         alpha = np.asarray(Image.open(io.BytesIO(ds.blobs.get(images["change_mask"]))).convert("L"))
         found = pairs.regions(alpha == 255, t)
-        if [(r.n, r.box, r.px) for r in found.numbered] != repo.mask_regions(conn, iteration_id):
+        if ([(r.n, r.box, r.px) for r in found.numbered] != repo.mask_regions(conn, iteration_id)
+                or found.speck_px != speck_px):
             result.problems.append(f"iteration {iteration_id}: its regions do not recompute from its mask")
             continue
-        if "regions" in images:
-            cluttered = np.asarray(imaging.decode(ds.blobs.get(images["composite"])).convert("RGB"))
-            drawn = np.asarray(imaging.decode(ds.blobs.get(images["regions"])).convert("RGB"))
-            if not np.array_equal(pairs.draw_regions(cluttered, found, t), drawn):
-                result.problems.append(f"iteration {iteration_id}: its regions image does not redraw from its composite")
+        cluttered = np.asarray(imaging.decode(ds.blobs.get(images["composite"])).convert("RGB"))
+        drawn = np.asarray(imaging.decode(ds.blobs.get(images["regions"])).convert("RGB"))
+        if not np.array_equal(pairs.draw_regions(cluttered, found, t), drawn):
+            result.problems.append(f"iteration {iteration_id}: its regions image does not redraw from its composite")
+        rows = repo.assessments(conn, iteration_id)
+        judged = [a for a in rows if a.kind == "judge"]
+        explained = [a for a in rows if a.kind == "pixel" and any(m.name == "unexplained_share" for m in a.measures)]
+        if judged and explained:
+            items = len(_spec_of(conn, iteration_id).item_ids)
+            again = pairs.explain(found, judged[0].judgment.regions, items, pairs.Thresholds.of(explained[0].thresholds))
+            if (again.findings != explained[0].judgment.findings
+                    or [(m.name, m.value) for m in again.measures] != [(m.name, m.value) for m in explained[0].measures]):
+                result.problems.append(f"iteration {iteration_id}: its explained-change assessment does not recompute")
+
+
+def _judgments(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
+    """Every judge assessment equals its call's stored answer parsed again: findings (the derived opening_changed
+    among them), guidance, region answers."""
+    for assessment_id in repo.all_assessment_ids(conn):
+        a = repo.assessment(conn, assessment_id)
+        if a.kind != "judge" or a.model_call_id is None:
+            continue
+        result.count("judgments parsed again")
+        call = repo.call(conn, a.model_call_id)
+        stage = repo.loop(conn, call.loop_run_id).stage
+        items = len(_spec_of(conn, a.iteration_id).item_ids) if stage == "clutter" else 0
+        regions = len(repo.mask_regions(conn, a.iteration_id)) if stage == "clutter" else 0
+        try:
+            again = parse_judgment(call.answer or "", stage, items, ds.judge_codes(stage), regions)
+        except ComposeError as error:
+            result.problems.append(f"assessment {assessment_id}: its call's answer no longer parses: {error}")
+            continue
+        if again != a.judgment:
+            result.problems.append(f"assessment {assessment_id}: it is not its call's answer parsed again")
+
+
+def _spec_of(conn: sqlite3.Connection, iteration_id: int) -> repo.SpecRow:
+    loop = repo.loop(conn, repo.loop_of_iteration(conn, iteration_id))
+    return repo.clutter_spec(conn, loop.clutter_spec_id or 0)
 
 
 def _pairs(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:

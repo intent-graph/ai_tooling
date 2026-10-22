@@ -1,4 +1,5 @@
-# The clutter writer's request: its instruction, the clutter spec with its items and rules, the lessons of its arm.
+# The clutter writer's request: its instruction, the clutter spec with its items and rules, the clean image, the
+# lessons of its arm.
 role = "write"
 request = "chat"
 renderer = "spec_text"
@@ -14,5 +15,6 @@ content = [{ slot = "instruction" }]
 role = "user"
 content = [
   { slot = "spec", header = "The room, the view and the clutter to add:" },
+  { slot = "clean", header = "The photograph of the empty room:" },
   { slot = "lesson", header = "Lessons learned from earlier images, to follow:" },
 ]

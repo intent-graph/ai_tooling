@@ -522,15 +522,21 @@ def clear_iteration_results(conn: sqlite3.Connection, iteration_id: int) -> None
     for aid in [int(r[0]) for r in conn.execute("SELECT id FROM assessment WHERE iteration_id = ?", (iteration_id,))]:
         conn.execute("DELETE FROM finding_region WHERE finding_id IN (SELECT id FROM finding WHERE assessment_id = ?)",
                      (aid,))
-        for table in ("finding", "guidance", "region_item", "measure"):
+        for table in ("finding", "guidance", "region_item", "region_answer", "measure"):
             conn.execute(f"DELETE FROM {table} WHERE assessment_id = ?", (aid,))
         conn.execute("DELETE FROM assessment WHERE id = ?", (aid,))
     conn.execute("DELETE FROM mask_region WHERE iteration_id = ?", (iteration_id,))
+    conn.execute("DELETE FROM region_set WHERE iteration_id = ?", (iteration_id,))
     conn.execute("DELETE FROM iteration_image WHERE iteration_id = ?", (iteration_id,))
 
 
-def add_mask_regions(conn: sqlite3.Connection, iteration_id: int, regions: Sequence[tuple[int, Box, int]]) -> None:
-    """The numbered regions of an iteration's change mask: (number, box, mask pixels)."""
+def add_region_set(conn: sqlite3.Connection, iteration_id: int, params: Mapping[str, int], speck_px: int,
+                   regions: Sequence[tuple[int, Box, int]]) -> None:
+    """An iteration's region set (region_group_px, region_min_px, max_regions, drawing) and its numbered regions:
+    (number, box, mask pixels)."""
+    conn.execute("INSERT INTO region_set (iteration_id, region_group_px, region_min_px, max_regions, drawing, speck_px)"
+                 " VALUES (?, ?, ?, ?, ?, ?)", (iteration_id, params["region_group_px"], params["region_min_px"],
+                                                params["max_regions"], params["drawing"], speck_px))
     conn.executemany("INSERT INTO mask_region (iteration_id, n, x0, y0, x1, y1, px) VALUES (?, ?, ?, ?, ?, ?, ?)",
                      [(iteration_id, n, b.x0, b.y0, b.x1, b.y1, px) for n, b, px in regions])
 
@@ -540,8 +546,21 @@ def mask_regions(conn: sqlite3.Connection, iteration_id: int) -> list[tuple[int,
         "SELECT n, x0, y0, x1, y1, px FROM mask_region WHERE iteration_id = ? ORDER BY n", (iteration_id,))]
 
 
-def iterations_with_regions(conn: sqlite3.Connection) -> list[int]:
-    return [int(r[0]) for r in conn.execute("SELECT DISTINCT iteration_id FROM mask_region ORDER BY iteration_id")]
+def region_set(conn: sqlite3.Connection, iteration_id: int) -> tuple[dict[str, int], int] | None:
+    """An iteration's region parameters (region_group_px, region_min_px, max_regions, drawing) and speck pixels."""
+    row = conn.execute("SELECT region_group_px, region_min_px, max_regions, drawing, speck_px FROM region_set"
+                       " WHERE iteration_id = ?", (iteration_id,)).fetchone()
+    if row is None:
+        return None
+    return dict(zip(("region_group_px", "region_min_px", "max_regions", "drawing"), map(int, row[:4]), strict=True)), int(row[4])
+
+
+def pair_judged_iterations(conn: sqlite3.Connection) -> list[int]:
+    """Clutter iterations the pair judge was called on, and those with a region set."""
+    return [int(r[0]) for r in conn.execute(
+        "SELECT mc.iteration_id FROM model_call mc JOIN loop_run l ON l.id = mc.loop_run_id"
+        " WHERE mc.role = 'judge' AND l.stage = 'clutter' AND mc.iteration_id IS NOT NULL"
+        " UNION SELECT iteration_id FROM region_set ORDER BY 1")]
 
 
 def accepted_clean_image(conn: sqlite3.Connection, scene_id: int) -> str | None:
@@ -683,8 +702,11 @@ def add_assessment(conn: sqlite3.Connection, iteration_id: int, kind: str, verdi
     for rank, guidance in enumerate(judgment.guidance, start=1):
         conn.execute("INSERT INTO guidance (assessment_id, rank, text_sha) VALUES (?, ?, ?)",
                      (aid, rank, record_text(conn, guidance)))
+    answered = [r for r in judgment.regions if r.answered]
+    conn.executemany("INSERT INTO region_answer (assessment_id, n, other_change) VALUES (?, ?, ?)",
+                     [(aid, r.region, int(r.other_change)) for r in answered])
     conn.executemany("INSERT INTO region_item (assessment_id, n, clutter_item_id) VALUES (?, ?, ?)",
-                     [(aid, r.region, item_ids[i - 1]) for r in judgment.regions for i in r.items])
+                     [(aid, r.region, item_ids[i - 1]) for r in answered for i in r.items])
     for m in measures:
         conn.execute("INSERT INTO measure (assessment_id, name, kind, value) VALUES (?, ?, 'value', ?)", (aid, m.name, m.value))
         if m.threshold is not None:
@@ -714,14 +736,17 @@ def assessment(conn: sqlite3.Connection, assessment_id: int) -> AssessmentRow:
                               " WHERE assessment_id = ? ORDER BY id", (assessment_id,)).fetchall())
     guidance = tuple(str(text(conn, r[0])) for r in
                      conn.execute("SELECT text_sha FROM guidance WHERE assessment_id = ? ORDER BY rank", (assessment_id,)))
-    held: dict[int, list[int]] = {}
-    if row[2] == "judge":  # every numbered region of the iteration, with or without an item
-        held = {int(r[0]): [] for r in conn.execute("SELECT n FROM mask_region WHERE iteration_id = ? ORDER BY n",
-                                                    (row[1],))}
-    for n, ordinal in conn.execute("SELECT r.n, i.ordinal FROM region_item r JOIN clutter_item i ON i.id = r.clutter_item_id"
-                                   " WHERE r.assessment_id = ? ORDER BY r.n, i.ordinal", (assessment_id,)):
-        held.setdefault(int(n), []).append(int(ordinal))
-    regions = tuple(RegionItems(n, tuple(held[n])) for n in sorted(held))
+    regions: tuple[RegionItems, ...] = ()
+    if row[2] == "judge" and region_set(conn, int(row[1])) is not None:  # every numbered region, answered or not
+        other = {int(r[0]): bool(r[1]) for r in conn.execute(
+            "SELECT n, other_change FROM region_answer WHERE assessment_id = ?", (assessment_id,))}
+        held: dict[int, list[int]] = {}
+        for n, ordinal in conn.execute("SELECT r.n, i.ordinal FROM region_item r JOIN clutter_item i"
+                                       " ON i.id = r.clutter_item_id WHERE r.assessment_id = ? ORDER BY r.n, i.ordinal",
+                                       (assessment_id,)):
+            held.setdefault(int(n), []).append(int(ordinal))
+        regions = tuple(RegionItems(n, tuple(held.get(n, [])), other.get(n, False), n in other)
+                        for n, _, _ in mask_regions(conn, int(row[1])))
     values: dict[str, list[float | None]] = {}
     for name, kind, value in conn.execute("SELECT name, kind, value FROM measure WHERE assessment_id = ?"
                                           " ORDER BY rowid", (assessment_id,)):
@@ -899,6 +924,10 @@ def misplaced_image_roles(conn: sqlite3.Connection) -> list[tuple[int, str]]:
         "SELECT ii.iteration_id, ii.role FROM iteration_image ii JOIN iteration it ON it.id = ii.iteration_id"
         " JOIN loop_run l ON l.id = it.loop_run_id"
         " WHERE (l.stage = 'clean') <> (ii.role = 'generated')")]
+
+
+def loop_of_iteration(conn: sqlite3.Connection, iteration_id: int) -> int:
+    return int(conn.execute("SELECT loop_run_id FROM iteration WHERE id = ?", (iteration_id,)).fetchone()[0])
 
 
 def all_iterations(conn: sqlite3.Connection) -> list[IterationRow]:

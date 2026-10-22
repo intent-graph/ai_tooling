@@ -10,9 +10,11 @@ from pathlib import Path
 
 import pytest
 
-from clutter_pairs.compose import ComposeError, canonical, compose, parse_composer, parse_judgment
+from clutter_pairs.compose import DERIVED_CODES, ComposeError, canonical, compose, parse_composer, parse_judgment
+from clutter_pairs.config import ConfigError
 from clutter_pairs.dataset import packaged_files, parse_reasons
-from clutter_pairs.domain import ModelId, Part, SourceRef
+from clutter_pairs.domain import ModelId, Part, RegionItems, SourceRef
+from clutter_pairs.pairs import Thresholds
 
 DATA = resources.files("clutter_pairs.data")
 MODEL = ModelId("org/judge", "abc", "fam", "MIT")
@@ -61,9 +63,62 @@ def test_judge_schemas_list_exactly_their_stage_codes_and_instructions_explain_t
     for schema, stage, instruction in (("clean_judgment", "clean", "clean_judge"), ("pair_judgment", "clutter", "pair_judge")):
         listed = json.loads(_read(f"schemas/{schema}.json"))["properties"]["findings"]["items"]["properties"]["code"]["enum"]
         expected = {c for c, r in reasons.items() if r.stage in (stage, "both") and r.by in ("judge", "both")}
-        assert set(listed) == expected
+        assert set(listed) == expected - DERIVED_CODES
         text = _read(f"instructions/{instruction}.md")
         assert all(f"`{code}`" in text for code in listed)
+
+
+def test_the_pair_judge_answers_openings_first_and_at_most_the_regions_drawn() -> None:
+    schema = json.loads(_read("schemas/pair_judgment.json"))
+    assert list(schema["properties"])[:3] == ["openings", "appeared", "regions"]
+    assert schema["properties"]["regions"]["maxItems"] == Thresholds().max_regions
+    assert schema["properties"]["regions"]["items"]["properties"]["region"]["maximum"] == Thresholds().max_regions
+
+
+def test_opening_changed_is_always_blocking_and_has_no_minor_twin() -> None:
+    reasons = parse_reasons(_read("reasons.toml"))
+    assert reasons["opening_changed"].severity == "blocking" and "opening_changed_minor" not in reasons
+    with pytest.raises(ConfigError):
+        parse_reasons(_read("reasons.toml").replace(
+            '[opening_changed]\nstage = "clutter"\nseverity = "blocking"', '[opening_changed]\nstage = "clutter"\nseverity = "minor"'))
+    with pytest.raises(ConfigError):
+        parse_reasons(_read("reasons.toml") + '\n[opening_changed_minor]\nstage = "clutter"\nseverity = "minor"\nby = "judge"\n')
+
+
+def _pair_answer(**overrides: object) -> str:
+    answer: dict[str, object] = {"openings": [], "appeared": [], "regions": [], "findings": [], "guidance": []}
+    answer.update(overrides)
+    return json.dumps(answer)
+
+
+PAIR_CODES = {"opening_changed", "scene_changed", "item_missing"}
+
+
+def test_a_changed_vanished_or_appeared_opening_becomes_a_blocking_finding() -> None:
+    openings = [{"kind": "window", "where": "left wall", "status": "changed", "regions": [1, 9]},
+                {"kind": "door", "where": "back wall", "status": "partly_hidden", "regions": [2]},
+                {"kind": "door", "where": "right wall", "status": "vanished", "regions": []}]
+    appeared = [{"kind": "passage", "where": "corner", "regions": [2]}]
+    judgment = parse_judgment(_pair_answer(openings=openings, appeared=appeared), "clutter", 3, PAIR_CODES, 2)
+    assert [(f.code, f.judged_severity, f.regions, f.comment) for f in judgment.findings] == [
+        ("opening_changed", "blocking", (1,), "window, left wall: changed"),
+        ("opening_changed", "blocking", (), "door, right wall: vanished"),
+        ("opening_changed", "blocking", (2,), "passage, corner: appeared")]
+    with pytest.raises(ComposeError):  # the checklist is the only channel for openings
+        parse_judgment(_pair_answer(findings=[{"code": "opening_changed", "severity": "blocking", "regions": [],
+                                               "box": None, "comment": "a door"}]), "clutter", 3, PAIR_CODES, 2)
+
+
+def test_region_answers_left_out_or_given_twice_are_not_answered_and_unknown_numbers_dropped() -> None:
+    regions = [{"region": 1, "items": [2, 7], "other_change": False},
+               {"region": 2, "items": [1], "other_change": False}, {"region": 2, "items": [], "other_change": False},
+               {"region": 4, "items": [1], "other_change": True}, {"region": 9, "items": [1], "other_change": False}]
+    judgment = parse_judgment(_pair_answer(regions=regions), "clutter", 3, PAIR_CODES, 4)
+    assert judgment.regions == (RegionItems(1, (2,)), RegionItems(2, (), False, answered=False),
+                                RegionItems(3, (), False, answered=False), RegionItems(4, (1,), True))
+    with pytest.raises(ComposeError):
+        parse_judgment(_pair_answer(regions=[{"region": 1, "items": [], "other_change": "yes"}]), "clutter", 3,
+                       PAIR_CODES, 1)
 
 
 def test_judgment_parsing_converts_boxes_and_rejects_foreign_codes() -> None:

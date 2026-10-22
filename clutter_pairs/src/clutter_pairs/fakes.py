@@ -34,11 +34,12 @@ SIZE_MULTIPLE = 32
 @dataclass
 class FakeBehaviour:
     """Switches for tests: answer 503 after a number of model requests; shift the first edit of each clean image;
-    assign no item to any region (every change is unexplained); a judge that answers prose instead of JSON."""
+    assign no item to any region (every change is unexplained); report an invented door; a judge that answers prose instead of JSON."""
 
     down_after: int | None = None
     misalign_first_edit: bool = False
     locate_items: bool = True
+    invent_door: bool = False  # the pair judge reports a door that appeared
     broken_judge: bool = False
     model_requests: int = 0
     edited_originals: set[str] = field(default_factory=set)
@@ -156,11 +157,14 @@ class FakeModelServer:
         _, cluttered, _ = images
         count = len(_ITEM_LINE.findall(text))
         items = list(range(1, count + 1)) if self.behaviour.locate_items else []
-        regions = [{"region": n, "items": items} for n in range(1, 13)]  # numbers past the drawn ones are dropped
+        regions = [{"region": n, "items": items, "other_change": False} for n in range(1, 13)]  # extra numbers dropped
+        openings = [{"kind": "window", "where": "back wall", "status": "unchanged", "regions": []}]
+        appeared = [{"kind": "door", "where": "left wall", "regions": [1]}] if self.behaviour.invent_door else []
+        head = {"openings": openings, "appeared": appeared, "regions": regions}
         marked = np.all(np.abs(cluttered.astype(int) - np.array(MARKER_RGB)) <= 2, axis=-1).sum() > 100
         if marked:
-            return {"regions": regions, "findings": [], "guidance": []}
-        return {"regions": regions,
+            return {**head, "findings": [], "guidance": []}
+        return {**head,
                 "findings": [{"code": "clutter_off_spec", "severity": "blocking", "regions": [], "box": None,
                               "comment": "the items are not the ones listed"}],
                 "guidance": [f"Write {MARKER} in the instruction."]}

@@ -14,11 +14,11 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 1. [Files in the package](#files-in-the-package) _(Lines 42-55)_
 1. [Composition and recording](#composition-and-recording) _(Lines 58-90)_
 1. [The clean loop](#the-clean-loop) _(Lines 93-125)_
-1. [The clutter loop](#the-clutter-loop) _(Lines 128-163)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 166-182)_
-1. [Lessons](#lessons) _(Lines 185-201)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 204-217)_
-1. [The run](#the-run) _(Lines 220-233)_
+1. [The clutter loop](#the-clutter-loop) _(Lines 128-166)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 169-185)_
+1. [Lessons](#lessons) _(Lines 188-204)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 207-220)_
+1. [The run](#the-run) _(Lines 223-236)_
 
 
 ---
@@ -124,13 +124,15 @@ sequenceDiagram
   rental).
 
 ## The clutter loop
-<!-- Lines 128-163 -->
+<!-- Lines 128-166 -->
 
 Same shape. The subject is a clutter spec; its input image C is one accepted clean image of the scene, recorded on
 the loop (`input_image`).
 
 1. **Write** the instruction: the clutter writer's instruction, the spec (room, scene, density, items with category,
-   placement, attachment), the placement rules that apply, the lessons of the arm.
+   placement, attachment), the placement rules that apply, the lessons of the arm, and C itself, so the writer
+   anchors items only on what the room shows (owner, 2026-10-22; [judge aids](judge_aids.md#a2-and-openings-in-detail)).
+   The reviser sees C too.
 2. **Edit:** the editor receives C as `original`, the instruction, the iteration's seed. Output: the raw edit E,
    at C's size (otherwise reason `misaligned`).
 3. **Correct and test globally:** estimate the shift between C and E and E's global colour and level change on the
@@ -144,13 +146,14 @@ the loop (`input_image`).
    C stays the clean one (P1: equal wherever the alpha is 0).
 6. **Regions:** the mask's pieces grouped into numbered regions, drawn on K (the `regions` image; aid A2,
    [judge aids](judge_aids.md#a2-and-openings-in-detail)).
-7. **Judge, pair:** C, K and the regions image; openings first (no door, window or passage added, removed, moved,
-   resized or changed in kind: `opening_changed`), then the clutter matches its spec and its placement rules,
-   nothing else in the room changed, K is plausible as a photograph; the judge **assigns the specified items to the
-   numbered regions** (per region, the items it holds, possibly none).
-8. **Explained change:** every numbered region must hold at least one item by the judge's assignment; a region that
-   does not is an `unexplained_change` (a repainted patch, a removed fixture, a changed frame pasted along with the
-   clutter). Identity outside the mask is necessary, not sufficient: this test guards the inside.
+7. **Judge, pair:** C, K and the regions image; first a **checklist of openings** (every door, window and passage
+   of C with its status in K, then any that appeared; a change derives `opening_changed`), then **per numbered
+   region** the specified items it holds and whether it holds another change, then findings: the clutter matches
+   its spec and its placement rules, nothing else in the room changed, K is plausible as a photograph.
+8. **Explained change:** every numbered region must be answered once, hold at least one item and no other change;
+   a region that does not is an `unexplained_change` (a repainted patch, a removed fixture, a changed frame pasted
+   along with the clutter), as are specks above their limit. Identity outside the mask is necessary, not
+   sufficient: this test guards the inside.
 9. **Revise** or accept, as in the clean loop; then distill.
 
 Every threshold in force is recorded with what it was compared to (`measure`, kind `threshold`). The owner looks at
@@ -162,7 +165,7 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 166-182 -->
+<!-- Lines 169-185 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
   thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
@@ -181,7 +184,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 185-201 -->
+<!-- Lines 188-204 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -200,7 +203,7 @@ which keeps one VAE per pair.
   prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 204-217 -->
+<!-- Lines 207-220 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
@@ -216,7 +219,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 220-233 -->
+<!-- Lines 223-236 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
   before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`

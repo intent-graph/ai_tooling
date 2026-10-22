@@ -2,6 +2,88 @@
   "title": "pair_judgment",
   "type": "object",
   "properties": {
+    "openings": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "door",
+              "window",
+              "passage"
+            ]
+          },
+          "where": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "unchanged",
+              "partly_hidden",
+              "changed",
+              "vanished"
+            ]
+          },
+          "regions": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "where",
+          "status",
+          "regions"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "appeared": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "door",
+              "window",
+              "passage"
+            ]
+          },
+          "where": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "regions": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "where",
+          "regions"
+        ],
+        "additionalProperties": false
+      }
+    },
     "regions": {
       "type": "array",
       "maxItems": 12,
@@ -21,11 +103,15 @@
               "minimum": 1,
               "maximum": 12
             }
+          },
+          "other_change": {
+            "type": "boolean"
           }
         },
         "required": [
           "region",
-          "items"
+          "items",
+          "other_change"
         ],
         "additionalProperties": false
       }
@@ -39,7 +125,6 @@
           "code": {
             "type": "string",
             "enum": [
-              "opening_changed",
               "clutter_off_spec",
               "clutter_off_spec_minor",
               "item_missing",
@@ -109,6 +194,8 @@
     }
   },
   "required": [
+    "openings",
+    "appeared",
     "regions",
     "findings",
     "guidance"

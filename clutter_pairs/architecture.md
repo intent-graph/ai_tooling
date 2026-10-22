@@ -82,8 +82,8 @@ A taxonomy of all clutter. *Proposal* for its axes:
 
 - **category:** large furniture, small furniture, storage, textiles (rugs, curtains, bedding), objects and
   decoration, appliances, kitchen fittings, boxes, people and animals, vehicles, garden furniture;
-- **placement:** standing against a wall, freestanding, on a surface, on a wall, **hanging on a door**,
-  inside open storage;
+- **placement:** standing against a wall, freestanding, on a surface, on a wall, inside open storage ("hanging on a
+  door" removed by the owner on 2026-10-22: asked for where no door was shown, the editor drew one);
 - **density:** tidy, lived-in, cluttered, moving day;
 - **attachment:** movable, or fixed to the building (what a given project keeps is that project's rule set;
   the taxonomy only records it).
@@ -128,7 +128,7 @@ Model 3 is a judge, or a pixel-based test. *Proposal* for what each checks (made
 | Check | Test |
 |---|---|
 | clean image is empty and matches its spec | judge; an object detector only if the judge misses movable items |
-| cluttered image changes **only** where clutter was added | outside the change mask: equal by construction (composite); inside: every changed region is an item the judge located; before both: no global repaint |
+| cluttered image changes **only** where clutter was added | outside the change mask: equal by construction (composite); inside: every numbered changed region holds an item the judge assigns to it, and no other change; before both: no global repaint |
 | clutter matches its spec and its placement rules | judge |
 | the pair is plausible as a photo | judge |
 
