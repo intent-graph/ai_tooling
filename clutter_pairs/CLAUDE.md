@@ -5,8 +5,9 @@
   anything marked *proposal* in it is not decided.
 - **Design stage:** the high-level design ([design/README.md](design/README.md)) is agreed; slice 1's detailed design
   ([design/data_model.md](design/data_model.md) with [design/schema.sql](design/schema.sql),
-  [design/loops.md](design/loops.md), [design/components.md](design/components.md)) is a proposal. Code starts once the
-  owner accepts it.
+  [design/loops.md](design/loops.md), [design/components.md](design/components.md)) is what slice 1 implements, at the
+  owner's request. A change it needs goes into the design first, and to the owner when it touches an agreed choice
+  (C1 to C10) or property (P1 to P10).
 - **virtual_unstaging** is imported, never copied. It may change only by adding modularity or override mechanisms
   (owner's rule): each defaults to its own behaviour and never names clutter_pairs. Its gates must pass after any
   change there, and the names relied on are the ones listed in design/components.md.

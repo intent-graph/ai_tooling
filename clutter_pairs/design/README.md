@@ -5,10 +5,10 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
 [construction guideline](../../dev_guidelines/software_development_guidelines/construction.md#derivation-order).
 
 > **Status:** the high-level design (this page) is agreed by the owner, with the owner's later answers folded in.
-> Slice 1's detailed design is a *proposal*, revised after an independent review: [data_model.md](data_model.md) (the
+> Slice 1's detailed design, revised after an independent review, is to be implemented (the owner's request): [data_model.md](data_model.md) (the
 > schema, its views and audit checks), [loops.md](loops.md) (composition and recording, both loops, pixel tests and
 > composite, verdict and stop rule, lessons and how their effect is measured), [components.md](components.md) (use of
-> virtual_unstaging, layering, configuration, command line). No clutter_pairs code yet.
+> virtual_unstaging, layering, configuration, command line). Implementation of slice 1 starting.
 
 ## Table of Contents
 
