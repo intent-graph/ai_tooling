@@ -1,0 +1,42 @@
+# FLUX.2 [klein] 4B: step-distilled 4B rectified-flow editor (Qwen3 4B text encoder), multi-reference input, no mask argument.
+# Verified: pipeline class and `is_distilled` (model_index.json), the card's call (4 steps, guidance 1.0), the __call__
+# arguments (diffusers source), commit and licence. Unverified: see `unverified`.
+name = "flux2_klein_4b"
+adapter = "diffusers"
+licence = "Apache-2.0"
+unverified = ["max_images", "output_side", "text_only"]
+notes = [
+  "About 16 GB of weights in bfloat16; the card gives about 13 GB of VRAM. Fits one 80 GB GPU beside the judge without offload.",
+  "Step-distilled to 4 steps: the pipeline ignores guidance above 1.0 for this model.",
+  "The pipeline resizes every condition image above 1 megapixel down to 1 megapixel and sets no limit on their number; four references is the reported figure, not found in the vendor's pages.",
+]
+
+[pipeline]
+class = "Flux2KleinPipeline"
+repository = "black-forest-labs/FLUX.2-klein-4B"
+revision = "e7b7dc27f91deacad38e78976d1f2b499d76a294"
+dtype = "bfloat16"
+placement = "cuda"
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 4
+native_mask = false         # the pipeline has no mask argument: a mask is a condition image, in request order
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+text_only = true            # also text to image (no image sent): the image argument is left out; not run yet
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 4
+guidance_scale = 1.0

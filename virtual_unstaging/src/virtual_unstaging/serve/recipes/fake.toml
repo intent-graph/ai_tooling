@@ -1,0 +1,37 @@
+# A stand-in generator that needs no torch and no weights: it fills the removal mask with the colour around it,
+# or, from text alone, makes a flat colour image.
+# For tests and dry runs of the whole path (client, blobs, roles, settings); it removes nothing a model would.
+name = "fake"
+adapter = "fake"
+licence = "none (test double)"
+notes = ["Not a model: the output is the original with the mask region filled by the mean colour of its surroundings."]
+
+[pipeline]
+class = "FakePipeline"
+repository = "fake/generator"
+revision = "1"
+dtype = "float32"
+placement = "cuda"
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 6
+native_mask = false
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+text_only = true            # without an image: a flat colour set by prompt and seed
+
+[output]
+side = 512
+multiple = 8
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 10
+true_cfg_scale = 4.0

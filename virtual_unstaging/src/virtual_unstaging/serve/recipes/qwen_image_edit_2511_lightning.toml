@@ -1,0 +1,62 @@
+# Qwen-Image-Edit-2511 with the 4-step Lightning distillation LoRA: guidance off, the distillation's scheduler (shift 3).
+# Verified: the LoRA file and its commit, the authors' diffusers script (scheduler configuration, LoRA loading, 4 steps,
+# true_cfg_scale 1.0), the base recipe's checks. Unverified: see `unverified`.
+name = "qwen_image_edit_2511_lightning"
+adapter = "diffusers"
+licence = "Apache-2.0 (base and LoRA)"
+unverified = ["placement", "fp8_storage", "lora", "max_images", "output_side"]
+notes = [
+  "Scheduler from the authors' generate_with_diffusers.py: base_shift = max_shift = ln 3 (shift 3 used in distillation), exponential time shift, shift_terminal unset.",
+  "The LoRA is fused at load, then the transformer is stored in FP8; whole models move to the GPU in turn (about 37 GB of weights).",
+]
+
+[pipeline]
+class = "QwenImageEditPlusPipeline"
+repository = "Qwen/Qwen-Image-Edit-2511"
+revision = "6f3ccc0b56e431dc6a0c2b2039706d7d26f22cb9"
+dtype = "bfloat16"
+placement = "model_cpu_offload"
+fp8_storage = ["transformer"]
+scheduler_none = ["shift_terminal"]
+
+[pipeline.lora]
+repository = "lightx2v/Qwen-Image-Edit-2511-Lightning"
+revision = "107d238d68b8387e32843d0b4a2e24ceb0d3ad86"
+weight_name = "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors"
+
+[pipeline.scheduler]
+base_image_seq_len = 256
+base_shift = 1.0986122886681098   # ln 3
+max_image_seq_len = 8192
+max_shift = 1.0986122886681098    # ln 3
+num_train_timesteps = 1000
+shift = 1.0
+time_shift_type = "exponential"
+use_dynamic_shifting = true
+invert_sigmas = false
+stochastic_sampling = false
+use_beta_sigmas = false
+use_exponential_sigmas = false
+use_karras_sigmas = false
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 3
+native_mask = false
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 4
+true_cfg_scale = 1.0

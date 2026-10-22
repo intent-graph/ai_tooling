@@ -1,0 +1,99 @@
+# Dimension registry, slice 1 (design/loop1.md: Dimension registry). Registry order is the order engines poll in.
+# Text fragments may use ${movable}, ${fixed_visible}, ${fixed_group}; nothing else is substituted.
+
+# For a defect seen, which dimension to step first, and which way (1 = next level, -1 = previous level).
+defect_steps = [
+  { defect = "opening_invented", dimension = "wall_rule", direction = 1, priority = 1 },
+  { defect = "opening_invented", dimension = "reference_count", direction = 1, priority = 2 },
+  { defect = "viewpoint_changed", dimension = "reference_count", direction = -1, priority = 1 },
+  { defect = "viewpoint_changed", dimension = "fidelity_clause", direction = 1, priority = 2 },
+  { defect = "scene_invented", dimension = "reference_count", direction = 1, priority = 1 },
+  { defect = "scene_invented", dimension = "fidelity_clause", direction = 1, priority = 2 },
+  { defect = "fixture_removed", dimension = "protected_mask", direction = 1, priority = 1 },
+  { defect = "fixture_removed", dimension = "fixed_elements_named", direction = 1, priority = 2 },
+  { defect = "fixture_removed", dimension = "mask_extent", direction = -1, priority = 3 },
+  { defect = "element_added", dimension = "fixed_elements_named", direction = -1, priority = 1 },
+  { defect = "element_added", dimension = "reference_count", direction = -1, priority = 2 },
+  { defect = "movable_left", dimension = "mask_extent", direction = 1, priority = 1 },
+  { defect = "surface_implausible", dimension = "reference_count", direction = 1, priority = 1 },
+  { defect = "surface_implausible", dimension = "wall_rule", direction = 1, priority = 2 },
+  { defect = "drift", dimension = "mask_extent", direction = -1, priority = 1 },
+  { defect = "drift", dimension = "fidelity_clause", direction = 1, priority = 2 },
+  { defect = "colour_shift", dimension = "fidelity_clause", direction = 1, priority = 1 },
+]
+
+[[dimension]]
+key = "wall_rule"
+input = "instructions"
+realizer = "text_slot"
+slot = "constraints"
+default = "present"
+targets = ["opening_invented", "surface_implausible"]
+levels = [
+  { label = "absent", text = "" },
+  { label = "present", text = "Where an object is removed, continue the wall, floor and skirting that were behind it. Do not add doors, windows or openings." },
+  { label = "emphasized", text = "Most important: behind every removed object there is a continuous wall. Never add a door, a window, a passage or any opening that is not visible in the photo to edit." },
+]
+
+[[dimension]]
+key = "fixed_elements_named"
+input = "instructions"
+realizer = "text_slot"
+slot = "keep"
+default = "visible"
+targets = ["fixture_removed", "element_added"]
+levels = [
+  { label = "none", text = "" },
+  { label = "visible", text = "Keep these fixed elements exactly where and as they are, without adding any: ${fixed_visible}." },
+  { label = "group_list", text = "This room's fixed elements must stay exactly as they are, and must not be added where they are not visible: ${fixed_group}." },
+]
+
+[[dimension]]
+key = "fidelity_clause"
+input = "instructions"
+realizer = "text_slot"
+slot = "fidelity"
+default = "present"
+targets = ["viewpoint_changed", "drift", "colour_shift"]
+levels = [
+  { label = "absent", text = "" },
+  { label = "present", text = "Keep the camera position, framing, perspective, lighting and colours of the photo to edit." },
+  { label = "emphasized", text = "Change nothing outside the removed objects: same camera position, same framing, same perspective, same light, same colours, pixel for pixel." },
+]
+
+[[dimension]]
+key = "reference_count"
+input = "clues"
+realizer = "reference_count"
+default = "1"
+targets = ["surface_implausible", "scene_invented", "viewpoint_changed"]
+levels = [
+  { label = "0", count = 0 },
+  { label = "1", count = 1 },
+  { label = "2", count = 2 },
+  { label = "4", count = 4 },
+]
+
+[[dimension]]
+key = "mask_extent"
+input = "guides"
+realizer = "mask_dilation"
+default = "dilated"
+targets = ["movable_left", "drift"]
+levels = [
+  { label = "tight", dilation_pct = 0.0 },
+  { label = "dilated", dilation_pct = 1.5 },
+  { label = "wide", dilation_pct = 4.0 },
+]
+
+[[dimension]]
+key = "protected_mask"
+input = "guides"
+realizer = "guide_toggle"
+role = "protected_mask"
+default = "off"
+targets = ["fixture_removed"]
+levels = [
+  { label = "off", on = false },
+  { label = "on", on = true },
+]

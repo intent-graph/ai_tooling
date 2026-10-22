@@ -1,0 +1,44 @@
+# Qwen-Image-Edit-2511: instruction editor, several condition images, no mask argument (the mask rides as an image).
+# Verified: pipeline class (the repository's model_index.json), the __call__ arguments (diffusers source), the
+# card's example (dtype, defaults), the repository's commit and licence. Unverified: see `unverified`.
+name = "qwen_image_edit_2511"
+adapter = "diffusers"
+licence = "Apache-2.0"
+unverified = ["placement", "fp8_storage", "max_images", "output_side"]
+notes = [
+  "The 2511 card shows two input images; the 2509 card advises one to three; the pipeline sets no limit.",
+  "The 20.4B transformer (40.9 GB in bfloat16) is stored in FP8 (20.4 GB) and whole models move to the GPU in turn: the peak is about one 20 GB model plus activations (inferred, not run). Sized to share one 80 GB GPU with an FP8 judge (about 36 GB): the generator must peak under about 40 GB.",
+  "Needs diffusers with QwenImageEditPlusPipeline. The default output size of this pipeline follows the last image, so width and height are always passed from the original.",
+]
+
+[pipeline]
+class = "QwenImageEditPlusPipeline"
+repository = "Qwen/Qwen-Image-Edit-2511"
+revision = "6f3ccc0b56e431dc6a0c2b2039706d7d26f22cb9"
+dtype = "bfloat16"
+placement = "model_cpu_offload"  # about 58 GB of weights in bfloat16 (inferred, not run)
+fp8_storage = ["transformer"]
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 3
+native_mask = false         # the pipeline has no mask argument: a mask is a condition image, in request order
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 40
+true_cfg_scale = 4.0
+guidance_scale = 1.0
+negative_prompt = " "

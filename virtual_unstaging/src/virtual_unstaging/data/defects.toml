@@ -1,0 +1,46 @@
+# Defect taxonomy: one vocabulary for the judge, the reviewer and the knowledge base (architecture: Defect taxonomy).
+
+[[defect]]
+code = "viewpoint_changed"
+label = "Viewpoint changed"
+description = "The framing, perspective or camera position differs from the original."
+
+[[defect]]
+code = "scene_invented"
+label = "Scene invented"
+description = "The room shown is not the room of the original: walls, openings or layout do not match."
+
+[[defect]]
+code = "fixture_removed"
+label = "Fixed element removed"
+description = "An element fixed to the building (door, window, radiator, socket, built-in) is missing or replaced."
+
+[[defect]]
+code = "opening_invented"
+label = "Opening invented"
+description = "A door, window or passage appears where furniture stood and is not visible in the original."
+
+[[defect]]
+code = "element_added"
+label = "Element added"
+description = "Anything that is not in the original and is not a plain revealed surface (wall, floor, skirting) was added."
+
+[[defect]]
+code = "movable_left"
+label = "Movable object left"
+description = "A piece of furniture or a movable object that should have been removed is still visible, whole or in part."
+
+[[defect]]
+code = "surface_implausible"
+label = "Implausible surface"
+description = "A revealed wall or floor does not continue the visible ones: material, colour, joints or lines are broken."
+
+[[defect]]
+code = "drift"
+label = "Drift outside the region"
+description = "Parts of the image outside the removed region changed beyond small tolerances."
+
+[[defect]]
+code = "colour_shift"
+label = "Colour shift"
+description = "The global exposure or colour balance changed."

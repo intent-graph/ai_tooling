@@ -1,0 +1,45 @@
+# FLUX.2 [klein] 9B: step-distilled 9B rectified-flow editor (Qwen3 8B text encoder), multi-reference input, no mask argument.
+# Verified: pipeline class and the card's call (4 steps, guidance 1.0), the __call__ arguments (diffusers source), commit
+# and licence. Not read: model_index.json (gated). Unverified: see `unverified`.
+name = "flux2_klein_9b"
+adapter = "diffusers"
+licence = "FLUX Non-Commercial License (the card asks for filters or manual review of outputs)"
+unverified = ["placement", "fp8_storage", "max_images", "output_side", "text_only"]
+notes = [
+  "The repository is gated: accept its terms with the account whose token the server uses.",
+  "The 9.1B transformer is stored in FP8 (9 GB) and stays on the GPU with the 8.2B text encoder (16.4 GB): about 25 GB, under the 36 GB a generator has beside the judge, with no per-call transfer (inferred, not run).",
+  "Step-distilled to 4 steps: the pipeline ignores guidance above 1.0 when the model's configuration says it is distilled.",
+  "The pipeline resizes every condition image above 1 megapixel down to 1 megapixel and sets no limit on their number; four references is the reported figure, not found in the vendor's pages.",
+  "A masked variant exists as Flux2KleinInpaintPipeline (mask_image, image_reference, strength), documented with the undistilled base model: not this recipe.",
+]
+
+[pipeline]
+class = "Flux2KleinPipeline"
+repository = "black-forest-labs/FLUX.2-klein-9B"
+revision = "92196c8e11f7b6cf2b7493e037d8c5345c559216"
+dtype = "bfloat16"
+placement = "cuda"
+fp8_storage = ["transformer"]
+
+[inputs]
+roles = ["original", "reference", "removal_mask", "protected_mask"]
+max_images = 4
+native_mask = false         # the pipeline has no mask argument: a mask is a condition image, in request order
+image_argument = "image"
+image_passing = "list"
+prompt_argument = "prompt"
+seed_argument = "generator"
+text_only = true            # also text to image (no image sent): the image argument is left out; not run yet
+
+[output]
+side = 1024
+multiple = 32
+width_argument = "width"
+height_argument = "height"
+
+[settings]
+steps_argument = "num_inference_steps"
+
+[settings.defaults]
+num_inference_steps = 4
+guidance_scale = 1.0
