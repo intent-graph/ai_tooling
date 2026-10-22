@@ -5,23 +5,24 @@ Generate pairs of images of the same view, clean and cluttered, as ground-truth 
 
 > **Status:** slice 1 implemented and tested offline, on stand-in models: declared space, planner, both loops with
 > lessons carried forward and a comparison arm, recording of every exchange, audit, reports, export, command line.
-> Run once on a rented GPU (2026-10-22): clean images worked, the clutter loop's judging held the yield to a few
-> pairs; two judge aids followed ([design/judge_aids.md](design/judge_aids.md)), not yet run on a real model. Read [architecture.md](architecture.md) (the contract: only pairs are
+> Run twice on a rented GPU (2026-10-22): the first run's judging held the yield to 3 pairs; with the judge aids
+> since ([design/judge_aids.md](design/judge_aids.md): knowledge as text, numbered regions, a checklist of openings),
+> the second gave 32 pairs in two hours. The main blocker now: the editor adds objects nobody listed. Read [architecture.md](architecture.md) (the contract: only pairs are
 > required; two routes, generation preferred; room ontology, clutter taxonomy, pipeline, quality checks, risks, prior
 > work), then [design/README.md](design/README.md) (data flow, stored data, the choices; slice 1's detailed design).
 
 ## Table of Contents
 
-1. [Install](#install) _(Lines 25-33)_
-1. [Use](#use) _(Lines 36-54)_
-1. [Develop](#develop) _(Lines 57-70)_
-1. [Files](#files) _(Lines 73-77)_
-1. [Sub-folders](#sub-folders) _(Lines 80-84)_
+1. [Install](#install) _(Lines 26-34)_
+1. [Use](#use) _(Lines 37-55)_
+1. [Develop](#develop) _(Lines 58-71)_
+1. [Files](#files) _(Lines 74-78)_
+1. [Sub-folders](#sub-folders) _(Lines 81-85)_
 
 ---
 
 ## Install
-<!-- Lines 25-33 -->
+<!-- Lines 26-34 -->
 
 From this folder, with [uv](https://docs.astral.sh/uv/), beside a checkout of `virtual_unstaging` (imported as an
 editable path dependency):
@@ -32,7 +33,7 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 ```
 
 ## Use
-<!-- Lines 36-54 -->
+<!-- Lines 37-55 -->
 
 A dataset is a folder: its configuration, its store, its images by hash, its exports.
 
@@ -53,7 +54,7 @@ Exit codes: 0 done, 1 failure (an audit problem included), 2 usage, 3 paused on 
 resumes), 4 stopped at the rental's deadline. The command name `cpairs` is provisional.
 
 ## Develop
-<!-- Lines 57-70 -->
+<!-- Lines 58-71 -->
 
 ```bash
 .venv/bin/pytest -q                        # offline: the stand-in model server runs on a local port
@@ -69,14 +70,14 @@ schemas, default space, reason codes and the carry-forward decision rule are the
 `clutter_pairs.toml`).
 
 ## Files
-<!-- Lines 73-77 -->
+<!-- Lines 74-78 -->
 
 - [`architecture.md`](architecture.md) — the architecture and its open questions.
 - [`CLAUDE.md`](CLAUDE.md) — agent entry point for this folder.
 - [`pyproject.toml`](pyproject.toml) — package, gates, and the declared layering.
 
 ## Sub-folders
-<!-- Lines 80-84 -->
+<!-- Lines 81-85 -->
 
 - [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model, loops
   (composition and recording, pixel tests, composite, lessons and their measurement), components (use of
