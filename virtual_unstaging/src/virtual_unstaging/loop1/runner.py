@@ -35,6 +35,7 @@ from virtual_unstaging.engines import make_engine, replay
 from virtual_unstaging.instructions import InstructionStack
 from virtual_unstaging.judge import Chat, ContractError, Judge, JudgeImage, JudgeInput, JudgeOutput
 from virtual_unstaging.loop1.compile import Guide, PhotoContext, compile_request
+from virtual_unstaging.loop1.evidence import inventory_names
 from virtual_unstaging.registry import prune
 from virtual_unstaging.store import repo
 from virtual_unstaging.store.blobs import BlobStore
@@ -65,6 +66,7 @@ class Adapters:
     text_part: Callable[[str], dict[str, object]]
     tools: ToolBox
     use_class_diff: bool
+    use_inventory: bool = False
     workers: int = 2
     fixed_settings: tuple[tuple[str, Any], ...] = ()
     judge_request: JudgeRequestOptions = JudgeRequestOptions()  # the judge's speed version; its revision says it
@@ -278,13 +280,18 @@ class Optimization:
         probes = [("change_map", self._tool("change_map", [original, candidate, region.sha256], {}))]
         if self.a.use_class_diff:
             probes.append(("class_diff", self._tool("class_diff", [original, candidate, region.sha256], {})))
+        if self.a.use_inventory:
+            fixed, movable = inventory_names(self.context.fixed_group, self.context.movable)
+            params = {"fixed": fixed, "movable": movable}
+            probes.append(("element_inventory", self._tool("element_inventory", [original, candidate, region.sha256], params)))
         images = [
             JudgeImage("the original photo", self.a.blobs.get(original)),
             JudgeImage("the edited candidate", self.a.blobs.get(candidate)),
             JudgeImage("the original with the removal region outlined in magenta", self.a.blobs.get(outline.outputs["image"])),
         ]
-        labels = {"heatmap": "a heat map of colour change outside the removal region (red = changed)",
-                  "map": "a map of semantic class changes between original and candidate"}
+        labels = {"heatmap": "a heat map of local colour change outside the removal region, a uniform shift removed (red = changed)",
+                  "map": "a map of semantic class changes between original and candidate",
+                  "annotated": "the edited candidate with the inventory's elements boxed by status, numbered as in the inventory"}
         for _, row in probes:
             for name, sha in row.outputs.items():
                 if name in labels:

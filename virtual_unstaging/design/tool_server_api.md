@@ -157,6 +157,7 @@ and `model`; the orchestrator caches a tool run by tool, version, params and inp
 |---|---|---|---|
 | `segment_elements` | `[image]` | `labels` (1 to 64 distinct element names: letters, digits, spaces, hyphens, apostrophes), `threshold` (default 0.3) | `mask` (union, white = found) and one `mask_<i>` per label, zero-based, in label order, always present; measures `found` (share of the frame per label), `detections` (boxes kept per label), `union_share`, `fell_back_to_boxes` (true when the masks are the detection boxes because the segmentation step failed) |
 | `class_diff` | `[original, candidate, region_mask]` | `opening_classes` (default door, window, doorway; ADE20K names or those words), `min_share` (default 0.005) | `map` (colour map: red became an opening, blue stopped being one, yellow a class that appeared, cyan one that vanished; dimmed outside the region); measures `opening_share_of_region`, `opening_box`, `opening_share_outside`, `region_share`, and for `inside` and `outside` the classes `appeared` and `vanished` (class absent in one picture and at least `min_share` of the zone in the other) with `share` and `box` in [0, 1] |
+| `element_inventory` | `[original, candidate, region_mask]` | `fixed`, `movable` (element names as for `segment_elements`; together 1 to 96, each name once across both lists), `threshold` (default 0.3) | `annotated` (the candidate with each element that is not kept boxed, coloured by status and numbered as in the summary); measures `elements` (per element: `n`, `label`, `kind` fixed or movable, `status`, `where` inside or outside the region, `inside_share`, `box_original`, `box_candidate` in [0, 1], `overlap`, `growth`, `stood`: the original's movable elements under a new one), `counts` per status, `compared_at`, `candidate_resized`, `fell_back_to_boxes`; the `summary` is the inventory as a short table, several lines ([Element inventory](#element-inventory)) |
 | `change_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side kept clear around the region, default 0.02) | `heatmap` (red = the larger of a displacement of 1% of the long side and a colour difference of 10; the region and its margin are drawn apart); measures `displacement_median_pct`, `displacement_p95_pct` (optical flow outside the region, in % of the long side), `global_shift_px`, `delta_e_median`, `delta_e_p95` (CIE76), `outside_share` |
 
 - The `summary` is one sentence the judge reads, for example "inside the removed region, 3.1% of pixels became
@@ -170,6 +171,43 @@ and `model`; the orchestrator caches a tool run by tool, version, params and inp
 
 The orchestrator also runs cheap tools itself (mask dilation, region outline, a pixel-level change map), under
 the same names and contract.
+
+### Element inventory
+
+*Proposal*, 2026-10-22. Pixels cannot tell a revealed surface from an invented one: the semantic diff called
+"appeared" a doorway the edit had uncovered behind a person, and the judges reported an invented opening. An
+element seen partly in the original and whole in the candidate can tell them apart. The inventory lists, element by
+element, what became of each thing the room's rules name.
+
+- **Detect and segment** both pictures with the same names (Grounding DINO boxes, SAM 2.1 masks, as
+  `segment_elements`), compared at no more than 1024 pixels on the long side; one instance per box kept. Each box
+  takes the one name its best-scoring prompt tokens belong to, not the phrase the detector decodes (the tokenizer
+  re-spaces names such as "built-in", and a decoded phrase may run over several names); boxes of one name that
+  overlap by 0.7 or more are one detection.
+- **One element, one entry:** within one picture, two instances of the same kind are one element, named by the
+  higher score, when their masks overlap by at least 0.6 (intersection over union) or one lies at least 80% within
+  the other and is at least a fifth of its area: the names overlap ("door" and "the arched wooden doors" find the
+  same door; a fireplace and its opening). A socket inside a built-in cupboard stays apart.
+- **Match by place** across the two pictures, greedily by mask overlap: the same name first, then any name of the
+  same kind; a pair needs an overlap of at least 0.3. An element is **inside** the region when at least half of its
+  mask is.
+- **Status** of each element:
+
+| Status | Rule | Bears on |
+|---|---|---|
+| `kept` | matched, overlap at least 0.6 | nothing |
+| `revealed` | matched, the candidate's mask at least 1.5 times the original's, most of the growth inside the region | legitimate: the edit uncovered it |
+| `changed` | matched, overlap under 0.6, not revealed | outside the region: `drift`; a fixed element replaced: `fixture_removed` |
+| `removed` | in the original only | movable, wherever it stood: what the rules ask; fixed: `fixture_removed`, or `drift` outside the region |
+| `new` | in the candidate only | `element_added`, `opening_invented`; `stood` names what the original showed there |
+| `left` | movable, matched, inside the region | `movable_left` |
+
+- **Summary**, the text the judge reads: one line per element that bears on a defect (number, name, kind, status,
+  where, what stood there); the movable elements removed and the kept ones rolled up into one line of names each;
+  then the counts. At most 24 element lines, the rest counted.
+- **Limits:** the detector misses and mislabels elements; an element hidden whole in the original and completed in
+  the candidate is `new`, with what stood there, and whether it was revealed or invented stays the judge's call.
+  Tools locate and measure; the judge decides.
 
 ## Asynchronous jobs
 <!-- Lines 176-199 -->

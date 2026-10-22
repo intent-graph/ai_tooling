@@ -110,6 +110,11 @@ def delta_e76(a: NDArray[np.float32], b: NDArray[np.float32]) -> NDArray[np.floa
     return cast(NDArray[np.float32], np.linalg.norm(_rgb_to_lab(a) - _rgb_to_lab(b), axis=-1).astype(np.float32))
 
 
+def lab(rgb: NDArray[np.float32]) -> NDArray[np.float32]:
+    """CIE L*a*b* (D65) of an RGB array in [0, 1]."""
+    return _rgb_to_lab(rgb)
+
+
 def _rgb_to_lab(rgb: NDArray[np.float32]) -> NDArray[np.float32]:
     linear = np.where(rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055) ** 2.4)
     matrix = np.array(

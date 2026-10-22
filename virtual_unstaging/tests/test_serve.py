@@ -48,7 +48,7 @@ from virtual_unstaging.serve.recipe import FIELDS, available_recipes, load_recip
 from virtual_unstaging.serve.tools import build_tools
 from virtual_unstaging.serve.tools.changemap import FarnebackBackend, PhaseCorrelationBackend, measure_change
 from virtual_unstaging.serve.tools.classdiff import BrightnessClassBackend, compare_classes, resolve_classes
-from virtual_unstaging.serve.tools.segment import match_labels
+from virtual_unstaging.serve.tools.segment import assign_labels, label_spans, suppress
 
 KEY = "test-key-0123456789abcdef"
 AUTH = {"Authorization": f"Bearer {KEY}"}
@@ -212,7 +212,7 @@ def test_capabilities_and_health(client: TestClient, clock: FakeClock) -> None:
     assert {"model", "revision", "max_images", "roles", "native_mask", "text_only", "settings", "licence"} <= set(generator)
     assert generator["native_mask"] is False and "removal_mask" in generator["roles"]
     assert generator["text_only"] is True and generator["settings"]["output_aspect"] == 1.0
-    assert {t["name"] for t in caps["tools"]} == {"segment_elements", "class_diff", "change_map"}
+    assert {t["name"] for t in caps["tools"]} == {"segment_elements", "class_diff", "change_map", "element_inventory"}
     assert all(t["version"] and t["model"] for t in caps["tools"])
     health = client.get("/health").json()
     assert health["status"] == "ok" and health["api_version"] == "1.2" and health["seconds_left"] == 3600
@@ -826,15 +826,21 @@ def test_colour_difference_and_boxes() -> None:
     assert box_of(mask) == [0.2, 0.2, 0.5, 0.5] and box_of(~mask & False) is None
 
 
-def test_matching_a_detected_phrase_to_labels() -> None:
-    labels = ["chair", "wooden table", "table"]
-    assert match_labels("chair", labels) == [0]
-    assert match_labels("wooden table", labels) == [1]
-    assert match_labels("table", labels) == [2]
-    assert match_labels("a chair and a table", labels) == [0, 2]
-    assert match_labels("chairs", labels) == []
-    assert match_labels("", labels) == []
-    assert match_labels("wooden", labels) == [1]
+def test_labels_come_from_the_detector_token_scores() -> None:
+    # "[CLS] chair . built - in cupboard . table . [SEP]" with "." = 9, CLS = 1, SEP = 2
+    tokens = [1, 30, 9, 31, 32, 33, 34, 9, 35, 9, 2]
+    spans = label_spans(tokens, {1, 2, 9}, 3)
+    assert spans == [[1], [3, 4, 5, 6], [8]]
+    with pytest.raises(ValueError):
+        label_spans(tokens, {1, 2, 9}, 4)
+    scores = np.zeros((3, len(tokens)), dtype=np.float32)
+    scores[0, 1] = 0.8  # query 0: chair
+    scores[1, 5] = 0.6  # query 1: one token of "built - in cupboard" carries the label
+    scores[1, 8] = 0.4
+    scores[2, 8] = 0.2  # query 2: below the threshold
+    assert assign_labels(scores, spans, 0.3) == [(0, 0, pytest.approx(0.8)), (1, 1, pytest.approx(0.6))]
+    found = [(0, [0.0, 0.0, 10.0, 10.0], 0.5), (0, [1.0, 0.0, 10.0, 10.0], 0.9), (1, [0.0, 0.0, 10.0, 10.0], 0.4)]
+    assert suppress(found, 0.7) == [(0, [1.0, 0.0, 10.0, 10.0], 0.9), (1, [0.0, 0.0, 10.0, 10.0], 0.4)]
 
 
 def test_class_names_resolve_through_aliases() -> None:
@@ -1202,37 +1208,70 @@ def test_the_segmentation_glue_against_stand_in_models(monkeypatch: pytest.Monke
 
     from virtual_unstaging.serve.tools.segment import GroundedSam2Backend
 
-    class Tensor:
+    class Array:  # a tensor as the adapter uses it: indexing, sigmoid, float, cpu, numpy, tolist
         def __init__(self, values: Any) -> None:
-            self.values = values
+            self.values = np.asarray(values)
 
-        def tolist(self) -> Any:
+        def __getitem__(self, index: Any) -> Array:
+            return Array(self.values[index])
+
+        def sigmoid(self) -> Array:
+            return self  # the stand-in holds probabilities already
+
+        def float(self) -> Array:
+            return self
+
+        def cpu(self) -> Array:
+            return self
+
+        def numpy(self) -> np.ndarray:
             return self.values
 
-    class Batch(dict[str, Any]):  # transformers' BatchEncoding is a mapping too
-        input_ids = "ids"
+        def tolist(self) -> Any:
+            return self.values.tolist()
 
-        def __init__(self) -> None:
+    class Tokenizer:  # "[CLS] a . b . [SEP]": CLS 1, SEP 2, "." 9, then one token per label
+        cls_token_id, sep_token_id = 1, 2
+
+        def convert_tokens_to_ids(self, token: str) -> int:
+            return 9
+
+    class Batch(dict[str, Any]):  # transformers' BatchEncoding is a mapping too
+        def __init__(self, input_ids: list[int] | None = None) -> None:
             super().__init__(original_sizes=np.array([[48, 64]]))
+            self.input_ids = Array([input_ids or []])
 
         def to(self, _: str) -> Batch:
             return self
 
-    detections = {  # what the detector says per pass: (label phrase, box)
-        0: [("chair", [2, 2, 12, 12], 0.9), ("table", [30, 5, 40, 15], 0.8)],
-        1: [("lamp", [0, 0, 3, 3], 0.6)],
+    def centre(box: list[float]) -> list[float]:  # absolute [x0, y0, x1, y1] to the detector's (cx, cy, w, h) in [0, 1]
+        x0, y0, x1, y1 = box
+        return [(x0 + x1) / 2 / 64, (y0 + y1) / 2 / 48, (x1 - x0) / 64, (y1 - y0) / 48]
+
+    detections = {  # what the detector says per pass: (label position in the pass, box, score)
+        0: [(0, [2, 2, 12, 12], 0.9), (1, [30, 5, 40, 15], 0.8)],
+        1: [(0, [0, 0, 3, 3], 0.3)],  # under the threshold
     }
     passes: list[list[str]] = []
 
     class DetectorProcessor:
+        tokenizer = Tokenizer()
+
         def __call__(self, images: Any, text: list[list[str]], return_tensors: str) -> Batch:
             passes.append(text[0])
-            return Batch()
+            ids = [1]
+            for i, _ in enumerate(text[0]):
+                ids += [10 + i, 9]
+            return Batch(ids + [2])
 
-        def post_process_grounded_object_detection(self, outputs: Any, input_ids: Any, **kwargs: Any) -> list[dict[str, Any]]:
+    class Detector:
+        def __call__(self, **_: Any) -> Any:
             found = detections[len(passes) - 1]
-            assert kwargs["threshold"] == kwargs["text_threshold"] == 0.4 and kwargs["target_sizes"] == [(48, 64)]
-            return [{"boxes": Tensor([f[1] for f in found]), "scores": Tensor([f[2] for f in found]), "text_labels": [f[0] for f in found]}]
+            tokens = 2 + 2 * len(passes[-1])
+            logits = np.zeros((len(found), tokens), dtype=np.float32)
+            for query, (label, _, score) in enumerate(found):
+                logits[query, 1 + 2 * label] = score
+            return types.SimpleNamespace(logits=Array([logits]), pred_boxes=Array([[centre(f[1]) for f in found]]))
 
     class SegmenterProcessor:
         def __call__(self, images: Any, input_boxes: list[list[list[float]]], return_tensors: str) -> Batch:
@@ -1258,7 +1297,7 @@ def test_the_segmentation_glue_against_stand_in_models(monkeypatch: pytest.Monke
     backend = GroundedSam2Backend()
     backend.labels_per_pass = 3
     backend._loaded = True
-    backend._detector, backend._detector_processor = Model(), DetectorProcessor()
+    backend._detector, backend._detector_processor = Detector(), DetectorProcessor()
     backend._segmenter, backend._segmenter_processor = Model(), SegmenterProcessor()
     image = Image.new("RGB", (64, 48))
     result = backend.segment(image, ["chair", "table", "lamp", "Rug"], 0.4)

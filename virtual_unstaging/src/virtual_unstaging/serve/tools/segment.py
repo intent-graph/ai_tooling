@@ -14,7 +14,7 @@ from PIL import Image
 
 from virtual_unstaging.serve import images as imaging
 from virtual_unstaging.serve.errors import ApiError
-from virtual_unstaging.serve.pixels import BoolArray
+from virtual_unstaging.serve.pixels import BoolArray, FloatArray
 from virtual_unstaging.serve.tools.base import (
     IMAGE,
     Backend,
@@ -31,10 +31,19 @@ DEFAULT_THRESHOLD = 0.3
 
 
 @dataclass(frozen=True)
+class Instance:
+    label: int  # index into the labels asked for
+    box: tuple[float, float, float, float]  # absolute pixels [x0, y0, x1, y1]
+    score: float
+    mask: BoolArray  # image-sized
+
+
+@dataclass(frozen=True)
 class SegmentResult:
     masks: list[BoolArray]  # one per label, in label order, image-sized
     detections: list[int]  # boxes kept per label
     fell_back_to_boxes: bool = False
+    instances: tuple[Instance, ...] = ()  # one per box kept, highest score first
 
 
 class SegmentBackend(Backend):
@@ -42,16 +51,50 @@ class SegmentBackend(Backend):
     def segment(self, image: Image.Image, labels: list[str], threshold: float) -> SegmentResult: ...
 
 
-def match_labels(text: str, batch: Sequence[str]) -> list[int]:
-    """Indices of the labels a detected phrase stands for: the phrase itself, else the labels it contains as words."""
-    phrase = " ".join(text.lower().split())
-    wanted = [" ".join(label.lower().split()) for label in batch]
-    if phrase in wanted:
-        return [wanted.index(phrase)]
-    contained = [i for i, label in enumerate(wanted) if re.search(rf"(?<!\w){re.escape(label)}(?!\w)", phrase)]
-    if contained:
-        return contained
-    return [i for i, label in enumerate(wanted) if phrase and re.search(rf"(?<!\w){re.escape(phrase)}(?!\w)", label)]
+def label_spans(token_ids: Sequence[int], separators: set[int], count: int) -> list[list[int]]:
+    """Token positions of each label in the detector's prompt ("[CLS] a. b. c. [SEP]"): the runs between separators, in
+    label order; ValueError when there are not `count` of them."""
+    spans: list[list[int]] = []
+    current: list[int] = []
+    for position, token in enumerate(token_ids):
+        if token in separators:
+            if current:
+                spans.append(current)
+            current = []
+        else:
+            current.append(position)
+    if current:
+        spans.append(current)
+    if len(spans) != count:
+        raise ValueError(f"the prompt holds {len(spans)} labels, {count} were sent")
+    return spans
+
+
+def assign_labels(token_scores: FloatArray, spans: Sequence[Sequence[int]], threshold: float) -> list[tuple[int, int, float]]:
+    """(query, label, score) for each detector query whose best label scores at least `threshold`: a label's score is
+    its best token's, as Grounding DINO scores a phrase; each box gets the one label it matches best."""
+    per_label = np.stack([token_scores[:, list(span)].max(axis=1) for span in spans], axis=1)
+    best = per_label.argmax(axis=1)
+    score = per_label[np.arange(per_label.shape[0]), best]
+    return [(int(q), int(best[q]), float(score[q])) for q in np.flatnonzero(score >= threshold)]
+
+
+def box_overlap(a: Sequence[float], b: Sequence[float]) -> float:
+    """Intersection over union of two [x0, y0, x1, y1] boxes."""
+    width = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+    height = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+    inter = width * height
+    union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
+    return inter / union if union > 0 else 0.0
+
+
+def suppress(found: Sequence[tuple[int, list[float], float]], overlap: float) -> list[tuple[int, list[float], float]]:
+    """Highest score first; a box of the same label overlapping a kept one by `overlap` or more is the same detection."""
+    kept: list[tuple[int, list[float], float]] = []
+    for item in sorted(found, key=lambda f: -f[2]):
+        if not any(k[0] == item[0] and box_overlap(k[1], item[1]) >= overlap for k in kept):
+            kept.append(item)
+    return kept
 
 
 def box_mask(box: Sequence[float], shape: tuple[int, int]) -> BoolArray:
@@ -74,6 +117,7 @@ class GroundedSam2Backend(SegmentBackend):
     model: ClassVar[str] = "IDEA-Research/grounding-dino-base + facebook/sam2.1-hiera-large"
     labels_per_pass = 8  # the detector's text input is limited in length
     max_boxes = 48
+    same_box = 0.7  # overlap above which two boxes of one label are one detection
 
     def __init__(self) -> None:
         super().__init__()
@@ -117,14 +161,18 @@ class GroundedSam2Backend(SegmentBackend):
             inputs = inputs.to(self._device)
             with torch.no_grad():
                 outputs = self._detector(**inputs)
-            results = self._detector_processor.post_process_grounded_object_detection(
-                outputs, inputs.input_ids, threshold=threshold, text_threshold=threshold, target_sizes=[(height, width)]
-            )[0]
-            phrases = results.get("text_labels", results.get("labels"))
-            for box, score, phrase in zip(results["boxes"].tolist(), results["scores"].tolist(), phrases, strict=True):
-                for local in match_labels(str(phrase), batch):
-                    found.append((start + local, [float(v) for v in box], float(score)))
-        found = sorted(found, key=lambda item: -item[2])[: self.max_boxes]
+            # Labels from the per-token scores, not from the decoded phrase: the tokenizer re-spaces names
+            # ("built - in"), and a phrase may span several labels.
+            tokenizer = self._detector_processor.tokenizer
+            separators = {tokenizer.convert_tokens_to_ids("."), tokenizer.cls_token_id, tokenizer.sep_token_id}
+            spans = label_spans(inputs.input_ids[0].tolist(), separators, len(batch))
+            token_scores = outputs.logits[0].sigmoid().float().cpu().numpy()
+            centres = outputs.pred_boxes[0].float().cpu().numpy()  # (cx, cy, w, h) in [0, 1]
+            for query, local, score in assign_labels(token_scores, spans, threshold):
+                cx, cy, w, h = (float(v) for v in centres[query])
+                box = [(cx - w / 2) * width, (cy - h / 2) * height, (cx + w / 2) * width, (cy + h / 2) * height]
+                found.append((start + local, box, score))
+        found = suppress(found, self.same_box)[: self.max_boxes]
         masks = [np.zeros((height, width), dtype=bool) for _ in labels]
         counts = [0] * len(labels)
         if not found:
@@ -141,10 +189,12 @@ class GroundedSam2Backend(SegmentBackend):
             LOG.warning("segmentation fell back to boxes: %s: %s", type(error).__name__, str(error)[:200])
             per_box = np.stack([box_mask(box, (height, width)) for box in boxes])
             fell_back = True
-        for (index, _, _), mask in zip(found, per_box, strict=True):
+        instances: list[Instance] = []
+        for (index, box, score), mask in zip(found, per_box, strict=True):
             masks[index] |= mask
             counts[index] += 1
-        return SegmentResult(masks, counts, fell_back)
+            instances.append(Instance(index, (box[0], box[1], box[2], box[3]), score, mask))
+        return SegmentResult(masks, counts, fell_back, tuple(instances))
 
 
 _COLOURS: dict[str, Any] = {
@@ -170,16 +220,22 @@ class ColourWordBackend(SegmentBackend):
         pixels = np.asarray(image.convert("RGB")).astype(int)
         r, g, b = pixels[..., 0], pixels[..., 1], pixels[..., 2]
         masks: list[BoolArray] = []
-        for label in labels:
+        instances: list[Instance] = []
+        for index, label in enumerate(labels):
             word = next((w for w in label.lower().split() if w in _COLOURS), None)
-            masks.append(np.asarray(_COLOURS[word](r, g, b), dtype=bool) if word else np.zeros(r.shape, dtype=bool))
-        return SegmentResult(masks, [int(m.any()) for m in masks])
+            mask = np.asarray(_COLOURS[word](r, g, b), dtype=bool) if word else np.zeros(r.shape, dtype=bool)
+            masks.append(mask)
+            if mask.any():  # one instance per colour: the box around all its pixels
+                rows, columns = np.where(mask.any(axis=1))[0], np.where(mask.any(axis=0))[0]
+                box = (float(columns[0]), float(rows[0]), float(columns[-1] + 1), float(rows[-1] + 1))
+                instances.append(Instance(index, box, 1.0, mask))
+        return SegmentResult(masks, [int(m.any()) for m in masks], instances=tuple(instances))
 
 
 @dataclass
 class SegmentElements(ServerTool):
     name: ClassVar[str] = "segment_elements"
-    code_version: ClassVar[str] = "1"
+    code_version: ClassVar[str] = "2"
     input_kinds: ClassVar[tuple[str, ...]] = (IMAGE,)
 
     def parse_params(self, params: Mapping[str, Any]) -> dict[str, Any]:

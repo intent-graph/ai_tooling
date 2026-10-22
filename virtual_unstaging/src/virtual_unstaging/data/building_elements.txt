@@ -1,0 +1,11 @@
+# Fixed building elements the element inventory looks for in every photo, beside the photo's own rules: one name per
+# line, as the detector reads it (English, lower case). A room's rules may name the same element more precisely.
+door
+window
+radiator
+socket
+switch
+light
+fireplace
+beam
+built-in cupboard
