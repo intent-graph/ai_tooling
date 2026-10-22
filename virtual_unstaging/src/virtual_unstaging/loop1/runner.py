@@ -67,6 +67,7 @@ class Adapters:
     tools: ToolBox
     use_class_diff: bool
     use_inventory: bool = False
+    use_structure_map: bool = False  # the structure map in place of the colour change map (needs the tool server)
     workers: int = 2
     fixed_settings: tuple[tuple[str, Any], ...] = ()
     judge_request: JudgeRequestOptions = JudgeRequestOptions()  # the judge's speed version; its revision says it
@@ -277,7 +278,8 @@ class Optimization:
         original = self.context.original
         region = self._region(point)
         outline = self._tool("outline", [original, region.sha256], {})
-        probes = [("change_map", self._tool("change_map", [original, candidate, region.sha256], {}))]
+        change = "structure_map" if self.a.use_structure_map else "change_map"
+        probes = [(change, self._tool(change, [original, candidate, region.sha256], {}))]
         if self.a.use_class_diff:
             probes.append(("class_diff", self._tool("class_diff", [original, candidate, region.sha256], {})))
         if self.a.use_inventory:
@@ -291,7 +293,9 @@ class Optimization:
         ]
         labels = {"heatmap": "a heat map of local colour change outside the removal region, a uniform shift removed (red = changed)",
                   "map": "a map of semantic class changes between original and candidate",
-                  "annotated": "the edited candidate with the inventory's elements boxed by status, numbered as in the inventory"}
+                  "annotated": "the edited candidate with the inventory's elements boxed by status, numbered as in the inventory",
+                  "changes": "the edited candidate aligned to the original, the removal region shaded, the places outside it "
+                             "whose structure changed outlined in red"}
         for _, row in probes:
             for name, sha in row.outputs.items():
                 if name in labels:

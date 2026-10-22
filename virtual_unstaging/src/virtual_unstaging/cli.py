@@ -119,7 +119,7 @@ def _parser() -> argparse.ArgumentParser:
     p.add_argument("--key-file", type=Path)
     p.add_argument("--key-env", help="name of the environment variable holding the key (rented-machine exception)")
     p.add_argument("--recipe", help="generator recipe name or TOML file; none: tools only")
-    p.add_argument("--tools", default="segment_elements,class_diff,change_map,element_inventory")
+    p.add_argument("--tools", default="segment_elements,class_diff,change_map,element_inventory,structure_map")
     p.add_argument("--data-dir", type=Path, default=Path("/tmp/unstage-serve"))
     p.set_defaults(handler=cmd_serve)
 
@@ -236,10 +236,10 @@ def _toolbox(cfg: config.ProjectConfig) -> ToolBox:
     routes: dict[str, ToolProvider] = {name: local for name in local.names}
     if cfg.generator.adapter == "fake":
         fake = FakeRemoteTools()
-        routes |= {"segment_elements": fake, "class_diff": fake, "element_inventory": fake}
+        routes |= {"segment_elements": fake, "class_diff": fake, "element_inventory": fake, "structure_map": fake}
     elif cfg.tools_endpoint:
         remote = RemoteTools(_toolserver(cfg))
-        routes |= {"segment_elements": remote, "class_diff": remote, "element_inventory": remote}
+        routes |= {"segment_elements": remote, "class_diff": remote, "element_inventory": remote, "structure_map": remote}
     return ToolBox(routes)
 
 
@@ -293,6 +293,7 @@ def _adapters(project: Path, cfg: config.ProjectConfig) -> Adapters:
         tools=_toolbox(cfg),
         use_class_diff=cfg.class_diff,
         use_inventory=cfg.inventory,
+        use_structure_map=cfg.structure_map,
         workers=cfg.workers,
         fixed_settings=tuple(sorted(cfg.generator.settings.items())),
         judge_request=cfg.judge.request,

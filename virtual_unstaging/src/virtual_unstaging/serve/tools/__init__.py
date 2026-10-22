@@ -10,8 +10,9 @@ from virtual_unstaging.serve.tools.changemap import ChangeMap, FarnebackBackend,
 from virtual_unstaging.serve.tools.classdiff import BrightnessClassBackend, ClassDiff, SegformerAdeBackend
 from virtual_unstaging.serve.tools.inventory import ElementInventory
 from virtual_unstaging.serve.tools.segment import ColourWordBackend, GroundedSam2Backend, SegmentElements
+from virtual_unstaging.serve.tools.structure import EccBackend, StructureMap, TranslationBackend
 
-TOOL_NAMES = ("segment_elements", "class_diff", "change_map", "element_inventory")
+TOOL_NAMES = ("segment_elements", "class_diff", "change_map", "element_inventory", "structure_map")
 FAKE = "fake"
 
 
@@ -26,6 +27,8 @@ def real_tool(name: str, shared: dict[str, Backend] | None = None) -> ServerTool
         return ClassDiff(SegformerAdeBackend())
     if name == "change_map":
         return ChangeMap(FarnebackBackend())
+    if name == "structure_map":
+        return StructureMap(EccBackend())
     raise ServeConfigError(f"unknown tool {name!r}; tools: {', '.join(TOOL_NAMES)}, or {FAKE} for stand-ins")
 
 
@@ -38,6 +41,8 @@ def fake_tool(name: str) -> ServerTool:
         return ClassDiff(BrightnessClassBackend())
     if name == "change_map":
         return ChangeMap(PhaseCorrelationBackend())
+    if name == "structure_map":
+        return StructureMap(TranslationBackend())
     raise ServeConfigError(f"unknown tool {name!r}")
 
 

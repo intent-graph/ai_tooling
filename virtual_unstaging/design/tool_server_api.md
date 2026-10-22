@@ -158,6 +158,7 @@ and `model`; the orchestrator caches a tool run by tool, version, params and inp
 | `segment_elements` | `[image]` | `labels` (1 to 64 distinct element names: letters, digits, spaces, hyphens, apostrophes), `threshold` (default 0.3) | `mask` (union, white = found) and one `mask_<i>` per label, zero-based, in label order, always present; measures `found` (share of the frame per label), `detections` (boxes kept per label), `union_share`, `fell_back_to_boxes` (true when the masks are the detection boxes because the segmentation step failed) |
 | `class_diff` | `[original, candidate, region_mask]` | `opening_classes` (default door, window, doorway; ADE20K names or those words), `min_share` (default 0.005) | `map` (colour map: red became an opening, blue stopped being one, yellow a class that appeared, cyan one that vanished; dimmed outside the region); measures `opening_share_of_region`, `opening_box`, `opening_share_outside`, `region_share`, and for `inside` and `outside` the classes `appeared` and `vanished` (class absent in one picture and at least `min_share` of the zone in the other) with `share` and `box` in [0, 1] |
 | `element_inventory` | `[original, candidate, region_mask]` | `fixed`, `movable` (element names as for `segment_elements`; together 1 to 96, each name once across both lists), `threshold` (default 0.3) | `annotated` (the candidate with each element that is not kept boxed, coloured by status and numbered as in the summary); measures `elements` (per element: `n`, `label`, `kind` fixed or movable, `status`, `where` inside or outside the region, `inside_share`, `box_original`, `box_candidate` in [0, 1], `overlap`, `growth`, `stood`: the original's movable elements under a new one), `counts` per status, `compared_at`, `candidate_resized`, `fell_back_to_boxes`; the `summary` is the inventory as a short table, several lines ([Element inventory](#element-inventory)) |
+| `structure_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side left out around the region, default 0.03), `threshold` (structural dissimilarity counted as a change, default 0.45), `search` (fraction of the long side each point may look around for its match, default 0.012) | `changes` (the candidate, aligned to the original, the removal region shaded, each region whose structure changed outside it outlined in red); measures `alignment` (`scale`, `shift_pct`, `rotation_deg`, `applied`), `outside_changed_share`, `regions` (each `box` in [0, 1] and `share` of the frame, largest first, at most 8), `compared_at`, `candidate_resized` ([Structure map](#structure-map)) |
 | `change_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side kept clear around the region, default 0.02) | `heatmap` (red = the larger of a displacement of 1% of the long side and a colour difference of 10; the region and its margin are drawn apart); measures `displacement_median_pct`, `displacement_p95_pct` (optical flow outside the region, in % of the long side), `global_shift_px`, `delta_e_median`, `delta_e_p95` (CIE76), `outside_share` |
 
 - The `summary` is one sentence the judge reads, for example "inside the removed region, 3.1% of pixels became
@@ -171,6 +172,23 @@ and `model`; the orchestrator caches a tool run by tool, version, params and inp
 
 The orchestrator also runs cheap tools itself (mask dilation, region outline, a pixel-level change map), under
 the same names and contract.
+
+### Structure map
+
+*Proposal*, 2026-10-22. The colour change map counts every pixel whose colour moved: a slight reframing, a resampling or
+a tone change lights up most of the frame, and the judges read that as drift. The structure map shows only what changed
+in structure, robust to small changes.
+
+- **Align:** an affine transform of the candidate onto the original, fitted on the pixels outside the region (OpenCV's
+  ECC), applied when it is a small reframing (scale 0.95 to 1.05, shift up to 3% of the long side); a larger one is
+  not applied and is reported, as a sign that the viewpoint changed.
+- **Compare structure, not colour:** grey levels at 512 pixels on the long side; structural similarity (SSIM, 7 x 7
+  window) of each point against the other picture shifted by up to `search`, both ways, the best match kept; a change
+  is a dissimilarity above `threshold`.
+- **Regions, not pixels:** changes pooled in 8 x 8 pixel cells, connected cells form a region, regions under 0.2% of
+  the frame dropped; only outside the region and its `margin` (inside it, change is the point of the edit).
+- **Measured** on 16 reviewed pairs (prototype): on photos without drift it marks 0-8% of the outside area against
+  19-43% for the colour map, and separates the owner's drift answers at least as well.
 
 ### Element inventory
 

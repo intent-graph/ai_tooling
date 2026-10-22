@@ -212,7 +212,7 @@ def test_capabilities_and_health(client: TestClient, clock: FakeClock) -> None:
     assert {"model", "revision", "max_images", "roles", "native_mask", "text_only", "settings", "licence"} <= set(generator)
     assert generator["native_mask"] is False and "removal_mask" in generator["roles"]
     assert generator["text_only"] is True and generator["settings"]["output_aspect"] == 1.0
-    assert {t["name"] for t in caps["tools"]} == {"segment_elements", "class_diff", "change_map", "element_inventory"}
+    assert {t["name"] for t in caps["tools"]} == {"segment_elements", "class_diff", "change_map", "element_inventory", "structure_map"}
     assert all(t["version"] and t["model"] for t in caps["tools"])
     health = client.get("/health").json()
     assert health["status"] == "ok" and health["api_version"] == "1.2" and health["seconds_left"] == 3600
