@@ -13,27 +13,29 @@ usage, required properties, functions, system shape, stored data, components, th
 
 ## Table of Contents
 
-1. [N0](#n0) _(Lines 37-48)_
-1. [Usage scenarios](#usage-scenarios) _(Lines 51-61)_
-1. [Required properties](#required-properties) _(Lines 64-76)_
-1. [Functional hierarchy](#functional-hierarchy) _(Lines 79-99)_
-1. [System shape](#system-shape) _(Lines 102-139)_
-1. [Components and layering](#components-and-layering) _(Lines 142-187)_
-1. [Trust boundaries](#trust-boundaries) _(Lines 190-205)_
-1. [Dependencies](#dependencies) _(Lines 208-225)_
-1. [Design decisions](#design-decisions) _(Lines 228-247)_
-1. [Command line](#command-line) _(Lines 250-273)_
-1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 276-320)_
-1. [Review page](#review-page) _(Lines 323-336)_
-1. [Build order](#build-order) _(Lines 339-351)_
-1. [Guidelines applied](#guidelines-applied) _(Lines 354-369)_
-1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 372-383)_
-1. [Open](#open) _(Lines 386-393)_
+1. [N0](#n0) _(Lines 39-50)_
+1. [Usage scenarios](#usage-scenarios) _(Lines 53-63)_
+1. [Required properties](#required-properties) _(Lines 66-78)_
+1. [Functional hierarchy](#functional-hierarchy) _(Lines 81-101)_
+1. [System shape](#system-shape) _(Lines 104-141)_
+1. [Components and layering](#components-and-layering) _(Lines 144-189)_
+1. [Trust boundaries](#trust-boundaries) _(Lines 192-207)_
+1. [Dependencies](#dependencies) _(Lines 210-227)_
+1. [Design decisions](#design-decisions) _(Lines 230-249)_
+1. [Extension points](#extension-points) _(Lines 252-263)_
+1. [Command line](#command-line) _(Lines 266-289)_
+1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 292-336)_
+1. [Review page](#review-page) _(Lines 339-352)_
+1. [Build order](#build-order) _(Lines 355-367)_
+1. [Guidelines applied](#guidelines-applied) _(Lines 370-385)_
+1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 388-399)_
+1. [Open](#open) _(Lines 402-409)_
+
 
 ---
 
 ## N0
-<!-- Lines 37-48 -->
+<!-- Lines 39-50 -->
 
 - One local program, the **orchestrator**, holds all state: one SQLite database and one content-addressed image
   store per project (one building). The rented GPU holds nothing that cannot be lost.
@@ -47,7 +49,7 @@ usage, required properties, functions, system shape, stored data, components, th
   review page.
 
 ## Usage scenarios
-<!-- Lines 51-61 -->
+<!-- Lines 53-63 -->
 
 What the owner does with the tool; every later section serves one of these.
 
@@ -60,7 +62,7 @@ What the owner does with the tool; every later section serves one of these.
 | S5 | **Retune and train** (stage 2, offline training): later slices, not designed here | — |
 
 ## Required properties
-<!-- Lines 64-76 -->
+<!-- Lines 66-78 -->
 
 Each is checkable; the constraints of the design serve them, and each check is a test.
 
@@ -75,7 +77,7 @@ Each is checkable; the constraints of the design serve them, and each check is a
 | P7 | An interrupted run resumes to the result it would have reached | interrupt and resume on fakes, compare with an uninterrupted run |
 
 ## Functional hierarchy
-<!-- Lines 79-99 -->
+<!-- Lines 81-101 -->
 
 **L0** — turn the photos of an occupied building into plausible empty versions, within a compute budget, with a
 justified outcome per photo (emptied, original kept, excluded).
@@ -98,7 +100,7 @@ justified outcome per photo (emptied, original kept, excluded).
 the next point → on stop, `select` the best attempt. Detailed in [loop1.md](loop1.md).
 
 ## System shape
-<!-- Lines 102-139 -->
+<!-- Lines 104-141 -->
 
 ```mermaid
 flowchart LR
@@ -138,7 +140,7 @@ flowchart LR
   The schema stays in portable SQL for that move.
 
 ## Components and layering
-<!-- Lines 142-187 -->
+<!-- Lines 144-189 -->
 
 One Python package, `src` layout, its own `pyproject.toml` and lock file, as the other tools of this repository.
 GPU-side dependencies are an optional extra (`[serve]`). Modules are cut by the decision each hides; the
@@ -186,7 +188,7 @@ adapters); imperative code where the work is control (the runner). No module per
 adapters and engines are registered by an explicit table at start-up.
 
 ## Trust boundaries
-<!-- Lines 190-205 -->
+<!-- Lines 192-207 -->
 
 Everything below is parsed once, where it enters, into the types of `domain`, under a positive definition of
 valid; code past the boundary relies on the parsed form.
@@ -204,7 +206,7 @@ Model text reaches the generator only as prompt text, never as code, a path or a
 built from hashes alone; every query is fixed text with bound parameters.
 
 ## Dependencies
-<!-- Lines 208-225 -->
+<!-- Lines 210-227 -->
 
 Nothing is added without a reason, per the [ownership guideline](../../dev_guidelines/software_development_guidelines/ownership.md);
 installed from the lock file only. The tool never ships model weights. Each model's licence (weights and
@@ -224,7 +226,7 @@ the user's call.
 | Review page | standard library | `http.server` and one static page | localhost, one user | — |
 
 ## Design decisions
-<!-- Lines 228-247 -->
+<!-- Lines 230-249 -->
 
 All *proposal*. The ones costly to reverse first; each names the alternative and when it would win.
 
@@ -245,8 +247,22 @@ All *proposal*. The ones costly to reverse first; each names the alternative and
 | D13 | **Override files** layered over `project.toml` and `gpu.toml` per command ([Command line](#command-line)); the project files are never rewritten by a tool or a script | Editing the files: one less flag, but a variant leaks into later commands and into other sessions on the project. `--set key=value` flags: when single values vary; can be added beside the files |
 | D14 | A **speed version** is recorded with what it shapes: generator settings in each attempt's settings (as today); the judge's request options as a suffix of the judge's recorded revision (`+jpeg@1024+answer:6/2/100/200`, findings / moves / comment / critique), as a generator's `+fp8` storage is: a judge that sees smaller images and must answer shorter is another judge, and reports group by it | A column on `run`: once the schema has migrations (it has none: version 1) |
 
+## Extension points
+<!-- Lines 252-263 -->
+
+For a program that imports this package. Each one defaults to the behaviour described above, and none names its
+callers.
+
+| Point | What a caller can change |
+|---|---|
+| `engines.SearchEngine[ProblemT, CandidateT, EvaluationT]` | the ask / tell contract with its candidate as a type parameter; `Engine` binds it to points of the lattice, and `make_engine` returns that binding |
+| `clients.http.Endpoint.observer` | sees every attempt of every request (`Exchange`: the request as sent, without the key, and the answer as received) |
+| `provision.lifecycle.Context.plan_source` | where a rental's plan comes from: the project folder's files by default; `project` is then only the folder of the session file |
+| `provision.plan.ProjectPlan.tools` | the tool server's tools, by name; the server's default set when unset |
+| recipe field `inputs.text_only` | a generator that also makes an image from the prompt alone ([tool server API](tool_server_api.md#generate), version 1.2) |
+
 ## Command line
-<!-- Lines 250-273 -->
+<!-- Lines 266-289 -->
 
 Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_guidelines.md):
 
@@ -272,7 +288,7 @@ Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_gu
   machine. This is the recorded exception the configuration guideline requires.
 
 ## Model services and provisioning
-<!-- Lines 276-320 -->
+<!-- Lines 292-336 -->
 
 Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with polled jobs) and
 [provisioning.md](provisioning.md) (renting, the self-delete guard, keys). The default models are the owner's choice.
@@ -319,7 +335,7 @@ Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with po
   one GPU rental service; others plug in.
 
 ## Review page
-<!-- Lines 323-336 -->
+<!-- Lines 339-352 -->
 
 Detailed in [review_page.md](review_page.md) (views, keys, security, data written).
 
@@ -335,7 +351,7 @@ Detailed in [review_page.md](review_page.md) (views, keys, security, data writte
   and the request is same-origin (Fetch Metadata or `Origin`).
 
 ## Build order
-<!-- Lines 339-351 -->
+<!-- Lines 355-367 -->
 
 Thin end to end first, then the riskiest branch to full.
 
@@ -350,7 +366,7 @@ Slice 1 answers one question: **at equal budget, does a findings-driven search f
 and more than a fixed-order search?** Engines and the experiment: [loop1.md](loop1.md#engines).
 
 ## Guidelines applied
-<!-- Lines 354-369 -->
+<!-- Lines 370-385 -->
 
 Where this design meets the repository's guidelines, and where it departs from them on purpose.
 
@@ -368,7 +384,7 @@ Where this design meets the repository's guidelines, and where it departs from t
   column. Changes when a second consumer reads the database directly.
 
 ## Changes proposed to the architecture
-<!-- Lines 372-383 -->
+<!-- Lines 388-399 -->
 
 Not applied; for the owner to accept.
 
@@ -382,7 +398,7 @@ Not applied; for the owner to accept.
   (so *project overlay*). *Probe* stays a verb (try a neighbour); the deterministic checks are *tools*.
 
 ## Open
-<!-- Lines 386-393 -->
+<!-- Lines 402-409 -->
 
 - **Default generator and judge:** the owner's choice, from the open-weight survey; it sets the capability
   profile, the endpoint protocol, and whether generator and judge share one GPU.

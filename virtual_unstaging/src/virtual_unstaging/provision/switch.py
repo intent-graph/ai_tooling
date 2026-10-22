@@ -7,7 +7,6 @@ import tomllib
 from collections.abc import Callable
 from typing import Any
 
-from virtual_unstaging.provision import plan as planning
 from virtual_unstaging.provision import userfiles
 from virtual_unstaging.provision.errors import ProvisionError
 from virtual_unstaging.provision.lifecycle import Context
@@ -39,7 +38,7 @@ def switch_generator(ctx: Context, recipe: str) -> dict[str, Any]:
 
 def switch_judge(ctx: Context) -> str:
     """Serve the judge named in the project's `[judge]` on the machine, with the session's server options."""
-    judge = planning.load_plan(ctx.project, ctx.overrides).judge
+    judge = ctx.plan_source(ctx.project, ctx.overrides).judge
     if judge is None:
         raise ProvisionError("judge_model_missing", "the project has no judge to serve", "set [judge] model in project.toml")
     endpoint, key = _session(ctx, "judge")
