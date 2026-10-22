@@ -8,19 +8,30 @@ function of the problem and the sequence of `tell`, so a run resumes by replayin
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Iterator
-from typing import Protocol
+from typing import Protocol, TypeVar
 
 from virtual_unstaging.domain import Dimension, Evaluation, Point, Problem, Severity, Stop, is_better
 
+ProblemT = TypeVar("ProblemT", contravariant=True)
+CandidateT = TypeVar("CandidateT")
+EvaluationT = TypeVar("EvaluationT", contravariant=True)
 
-class Engine(Protocol):
+
+class SearchEngine(Protocol[ProblemT, CandidateT, EvaluationT]):
+    """The ask / tell contract, whatever a candidate is: a point of the lattice for the engines below, any value for
+    an engine of another kind. One rule for all: the same problem and the same sequence of `tell` give the same
+    sequence of `ask` (design D10), so a run resumes by replaying its history."""
+
     name: str
 
-    def start(self, problem: Problem) -> None: ...
+    def start(self, problem: ProblemT, /) -> None: ...
 
-    def ask(self) -> Point | Stop: ...
+    def ask(self) -> CandidateT | Stop: ...
 
-    def tell(self, point: Point, evaluation: Evaluation | None) -> None: ...
+    def tell(self, candidate: CandidateT, evaluation: EvaluationT | None, /) -> None: ...
+
+
+Engine = SearchEngine[Problem, Point, Evaluation]  # the engines of this module: points of the lattice of levels
 
 
 class PatternSearch:
@@ -142,7 +153,7 @@ ENGINES: dict[str, Callable[[], PatternSearch]] = {
 }
 
 
-def make_engine(name: str) -> PatternSearch:
+def make_engine(name: str) -> Engine:
     try:
         return ENGINES[name]()
     except KeyError:

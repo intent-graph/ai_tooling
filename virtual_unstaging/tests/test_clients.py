@@ -1,5 +1,5 @@
 """Clients against a local HTTP server: the judge's chat is streamed (and tolerates a server that does not stream);
-generator adapters and the fake generator on a request from text alone."""
+an endpoint's observer sees every exchange; generator adapters and the fake generator from text alone."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import io
 import json
 import threading
 from collections.abc import Iterator
+from dataclasses import replace
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
@@ -14,7 +15,7 @@ from PIL import Image
 
 from virtual_unstaging.clients.fakes import FAKE_CAPABILITIES, FakeGenerator
 from virtual_unstaging.clients.generators import OpenAIImageEditGenerator
-from virtual_unstaging.clients.http import Endpoint, EndpointError
+from virtual_unstaging.clients.http import Endpoint, EndpointError, Exchange
 from virtual_unstaging.clients.openai_compatible import chat_json
 from virtual_unstaging.domain import GeneratorRequest, ModelRef
 
@@ -79,7 +80,26 @@ def test_a_truncated_stream_is_an_error(server: Endpoint) -> None:
     assert caught.value.code == "bad_response"
 
 
-TEXT_ONLY = GeneratorRequest("an empty room", (), (("output_side", 64), ("output_aspect", 2.0)), 9)
+def test_an_observer_sees_each_exchange_as_sent_without_the_key(server: Endpoint) -> None:
+    Handler.mode = "stream"
+    seen: list[Exchange] = []
+    chat_json(replace(server, observer=seen.append), "judge", [{"role": "user", "content": "hi"}], {"type": "object"}, 0.0, 512)
+    assert len(seen) == 1
+    exchange = seen[0]
+    assert exchange.method == "POST" and exchange.url.endswith("/v1/chat/completions") and exchange.status == 200
+    assert json.loads(exchange.body or b"") == {key: value for key, value in Handler.received.items() if key != "_auth"}
+    assert "Authorization" not in exchange.headers and b"[DONE]" in exchange.response and exchange.error is None
+
+
+def test_an_observer_sees_a_failed_attempt() -> None:
+    seen: list[Exchange] = []
+    unreachable = Endpoint("http://127.0.0.1:9/v1", "session-key", timeout=2, retries=0, observer=seen.append)
+    with pytest.raises(EndpointError):
+        chat_json(unreachable, "judge", [], {"type": "object"}, 0.0, 512)
+    assert [(exchange.status, exchange.error) for exchange in seen] == [(None, "endpoint_unreachable")]
+
+
+TEXT_ONLY =GeneratorRequest("an empty room", (), (("output_side", 64), ("output_aspect", 2.0)), 9)
 
 
 def test_the_fake_generator_makes_an_image_from_text_alone() -> None:

@@ -64,6 +64,7 @@ class ProjectPlan:
     disk_gb: int
     min_vram_gb: int
     gpu_prefer: tuple[str, ...]
+    tools: tuple[str, ...] | None = None  # the tool server's tools by name; None: the server's own default set
 
 
 def check_recipe(recipe: str | None) -> str | None:

@@ -16,6 +16,7 @@ import time
 import tomllib
 import urllib.parse
 from collections.abc import Iterator
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -514,6 +515,26 @@ def test_up_without_a_judge_adapter_serves_tools_only(gpu_project: Path, tmp_pat
     plan_json = json.loads(world.created[0].env["UNSTAGE_PLAN"])
     assert plan_json["judge_argv"] is None
     assert "[judge]" not in (gpu_project / "gpu_session.toml").read_text()
+
+
+def test_up_takes_its_plan_from_an_injected_source(gpu_project: Path, tmp_path: Path, world: FakeWorld, clock: Clock) -> None:
+    own_plan = replace(plan.load_plan(gpu_project), tools=("change_map",))
+    folder = tmp_path / "caller_folder"  # a caller's own folder: no project.toml, only the session file lands here
+    folder.mkdir()
+    ctx = make_context(tmp_path, folder, world, clock, plan_source=lambda project, overrides: own_plan)
+    run_up(ctx, recipe="fake")
+    argv = json.loads(world.created[0].env["UNSTAGE_PLAN"])["tools_argv"]
+    assert argv[argv.index("--tools") + 1] == "change_map" and argv[-2:] == ["--recipe", "fake"]
+    assert (folder / "gpu_session.toml").is_file() and not (folder / "project.toml").exists()
+
+
+def test_the_tool_list_is_passed_only_when_the_plan_names_one(gpu_project: Path, tmp_path: Path) -> None:
+    default = plan.load_plan(gpu_project)
+    wheel = make_wheel(tmp_path)
+    argv = machine.machine_plan(default, wheel, 0.0, "2026-01-01T00:00:00+00:00", 1, None)["tools_argv"]
+    assert isinstance(argv, list) and "--tools" not in argv  # the server's own default set
+    none = machine.machine_plan(replace(default, tools=()), wheel, 0.0, "2026-01-01T00:00:00+00:00", 1, None)["tools_argv"]
+    assert isinstance(none, list) and none[-2:] == ["--tools", ""]
 
 
 def test_up_needs_the_judge_model_named_in_the_project(gpu_project: Path, tmp_path: Path, world: FakeWorld, clock: Clock) -> None:

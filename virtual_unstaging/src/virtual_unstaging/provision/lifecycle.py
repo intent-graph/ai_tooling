@@ -59,6 +59,9 @@ class Context:
     startup_timeout: float = STARTUP_TIMEOUT_SECONDS
     poll_seconds: float = 5.0
     overrides: tuple[Path, ...] = ()  # override files layered over project.toml and gpu.toml (design D13)
+    # Where the plan comes from: the project folder's files by default; a caller with its own configuration builds
+    # the plan itself, and `project` is then only the folder that holds the session file.
+    plan_source: Callable[[Path, tuple[Path, ...]], ProjectPlan] = load_plan
 
     @property
     def project_key(self) -> str:
@@ -182,7 +185,7 @@ def up(
     # Every check that costs nothing comes first; nothing is rented before the last of them.
     seconds = parse_limit(limit)
     recipe = check_recipe(recipe)
-    plan = load_plan(ctx.project, ctx.overrides)
+    plan = ctx.plan_source(ctx.project, ctx.overrides)
     count, wanted = parse_gpu(gpu)
     live = [s for s in sessions.load(ctx.state_folder) if s.live and s.project == ctx.project_key]
     if live:

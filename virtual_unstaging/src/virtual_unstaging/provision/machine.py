@@ -38,6 +38,8 @@ def machine_plan(
     shared = gpu_count < 2
     tools_argv = ["serve", "--host", "0.0.0.0", "--port", str(TOOLS_PORT), "--deadline", deadline_iso,
                   "--key-env", KEY_ENV]
+    if plan.tools is not None:
+        tools_argv += ["--tools", ",".join(plan.tools)]
     if recipe:
         tools_argv += ["--recipe", recipe]
     return {
