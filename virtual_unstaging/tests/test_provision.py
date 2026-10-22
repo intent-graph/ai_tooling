@@ -975,6 +975,20 @@ def test_the_judge_waits_as_long_as_the_project_says(gpu_project: Path, tmp_path
     assert config.load(gpu_project, (path,)).judge.timeout_seconds == 120
 
 
+def test_an_override_file_switches_the_judge_overlay(gpu_project: Path, tmp_path: Path) -> None:
+    from virtual_unstaging import config
+
+    assert config.overlay_text(gpu_project, "judge", config.load(gpu_project).judge.overlay) is None
+    rules = tmp_path / "strict.md"
+    rules.write_text("Report a movable object only when you can box it.\n", encoding="utf-8")
+    switch = tmp_path / "strict.toml"
+    switch.write_text(f'[judge]\noverlay = "{rules}"\n', encoding="utf-8")
+    named = config.load(gpu_project, (switch,)).judge.overlay
+    assert config.overlay_text(gpu_project, "judge", named) == "Report a movable object only when you can box it.\n"
+    with pytest.raises(config.ConfigError):
+        config.overlay_text(gpu_project, "judge", "missing.md")
+
+
 @pytest.mark.parametrize("model", ["--help", "a b/c", "org/model; id", "../x", "no-slash", "org/-x"])
 def test_plan_rejects_a_judge_model_that_is_not_a_repository_id(gpu_project: Path, model: str) -> None:
     text = (gpu_project / "project.toml").read_text().replace(f'model = "{JUDGE_MODEL}"', f'model = "{model}"')
