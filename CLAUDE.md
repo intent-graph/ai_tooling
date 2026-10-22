@@ -14,6 +14,9 @@ base here documents itself:
   `drill_down/`, or `build/`.
 - `global_skills/` — user-wide skills; read its `CLAUDE.md` (self-contained folders, no
   links leaving a skill folder).
+- `virtual_unstaging/`, `clutter_pairs/` — English only; read each one's `architecture.md` and `CLAUDE.md` before any
+  change (`virtual_unstaging`: design and implementation open; `clutter_pairs`: high-level design agreed, detailed design before code; it may
+  change `virtual_unstaging` only by adding modularity or override mechanisms).
 - `diagrams_for_humans/`, `howto/`, `ai_evolution/`
 
 ## Agents and skills (`.claude/`)

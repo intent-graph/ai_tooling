@@ -23,7 +23,7 @@ git clone https://github.com/intent-graph/intent_graph.git
 ```
 
 ## Layout
-<!-- Lines 27-49 -->
+<!-- Lines 27-53 -->
 
 - [`documentation_tools/`](documentation_tools/) — [`md_structure_sync`](documentation_tools/md_structure_sync/) (TOC/line-range sync CLI), [`md_structure_viz`](documentation_tools/md_structure_viz/)
   (doc-tree visualization CLI), [`codemap`](documentation_tools/codemap/) (structural code-graph CLI for Python), and
@@ -43,12 +43,16 @@ git clone https://github.com/intent-graph/intent_graph.git
 - [`global_skills/`](global_skills/) — Claude Code skills meant for every project, installed user-wide by symlink
   ([`subagent-orchestration`](global_skills/subagent-orchestration/): brief sub-agents by pointer, fixed I/O, three-level returns;
   [`session-handoff`](global_skills/session-handoff/): hand a task to a new session, intent first, pointers to disk).
+- [`virtual_unstaging/`](virtual_unstaging/) — empty a building's photos of their furniture with an image-editing
+  model steered by a judge model and a second review level (design written, first slice implemented and tested).
+- [`clutter_pairs/`](clutter_pairs/) — generate clean and cluttered image pairs of the same view, as ground-truth
+  data for decluttering tools (high-level design agreed, no code yet).
 - [`ai_evolution/`](ai_evolution/) — notes on AI evolution and method (in French).
 - [`.claude/`](.claude/) — agents (`doc-manifest-agent`, `diagram-agent`, `python-kb-agent`) and skills
   (`md-doc-tools`, `codemap`) that wrap the CLIs above for agent use.
 
 ## Installing the CLIs
-<!-- Lines 52-70 -->
+<!-- Lines 56-74 -->
 
 Each CLI is a standalone Python project (Python 3.11+) installed system-wide with
 [`uv`](https://docs.astral.sh/uv/), from the root of this repository:
@@ -69,13 +73,13 @@ codemap overview documentation_tools/md_structure_sync   # structural map of a P
 ```
 
 ## Contributing
-<!-- Lines 73-76 -->
+<!-- Lines 77-80 -->
 
 Issues are welcome. A pull request gives its content entirely to the owner: read
 [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## License
-<!-- Lines 79-87 -->
+<!-- Lines 83-91 -->
 
 - **CC BY 4.0** — `level_of_detail/`, `ai_evolution/`, `dev_guidelines/`, `howto/`,
   `documentation_tools/DOCUMENTATION_STANDARD.md` (intellectual/creative work).
