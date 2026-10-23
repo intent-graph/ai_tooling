@@ -15,10 +15,10 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 1. [Composition and recording](#composition-and-recording) _(Lines 58-90)_
 1. [The clean loop](#the-clean-loop) _(Lines 93-125)_
 1. [The clutter loop](#the-clutter-loop) _(Lines 128-166)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 169-185)_
-1. [Lessons](#lessons) _(Lines 188-204)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 207-220)_
-1. [The run](#the-run) _(Lines 223-236)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 169-188)_
+1. [Lessons](#lessons) _(Lines 191-207)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 210-223)_
+1. [The run](#the-run) _(Lines 226-239)_
 
 
 ---
@@ -165,7 +165,7 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 169-185 -->
+<!-- Lines 169-188 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
   thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
@@ -175,7 +175,10 @@ which keeps one VAE per pair.
   rest on the judge's severity call (which is recorded). A judge code that can be serious or slight has a `_minor`
   twin with its own meaning (`room_off_spec_minor`, `clutter_off_spec_minor`, `placement_violation_minor`,
   `scene_changed_minor`; owner, 2026-10-22): the judge's choice of code carries the severity. `not_empty`,
-  `item_missing` and `opening_changed` have no twin: each breaks the pair's ground truth.
+  `item_missing` and `opening_changed` have no twin: each breaks the pair's ground truth. An object nobody listed is
+  `clutter_off_spec` and blocks, even a movable one (owner, 2026-10-23: "we want things as clean as possible ... we
+  are building the clean images, and we will add in a controled manner the clutter"): a pair holds exactly the
+  specified clutter.
 - **Score and no progress:** each assessed iteration scores (blocking findings, minor findings). The loop stops with
   `no_progress` when its best score has not strictly improved for 2 iterations; a pixel failure (`misaligned`,
   `global_repaint`) is answered first by a reseed, since a prompt rarely fixes it. The rule's name and version are
@@ -184,7 +187,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 188-204 -->
+<!-- Lines 191-207 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -203,7 +206,7 @@ which keeps one VAE per pair.
   prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 207-220 -->
+<!-- Lines 210-223 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
@@ -219,7 +222,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 223-236 -->
+<!-- Lines 226-239 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
   before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`
