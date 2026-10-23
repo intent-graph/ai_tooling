@@ -11,9 +11,9 @@ model and corrected by a second level of review, so the same photos show the emp
 ## Table of Contents
 
 1. [Install](#install) _(Lines 22-31)_
-1. [Use](#use) _(Lines 34-52)_
-1. [Develop](#develop) _(Lines 55-65)_
-1. [Files](#files) _(Lines 68-81)_
+1. [Use](#use) _(Lines 34-72)_
+1. [Develop](#develop) _(Lines 75-85)_
+1. [Files](#files) _(Lines 88-102)_
 
 ---
 
@@ -30,7 +30,7 @@ uv pip install --python .venv/bin/python -e ".[dev]"     # the orchestrator: no 
 The GPU side (`unstage serve`) needs the `[serve]` extra, on the rented machine only.
 
 ## Use
-<!-- Lines 34-52 -->
+<!-- Lines 34-72 -->
 
 A project is a folder: its configuration, its database, its images by hash.
 
@@ -71,7 +71,7 @@ output_side = 768
 ```
 
 ## Develop
-<!-- Lines 55-65 -->
+<!-- Lines 75-85 -->
 
 ```bash
 .venv/bin/pytest -q                        # offline, no GPU
@@ -84,13 +84,14 @@ The schema is [`src/virtual_unstaging/store/schema.sql`](src/virtual_unstaging/s
 registry, defect taxonomy and base instructions are in [`src/virtual_unstaging/data/`](src/virtual_unstaging/data/).
 
 ## Files
-<!-- Lines 68-81 -->
+<!-- Lines 88-102 -->
 
 - [`architecture.md`](architecture.md) — the architecture and its open questions.
 - [`design/`](design/README.md) — the detailed design: usage, required properties, system shape, components,
   decisions; [data model](design/data_model.md); [per-image loop](design/loop1.md) (registry, compile, judge
   contract, scoring, engines, first-slice experiment); [tool server API](design/tool_server_api.md);
-  [review page](design/review_page.md); [provisioning](design/provisioning.md).
+  [review page](design/review_page.md); [provisioning](design/provisioning.md); [defect detectors](design/defect_detectors.md)
+  (one detector per defect: decides what it measures reliably, zooms the rest for the judge; *proposal*).
 - [`training.md`](training.md) — the offline layer as machine learning on prompts: parameters, training data
   (pairs from [clutter_pairs](../clutter_pairs/README.md), and what is derived from them), performance measure,
   search methods.

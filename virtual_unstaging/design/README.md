@@ -9,33 +9,34 @@ usage, required properties, functions, system shape, stored data, components, th
 > GPU provisioning); nothing has yet run on a real model or a rented GPU. The architecture stays the reference; what this design would change in it is listed under
 > [Changes proposed to the architecture](#changes-proposed-to-the-architecture). Drilled in full: the data model
 > ([data_model.md](data_model.md)) and the per-image loop ([loop1.md](loop1.md)). At claim level only: model
-> services, provisioning, review page, stage 2, offline training.
+> services, provisioning, review page, stage 2, offline training. Defect detectors ([defect_detectors.md](defect_detectors.md)): pixel
+> detectors measured on a pilot, the rest designed.
 
 ## Table of Contents
 
-1. [N0](#n0) _(Lines 39-50)_
-1. [Usage scenarios](#usage-scenarios) _(Lines 53-63)_
-1. [Required properties](#required-properties) _(Lines 66-78)_
-1. [Functional hierarchy](#functional-hierarchy) _(Lines 81-101)_
-1. [System shape](#system-shape) _(Lines 104-141)_
-1. [Components and layering](#components-and-layering) _(Lines 144-189)_
-1. [Trust boundaries](#trust-boundaries) _(Lines 192-207)_
-1. [Dependencies](#dependencies) _(Lines 210-227)_
-1. [Design decisions](#design-decisions) _(Lines 230-249)_
-1. [Extension points](#extension-points) _(Lines 252-274)_
-1. [Command line](#command-line) _(Lines 277-300)_
-1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 303-347)_
-1. [Review page](#review-page) _(Lines 350-363)_
-1. [Build order](#build-order) _(Lines 366-378)_
-1. [Guidelines applied](#guidelines-applied) _(Lines 381-396)_
-1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 399-410)_
-1. [Open](#open) _(Lines 413-420)_
+1. [N0](#n0) _(Lines 40-51)_
+1. [Usage scenarios](#usage-scenarios) _(Lines 54-64)_
+1. [Required properties](#required-properties) _(Lines 67-79)_
+1. [Functional hierarchy](#functional-hierarchy) _(Lines 82-102)_
+1. [System shape](#system-shape) _(Lines 105-142)_
+1. [Components and layering](#components-and-layering) _(Lines 145-190)_
+1. [Trust boundaries](#trust-boundaries) _(Lines 193-208)_
+1. [Dependencies](#dependencies) _(Lines 211-228)_
+1. [Design decisions](#design-decisions) _(Lines 231-252)_
+1. [Extension points](#extension-points) _(Lines 255-277)_
+1. [Command line](#command-line) _(Lines 280-304)_
+1. [Model services and provisioning](#model-services-and-provisioning) _(Lines 307-356)_
+1. [Review page](#review-page) _(Lines 359-372)_
+1. [Build order](#build-order) _(Lines 375-387)_
+1. [Guidelines applied](#guidelines-applied) _(Lines 390-405)_
+1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 408-422)_
+1. [Open](#open) _(Lines 425-432)_
 
 
 ---
 
 ## N0
-<!-- Lines 39-50 -->
+<!-- Lines 40-51 -->
 
 - One local program, the **orchestrator**, holds all state: one SQLite database and one content-addressed image
   store per project (one building). The rented GPU holds nothing that cannot be lost.
@@ -49,7 +50,7 @@ usage, required properties, functions, system shape, stored data, components, th
   review page.
 
 ## Usage scenarios
-<!-- Lines 53-63 -->
+<!-- Lines 54-64 -->
 
 What the owner does with the tool; every later section serves one of these.
 
@@ -62,7 +63,7 @@ What the owner does with the tool; every later section serves one of these.
 | S5 | **Retune and train** (stage 2, offline training): later slices, not designed here | — |
 
 ## Required properties
-<!-- Lines 66-78 -->
+<!-- Lines 67-79 -->
 
 Each is checkable; the constraints of the design serve them, and each check is a test.
 
@@ -77,7 +78,7 @@ Each is checkable; the constraints of the design serve them, and each check is a
 | P7 | An interrupted run resumes to the result it would have reached | interrupt and resume on fakes, compare with an uninterrupted run |
 
 ## Functional hierarchy
-<!-- Lines 81-101 -->
+<!-- Lines 82-102 -->
 
 **L0** — turn the photos of an occupied building into plausible empty versions, within a compute budget, with a
 justified outcome per photo (emptied, original kept, excluded).
@@ -100,7 +101,7 @@ justified outcome per photo (emptied, original kept, excluded).
 the next point → on stop, `select` the best attempt. Detailed in [loop1.md](loop1.md).
 
 ## System shape
-<!-- Lines 104-141 -->
+<!-- Lines 105-142 -->
 
 ```mermaid
 flowchart LR
@@ -140,7 +141,7 @@ flowchart LR
   The schema stays in portable SQL for that move.
 
 ## Components and layering
-<!-- Lines 144-189 -->
+<!-- Lines 145-190 -->
 
 One Python package, `src` layout, its own `pyproject.toml` and lock file, as the other tools of this repository.
 GPU-side dependencies are an optional extra (`[serve]`). Modules are cut by the decision each hides; the
@@ -188,7 +189,7 @@ adapters); imperative code where the work is control (the runner). No module per
 adapters and engines are registered by an explicit table at start-up.
 
 ## Trust boundaries
-<!-- Lines 192-207 -->
+<!-- Lines 193-208 -->
 
 Everything below is parsed once, where it enters, into the types of `domain`, under a positive definition of
 valid; code past the boundary relies on the parsed form.
@@ -206,7 +207,7 @@ Model text reaches the generator only as prompt text, never as code, a path or a
 built from hashes alone; every query is fixed text with bound parameters.
 
 ## Dependencies
-<!-- Lines 210-227 -->
+<!-- Lines 211-228 -->
 
 Nothing is added without a reason, per the [ownership guideline](../../dev_guidelines/software_development_guidelines/ownership.md);
 installed from the lock file only. The tool never ships model weights. Each model's licence (weights and
@@ -226,7 +227,7 @@ the user's call.
 | Review page | standard library | `http.server` and one static page | localhost, one user | — |
 
 ## Design decisions
-<!-- Lines 230-249 -->
+<!-- Lines 231-252 -->
 
 All *proposal*. The ones costly to reverse first; each names the alternative and when it would win.
 
@@ -250,7 +251,7 @@ All *proposal*. The ones costly to reverse first; each names the alternative and
 | D16 | The judge's change map shows **structure, not colour** (`structure_map`, [tool server API](tool_server_api.md#structure-map)): the candidate aligned to the original, then regions whose structure changed outside the removal region, robust to small shifts, resampling and tone; the default when a tool server runs | The colour change map (`[tools] structure_map = false`, and without a tool server): pixel exact, it marks most of the frame after a slight reframing or tone change |
 
 ## Extension points
-<!-- Lines 252-274 -->
+<!-- Lines 255-277 -->
 
 For a program that imports this package. The owner's rule: a change made for such a program only adds modularity or
 an override; it defaults to the behaviour described above and names no caller.
@@ -275,7 +276,7 @@ types; `store.blobs.BlobStore`, `store.db.connect`, `store.db.transaction`; `con
 change of contract: the repository's instructions say which other tests run with it.
 
 ## Command line
-<!-- Lines 277-300 -->
+<!-- Lines 280-304 -->
 
 Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_guidelines.md):
 
@@ -302,7 +303,7 @@ Per the repository's [CLI guidelines](../../dev_guidelines/cli_guidelines/cli_gu
   machine. This is the recorded exception the configuration guideline requires.
 
 ## Model services and provisioning
-<!-- Lines 303-347 -->
+<!-- Lines 307-356 -->
 
 Detailed in [tool_server_api.md](tool_server_api.md) (the HTTP contract, with polled jobs) and
 [provisioning.md](provisioning.md) (renting, the self-delete guard, keys). The default models are the owner's choice:
@@ -354,7 +355,7 @@ images the owner kept most); judge open.
   one GPU rental service; others plug in.
 
 ## Review page
-<!-- Lines 350-363 -->
+<!-- Lines 359-372 -->
 
 Detailed in [review_page.md](review_page.md) (views, keys, security, data written).
 
@@ -370,7 +371,7 @@ Detailed in [review_page.md](review_page.md) (views, keys, security, data writte
   and the request is same-origin (Fetch Metadata or `Origin`).
 
 ## Build order
-<!-- Lines 366-378 -->
+<!-- Lines 375-387 -->
 
 Thin end to end first, then the riskiest branch to full.
 
@@ -385,7 +386,7 @@ Slice 1 answers one question: **at equal budget, does a findings-driven search f
 and more than a fixed-order search?** Engines and the experiment: [loop1.md](loop1.md#engines).
 
 ## Guidelines applied
-<!-- Lines 381-396 -->
+<!-- Lines 390-405 -->
 
 Where this design meets the repository's guidelines, and where it departs from them on purpose.
 
@@ -403,7 +404,7 @@ Where this design meets the repository's guidelines, and where it departs from t
   column. Changes when a second consumer reads the database directly.
 
 ## Changes proposed to the architecture
-<!-- Lines 399-410 -->
+<!-- Lines 408-422 -->
 
 Not applied; for the owner to accept.
 
@@ -413,11 +414,14 @@ Not applied; for the owner to accept.
   defect-to-dimension map).
 - `RECIPE` becomes a view over pairs of attempts (D8), no longer a stored entity.
 - The defect-to-dimension map carries a **direction** per pair (which way to step), not only the dimension.
+- **Detectors decide what they measure reliably** ([defect detectors](defect_detectors.md)): "Tools locate and
+  measure; the VLM decides" becomes "a detector decides the defects it measures without error on the owner's reviews
+  and on injected defects; the VLM decides the rest, on the detector's zooms".
 - One name per concept: the architecture says both *task* and *project* for one building; *project* everywhere
   (so *project overlay*). *Probe* stays a verb (try a neighbour); the deterministic checks are *tools*.
 
 ## Open
-<!-- Lines 413-420 -->
+<!-- Lines 425-432 -->
 
 - **Default generator and judge:** the owner's choice, from the open-weight survey; it sets the capability
   profile, the endpoint protocol, and whether generator and judge share one GPU.
