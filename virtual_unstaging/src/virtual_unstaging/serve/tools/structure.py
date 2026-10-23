@@ -1,5 +1,6 @@
 """`structure_map`: the candidate aligned to the original, then the regions outside the removal region whose structure
-changed, robust to small shifts, resampling and tone (design/tool_server_api.md: Structure map)."""
+changed, robust to small shifts, resampling and tone, and the tone change outside it (design/tool_server_api.md:
+Structure map)."""
 
 from __future__ import annotations
 
@@ -32,6 +33,9 @@ MIN_REGION = 0.002  # smallest region kept, as a share of the frame
 MAX_REGIONS = 8
 SMALL_SCALE = (0.95, 1.05)  # an alignment within these and SMALL_SHIFT is a small reframing, applied
 SMALL_SHIFT = 0.03  # fraction of the long side
+MIN_MATCHED = 12  # features that must fit one similarity for the feature fit to be trusted
+RATIO = 0.75  # Lowe's ratio test on feature matches
+TONE_SIGMA = 1 / 32  # tone, not detail: the colour difference smoothed over this fraction of the long side
 DEFAULT_MARGIN, DEFAULT_THRESHOLD, DEFAULT_SEARCH = 0.03, 0.45, 0.012
 LEGEND = {
     "red outline": "a region outside the removal region whose structure changed",
@@ -41,9 +45,20 @@ LEGEND = {
 Warp = NDArray[np.float32]  # 2 x 3 affine matrix mapping original coordinates to candidate coordinates
 
 
+@dataclass(frozen=True)
+class Fit:
+    """An alignment: the warp, how it was found (`none`: no fit, the warp is the identity and says nothing), and for a
+    feature fit, the original's features outside the region and how many of them fit one motion."""
+
+    warp: Warp
+    method: str
+    features: int | None = None
+    matched: int | None = None
+
+
 class AlignBackend(Backend):
     @abstractmethod
-    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Warp:
+    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Fit:
         """The affine warp that maps the original's pixels onto the candidate's, fitted where `keep` is true."""
 
     @abstractmethod
@@ -60,7 +75,7 @@ class EccBackend(AlignBackend):
     def load(self) -> None:
         import cv2  # noqa: F401  (fail at warm-up, not at the first call)
 
-    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Warp:
+    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Fit:
         self.warm()
         import cv2
 
@@ -68,9 +83,9 @@ class EccBackend(AlignBackend):
         criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-5)
         try:
             _, found = cv2.findTransformECC(original, candidate, warp, cv2.MOTION_AFFINE, criteria, keep.astype(np.uint8), 5)
-        except cv2.error:  # no convergence: no alignment, which the measures say (scale 1, shift 0)
-            return warp
-        return np.asarray(found, dtype=np.float32)
+        except cv2.error:  # no convergence: said as no fit, not as "no motion"
+            return Fit(warp, "none")
+        return Fit(np.asarray(found, dtype=np.float32), "ecc")
 
     def apply(self, image: ByteArray, warp: Warp) -> ByteArray:
         import cv2
@@ -78,6 +93,41 @@ class EccBackend(AlignBackend):
         height, width = image.shape[:2]
         flags = cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP
         return np.asarray(cv2.warpAffine(image, warp, (width, height), flags=flags, borderMode=cv2.BORDER_REFLECT))
+
+
+class FeatureBackend(EccBackend):
+    """A similarity (scale, rotation, shift) fitted by RANSAC on SIFT features of the original outside the region,
+    matched in the candidate; ECC when too few fit. Measured on reviewed pairs: it fits reframings ECC diverges on, and
+    the share of features that fit tells another picture from the same one (design/defect_detectors.md)."""
+
+    ident: ClassVar[str] = "opencv-sift-similarity"
+    model: ClassVar[str] = "OpenCV SIFT, RANSAC similarity; ECC affine as the fallback (no learned model)"
+
+    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Fit:
+        self.warm()
+        import cv2
+
+        sift = cv2.SIFT.create(nfeatures=4000)
+        first, second = (np.clip(x, 0, 255).astype(np.uint8) for x in (original, candidate))
+        points_o, described_o = sift.detectAndCompute(first, keep.astype(np.uint8) * 255)
+        points_c, described_c = sift.detectAndCompute(second, None)
+        features, matched = len(points_o), 0
+        if described_o is not None and described_c is not None and len(points_o) >= 2 and len(points_c) >= 2:
+            pairs = cv2.BFMatcher().knnMatch(described_o, described_c, k=2)
+            good = [m for m, n in (p for p in pairs if len(p) == 2) if m.distance < RATIO * n.distance]
+            if len(good) >= MIN_MATCHED:
+                source = np.array([points_o[m.queryIdx].pt for m in good], dtype=np.float32)
+                target = np.array([points_c[m.trainIdx].pt for m in good], dtype=np.float32)
+                warp, inliers = cv2.estimateAffinePartial2D(source, target, method=cv2.RANSAC,
+                                                            ransacReprojThreshold=0.01 * max(original.shape))
+                if warp is not None and inliers is not None:
+                    scale = float(np.sqrt(abs(np.linalg.det(warp[:, :2]))))
+                    if 0.5 <= scale <= 2.0:  # many matches on one impossible motion: a degenerate fit, no fit
+                        matched = int(inliers.sum())
+                        if matched >= MIN_MATCHED:
+                            return Fit(np.asarray(warp, dtype=np.float32), "features", features, matched)
+        fallback = super().estimate(original, candidate, keep)
+        return Fit(fallback.warp, fallback.method, features, matched)
 
 
 class TranslationBackend(AlignBackend):
@@ -89,7 +139,7 @@ class TranslationBackend(AlignBackend):
     def load(self) -> None:
         return None
 
-    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Warp:
+    def estimate(self, original: FloatArray, candidate: FloatArray, keep: BoolArray) -> Fit:
         a, b = original - original.mean(), candidate - candidate.mean()
         cross = np.fft.fft2(b) * np.conj(np.fft.fft2(a))
         cross /= np.abs(cross) + 1e-9
@@ -97,7 +147,7 @@ class TranslationBackend(AlignBackend):
         height, width = a.shape
         dy = peak_y - height if peak_y > height // 2 else peak_y
         dx = peak_x - width if peak_x > width // 2 else peak_x
-        return np.array([[1, 0, dx], [0, 1, dy]], dtype=np.float32)
+        return Fit(np.array([[1, 0, dx], [0, 1, dy]], dtype=np.float32), "translation")
 
     def apply(self, image: ByteArray, warp: Warp) -> ByteArray:
         dx, dy = int(round(float(warp[0, 2]))), int(round(float(warp[1, 2])))
@@ -158,13 +208,39 @@ def regions(cells: BoolArray, min_cells: int) -> list[list[tuple[int, int]]]:
     return sorted(groups, key=len, reverse=True)
 
 
-def describe_alignment(warp: Warp, long_side: int) -> dict[str, Any]:
-    linear = warp[:, :2].astype(np.float64)
+def describe_alignment(fit: Fit, long_side: int) -> dict[str, Any]:
+    linear = fit.warp[:, :2].astype(np.float64)
     scale = float(np.sqrt(abs(np.linalg.det(linear))))
-    shift = float(np.hypot(warp[0, 2], warp[1, 2])) / long_side
+    shift = float(np.hypot(fit.warp[0, 2], fit.warp[1, 2])) / long_side
     rotation = float(np.degrees(np.arctan2(linear[1, 0], linear[0, 0])))
-    small = SMALL_SCALE[0] <= scale <= SMALL_SCALE[1] and shift <= SMALL_SHIFT
-    return {"scale": round(scale, 4), "shift_pct": round(100 * shift, 2), "rotation_deg": round(rotation, 2), "applied": small}
+    small = SMALL_SCALE[0] <= scale <= SMALL_SCALE[1] and shift <= SMALL_SHIFT and fit.method != "none"
+    return {"scale": round(scale, 4), "shift_pct": round(100 * shift, 2), "rotation_deg": round(rotation, 2), "applied": small,
+            "method": fit.method, "features": fit.features, "matched": fit.matched}
+
+
+def lab(rgb: ByteArray) -> FloatArray:
+    """CIE L*a*b* (D65) of 8-bit sRGB."""
+    c = rgb.astype(np.float64) / 255.0
+    c = np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    xyz = c @ np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]]).T
+    xyz /= np.array([0.95047, 1.0, 1.08883])
+    f = np.where(xyz > 216 / 24389, np.cbrt(xyz), (24389 / 27 * xyz + 16) / 116)
+    return np.asarray(np.stack([116 * f[..., 1] - 16, 500 * (f[..., 0] - f[..., 1]), 200 * (f[..., 1] - f[..., 2])], -1),
+                      dtype=np.float32)
+
+
+def measure_tone(first: ByteArray, second: ByteArray, keep: BoolArray) -> dict[str, Any] | None:
+    """Colour difference outside the region: its uniform part (the median Lab shift, as a CIE76 distance) and how uneven
+    it is (90th percentile of the smoothed difference once the uniform part is removed)."""
+    if not keep.any():
+        return None
+    difference = lab(second) - lab(first)
+    shift = np.median(difference[keep], axis=0)
+    radius = max(1, round(TONE_SIGMA * max(keep.shape) * 0.85))  # three box passes approximate a Gaussian of that sigma
+    smooth = np.stack([box_mean(box_mean(box_mean(difference[..., k], radius), radius), radius) for k in range(3)], -1)
+    uneven = np.linalg.norm(smooth - shift, axis=-1)[keep]
+    return {"shift_de": round(float(np.linalg.norm(shift)), 2), "shift_lab": [round(float(v), 2) for v in shift],
+            "uneven_de": round(float(np.percentile(uneven, 90)), 2)}
 
 
 @dataclass(frozen=True)
@@ -181,10 +257,10 @@ def measure_structure(
     first, second = np.asarray(original.convert("RGB")), np.asarray(candidate.convert("RGB"))
     long_side = max(region.shape)
     keep = ~dilate_square(region, round(margin * long_side))
-    warp = backend.estimate(grey(first), grey(second), keep)
-    alignment = describe_alignment(warp, long_side)
+    fit = backend.estimate(grey(first), grey(second), keep)
+    alignment = describe_alignment(fit, long_side)
     if alignment["applied"]:
-        second = backend.apply(second, warp)
+        second = backend.apply(second, fit.warp)
     change = tolerant_dissimilarity(grey(first), grey(second), max(1, round(search * long_side)))
     height, width = region.shape
     rows, columns = height // CELL, width // CELL
@@ -209,6 +285,7 @@ def measure_structure(
     measures: dict[str, Any] = {
         "alignment": alignment,
         "outside_changed_share": round(int(changed.sum()) / outside, 4) if outside else None,
+        "tone": measure_tone(first, second, keep),
         "regions": listed,
         "compared_at": [width, height],
         "threshold": threshold,
@@ -232,13 +309,21 @@ def draw(candidate: ByteArray, keep: BoolArray, changed: BoolArray) -> Image.Ima
 
 def summarize(measures: Mapping[str, Any]) -> str:
     a = measures["alignment"]
-    if a["applied"]:
-        framing = (f"framing: the candidate matches the original after a shift of {a['shift_pct']:.1f}% of the long side "
-                   f"and a scale of {a['scale']:.3f} (a small reframing, corrected before comparing)")
+    matched = (f" ({a['matched']} of {a['features']} features of the original matched)"
+               if a.get("features") is not None else "")
+    if a.get("method") == "none":
+        framing = f"framing: no fit found between the two pictures{matched}; compared without correction"
+    elif a["applied"]:
+        framing = (f"framing: aligned by a shift of {a['shift_pct']:.1f}% of the long side, a scale of {a['scale']:.3f} and "
+                   f"a rotation of {a['rotation_deg']:.1f} degrees{matched}, corrected before comparing")
     else:
-        framing = (f"framing differs: a fit needs a shift of {a['shift_pct']:.1f}% of the long side and a scale of "
-                   f"{a['scale']:.3f}, more than a small reframing (a sign that the viewpoint changed); compared without "
+        framing = (f"framing: the best fit is a shift of {a['shift_pct']:.1f}% of the long side, a scale of {a['scale']:.3f} "
+                   f"and a rotation of {a['rotation_deg']:.1f} degrees{matched}, beyond a small reframing; compared without "
                    "correction")
+    tone = measures.get("tone")
+    if tone is not None:
+        framing += (f"; tone outside the removal region: a uniform shift of delta E {tone['shift_de']:.1f}, uneven by "
+                    f"delta E {tone['uneven_de']:.1f} (90th percentile)")
     if measures["outside_changed_share"] is None:
         return framing + "; the removal region and its margin cover the whole frame: nothing outside it to compare"
     found = measures["regions"]
@@ -254,7 +339,7 @@ def summarize(measures: Mapping[str, Any]) -> str:
 @dataclass
 class StructureMap(ServerTool):
     name: ClassVar[str] = "structure_map"
-    code_version: ClassVar[str] = "1"
+    code_version: ClassVar[str] = "2"
     input_kinds: ClassVar[tuple[str, ...]] = (IMAGE, IMAGE, MASK)
 
     def parse_params(self, params: Mapping[str, Any]) -> dict[str, Any]:
