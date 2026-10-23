@@ -37,7 +37,7 @@ def ask_zooms(adapters: Adapters, conn: sqlite3.Connection, run_ids: Sequence[in
         region = imaging.mask_array(adapters.blobs.get(row["region"]), original.size)
         places = zooms.places(structure.measures, region)
         aligned = zooms.aligned_candidate(original, candidate, structure.measures)
-        shown = [(p, zooms.render(original, aligned, region, p)) for p in places]
+        shown = [(p, zooms.render(original, aligned, p)) for p in places]
         stored = [(p.where, p.box, _store_image(adapters, conn, data)) for p, data in shown]
         request = zoomjudge.build(judge, shown, adapters.image_part, adapters.text_part, adapters.judge_request)
         reused = repo.find_zoom_judgment(conn, request.request_sha256, judge_model_id)
@@ -56,10 +56,10 @@ def ask_zooms(adapters: Adapters, conn: sqlite3.Connection, run_ids: Sequence[in
             with transaction(conn):
                 zoom_judgment_id = repo.insert_zoom_judgment(
                     conn, row["attempt"], judge_model_id, structure.tool_run_id, request.request_sha256, raw, error, wall,
-                    stored, [(a.n, a.answers, a.severity, a.comment) for a in answers])
+                    stored, [(a.n, (), a.severity, a.what) for a in answers])
             if error is None:
                 break
-        said = "; ".join(f"{p.where} {', '.join(a.answers)} ({a.severity})" for p, a in zip(places, answers, strict=False))
+        said = "; ".join(f"{p.where} {a.severity}{': ' + a.what if a.what else ''}" for p, a in zip(places, answers, strict=False))
         say(f"attempt {row['attempt']}: {len(places)} zooms in {wall:.1f} s: {said or error}")
         done.append(entry | {"zooms": len(places), "zoom_judgment": zoom_judgment_id, "seconds": round(wall, 1),
                              "error": error})

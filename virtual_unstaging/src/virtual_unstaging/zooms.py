@@ -1,5 +1,5 @@
-"""Zooms: the places a judge is asked about, from a `structure_map` run and the removal area, each cut as a pair of
-crops (original | aligned candidate) in one image (design/defect_detectors.md: The zoom judge)."""
+"""Zooms: the places a judge is asked about, from a `structure_map` run and the removal area, each shown as one card
+(the whole photo with the place framed, BEFORE and AFTER crops) (design/defect_detectors.md: The zoom judge)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from virtual_unstaging import imaging
 
@@ -21,6 +21,7 @@ INSIDE_CONTEXT = 0.25  # the removal area is large: a ring of its surroundings i
 MIN_SIDE = 0.12  # a crop covers at least this share of the long side
 CROP_SIDE = 512  # each crop's long side in the zoom image
 GAP = 12
+LABEL = 36  # height of the label strip above the panels
 MIN_PART = 0.001  # a part of the removal area under this share of the frame gets no zoom
 GRID = 128  # the removal area's parts are found on a grid of this long side
 
@@ -92,26 +93,29 @@ def aligned_candidate(original: Image.Image, candidate: Image.Image, measures: M
                              resample=Image.Resampling.BICUBIC)
 
 
-def render(original: Image.Image, aligned: Image.Image, region: NDArray[np.bool_], place: Place) -> bytes:
-    """One zoom image: the original crop left, the candidate crop right; outside zooms shade the removal area, inside
-    zooms outline it in magenta."""
+def render(original: Image.Image, aligned: Image.Image, place: Place) -> bytes:
+    """One card: the whole photo with the place framed in red, then BEFORE and AFTER cut to the frame, each labelled;
+    no shading and no outline (owner, 2026-10-23: "if it is confusing for me, its confusing for judge")."""
     box = crop_box(place, original.size)
-    mask = Image.fromarray(region).resize(original.size, Image.Resampling.NEAREST).crop(box)
-    halves = []
-    for picture in (original.convert("RGB"), aligned):
-        crop = np.asarray(picture.crop(box), dtype=np.float32)
-        area = np.asarray(mask, dtype=bool)
-        if place.where == OUTSIDE:
-            crop[area] = crop[area] * 0.55 + np.array([60, 60, 110], dtype=np.float32) * 0.45
-        else:
-            crop[imaging.dilate(area, max(2, round(0.004 * max(original.size)))) & ~area] = (255, 0, 255)
-        halves.append(Image.fromarray(np.clip(crop, 0, 255).astype(np.uint8)))
-    scale = CROP_SIDE / max(halves[0].size)
-    size = (max(1, round(halves[0].width * scale)), max(1, round(halves[0].height * scale)))
-    sheet = Image.new("RGB", (2 * size[0] + GAP, size[1]), "white")
-    for k, half in enumerate(halves):
-        sheet.paste(half.resize(size, Image.Resampling.LANCZOS), (k * (size[0] + GAP), 0))
-    ImageDraw.Draw(sheet).line([(size[0] + GAP // 2, 0), (size[0] + GAP // 2, size[1])], fill=(255, 255, 255), width=GAP)
+    crops = [picture.convert("RGB").crop(box) for picture in (original, aligned)]
+    scale = CROP_SIDE / max(crops[0].size)
+    size = (max(1, round(crops[0].width * scale)), max(1, round(crops[0].height * scale)))
+    crops = [crop.resize(size, Image.Resampling.LANCZOS) for crop in crops]
+    whole = original.convert("RGB")
+    s = size[1] / whole.height
+    whole = whole.resize((max(1, round(whole.width * s)), size[1]), Image.Resampling.LANCZOS)
+    ImageDraw.Draw(whole).rectangle([box[0] * s, box[1] * s, box[2] * s, box[3] * s], outline=(255, 30, 30),
+                                    width=max(3, size[1] // 120))
+    panels = [("WHERE", whole), ("BEFORE", crops[0]), ("AFTER (room emptied)", crops[1])]
+    width = sum(panel.width for _, panel in panels) + GAP * (len(panels) - 1)
+    sheet = Image.new("RGB", (width, size[1] + LABEL), "white")
+    draw = ImageDraw.Draw(sheet)
+    font = ImageFont.load_default(size=LABEL * 2 // 3)
+    x = 0
+    for label, panel in panels:
+        draw.text((x + 4, 2), label, fill=(0, 0, 0), font=font)
+        sheet.paste(panel, (x, LABEL))
+        x += panel.width + GAP
     return imaging.encode_png(sheet)
 
 

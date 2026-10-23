@@ -72,15 +72,19 @@ def test_the_candidate_is_aligned_by_the_warp_at_full_resolution() -> None:
     assert np.array_equal(np.asarray(unapplied), np.asarray(shifted))
 
 
-def test_a_zoom_is_the_two_crops_side_by_side() -> None:
+def test_a_card_is_the_framed_photo_then_before_and_after() -> None:
     original = textured()
-    region = np.zeros((192, 256), dtype=bool)
-    region[40:100, 40:120] = True
-    image = Image.open(io.BytesIO(zooms.render(original, original, region, Place(INSIDE, (40 / 256, 40 / 192, 120 / 256, 100 / 192)))))
-    assert image.width == 2 * max(image.size[1], (image.width - zooms.GAP) // 2) + zooms.GAP
-    assert max(image.size) == 2 * zooms.CROP_SIDE + zooms.GAP or image.height == zooms.CROP_SIDE
-    pixels = np.asarray(image.convert("RGB"))
-    assert ((pixels == (255, 0, 255)).all(axis=-1)).any()  # the removal area outlined
+    after = Image.fromarray(255 - np.asarray(original))
+    image = Image.open(io.BytesIO(zooms.render(original, after, Place(OUTSIDE, (0.4, 0.4, 0.5, 0.5)))))
+    crop = zooms.CROP_SIDE
+    assert image.height == crop + zooms.LABEL
+    whole = round(original.width * crop / original.height)
+    assert image.width == whole + 2 * crop + 2 * zooms.GAP
+    pixels = np.asarray(image.convert("RGB")).astype(int)
+    assert ((pixels[zooms.LABEL:, :whole] == (255, 30, 30)).all(axis=-1)).any()  # the place framed in red
+    before = pixels[zooms.LABEL + 10, whole + zooms.GAP + 10]
+    after_px = pixels[zooms.LABEL + 10, whole + 2 * zooms.GAP + crop + 10]
+    assert np.abs(before + after_px - 255).max() <= 3  # AFTER is the inverted crop of BEFORE, same place
 
 
 PLACES = (Place(OUTSIDE, (0.1, 0.1, 0.2, 0.2)), Place(INSIDE, (0.3, 0.3, 0.7, 0.8)))
@@ -90,23 +94,21 @@ def answer(*items: dict[str, Any]) -> str:
     return json.dumps({f"zoom_{n}": item for n, item in enumerate(items, start=1)})
 
 
-def item(answers: list[str], severity: str = "none", comment: str = "") -> dict[str, Any]:
-    return {"answers": answers, "severity": severity, "comment": comment}
+def item(severity: str = "none", what: str = "") -> dict[str, Any]:
+    return {"answer": severity, "what": what}
 
 
-def test_the_contract_takes_each_zoom_with_answers_of_its_kind() -> None:
-    parsed = zoomjudge.parse(answer(item(["added", "changed_shape", "added"], "minor", "a bin"), item(["continues"])), PLACES)
-    assert [(a.n, a.answers, a.severity) for a in parsed] == [(1, ("added", "changed_shape"), "minor"), (2, ("continues",), "none")]
-    for bad in (answer(item(["continues"]), item(["continues"])),  # an inside answer to an outside zoom
-                answer(item(["same"])),  # zoom 2 missing
-                answer(item([]), item(["continues"])),  # no answer
+def test_the_contract_is_one_of_three_answers_per_card() -> None:
+    parsed = zoomjudge.parse(answer(item("minor", "a bin appeared"), item()), PLACES)
+    assert [(a.n, a.severity, a.what) for a in parsed] == [(1, "minor", "a bin appeared"), (2, "none", "")]
+    for bad in (answer(item("removed")),  # not one of the three, and card 2 missing
+                answer(item(), {"answer": "none"}),  # no what
                 "not json"):
         with pytest.raises(ContractError):
             zoomjudge.parse(bad, PLACES)
     schema = zoomjudge.output_schema(PLACES)
     properties: Any = schema["properties"]
-    assert schema["required"] == ["zoom_1", "zoom_2"]
-    assert properties["zoom_1"]["properties"]["answers"]["items"]["enum"] == list(zoomjudge.ANSWERS[OUTSIDE])
+    assert schema["required"] == ["zoom_1", "zoom_2"] and properties["zoom_2"]["properties"]["answer"]["enum"] == ["none", "minor", "blocking"]
     assert "uniqueItems" not in json.dumps(schema)  # refused by the judge server's grammar backend
 
 
@@ -115,8 +117,8 @@ def test_the_request_names_each_zoom_and_its_kind() -> None:
                               lambda data, kind: {"type": "image", "bytes": len(data)}, lambda t: {"type": "text", "text": t},
                               JudgeRequestOptions())
     texts = [part["text"] for part in request.messages[1]["content"] if part["type"] == "text"]  # type: ignore[index, union-attr]
-    assert texts[:2] == ["Zoom 1 (outside): original left, edited right.", "Zoom 2 (inside): original left, edited right."]
-    assert "inside" in str(request.messages[0]["content"])
+    assert texts[:2] == ["Card 1.", "Card 2."]
+    assert "is anything wrong in AFTER" in str(request.messages[0]["content"])
 
 
 def textured_png() -> bytes:
@@ -126,10 +128,9 @@ def textured_png() -> bytes:
 
 
 def zoom_chat(messages: list[dict[str, object]], schema: dict[str, object]) -> str:
-    """A judge that answers every zoom as unchanged."""
-    texts = [p["text"] for p in messages[1]["content"] if p["type"] == "text"]  # type: ignore[index, union-attr, attr-defined]
-    kinds = [t.split("(")[1].split(")")[0] for t in texts if t.startswith("Zoom ")]
-    return answer(*(item(["same" if k == OUTSIDE else "continues"]) for k in kinds))
+    """A judge that finds nothing wrong on any card."""
+    keys: Any = schema["required"]
+    return json.dumps({k: item() for k in keys})
 
 
 def test_the_command_asks_once_per_picture_and_reuses_an_answered_request(project: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -139,7 +140,7 @@ def test_the_command_asks_once_per_picture_and_reuses_an_answered_request(projec
     done = ask_zooms(adapters, conn, [run], say=lambda _: None)
     pictures = conn.execute("SELECT COUNT(DISTINCT attempt_id) FROM zoom_judgment").fetchone()[0]
     assert len(done) == pictures > 0 and all(d["zooms"] >= 1 and d["error"] is None for d in done)
-    assert conn.execute("SELECT COUNT(*) FROM zoom_answer WHERE answer = 'continues'").fetchone()[0] >= pictures
+    assert conn.execute("SELECT COUNT(*) FROM zoom WHERE severity = 'none'").fetchone()[0] >= pictures
     again = ask_zooms(adapters, conn, [run], say=lambda _: None)
     assert all(d.get("reused") for d in again)
     assert main(["--project", str(project), "zooms", str(run), "--limit", "1"]) == 0
