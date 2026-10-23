@@ -288,12 +288,23 @@ def _chat(cfg: config.ProjectConfig) -> tuple[Chat, ModelRef]:
     return chat, ModelRef(j.model, j.revision + j.request.revision_suffix())
 
 
-def _adapters(project: Path, cfg: config.ProjectConfig) -> Adapters:
+class _NoGenerator:
+    """For commands that judge stored attempts: they generate nothing, so they need no generator served."""
+
+    model = ModelRef("none", "0")
+    capabilities = GeneratorCapabilities(frozenset(), 0, False)
+    licence = ""
+
+    def generate(self, request: object, fetch: object) -> tuple[bytes, float]:
+        raise RuntimeError("this command generates nothing")
+
+
+def _adapters(project: Path, cfg: config.ProjectConfig, with_generator: bool = True) -> Adapters:
     chat, judge_model = _chat(cfg)
     return Adapters(
         db_path=project / DB_NAME,
         blobs=BlobStore(project / "blobs"),
-        generator=_generator(cfg),
+        generator=_generator(cfg) if with_generator else _NoGenerator(),
         chat=chat,
         judge_model=judge_model,
         judge_box_scale=cfg.judge.box_scale,
@@ -367,7 +378,7 @@ def cmd_report(args: argparse.Namespace) -> int:
 
 def cmd_zooms(args: argparse.Namespace) -> int:
     conn, _ = _open(args.project)
-    adapters = _adapters(args.project, config.load(args.project, args.override))
+    adapters = _adapters(args.project, config.load(args.project, args.override), with_generator=False)
     done = ask_zooms(adapters, conn, args.runs, args.limit)
     broken = sum(1 for d in done if d.get("error"))
     print(f"{len(done)} pictures, {sum(d['zooms'] for d in done)} zooms, {broken} broken answers")
