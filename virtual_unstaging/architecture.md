@@ -13,26 +13,17 @@ generator; a second level of review (a human or a very powerful model) corrects 
 
 ## Table of Contents
 
-1. [Scope](#scope) _(Lines 46-61)_
-1. [Stages](#stages) _(Lines 64-91)_
-1. [Base instructions — offline optimization](#base-instructions--offline-optimization) _(Lines 94-124)_
-1. [Stage 0 — Preprocess](#stage-0--preprocess) _(Lines 127-140)_
-1. [Stage 1 — Per-image loop](#stage-1--per-image-loop) _(Lines 143-143)_
-   1. [An optimization under a compute budget](#an-optimization-under-a-compute-budget) _(Lines 146-176)_
-   1. [Optimization engine, pluggable](#optimization-engine-pluggable) _(Lines 179-190)_
-      1. [Dimensions of exploration](#dimensions-of-exploration) _(Lines 193-222)_
-      1. [Pre-loaded and judge-designed dimensions](#pre-loaded-and-judge-designed-dimensions) _(Lines 225-247)_
-      1. [Engine contract](#engine-contract) _(Lines 250-273)_
-   1. [The judge](#the-judge) _(Lines 276-285)_
-   1. [Judge tool library](#judge-tool-library) _(Lines 288-312)_
-   1. [Recipe knowledge base](#recipe-knowledge-base) _(Lines 315-324)_
-1. [Stage 2 — Cross-image loop](#stage-2--cross-image-loop) _(Lines 327-327)_
-   1. [2a. Judge findings retune the generator instructions](#2a-judge-findings-retune-the-generator-instructions) _(Lines 330-340)_
-   1. [2b. Second-level review retunes the judge](#2b-second-level-review-retunes-the-judge) _(Lines 343-362)_
-1. [Defect taxonomy](#defect-taxonomy) _(Lines 365-381)_
-1. [Data model](#data-model) _(Lines 384-431)_
-1. [Lessons from the first prototype](#lessons-from-the-first-prototype) _(Lines 434-455)_
-1. [Open questions](#open-questions) _(Lines 458-472)_
+1. [Scope](#scope) _(Lines 37-52)_
+1. [Stages](#stages) _(Lines 55-82)_
+1. [Base instructions — offline optimization](#base-instructions--offline-optimization) _(Lines 85-115)_
+1. [Stage 0 — Preprocess](#stage-0--preprocess) _(Lines 118-131)_
+1. [Stage 1 — Per-image loop](#stage-1--per-image-loop) _(Lines 134-318)_
+1. [Stage 2 — Cross-image loop](#stage-2--cross-image-loop) _(Lines 321-356)_
+1. [Defect taxonomy](#defect-taxonomy) _(Lines 359-375)_
+1. [Data model](#data-model) _(Lines 378-425)_
+1. [Lessons from the first prototype](#lessons-from-the-first-prototype) _(Lines 428-449)_
+1. [Open questions](#open-questions) _(Lines 452-466)_
+
 
 
 
@@ -42,7 +33,7 @@ generator; a second level of review (a human or a very powerful model) corrects 
 ---
 
 ## Scope
-<!-- Lines 46-61 -->
+<!-- Lines 37-52 -->
 
 - **Input:** a set of photos of one building, a **content rule set** (what belongs to the building and stays,
   what is movable and goes), optionally groups (rooms) and camera poses.
@@ -60,7 +51,7 @@ Design constraints:
 - compute is budgeted per image and per batch.
 
 ## Stages
-<!-- Lines 64-91 -->
+<!-- Lines 55-82 -->
 
 ```mermaid
 flowchart LR
@@ -90,7 +81,7 @@ every photo starts from (2a) and the instructions the judge applies (2b). Both s
 instructions, which no task changes.
 
 ## Base instructions — offline optimization
-<!-- Lines 94-124 -->
+<!-- Lines 85-115 -->
 
 A one-off layer: writing the base instructions of the models involved. It does not vary while a task runs;
 it is closer to writing good code, or to training a model, than to the loops above.
@@ -123,7 +114,7 @@ benchmark of clean and cluttered pairs, a separate project: [clutter_pairs](../c
 the benchmark before release.
 
 ## Stage 0 — Preprocess
-<!-- Lines 127-140 -->
+<!-- Lines 118-131 -->
 
 Filter out what is useless or has a low chance of success, then prepare the starting point.
 
@@ -139,7 +130,7 @@ Filter out what is useless or has a low chance of success, then prepare the star
 - **Initial recipe:** the best known starting inputs for this kind of photo, from the knowledge base.
 
 ## Stage 1 — Per-image loop
-<!-- Lines 143-143 -->
+<!-- Lines 134-318 -->
 
 ### An optimization under a compute budget
 <!-- Lines 146-176 -->
@@ -307,7 +298,10 @@ than as two RGB images.
 - **Contract (*proposal*):** each tool takes images and parameters, returns a derived image or measure plus
   a short text summary the VLM can read; every call is recorded (tool, version, inputs, output) so a
   judgment can be replayed.
-- Tools locate and measure; the VLM decides. On the first prototype a door detector alone did not separate
+- Tools locate and measure; the VLM decides. Long-term target (owner, 2026-10-23): a **detector** decides the defects
+  it measures without error on the owner's reviews and on injected defects, and the VLM decides the rest, on the
+  detector's zoomed crops; for now detectors run in shadow, recorded and compared with the judge, which is still
+  asked everything ([defect detectors](design/defect_detectors.md)). On the first prototype a door detector alone did not separate
   good from bad images ([Lessons](#lessons-from-the-first-prototype)).
 
 ### Recipe knowledge base
@@ -323,7 +317,7 @@ What the judge learns on one photo is reused on the next.
 - *Proposal:* an entry that keeps working on many photos is a candidate for the task overlay (2a).
 
 ## Stage 2 — Cross-image loop
-<!-- Lines 327-327 -->
+<!-- Lines 321-356 -->
 
 ### 2a. Judge findings retune the generator instructions
 <!-- Lines 330-340 -->
@@ -361,7 +355,7 @@ flowchart LR
 ```
 
 ## Defect taxonomy
-<!-- Lines 365-381 -->
+<!-- Lines 359-375 -->
 
 One vocabulary for the judge, the reviewer and the knowledge base. *Proposal*, to be refined on reviews.
 
@@ -380,7 +374,7 @@ One vocabulary for the judge, the reviewer and the knowledge base. *Proposal*, t
 Each finding: code, region (box or mask), severity (`minor`, `blocking`), free comment.
 
 ## Data model
-<!-- Lines 384-431 -->
+<!-- Lines 378-425 -->
 
 *Proposal.* Storage is an open question ([Open questions](#open-questions)); the structure comes first.
 
@@ -430,7 +424,7 @@ A judge finding and a reviewer finding on the same attempt are comparable row by
 calibration measure of 2b.
 
 ## Lessons from the first prototype
-<!-- Lines 434-455 -->
+<!-- Lines 428-449 -->
 
 One house, ~800 photos, one generator call per variant, a judge that accepted or rejected, a human review of
 the rejected photos and of a random sample of accepted ones.
@@ -454,7 +448,7 @@ the rejected photos and of a random sample of accepted ones.
   failures are gross (viewpoint change, invented scene), which a drift probe alone does not catch.
 
 ## Open questions
-<!-- Lines 458-472 -->
+<!-- Lines 452-466 -->
 
 - Loop 1: the first registry of dimensions and their levels; which engine to implement first behind the
   ask / tell contract; how engines are compared (same photos, same budget, same seeds).

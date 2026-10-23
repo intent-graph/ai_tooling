@@ -29,8 +29,8 @@ usage, required properties, functions, system shape, stored data, components, th
 1. [Review page](#review-page) _(Lines 359-372)_
 1. [Build order](#build-order) _(Lines 375-387)_
 1. [Guidelines applied](#guidelines-applied) _(Lines 390-405)_
-1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 408-422)_
-1. [Open](#open) _(Lines 425-432)_
+1. [Changes proposed to the architecture](#changes-proposed-to-the-architecture) _(Lines 408-419)_
+1. [Open](#open) _(Lines 422-429)_
 
 
 ---
@@ -404,7 +404,7 @@ Where this design meets the repository's guidelines, and where it departs from t
   column. Changes when a second consumer reads the database directly.
 
 ## Changes proposed to the architecture
-<!-- Lines 408-422 -->
+<!-- Lines 408-419 -->
 
 Not applied; for the owner to accept.
 
@@ -414,14 +414,11 @@ Not applied; for the owner to accept.
   defect-to-dimension map).
 - `RECIPE` becomes a view over pairs of attempts (D8), no longer a stored entity.
 - The defect-to-dimension map carries a **direction** per pair (which way to step), not only the dimension.
-- **Detectors decide what they measure reliably** ([defect detectors](defect_detectors.md)): "Tools locate and
-  measure; the VLM decides" becomes "a detector decides the defects it measures without error on the owner's reviews
-  and on injected defects; the VLM decides the rest, on the detector's zooms".
 - One name per concept: the architecture says both *task* and *project* for one building; *project* everywhere
   (so *project overlay*). *Probe* stays a verb (try a neighbour); the deterministic checks are *tools*.
 
 ## Open
-<!-- Lines 425-432 -->
+<!-- Lines 422-429 -->
 
 - **Default generator and judge:** the owner's choice, from the open-weight survey; it sets the capability
   profile, the endpoint protocol, and whether generator and judge share one GPU.
