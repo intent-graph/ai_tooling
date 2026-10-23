@@ -143,3 +143,15 @@ def test_the_command_asks_once_per_picture_and_reuses_an_answered_request(projec
     assert all(d.get("reused") for d in again)
     assert main(["--project", str(project), "zooms", str(run), "--limit", "1"]) == 0
     assert "1 pictures" in capsys.readouterr().out
+
+
+def test_the_command_needs_no_generator(project: Path, monkeypatch: pytest.MonkeyPatch,
+                                         capsys: pytest.CaptureFixture[str]) -> None:
+    run, _ = api_run(project, "single")
+
+    def no_generator(cfg: object) -> object:
+        raise config.ConfigError("the tool server serves no generator")
+
+    monkeypatch.setattr("virtual_unstaging.cli._generator", no_generator)
+    assert main(["--project", str(project), "zooms", str(run), "--limit", "1"]) == 0
+    assert "1 pictures" in capsys.readouterr().out
