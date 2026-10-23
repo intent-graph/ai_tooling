@@ -136,22 +136,27 @@ Every number in this table is drafted on 16 pairs of one building; each must hol
 is switched to decide.
 
 ## Zooms: what the judge gets instead
-<!-- Lines 140-152 -->
+<!-- Lines 140-157 -->
 
-- **A zoom** is a pair of crops (original, aligned candidate) around one region, grown by half its size on each side
-  for context and at least an eighth of the long side, enlarged to the judge's image size; the removal area shaded
-  in both, so the judge does not count the intended change. Several zooms go in one call.
-- **One question per zoom, closed options**, mapped to codes: outside the region, "the same / only sharper or softer
-  / something added / something removed / something changed shape"; inside, "a wall or floor that continues / an
-  element revealed (partly visible in the original) / an element invented / an opening invented / an object left".
-  The judge's answer is an option per zoom, not a free search; findings take the zoom's box.
+- **A zoom** is a pair of crops (original, aligned candidate) around one **place** (a region a detector found),
+  grown by its own size on each side for context and at least an eighth of the long side, enlarged to the judge's
+  image size; the removal area shaded in both, so the judge does not count the intended change. Several zooms go in
+  one call. On the pilot, against the owner's boxes: 16 of 18 defects outside the removal area lie at least 80% inside
+  a zoom so cut (median zoom 21% of the frame); grown by half its size, 11 of 18 (drafted on the same boxes).
+- **One question per zoom, closed options, several allowed:** a defect often belongs to more than one code (owner,
+  2026-10-23: "in several cases the defect does not fit neatly in one category": an invented opening that also makes
+  the scene another one; a stain that is both drift and an added element). Outside the region: "the same / only
+  sharper or softer / something added / something removed / something changed shape / the surface is wrong";
+  inside: "a wall or floor that continues / an element revealed (partly visible in the original) / an element
+  invented / an opening invented / an object left / the surface is wrong". Each option maps to one or more codes;
+  findings take the zoom's box.
 - **Cost:** on the pilot, at most 4 zooms per attempt outside the region; small crops and short closed answers
   should let a smaller or faster judge answer within the owner's 10 seconds. Not measured.
 - On the pilot's prototype, the zooms show defects the whole-picture judges missed or misread: an object and a
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
 ## Measuring a detector
-<!-- Lines 155-168 -->
+<!-- Lines 160-176 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -159,7 +164,10 @@ Three measures, all offline on stored images, before a judge reads a detector's 
    patches pasted outside the region, another photo given as the output); what the detector reads back, and from
    what size it finds the defect. Says whether the detector *can* see a defect, and how precisely.
 2. **The owner's reviews:** per code, the owner's answer (absent, minor, blocking) against the detector's band;
-   sets the thresholds of the bands. A band is earned when it is never wrong on the reviews.
+   sets the thresholds of the bands. A band is earned when it is never wrong on the reviews. For local defects, by
+   **place** first (did a detector find the place the owner boxed; does the zoom contain it), then by label, lenient:
+   a place's label is right when it is any of the codes the owner gave that place, as the owner files one place under
+   one code and leaves its other codes unboxed.
 3. **Hold-out:** thresholds drafted on one set are checked on another before `decide` is switched on.
 4. **Against the judge (shadow mode):** per code, the detector's band, the judge's answer and the owner's, on the
    same attempts.
@@ -167,19 +175,22 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 171-180 -->
+<!-- Lines 179-191 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted:
 
-- `detection` (attempt, defect code, detector, detector version, tool run, band, severity, measures, reason) and
-  `detection_region` (box), one detection per attempt and code.
+- `detection` (attempt, defect code, detector, detector version, tool run, band, severity, measures, reason), one
+  per attempt and code, for the whole-image codes (same picture, viewpoint, colour shift) and for each local code's
+  overall band.
+- `place` (attempt, detector, box, where: outside, inside or across the removal area's edge): a region a detector
+  found; its codes are not fixed by the detector but answered per zoom (several allowed), stored as `place_code`.
 - `finding` gains a third source beside `judgment` and `review`: a `detection` whose band is `present`. In shadow
   mode the score (D4) counts the judgment's findings only; once a detector decides, the findings of its detections
   replace the judge's for its code.
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 183-197 -->
+<!-- Lines 194-208 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -196,7 +207,7 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 200-205 -->
+<!-- Lines 211-216 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -204,10 +215,14 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 208-213 -->
+<!-- Lines 219-228 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.
 - **Viewpoint tolerance:** from what reframing does the owner see a changed viewpoint? The bands use the generator's
   own range on kept outputs. The owner's.
 - **Severity by a detector:** whether a detector may say `blocking` (the gate does; drift and colour shift ask).
+- **Overlapping codes:** the taxonomy names causes and places at once (`drift` is "outside the region",
+  `element_added` "anything new"), so one defect fits several. Places with several answers sidestep it for now; a
+  taxonomy along two axes (where: outside, inside, across the edge; what: added, removed, changed shape, tone,
+  surface wrong, scene other) is a possible change to the architecture, for the owner.
