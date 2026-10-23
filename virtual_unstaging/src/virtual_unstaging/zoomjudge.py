@@ -43,56 +43,56 @@ def build(model: ModelRef, zooms: Sequence[tuple[Place, bytes]], image_part: Ima
         content.append(text_part(f"Zoom {n} ({place.where}): original left, edited right."))
         content.append(image_part(shown, media_type))
         identity.append([place.where, sha256_bytes(shown)])
-    text = (f"Answer for each of the {len(zooms)} zooms, in order: zoom number, answers, severity, comment (under "
-            f"{COMMENT_MAX} characters).")
+    text = (f"Answer for each of the {len(zooms)} zooms under its key (zoom_1, zoom_2, ...): answers, severity, comment "
+            f"(under {COMMENT_MAX} characters).")
     content.append(text_part(text))
-    schema = output_schema(len(zooms))
+    schema = output_schema([place for place, _ in zooms])
     messages: list[dict[str, object]] = [{"role": "system", "content": system}, {"role": "user", "content": content}]
     sha = sha256_text(canonical_json({"model": [model.name, model.revision], "system": system, "images": identity,
                                       "text": text, "schema": schema}))
     return JudgeRequest(messages, schema, sha)
 
 
-def output_schema(count: int) -> dict[str, object]:
-    every = sorted({a for answers in ANSWERS.values() for a in answers})
-    item = {
-        "type": "object",
-        "properties": {
-            "zoom": {"type": "integer", "minimum": 1, "maximum": count},
-            "answers": {"type": "array", "items": {"enum": every}, "minItems": 1, "maxItems": MAX_ANSWERS,
-                        "uniqueItems": True},
-            "severity": {"enum": list(SEVERITIES)},
-            "comment": {"type": "string", "maxLength": COMMENT_MAX},
-        },
-        "required": ["zoom", "answers", "severity", "comment"],
-        "additionalProperties": False,
-    }
-    return {"type": "object", "properties": {"zooms": {"type": "array", "items": item, "minItems": count,
-                                                       "maxItems": count}},
-            "required": ["zooms"], "additionalProperties": False}
+def output_schema(zooms: Sequence[Place]) -> dict[str, object]:
+    """One key per zoom (`zoom_<n>`), each offering only its own kind's answers: constrained decoding cannot give an
+    inside answer to an outside zoom (a single list of every answer let a judge do so)."""
+
+    def item(place: Place) -> dict[str, object]:
+        # no uniqueItems: vLLM's grammar backend refuses it; a repeated answer is dropped when parsed
+        return {"type": "object",
+                "properties": {"answers": {"type": "array", "items": {"enum": list(ANSWERS[place.where])}, "minItems": 1,
+                                           "maxItems": MAX_ANSWERS},
+                               "severity": {"enum": list(SEVERITIES)},
+                               "comment": {"type": "string", "maxLength": COMMENT_MAX}},
+                "required": ["answers", "severity", "comment"], "additionalProperties": False}
+
+    keys = [f"zoom_{n}" for n in range(1, len(zooms) + 1)]
+    return {"type": "object", "properties": {k: item(p) for k, p in zip(keys, zooms, strict=True)}, "required": keys,
+            "additionalProperties": False}
 
 
 def parse(raw: str, zooms: Sequence[Place]) -> tuple[ZoomAnswer, ...]:
-    """Each zoom answered once, with answers of its own kind; anything else breaks the contract."""
+    """Each zoom answered under its key, with answers of its own kind; anything else breaks the contract."""
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as error:
         raise ContractError(f"not JSON: {error}") from error
-    items = data.get("zooms") if isinstance(data, dict) else None
-    if not isinstance(items, list) or len(items) != len(zooms):
-        raise ContractError(f"expected {len(zooms)} zoom answers")
-    found: dict[int, ZoomAnswer] = {}
-    for item in items:
-        if not isinstance(item, dict) or set(item) != {"zoom", "answers", "severity", "comment"}:
-            raise ContractError("a zoom answer needs exactly zoom, answers, severity, comment")
-        n, answers, severity, comment = item["zoom"], item["answers"], item["severity"], item["comment"]
-        if not isinstance(n, int) or not 1 <= n <= len(zooms) or n in found:
-            raise ContractError(f"zoom number {n!r} out of range or repeated")
-        allowed = ANSWERS[zooms[n - 1].where]
-        if (not isinstance(answers, list) or not 1 <= len(answers) <= MAX_ANSWERS or len(set(answers)) != len(answers)
+    keys = [f"zoom_{n}" for n in range(1, len(zooms) + 1)]
+    if not isinstance(data, dict) or sorted(data) != sorted(keys):
+        raise ContractError(f"expected exactly the keys {', '.join(keys)}")
+    found = []
+    for n, (key, place) in enumerate(zip(keys, zooms, strict=True), start=1):
+        item = data[key]
+        if not isinstance(item, dict) or set(item) != {"answers", "severity", "comment"}:
+            raise ContractError(f"{key} needs exactly answers, severity, comment")
+        answers, severity, comment = item["answers"], item["severity"], item["comment"]
+        allowed = ANSWERS[place.where]
+        if isinstance(answers, list):
+            answers = list(dict.fromkeys(answers))
+        if (not isinstance(answers, list) or not 1 <= len(answers) <= MAX_ANSWERS
                 or any(a not in allowed for a in answers)):
-            raise ContractError(f"zoom {n} ({zooms[n - 1].where}): answers must be 1 to {MAX_ANSWERS} of {', '.join(allowed)}")
+            raise ContractError(f"{key} ({place.where}): answers must be 1 to {MAX_ANSWERS} of {', '.join(allowed)}")
         if severity not in SEVERITIES or not isinstance(comment, str):
-            raise ContractError(f"zoom {n}: bad severity or comment")
-        found[n] = ZoomAnswer(n, tuple(answers), severity, comment[:COMMENT_MAX])
-    return tuple(found[n] for n in sorted(found))
+            raise ContractError(f"{key}: bad severity or comment")
+        found.append(ZoomAnswer(n, tuple(answers), severity, comment[:COMMENT_MAX]))
+    return tuple(found)

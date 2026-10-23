@@ -87,25 +87,27 @@ PLACES = (Place(OUTSIDE, (0.1, 0.1, 0.2, 0.2)), Place(INSIDE, (0.3, 0.3, 0.7, 0.
 
 
 def answer(*items: dict[str, Any]) -> str:
-    return json.dumps({"zooms": list(items)})
+    return json.dumps({f"zoom_{n}": item for n, item in enumerate(items, start=1)})
 
 
-def test_the_contract_takes_each_zoom_once_with_answers_of_its_kind() -> None:
-    raw = answer({"zoom": 2, "answers": ["continues"], "severity": "none", "comment": ""},
-                 {"zoom": 1, "answers": ["added", "changed_shape"], "severity": "minor", "comment": "a bin appeared"})
-    parsed = zoomjudge.parse(raw, PLACES)
+def item(answers: list[str], severity: str = "none", comment: str = "") -> dict[str, Any]:
+    return {"answers": answers, "severity": severity, "comment": comment}
+
+
+def test_the_contract_takes_each_zoom_with_answers_of_its_kind() -> None:
+    parsed = zoomjudge.parse(answer(item(["added", "changed_shape", "added"], "minor", "a bin"), item(["continues"])), PLACES)
     assert [(a.n, a.answers, a.severity) for a in parsed] == [(1, ("added", "changed_shape"), "minor"), (2, ("continues",), "none")]
-    for bad in (answer({"zoom": 1, "answers": ["continues"], "severity": "none", "comment": ""},
-                       {"zoom": 2, "answers": ["continues"], "severity": "none", "comment": ""}),  # inside answer outside
-                answer({"zoom": 1, "answers": ["same"], "severity": "none", "comment": ""},
-                       {"zoom": 1, "answers": ["same"], "severity": "none", "comment": ""}),  # zoom 1 twice
-                answer({"zoom": 1, "answers": [], "severity": "none", "comment": ""},
-                       {"zoom": 2, "answers": ["continues"], "severity": "none", "comment": ""}),  # no answer
+    for bad in (answer(item(["continues"]), item(["continues"])),  # an inside answer to an outside zoom
+                answer(item(["same"])),  # zoom 2 missing
+                answer(item([]), item(["continues"])),  # no answer
                 "not json"):
         with pytest.raises(ContractError):
             zoomjudge.parse(bad, PLACES)
-    schema = zoomjudge.output_schema(2)
-    assert schema["properties"]["zooms"]["minItems"] == 2  # type: ignore[index]
+    schema = zoomjudge.output_schema(PLACES)
+    properties: Any = schema["properties"]
+    assert schema["required"] == ["zoom_1", "zoom_2"]
+    assert properties["zoom_1"]["properties"]["answers"]["items"]["enum"] == list(zoomjudge.ANSWERS[OUTSIDE])
+    assert "uniqueItems" not in json.dumps(schema)  # refused by the judge server's grammar backend
 
 
 def test_the_request_names_each_zoom_and_its_kind() -> None:
@@ -127,8 +129,7 @@ def zoom_chat(messages: list[dict[str, object]], schema: dict[str, object]) -> s
     """A judge that answers every zoom as unchanged."""
     texts = [p["text"] for p in messages[1]["content"] if p["type"] == "text"]  # type: ignore[index, union-attr, attr-defined]
     kinds = [t.split("(")[1].split(")")[0] for t in texts if t.startswith("Zoom ")]
-    return answer(*({"zoom": n, "answers": ["same" if k == OUTSIDE else "continues"], "severity": "none", "comment": ""}
-                    for n, k in enumerate(kinds, start=1)))
+    return answer(*(item(["same" if k == OUTSIDE else "continues"]) for k in kinds))
 
 
 def test_the_command_asks_once_per_picture_and_reuses_an_answered_request(project: Path, capsys: pytest.CaptureFixture[str]) -> None:
