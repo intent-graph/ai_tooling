@@ -157,7 +157,7 @@ is switched to decide.
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
 ## The zoom judge (build step 4)
-<!-- Lines 161-186 -->
+<!-- Lines 161-192 -->
 
 *Proposal*, 2026-10-23; the owner's go "lets go" on a separate call. In shadow mode the zoom questions are a **second
 judge call** per attempt, so the whole-picture judgment stays as it was and every place gets three answers: the zoom
@@ -184,8 +184,14 @@ judge's, the whole-picture judge's, the owner's.
   inside zooms marked blocking on kept photos. That question was replaced by the card question above, which the owner
   answered first on the same 53 places.
 
+- **Measured, card question** (pilot, 16 photos, the owner's answers on the same 53 cards first; 3 judges × 2 speed
+  versions; 0 broken of 78 calls): the owner's 9 blocking cards called blocking by the 27B judge 9 and 8 times, by
+  the 35B-A3B fast version 8; the owner's 16 clean cards called clean 15 times by the 27B; most disagreement on the
+  owner's 27 minor cards (14-16 called clean). Photo verdicts right on 9-12 of 16 (35B-A3B fast: 12, median 1.7 s per
+  photo), against 7-10 for the whole-picture judges.
+
 ## Measuring a detector
-<!-- Lines 189-205 -->
+<!-- Lines 195-211 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -204,7 +210,7 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 208-223 -->
+<!-- Lines 214-229 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted. While detectors only run in shadow, a detection is a
 pure function of a stored `structure_map` run and the thresholds file, so it is computed when reported
@@ -222,7 +228,7 @@ zoom answers need storing (build step 4):
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 226-243 -->
+<!-- Lines 232-249 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -242,7 +248,7 @@ zoom answers need storing (build step 4):
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 246-251 -->
+<!-- Lines 252-257 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -250,7 +256,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 254-263 -->
+<!-- Lines 260-269 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.
