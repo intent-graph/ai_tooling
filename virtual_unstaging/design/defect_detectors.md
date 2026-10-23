@@ -20,6 +20,7 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
 1. [The cascade](#the-cascade)
 1. [Detectors per defect](#detectors-per-defect)
 1. [Zooms: what the judge gets instead](#zooms-what-the-judge-gets-instead)
+1. [The zoom judge (build step 4)](#the-zoom-judge-build-step-4)
 1. [Measuring a detector](#measuring-a-detector)
 1. [Data model](#data-model)
 1. [Build order](#build-order)
@@ -29,7 +30,7 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
 ---
 
 ## N0
-<!-- Lines 33-46 -->
+<!-- Lines 34-47 -->
 
 - Each defect code gets a **detector** that returns one of three **bands** per attempt: `absent` and `present`
   (decided, with a severity and a location), or `ask` (the detector cannot tell; the judge gets a zoomed question).
@@ -45,7 +46,7 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
   three wholly failed outputs (a copied reference, another scene, another framing) rejected with no judge.
 
 ## Why
-<!-- Lines 49-55 -->
+<!-- Lines 50-56 -->
 
 The judges were measured against the owner's blind review of 16 pairs, with more evidence (element inventory), with
 rules drawn from the reviews (instruction overlay) and with a better change map (`structure_map`): each moved
@@ -54,7 +55,7 @@ judge is asked to do two things at once: find small differences between two whol
 models do badly ([state of the art](../state_of_the_art.md)), and weigh them. Detectors take the first job.
 
 ## The triage contract
-<!-- Lines 58-75 -->
+<!-- Lines 59-76 -->
 
 For each attempt and each defect code, one **detection**:
 
@@ -74,7 +75,7 @@ For each attempt and each defect code, one **detection**:
   judge is asked anyway, so a run measures the detector and the judge on the same questions.
 
 ## Shadow mode
-<!-- Lines 78-90 -->
+<!-- Lines 79-91 -->
 
 The owner's ruling, 2026-10-23: "I think long term yes. However for now we should still ask the judge, as it allows
 to gather data on how often the judge makes the right decision."
@@ -89,7 +90,7 @@ to gather data on how often the judge makes the right decision."
   cost, and the owner agrees.
 
 ## The cascade
-<!-- Lines 93-117 -->
+<!-- Lines 94-118 -->
 
 ```mermaid
 flowchart TD
@@ -116,7 +117,7 @@ flowchart TD
   the point of the edit: the question is what the new content is.
 
 ## Detectors per defect
-<!-- Lines 120-137 -->
+<!-- Lines 121-138 -->
 
 Pixel detectors need no learned model (OpenCV, NumPy); semantic ones run the tool server's existing models.
 
@@ -136,7 +137,7 @@ Every number in this table is drafted on 16 pairs of one building; each must hol
 is switched to decide.
 
 ## Zooms: what the judge gets instead
-<!-- Lines 140-157 -->
+<!-- Lines 141-158 -->
 
 - **A zoom** is a pair of crops (original, aligned candidate) around one **place** (a region a detector found),
   grown by its own size on each side for context and at least an eighth of the long side, enlarged to the judge's
@@ -155,8 +156,30 @@ is switched to decide.
 - On the pilot's prototype, the zooms show defects the whole-picture judges missed or misread: an object and a
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
+## The zoom judge (build step 4)
+<!-- Lines 161-180 -->
+
+*Proposal*, 2026-10-23; the owner's go "lets go" on a separate call. In shadow mode the zoom questions are a **second
+judge call** per attempt, so the whole-picture judgment stays as it was and every place gets three answers: the zoom
+judge's, the whole-picture judge's, the owner's.
+
+- **Places:** the `structure_map` regions outside the removal area (at most 4, largest first) and the removal area
+  itself (each of its at most 2 largest parts), since inside it no detector is built yet and the zoom alone narrows
+  the question. A picture the gate calls another picture gets no zooms.
+- **Zoom image:** one image per place, original crop and aligned candidate crop side by side, each at most 512 pixels
+  on its long side; the candidate is aligned by the warp `structure_map` reports (`alignment.warp`, at the size it
+  compared), applied by the orchestrator at full resolution. Outside zooms shade the removal area; inside zooms outline
+  it.
+- **Question:** per zoom, the answers that apply among a closed list (several allowed), a severity (`none`, `minor`,
+  `blocking`) and a comment under 120 characters. Outside: `same`, `sharper_or_softer`, `added`, `removed`,
+  `changed_shape`, `tone`, `surface_wrong`. Inside: `continues`, `revealed`, `invented_element`, `invented_opening`,
+  `object_left`, `surface_wrong`. Each answer maps to defect codes in `data/detectors.toml` (`[zoom_answers]`).
+- **Command:** `unstage zooms RUN…` asks the configured judge on every judged attempt of the runs, once per
+  candidate; a request already answered by the same judge is reused. Stored as `zoom_judgment`, `zoom`,
+  `zoom_answer` (schema version 2; a version 1 database is migrated by adding these tables).
+
 ## Measuring a detector
-<!-- Lines 160-176 -->
+<!-- Lines 183-199 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -175,7 +198,7 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 179-194 -->
+<!-- Lines 202-217 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted. While detectors only run in shadow, a detection is a
 pure function of a stored `structure_map` run and the thresholds file, so it is computed when reported
@@ -193,7 +216,7 @@ zoom answers need storing (build step 4):
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 197-214 -->
+<!-- Lines 220-237 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -213,7 +236,7 @@ zoom answers need storing (build step 4):
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 217-222 -->
+<!-- Lines 240-245 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -221,7 +244,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 225-234 -->
+<!-- Lines 248-257 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.

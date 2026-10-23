@@ -779,3 +779,54 @@ def judged_attempts_with_structure(conn: sqlite3.Connection, run_id: int) -> lis
                       "structure": None if measures is None else json.loads(measures), "judge_codes": judged,
                       "review_verdict": None if review is None else str(review[1]), "review_codes": reviewed})
     return found
+
+
+# --- Zoom judge ------------------------------------------------------------------------------------------------
+
+
+def judged_candidates(conn: sqlite3.Connection, run_ids: Sequence[int]) -> list[dict[str, Any]]:
+    """One row per distinct judged picture of the runs (original, candidate, removal region, as its change map read
+    them): the first attempt that produced it."""
+    marks = ",".join("?" * len(run_ids))
+    rows = conn.execute(
+        "SELECT MIN(j.attempt_id), ti0.image_sha256, ti1.image_sha256, ti2.image_sha256 FROM judgment j "
+        "JOIN attempt a USING (attempt_id) JOIN optimization o USING (optimization_id) "
+        "JOIN judgment_tool_run jt ON jt.judgment_id = j.judgment_id JOIN tool_run t ON t.tool_run_id = jt.tool_run_id "
+        "JOIN tool_run_input ti0 ON ti0.tool_run_id = t.tool_run_id AND ti0.position = 0 "
+        "JOIN tool_run_input ti1 ON ti1.tool_run_id = t.tool_run_id AND ti1.position = 1 "
+        "JOIN tool_run_input ti2 ON ti2.tool_run_id = t.tool_run_id AND ti2.position = 2 "
+        f"WHERE o.run_id IN ({marks}) AND t.tool IN ('structure_map', 'change_map') "
+        "GROUP BY ti0.image_sha256, ti1.image_sha256, ti2.image_sha256 ORDER BY 1",
+        tuple(run_ids),
+    ).fetchall()
+    return [{"attempt": int(r[0]), "original": str(r[1]), "candidate": str(r[2]), "region": str(r[3])} for r in rows]
+
+
+def find_zoom_judgment(conn: sqlite3.Connection, request_sha: str, judge_model_id: int) -> int | None:
+    row = _one(conn, "SELECT zoom_judgment_id FROM zoom_judgment WHERE request_sha256 = ? AND judge_model_id = ? "
+                     "AND parse_error IS NULL ORDER BY zoom_judgment_id DESC LIMIT 1", (request_sha, judge_model_id))
+    return None if row is None else int(row[0])
+
+
+def insert_zoom_judgment(
+    conn: sqlite3.Connection, attempt_id: int, judge_model_id: int, tool_run_id: int, request_sha: str, raw: str,
+    parse_error: str | None, wall_seconds: float,
+    zooms: Sequence[tuple[str, Sequence[float], str]] = (),
+    answers: Sequence[tuple[int, Sequence[str], str, str]] = (),
+) -> int:
+    """A zoom judgment with its zooms (place, box, image) and, when parsed, the answers (zoom, answers, severity,
+    comment)."""
+    zoom_judgment_id = _id(conn.execute(
+        "INSERT INTO zoom_judgment (attempt_id, judge_model_id, tool_run_id, request_sha256, raw_response, parse_error, "
+        "wall_seconds, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (attempt_id, judge_model_id, tool_run_id, request_sha, raw, parse_error, wall_seconds, now()),
+    ))
+    by_zoom = {n: (severity, comment) for n, _, severity, comment in answers}
+    for n, (place, box, image_sha) in enumerate(zooms, start=1):
+        severity, comment = by_zoom.get(n, (None, None))
+        conn.execute("INSERT INTO zoom (zoom_judgment_id, n, place, x0, y0, x1, y1, image_sha256, severity, comment) "
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (zoom_judgment_id, n, place, *box, image_sha, severity, comment))
+    for n, chosen, _, _ in answers:
+        conn.executemany("INSERT INTO zoom_answer (zoom_judgment_id, n, answer) VALUES (?, ?, ?)",
+                         [(zoom_judgment_id, n, a) for a in chosen])
+    return zoom_judgment_id

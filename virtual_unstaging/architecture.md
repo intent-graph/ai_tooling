@@ -20,9 +20,9 @@ generator; a second level of review (a human or a very powerful model) corrects 
 1. [Stage 1 — Per-image loop](#stage-1--per-image-loop) _(Lines 134-318)_
 1. [Stage 2 — Cross-image loop](#stage-2--cross-image-loop) _(Lines 321-356)_
 1. [Defect taxonomy](#defect-taxonomy) _(Lines 359-375)_
-1. [Data model](#data-model) _(Lines 378-425)_
-1. [Lessons from the first prototype](#lessons-from-the-first-prototype) _(Lines 428-449)_
-1. [Open questions](#open-questions) _(Lines 452-466)_
+1. [Data model](#data-model) _(Lines 378-431)_
+1. [Lessons from the first prototype](#lessons-from-the-first-prototype) _(Lines 434-455)_
+1. [Open questions](#open-questions) _(Lines 458-472)_
 
 
 
@@ -374,7 +374,7 @@ One vocabulary for the judge, the reviewer and the knowledge base. *Proposal*, t
 Each finding: code, region (box or mask), severity (`minor`, `blocking`), free comment.
 
 ## Data model
-<!-- Lines 378-425 -->
+<!-- Lines 378-431 -->
 
 *Proposal.* Storage is an open question ([Open questions](#open-questions)); the structure comes first.
 
@@ -403,6 +403,10 @@ erDiagram
   PHOTO ||--o| DELIVERY : "final"
   JUDGMENT ||--o{ TOOL_RUN : calls
   TOOL_RUN }o--o| ATTEMPT : "guide for next"
+  ATTEMPT ||--o{ ZOOM_JUDGMENT : "zoomed questions"
+  ZOOM_JUDGMENT }o--|| TOOL_RUN : "places from"
+  ZOOM_JUDGMENT ||--o{ ZOOM : asks
+  ZOOM ||--o{ ZOOM_ANSWER : "answered with"
 ```
 
 | Entity | Holds |
@@ -419,12 +423,14 @@ erDiagram
 | `ATTEMPT_LEVEL` | the level of one dimension in one attempt: the attempt's point, one row per dimension |
 | `RECIPE` | condition, defect, dimension, step, outcome counts (tried, fixed, made worse) |
 | `DELIVERY` | chosen attempt or fallback (`original`, `excluded`), decided by |
+| `ZOOM_JUDGMENT` | a judge's separate call on one attempt's zooms: judge model, the tool run the places came from, raw answer, time ([defect detectors](design/defect_detectors.md)) |
+| `ZOOM` / `ZOOM_ANSWER` | one place (outside or inside the removal area, box, the image shown) and the judge's answers on it, several allowed, with a severity |
 
 A judge finding and a reviewer finding on the same attempt are comparable row by row: that comparison is the
 calibration measure of 2b.
 
 ## Lessons from the first prototype
-<!-- Lines 428-449 -->
+<!-- Lines 434-455 -->
 
 One house, ~800 photos, one generator call per variant, a judge that accepted or rejected, a human review of
 the rejected photos and of a random sample of accepted ones.
@@ -448,7 +454,7 @@ the rejected photos and of a random sample of accepted ones.
   failures are gross (viewpoint change, invented scene), which a drift probe alone does not catch.
 
 ## Open questions
-<!-- Lines 452-466 -->
+<!-- Lines 458-472 -->
 
 - Loop 1: the first registry of dimensions and their levels; which engine to implement first behind the
   ask / tell contract; how engines are compared (same photos, same budget, same seeds).

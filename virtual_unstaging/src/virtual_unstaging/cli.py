@@ -22,6 +22,7 @@ from virtual_unstaging.domain import GeneratorCapabilities, ModelRef
 from virtual_unstaging.instructions import InstructionStack, load_base
 from virtual_unstaging.judge import Chat
 from virtual_unstaging.loop1.runner import Adapters, RunPaused, RunVersions, create_run, execute_run
+from virtual_unstaging.loop1.zoomrun import ask_zooms
 from virtual_unstaging.registry import load_defects, load_release
 from virtual_unstaging.report import build, detector_report, render_detectors, render_text, to_json
 from virtual_unstaging.store import repo
@@ -101,6 +102,11 @@ def _parser() -> argparse.ArgumentParser:
                    help="add the pixel detectors' bands, in shadow, beside the judge and the reviews")
     p.set_defaults(handler=cmd_report)
 
+    p = sub.add_parser("zooms", help="shadow mode: ask the judge about each place a detector found, in a separate call")
+    p.add_argument("runs", nargs="+", type=int, help="the runs whose judged pictures are zoomed")
+    p.add_argument("--limit", type=int, default=None, help="at most this many pictures")
+    p.set_defaults(handler=cmd_zooms)
+
     p = sub.add_parser("deliver", help="decide each photo's outcome by rule (people's decisions are kept)")
     p.add_argument("--run", type=int, required=True)
     p.set_defaults(handler=cmd_deliver)
@@ -145,6 +151,7 @@ def _open(project: Path) -> tuple[sqlite3.Connection, BlobStore]:
     if not db_path.exists():
         raise config.ConfigError(f"no project in {project}: run `unstage --project {project} init` first")
     conn = connect(db_path)
+    create_schema(conn, backup=db_path)  # an older database is migrated, after a copy
     return conn, BlobStore(project / "blobs")
 
 
@@ -355,6 +362,15 @@ def cmd_report(args: argparse.Namespace) -> int:
         report["detectors"] = detector_report(conn, runs)
     text = render_text(report) + ("\n" + render_detectors(report["detectors"]) if args.detectors else "")
     print(to_json(report) if args.json else text)
+    return EXIT_OK
+
+
+def cmd_zooms(args: argparse.Namespace) -> int:
+    conn, _ = _open(args.project)
+    adapters = _adapters(args.project, config.load(args.project, args.override))
+    done = ask_zooms(adapters, conn, args.runs, args.limit)
+    broken = sum(1 for d in done if d.get("error"))
+    print(f"{len(done)} pictures, {sum(d['zooms'] for d in done)} zooms, {broken} broken answers")
     return EXIT_OK
 
 

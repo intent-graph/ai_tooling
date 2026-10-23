@@ -286,6 +286,8 @@ def measure_structure(
         "alignment": alignment,
         "outside_changed_share": round(int(changed.sum()) / outside, 4) if outside else None,
         "tone": measure_tone(first, second, keep),
+        # original coordinates to candidate coordinates at `compared_at`; applied only when `alignment.applied`
+        "warp": [[round(float(v), 6) for v in row] for row in fit.warp],
         "regions": listed,
         "compared_at": [width, height],
         "threshold": threshold,
