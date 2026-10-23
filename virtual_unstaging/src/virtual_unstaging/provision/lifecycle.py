@@ -489,6 +489,7 @@ def end_session(ctx: Context, session: Session, by: str) -> Session:
     if not machine_id:  # requested, but the answer was lost before it was recorded
         found = provider.find(session.machine_name)
         machine_id = found.id if found else ""
+    deleted_here = False
     if machine_id:
         current = provider.get(machine_id)
         if current is not None and current.name != session.machine_name:
@@ -496,7 +497,12 @@ def end_session(ctx: Context, session: Session, by: str) -> Session:
                                  "it is left alone; check the provider's console")
         if current is not None and current.status != GONE:
             _delete_and_confirm(ctx, provider, machine_id, f"session {session.id}")
-    sessions.append(ctx.state_folder, "ended", session.id, ctx.now(), by=by)
+            deleted_here = True
+    if deleted_here:
+        sessions.append(ctx.state_folder, "ended", session.id, ctx.now(), by=by)
+    else:  # already gone: billed no later than the guard's deadline, as `reconcile` records it
+        at = min(ctx.now(), session.deadline + timedelta(seconds=GRACE_SECONDS))
+        sessions.append(ctx.state_folder, "ended", session.id, at, by="machine-gone")
     if session.key_file:
         userfiles.remove_session_key(Path(session.key_file))
     remove_session_file(ctx, session.id)
