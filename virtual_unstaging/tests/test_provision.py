@@ -701,6 +701,19 @@ def test_down_when_the_machine_is_already_gone_still_closes_the_session(
     assert world.deleted == []
 
 
+def test_down_long_after_the_guard_deleted_the_machine_ends_the_session_at_the_deadline(
+    gpu_project: Path, tmp_path: Path, world: FakeWorld, clock: Clock
+) -> None:
+    ctx = make_context(tmp_path, gpu_project, world, clock)
+    run_up(ctx)
+    world.machines.clear()
+    clock.sleep(3600 * 12)  # `down` the next morning
+    lifecycle.down(ctx)
+    session = sessions.load(tmp_path / "xdg_state" / userfiles.APP_FOLDER)[0]
+    assert session.end_reason == "machine-gone"
+    assert session.ended_at == START + timedelta(hours=3, seconds=machine.GRACE_SECONDS)
+
+
 def test_down_refuses_a_machine_whose_name_is_not_the_sessions(gpu_project: Path, tmp_path: Path, world: FakeWorld, clock: Clock) -> None:
     ctx = make_context(tmp_path, gpu_project, world, clock)
     run_up(ctx)
