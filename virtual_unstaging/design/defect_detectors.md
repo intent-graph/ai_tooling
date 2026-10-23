@@ -1,0 +1,192 @@
+# virtual_unstaging — defect detectors
+
+One detector per defect type: it settles the cases it measures reliably, and turns the rest into a narrow, zoomed
+question for the judge, so that the judge no longer has to find every defect in two whole pictures, and sometimes
+does not run at all. Answers the owner's direction of 2026-10-23: "build tools that reliably detect problems, instead
+of asking the LLM to judge everything", "as filter / zoomer, so judge has specialized/focus input".
+
+> **Status:** *proposal*, 2026-10-23. Pixel detectors (same picture, viewpoint, colour shift, drift) prototyped and
+> measured offline on a pilot set of 16 reviewed pairs and on injected defects; inside-the-region detectors designed,
+> not measured. A detector that **decides** a defect without the judge changes the architecture's rule "tools locate
+> and measure; the VLM decides" ([Judge tool library](../architecture.md#judge-tool-library)): not applied until the
+> owner accepts it ([Change to the architecture](#change-to-the-architecture)).
+
+## Table of Contents
+
+1. [N0](#n0)
+1. [Why](#why)
+1. [The triage contract](#the-triage-contract)
+1. [The cascade](#the-cascade)
+1. [Detectors per defect](#detectors-per-defect)
+1. [Zooms: what the judge gets instead](#zooms-what-the-judge-gets-instead)
+1. [Measuring a detector](#measuring-a-detector)
+1. [Data model](#data-model)
+1. [Build order](#build-order)
+1. [Change to the architecture](#change-to-the-architecture)
+1. [Open](#open)
+
+---
+
+## N0
+<!-- Lines 32-44 -->
+
+- Each defect code gets a **detector** that returns one of three **bands** per attempt: `absent` and `present`
+  (decided, with a severity and a location), or `ask` (the detector cannot tell; the judge gets a zoomed question).
+- Detectors run as a **cascade**: first "is this the same picture?", then the camera, the tone and the structure
+  outside the region, then what fills the region. A failure upstream makes the downstream measures meaningless, and
+  stops the cascade.
+- A detector's bands are set from the owner's reviews and its reliability from **injected defects** of known size.
+  It may decide only what it decided without error on both; everything else is `ask`.
+- The judge answers **one question per zoom** (crops of the region at issue, the removal area shaded), not "find
+  every defect". An attempt whose every code is decided needs no judge.
+- Measured (pilot, 16 pairs, bands drafted on the same pairs): 38 of 55 pixel-level questions decided, none wrong;
+  three wholly failed outputs (a copied reference, another scene, another framing) rejected with no judge.
+
+## Why
+<!-- Lines 47-53 -->
+
+The judges were measured against the owner's blind review of 16 pairs, with more evidence (element inventory), with
+rules drawn from the reviews (instruction overlay) and with a better change map (`structure_map`): each moved
+agreement a little, none made the verdicts usable; the judges rejected nearly every image the owner would keep. The
+judge is asked to do two things at once: find small differences between two whole pictures, which vision-language
+models do badly ([state of the art](../state_of_the_art.md)), and weigh them. Detectors take the first job.
+
+## The triage contract
+<!-- Lines 56-73 -->
+
+For each attempt and each defect code, one **detection**:
+
+| Field | Meaning |
+|---|---|
+| `band` | `absent`, `present` (decided by the detector), `ask` (the judge decides, on a zoom), `skipped` (an upstream detector failed the attempt) |
+| `severity` | for `present`: `minor` or `blocking`, by the detector's rule; for `ask`: none |
+| `regions` | boxes in [0, 1] where the defect is or may be; for `ask`, the zooms are cut from these |
+| `measures` | the numbers the band was read from, and the thresholds used |
+| `reason` | for `ask`, why the detector could not tell ("too few features to fit the camera", "a change of 3% of the frame outside the region") |
+
+- Thresholds live in a versioned data file of the package (`data/detectors.toml`, as `defects.toml`), overridable per
+  project through the override files (D13). A detector's version is its code version plus its thresholds' hash.
+- **Never wrong before useful:** a band a detector has not earned stays `ask`. A detector with no earned band is a
+  zoomer only, and still saves the judge the search.
+- A `decide` switch per detector, off by default: off, every band but `absent` and `present` collapses to `ask` with
+  the detector's regions, so a run can measure a detector's decisions without acting on them.
+
+## The cascade
+<!-- Lines 76-100 -->
+
+```mermaid
+flowchart TD
+    A[original + candidate + removal region] --> G{same picture?<br/>feature matches outside the region}
+    G -- no --> R1[reject: scene_invented, blocking<br/>no other detector, no judge]
+    G -- cannot tell --> J
+    G -- yes --> F[fit the camera: similarity on the matches<br/>align the candidate]
+    F --> V{viewpoint_changed}
+    F --> T{colour_shift<br/>tone outside the region}
+    F --> D{drift<br/>structure outside the region}
+    F --> I{inside the region<br/>what fills it}
+    I --> E[element_added / opening_invented /<br/>movable_left / fixture_removed]
+    I --> S[surface_implausible]
+    V & T & D & E & S --> B[bands per code]
+    B -- all decided --> X[score from the detections<br/>no judge]
+    B -- some ask --> J[judge: one zoomed question per ask]
+    J --> X2[score from detections + the judge's answers]
+```
+
+- Order matters because each step's measure assumes the previous one passed: tone and structure compared on another
+  picture, or on a misaligned one, measure the failure, not the defect (on the pilot, an alignment that silently
+  failed reported "no motion" on a picture of another scene).
+- Outside the region, the original is the reference: any change is a defect or noise. Inside the region, change is
+  the point of the edit: the question is what the new content is.
+
+## Detectors per defect
+<!-- Lines 103-120 -->
+
+Pixel detectors need no learned model (OpenCV, NumPy); semantic ones run the tool server's existing models.
+
+| Code | Detector and signal | Decides `absent` | Decides `present` | Asks the judge | Measured |
+|---|---|---|---|---|---|
+| (gate) `scene_invented`, whole picture | SIFT features outside the region matched to the candidate; RANSAC similarity; share of the original's features that fit; structure change outside | a fit on at least 12 matches | under 5% of features fit **and** over 20% of the outside changed: another picture (copied reference, other scene, other framing) | too few features (bare walls), or one signal without the other | 17 of 17 other pictures caught (14 injected, 3 real); none of 13 real outputs nor 147 injected variants of the same picture flagged |
+| `viewpoint_changed` | scale, rotation and shift of the fitted similarity | within the generator's own reframing on kept outputs (scale 0.97-1.04, rotation under 1°) | beyond scale 0.95-1.05 or 2° | between the two, or no feature fit (the ECC fallback is too loose to decide) | injected reframings recovered within 0.01 of scale and 0.1°; one real case only, caught by the gate |
+| `colour_shift` | Lab difference outside the region after alignment: its uneven part (90th percentile of the low-frequency difference after the median shift is removed) and the median shift | uneven part under 8 | over 13; severity `minor` unless the owner rules otherwise (the owner marked most colour shifts minor) | between 8 and 13 | separates the owner's answers on 15 pairs without error (AUC 1.0); a uniform shift alone separates worse (AUC 0.92) |
+| `drift` | `structure_map` regions outside the region, after the feature alignment | no region (under 1% of the outside) | over 10% of the outside changed; severity asked | regions between 1% and 10%: one zoom per region | injected patches visibly different from what they cover, at least 1% of the frame: located 13 of 13; at 0.5%: 2 of 5 |
+| `fixture_removed` | outside: a drift region whose original crop holds a fixed element (detection on the crop only); inside: a fixed element the original shows crossing the region's edge, absent from the candidate (visible names only, score at least 0.4) | no fixed element at any changed place | — (detection errors too frequent to decide) | each such element, as a zoom | not measured (2 cases in the pilot) |
+| `opening_invented` | inside the region: pixels whose class became door, window or passage (`class_diff`), and whether they continue an opening at the region's edge | no opening class inside the region | — until measured | every opening inside the region: zoom of the region with its edge | not measured (4 cases) |
+| `element_added` | inside the region: blobs of the candidate that are not a surface class (wall, floor, ceiling) nor a continued fixed element; outside: drift regions | the region holds surfaces only | — until measured | each blob, as a zoom: revealed (partly visible in the original) or invented? | not measured (7 cases) |
+| `movable_left` | inside the region: the movable names detected in the candidate (score at least 0.4) | none detected | a detection of high score and size, once measured | weaker detections, as zooms | no positive case in the pilot |
+| `surface_implausible` | none that decides: the revealed surfaces, cropped with a ring of their surroundings | — | — | always, one zoom per revealed area | — |
+
+Every number in this table is drafted on 16 pairs of one building; each must hold on a second set before its band
+is switched to decide.
+
+## Zooms: what the judge gets instead
+<!-- Lines 123-135 -->
+
+- **A zoom** is a pair of crops (original, aligned candidate) around one region, grown by half its size on each side
+  for context and at least an eighth of the long side, enlarged to the judge's image size; the removal area shaded
+  in both, so the judge does not count the intended change. Several zooms go in one call.
+- **One question per zoom, closed options**, mapped to codes: outside the region, "the same / only sharper or softer
+  / something added / something removed / something changed shape"; inside, "a wall or floor that continues / an
+  element revealed (partly visible in the original) / an element invented / an opening invented / an object left".
+  The judge's answer is an option per zoom, not a free search; findings take the zoom's box.
+- **Cost:** on the pilot, at most 4 zooms per attempt outside the region; small crops and short closed answers
+  should let a smaller or faster judge answer within the owner's 10 seconds. Not measured.
+- On the pilot's prototype, the zooms show defects the whole-picture judges missed or misread: an object and a
+  stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
+
+## Measuring a detector
+<!-- Lines 138-149 -->
+
+Three measures, all offline on stored images, before a judge reads a detector's output:
+
+1. **Injection bench:** known defects of known size injected into outputs the owner kept (tone shifts, reframings,
+   patches pasted outside the region, another photo given as the output); what the detector reads back, and from
+   what size it finds the defect. Says whether the detector *can* see a defect, and how precisely.
+2. **The owner's reviews:** per code, the owner's answer (absent, minor, blocking) against the detector's band;
+   sets the thresholds of the bands. A band is earned when it is never wrong on the reviews.
+3. **Hold-out:** thresholds drafted on one set are checked on another before `decide` is switched on.
+
+The scripts live with the project's runs; the tool's tests use synthetic images only.
+
+## Data model
+<!-- Lines 152-160 -->
+
+*Proposal*, to [data_model.md](data_model.md) once accepted:
+
+- `detection` (attempt, defect code, detector, detector version, tool run, band, severity, measures, reason) and
+  `detection_region` (box), one detection per attempt and code.
+- `finding` gains a third source beside `judgment` and `review`: a `detection` whose band is `present`. The score
+  (D4) counts the findings of the attempt's detections and of its judgment.
+- The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
+
+## Build order
+<!-- Lines 163-175 -->
+
+*Proposal*, cheapest and most measurable first:
+
+1. **Gate and camera fit:** feature alignment (SIFT, similarity, RANSAC) in `structure_map`, ECC as the fallback,
+   and a failed fit said as such, not as "no motion"; the gate. Tests on synthetic pictures.
+2. **Tone measure** in the same tool: median shift and uneven part, as numbers.
+3. **Triage layer** in the orchestrator: detections from tool measures by `data/detectors.toml`; `decide` off.
+4. **Zooms** and the closed-question judge contract; measured on the stored pilot attempts (judges only, no
+   generation).
+5. **Inside-the-region detectors** (`element_added`, `opening_invented`, `movable_left`, `fixture_removed`), each
+   measured on stored detections before a judge reads it.
+6. `decide` switched on per detector, after its hold-out check and the owner's go.
+
+## Change to the architecture
+<!-- Lines 178-183 -->
+
+For the owner to accept. [Judge tool library](../architecture.md#judge-tool-library): "Tools locate and measure;
+the VLM decides" would become: "A detector decides the defects it measures without error on the owner's reviews and
+on injected defects; the VLM decides the rest, on the detector's zooms." [The judge](../architecture.md#the-judge):
+its input becomes the zooms and their questions, beside or instead of the whole pictures.
+
+## Open
+<!-- Lines 186-192 -->
+
+- **The architecture change** above: the owner's.
+- **Ground truth with locations:** the owner's reviews say which defect, not where; zooms can only be scored once a
+  review marks where each defect is. The owner's.
+- **Viewpoint tolerance:** from what reframing does the owner see a changed viewpoint? The bands use the generator's
+  own range on kept outputs. The owner's.
+- **Severity by a detector:** whether a detector may say `blocking` (the gate does; drift and colour shift ask).
