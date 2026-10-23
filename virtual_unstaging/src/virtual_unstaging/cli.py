@@ -23,7 +23,7 @@ from virtual_unstaging.instructions import InstructionStack, load_base
 from virtual_unstaging.judge import Chat
 from virtual_unstaging.loop1.runner import Adapters, RunPaused, RunVersions, create_run, execute_run
 from virtual_unstaging.registry import load_defects, load_release
-from virtual_unstaging.report import build, render_text, to_json
+from virtual_unstaging.report import build, detector_report, render_detectors, render_text, to_json
 from virtual_unstaging.store import repo
 from virtual_unstaging.store.blobs import BlobStore
 from virtual_unstaging.store.db import connect, create_schema, transaction
@@ -97,6 +97,8 @@ def _parser() -> argparse.ArgumentParser:
     p = sub.add_parser("report", help="summarize runs and the blind comparisons between them")
     p.add_argument("runs", nargs="*", type=int)
     p.add_argument("--json", action="store_true")
+    p.add_argument("--detectors", action="store_true",
+                   help="add the pixel detectors' bands, in shadow, beside the judge and the reviews")
     p.set_defaults(handler=cmd_report)
 
     p = sub.add_parser("deliver", help="decide each photo's outcome by rule (people's decisions are kept)")
@@ -349,7 +351,10 @@ def cmd_report(args: argparse.Namespace) -> int:
     conn, _ = _open(args.project)
     runs = args.runs or [int(r[0]) for r in conn.execute("SELECT run_id FROM run ORDER BY run_id")]
     report = build(conn, runs)
-    print(to_json(report) if args.json else render_text(report))
+    if args.detectors:
+        report["detectors"] = detector_report(conn, runs)
+    text = render_text(report) + ("\n" + render_detectors(report["detectors"]) if args.detectors else "")
+    print(to_json(report) if args.json else text)
     return EXIT_OK
 
 

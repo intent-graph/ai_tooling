@@ -1,5 +1,6 @@
 """Reports on runs: per run, what was accepted, why optimizations stopped, what it cost; blind preferences
-between runs; and a comparability check before any comparison (design P5)."""
+between runs; a comparability check before any comparison (design P5); and the pixel detectors in shadow, beside the
+judge and the reviews (design/defect_detectors.md)."""
 
 from __future__ import annotations
 
@@ -7,6 +8,7 @@ import json
 import sqlite3
 from typing import Any
 
+from virtual_unstaging import detectors
 from virtual_unstaging.store import repo
 
 # Run columns that must match for two runs to be compared.
@@ -80,3 +82,49 @@ def render_text(report: dict[str, Any]) -> str:
 
 def to_json(report: dict[str, Any]) -> str:
     return json.dumps(report, indent=2, sort_keys=True)
+
+
+def detector_report(conn: sqlite3.Connection, run_ids: list[int]) -> dict[str, Any]:
+    """Per detector code: its bands on every judged attempt, and where it decided, how often the judge and the latest
+    review agree with it. A detector's `absent` on `other_picture` (the same picture) is compared with nothing."""
+    thresholds = detectors.load_thresholds()
+    codes: dict[str, dict[str, Any]] = {
+        c: {"bands": {}, "judge": {"agree": 0, "disagree": 0}, "review": {"agree": 0, "disagree": 0}, "disagreements": []}
+        for c in detectors.CODES}
+    judged = without_map = 0
+    for run_id in run_ids:
+        for row in repo.judged_attempts_with_structure(conn, run_id):
+            judged += 1
+            if row["structure"] is None:
+                without_map += 1
+                continue
+            for d in detectors.detect(row["structure"], thresholds):
+                entry = codes[d.code]
+                entry["bands"][d.band] = entry["bands"].get(d.band, 0) + 1
+                if d.band not in (detectors.ABSENT, detectors.PRESENT):
+                    continue
+                if d.code in detectors.DEFECT_OF and d.band == detectors.ABSENT:
+                    continue
+                defect = detectors.DEFECT_OF.get(d.code, d.code)
+                said = d.band == detectors.PRESENT
+                for who, found in (("judge", row["judge_codes"]), ("review", row["review_codes"])):
+                    if found is None:
+                        continue
+                    agree = (defect in found) == said
+                    entry[who]["agree" if agree else "disagree"] += 1
+                    if not agree and len(entry["disagreements"]) < 20:
+                        entry["disagreements"].append({"attempt": row["attempt"], "photo": row["photo"], "with": who,
+                                                       "detector": d.band, "reason": d.reason})
+    return {"version": detectors.version(thresholds), "judged_attempts": judged, "without_structure_map": without_map,
+            "codes": codes}
+
+
+def render_detectors(report: dict[str, Any]) -> str:
+    lines = [f"pixel detectors in shadow ({report['version']}): {report['judged_attempts']} judged attempts, "
+             f"{report['without_structure_map']} without a structure map"]
+    for code, e in report["codes"].items():
+        bands = ", ".join(f"{k} {v}" for k, v in sorted(e["bands"].items())) or "none"
+        judge, review = e["judge"], e["review"]
+        lines.append(f"  {code:<18} {bands}; where decided, judge agrees {judge['agree']} of "
+                     f"{judge['agree'] + judge['disagree']}, review {review['agree']} of {review['agree'] + review['disagree']}")
+    return "\n".join(lines)

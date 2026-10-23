@@ -755,3 +755,27 @@ def preferences_between(conn: sqlite3.Connection, run_a: int, run_b: int) -> dic
         else:
             tally[str(choice)] += 1
     return tally
+
+
+def judged_attempts_with_structure(conn: sqlite3.Connection, run_id: int) -> list[dict[str, Any]]:
+    """Per judged attempt of a run: the `structure_map` measures its judge read, the judge's defect codes, and the
+    latest review's verdict and codes (None when not reviewed); the input of the detector report."""
+    rows = conn.execute(
+        "SELECT j.judgment_id, j.attempt_id, o.photo_id, "
+        "  (SELECT t.measures_json FROM judgment_tool_run jt JOIN tool_run t USING (tool_run_id) "
+        "   WHERE jt.judgment_id = j.judgment_id AND t.tool = 'structure_map' ORDER BY t.tool_run_id DESC LIMIT 1) "
+        "FROM judgment j JOIN attempt a USING (attempt_id) JOIN optimization o USING (optimization_id) "
+        "WHERE o.run_id = ? AND j.parse_error IS NULL ORDER BY j.attempt_id, j.judgment_id",
+        (run_id,),
+    ).fetchall()
+    found = []
+    for judgment_id, attempt_id, photo_id, measures in rows:
+        judged = {str(r[0]) for r in conn.execute("SELECT defect_code FROM finding WHERE judgment_id = ?", (judgment_id,))}
+        review = _one(conn, "SELECT review_id, verdict FROM review WHERE attempt_id = ? ORDER BY review_id DESC LIMIT 1",
+                      (attempt_id,))
+        reviewed = None if review is None else {
+            str(r[0]) for r in conn.execute("SELECT defect_code FROM finding WHERE review_id = ?", (review[0],))}
+        found.append({"attempt": int(attempt_id), "photo": int(photo_id), "judgment": int(judgment_id),
+                      "structure": None if measures is None else json.loads(measures), "judge_codes": judged,
+                      "review_verdict": None if review is None else str(review[1]), "review_codes": reviewed})
+    return found
