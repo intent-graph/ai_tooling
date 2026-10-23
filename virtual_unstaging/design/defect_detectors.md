@@ -7,15 +7,16 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
 
 > **Status:** *proposal*, 2026-10-23. Pixel detectors (same picture, viewpoint, colour shift, drift) prototyped and
 > measured offline on a pilot set of 16 reviewed pairs and on injected defects; inside-the-region detectors designed,
-> not measured. A detector that **decides** a defect without the judge changes the architecture's rule "tools locate
-> and measure; the VLM decides" ([Judge tool library](../architecture.md#judge-tool-library)): not applied until the
-> owner accepts it ([Change to the architecture](#change-to-the-architecture)).
+> not measured. Owner's ruling (2026-10-23): detectors that decide are the long-term target, but for now they run in
+> **shadow**: their decisions are recorded, the judge is still asked every question, and the two are compared, "as it
+> allows to gather data on how often the judge makes the right decision" ([Shadow mode](#shadow-mode)).
 
 ## Table of Contents
 
 1. [N0](#n0)
 1. [Why](#why)
 1. [The triage contract](#the-triage-contract)
+1. [Shadow mode](#shadow-mode)
 1. [The cascade](#the-cascade)
 1. [Detectors per defect](#detectors-per-defect)
 1. [Zooms: what the judge gets instead](#zooms-what-the-judge-gets-instead)
@@ -28,7 +29,7 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
 ---
 
 ## N0
-<!-- Lines 32-44 -->
+<!-- Lines 33-46 -->
 
 - Each defect code gets a **detector** that returns one of three **bands** per attempt: `absent` and `present`
   (decided, with a severity and a location), or `ask` (the detector cannot tell; the judge gets a zoomed question).
@@ -38,12 +39,13 @@ of asking the LLM to judge everything", "as filter / zoomer, so judge has specia
 - A detector's bands are set from the owner's reviews and its reliability from **injected defects** of known size.
   It may decide only what it decided without error on both; everything else is `ask`.
 - The judge answers **one question per zoom** (crops of the region at issue, the removal area shaded), not "find
-  every defect". An attempt whose every code is decided needs no judge.
+  every defect". Long term, an attempt whose every code is decided needs no judge; for now (owner, 2026-10-23) the
+  detectors run in **shadow**: recorded, compared with the judge and the owner, never acting.
 - Measured (pilot, 16 pairs, bands drafted on the same pairs): 38 of 55 pixel-level questions decided, none wrong;
   three wholly failed outputs (a copied reference, another scene, another framing) rejected with no judge.
 
 ## Why
-<!-- Lines 47-53 -->
+<!-- Lines 49-55 -->
 
 The judges were measured against the owner's blind review of 16 pairs, with more evidence (element inventory), with
 rules drawn from the reviews (instruction overlay) and with a better change map (`structure_map`): each moved
@@ -52,7 +54,7 @@ judge is asked to do two things at once: find small differences between two whol
 models do badly ([state of the art](../state_of_the_art.md)), and weigh them. Detectors take the first job.
 
 ## The triage contract
-<!-- Lines 56-73 -->
+<!-- Lines 58-75 -->
 
 For each attempt and each defect code, one **detection**:
 
@@ -68,16 +70,31 @@ For each attempt and each defect code, one **detection**:
   project through the override files (D13). A detector's version is its code version plus its thresholds' hash.
 - **Never wrong before useful:** a band a detector has not earned stays `ask`. A detector with no earned band is a
   zoomer only, and still saves the judge the search.
-- A `decide` switch per detector, off by default: off, every band but `absent` and `present` collapses to `ask` with
-  the detector's regions, so a run can measure a detector's decisions without acting on them.
+- A `decide` switch per detector, off by default (shadow mode, below): off, the detector's band is recorded but the
+  judge is asked anyway, so a run measures the detector and the judge on the same questions.
+
+## Shadow mode
+<!-- Lines 78-90 -->
+
+The owner's ruling, 2026-10-23: "I think long term yes. However for now we should still ask the judge, as it allows
+to gather data on how often the judge makes the right decision."
+
+- Every detector runs and records its detection (band, severity, regions, measures) on every attempt.
+- The judge is asked as if no detector had decided: its findings alone make the score (D4), as before. It also
+  answers the zooms of the `ask` bands, and, for each code a detector decided, the same closed question on the same
+  zoom, so that every decision has a judge's answer beside it.
+- Each reviewed attempt then gives, per code, three answers: the detector's, the judge's, the owner's. Reports count
+  per code and per detector how often each is right, and on which cases they disagree.
+- `decide` is switched on per detector once its record shows it right where the judge is wrong, or as right at lower
+  cost, and the owner agrees.
 
 ## The cascade
-<!-- Lines 76-100 -->
+<!-- Lines 93-117 -->
 
 ```mermaid
 flowchart TD
     A[original + candidate + removal region] --> G{same picture?<br/>feature matches outside the region}
-    G -- no --> R1[reject: scene_invented, blocking<br/>no other detector, no judge]
+    G -- no --> R1[reject: scene_invented, blocking<br/>no other detector; long term, no judge]
     G -- cannot tell --> J
     G -- yes --> F[fit the camera: similarity on the matches<br/>align the candidate]
     F --> V{viewpoint_changed}
@@ -87,7 +104,7 @@ flowchart TD
     I --> E[element_added / opening_invented /<br/>movable_left / fixture_removed]
     I --> S[surface_implausible]
     V & T & D & E & S --> B[bands per code]
-    B -- all decided --> X[score from the detections<br/>no judge]
+    B -- all decided --> X[long term: score from the detections, no judge<br/>shadow: recorded, judge asked anyway]
     B -- some ask --> J[judge: one zoomed question per ask]
     J --> X2[score from detections + the judge's answers]
 ```
@@ -99,7 +116,7 @@ flowchart TD
   the point of the edit: the question is what the new content is.
 
 ## Detectors per defect
-<!-- Lines 103-120 -->
+<!-- Lines 120-137 -->
 
 Pixel detectors need no learned model (OpenCV, NumPy); semantic ones run the tool server's existing models.
 
@@ -119,7 +136,7 @@ Every number in this table is drafted on 16 pairs of one building; each must hol
 is switched to decide.
 
 ## Zooms: what the judge gets instead
-<!-- Lines 123-135 -->
+<!-- Lines 140-152 -->
 
 - **A zoom** is a pair of crops (original, aligned candidate) around one region, grown by half its size on each side
   for context and at least an eighth of the long side, enlarged to the judge's image size; the removal area shaded
@@ -134,7 +151,7 @@ is switched to decide.
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
 ## Measuring a detector
-<!-- Lines 138-149 -->
+<!-- Lines 155-168 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -144,29 +161,33 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 2. **The owner's reviews:** per code, the owner's answer (absent, minor, blocking) against the detector's band;
    sets the thresholds of the bands. A band is earned when it is never wrong on the reviews.
 3. **Hold-out:** thresholds drafted on one set are checked on another before `decide` is switched on.
+4. **Against the judge (shadow mode):** per code, the detector's band, the judge's answer and the owner's, on the
+   same attempts.
 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 152-160 -->
+<!-- Lines 171-180 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted:
 
 - `detection` (attempt, defect code, detector, detector version, tool run, band, severity, measures, reason) and
   `detection_region` (box), one detection per attempt and code.
-- `finding` gains a third source beside `judgment` and `review`: a `detection` whose band is `present`. The score
-  (D4) counts the findings of the attempt's detections and of its judgment.
+- `finding` gains a third source beside `judgment` and `review`: a `detection` whose band is `present`. In shadow
+  mode the score (D4) counts the judgment's findings only; once a detector decides, the findings of its detections
+  replace the judge's for its code.
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 163-175 -->
+<!-- Lines 183-196 -->
 
 *Proposal*, cheapest and most measurable first:
 
 1. **Gate and camera fit:** feature alignment (SIFT, similarity, RANSAC) in `structure_map`, ECC as the fallback,
    and a failed fit said as such, not as "no motion"; the gate. Tests on synthetic pictures.
 2. **Tone measure** in the same tool: median shift and uneven part, as numbers.
-3. **Triage layer** in the orchestrator: detections from tool measures by `data/detectors.toml`; `decide` off.
+3. **Triage layer** in the orchestrator: detections from tool measures by `data/detectors.toml`, recorded in
+   shadow (`decide` off); a report of detector, judge and owner per code.
 4. **Zooms** and the closed-question judge contract; measured on the stored pilot attempts (judges only, no
    generation).
 5. **Inside-the-region detectors** (`element_added`, `opening_invented`, `movable_left`, `fixture_removed`), each
@@ -174,19 +195,18 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 178-183 -->
+<!-- Lines 199-204 -->
 
-For the owner to accept. [Judge tool library](../architecture.md#judge-tool-library): "Tools locate and measure;
-the VLM decides" would become: "A detector decides the defects it measures without error on the owner's reviews and
-on injected defects; the VLM decides the rest, on the detector's zooms." [The judge](../architecture.md#the-judge):
-its input becomes the zooms and their questions, beside or instead of the whole pictures.
+Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
+a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
+decides the rest, on the detector's zooms. Until then, shadow mode. Still a *proposal*: [The judge](../architecture.md#the-judge)'s
+input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 186-192 -->
+<!-- Lines 207-212 -->
 
-- **The architecture change** above: the owner's.
-- **Ground truth with locations:** the owner's reviews say which defect, not where; zooms can only be scored once a
-  review marks where each defect is. The owner's.
+- **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
+  set needs one more generation run.
 - **Viewpoint tolerance:** from what reframing does the owner see a changed viewpoint? The bands use the generator's
   own range on kept outputs. The owner's.
 - **Severity by a detector:** whether a detector may say `blocking` (the gate does; drift and colour shift ask).
