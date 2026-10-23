@@ -15,10 +15,14 @@ from test_serve import AUTH, make_app, mask_png, png, put, run_tool
 
 from virtual_unstaging.clients.fakes import FakeChat
 from virtual_unstaging.serve.tools.structure import (
+    FeatureBackend,
+    Fit,
     TranslationBackend,
     box_mean,
     describe_alignment,
+    lab,
     measure_structure,
+    measure_tone,
     regions,
     summarize,
 )
@@ -49,7 +53,9 @@ def structure(first: np.ndarray, second: np.ndarray, **kw: float) -> Any:
 def test_the_same_picture_has_no_change() -> None:
     measures = structure(textured(), textured())
     assert measures["regions"] == [] and measures["outside_changed_share"] == 0.0
-    assert measures["alignment"] == {"scale": 1.0, "shift_pct": 0.0, "rotation_deg": 0.0, "applied": True}
+    assert measures["alignment"] == {"scale": 1.0, "shift_pct": 0.0, "rotation_deg": 0.0, "applied": True,
+                                     "method": "translation", "features": None, "matched": None}
+    assert measures["tone"] == {"shift_de": 0.0, "shift_lab": [0.0, 0.0, 0.0], "uneven_de": 0.0}
 
 
 def test_a_change_outside_the_region_is_one_region_with_its_box() -> None:
@@ -81,7 +87,8 @@ def test_a_large_reframing_is_reported_and_not_corrected() -> None:
     moved = np.roll(textured(), 20, axis=1)  # 15% of the long side
     measures = structure(textured(), moved)
     assert measures["alignment"]["applied"] is False and measures["regions"]
-    assert summarize(measures).startswith("framing differs")
+    assert summarize(measures).startswith("framing: the best fit is a shift of 15.6%")
+    assert "sign" not in summarize(measures)  # a measure, not a reading of it
 
 
 def test_helpers() -> None:
@@ -91,7 +98,73 @@ def test_helpers() -> None:
     cells[4, 4] = True
     assert [len(g) for g in regions(cells, 1)] == [4, 1] and [len(g) for g in regions(cells, 2)] == [4]
     warp = np.array([[1.02, 0.0, 5.12], [0.0, 1.02, 0.0]], dtype=np.float32)
-    assert describe_alignment(warp, 512) == {"scale": 1.02, "shift_pct": 1.0, "rotation_deg": 0.0, "applied": True}
+    assert describe_alignment(Fit(warp, "ecc"), 512) == {"scale": 1.02, "shift_pct": 1.0, "rotation_deg": 0.0,
+                                                         "applied": True, "method": "ecc", "features": None, "matched": None}
+    assert lab(np.array([[[255, 255, 255]]], dtype=np.uint8))[0, 0].round(1).tolist() == [100.0, 0.0, 0.0]
+
+
+def test_a_failed_fit_is_said_as_such_not_as_no_motion() -> None:
+    alignment = describe_alignment(Fit(np.eye(2, 3, dtype=np.float32), "none", 600, 0), 512)
+    assert alignment["applied"] is False and alignment["scale"] == 1.0
+    measures = {"alignment": alignment, "outside_changed_share": 0.7, "regions": [], "tone": None}
+    assert summarize(measures).startswith("framing: no fit found between the two pictures (0 of 600 features")
+
+
+def test_tone_separates_a_uniform_shift_from_an_uneven_one() -> None:
+    keep = ~region()
+    base = textured()
+    lighter = np.clip(base.astype(int) + 20, 0, 255).astype(np.uint8)
+    uniform = measure_tone(base, lighter, keep)
+    assert uniform is not None and uniform["shift_de"] > 5 and uniform["uneven_de"] < 1.5
+    ramp = np.linspace(0, 60, SIZE)[None, :, None]
+    uneven = measure_tone(base, np.clip(base + ramp, 0, 255).astype(np.uint8), keep)
+    assert uneven is not None and uneven["uneven_de"] > 3 * uniform["uneven_de"] + 5
+    assert "uniform shift of delta E" in summarize(structure(base, lighter))
+
+
+def photo_like(seed: int, side: int = 384) -> np.ndarray:
+    """Smooth random shapes with edges and corners at several scales: features for SIFT, as a room photo has."""
+    rng = np.random.default_rng(seed)
+    noise = rng.random((side // 16, side // 16)).astype(np.float32)
+    coarse = np.asarray(Image.fromarray((noise * 255).astype(np.uint8)).resize((side, side), Image.BICUBIC), dtype=np.float32)
+    picture = Image.fromarray(np.clip(coarse, 0, 255).astype(np.uint8)).convert("RGB")
+    from PIL import ImageDraw
+
+    draw = ImageDraw.Draw(picture)
+    for _ in range(60):
+        x, y, w, h = rng.integers(0, side, 2).tolist() + rng.integers(8, side // 5, 2).tolist()
+        draw.rectangle((x, y, x + w, y + h), fill=tuple(int(v) for v in rng.integers(0, 255, 3)))
+    return np.asarray(picture)
+
+
+def similarity(image: np.ndarray, scale: float, degrees: float, shift: tuple[float, float]) -> np.ndarray:
+    cv2 = pytest.importorskip("cv2")
+    h, w = image.shape[:2]
+    warp = cv2.getRotationMatrix2D((w / 2, h / 2), degrees, scale)
+    warp[:, 2] += shift
+    return np.asarray(cv2.warpAffine(image, warp, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT))
+
+
+def feature_fit(first: np.ndarray, second: np.ndarray) -> dict[str, Any]:
+    pytest.importorskip("cv2")
+    keep = np.ones(first.shape[:2], dtype=bool)
+    keep[120:260, 120:260] = False
+    fit = FeatureBackend().estimate(first[..., 0].astype(np.float32), second[..., 0].astype(np.float32), keep)
+    return describe_alignment(fit, max(first.shape[:2]))
+
+
+def test_the_feature_fit_recovers_a_small_reframing() -> None:
+    first = photo_like(1)
+    alignment = feature_fit(first, similarity(first, 1.03, 1.0, (4.0, -3.0)))
+    assert alignment["method"] == "features" and alignment["matched"] >= 12
+    assert alignment["scale"] == pytest.approx(1.03, abs=0.005) and abs(alignment["rotation_deg"]) == pytest.approx(1.0, abs=0.1)
+    assert alignment["applied"] is True
+
+
+def test_another_picture_matches_almost_no_feature() -> None:
+    alignment = feature_fit(photo_like(1), photo_like(2))
+    assert alignment["method"] != "features" and alignment["features"] > 50
+    assert alignment["matched"] < 0.05 * alignment["features"]
 
 
 @pytest.fixture

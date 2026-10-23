@@ -13,9 +13,9 @@ reports its API version and the client refuses a different major version.
 1. [Endpoints](#endpoints) _(Lines 54-69)_
 1. [Generate](#generate) _(Lines 72-120)_
 1. [Generator recipes](#generator-recipes) _(Lines 123-147)_
-1. [Tools](#tools) _(Lines 150-173)_
-1. [Asynchronous jobs](#asynchronous-jobs) _(Lines 176-199)_
-1. [Deadline](#deadline) _(Lines 202-213)_
+1. [Tools](#tools) _(Lines 150-244)_
+1. [Asynchronous jobs](#asynchronous-jobs) _(Lines 247-270)_
+1. [Deadline](#deadline) _(Lines 273-284)_
 
 
 
@@ -146,7 +146,7 @@ returns a PNG with the GPU seconds. Recipes shipped: `qwen_image_edit_2511`, `fi
 fills the mask with the colour around it, for tests and dry runs).
 
 ## Tools
-<!-- Lines 150-173 -->
+<!-- Lines 150-244 -->
 
 `POST /tools/{name}` with `{"inputs": ["<sha256>", …], "params": {…}}` returns
 `{"tool", "version", "outputs": {"<name>": "<sha256>"}, "measures": {…}, "summary": "<text>", "gpu_seconds"}`.
@@ -158,7 +158,7 @@ and `model`; the orchestrator caches a tool run by tool, version, params and inp
 | `segment_elements` | `[image]` | `labels` (1 to 64 distinct element names: letters, digits, spaces, hyphens, apostrophes), `threshold` (default 0.3) | `mask` (union, white = found) and one `mask_<i>` per label, zero-based, in label order, always present; measures `found` (share of the frame per label), `detections` (boxes kept per label), `union_share`, `fell_back_to_boxes` (true when the masks are the detection boxes because the segmentation step failed) |
 | `class_diff` | `[original, candidate, region_mask]` | `opening_classes` (default door, window, doorway; ADE20K names or those words), `min_share` (default 0.005) | `map` (colour map: red became an opening, blue stopped being one, yellow a class that appeared, cyan one that vanished; dimmed outside the region); measures `opening_share_of_region`, `opening_box`, `opening_share_outside`, `region_share`, and for `inside` and `outside` the classes `appeared` and `vanished` (class absent in one picture and at least `min_share` of the zone in the other) with `share` and `box` in [0, 1] |
 | `element_inventory` | `[original, candidate, region_mask]` | `fixed`, `movable` (element names as for `segment_elements`; together 1 to 96, each name once across both lists), `threshold` (default 0.3) | `annotated` (the candidate with each element that is not kept boxed, coloured by status and numbered as in the summary); measures `elements` (per element: `n`, `label`, `kind` fixed or movable, `status`, `where` inside or outside the region, `inside_share`, `box_original`, `box_candidate` in [0, 1], `overlap`, `growth`, `stood`: the original's movable elements under a new one), `counts` per status, `compared_at`, `candidate_resized`, `fell_back_to_boxes`; the `summary` is the inventory as a short table, several lines ([Element inventory](#element-inventory)) |
-| `structure_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side left out around the region, default 0.03), `threshold` (structural dissimilarity counted as a change, default 0.45), `search` (fraction of the long side each point may look around for its match, default 0.012) | `changes` (the candidate, aligned to the original, the removal region shaded, each region whose structure changed outside it outlined in red); measures `alignment` (`scale`, `shift_pct`, `rotation_deg`, `applied`), `outside_changed_share`, `regions` (each `box` in [0, 1] and `share` of the frame, largest first, at most 8), `compared_at`, `candidate_resized` ([Structure map](#structure-map)) |
+| `structure_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side left out around the region, default 0.03), `threshold` (structural dissimilarity counted as a change, default 0.45), `search` (fraction of the long side each point may look around for its match, default 0.012) | `changes` (the candidate, aligned to the original, the removal region shaded, each region whose structure changed outside it outlined in red); measures `alignment` (`scale`, `shift_pct`, `rotation_deg`, `applied`, `method`: `features`, `ecc` or `none`, `features` and `matched`: the original's features outside the region and how many fit), `outside_changed_share`, `tone` (`shift_de`, `shift_lab`, `uneven_de`), `regions` (each `box` in [0, 1] and `share` of the frame, largest first, at most 8), `compared_at`, `candidate_resized` ([Structure map](#structure-map)) |
 | `change_map` | `[original, candidate, region_mask]` | `margin` (fraction of the long side kept clear around the region, default 0.02) | `heatmap` (red = the larger of a displacement of 1% of the long side and a colour difference of 10; the region and its margin are drawn apart); measures `displacement_median_pct`, `displacement_p95_pct` (optical flow outside the region, in % of the long side), `global_shift_px`, `delta_e_median`, `delta_e_p95` (CIE76), `outside_share` |
 
 - The `summary` is one sentence the judge reads, for example "inside the removed region, 3.1% of pixels became
@@ -179,16 +179,25 @@ the same names and contract.
 a tone change lights up most of the frame, and the judges read that as drift. The structure map shows only what changed
 in structure, robust to small changes.
 
-- **Align:** an affine transform of the candidate onto the original, fitted on the pixels outside the region (OpenCV's
-  ECC), applied when it is a small reframing (scale 0.95 to 1.05, shift up to 3% of the long side); a larger one is
-  not applied and is reported, as a sign that the viewpoint changed.
+- **Align:** a similarity (scale, rotation, shift) fitted by RANSAC on SIFT features of the original outside the
+  region matched in the candidate, trusted when at least 12 fit one motion; otherwise an affine fit by OpenCV's ECC on
+  the pixels outside the region; when that fails too, `method` is `none` and the summary says no fit was found (ECC
+  alone reported "no motion" on a picture of another scene). Applied when it is a small reframing (scale 0.95 to 1.05,
+  shift up to 3% of the long side); a larger one is not applied and is reported as a measure. The share of features
+  that fit is what tells another picture from the same one ([defect detectors](defect_detectors.md)).
+- **Tone:** outside the region and its margin, the Lab difference (D65) between the original and the aligned
+  candidate: its median as a CIE76 distance (`shift_de`, a uniform shift), and the 90th percentile of the difference
+  smoothed over 1/32 of the long side once the median is removed (`uneven_de`, an uneven tone change). The owner's
+  colour-shift answers follow the uneven part more than the uniform one.
 - **Compare structure, not colour:** grey levels at 512 pixels on the long side; structural similarity (SSIM, 7 x 7
   window) of each point against the other picture shifted by up to `search`, both ways, the best match kept; a change
   is a dissimilarity above `threshold`.
 - **Regions, not pixels:** changes pooled in 8 x 8 pixel cells, connected cells form a region, regions under 0.2% of
   the frame dropped; only outside the region and its `margin` (inside it, change is the point of the edit).
-- **Measured** on 16 reviewed pairs (prototype): on photos without drift it marks 0-8% of the outside area against
-  19-43% for the colour map, and separates the owner's drift answers at least as well.
+- **Measured** on 16 reviewed pairs: on photos without drift it marks 0-8% of the outside area against 19-43% for
+  the colour map, and separates the owner's drift answers at least as well (AUC 0.87); the feature fit aligns two pairs
+  ECC diverged on; `uneven_de` separates the owner's colour-shift answers with AUC 0.98 (one overlap, at 11.4 and
+  11.6).
 
 ### Element inventory
 
@@ -234,7 +243,7 @@ element, what became of each thing the room's rules name.
   only the fixed elements visible in the photo as names. `[tools] inventory` stays off by default until then.
 
 ## Asynchronous jobs
-<!-- Lines 176-199 -->
+<!-- Lines 247-270 -->
 
 A proxy in front of a rented machine may cut a request that stays silent for about 100 seconds, and a generation can
 last longer. API 1.1 therefore lets a call return at once and be polled; the synchronous behaviour of 1.0 stays for
@@ -260,7 +269,7 @@ a client that does not ask.
   server that ignores the preference and answers 200 is read as a synchronous answer.
 
 ## Deadline
-<!-- Lines 202-213 -->
+<!-- Lines 273-284 -->
 
 The server refuses to start without `--deadline` (a duration such as `90m`, `2h`, `1h30m`, or an ISO 8601 time with
 a UTC offset, in the future). Past it, every endpoint except `GET /health` answers 503 `deadline_reached`, the calls

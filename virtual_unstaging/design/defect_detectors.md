@@ -179,13 +179,14 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 183-196 -->
+<!-- Lines 183-197 -->
 
 *Proposal*, cheapest and most measurable first:
 
-1. **Gate and camera fit:** feature alignment (SIFT, similarity, RANSAC) in `structure_map`, ECC as the fallback,
-   and a failed fit said as such, not as "no motion"; the gate. Tests on synthetic pictures.
-2. **Tone measure** in the same tool: median shift and uneven part, as numbers.
+1. **Camera fit** (done, 2026-10-23): feature alignment (SIFT, similarity, RANSAC) in `structure_map`, ECC as the
+   fallback, a failed fit said as such, and the feature counts the gate reads. Tests on synthetic pictures.
+2. **Tone measure** (done, 2026-10-23) in the same tool: median shift and uneven part, as numbers, also in the summary
+   the judge reads.
 3. **Triage layer** in the orchestrator: detections from tool measures by `data/detectors.toml`, recorded in
    shadow (`decide` off); a report of detector, judge and owner per code.
 4. **Zooms** and the closed-question judge contract; measured on the stored pilot attempts (judges only, no
@@ -195,7 +196,7 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 199-204 -->
+<!-- Lines 200-205 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -203,7 +204,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 207-212 -->
+<!-- Lines 208-213 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.
