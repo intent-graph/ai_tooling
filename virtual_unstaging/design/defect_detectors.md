@@ -175,9 +175,12 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 179-191 -->
+<!-- Lines 179-194 -->
 
-*Proposal*, to [data_model.md](data_model.md) once accepted:
+*Proposal*, to [data_model.md](data_model.md) once accepted. While detectors only run in shadow, a detection is a
+pure function of a stored `structure_map` run and the thresholds file, so it is computed when reported
+(`unstage report --detectors`), not stored, as the knowledge base's view (D8); no schema change until the judge's
+zoom answers need storing (build step 4):
 
 - `detection` (attempt, defect code, detector, detector version, tool run, band, severity, measures, reason), one
   per attempt and code, for the whole-image codes (same picture, viewpoint, colour shift) and for each local code's
@@ -190,7 +193,7 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 194-208 -->
+<!-- Lines 197-214 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -198,8 +201,11 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
    fallback, a failed fit said as such, and the feature counts the gate reads. Tests on synthetic pictures.
 2. **Tone measure** (done, 2026-10-23) in the same tool: median shift and uneven part, as numbers, also in the summary
    the judge reads.
-3. **Triage layer** in the orchestrator: detections from tool measures by `data/detectors.toml`, recorded in
-   shadow (`decide` off); a report of detector, judge and owner per code.
+3. **Triage layer** (done, 2026-10-23, pixel detectors): `detectors.py` reads the bands from
+   `data/detectors.toml`; `unstage report --detectors` gives per code the bands and, where a detector decided, how
+   often the judge and the latest review agree. On the pilot's stored judgments (9 judge variants, 16 photos, maps of
+   the tool's first version): where the drift detector decided, it matched the owner on 72 of 75 judgments (the 3
+   misses: a copied reference the gate catches with the current version), the judges on 55 of 75.
 4. **Zooms** and the closed-question judge contract; measured on the stored pilot attempts (judges only, no
    generation).
 5. **Inside-the-region detectors** (`element_added`, `opening_invented`, `movable_left`, `fixture_removed`), each
@@ -207,7 +213,7 @@ The scripts live with the project's runs; the tool's tests use synthetic images 
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 211-216 -->
+<!-- Lines 217-222 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -215,7 +221,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 219-228 -->
+<!-- Lines 225-234 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.

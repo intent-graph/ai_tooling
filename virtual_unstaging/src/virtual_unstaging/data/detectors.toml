@@ -1,0 +1,26 @@
+# Bands of the pixel detectors (design/defect_detectors.md): below `absent_below` a defect is absent, above
+# `present_above` present, between the two the judge is asked. Drafted on 16 reviewed pairs and on injected defects;
+# in shadow mode they are recorded and compared, never acted on.
+
+[same_picture]
+# another picture (a copied reference, another scene, another framing): few of the original's features fit one
+# motion, and much of the outside changed in structure
+max_matched_share = 0.05
+min_outside_changed = 0.20
+min_matched = 12            # a feature fit on fewer is no fit: the camera is asked, not decided
+
+[viewpoint_changed]
+kept_scale = [0.97, 1.04]   # the generator's own reframing on outputs the owner kept
+kept_rotation_deg = 1.0
+changed_scale = [0.95, 1.05]
+changed_rotation_deg = 2.0
+
+[colour_shift]
+measure = "uneven_de"       # structure_map tone: the uneven part of the colour change outside the region
+absent_below = 8.0
+present_above = 13.0
+
+[drift]
+measure = "outside_changed_share"
+absent_below = 0.01
+present_above = 0.10

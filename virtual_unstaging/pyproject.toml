@@ -84,7 +84,7 @@ layers = [
     "virtual_unstaging.review",
     "virtual_unstaging.loop1 | virtual_unstaging.stage0 | virtual_unstaging.report | virtual_unstaging.provision",
     "virtual_unstaging.judge | virtual_unstaging.clients | virtual_unstaging.store | virtual_unstaging.config",
-    "virtual_unstaging.registry | virtual_unstaging.instructions | virtual_unstaging.engines | virtual_unstaging.tools",
+    "virtual_unstaging.registry | virtual_unstaging.instructions | virtual_unstaging.engines | virtual_unstaging.tools | virtual_unstaging.detectors",
     "virtual_unstaging.imaging",
     "virtual_unstaging.domain",
 ]
