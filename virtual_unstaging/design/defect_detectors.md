@@ -137,28 +137,27 @@ Every number in this table is drafted on 16 pairs of one building; each must hol
 is switched to decide.
 
 ## Zooms: what the judge gets instead
-<!-- Lines 141-159 -->
+<!-- Lines 141-158 -->
 
 - **A zoom** is a pair of crops (original, aligned candidate) around one **place** (a region a detector found),
   grown by its own size on each side for context and at least an eighth of the long side, enlarged to the judge's
   image size; the removal area shaded in both, so the judge does not count the intended change. Several zooms go in
   one call. On the pilot, against the owner's boxes: 16 of 18 defects outside the removal area lie at least 80% inside
   a zoom so cut (median zoom 21% of the frame); grown by half its size, 11 of 18 (drafted on the same boxes).
-- **One question per zoom, closed options, several allowed:** a defect often belongs to more than one code (owner,
-  2026-10-23: "in several cases the defect does not fit neatly in one category": an invented opening that also makes
-  the scene another one; a stain that is both drift and an added element). Outside the region: "the same / only
-  sharper or softer / something added / a belonging removed (harmless) / a fixed element removed / something changed
-  shape / the surface is wrong";
-  inside: "a wall or floor that continues / an element revealed (partly visible in the original) / an element
-  invented / an opening invented / an object left / the surface is wrong". Each option maps to one or more codes;
-  findings take the zoom's box.
+- **One plain question per card**, the same for every place, answered first by the owner on the same cards (owner,
+  2026-10-23: "if it is confusing for me, its confusing for judge"): "Apart from furniture and belongings being gone,
+  is anything wrong in AFTER?" — `none` (nothing wrong), `minor` (a small touch-up fixes it), `blocking` (the photo is
+  unusable), and in a few words what is wrong. No list of defect kinds: a defect often fits several (owner: "in
+  several cases the defect does not fit neatly in one category"), and an earlier closed list of 6 to 8 answers per
+  zoom, with shaded and outlined areas to decode, confused the owner and the judges alike. The place gives where; the
+  judge's words give what.
 - **Cost:** on the pilot, at most 4 zooms per attempt outside the region; small crops and short closed answers
   should let a smaller or faster judge answer within the owner's 10 seconds. Not measured.
 - On the pilot's prototype, the zooms show defects the whole-picture judges missed or misread: an object and a
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
 ## The zoom judge (build step 4)
-<!-- Lines 162-188 -->
+<!-- Lines 161-186 -->
 
 *Proposal*, 2026-10-23; the owner's go "lets go" on a separate call. In shadow mode the zoom questions are a **second
 judge call** per attempt, so the whole-picture judgment stays as it was and every place gets three answers: the zoom
@@ -167,27 +166,26 @@ judge's, the whole-picture judge's, the owner's.
 - **Places:** the `structure_map` regions outside the removal area (at most 4, largest first) and the removal area
   itself (each of its at most 2 largest parts), since inside it no detector is built yet and the zoom alone narrows
   the question. A picture the gate calls another picture gets no zooms.
-- **Zoom image:** one image per place, original crop and aligned candidate crop side by side, each at most 512 pixels
-  on its long side; the candidate is aligned by the warp `structure_map` reports (`alignment.warp`, at the size it
-  compared), applied by the orchestrator at full resolution. Outside zooms shade the removal area; inside zooms outline
-  it.
-- **Question:** per zoom, the answers that apply among a closed list (several allowed), a severity (`none`, `minor`,
-  `blocking`) and a comment under 120 characters. Outside: `same`, `sharper_or_softer`, `added`, `removed_belonging` (harmless: the
-  edit's purpose, even beyond the drawn area), `removed_fixed`, `changed_shape`, `tone`, `surface_wrong`. Inside: `continues`, `revealed`, `invented_element`, `invented_opening`,
-  `object_left`, `surface_wrong`. Each answer maps to defect codes in `data/detectors.toml` (`[zoom_answers]`).
+- **Card image:** one image per place with three labelled panels: WHERE (the whole original, the place framed in
+  red), BEFORE (the original cut to the frame), AFTER (the aligned candidate cut to the same frame, at most 512 pixels on
+  its long side); no shading, no outline. The candidate is aligned by the warp `structure_map` reports
+  (`alignment.warp`, at the size it compared), applied by the orchestrator at full resolution.
+- **Answer:** per card, `answer` (`none`, `minor`, `blocking`) and `what` (under 120 characters), stored as the zoom's
+  severity and comment.
 - **Command:** `unstage zooms RUN…` asks the configured judge on every judged attempt of the runs, once per
   candidate; a request already answered by the same judge is reused. Stored as `zoom_judgment`, `zoom`,
-  `zoom_answer` (schema version 2; a version 1 database is migrated by adding these tables).
+  `zoom_answer` (schema version 2; a version 1 database is migrated by adding these tables; `zoom_answer` holds the
+  answers of the earlier closed-list question, the card question needs only the zoom's severity and comment).
 
 - **Measured** (pilot, 16 pictures, 3 judges × 2 speed versions, keyed answer schema): 0 broken answers of 78 calls,
   median 2.2-6.0 s per call; the gate spared the judge the 3 wholly failed outputs. Verdicts (a blocking zoom rejects)
   right on 6-9 of 16, no better than the whole-picture judges (7-10). Two causes seen: belongings the generator removed
   beyond the drawn area are places the outside question can only call `removed` (the 35B judge: 19 of 30 outside zooms);
-  inside zooms marked blocking on kept photos. Next: split `removed` into a belonging removed (harmless) and a fixed
-  element removed; the owner answering the same closed questions on the same zooms, as the judge's ground truth.
+  inside zooms marked blocking on kept photos. That question was replaced by the card question above, which the owner
+  answered first on the same 53 places.
 
 ## Measuring a detector
-<!-- Lines 191-207 -->
+<!-- Lines 189-205 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -206,7 +204,7 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 210-225 -->
+<!-- Lines 208-223 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted. While detectors only run in shadow, a detection is a
 pure function of a stored `structure_map` run and the thresholds file, so it is computed when reported
@@ -224,7 +222,7 @@ zoom answers need storing (build step 4):
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 228-245 -->
+<!-- Lines 226-243 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -244,7 +242,7 @@ zoom answers need storing (build step 4):
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 248-253 -->
+<!-- Lines 246-251 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -252,7 +250,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 256-265 -->
+<!-- Lines 254-263 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.
