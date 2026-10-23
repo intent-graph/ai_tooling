@@ -137,7 +137,7 @@ Every number in this table is drafted on 16 pairs of one building; each must hol
 is switched to decide.
 
 ## Zooms: what the judge gets instead
-<!-- Lines 141-158 -->
+<!-- Lines 141-159 -->
 
 - **A zoom** is a pair of crops (original, aligned candidate) around one **place** (a region a detector found),
   grown by its own size on each side for context and at least an eighth of the long side, enlarged to the judge's
@@ -147,7 +147,8 @@ is switched to decide.
 - **One question per zoom, closed options, several allowed:** a defect often belongs to more than one code (owner,
   2026-10-23: "in several cases the defect does not fit neatly in one category": an invented opening that also makes
   the scene another one; a stain that is both drift and an added element). Outside the region: "the same / only
-  sharper or softer / something added / something removed / something changed shape / the surface is wrong";
+  sharper or softer / something added / a belonging removed (harmless) / a fixed element removed / something changed
+  shape / the surface is wrong";
   inside: "a wall or floor that continues / an element revealed (partly visible in the original) / an element
   invented / an opening invented / an object left / the surface is wrong". Each option maps to one or more codes;
   findings take the zoom's box.
@@ -157,7 +158,7 @@ is switched to decide.
   stain appearing outside the region of a kept image; a wall sliver, the defect that sank a discarded one.
 
 ## The zoom judge (build step 4)
-<!-- Lines 161-187 -->
+<!-- Lines 162-188 -->
 
 *Proposal*, 2026-10-23; the owner's go "lets go" on a separate call. In shadow mode the zoom questions are a **second
 judge call** per attempt, so the whole-picture judgment stays as it was and every place gets three answers: the zoom
@@ -171,8 +172,8 @@ judge's, the whole-picture judge's, the owner's.
   compared), applied by the orchestrator at full resolution. Outside zooms shade the removal area; inside zooms outline
   it.
 - **Question:** per zoom, the answers that apply among a closed list (several allowed), a severity (`none`, `minor`,
-  `blocking`) and a comment under 120 characters. Outside: `same`, `sharper_or_softer`, `added`, `removed`,
-  `changed_shape`, `tone`, `surface_wrong`. Inside: `continues`, `revealed`, `invented_element`, `invented_opening`,
+  `blocking`) and a comment under 120 characters. Outside: `same`, `sharper_or_softer`, `added`, `removed_belonging` (harmless: the
+  edit's purpose, even beyond the drawn area), `removed_fixed`, `changed_shape`, `tone`, `surface_wrong`. Inside: `continues`, `revealed`, `invented_element`, `invented_opening`,
   `object_left`, `surface_wrong`. Each answer maps to defect codes in `data/detectors.toml` (`[zoom_answers]`).
 - **Command:** `unstage zooms RUN…` asks the configured judge on every judged attempt of the runs, once per
   candidate; a request already answered by the same judge is reused. Stored as `zoom_judgment`, `zoom`,
@@ -186,7 +187,7 @@ judge's, the whole-picture judge's, the owner's.
   element removed; the owner answering the same closed questions on the same zooms, as the judge's ground truth.
 
 ## Measuring a detector
-<!-- Lines 190-206 -->
+<!-- Lines 191-207 -->
 
 Three measures, all offline on stored images, before a judge reads a detector's output:
 
@@ -205,7 +206,7 @@ Three measures, all offline on stored images, before a judge reads a detector's 
 The scripts live with the project's runs; the tool's tests use synthetic images only.
 
 ## Data model
-<!-- Lines 209-224 -->
+<!-- Lines 210-225 -->
 
 *Proposal*, to [data_model.md](data_model.md) once accepted. While detectors only run in shadow, a detection is a
 pure function of a stored `structure_map` run and the thresholds file, so it is computed when reported
@@ -223,7 +224,7 @@ zoom answers need storing (build step 4):
 - The judgment of an attempt records which zooms it answered (a `zoom` row: detection, crop box, images).
 
 ## Build order
-<!-- Lines 227-244 -->
+<!-- Lines 228-245 -->
 
 *Proposal*, cheapest and most measurable first:
 
@@ -243,7 +244,7 @@ zoom answers need storing (build step 4):
 6. `decide` switched on per detector, after its hold-out check and the owner's go.
 
 ## Change to the architecture
-<!-- Lines 247-252 -->
+<!-- Lines 248-253 -->
 
 Accepted by the owner as the long-term target (2026-10-23), applied to [Judge tool library](../architecture.md#judge-tool-library):
 a detector decides the defects it measures without error on the owner's reviews and on injected defects; the VLM
@@ -251,7 +252,7 @@ decides the rest, on the detector's zooms. Until then, shadow mode. Still a *pro
 input becoming the zooms and their questions, beside or instead of the whole pictures.
 
 ## Open
-<!-- Lines 255-264 -->
+<!-- Lines 256-265 -->
 
 - **Ground truth with locations:** being marked by the owner (2026-10-23) on the pilot's 16 pairs; a second, held-out
   set needs one more generation run.

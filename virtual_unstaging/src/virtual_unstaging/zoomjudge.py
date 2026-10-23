@@ -14,7 +14,8 @@ from virtual_unstaging.judge import ContractError, ImagePart, JudgeRequest
 from virtual_unstaging.zooms import INSIDE, OUTSIDE, Place
 
 ANSWERS = {
-    OUTSIDE: ("same", "sharper_or_softer", "added", "removed", "changed_shape", "tone", "surface_wrong"),
+    OUTSIDE: ("same", "sharper_or_softer", "added", "removed_belonging", "removed_fixed", "changed_shape", "tone",
+              "surface_wrong"),
     INSIDE: ("continues", "revealed", "invented_element", "invented_opening", "object_left", "surface_wrong"),
 }
 SEVERITIES = ("none", "minor", "blocking")

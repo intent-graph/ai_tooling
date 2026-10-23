@@ -17,7 +17,10 @@ Outside answers:
 - `same`: nothing changed beyond resampling.
 - `sharper_or_softer`: only sharpness, noise or fine texture differs.
 - `added`: something appeared that the original does not show there.
-- `removed`: something the original shows there is gone (a fixed element, an object, a mark).
+- `removed_belonging`: furniture or a belonging the original shows there is gone. This is what the edit is for, even
+  outside the shaded area: not a defect.
+- `removed_fixed`: a fixed element or a mark of the building the original shows there is gone (a socket, a radiator, a
+  beam, a door frame, a stain on the wall).
 - `changed_shape`: something is still there but its shape, size or position changed.
 - `tone`: only colour or brightness changed.
 - `surface_wrong`: a wall, floor or ceiling is broken, warped or does not continue.
@@ -30,5 +33,6 @@ Inside answers:
 - `object_left`: furniture or a belonging is still there, whole or in part.
 - `surface_wrong`: a wall, floor or ceiling is broken, warped, smeared or does not continue.
 
-Severity: `none` when the answer is `same`, `sharper_or_softer` or `continues` alone; `minor` when a person would keep
+Severity: `none` when the answers are only among `same`, `sharper_or_softer`, `removed_belonging`, `continues` and
+`revealed`; `minor` when a person would keep
 the photo after a small touch-up; `blocking` when the photo cannot be used as the empty room.
