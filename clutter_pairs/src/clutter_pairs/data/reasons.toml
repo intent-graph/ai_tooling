@@ -40,8 +40,8 @@ meaning = "a small rendering flaw that does not change what the image shows"
 [clutter_off_spec]
 stage = "clutter"
 severity = "blocking"
-by = "both"
-meaning = "the clutter does not match its spec: wrong items, wrong density, or a change mask outside the density's range"
+by = "judge"
+meaning = "the clutter does not match its spec: wrong items, wrong density"
 
 [clutter_off_spec_minor]
 stage = "clutter"
@@ -90,6 +90,12 @@ stage = "clutter"
 severity = "blocking"
 by = "pixels"
 meaning = "the edit changed colour or levels across the whole image"
+
+[change_share_off]
+stage = "clutter"
+severity = "blocking"
+by = "pixels"
+meaning = "the change mask covers a share of the image outside the range its density implies: too little, or a rebuilt room"
 
 [unexplained_change]
 stage = "clutter"

@@ -9,7 +9,7 @@
 CREATE TABLE source_file (
   sha256      TEXT PRIMARY KEY CHECK (length(sha256) = 64),
   kind        TEXT NOT NULL CHECK (kind IN ('ontology', 'taxonomy', 'targets', 'instruction', 'composer',
-                                            'schema', 'reasons', 'config', 'decision_rule')),
+                                            'schema', 'reasons', 'config', 'decision_rule', 'import_manifest')),
   path        TEXT NOT NULL,
   content     TEXT NOT NULL,
   first_used  TEXT NOT NULL                        -- ISO 8601 UTC
@@ -190,7 +190,8 @@ CREATE TABLE iteration (
   id           INTEGER PRIMARY KEY,
   loop_run_id  INTEGER NOT NULL REFERENCES loop_run,
   n            INTEGER NOT NULL CHECK (n >= 1),
-  action       TEXT NOT NULL CHECK (action IN ('write', 'revise', 'reseed')),  -- what the engine asked
+  -- what the engine asked; `import`: the one iteration of an imported scene's clean loop (judge only)
+  action       TEXT NOT NULL CHECK (action IN ('write', 'revise', 'reseed', 'import')),
   seed         BIGINT NOT NULL CHECK (seed >= 0),  -- the generator's or editor's seed for this iteration
   -- Denormalized: derivable from the assessments by the verdict rule; kept for the index below; audit checks it.
   verdict      TEXT CHECK (verdict IN ('accept', 'revise')),
@@ -198,13 +199,13 @@ CREATE TABLE iteration (
 );
 CREATE UNIQUE INDEX iteration_one_accept ON iteration (loop_run_id) WHERE verdict = 'accept';
 
--- clean loop: generated; clutter loop: raw_edit, corrected_edit (after the global colour correction),
+-- clean loop: generated, or imported (an imported scene's one iteration); clutter loop: raw_edit, corrected_edit (after the global colour correction),
 -- change_mask (soft alpha in [0, 1] as an 8-bit image), composite (the cluttered image), regions (the composite with
 -- the mask's numbered regions drawn, for the pair judge).
 CREATE TABLE iteration_image (
   iteration_id  INTEGER NOT NULL REFERENCES iteration,
-  role          TEXT NOT NULL CHECK (role IN ('generated', 'raw_edit', 'corrected_edit', 'change_mask', 'composite',
-                                              'regions')),
+  role          TEXT NOT NULL CHECK (role IN ('generated', 'imported', 'raw_edit', 'corrected_edit', 'change_mask',
+                                              'composite', 'regions')),
   image_sha     TEXT NOT NULL REFERENCES image,
   PRIMARY KEY (iteration_id, role)
 );
@@ -240,6 +241,41 @@ CREATE TABLE model (
   family    TEXT NOT NULL,                         -- the editor-family rule (choice C8)
   licence   TEXT NOT NULL,                         -- recorded, never a filter
   UNIQUE (name, revision)
+);
+
+-- === Imported clean images (design/imports.md) ===========================================================
+
+-- One `cpairs import`: its manifest as read, kept as a source file (kind import_manifest), and the sizing parameters
+-- its images were resized with (audit resizes each original again with them; a run refuses unfinished imported scenes
+-- the configuration no longer fits).
+CREATE TABLE import_set (
+  id                   INTEGER PRIMARY KEY,
+  manifest_sha         TEXT NOT NULL REFERENCES source_file,
+  imported_at          TEXT NOT NULL,              -- ISO 8601 UTC
+  output_side          INTEGER NOT NULL CHECK (output_side > 0),
+  size_multiple        INTEGER NOT NULL CHECK (size_multiple > 0),
+  condition_max_pixels INTEGER NOT NULL CHECK (condition_max_pixels > 0),
+  resampler            TEXT NOT NULL               -- how the original was resized: `lanczos` (Pillow)
+);
+
+-- The clean image of a scene made outside the clean loop. `original_sha` is the file as received, `image_sha` the
+-- image resized to the editor's size, the one the clean judge sees and the clutter loops edit. The source is a
+-- model row, so the family rule (C8) and the export read it like a generator's. One image enters once: the original's
+-- bytes, its decoded RGB pixels and the resized image are each unique (P6: the same picture in two buildings could land
+-- in two splits). Views of one room share a `group_name` (with the source) and so one room and one building; a scene
+-- with no group is alone in its room. Audit checks the line in the stored manifest, the pixel hash, the resize again
+-- from the original with the set's parameters, and the grouping.
+CREATE TABLE imported_image (
+  scene_id         INTEGER PRIMARY KEY REFERENCES scene,
+  import_set_id    INTEGER NOT NULL REFERENCES import_set,
+  line             INTEGER NOT NULL CHECK (line >= 1),  -- in the stored manifest
+  original_sha     TEXT NOT NULL UNIQUE REFERENCES image,
+  pixel_sha        TEXT NOT NULL UNIQUE CHECK (length(pixel_sha) = 64),  -- the decoded RGB pixels (EXIF applied)
+  image_sha        TEXT NOT NULL UNIQUE REFERENCES image,
+  source_model_id  INTEGER NOT NULL REFERENCES model,
+  group_name       TEXT,                           -- the manifest's `group`: views of one room
+  origin           TEXT,                           -- as the manifest gives it: a URL, a render seed
+  UNIQUE (import_set_id, line)
 );
 
 CREATE TABLE model_call (
@@ -459,16 +495,17 @@ CREATE TABLE export_pair (
 
 -- === Views: derived, never stored (data_model.md, "Views") ===============================================
 
--- Accepted clean images, per scene: the generated image of a clean loop's accepted iteration.
+-- Accepted clean images, per scene: the generated or imported image of a clean loop's accepted iteration.
 CREATE VIEW clean_image AS
 SELECT lr.scene_id, lr.id AS loop_run_id, it.id AS iteration_id, ii.image_sha
 FROM loop_run lr
 JOIN iteration it ON it.loop_run_id = lr.id AND it.verdict = 'accept'
-JOIN iteration_image ii ON ii.iteration_id = it.id AND ii.role = 'generated'
+JOIN iteration_image ii ON ii.iteration_id = it.id AND ii.role IN ('generated', 'imported')
 WHERE lr.stage = 'clean';
 
 -- One row per accepted pair; its id is the accepted clutter iteration. The families come from the call that made
--- the clean image and from the edit call (one generate or edit call per iteration).
+-- the clean image (or, for an imported one, from its source model) and from the edit call (one generate or edit
+-- call per iteration).
 CREATE VIEW pair AS
 SELECT it.id AS pair_id, b.id AS building_id, r.id AS room_id, s.id AS scene_id, cs.id AS clutter_spec_id,
        lr.id AS loop_run_id, lr.input_image AS clean_image, comp.image_sha AS cluttered_image,
@@ -485,8 +522,9 @@ JOIN iteration_image mask ON mask.iteration_id = it.id AND mask.role = 'change_m
 JOIN model_call ec ON ec.iteration_id = it.id AND ec.role = 'edit'
 JOIN model em ON em.id = ec.model_id
 JOIN clean_image ci ON ci.scene_id = s.id AND ci.image_sha = lr.input_image
-JOIN model_call gc ON gc.iteration_id = ci.iteration_id AND gc.role = 'generate'
-JOIN model gm ON gm.id = gc.model_id
+LEFT JOIN model_call gc ON gc.iteration_id = ci.iteration_id AND gc.role = 'generate'
+LEFT JOIN imported_image im ON im.scene_id = s.id
+JOIN model gm ON gm.id = COALESCE(gc.model_id, im.source_model_id)
 WHERE it.verdict = 'accept';
 
 -- Every axis value of a pair: its room's, its scene's and its clutter spec's.
@@ -515,14 +553,17 @@ SELECT lr.stage, w.run_id, w.id AS wave_id, w.ordinal AS wave_ordinal, lr.id AS 
 FROM loop_run lr JOIN wave w ON w.id = lr.wave_id;
 
 -- The loops the carry-forward comparison counts: finished, in waves from the stage's first active lesson on, not
--- evidence of a lesson. The decision rule (decision_rules/carry_forward.md) is applied to these rows by the report.
+-- evidence of a lesson, and not the clean loop of an imported scene (it has no prompt for a lesson to change).
+-- The decision rule (decision_rules/carry_forward.md) is applied to these rows by the report.
 CREATE VIEW carry_forward_loop AS
 SELECT ic.*
 FROM iteration_curve ic
 WHERE ic.stop_reason IS NOT NULL AND ic.stop_reason NOT IN ('deadline', 'error')
   AND ic.wave_id >= (SELECT MIN(l.active_from_wave_id) FROM lesson l WHERE l.stage = ic.stage)
   AND NOT EXISTS (SELECT 1 FROM lesson_evidence le JOIN iteration it ON it.id = le.iteration_id
-                  WHERE it.loop_run_id = ic.loop_run_id);
+                  WHERE it.loop_run_id = ic.loop_run_id)
+  AND NOT EXISTS (SELECT 1 FROM loop_run l JOIN imported_image im ON im.scene_id = l.scene_id
+                  WHERE l.id = ic.loop_run_id);
 
 CREATE VIEW carry_forward AS
 SELECT stage, lessons_arm, COUNT(*) AS loops,

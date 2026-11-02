@@ -10,7 +10,7 @@ from pathlib import Path
 from virtual_unstaging.store.blobs import BlobStore
 from virtual_unstaging.store.db import connect, transaction
 
-SCHEMA_VERSION = 2  # 2: numbered mask regions (judge aid A2)
+SCHEMA_VERSION = 3  # 2: numbered mask regions (judge aid A2); 3: imported clean images
 DB_NAME = "store.sqlite"
 IMAGES_DIR = "images"
 

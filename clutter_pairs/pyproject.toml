@@ -66,9 +66,10 @@ name = "Layers: presentation, application, adapters, pure core, domain"
 type = "layers"
 layers = [
     "clutter_pairs.cli",
-    "clutter_pairs.run | clutter_pairs.plan | clutter_pairs.export | clutter_pairs.audit | clutter_pairs.report | clutter_pairs.gpu",
+    "clutter_pairs.run | clutter_pairs.plan | clutter_pairs.importer | clutter_pairs.export | clutter_pairs.audit | clutter_pairs.report | clutter_pairs.gpu",
     "clutter_pairs.dataset",
     "clutter_pairs.models | clutter_pairs.recorder | clutter_pairs.store | clutter_pairs.config | clutter_pairs.fakes",
+    "clutter_pairs.manifest | clutter_pairs.sizing",  # pure steps over the pure core's space
     "clutter_pairs.compose | clutter_pairs.pairs | clutter_pairs.lessons | clutter_pairs.engine | clutter_pairs.space",
     "clutter_pairs.domain",
 ]

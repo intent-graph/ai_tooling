@@ -6,6 +6,7 @@ space version and the target set, so every later row can point to them.
 
 from __future__ import annotations
 
+import json
 import sqlite3
 import tomllib
 from dataclasses import dataclass
@@ -18,12 +19,13 @@ from virtual_unstaging.store.blobs import BlobStore
 from clutter_pairs import config
 from clutter_pairs.compose import Composer, parse_composer
 from clutter_pairs.config import Config, ConfigError
-from clutter_pairs.space import Space, Target, check_sizes, parse_space, parse_targets
+from clutter_pairs.space import Space, Target, check_sizes, parse_space, parse_targets, size_problem
 from clutter_pairs.store import repo
 from clutter_pairs.store.db import DB_NAME, connect, open_store, transaction, utc_now
 
 DECISION_RULE = "decision_rules/carry_forward.md"
 ALWAYS_BLOCKING = ("opening_changed",)  # owner, 2026-10-22: a changed opening is the worst defect a pair can carry
+PIXEL_CODES = ("misaligned", "global_repaint", "change_share_off", "unexplained_change", "opening_changed")  # code-emitted
 
 
 @dataclass(frozen=True)
@@ -68,6 +70,25 @@ class Dataset:
         return {c for c, r in self.reasons.items() if r.stage in (stage, "both") and r.by in ("judge", "both")}
 
 
+def check_imported_sizes(ds: Dataset, scenes: list[int]) -> None:
+    """Refuse a run over imported scenes the configuration no longer fits: an image resized for another `output_side`
+    (or limit) would come back from the editor at another size, and every edit would be `misaligned`."""
+    cfg = ds.cfg
+    problems = []
+    for scene_id in scenes:
+        row = repo.imported_image(ds.conn, scene_id)
+        if row is None:
+            continue
+        why = size_problem(repo.image_size(ds.conn, row.image_sha), cfg.run.output_side, cfg.generator.size_multiple,
+                           cfg.generator.condition_max_pixels)
+        if why:
+            problems.append(f"scene {scene_id}: {why}")
+    if problems:
+        raise ConfigError("imported scenes no longer fit the configuration (restore output_side, size_multiple and "
+                          "condition_max_pixels as at the import, or import again into a new dataset):\n"
+                          + "\n".join(problems[:10]))
+
+
 def packaged_files() -> list[str]:
     """Every data file shipped with the package, as `folder/name` paths."""
     root = resources.files("clutter_pairs.data")
@@ -90,6 +111,7 @@ def open_dataset(folder: Path) -> Dataset:
             files[packaged] = (repo.record_file(conn, config.file_kind(packaged), label, content, now), content)
         config_sha = repo.record_file(conn, "config", config.CONFIG_NAME, cfg.text, now)
         reasons = parse_reasons(files["reasons.toml"][1])
+        check_reasons_cover(reasons, emitted_codes(files))
         repo.register_reasons(conn, {c: (r.stage, r.severity) for c, r in reasons.items()}, files["reasons.toml"][0])
         space = parse_space(files["space/ontology.toml"][1], files["space/taxonomy.toml"][1])
         version = repo.register_space(conn, space, files["space/ontology.toml"][0], files["space/taxonomy.toml"][0])
@@ -112,6 +134,25 @@ def parse_reasons(text: str) -> dict[str, Reason]:
         if code not in out or out[code].severity != "blocking" or f"{code}_minor" in out:
             raise ConfigError(f"reasons.toml: {code} is blocking and has no _minor twin (owner's rule)")
     return out
+
+
+def emitted_codes(files: dict[str, tuple[str, str]]) -> set[str]:
+    """Every finding code a run can record: the pixel tests' and each judge answer schema's `findings[].code` enum."""
+    codes = set(PIXEL_CODES)
+    for name, (_, content) in files.items():
+        if name.startswith("schemas/") and name.endswith(".json"):
+            schema = json.loads(content)
+            code = schema.get("properties", {}).get("findings", {}).get("items", {}).get("properties", {}).get("code", {})
+            codes.update(code.get("enum", []))
+    return codes
+
+
+def check_reasons_cover(reasons: dict[str, Reason], codes: set[str]) -> None:
+    """A replacement reasons.toml must register every code a run can emit, or the run fails mid-way, after a paid edit."""
+    missing = sorted(codes - set(reasons))
+    if missing:
+        raise ConfigError(f"reasons.toml: no entry for {', '.join(missing)}, which the pixel tests or a judge's answer "
+                          "schema can emit")
 
 
 def parse_rule(text: str) -> dict[str, Any]:

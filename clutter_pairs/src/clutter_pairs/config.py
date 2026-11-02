@@ -125,7 +125,7 @@ def load(folder: Path) -> Config:
     g, j, r, ds = data.get("generator", {}), data.get("judge", {}), data.get("run", {}), data.get("dataset", {})
     files = {str(k): str(v) for k, v in data.get("files", {}).items()}
     for packaged in files:
-        if packaged.split("/")[0] not in DATA_FOLDERS or ".." in packaged:
+        if (packaged != "reasons.toml" and packaged.split("/")[0] not in DATA_FOLDERS) or ".." in packaged:
             raise ConfigError(f"[files]: {packaged} is not a packaged data file")
     gpu = data.get("gpu", {})
     pixels = data.get("pixels", {})

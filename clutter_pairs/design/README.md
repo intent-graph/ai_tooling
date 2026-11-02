@@ -8,38 +8,39 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
 > Slice 1's detailed design, revised after an independent review, is implemented and tested offline: [data_model.md](data_model.md) (the
 > schema, its views and audit checks), [loops.md](loops.md) (composition and recording, both loops, pixel tests and
 > composite, verdict and stop rule, lessons and how their effect is measured), [components.md](components.md) (use of
-> virtual_unstaging, layering, configuration, command line). The rental of slice 1 is next.
+> virtual_unstaging, layering, configuration, command line). The rental of slice 1 is next. Imported clean images
+> (S5, C1): [imports.md](imports.md), implemented 2026-10-24, awaiting the owner's review.
 
 ## Table of Contents
 
-1. [N0](#n0) _(Lines 43-58)_
-1. [Usage scenarios](#usage-scenarios) _(Lines 61-70)_
-1. [Required properties](#required-properties) _(Lines 73-88)_
-1. [Functional hierarchy](#functional-hierarchy) _(Lines 91-112)_
-1. [Data flow](#data-flow) _(Lines 115-156)_
-1. [Inner loops and carry-forward](#inner-loops-and-carry-forward) _(Lines 159-174)_
-1. [Auditability](#auditability) _(Lines 177-190)_
-1. [Stored data](#stored-data) _(Lines 193-198)_
-1. [System shape](#system-shape) _(Lines 201-211)_
-1. [Choices](#choices) _(Lines 214-216)_
-   1. [C1 Clean sources](#c1-clean-sources) _(Lines 219-226)_
-   1. [C2 How clutter is added](#c2-how-clutter-is-added) _(Lines 229-236)_
-   1. [C3 Clutter variants per clean image](#c3-clutter-variants-per-clean-image) _(Lines 239-241)_
-   1. [C4 Writing prompts and instructions](#c4-writing-prompts-and-instructions) _(Lines 244-247)_
-   1. [C5 The checks, cheapest first](#c5-the-checks-cheapest-first) _(Lines 250-254)_
-   1. [C6 Speed and cost](#c6-speed-and-cost) _(Lines 257-263)_
-   1. [C7 Model serving](#c7-model-serving) _(Lines 266-271)_
-   1. [C8 Editor families](#c8-editor-families) _(Lines 274-281)_
-   1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 284-287)_
-   1. [C10 Loop code](#c10-loop-code) _(Lines 290-295)_
-1. [Build order](#build-order) _(Lines 298-311)_
-1. [Open](#open) _(Lines 314-325)_
+1. [N0](#n0) _(Lines 44-59)_
+1. [Usage scenarios](#usage-scenarios) _(Lines 62-71)_
+1. [Required properties](#required-properties) _(Lines 74-89)_
+1. [Functional hierarchy](#functional-hierarchy) _(Lines 92-113)_
+1. [Data flow](#data-flow) _(Lines 116-157)_
+1. [Inner loops and carry-forward](#inner-loops-and-carry-forward) _(Lines 160-175)_
+1. [Auditability](#auditability) _(Lines 178-191)_
+1. [Stored data](#stored-data) _(Lines 194-199)_
+1. [System shape](#system-shape) _(Lines 202-212)_
+1. [Choices](#choices) _(Lines 215-217)_
+   1. [C1 Clean sources](#c1-clean-sources) _(Lines 220-229)_
+   1. [C2 How clutter is added](#c2-how-clutter-is-added) _(Lines 232-239)_
+   1. [C3 Clutter variants per clean image](#c3-clutter-variants-per-clean-image) _(Lines 242-244)_
+   1. [C4 Writing prompts and instructions](#c4-writing-prompts-and-instructions) _(Lines 247-250)_
+   1. [C5 The checks, cheapest first](#c5-the-checks-cheapest-first) _(Lines 253-257)_
+   1. [C6 Speed and cost](#c6-speed-and-cost) _(Lines 260-266)_
+   1. [C7 Model serving](#c7-model-serving) _(Lines 269-274)_
+   1. [C8 Editor families](#c8-editor-families) _(Lines 277-284)_
+   1. [C9 Size of the first slice](#c9-size-of-the-first-slice) _(Lines 287-290)_
+   1. [C10 Loop code](#c10-loop-code) _(Lines 293-298)_
+1. [Build order](#build-order) _(Lines 301-314)_
+1. [Open](#open) _(Lines 317-334)_
 
 
 ---
 
 ## N0
-<!-- Lines 43-58 -->
+<!-- Lines 44-59 -->
 
 - A **declared space** (room ontology, clutter taxonomy, placement rules, coverage targets) lives in versioned files;
   a planner samples scenes where coverage is thinnest.
@@ -57,7 +58,7 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
   One local store holds everything; models run on a rented GPU with a deadline.
 
 ## Usage scenarios
-<!-- Lines 61-70 -->
+<!-- Lines 62-71 -->
 
 | # | Scenario | Steps |
 |---|---|---|
@@ -65,11 +66,11 @@ two loops, auditability, stored data, and the choices that shape them. Derived i
 | S2 | **Grow it**: raise the targets or add a room type; the planner fills the thin cells; nothing already made is made again, and earlier pairs still count | edit targets, plan, run |
 | S3 | **Compare models or instructions**: same specs and seeds, one factor changed; compare iterations, acceptance and cost per accepted pair | run per variant, report |
 | S4 | **Review a sample**: look at pairs, mark the checks' mistakes, set thresholds; in slice 1, 20 to 30 pairs early in the rental | review, decide |
-| S5 | **Import real empty photos** (the owner's preferred clean source, once one is usable): they enter the clean loop at the judge | import (later slice) |
+| S5 | **Import clean images**: renders of a procedural generator, or real empty photos (the owner's preferred clean source, once one is usable): they enter the clean loop at the judge ([imports.md](imports.md); implemented, awaiting the owner's review) | import |
 | S6 | **Audit**: from any pair or image, trace every instruction version, lesson, assessment, exchange and decision behind it | audit |
 
 ## Required properties
-<!-- Lines 73-88 -->
+<!-- Lines 74-89 -->
 
 Each is checkable; each check becomes a test or an `audit` check.
 
@@ -87,7 +88,7 @@ Each is checkable; each check becomes a test or an `audit` check.
 | P10 | **No instruction text in code** | every instruction or template part cites a file; a test fails on any prompt-like literal (multi-line, or over 200 characters) in the package's Python sources |
 
 ## Functional hierarchy
-<!-- Lines 91-112 -->
+<!-- Lines 92-113 -->
 
 **L0** — produce a dataset of pairs (clean, cluttered) of the same view, the clean image being the truth of the
 cluttered one, covering a declared space of rooms and clutter, every image traceable to what made it, at a known cost
@@ -111,7 +112,7 @@ clutter loop [`compose` → `edit` → `correct` → `mask` → `composite` → 
 `revise`]* → accept → `distill lessons`.
 
 ## Data flow
-<!-- Lines 115-156 -->
+<!-- Lines 116-157 -->
 
 ```mermaid
 flowchart LR
@@ -121,7 +122,7 @@ flowchart LR
     TG[coverage targets]
     INS[model instructions]
   end
-  IMP[import real empty photos<br/><i>later slice</i>] -.-> J1
+  IMP[import clean images<br/>renders or photographs] -.-> J1
   ON --> PS[plan scenes<br/>thinnest cells first]
   TG --> PS
   PS --> W1
@@ -155,7 +156,7 @@ flowchart LR
   instruction version (S3).
 
 ## Inner loops and carry-forward
-<!-- Lines 159-174 -->
+<!-- Lines 160-175 -->
 
 The owner's shape: in both places, generator and judge iterate on one image; the first images may need many
 iterations, and what they teach makes the next images start better.
@@ -173,7 +174,7 @@ iterations, and what they teach makes the next images start better.
   report compares the arms under a decision rule written before the rental. Mechanics: [loops.md](loops.md).
 
 ## Auditability
-<!-- Lines 177-190 -->
+<!-- Lines 178-191 -->
 
 The owner's requirement: full auditability.
 
@@ -189,15 +190,15 @@ The owner's requirement: full auditability.
   part's origin, recursively. Human acts (thresholds, reviews, lesson retirements and promotions) are `decision` rows.
 
 ## Stored data
-<!-- Lines 193-198 -->
+<!-- Lines 194-199 -->
 
 One store per dataset: a SQLite file and an image store addressed by SHA-256, the pattern of virtual_unstaging. The
-schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](../src/clutter_pairs/store/schema.sql) (42 tables;
+schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](../src/clutter_pairs/store/schema.sql) (48 tables;
 the DDL loads in SQLite and in Postgres 18). The export is plain files: `clean/`, `cluttered/` and `mask/` PNGs and a JSONL manifest, one line per
 pair: public ids (content hashes that survive a rebuild of the store), split, specs, families, licences, checks.
 
 ## System shape
-<!-- Lines 201-211 -->
+<!-- Lines 202-212 -->
 
 Same shape as virtual_unstaging: a local orchestrator owns the store; models run as services on a rented GPU that
 deletes itself at its deadline and holds nothing that cannot be lost.
@@ -210,22 +211,24 @@ flowchart LR
 ```
 
 ## Choices
-<!-- Lines 214-216 -->
+<!-- Lines 215-217 -->
 
 All decided by the owner, except where marked *proposal*.
 
 ### C1 Clean sources
-<!-- Lines 219-226 -->
+<!-- Lines 220-229 -->
 
 Generated from the written prompt in slice 1. **Real empty photos are the owner's preferred source** ("if we can find
-empty pictures, real, it would be actually perfect"): imported through S5 in a later slice. Candidate found:
+empty pictures, real, it would be actually perfect"): imported through S5, `cpairs import`, which also takes renders
+of a procedural generator (2026-10-23, the owner's request: [imports.md](imports.md); *status:* implemented
+2026-10-24, awaiting the owner's review). Candidate found:
 Wikimedia Commons, category "Empty rooms" and its sub-categories, about 700 to 800 real photos under per-file open
 licences (CC BY, CC BY-SA, CC0, public domain), of mixed buildings (classrooms, offices, homes) and uneven sizes, to be
 sorted before use; licences are recorded per image and carried into the manifest. Ruled out: ZInD (academic use only,
 access by approval). Detail: [state of the art](../../virtual_unstaging/state_of_the_art.md), branch A.
 
 ### C2 How clutter is added
-<!-- Lines 229-236 -->
+<!-- Lines 232-239 -->
 
 Free edit, then colour correction and composite: the change mask is measured from the difference between the clean
 image and the corrected edit (so it includes shadows and reflections); outside it the clean image is kept, so P1
@@ -235,25 +238,25 @@ edit as returned (editors repaint slightly everywhere); masked inpainting (needs
 clutter to the mask's shape).
 
 ### C3 Clutter variants per clean image
-<!-- Lines 239-241 -->
+<!-- Lines 242-244 -->
 
 K = 3 independent variants at different densities (lived-in, cluttered, moving day), sharing the scene.
 
 ### C4 Writing prompts and instructions
-<!-- Lines 244-247 -->
+<!-- Lines 247-250 -->
 
 A language model writes them from the spec, the lessons and its instruction file, with a sampling seed per subject;
 its call is recorded like any other.
 
 ### C5 The checks, cheapest first
-<!-- Lines 250-254 -->
+<!-- Lines 253-257 -->
 
 Pixel tests before the judge (size, shift, global repaint, mask share); the judge on a fixed schema, answering a checklist
 of openings and the items of each numbered mask region in the clutter loop; the explained-change test; an object detector only if the judge misses leftover clutter.
 Thresholds are set by the owner on 20 to 30 pairs early in the rental (S4).
 
 ### C6 Speed and cost
-<!-- Lines 257-263 -->
+<!-- Lines 260-266 -->
 
 The 10-second figure of virtual_unstaging is a guideline. Measured: iterations and wall seconds per accepted image per
 stage; cost per accepted pair from the rental's price and wall clock. Arithmetic, *inferred* from the measured A100
@@ -262,7 +265,7 @@ few seconds of writing or revising; at two to three iterations per accepted imag
 hours, $25 to $45, start-up excluded.
 
 ### C7 Model serving
-<!-- Lines 266-271 -->
+<!-- Lines 269-274 -->
 
 virtual_unstaging's serving: rental with a self-deleting deadline, generator service with recipes, judge service.
 The owner's rule: virtual_unstaging changes only by **adding modularity or override mechanisms** that keep its own
@@ -270,7 +273,7 @@ behaviour by default and never name clutter_pairs; text-to-image (a new request 
 exception the owner accepted. What is used, and how: [components.md](components.md).
 
 ### C8 Editor families
-<!-- Lines 274-281 -->
+<!-- Lines 277-284 -->
 
 A model family is the models of one lab and architecture (FLUX, Black Forest Labs; Qwen-Image, Alibaba's Qwen team).
 A remover tested on clutter painted by its own family may undo it more easily than real clutter, and the test then
@@ -280,13 +283,13 @@ family: FLUX.2 klein 4B makes and edits the clean images, Qwen3-VL-8B judges and
 adds Qwen-Image-Edit-2511 with its own family's text-to-image model for its clean images. All are configuration.
 
 ### C9 Size of the first slice
-<!-- Lines 284-287 -->
+<!-- Lines 287-290 -->
 
 3 room types (living room, kitchen, bedroom) × 2 styles × 3 densities, other axes at random; about 50 accepted pairs;
 one rental of at most 2 hours.
 
 ### C10 Loop code
-<!-- Lines 290-295 -->
+<!-- Lines 293-298 -->
 
 clutter_pairs imports virtual_unstaging. Shared: the ask / tell contract (`engines.SearchEngine`, generic over the
 candidate) and the replay check (`engines.replay`, extracted at the owner's request and used by virtual_unstaging's own
@@ -294,7 +297,7 @@ runner). clutter_pairs' engine is the reviser's policy; its driver is the short 
 owner: a separate shared library (overengineering at this stage); duplicated loop code.
 
 ## Build order
-<!-- Lines 298-311 -->
+<!-- Lines 301-314 -->
 
 The whole flow end to end at small scale first, then depth where it fails.
 
@@ -304,16 +307,19 @@ The whole flow end to end at small scale first, then depth where it fails.
    P8, P9, P10, the size check, and carry-forward itself (a scripted fake judge that rejects until a lesson is
    present: the `on` arm's next scene is accepted at its first iteration, the `off` arm's is not). Then one rental of at
    most 2 hours: a smoke wave, the owner's threshold setting on 20 to 30 pairs, waves to about 50 pairs.
-2. **Slice 2.** Coverage planner, the second family with its own text-to-image model, per-lesson effects, import of
-   real empty photos (S5), a review page.
+2. **Slice 2.** Coverage planner, the second family with its own text-to-image model, per-lesson effects, sorting of
+   real empty photos for the import (S5; the import itself is built, [imports.md](imports.md)), a review page.
 3. **Slice 3.** Dataset audits (shortcut-cue detector, near-copies), scale-up; then coherence: several scenes per
    room, several rooms per building.
 
 ## Open
-<!-- Lines 314-325 -->
+<!-- Lines 317-334 -->
 
 - Whether FLUX.2 klein 4B makes an image from text alone, and its condition-image size limit: read before the
   rental, then checked by the smoke wave.
+- Imported clean images ([imports.md](imports.md)): whether a render's style and light can be mapped onto the space's
+  axes; a crop or pad step for images whose aspect does not survive the sizing rule; the owner's review of the choices
+  the implementation settled.
 - Real empty photos: sort the Commons candidates (residential, tidy, large enough); two more leads to look at: a
   furniture-synthesis benchmark with real test images (RoomBench++, training data by request) and the gated empty,
   furnished and staged bedroom dataset (access requested).
@@ -323,3 +329,6 @@ The whole flow end to end at small scale first, then depth where it fails.
   and numbered mask regions with a blocking code for changed openings (both implemented), crops, detection and
   segmentation through virtual_unstaging's tools, and a judge bench that measures each aid on stored iterations
   against the owner's marks. Which to build next: open.
+- **Concrete clutter specs** (*proposal*, 2026-10-23), for the owner's ruling that an unlisted object blocks a
+  pair: [concrete_specs.md](concrete_specs.md): one named object per item, a support that exists, storage with its
+  contents, a text check of every prompt before the edit. Extends C5; needs the owner's OK.

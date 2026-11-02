@@ -173,3 +173,26 @@ def test_the_audit_catches_tampering(folder: Path) -> None:
     assert any("differs from stored" in p for p in problems)
     assert any("not the loop subject's spec" in p for p in problems)
     assert any("wire hash" in p for p in problems)
+
+
+def test_a_dataset_can_replace_reasons_toml(folder: Path) -> None:
+    packaged = config.read_data_file(config.load(folder), "reasons.toml")[1]
+    relaxed = packaged.replace('[item_missing]\nstage = "clutter"\nseverity = "blocking"',
+                               '[item_missing]\nstage = "clutter"\nseverity = "minor"', 1)
+    assert relaxed != packaged
+    (folder / "my_reasons.toml").write_text(relaxed)
+    text = (folder / config.CONFIG_NAME).read_text().replace("[files]", '[files]\n"reasons.toml" = "my_reasons.toml"', 1)
+    (folder / config.CONFIG_NAME).write_text(text)
+    label, content = config.read_data_file(config.load(folder), "reasons.toml")
+    assert (label, content) == ("dataset:my_reasons.toml", relaxed)
+
+
+def test_a_replacement_reasons_toml_missing_an_emitted_code_is_refused(folder: Path) -> None:
+    packaged = config.read_data_file(config.load(folder), "reasons.toml")[1]
+    start = packaged.index("[change_share_off]")
+    end = packaged.index("\n[", start + 1) + 1 if "\n[" in packaged[start + 1:] else len(packaged)
+    (folder / "my_reasons.toml").write_text(packaged[:start] + packaged[end:])
+    text = (folder / config.CONFIG_NAME).read_text().replace("[files]", '[files]\n"reasons.toml" = "my_reasons.toml"', 1)
+    (folder / config.CONFIG_NAME).write_text(text)
+    with pytest.raises(config.ConfigError, match="change_share_off"):
+        open_dataset(folder)

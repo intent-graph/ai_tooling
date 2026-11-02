@@ -105,6 +105,28 @@ class AssessmentRow:
 
 
 @dataclass(frozen=True)
+class ImportedRow:
+    scene_id: int
+    import_set_id: int
+    line: int
+    original_sha: str
+    pixel_sha: str
+    image_sha: str
+    source_model_id: int
+    group_name: str | None
+    origin: str | None
+
+
+@dataclass(frozen=True)
+class ImportSetRow:
+    id: int
+    output_side: int
+    size_multiple: int
+    condition_max_pixels: int
+    resampler: str
+
+
+@dataclass(frozen=True)
 class PartRow:
     ordinal: int
     slot: str
@@ -188,6 +210,119 @@ def model_by_id(conn: sqlite3.Connection, model_id: int) -> ModelId:
     return ModelId(str(row[0]), str(row[1]), str(row[2]), str(row[3]))
 
 
+# --- Imported clean images -------------------------------------------------------------------------------------
+
+
+def create_import_set(conn: sqlite3.Connection, manifest_sha: str, now: str, output_side: int, size_multiple: int,
+                      condition_max_pixels: int, resampler: str) -> int:
+    return int(conn.execute(
+        "INSERT INTO import_set (manifest_sha, imported_at, output_side, size_multiple, condition_max_pixels,"
+        " resampler) VALUES (?, ?, ?, ?, ?, ?)",
+        (manifest_sha, now, output_side, size_multiple, condition_max_pixels, resampler)).lastrowid or 0)
+
+
+def import_set(conn: sqlite3.Connection, import_set_id: int) -> ImportSetRow:
+    row = conn.execute("SELECT id, output_side, size_multiple, condition_max_pixels, resampler FROM import_set"
+                       " WHERE id = ?", (import_set_id,)).fetchone()
+    if row is None:
+        raise LookupError(f"no import set {import_set_id}")
+    return ImportSetRow(*row)
+
+
+def import_manifest(conn: sqlite3.Connection, import_set_id: int) -> str:
+    """The manifest text an import set stored."""
+    row = conn.execute("SELECT manifest_sha FROM import_set WHERE id = ?", (import_set_id,)).fetchone()
+    if row is None:
+        raise LookupError(f"no import set {import_set_id}")
+    return file_content(conn, str(row[0]))
+
+
+def add_imported_image(conn: sqlite3.Connection, scene_id: int, import_set_id: int, line: int, original_sha: str,
+                       pixel_sha: str, image_sha: str, source_model_id: int, group_name: str | None,
+                       origin: str | None) -> None:
+    conn.execute("INSERT INTO imported_image (scene_id, import_set_id, line, original_sha, pixel_sha, image_sha,"
+                 " source_model_id, group_name, origin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                 (scene_id, import_set_id, line, original_sha, pixel_sha, image_sha, source_model_id, group_name, origin))
+
+
+_IMPORTED = ("SELECT scene_id, import_set_id, line, original_sha, pixel_sha, image_sha, source_model_id, group_name,"
+             " origin FROM imported_image")
+
+
+def imported_image(conn: sqlite3.Connection, scene_id: int) -> ImportedRow | None:
+    row = conn.execute(f"{_IMPORTED} WHERE scene_id = ?", (scene_id,)).fetchone()
+    return None if row is None else ImportedRow(*row)
+
+
+def imported_images(conn: sqlite3.Connection) -> list[ImportedRow]:
+    return [ImportedRow(*r) for r in conn.execute(f"{_IMPORTED} ORDER BY scene_id")]
+
+
+def imported_hashes(conn: sqlite3.Connection) -> tuple[set[str], set[str], set[str]]:
+    """The hashes already imported: originals' bytes, decoded pixels, resized images. One picture enters once."""
+    rows = conn.execute("SELECT original_sha, pixel_sha, image_sha FROM imported_image").fetchall()
+    return {str(r[0]) for r in rows}, {str(r[1]) for r in rows}, {str(r[2]) for r in rows}
+
+
+def find_model(conn: sqlite3.Connection, name: str, revision: str) -> ModelId | None:
+    row = conn.execute("SELECT name, revision, family, licence FROM model WHERE name = ? AND revision = ?",
+                       (name, revision)).fetchone()
+    return None if row is None else ModelId(str(row[0]), str(row[1]), str(row[2]), str(row[3]))
+
+
+def group_room(conn: sqlite3.Connection, name: str, revision: str, group: str) -> tuple[int, Values] | None:
+    """The room an earlier import gave a group (of the same source): its id and values."""
+    row = conn.execute(
+        "SELECT s.room_id FROM imported_image i JOIN scene s ON s.id = i.scene_id JOIN model m ON m.id = i.source_model_id"
+        " WHERE m.name = ? AND m.revision = ? AND i.group_name = ? ORDER BY i.scene_id LIMIT 1",
+        (name, revision, group)).fetchone()
+    if row is None:
+        return None
+    values = tuple((str(a), str(v)) for a, v in conn.execute(
+        "SELECT axis, value FROM room_value WHERE room_id = ? ORDER BY axis", (row[0],)))
+    return int(row[0]), values
+
+
+def misplaced_imported_iteration_images(conn: sqlite3.Connection) -> list[int]:
+    """Iterations whose `imported` image is not the image recorded for the scene's import."""
+    return [int(r[0]) for r in conn.execute(
+        "SELECT ii.iteration_id FROM iteration_image ii JOIN iteration it ON it.id = ii.iteration_id"
+        " JOIN loop_run l ON l.id = it.loop_run_id JOIN imported_image im ON im.scene_id = l.scene_id"
+        " WHERE ii.role = 'imported' AND ii.image_sha <> im.image_sha ORDER BY ii.iteration_id")]
+
+
+def accepted_clutter_iterations_without_pair(conn: sqlite3.Connection) -> list[int]:
+    """Accepted clutter iterations that the `pair` view does not show: a pair that went missing."""
+    return [int(r[0]) for r in conn.execute(
+        "SELECT it.id FROM iteration it JOIN loop_run l ON l.id = it.loop_run_id"
+        " WHERE l.stage = 'clutter' AND it.verdict = 'accept'"
+        " AND NOT EXISTS (SELECT 1 FROM pair p WHERE p.pair_id = it.id) ORDER BY it.id")]
+
+
+def badly_grouped_rooms(conn: sqlite3.Connection) -> list[int]:
+    """Rooms of imported scenes whose scenes do not share one group and one source (or share a room with no group)."""
+    return [int(r[0]) for r in conn.execute(
+        "SELECT s.room_id FROM imported_image i JOIN scene s ON s.id = i.scene_id GROUP BY s.room_id"
+        " HAVING COUNT(DISTINCT COALESCE(i.group_name, '')) > 1 OR COUNT(DISTINCT i.source_model_id) > 1"
+        "    OR (COUNT(*) > 1 AND SUM(i.group_name IS NULL) > 0) ORDER BY s.room_id")]
+
+
+def imported_owners(conn: sqlite3.Connection) -> set[tuple[str, int]]:
+    """The rooms and scenes of imported scenes, as (kind, id): they hold the values the manifest gave."""
+    return {(str(r[0]), int(r[1])) for r in conn.execute(
+        "SELECT 'scene', s.id FROM imported_image i JOIN scene s ON s.id = i.scene_id"
+        " UNION ALL SELECT 'room', s.room_id FROM imported_image i JOIN scene s ON s.id = i.scene_id")}
+
+
+def misplaced_import_actions(conn: sqlite3.Connection) -> list[int]:
+    """Iterations whose action does not fit their loop: `import` only in the clean loop of an imported scene, and
+    nothing but `import` there."""
+    return [int(r[0]) for r in conn.execute(
+        "SELECT it.id FROM iteration it JOIN loop_run l ON l.id = it.loop_run_id"
+        " WHERE (it.action = 'import') <> (l.stage = 'clean' AND EXISTS"
+        "   (SELECT 1 FROM imported_image im WHERE im.scene_id = l.scene_id)) ORDER BY it.id")]
+
+
 # --- Reasons, space, targets ---------------------------------------------------------------------------------
 
 
@@ -250,15 +385,19 @@ def targets(conn: sqlite3.Connection, target_set_id: int) -> list[tuple[int, int
 # --- Buildings, rooms, scenes, clutter specs -----------------------------------------------------------------
 
 
-def create_scene(conn: sqlite3.Connection, space_version_id: int, room_values: Mapping[str, str],
-                 scene_values: Mapping[str, str], seed: int,
-                 specs: Sequence[tuple[int, int, Mapping[str, str], Sequence[Mapping[str, str]]]]) -> int:
-    """One building, one room, one scene (slice 1), and its clutter specs: (variant, seed, values, items)."""
+def create_room(conn: sqlite3.Connection, space_version_id: int, room_values: Mapping[str, str]) -> int:
+    """A building and its one room, with the room's values; returns the room's id."""
     building = conn.execute("INSERT INTO building (space_version_id) VALUES (?)", (space_version_id,)).lastrowid
-    room = conn.execute("INSERT INTO room (building_id) VALUES (?)", (building,)).lastrowid
+    room = int(conn.execute("INSERT INTO room (building_id) VALUES (?)", (building,)).lastrowid or 0)
     conn.executemany("INSERT INTO room_value (room_id, axis, value) VALUES (?, ?, ?)",
                      [(room, a, v) for a, v in room_values.items()])
-    scene = int(conn.execute("INSERT INTO scene (room_id, seed) VALUES (?, ?)", (room, seed)).lastrowid or 0)
+    return room
+
+
+def create_scene_in_room(conn: sqlite3.Connection, room_id: int, scene_values: Mapping[str, str], seed: int,
+                         specs: Sequence[tuple[int, int, Mapping[str, str], Sequence[Mapping[str, str]]]]) -> int:
+    """A scene of a room and its clutter specs: (variant, seed, values, items)."""
+    scene = int(conn.execute("INSERT INTO scene (room_id, seed) VALUES (?, ?)", (room_id, seed)).lastrowid or 0)
     conn.executemany("INSERT INTO scene_value (scene_id, axis, value) VALUES (?, ?, ?)",
                      [(scene, a, v) for a, v in scene_values.items()])
     for variant, spec_seed, values, items in specs:
@@ -272,6 +411,13 @@ def create_scene(conn: sqlite3.Connection, space_version_id: int, room_values: M
             conn.executemany("INSERT INTO clutter_item_value (clutter_item_id, axis, value) VALUES (?, ?, ?)",
                              [(iid, a, v) for a, v in item.items()])
     return scene
+
+
+def create_scene(conn: sqlite3.Connection, space_version_id: int, room_values: Mapping[str, str],
+                 scene_values: Mapping[str, str], seed: int,
+                 specs: Sequence[tuple[int, int, Mapping[str, str], Sequence[Mapping[str, str]]]]) -> int:
+    """One building, one room, one scene (the planner's rule), and its clutter specs: (variant, seed, values, items)."""
+    return create_scene_in_room(conn, create_room(conn, space_version_id, room_values), scene_values, seed, specs)
 
 
 def scene_count(conn: sqlite3.Connection) -> int:
@@ -920,10 +1066,16 @@ def loops_with_bad_input(conn: sqlite3.Connection) -> list[int]:
 
 
 def misplaced_image_roles(conn: sqlite3.Connection) -> list[tuple[int, str]]:
+    """Images whose role does not fit their loop: `generated` on the clean loop of a scene that was not imported,
+    `imported` on the one of an imported scene, the other roles on clutter loops."""
     return [(int(r[0]), str(r[1])) for r in conn.execute(
         "SELECT ii.iteration_id, ii.role FROM iteration_image ii JOIN iteration it ON it.id = ii.iteration_id"
         " JOIN loop_run l ON l.id = it.loop_run_id"
-        " WHERE (l.stage = 'clean') <> (ii.role = 'generated')")]
+        " WHERE NOT ((l.stage = 'clean' AND ii.role = 'generated'"
+        "             AND NOT EXISTS (SELECT 1 FROM imported_image im WHERE im.scene_id = l.scene_id))"
+        "         OR (l.stage = 'clean' AND ii.role = 'imported'"
+        "             AND EXISTS (SELECT 1 FROM imported_image im WHERE im.scene_id = l.scene_id))"
+        "         OR (l.stage = 'clutter' AND ii.role NOT IN ('generated', 'imported')))")]
 
 
 def loop_of_iteration(conn: sqlite3.Connection, iteration_id: int) -> int:
