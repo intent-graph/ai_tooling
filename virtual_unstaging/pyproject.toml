@@ -12,13 +12,17 @@ dependencies = [
 
 [project.optional-dependencies]
 # GPU side: the tool server, its generator adapters and tools.
+# Upper bounds: the set that loaded every generator on vllm/vllm-openai:v0.28.0 (rentals of 2026-10-24/25). On
+# 2026-11-01 fresh machines loaded none ("Could not import module 'Qwen3ForCausalLM'"), after releases of
+# huggingface-hub 2.4.0, diffusers 0.42.1, transformers 5.21+, torch 2.15. Raise them only after a rental loads.
 serve = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
-    "torch>=2.6",
-    "torchvision",
-    "diffusers>=0.41",
-    "transformers>=4.56",
+    "torch>=2.6,<2.15",
+    "torchvision<0.29.2",
+    "diffusers>=0.41,<0.42.1",
+    "transformers>=4.56,<5.21",
+    "huggingface-hub<2.4",
     "accelerate>=1.0",
     "peft>=0.17",  # diffusers' LoRA loading (recipe key `lora`)
     "opencv-python-headless>=4.9",

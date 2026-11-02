@@ -159,12 +159,14 @@ class DiffusersGenerator:
         self._load_lock = threading.Lock()
         self.load_seconds = 0.0
         self.error = ""
+        self.packages: dict[str, str] = {}
         self.peak_gpu_gb: float | None = None
 
     def profile(self) -> dict[str, Any]:
         profile = {**self.recipe.profile(), "state": self._state}
         if self._state == FAILED and self.error:
             profile["error"] = self.error
+            profile["packages"] = self.packages
         if self.peak_gpu_gb is not None:
             profile["peak_gpu_gb"] = self.peak_gpu_gb
         return profile
@@ -220,7 +222,8 @@ class DiffusersGenerator:
                         pipeline = pipeline.to("cuda")
             except Exception as error:
                 self._state = FAILED
-                self.error = f"{type(error).__name__}: {str(error)[:300]}"
+                self.error = describe_failure(error)
+                self.packages = package_versions()
                 raise ApiError("generator_unavailable", f"cannot load {self.recipe.repository}: {self.error}") from error
             self._pipeline = pipeline
             self._state = READY
@@ -252,6 +255,34 @@ class DiffusersGenerator:
             _release_cached_memory()
             raise ApiError("generator_failed", f"{type(error).__name__}: {str(error)[:300]}") from error
         return GenerationResult(png, image.width, image.height, watch.seconds, self.load_seconds, self.peak_gpu_gb)
+
+
+DIAGNOSED_PACKAGES = ("torch", "torchvision", "diffusers", "transformers", "huggingface-hub", "accelerate", "peft")
+
+
+def describe_failure(error: BaseException, depth: int = 4) -> str:
+    """The error and the causes it wraps, innermost last: a lazy import's message hides the import that failed."""
+    parts: list[str] = []
+    seen: set[int] = set()
+    current: BaseException | None = error
+    while current is not None and id(current) not in seen and len(parts) < depth:
+        seen.add(id(current))
+        parts.append(f"{type(current).__name__}: {str(current)[:300]}")
+        current = current.__cause__ or current.__context__
+    return " <- ".join(parts)
+
+
+def package_versions() -> dict[str, str]:
+    """Installed versions of the packages a load depends on, so a failed load can be matched to a release."""
+    from importlib import metadata
+
+    versions = {}
+    for name in DIAGNOSED_PACKAGES:
+        try:
+            versions[name] = metadata.version(name)
+        except metadata.PackageNotFoundError:
+            versions[name] = "absent"
+    return versions
 
 
 def _release_cached_memory() -> None:

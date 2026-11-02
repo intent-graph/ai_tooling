@@ -1201,6 +1201,22 @@ def test_adapter_failures_carry_stable_codes(monkeypatch: pytest.MonkeyPatch) ->
     with pytest.raises(ApiError) as unavailable:
         broken.generate(the_job)
     assert unavailable.value.code == "generator_unavailable" and broken.state() == "failed"
+    assert set(broken.profile()["packages"]) == {"torch", "torchvision", "diffusers", "transformers", "huggingface-hub",
+                                                 "accelerate", "peft"}
+
+
+def test_a_failed_load_names_the_cause_a_lazy_import_hides() -> None:
+    from virtual_unstaging.serve.generation import describe_failure
+
+    try:
+        try:
+            raise ImportError("cannot import name 'is_offline_mode' from 'huggingface_hub'")
+        except ImportError as inner:
+            raise RuntimeError("Could not import module 'Qwen3ForCausalLM'") from inner
+    except RuntimeError as outer:
+        text = describe_failure(outer)
+    assert text == ("RuntimeError: Could not import module 'Qwen3ForCausalLM' <- "
+                    "ImportError: cannot import name 'is_offline_mode' from 'huggingface_hub'")
 
 
 def test_the_segmentation_glue_against_stand_in_models(monkeypatch: pytest.MonkeyPatch) -> None:
