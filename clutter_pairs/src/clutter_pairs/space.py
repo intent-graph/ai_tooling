@@ -15,7 +15,7 @@ from typing import Any
 
 from virtual_unstaging.serve.images import output_size
 
-from clutter_pairs.domain import OWNER_KINDS, ItemSpec, OwnerKind, Stage, SubjectSpec, ValueText
+from clutter_pairs.domain import OWNER_KINDS, ItemSpec, OwnerKind, Stage, SubjectSpec, ValueText, derive_seed
 
 ROOM_TYPE, DENSITY, CATEGORY, PLACEMENT, CAMERA = "room_type", "density", "category", "placement", "camera"
 ASPECT_RANGE = (0.25, 4.0)  # the tool server's bounds on output_aspect
@@ -192,6 +192,29 @@ def check_sizes(space: Space, side: int, multiple: int, condition_max_pixels: in
     return sizes
 
 
+def imported_size(original: tuple[int, int], side: int, multiple: int, condition_max_pixels: int) -> tuple[int, int]:
+    """The size an imported clean image is resized to (the sizing rule applied to the original), checked like a
+    camera's: edited at the same `side` it comes back at the same size, and the editor sees it unscaled."""
+    size = output_size(original, side, multiple)
+    edited = output_size(size, side, multiple)
+    if edited != size:
+        raise SpaceError(f"an image of {original[0]}x{original[1]} is resized to {size[0]}x{size[1]}, and the editor "
+                         f"would return it at {edited[0]}x{edited[1]}: crop it to an aspect that survives the rule")
+    if size[0] * size[1] > condition_max_pixels:
+        raise SpaceError(f"{size[0]}x{size[1]} exceeds the editor's condition-image limit of {condition_max_pixels} pixels")
+    return size
+
+
+def size_problem(size: tuple[int, int], side: int, multiple: int, condition_max_pixels: int) -> str | None:
+    """Why an image of this size cannot be edited at `side` and come back unchanged in size, or None."""
+    edited = output_size(size, side, multiple)
+    if edited != size:
+        return f"edited at output_side {side} an image of {size[0]}x{size[1]} comes back at {edited[0]}x{edited[1]}"
+    if size[0] * size[1] > condition_max_pixels:
+        return f"{size[0]}x{size[1]} exceeds the editor's condition-image limit of {condition_max_pixels} pixels"
+    return None
+
+
 # --- Sampling ------------------------------------------------------------------------------------------------
 
 
@@ -220,6 +243,24 @@ def sample_items(space: Space, room_type: str, density: str, rng: random.Random)
         placement = rng.choice(sorted(space.value(CATEGORY, category).attrs["placements"]))
         items.append(sample_values(space, "clutter_item", {CATEGORY: category, PLACEMENT: placement}, rng))
     return items
+
+
+def sample_clutter_specs(space: Space, room_type: str, scene_seed: int, variants: int,
+                         cell: Mapping[str, str] | None = None) -> list[tuple[int, int, dict[str, str], list[dict[str, str]]]]:
+    """A scene's K clutter specs as (variant, seed, values, items): one density per variant, the cell's first when it
+    names one, then the space's in order; every draw seeded from the scene's seed and the variant."""
+    cell = cell or {}
+    densities = list(space.axes[DENSITY].values)
+    first = cell.get(DENSITY)
+    order = ([first] if first else []) + [d for d in densities if d != first]
+    specs = []
+    for variant in range(1, variants + 1):
+        density = order[(variant - 1) % len(order)]
+        spec_seed = derive_seed(scene_seed, "clutter", variant)
+        spec_rng = random.Random(spec_seed)
+        values = sample_values(space, "clutter_spec", {**cell, DENSITY: density}, spec_rng)
+        specs.append((variant, spec_seed, values, sample_items(space, room_type, density, spec_rng)))
+    return specs
 
 
 def mask_share_range(space: Space, density: str) -> tuple[float, float]:

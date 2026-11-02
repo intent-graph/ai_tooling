@@ -12,10 +12,10 @@ rejected, what was sent to every model and what each request was built from. Ref
 ## Table of Contents
 
 1. [Principles](#principles) _(Lines 26-42)_
-1. [Entities](#entities) _(Lines 45-76)_
-1. [Schema](#schema) _(Lines 79-117)_
-1. [Views](#views) _(Lines 120-131)_
-1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 134-159)_
+1. [Entities](#entities) _(Lines 45-79)_
+1. [Schema](#schema) _(Lines 82-122)_
+1. [Views](#views) _(Lines 125-136)_
+1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 139-173)_
 
 
 
@@ -41,7 +41,7 @@ rejected, what was sent to every model and what each request was built from. Ref
   media type is in `image`), `exports/<name>/`. Nothing in the package.
 
 ## Entities
-<!-- Lines 45-76 -->
+<!-- Lines 45-79 -->
 
 ```mermaid
 erDiagram
@@ -54,6 +54,9 @@ erDiagram
   BUILDING ||--o{ ROOM : has
   ROOM ||--o{ SCENE : "seen from"
   SCENE ||--o{ CLUTTER_SPEC : "K variants"
+  SCENE ||--o| IMPORTED_IMAGE : "clean image of"
+  IMPORT_SET ||--o{ IMPORTED_IMAGE : lists
+  MODEL ||--o{ IMPORTED_IMAGE : "source of"
   CLUTTER_SPEC ||--o{ CLUTTER_ITEM : lists
   RENTAL ||--o{ RUN : hosts
   RUN ||--o{ WAVE : "in order"
@@ -75,9 +78,9 @@ Left out of the diagram: the value tables, each linking its owner to one axis va
 `measure`, `reason`, `model`, `decision`, and the files, texts and images every table points to.
 
 ## Schema
-<!-- Lines 79-117 -->
+<!-- Lines 82-122 -->
 
-The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 46 tables in dependency order and the views below,
+The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 48 tables in dependency order and the views below,
 loaded in SQLite and in Postgres 18. One line per
 table here; each table's comments in the file carry its rules.
 
@@ -97,9 +100,11 @@ table here; each table's comments in the file carry its rules.
 | | `run` | its configuration, target set, pair target, rental |
 | | `wave` | ordered across runs; the smoke wave flagged |
 | | `loop_run` | stage, subject, the clean image a clutter loop received, the lessons arm, the engine and its stop rule, the stop reason |
-| | `iteration`, `iteration_image` | the engine's action and the seed per iteration; the images it made by role; its verdict (a named denormalization) |
+| | `iteration`, `iteration_image` | the engine's action (`import` for an imported scene's one iteration) and the seed per iteration; the images it made by role (`imported` among them); its verdict (a named denormalization) |
 | | `region_set`, `mask_region` | a clutter iteration's regions: the thresholds and drawing version used, the speck pixels; each numbered region's box and mask pixels ([judge aids](judge_aids.md#a2-and-openings-in-detail)) |
-| calls | `model` | name, revision, family, licence |
+| imports | `import_set` | one `cpairs import`: its manifest, as a `source_file` of kind `import_manifest`, and the sizing parameters it applied |
+| | `imported_image` | per imported scene: its line in the manifest, the original image as received, the hash of its decoded pixels, the image resized to the editor's size, the source as a `model` row, the group (views of one room), the origin ([imports.md](imports.md)); original, pixels and resized image are each unique across the dataset |
+| calls | `model` | name, revision, family, licence (a generator's, the judge's, or an import's source) |
 | | `model_call` | role, model, composer, canonical request (the cache key), answer, output image, reuse, timings, error |
 | | `exchange` | every HTTP exchange of a call as sent and answered: bodies with images by hash, the wire hash |
 | | `composition_part` | the ordered parts of a request, each with its source: file, lesson, assessment, earlier call, image, setting, seed |
@@ -116,21 +121,21 @@ images' hashes; a scene's, a room's and a building's are the hash of their axis 
 or a building, of their children's ids). They survive a rebuild of the store.
 
 ## Views
-<!-- Lines 120-131 -->
+<!-- Lines 125-136 -->
 
 | View | Gives | How |
 |---|---|---|
-| `clean_image` | accepted clean images, per scene (several when models are compared, S3) | the `generated` image of a clean loop's iteration with verdict `accept` |
-| `pair` | one row per accepted pair: id (the accepted clutter iteration), building, room, scene, clutter spec; clean image (the loop's `input_image`), cluttered (`composite`), mask (`change_mask`); the clean generator's family and the editor's | the clutter loop's accepted iteration; the families from the call that made `input_image` and from the edit call |
+| `clean_image` | accepted clean images, per scene (several when models are compared, S3) | the `generated` or `imported` image of a clean loop's iteration with verdict `accept` |
+| `pair` | one row per accepted pair: id (the accepted clutter iteration), building, room, scene, clutter spec; clean image (the loop's `input_image`), cluttered (`composite`), mask (`change_mask`); the clean generator's family and the editor's | the clutter loop's accepted iteration; the families from the call that made `input_image` (or, when it was imported, from `imported_image.source_model_id`) and from the edit call |
 | `coverage` | per target of a target set: pairs wanted, pairs accepted | relational division on (axis, value): pairs whose room, scene and clutter values include every value of the target, whatever the space version |
 | `iteration_curve` | per stage, loops in wave order with their iterations and stop reason | descriptive only |
-| `carry_forward_loop`, `carry_forward` | the compared loops; per stage and arm (`on`, `off`): loops, accepted share, mean iterations to acceptance | finished loops (not stopped by a deadline or an error) in waves from the stage's first active lesson on, the lessons' evidence loops excluded; the decision rule is applied by the report ([loops.md](loops.md#measuring-carry-forward)) |
+| `carry_forward_loop`, `carry_forward` | the compared loops; per stage and arm (`on`, `off`): loops, accepted share, mean iterations to acceptance | finished loops (not stopped by a deadline or an error) in waves from the stage's first active lesson on, the lessons' evidence loops and the clean loops of imported scenes excluded; the decision rule is applied by the report ([loops.md](loops.md#measuring-carry-forward)) |
 | `lesson_use` | per lesson: the loops whose first request cited it | `composition_part` rows of kind `lesson`; descriptive (per-lesson effects: slice 2) |
 | `call_cost` | per run, stage, role and model: calls, reused calls, wall seconds, generator GPU-seconds | `model_call`; the rental's price times the run's wall clock and the cost per accepted pair are computed by the report (date arithmetic differs between SQLite and Postgres) |
 | `pair_value` | every axis value of a pair: its room's, its scene's, its clutter spec's | used by `coverage` |
 
 ## Checks run by `audit`
-<!-- Lines 134-159 -->
+<!-- Lines 139-173 -->
 
 Requests and records:
 - **P9:** every request recomposes: the composer file, the call's model and the parts in order give the request
@@ -143,8 +148,17 @@ Requests and records:
 Denormalizations and rules:
 - `iteration.verdict` and `assessment.verdict` equal the verdict rule applied to the findings and the reasons'
   severities; `stop_reason = 'accepted'` exactly when the loop has an iteration with verdict `accept`.
-- A clutter loop's `input_image` is the `generated` image of an accepted iteration of a clean loop of the same scene.
-- An image role fits its loop's stage (`generated` on clean loops only; the other roles on clutter loops only).
+- A clutter loop's `input_image` is the `generated` or `imported` image of an accepted iteration of a clean loop of the same
+  scene.
+- An image role fits its loop's stage (`generated` on the clean loop of a generated scene, `imported` on the one of an
+  imported scene; the other roles on clutter loops only); the action `import` occurs in the clean loop of an imported
+  scene and nowhere else.
+- **Imports:** every `imported_image` has its line in the stored manifest, and that line, read again, gives the scene's
+  values, the source model, the group and the origin; its original and resized images are in the image store; the hash
+  of its original's decoded pixels is the recorded one; its clean image equals its original resized again with the
+  parameters of its import set (the sizing rule, which also passes the editor-returns-the-same-size and
+  condition-image-limit tests of a camera's size, and the resampler); the image an imported iteration judged is the
+  recorded one; the scenes of one room share one group and one source; every accepted clutter iteration is a `pair` row.
 - Every clutter iteration judged by the pair judge has a region set and a `regions` image; its regions recompute
   from its stored change mask with the region set's thresholds, and the image redraws pixel for pixel from its
   composite.
@@ -154,6 +168,7 @@ Denormalizations and rules:
 
 Space and exports:
 - Every owner holds exactly one value for every axis that applies to its kind, and each value is declared by its
-  building's space version (`space_value`).
+  building's space version (`space_value`); the room and the scene of an imported image are the exception: the room
+  type is required, the other axes only where the manifest gave a value.
 - Every exported pair is an accepted clutter iteration, and its building has a split row in that export.
 - **P1:** for every pair, clean and cluttered images are equal wherever the mask's alpha is 0.

@@ -36,12 +36,12 @@ def test_shift_and_global_repaint_are_caught_before_any_judge() -> None:
     assert "global_repaint" in [f.code for f in pairs.prepare(clean, repainted, (0.0, 1.0), Thresholds()).result.findings]
 
 
-def test_mask_share_outside_the_density_range_is_off_spec() -> None:
+def test_mask_share_outside_the_density_range_is_change_share_off() -> None:
     clean = _room()
     edit = clean.copy()
     edit[40:50, 30:40] = 0.0
     result = pairs.prepare(clean, edit, (0.3, 0.6), Thresholds()).result
-    assert [f.code for f in result.findings] == ["clutter_off_spec"]
+    assert [f.code for f in result.findings] == ["change_share_off"]
 
 
 def _two_patches_and_a_speck() -> np.ndarray:

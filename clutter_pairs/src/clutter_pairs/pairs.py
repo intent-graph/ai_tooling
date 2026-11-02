@@ -92,7 +92,7 @@ def prepare(clean: FloatImage, edit: FloatImage, share_range: tuple[float, float
     if global_delta > t.max_global_delta_e:
         findings.append(Finding("global_repaint", None, None, f"median colour change {global_delta:.1f} on the far field"))
     if not findings and not share_range[0] <= share <= share_range[1]:
-        findings.append(Finding("clutter_off_spec", None, None,
+        findings.append(Finding("change_share_off", None, None,
                                 f"the change covers {share:.1%} of the image, outside {share_range[0]:.0%} to {share_range[1]:.0%}"))
     return Prepared(corrected, mask, feather(mask, t.feather_px), PixelResult(tuple(measures), tuple(findings)))
 

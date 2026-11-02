@@ -7,22 +7,24 @@ Generate pairs of images of the same view, clean and cluttered, as ground-truth 
 > lessons carried forward and a comparison arm, recording of every exchange, audit, reports, export, command line.
 > Run twice on a rented GPU (2026-10-22): the first run's judging held the yield to 3 pairs; with the judge aids
 > since ([design/judge_aids.md](design/judge_aids.md): knowledge as text, numbered regions, a checklist of openings),
-> the second gave 32 pairs in two hours. The main blocker now: the editor adds objects nobody listed. Read [architecture.md](architecture.md) (the contract: only pairs are
+> the second gave 32 pairs in two hours. The main blocker now: the editor adds objects nobody listed. Clean images made
+> elsewhere (renders of a procedural generator, photographs) enter through `cpairs import`
+> ([design/imports.md](design/imports.md)): implemented 2026-10-24, awaiting the owner's review. Read [architecture.md](architecture.md) (the contract: only pairs are
 > required; two routes, generation preferred; room ontology, clutter taxonomy, pipeline, quality checks, risks, prior
 > work), then [design/README.md](design/README.md) (data flow, stored data, the choices; slice 1's detailed design).
 
 ## Table of Contents
 
-1. [Install](#install) _(Lines 26-34)_
-1. [Use](#use) _(Lines 37-55)_
-1. [Develop](#develop) _(Lines 58-71)_
-1. [Files](#files) _(Lines 74-78)_
-1. [Sub-folders](#sub-folders) _(Lines 81-85)_
+1. [Install](#install) _(Lines 28-36)_
+1. [Use](#use) _(Lines 39-64)_
+1. [Develop](#develop) _(Lines 67-80)_
+1. [Files](#files) _(Lines 83-87)_
+1. [Sub-folders](#sub-folders) _(Lines 90-95)_
 
 ---
 
 ## Install
-<!-- Lines 26-34 -->
+<!-- Lines 28-36 -->
 
 From this folder, with [uv](https://docs.astral.sh/uv/), beside a checkout of `virtual_unstaging` (imported as an
 editable path dependency):
@@ -33,12 +35,13 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 ```
 
 ## Use
-<!-- Lines 37-55 -->
+<!-- Lines 39-64 -->
 
 A dataset is a folder: its configuration, its store, its images by hash, its exports.
 
 ```bash
 cpairs init my_pairs                          # writes clutter_pairs.toml: models, run settings, thresholds, GPU
+cpairs --dataset my_pairs import renders/     # clean images made elsewhere (renders, photos) and their manifest.jsonl
 cpairs --dataset my_pairs plan                # scenes and clutter specs into the target cells
 cpairs --dataset my_pairs run --fake --smoke  # a dry run on stand-in models, no GPU
 cpairs --dataset my_pairs gpu up --limit 2h   # rents the GPU; shows the price and the deadline
@@ -53,8 +56,14 @@ cpairs --dataset my_pairs gpu down
 Exit codes: 0 done, 1 failure (an audit problem included), 2 usage, 3 paused on an endpoint error (`run` again
 resumes), 4 stopped at the rental's deadline. The command name `cpairs` is provisional.
 
+`import <folder>` reads `<folder>/manifest.jsonl`, one line per image (`file`, `room_type`, `source` with `name`,
+`revision`, `family`, `licence`; optional `values`, `origin` and `group`, the views of one room), and makes a scene with
+K clutter specs per image (one building per group, else per image); at
+the next `run`, each image is judged once as a clean image. The store's schema version is 3: a store of an earlier
+version is refused (no migration), so a dataset folder made by an older checkout is rebuilt or kept for that checkout.
+
 ## Develop
-<!-- Lines 58-71 -->
+<!-- Lines 67-80 -->
 
 ```bash
 .venv/bin/pytest -q                        # offline: the stand-in model server runs on a local port
@@ -70,16 +79,17 @@ schemas, default space, reason codes and the carry-forward decision rule are the
 `clutter_pairs.toml`).
 
 ## Files
-<!-- Lines 74-78 -->
+<!-- Lines 83-87 -->
 
 - [`architecture.md`](architecture.md) — the architecture and its open questions.
 - [`CLAUDE.md`](CLAUDE.md) — agent entry point for this folder.
 - [`pyproject.toml`](pyproject.toml) — package, gates, and the declared layering.
 
 ## Sub-folders
-<!-- Lines 81-85 -->
+<!-- Lines 90-95 -->
 
 - [`design/`](design/README.md) — the agreed high-level design and slice 1's detailed design: data model, loops
   (composition and recording, pixel tests, composite, lessons and their measurement), components (use of
-  virtual_unstaging, layering, command line); aids for the judges (exploration).
+  virtual_unstaging, layering, command line); aids for the judges (exploration); concrete clutter specs (proposal);
+  imported clean images (implemented, awaiting the owner's review).
 - [`src/clutter_pairs/`](src/clutter_pairs/) — the package; [`tests/`](tests/) — one test per property, on fakes.

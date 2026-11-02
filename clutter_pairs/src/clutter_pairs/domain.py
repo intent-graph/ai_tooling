@@ -9,13 +9,13 @@ from typing import Literal, get_args
 
 Stage = Literal["clean", "clutter"]
 Role = Literal["write", "generate", "edit", "judge", "revise", "distill"]
-ActionKind = Literal["write", "revise", "reseed"]
+ActionKind = Literal["write", "revise", "reseed", "import"]
 Severity = Literal["blocking", "minor"]
 StopReason = Literal["accepted", "no_progress", "max_iterations", "deadline", "error"]
 SourceKind = Literal["template", "instruction", "schema", "spec", "lesson", "assessment", "call_output", "image",
                      "setting", "seed"]
 Origin = Literal["config", "spec", "engine", "subject"]
-ImageRole = Literal["generated", "raw_edit", "corrected_edit", "change_mask", "composite"]
+ImageRole = Literal["generated", "imported", "raw_edit", "corrected_edit", "change_mask", "composite", "regions"]
 AssessmentKind = Literal["pixel", "judge", "detector", "human"]
 Arm = Literal["on", "off"]
 OwnerKind = Literal["room", "scene", "clutter_spec", "clutter_item"]
@@ -31,7 +31,8 @@ SEED_MODULUS = 2**31  # seeds stay below it: every model server takes them
 
 @dataclass(frozen=True)
 class Action:
-    """What the engine asks next: write the first prompt, revise it from the last assessment, or reseed."""
+    """What the engine asks next: write the first prompt, revise it from the last assessment, reseed, or (an imported
+    scene's clean loop) judge the imported image."""
 
     kind: ActionKind
 

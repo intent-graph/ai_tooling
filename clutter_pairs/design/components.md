@@ -9,9 +9,9 @@ what a dataset folder holds, and the command line. Refines [C7](README.md#c7-mod
 ## Table of Contents
 
 1. [Use of virtual_unstaging](#use-of-virtual_unstaging) _(Lines 21-43)_
-1. [Components and layering](#components-and-layering) _(Lines 46-66)_
-1. [The dataset folder](#the-dataset-folder) _(Lines 69-79)_
-1. [Command line](#command-line) _(Lines 82-98)_
+1. [Components and layering](#components-and-layering) _(Lines 46-67)_
+1. [The dataset folder](#the-dataset-folder) _(Lines 70-80)_
+1. [Command line](#command-line) _(Lines 83-100)_
 
 
 ---
@@ -42,7 +42,7 @@ repository's instructions say that a change to virtual_unstaging also runs clutt
 missing from that list is a defect of this page.
 
 ## Components and layering
-<!-- Lines 46-66 -->
+<!-- Lines 46-67 -->
 
 One package, `clutter_pairs`, layered like virtual_unstaging and checked the same way (`lint-imports`, contract in
 `pyproject.toml`): each layer imports only from the layers below it; modules of one layer do not import each other.
@@ -50,9 +50,10 @@ One package, `clutter_pairs`, layered like virtual_unstaging and checked the sam
 | Layer | Modules |
 |---|---|
 | presentation | `cli` |
-| application | `run` (waves, the loops, calls, the driver around `engines.replay`, lesson activation), `plan` (sampling into target cells), `export`, `audit`, `report`, `gpu` (provisioning glue) |
+| application | `run` (waves, the loops, calls, the driver around `engines.replay`, lesson activation), `plan` (sampling into target cells), `importer` (a folder and its manifest into scenes, [imports.md](imports.md)), `export`, `audit`, `report`, `gpu` (provisioning glue) |
 | dataset | `dataset`: opens a dataset (configuration, store, the data files in force recorded by hash, space, targets, reasons, the decision rule), shared by every command |
 | adapters | `models` (generator and chat callers), `recorder` (the observer: exchanges, image bytes, wire hashes), `store` (schema, queries, views: the only module that holds SQL), `config`, `fakes` |
+| import steps | `manifest` (an import set's manifest line parsed against the space), `sizing` (opaque RGB, the pixels' hash, the resize to the editor's size): a layer of its own, between the adapters and the pure core |
 | pure core | `compose` (composers, renderers, answer parsing), `pairs` (correction, mask, composite, explained change), `lessons` (arms, selection by scope, the distiller's answer), `engine` (the reviser's policy and stop rule), `space` (ontology, taxonomy, targets, sampling, the image-size check) |
 | domain | the types |
 
@@ -65,7 +66,7 @@ Data files ship in the package (`data/`): `instructions/`, `composers/`, `schema
 `decision_rules/`, and `config_template.toml` (what `init` writes).
 
 ## The dataset folder
-<!-- Lines 69-79 -->
+<!-- Lines 70-80 -->
 
 Outside the package, one per dataset:
 
@@ -78,7 +79,7 @@ Outside the package, one per dataset:
   rental's session file (`gpu_session.toml`) while a GPU is up.
 
 ## Command line
-<!-- Lines 82-98 -->
+<!-- Lines 83-100 -->
 
 Name `cpairs`, provisional. Per the repository's CLI guidelines: data on stdout, messages on stderr, `--json` on every
 report, no interactivity required (`gpu up --yes`), distinct exit codes: 0 done, 1 failure (an audit problem
@@ -89,6 +90,7 @@ included), 2 usage, 3 paused on an endpoint error (`run` again resumes), 4 stopp
 |---|---|
 | `init <folder>` | writes `clutter_pairs.toml` from the template and opens the store |
 | `plan` | samples scenes and clutter specs into the target cells with the largest shortfall |
+| `import <folder>` | imports the images of `<folder>/manifest.jsonl` as scenes with their clean image and K clutter specs ([imports.md](imports.md)); an image already imported is skipped |
 | `gpu up --limit <h>` / `gpu judge` / `gpu down` | rents and releases the GPU through virtual_unstaging's provisioning; up records the rental with its price and deadline; judge serves the judge `[judge]` names on the live machine |
 | `run [--smoke] [--fake]` | on a rental's first run, the smoke wave only; then waves of loops until the pair target or the deadline; `--fake` runs on the stand-in models |
 | `report` | coverage, iteration curve, carry-forward under its decision rule, cost per accepted pair |

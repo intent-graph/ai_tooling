@@ -36,7 +36,7 @@ from clutter_pairs.compose import (
     render_spec,
 )
 from clutter_pairs.config import ConfigError
-from clutter_pairs.dataset import Dataset
+from clutter_pairs.dataset import Dataset, check_imported_sizes
 from clutter_pairs.domain import (
     Action,
     Halt,
@@ -51,11 +51,11 @@ from clutter_pairs.domain import (
     SubjectSpec,
     derive_seed,
 )
-from clutter_pairs.engine import LoopProblem, Reviser, engine_label, score_of
+from clutter_pairs.engine import Importer, LoopProblem, Reviser, engine_label, import_engine_label, score_of
 from clutter_pairs.models import Caller, chat_caller, generator_caller
 from clutter_pairs.pairs import Thresholds
 from clutter_pairs.recorder import Recorder
-from clutter_pairs.space import DENSITY, Space, camera_aspect, mask_share_range, parse_space, subject_spec
+from clutter_pairs.space import CAMERA, DENSITY, Space, camera_aspect, mask_share_range, parse_space, subject_spec
 from clutter_pairs.store import repo
 from clutter_pairs.store.db import transaction, utc_now
 
@@ -106,7 +106,7 @@ class Subject:
     spec: SubjectSpec
     item_ids: tuple[int, ...]
     density: str | None
-    aspect: float
+    aspect: float | None  # the camera's; none for an imported scene, whose values need not name a camera
 
 
 def connect_models(ds: Dataset, retries: int = 3) -> Models:
@@ -125,6 +125,7 @@ def connect_models(ds: Dataset, retries: int = 3) -> Models:
 
 def execute(ds: Dataset, models: Models, thresholds: Thresholds, options: RunOptions) -> RunSummary:
     conn = ds.conn
+    check_imported_sizes(ds, repo.wave_scenes(conn, 1_000_000))
     with transaction(conn):
         run_id = repo.create_run(conn, ds.config_sha, ds.target_set_id, ds.cfg.run.pair_target, options.rental_id,
                                  utc_now())
@@ -230,13 +231,16 @@ def subject_of(conn: sqlite3.Connection, ds: Dataset, stage: str, subject_id: in
         scene = repo.scene(conn, subject_id)
         space = space_of(conn, ds, scene.space_version_id)
         spec = subject_spec(space, "clean", scene.values)
-        return Subject("clean", subject_id, scene.seed, spec, (), None, camera_aspect(space, dict(scene.values)["camera"]))
+        camera = dict(scene.values).get(CAMERA)
+        return Subject("clean", subject_id, scene.seed, spec, (), None,
+                       None if camera is None else camera_aspect(space, camera))
     clutter = repo.clutter_spec(conn, subject_id)
     scene = repo.scene(conn, clutter.scene_id)
     space = space_of(conn, ds, scene.space_version_id)
     spec = subject_spec(space, "clutter", scene.values + clutter.values, clutter.items)
+    camera = dict(scene.values).get(CAMERA)
     return Subject("clutter", subject_id, clutter.seed, spec, clutter.item_ids, dict(clutter.values)[DENSITY],
-                   camera_aspect(space, dict(scene.values)["camera"]))
+                   None if camera is None else camera_aspect(space, camera))
 
 
 def space_of(conn: sqlite3.Connection, ds: Dataset, version: int) -> Space:
@@ -288,8 +292,12 @@ class SceneWork:
         conn = self.conn
         subject = subject_of(conn, self.ds, stage, subject_id)
         loop = repo.find_loop(conn, stage, subject_id)
+        imported = stage == "clean" and repo.imported_image(conn, subject_id) is not None
         with transaction(conn):
-            if loop is None:
+            if loop is None and imported:  # no prompt for a lesson to change: the `off` arm, one iteration
+                loop_id = repo.create_loop(conn, self.wave_id, stage, subject_id, input_image, "off",
+                                           import_engine_label(), 1)
+            elif loop is None:
                 arm = lessons.draw_arm(subject.seed, float(self.ds.rule["off_share"]))
                 loop_id = repo.create_loop(conn, self.wave_id, stage, subject_id, input_image, arm, engine_label(),
                                            self.ds.cfg.run.max_iterations)
@@ -297,7 +305,7 @@ class SceneWork:
                 loop_id = loop.id
                 repo.set_stop(conn, loop_id, None)
         loop_row = repo.loop(conn, loop_id)
-        engine = Reviser()
+        engine: Reviser | Importer = Importer() if imported else Reviser()
         engine.start(LoopProblem(loop_row.max_iterations))
         stored = repo.iterations(conn, loop_id)
         done = [it for it in stored if it.verdict is not None]
@@ -346,6 +354,8 @@ class SceneWork:
 
     def run_iteration(self, loop: repo.LoopRow, subject: Subject, iteration: repo.IterationRow,
                       done: Sequence[repo.IterationRow]) -> Outcome | None:
+        if iteration.action == "import":
+            return self.import_iteration(loop, subject, iteration)
         prompt_call = self.prompt(loop, subject, iteration, done)
         if prompt_call is None:
             return None
@@ -385,6 +395,7 @@ class SceneWork:
 
     def clean_iteration(self, loop: repo.LoopRow, subject: Subject, iteration: repo.IterationRow,
                         prompt_call: tuple[int, str]) -> Outcome | None:
+        assert subject.aspect is not None  # a generated scene's camera gives it
         parts = [self._call_output("prompt", prompt_call[0]),
                  self._setting("output_side", self.ds.cfg.run.output_side, "config"),
                  self._setting("output_aspect", subject.aspect, "spec"),
@@ -393,11 +404,23 @@ class SceneWork:
         assert generated.output_image is not None
         with transaction(self.conn):
             repo.add_iteration_image(self.conn, iteration.id, "generated", generated.output_image)
+        return self._judge_clean(loop, subject, iteration, generated.output_image)
+
+    def import_iteration(self, loop: repo.LoopRow, subject: Subject, iteration: repo.IterationRow) -> Outcome | None:
+        """The one iteration of an imported scene's clean loop: its imported image, judged, nothing generated."""
+        imported = repo.imported_image(self.conn, subject.id)
+        assert imported is not None
+        with transaction(self.conn):
+            repo.add_iteration_image(self.conn, iteration.id, "imported", imported.image_sha)
+        return self._judge_clean(loop, subject, iteration, imported.image_sha)
+
+    def _judge_clean(self, loop: repo.LoopRow, subject: Subject, iteration: repo.IterationRow,
+                     image_sha: str) -> Outcome | None:
         parts = [self._file("instruction", "instruction", "instructions/clean_judge.md"),
                  self._file("knowledge", "instruction", KNOWLEDGE),
                  self._file("schema", "schema", "schemas/clean_judgment.json"),
                  self._spec(subject, "clean_judge"),
-                 Part("image", "image", None, generated.output_image)]
+                 Part("image", "image", None, image_sha)]
         parts += self._chat_settings(self.ds.cfg.judge.judge_temperature, subject, "judge", iteration.n)
         judged = self.call(loop, iteration.id, "judge", "clean_judge", self.models.chat, parts)
         judgment = self._parse(judged, "clean", 0)

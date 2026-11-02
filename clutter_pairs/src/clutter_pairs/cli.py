@@ -13,7 +13,7 @@ from typing import Any
 
 from virtual_unstaging.provision.errors import ProvisionError
 
-from clutter_pairs import __version__, audit, config, export, gpu, plan, report, run
+from clutter_pairs import __version__, audit, config, export, gpu, importer, plan, report, run
 from clutter_pairs.dataset import Dataset, open_dataset
 from clutter_pairs.fakes import FakeModelServer
 from clutter_pairs.store import repo
@@ -51,6 +51,11 @@ def _parser() -> argparse.ArgumentParser:
     p = sub.add_parser("plan", help="sample scenes and clutter specs into the target cells with the largest shortfall")
     p.add_argument("--json", action="store_true")
     p.set_defaults(handler=cmd_plan)
+
+    p = sub.add_parser("import", help="import a folder of clean images (renders or photographs) with its manifest.jsonl")
+    p.add_argument("folder", type=Path)
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(handler=cmd_import)
 
     p = sub.add_parser("gpu", help="rent or release the GPU (virtual_unstaging's provisioning, with a deadline)")
     gsub = p.add_subparsers(required=True, metavar="action")
@@ -128,6 +133,19 @@ def cmd_plan(args: argparse.Namespace) -> int:
         added = plan.plan(ds.conn, ds)
     _emit({"scenes_added": added, "scenes": repo.scene_count(ds.conn)}, args.json,
           f"{added} scenes added, {repo.scene_count(ds.conn)} in all")
+    return EXIT_OK
+
+
+def cmd_import(args: argparse.Namespace) -> int:
+    ds = open_dataset(args.dataset)
+    summary = importer.import_folder(ds, args.folder)
+    skipped = f", {len(summary.skipped)} skipped (already imported)" if summary.skipped else ""
+    _emit({"import_set": summary.import_set_id, "scenes_imported": summary.scenes, "buildings": summary.buildings,
+           "clutter_specs": summary.specs, "skipped": list(summary.skipped), "scenes": repo.scene_count(ds.conn)},
+          args.json,
+          f"{summary.scenes} scenes in {summary.buildings} buildings imported with {summary.specs} clutter specs "
+          f"planned{skipped}; "
+          f"{repo.scene_count(ds.conn)} scenes in all")
     return EXIT_OK
 
 

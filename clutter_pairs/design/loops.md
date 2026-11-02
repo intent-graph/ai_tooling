@@ -13,12 +13,12 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 1. [Vocabulary](#vocabulary) _(Lines 28-39)_
 1. [Files in the package](#files-in-the-package) _(Lines 42-55)_
 1. [Composition and recording](#composition-and-recording) _(Lines 58-90)_
-1. [The clean loop](#the-clean-loop) _(Lines 93-125)_
-1. [The clutter loop](#the-clutter-loop) _(Lines 128-166)_
-1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 169-188)_
-1. [Lessons](#lessons) _(Lines 191-207)_
-1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 210-223)_
-1. [The run](#the-run) _(Lines 226-239)_
+1. [The clean loop](#the-clean-loop) _(Lines 93-132)_
+1. [The clutter loop](#the-clutter-loop) _(Lines 135-173)_
+1. [The verdict and the stop rule](#the-verdict-and-the-stop-rule) _(Lines 176-195)_
+1. [Lessons](#lessons) _(Lines 198-214)_
+1. [Measuring carry-forward](#measuring-carry-forward) _(Lines 217-231)_
+1. [The run](#the-run) _(Lines 234-247)_
 
 
 ---
@@ -29,7 +29,7 @@ and [Auditability](README.md#auditability); tables are in [data_model.md](data_m
 | Term | Meaning |
 |---|---|
 | subject | what a loop works on: a scene (clean loop) or a clutter spec on an accepted clean image (clutter loop) |
-| role | what a model call does: write, generate, edit, judge, revise, distill |
+| role | what a model call does: write, generate, edit, judge, revise, distill (an imported scene's clean loop has the judge call only) |
 | composer | a versioned file that says, for one role, which parts go into the request, in which order, and which spec renderer (with its version) turns a subject's values into text |
 | part | one input of a request: a template text, an instruction file, an answer schema, the subject's spec, a lesson, an earlier assessment, an earlier call's output, an image, a setting, a seed |
 | canonical request | the request in a stable form, images by hash: what the cache is keyed on |
@@ -89,7 +89,7 @@ flowchart LR
   answer.
 
 ## The clean loop
-<!-- Lines 93-125 -->
+<!-- Lines 93-132 -->
 
 ```mermaid
 sequenceDiagram
@@ -123,8 +123,15 @@ sequenceDiagram
   condition-image limit, so the editor sees the clean image unscaled (the limit is read from the model before the
   rental).
 
+**An imported scene's clean loop** ([imports.md](imports.md)) has no writer, reviser or generator: its one iteration
+(action `import`, image role `imported`) judges the image the scene was imported with, by the clean judge above (same
+composer, same spec rendering, with the values the scene has: the room type at least). Accepted, the loop stops
+`accepted` and its image feeds the clutter loops; rejected, it stops `max_iterations`, the budget being the one
+iteration, and the scene gets no clutter loop. Engine `import@1+one_iteration@1`, arm `off`, no distill; it replays like
+any loop (the cache and `engines.replay`).
+
 ## The clutter loop
-<!-- Lines 128-166 -->
+<!-- Lines 135-173 -->
 
 Same shape. The subject is a clutter spec; its input image C is one accepted clean image of the scene, recorded on
 the loop (`input_image`).
@@ -141,7 +148,8 @@ the loop (`input_image`).
 4. **Change mask:** a per-pixel colour difference between C and the corrected E (CIE ΔE after a small blur),
    thresholded, cleaned (opening, closing), dilated, feathered into an alpha in [0, 1]; it includes shadows and
    reflections because it is measured, not drawn. Its share of the image must lie in the range the density implies,
-   otherwise `clutter_off_spec`.
+   otherwise `change_share_off` (its own code, so a dataset can relax the judge's `clutter_off_spec` and keep this
+   test: a mask far above the range is often a rebuilt room).
 5. **Composite:** K = C where the alpha is 0, the corrected E where it is 1, blended between. K is the cluttered image;
    C stays the clean one (P1: equal wherever the alpha is 0).
 6. **Regions:** the mask's pieces grouped into numbered regions, drawn on K (the `regions` image; aid A2,
@@ -165,7 +173,7 @@ dataset audit of slice 3. Slice 2's second family generates its own clean images
 which keeps one VAE per pair.
 
 ## The verdict and the stop rule
-<!-- Lines 169-188 -->
+<!-- Lines 176-195 -->
 
 - **Verdict:** the judge answers on its schema: findings (a reason code, its own severity, an optional region in
   thousandths of the width and height, stored in [0, 1], a comment), guidance (ranked suggestions), and, for the pair
@@ -187,7 +195,7 @@ which keeps one VAE per pair.
   rental's deadline (P4), whichever comes first; a call the deadline would cut is not started.
 
 ## Lessons
-<!-- Lines 191-207 -->
+<!-- Lines 198-214 -->
 
 - **Distill** after every loop of two or more iterations: the distiller gets its instruction, the loop's history
   (prompts, findings, guidance, final verdict), the spec, and the active lessons in scope; it answers on the lessons
@@ -206,7 +214,7 @@ which keeps one VAE per pair.
   prints its text for the owner to add to the instruction file in force, a new file version in git.
 
 ## Measuring carry-forward
-<!-- Lines 210-223 -->
+<!-- Lines 217-231 -->
 
 The owner's hypothesis: lessons make later images need fewer iterations. A falling curve alone cannot show it (later
 loops differ in order, cells and other lessons), so slice 1 compares arms.
@@ -214,7 +222,8 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
 - **Arms:** each subject is drawn `off` with probability 1/3 (`off_share` in the decision rule's file), `on`
   otherwise, by a draw seeded from the subject's seed, recorded on the loop.
 - **Compared loops:** those in waves after the stage's first lesson became active, the lessons' evidence loops
-  excluded (they were selected for being hard).
+  excluded (they were selected for being hard), and the clean loops of imported scenes (no prompt for a lesson to
+  change).
 - **Decision rule** (`decision_rules/carry_forward.md`, written before the rental, as proposed; its parameters in a
   TOML block the report reads): per stage, carry-forward helps if the `on` arm's mean iterations to acceptance is
   lower than the `off` arm's by at least 0.5, with a one-sided permutation test at p < 0.1, and its acceptance share
@@ -222,7 +231,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   50 clutter loops: the test can show a large effect or none; per-lesson effects wait for slice 2.
 
 ## The run
-<!-- Lines 226-239 -->
+<!-- Lines 234-247 -->
 
 - **Smoke wave first:** each rental starts with one wave of two scenes through both loops (`wave.smoke`), checked
   before the other waves: text-to-image on the chosen model, sizes, recording, the composite. A rental's first `run`
@@ -231,7 +240,7 @@ loops differ in order, cells and other lessons), so slice 1 compares arms.
   clutter loop starts once the target is reached. A loop the deadline stops resumes on the next rental; a loop an
   endpoint failure interrupts stays unfinished and resumes on the next `run`.
 - **Waves:** a few scenes run in parallel (`wave_width`), each its clean loop then its clutter loops, so the GPU
-  alternates generation and judgment; one generator (or editor) and one judge are loaded; the writer, the reviser
+  alternates generation and judgment (by rank, then scene id: imported scenes come first only when they were imported before the planner made the others); one generator (or editor) and one judge are loaded; the writer, the reviser
   and the distiller run on the judge's model. Before each wave the planner tops up the scenes whose loops failed.
 - **Resume:** the loop's policy is an engine behind virtual_unstaging's generic ask / tell contract
   (`engines.SearchEngine`); its candidate is the next action (write, revise from an assessment, reseed). A resumed

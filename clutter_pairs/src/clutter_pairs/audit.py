@@ -3,7 +3,8 @@
 Requests are recomposed from their recorded parts (P9), bodies rebuilt from their stored form (P8), images checked
 against their hashes, the denormalized verdicts recomputed, the values checked against their space versions, each
 iteration's numbered regions and their image recomputed from its mask, and every pair's clean and cluttered images
-compared outside the mask (P1).
+compared outside the mask (P1). An imported scene's import record is checked too: its line in the stored manifest,
+its two images, the sizing rule.
 """
 
 from __future__ import annotations
@@ -33,8 +34,10 @@ from clutter_pairs.compose import (
 )
 from clutter_pairs.dataset import Dataset
 from clutter_pairs.domain import Part, SourceRef
+from clutter_pairs.manifest import ManifestError, parse_entry
 from clutter_pairs.recorder import hashed_images, rebuild_text
-from clutter_pairs.space import Space, parse_space, subject_spec
+from clutter_pairs.sizing import opaque_rgb, pixel_sha, resized
+from clutter_pairs.space import ROOM_TYPE, Space, SpaceError, imported_size, parse_space, subject_spec
 from clutter_pairs.store import repo
 
 
@@ -73,7 +76,8 @@ def audit(ds: Dataset) -> AuditResult:
     conn = ds.conn
     known = _Known(conn, images=set(repo.all_image_shas(conn)),
                    numbers={it.id: it.n for it in repo.all_iterations(conn)})
-    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _regions, _judgments, _pairs):
+    for check in (_requests, _exchanges, _images, _verdicts, _structure, _values, _imports, _regions, _judgments,
+                  _pairs):
         check(conn, ds, result, known)
     return result
 
@@ -191,13 +195,18 @@ def _structure(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known
         result.problems.append(f"loop {loop_id}: its input image is not an accepted clean image of its scene")
     for iteration_id, role in repo.misplaced_image_roles(conn):
         result.problems.append(f"iteration {iteration_id}: image role {role} does not fit its loop's stage")
+    for iteration_id in repo.misplaced_import_actions(conn):
+        result.problems.append(f"iteration {iteration_id}: the action `import` belongs to the clean loop of an "
+                               "imported scene, and to nothing else")
     result.problems.extend(repo.export_problems(conn))
 
 
 def _values(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
-    """Every owner holds one value for every axis of its kind, declared by its building's space version."""
+    """Every owner holds one value for every axis of its kind, declared by its building's space version; the room and
+    scene of an imported image hold the values its manifest gave, the room type at least (design/imports.md, I2)."""
     axes = repo.axes_by_kind(conn)
     declared = repo.space_values(conn)
+    imported = repo.imported_owners(conn)
     held: dict[tuple[str, int], set[str]] = {}
     for kind, owner, version, axis, value in repo.owner_values(conn):
         held.setdefault((kind, owner), set()).add(axis)
@@ -206,10 +215,68 @@ def _values(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _
     for kind, owner in repo.owners(conn):
         result.count("owners checked")
         version_axes = set(known.space(repo.owner_space_version(conn, kind, owner)).axes_for(kind))  # type: ignore[arg-type]
-        missing = version_axes - held.get((kind, owner), set())
+        required = version_axes & {ROOM_TYPE} if (kind, owner) in imported else version_axes
+        missing = required - held.get((kind, owner), set())
         extra = held.get((kind, owner), set()) - axes.get(kind, set())
         if missing or extra:
             result.problems.append(f"{kind} {owner}: missing axes {sorted(missing)}, foreign axes {sorted(extra)}")
+
+
+def _imports(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
+    """Every imported image has its line in the stored manifest (and its scene's values, source, group and origin are
+    that line's), its images in the image store, the hash of its decoded pixels, and a clean image equal, pixel for
+    pixel, to its original resized again with the sizing parameters its import set recorded; the scenes of one room
+    share one group and one source; the judged image of each imported iteration is the recorded one."""
+    for room in repo.badly_grouped_rooms(conn):
+        result.problems.append(f"room {room}: its imported scenes do not share one group and one source")
+    for iteration_id in repo.misplaced_imported_iteration_images(conn):
+        result.problems.append(f"iteration {iteration_id}: the image it judged is not the one its scene's import recorded")
+    for iteration_id in repo.accepted_clutter_iterations_without_pair(conn):
+        result.problems.append(f"iteration {iteration_id}: accepted, but it is not a pair (an image or a link is missing)")
+    for row in repo.imported_images(conn):
+        result.count("imports checked")
+        who = f"scene {row.scene_id}"
+        scene = repo.scene(conn, row.scene_id)
+        lines = repo.import_manifest(conn, row.import_set_id).splitlines()
+        if row.line > len(lines) or not lines[row.line - 1].strip():
+            result.problems.append(f"{who}: line {row.line} is not in the stored manifest of import set {row.import_set_id}")
+        else:
+            try:
+                entry = parse_entry(row.line, lines[row.line - 1], known.space(scene.space_version_id))
+            except ManifestError as error:
+                result.problems.append(f"{who}: its manifest line does not parse ({error})")
+            else:
+                given = {ROOM_TYPE: entry.room_type, **dict(entry.values)}
+                if (dict(scene.values) != given or repo.model_by_id(conn, row.source_model_id) != entry.source
+                        or row.origin != entry.origin or row.group_name != entry.group):
+                    result.problems.append(f"{who}: its values, source, group or origin differ from line {row.line} "
+                                           "of its manifest")
+        if row.original_sha not in known.images or row.image_sha not in known.images:
+            result.problems.append(f"{who}: an image of its import record is not in the image store")
+            continue
+        problem = _import_image_problem(conn, ds, row)
+        if problem:
+            result.problems.append(f"{who}: {problem}")
+
+
+def _import_image_problem(conn: sqlite3.Connection, ds: Dataset, row: repo.ImportedRow) -> str | None:
+    """Why the clean image is not its original made again (pixel hash, sizing rule, resize), or None."""
+    params = repo.import_set(conn, row.import_set_id)
+    try:
+        original = opaque_rgb(imaging.decode(ds.blobs.get(row.original_sha)))
+        expected = imported_size(original.size, params.output_side, params.size_multiple, params.condition_max_pixels)
+        again = np.asarray(resized(original, expected, params.resampler))
+        stored = np.asarray(imaging.decode(ds.blobs.get(row.image_sha)).convert("RGB"))
+    except (OSError, ValueError, SpaceError) as error:
+        return f"the import cannot be made again from its original ({error})"
+    if pixel_sha(original) != row.pixel_sha:
+        return "the hash of its original's pixels is not the recorded one"
+    if repo.image_size(conn, row.image_sha) != expected or stored.shape != again.shape:
+        return f"its image is {repo.image_size(conn, row.image_sha)}, the sizing rule gives {expected} for its original"
+    # a resize is deterministic for one Pillow; one level of slack keeps an upgrade of it from failing every import
+    if int(np.abs(stored.astype(np.int16) - again.astype(np.int16)).max()) > 1:
+        return "its image is not its original resized again with the recorded parameters"
+    return None
 
 
 def _regions(conn: sqlite3.Connection, ds: Dataset, result: AuditResult, known: _Known) -> None:
@@ -301,10 +368,16 @@ def lineage(conn: sqlite3.Connection, pair_id: int) -> dict[str, Any]:
     if pair is None:
         raise LookupError(f"no accepted pair {pair_id}")
     clean_loop = repo.find_loop(conn, "clean", int(pair["scene_id"]))  # type: ignore[call-overload]
+    imported = repo.imported_image(conn, int(pair["scene_id"]))  # type: ignore[call-overload]
+    source = None if imported is None else repo.model_by_id(conn, imported.source_model_id)
     return {
         "pair": pair_id,
         "building": pair["building_id"], "room": pair["room_id"], "scene": pair["scene_id"],
         "clutter_spec": pair["clutter_spec_id"],
+        "import": None if imported is None or source is None else {
+            "import_set": imported.import_set_id, "line": imported.line, "original": imported.original_sha,
+            "origin": imported.origin, "group": imported.group_name, "source": f"{source.name}@{source.revision}", "family": source.family,
+            "licence": source.licence},
         "images": {"clean": pair["clean_image"], "cluttered": pair["cluttered_image"], "mask": pair["mask_image"]},
         "clutter_loop": _loop_tree(conn, int(pair["loop_run_id"])),  # type: ignore[call-overload]
         "clean_loop": None if clean_loop is None else _loop_tree(conn, clean_loop.id),
