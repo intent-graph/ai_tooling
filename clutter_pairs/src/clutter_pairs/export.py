@@ -8,6 +8,8 @@ building's public id. A snapshot: pairs accepted later do not join it.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +31,50 @@ def split_of(building_public_id: str) -> str:
     raise AssertionError("unreachable")
 
 
+@dataclass(frozen=True)
+class PublicIds:
+    """Public ids and splits of an export, by internal id: scenes, rooms, buildings; and each building's split."""
+
+    scenes: dict[int, str]
+    rooms: dict[int, str]
+    buildings: dict[int, str]
+    splits: dict[int, str]
+
+
+def public_ids(conn: Any, room_axes: set[str], pairs: Sequence[Mapping[str, Any]]) -> PublicIds:
+    """The public ids of the scenes, rooms and buildings of `pairs`, and the split of each building.
+
+    A scene is its values and seed. A room imported with a `group` is its values and its group (source name, revision,
+    group name): the identity the manifest gave it, so a room keeps its id, and its building its split, when a view of
+    it gains its first pair or a later import adds a view. Any other room has one scene and is its values and that scene.
+    """
+    scenes: dict[int, str] = {}
+    room_scenes: dict[int, list[str]] = {}
+    for p in pairs:
+        scene = repo.scene(conn, int(p["scene_id"]))
+        scenes[scene.id] = sha256_text(canonical_json({"values": sorted(scene.values), "seed": scene.seed}))
+        known = room_scenes.setdefault(scene.room_id, [])
+        if scenes[scene.id] not in known:
+            known.append(scenes[scene.id])
+    rooms: dict[int, str] = {}
+    buildings: dict[int, list[str]] = {}
+    for p in pairs:
+        scene = repo.scene(conn, int(p["scene_id"]))
+        if scene.room_id not in rooms:
+            identity: dict[str, Any] = {"values": sorted(v for v in scene.values if v[0] in room_axes)}
+            group = repo.room_group(conn, scene.room_id)
+            if group is None:
+                identity["scenes"] = sorted(room_scenes[scene.room_id])
+            else:
+                identity["group"] = list(group)
+            rooms[scene.room_id] = sha256_text(canonical_json(identity))
+        known_rooms = buildings.setdefault(scene.building_id, [])
+        if rooms[scene.room_id] not in known_rooms:
+            known_rooms.append(rooms[scene.room_id])
+    building_ids = {b: sha256_text(canonical_json({"rooms": sorted(r)})) for b, r in buildings.items()}
+    return PublicIds(scenes, rooms, building_ids, {b: split_of(public) for b, public in building_ids.items()})
+
+
 def export(ds: Dataset, name: str) -> tuple[Path, int]:
     conn = ds.conn
     if not name.replace("_", "").replace("-", "").isalnum():
@@ -39,26 +85,8 @@ def export(ds: Dataset, name: str) -> tuple[Path, int]:
     if target.exists():
         raise ValueError(f"{target} exists")
     pairs = repo.query(conn, "pair")
-    scenes: dict[int, str] = {}
-    rooms: dict[int, list[str]] = {}
-    buildings: dict[int, list[str]] = {}
-    for p in pairs:
-        scene = repo.scene(conn, int(p["scene_id"]))  # type: ignore[call-overload]
-        scenes[scene.id] = sha256_text(canonical_json({"values": sorted(scene.values), "seed": scene.seed}))
-        rooms.setdefault(scene.room_id, [])
-        if scenes[scene.id] not in rooms[scene.room_id]:
-            rooms[scene.room_id].append(scenes[scene.id])
-    room_ids = {}
-    for p in pairs:
-        scene = repo.scene(conn, int(p["scene_id"]))  # type: ignore[call-overload]
-        room_values = [v for v in scene.values if v[0] in ds.space.axes_for("room")]
-        room_ids[scene.room_id] = sha256_text(canonical_json({"values": sorted(room_values),
-                                                              "scenes": sorted(rooms[scene.room_id])}))
-        buildings.setdefault(scene.building_id, [])
-        if room_ids[scene.room_id] not in buildings[scene.building_id]:
-            buildings[scene.building_id].append(room_ids[scene.room_id])
-    building_ids = {b: sha256_text(canonical_json({"rooms": sorted(r)})) for b, r in buildings.items()}
-    splits = {b: split_of(public) for b, public in building_ids.items()}
+    ids = public_ids(conn, set(ds.space.axes_for("room")), pairs)
+    scenes, room_ids, building_ids, splits = ids.scenes, ids.rooms, ids.buildings, ids.splits
     lines: list[str] = []
     for folder in ("clean", "cluttered", "mask"):
         (target / folder).mkdir(parents=True, exist_ok=False)

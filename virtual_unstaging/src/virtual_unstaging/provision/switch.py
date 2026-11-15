@@ -28,7 +28,7 @@ def switch_generator(ctx: Context, recipe: str) -> dict[str, Any]:
         if state != "failed":
             return state, ""
         _, capabilities = _call(ctx, "GET", f"{tools}/capabilities", key)
-        return state, str((capabilities.get("generator") or {}).get("error", ""))
+        return state, _failure_detail(capabilities.get("generator") or {})
 
     seconds = _wait(ctx, f"generator {recipe}", probe)
     ctx.progress(f"{recipe} ready after {seconds:.0f} s")
@@ -104,6 +104,16 @@ def _wait(ctx: Context, what: str, probe: Probe) -> float:
             raise ProvisionError("switch_failed", f"{what} failed to load on the machine: {detail[-1600:]}")
         ctx.sleep(ctx.poll_seconds)
     raise ProvisionError("switch_timeout", f"{what} was not ready after {int(ctx.startup_timeout)} s")
+
+
+def _failure_detail(profile: dict[str, Any]) -> str:
+    """A failed generator's chained cause, then the installed versions of the packages a load depends on (the tail of
+    the text is what `_wait` keeps when it is long), so the operator can match the failure to a release."""
+    detail = str(profile.get("error", ""))
+    packages = profile.get("packages")
+    if isinstance(packages, dict) and packages:
+        detail += " [installed: " + ", ".join(f"{name} {version}" for name, version in packages.items()) + "]"
+    return detail
 
 
 def _message(reply: dict[str, Any], status: int) -> str:

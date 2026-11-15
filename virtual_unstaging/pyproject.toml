@@ -15,6 +15,8 @@ dependencies = [
 # Upper bounds: the set that loaded every generator on vllm/vllm-openai:v0.28.0 (rentals of 2026-10-24/25). On
 # 2026-11-01 fresh machines loaded none ("Could not import module 'Qwen3ForCausalLM'"), after releases of
 # huggingface-hub 2.4.0, diffusers 0.42.1, transformers 5.21+, torch 2.15. Raise them only after a rental loads.
+# torchvision<0.29.2 is not a diagnosed cause: 0.29.1 was the newest torchvision on those rentals' days (0.29.2 came out
+# on 2026-10-28), so the bound keeps the tested one; the others are the releases named above.
 serve = [
     "fastapi>=0.110",
     "uvicorn>=0.29",

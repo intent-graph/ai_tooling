@@ -9,20 +9,23 @@ reports its API version and the client refuses a different major version.
 
 ## Table of Contents
 
-1. [Conventions](#conventions) _(Lines 26-51)_
-1. [Endpoints](#endpoints) _(Lines 54-69)_
-1. [Generate](#generate) _(Lines 72-120)_
-1. [Generator recipes](#generator-recipes) _(Lines 123-147)_
-1. [Tools](#tools) _(Lines 150-244)_
-1. [Asynchronous jobs](#asynchronous-jobs) _(Lines 247-270)_
-1. [Deadline](#deadline) _(Lines 273-284)_
+1. [Conventions](#conventions) _(Lines 29-54)_
+1. [Endpoints](#endpoints) _(Lines 57-72)_
+1. [Generate](#generate) _(Lines 75-126)_
+1. [Generator recipes](#generator-recipes) _(Lines 129-153)_
+1. [Tools](#tools) _(Lines 156-181)_
+   1. [Structure map](#structure-map) _(Lines 184-208)_
+   1. [Element inventory](#element-inventory) _(Lines 211-252)_
+1. [Asynchronous jobs](#asynchronous-jobs) _(Lines 255-278)_
+1. [Deadline](#deadline) _(Lines 281-292)_
+
 
 
 
 ---
 
 ## Conventions
-<!-- Lines 26-51 -->
+<!-- Lines 29-54 -->
 
 - JSON bodies, UTF-8. Images are never inlined: they travel as blobs, addressed by the SHA-256 of their bytes,
   in lowercase hex. A request is parsed once, at the edge: an unknown field, a wrong type or an out-of-range value
@@ -50,7 +53,7 @@ reports its API version and the client refuses a different major version.
   only with a major version.
 
 ## Endpoints
-<!-- Lines 54-69 -->
+<!-- Lines 57-72 -->
 
 | Method and path | Request | Response |
 |---|---|---|
@@ -68,7 +71,7 @@ Blob addresses are 64 lowercase hexadecimal characters and nothing else; they al
 of a blob already stored answers 201 again.
 
 ## Generate
-<!-- Lines 72-120 -->
+<!-- Lines 75-126 -->
 
 The generator's capability profile, in `GET /capabilities`:
 
@@ -85,7 +88,10 @@ The generator's capability profile, in `GET /capabilities`:
 argument and then limits the other images. `text_only` says whether the generator also makes an image from the prompt
 alone, a request with no image (API 1.2). `revision` names the weights as run: the commit, followed by
 `+fp8:<components>` when the recipe stores components in FP8, so the client never mixes their images with the
-full-precision model's.
+full-precision model's. `peak_gpu_gb` appears once a generation has run. A generator whose load failed is in state
+`failed` and adds `error`, the failure and its chained causes (a lazy import hides the real one), and `packages`, the
+installed versions of the packages a load depends on (`"absent"` when one is missing), so a failure is matched to a
+release. Both are additive fields (API 1.2 stands). `unstage gpu recipe` prints them when the switch fails to load.
 
 `POST /generate` request and response:
 
@@ -119,7 +125,7 @@ full-precision model's.
 - `gpu_seconds` is the pipeline call only; `load_seconds` is the one-time load of the weights, 0 once resident.
 
 ## Generator recipes
-<!-- Lines 123-147 -->
+<!-- Lines 129-153 -->
 
 One generic adapter serves every diffusers pipeline; a TOML file per model, in `serve/recipes/` or given by path to
 `--recipe`, says how that pipeline is loaded and fed. The file is parsed strictly at start: unknown keys, a revision
@@ -146,7 +152,7 @@ returns a PNG with the GPU seconds. Recipes shipped: `qwen_image_edit_2511`, `fi
 fills the mask with the colour around it, for tests and dry runs).
 
 ## Tools
-<!-- Lines 150-244 -->
+<!-- Lines 156-181 -->
 
 `POST /tools/{name}` with `{"inputs": ["<sha256>", …], "params": {…}}` returns
 `{"tool", "version", "outputs": {"<name>": "<sha256>"}, "measures": {…}, "summary": "<text>", "gpu_seconds"}`.
@@ -174,6 +180,7 @@ The orchestrator also runs cheap tools itself (mask dilation, region outline, a 
 the same names and contract.
 
 ### Structure map
+<!-- Lines 184-208 -->
 
 *Proposal*, 2026-10-22. The colour change map counts every pixel whose colour moved: a slight reframing, a resampling or
 a tone change lights up most of the frame, and the judges read that as drift. The structure map shows only what changed
@@ -200,6 +207,7 @@ in structure, robust to small changes.
   11.6).
 
 ### Element inventory
+<!-- Lines 211-252 -->
 
 *Proposal*, 2026-10-22. Pixels cannot tell a revealed surface from an invented one: the semantic diff called
 "appeared" a doorway the edit had uncovered behind a person, and the judges reported an invented opening. An
@@ -243,7 +251,7 @@ element, what became of each thing the room's rules name.
   only the fixed elements visible in the photo as names. `[tools] inventory` stays off by default until then.
 
 ## Asynchronous jobs
-<!-- Lines 247-270 -->
+<!-- Lines 255-278 -->
 
 A proxy in front of a rented machine may cut a request that stays silent for about 100 seconds, and a generation can
 last longer. API 1.1 therefore lets a call return at once and be polled; the synchronous behaviour of 1.0 stays for
@@ -269,7 +277,7 @@ a client that does not ask.
   server that ignores the preference and answers 200 is read as a synchronous answer.
 
 ## Deadline
-<!-- Lines 273-284 -->
+<!-- Lines 281-292 -->
 
 The server refuses to start without `--deadline` (a duration such as `90m`, `2h`, `1h30m`, or an ISO 8601 time with
 a UTC offset, in the future). Past it, every endpoint except `GET /health` answers 503 `deadline_reached`, the calls

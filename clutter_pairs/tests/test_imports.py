@@ -411,6 +411,42 @@ def test_the_views_of_a_group_land_in_one_split_of_an_export(folder: Path, impor
     assert audit.audit(ds).ok
 
 
+def test_a_room_keeps_its_id_and_split_when_a_view_gains_its_first_pair(folder: Path, import_set: Path) -> None:
+    """N3: a grouped room's public id comes from its group, not from the views that have a pair in this export."""
+    ds, _ = run_imports(folder, _grouped(import_set))
+    pairs = repo.query(ds.conn, "pair")
+    room_axes = set(ds.space.axes_for("room"))
+    first_view_only = [p for p in pairs if p["scene_id"] != 2]  # scene 2 is the second view of room "kitchen 1"
+    assert len(first_view_only) < len(pairs)
+    before = export.public_ids(ds.conn, room_axes, first_view_only)
+    after = export.public_ids(ds.conn, room_axes, pairs)
+    room, building = repo.scene(ds.conn, 1).room_id, repo.scene(ds.conn, 1).building_id
+    assert before.rooms[room] == after.rooms[room]
+    assert before.buildings[building] == after.buildings[building]
+    assert before.splits[building] == after.splits[building]
+    assert 2 not in before.scenes and 2 in after.scenes  # the new view is a scene of its own
+    for other in (3, 5):  # another group, and an image with no group: untouched
+        other_room = repo.scene(ds.conn, other).room_id
+        assert before.rooms[other_room] == after.rooms[other_room]
+
+
+def test_a_room_keeps_its_id_and_split_when_a_later_import_adds_a_view_to_its_group(folder: Path, import_set: Path) -> None:
+    first = make_import_set(import_set / "first_view", [("k1.png", "kitchen", True)], indices=[30], extra={"k1.png": GROUPS["k1.png"]})
+    ds, _ = run_imports(folder, first)
+    early, _ = export.export(ds, "v1")
+    later = make_import_set(import_set / "second_view", [("k2.png", "kitchen", True)], indices=[31], extra={"k2.png": GROUPS["k2.png"]})
+    importer.import_folder(ds, later)
+    thresholds = config.thresholds(ds.cfg, repo.threshold_decisions(ds.conn))
+    run.execute(ds, run.connect_models(ds, retries=0), thresholds, run.RunOptions())
+    late, _ = export.export(ds, "v2")
+    v1 = [json.loads(line) for line in (early / "manifest.jsonl").read_text().splitlines()]
+    v2 = [json.loads(line) for line in (late / "manifest.jsonl").read_text().splitlines()]
+    assert len({line["scene"] for line in v1}) == 1 and len({line["scene"] for line in v2}) == 2
+    room_of = {line["scene"]: (line["room"], line["building"], line["split"]) for line in v2}
+    assert {(line["room"], line["building"], line["split"]) for line in v1} == {room_of[v1[0]["scene"]]}  # the same room
+    assert len(set(room_of.values())) == 1  # both views: one room, one building, one split
+
+
 def test_a_group_is_one_room_of_one_source_and_may_grow_in_a_later_import(folder: Path, import_set: Path) -> None:
     ds = open_dataset(folder)
     importer.import_folder(ds, _grouped(import_set))

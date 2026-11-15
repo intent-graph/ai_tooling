@@ -1761,6 +1761,23 @@ def test_gpu_recipe_reports_a_load_failure(gpu_project: Path, tmp_path: Path) ->
         switch.switch_generator(ctx, "qwen_image_edit_2511")
 
 
+def test_gpu_recipe_load_failure_carries_the_installed_package_versions(gpu_project: Path, tmp_path: Path) -> None:
+    from virtual_unstaging.provision import switch
+
+    tools = "https://pod-8000.example"
+    ctx, _ = switch_context(gpu_project, tmp_path, {
+        ("PUT", f"{tools}/generator"): [(200, {})],
+        ("GET", f"{tools}/health"): [(200, {"models": {"generator": "failed"}})],
+        ("GET", f"{tools}/capabilities"): [(200, {"generator": {
+            "error": "ImportError: cannot import name 'x'", "packages": {"torch": "2.9.0", "diffusers": "absent"}}})],
+    })
+    with pytest.raises(ProvisionError) as failed:
+        switch.switch_generator(ctx, "qwen_image_edit_2511")
+    assert failed.value.code == "switch_failed"
+    assert "cannot import name 'x'" in failed.value.message
+    assert "[installed: torch 2.9.0, diffusers absent]" in failed.value.message
+
+
 def test_gpu_judge_serves_the_project_judge_and_waits_for_it(gpu_project: Path, tmp_path: Path) -> None:
     from virtual_unstaging.provision import switch
 

@@ -81,7 +81,7 @@ Each is checkable; each check becomes a test or an `audit` check.
 | P3 | Every model is **swappable**: no model name, weight path or provider in code outside adapters and configuration | the test suite runs end to end on fake adapters |
 | P4 | **No GPU without a deadline;** a run stops at its pair target or at the rental's deadline | provisioning refuses to start without a limit; no call starts that the deadline would cut |
 | P5 | **Coverage** is measurable, across versions of the targets and the space | the report counts accepted pairs per target cell, matching on (axis, value) |
-| P6 | **Split safety:** an export never puts one building in two splits | the split is stored per building only |
+| P6 | **Split safety:** an export never puts one building in two splits | the split is stored per building only; a building's public id does not depend on which of its views have a pair (a room imported with a `group` is identified by its group), so a building keeps its split from one export to the next, under this rule and unchanged room axes |
 | P7 | The public code carries **no dataset** | the package ships no images |
 | P8 | **Every exchange is stored as sent**, with its answer | audit rebuilds each body from the store and matches the hash of the bytes sent |
 | P9 | **Every request recomposes** from its composer, its model and its recorded parts | audit recomposes every request and compares it byte for byte |
@@ -195,7 +195,7 @@ The owner's requirement: full auditability.
 One store per dataset: a SQLite file and an image store addressed by SHA-256, the pattern of virtual_unstaging. The
 schema, its views and the audit checks are in [data_model.md](data_model.md) and [schema.sql](../src/clutter_pairs/store/schema.sql) (48 tables;
 the DDL loads in SQLite and in Postgres 18). The export is plain files: `clean/`, `cluttered/` and `mask/` PNGs and a JSONL manifest, one line per
-pair: public ids (content hashes that survive a rebuild of the store), split, specs, families, licences, checks.
+pair: public ids (content hashes that survive a rebuild of the store, and stay the same when a room gains a view or a view gains its first pair), split, specs, families, licences, checks.
 
 ## System shape
 <!-- Lines 202-212 -->

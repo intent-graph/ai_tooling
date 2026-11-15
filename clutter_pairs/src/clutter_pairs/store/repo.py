@@ -283,6 +283,16 @@ def group_room(conn: sqlite3.Connection, name: str, revision: str, group: str) -
     return int(row[0]), values
 
 
+def room_group(conn: sqlite3.Connection, room_id: int) -> tuple[str, str, str] | None:
+    """The (source name, source revision, group) an import gave a room, or none for a room made without a group."""
+    rows = conn.execute(
+        "SELECT DISTINCT m.name, m.revision, i.group_name FROM imported_image i JOIN scene s ON s.id = i.scene_id"
+        " JOIN model m ON m.id = i.source_model_id WHERE s.room_id = ? AND i.group_name IS NOT NULL", (room_id,)).fetchall()
+    if len(rows) > 1:  # the audit's group rule forbids it
+        raise ValueError(f"room {room_id} has views of more than one group")
+    return (str(rows[0][0]), str(rows[0][1]), str(rows[0][2])) if rows else None
+
+
 def misplaced_imported_iteration_images(conn: sqlite3.Connection) -> list[int]:
     """Iterations whose `imported` image is not the image recorded for the scene's import."""
     return [int(r[0]) for r in conn.execute(

@@ -13,9 +13,9 @@ rejected, what was sent to every model and what each request was built from. Ref
 
 1. [Principles](#principles) _(Lines 26-42)_
 1. [Entities](#entities) _(Lines 45-79)_
-1. [Schema](#schema) _(Lines 82-122)_
-1. [Views](#views) _(Lines 125-136)_
-1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 139-173)_
+1. [Schema](#schema) _(Lines 82-125)_
+1. [Views](#views) _(Lines 128-139)_
+1. [Checks run by `audit`](#checks-run-by-audit) _(Lines 142-177)_
 
 
 
@@ -78,7 +78,7 @@ Left out of the diagram: the value tables, each linking its owner to one axis va
 `measure`, `reason`, `model`, `decision`, and the files, texts and images every table points to.
 
 ## Schema
-<!-- Lines 82-122 -->
+<!-- Lines 82-125 -->
 
 The DDL is [schema.sql](../src/clutter_pairs/store/schema.sql): 48 tables in dependency order and the views below,
 loaded in SQLite and in Postgres 18. One line per
@@ -117,11 +117,14 @@ table here; each table's comments in the file carry its rules.
 | exports | `export`, `export_building`, `export_pair` | a named snapshot; the split per building; its pairs |
 
 **Public ids.** The export never publishes store-local integers. A pair's id is the hash of its clean and cluttered
-images' hashes; a scene's, a room's and a building's are the hash of their axis values and seeds (and, for a room
-or a building, of their children's ids). They survive a rebuild of the store.
+images' hashes; a scene's is the hash of its axis values and seed; a room's is the hash of its room values and either
+its scene (a room made without a group has one) or its group, the source name, revision and group name its import gave
+it (the views of a group are not part of it); a building's is the hash of its rooms' ids. They survive a rebuild of the
+store, and a room keeps its id, and its building its split, when a view of it gains its first pair or a later import
+adds a view to its group.
 
 ## Views
-<!-- Lines 125-136 -->
+<!-- Lines 128-139 -->
 
 | View | Gives | How |
 |---|---|---|
@@ -135,7 +138,7 @@ or a building, of their children's ids). They survive a rebuild of the store.
 | `pair_value` | every axis value of a pair: its room's, its scene's, its clutter spec's | used by `coverage` |
 
 ## Checks run by `audit`
-<!-- Lines 139-173 -->
+<!-- Lines 142-177 -->
 
 Requests and records:
 - **P9:** every request recomposes: the composer file, the call's model and the parts in order give the request
