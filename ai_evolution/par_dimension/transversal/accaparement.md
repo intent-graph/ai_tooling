@@ -7,23 +7,24 @@ portent un statut `V`, `K` ou `D`.
 
 ## Table of Contents
 
-1. [Question et définition](#question-et-d-finition) _(Lines 27-46)_
-1. [Vue d'ensemble](#vue-d-ensemble) _(Lines 49-83)_
-1. [Les cinq mécanismes](#les-cinq-m-canismes) _(Lines 86-86)_
-   1. [M1. La porte d'entrée](#m1-la-porte-d-entr-e) _(Lines 89-102)_
-   1. [M2. L'infrastructure physique](#m2-l-infrastructure-physique) _(Lines 105-116)_
-   1. [M3. La relation client déplacée](#m3-la-relation-client-d-plac-e) _(Lines 119-131)_
-   1. [M4. Les règles et la juridiction](#m4-les-r-gles-et-la-juridiction) _(Lines 134-151)_
-   1. [M5. Le capital qui court après le territoire](#m5-le-capital-qui-court-apr-s-le-territoire) _(Lines 154-165)_
-1. [Échecs, reprises et contre-mouvements](#checs-reprises-et-contre-mouvements) _(Lines 168-191)_
-1. [Lectures transversales](#lectures-transversales) _(Lines 194-218)_
-1. [Certitude et lacunes](#certitude-et-lacunes) _(Lines 221-241)_
-1. [Questions ouvertes](#questions-ouvertes) _(Lines 244-251)_
+1. [Question et définition](#question-et-définition) _(Lines 28-47)_
+1. [Vue d'ensemble](#vue-densemble) _(Lines 50-84)_
+1. [Les cinq mécanismes](#les-cinq-mécanismes) _(Lines 87-87)_
+   1. [M1. La porte d'entrée](#m1-la-porte-dentrée) _(Lines 90-103)_
+   1. [M2. L'infrastructure physique](#m2-linfrastructure-physique) _(Lines 106-117)_
+   1. [M3. La relation client déplacée](#m3-la-relation-client-déplacée) _(Lines 120-132)_
+   1. [M4. Les règles et la juridiction](#m4-les-règles-et-la-juridiction) _(Lines 135-152)_
+   1. [M5. Le capital qui court après le territoire](#m5-le-capital-qui-court-après-le-territoire) _(Lines 155-166)_
+1. [Échecs, reprises et contre-mouvements](#échecs-reprises-et-contre-mouvements) _(Lines 169-192)_
+1. [Lectures transversales](#lectures-transversales) _(Lines 195-219)_
+1. [Certitude et lacunes](#certitude-et-lacunes) _(Lines 222-242)_
+1. [Questions ouvertes](#questions-ouvertes) _(Lines 245-252)_
+
 
 ---
 
 ## Question et définition
-<!-- Lines 27-46 -->
+<!-- Lines 28-47 -->
 
 **Question :** quels grands mécanismes d'accaparement observe-t-on pendant chacun des deux
 chocs, quel était le territoire, qui l'a pris, et selon quelle temporalité ?
@@ -45,7 +46,7 @@ krach, loi, décision de justice. Un accaparement raté compte autant qu'un acca
 ---
 
 ## Vue d'ensemble
-<!-- Lines 49-83 -->
+<!-- Lines 50-84 -->
 
 Les cinq mécanismes se retrouvent dans les deux chocs. Ce qui change entre les deux, c'est qui
 accapare, avec quel argent, et ce qui clôt la ruée :
@@ -82,10 +83,10 @@ CH.CLD.30 → CH.CLD.50), tous de certitude `i`.
 ---
 
 ## Les cinq mécanismes
-<!-- Lines 86-86 -->
+<!-- Lines 87-87 -->
 
 ### M1. La porte d'entrée
-<!-- Lines 89-102 -->
+<!-- Lines 90-103 -->
 
 Terrain : le passage obligé entre l'usager et le réseau. Côté demande : quand trouver ne coûte
 rien, tout le monde va au même endroit.
@@ -101,13 +102,13 @@ La clôture passe par l'effet de réseau, pas par le droit : l'action antitrust 
 modifie pas la structure du marché (F.INT.C5.003).
 
 ### M2. L'infrastructure physique
-<!-- Lines 105-116 -->
+<!-- Lines 106-117 -->
 
 Terrain : la capacité matérielle du réseau puis du calcul, et ses sites.
 
 | choc | terrain | accapareurs | ouverture → ruée → clôture | détenteur en fin de fenêtre | faits |
 | --- | --- | --- | --- | --- | --- |
-| INT | fibre longue distance | opérateurs historiques et nouveaux entrants, par la dette autant que par les actions | 1996 → 1998-2000 → faillites de 2001-2002 | les survivants et les acheteurs de capacité bradée | F.INT.A1.001 V, F.INT.B1.013 K, F.INT.A1.009 K, F.INT.B1.010 K, F.INT.A3.004 K, F.INT.A3.005 K |
+| INT | fibre longue distance | opérateurs historiques et nouveaux entrants, par la dette autant que par les actions | 1996 → 1998-2000 → faillites de 2001-2002 | les survivants et les acheteurs de capacité bradée | F.INT.A1.001 V, F.INT.B1.013 K, F.INT.A1.009 V, F.INT.B1.010 K, F.INT.A3.004 K, F.INT.A3.005 K |
 | CLD | capacité de calcul louée | un grand détaillant en ligne, puis deux autres fournisseurs américains | 2006 → 2006-2013, dépenses d'équipement du premier ×20 → oligopole à trois vers 2014 | trois fournisseurs qui coordonnent leurs baisses de prix | F.CLD.A1.003 V, F.CLD.A1.004 V, F.CLD.B1.001 V, F.CLD.C5.001 K, F.CLD.C5.002 K |
 | CLD | sites et électricité | exploitants d'usines | 2006-2008 près des barrages ; premier contrat direct d'électricité éolienne en 2010 | les exploitants de grande taille | F.CLD.H2.001 K, F.CLD.H2.003 K |
 
@@ -115,7 +116,7 @@ Même terrain, issue inverse : la fibre ruine ceux qui l'ont posée et profite �
 après ; l'usine de calcul reste à ceux qui l'ont construite.
 
 ### M3. La relation client déplacée
-<!-- Lines 119-131 -->
+<!-- Lines 120-132 -->
 
 Terrain : le client d'un intermédiaire établi, capté par un nouveau canal.
 
@@ -130,7 +131,7 @@ Là où un réseau d'intermédiation existait déjà (l'échange de données ent
 terrain n'était pas libre et la ruée échoue (F.INT.A6.010).
 
 ### M4. Les règles et la juridiction
-<!-- Lines 134-151 -->
+<!-- Lines 135-152 -->
 
 Terrain : le droit applicable, les ressources critiques, le marché national. L'État y est
 propriétaire foncier : il ouvre le terrain, le vend, le ferme ou le reprend.
@@ -150,7 +151,7 @@ Blocs : la Corée du Sud légifère en 2015 pour soutenir le secteur plutôt que
 dans le dossier : absence notée, pas constatée.
 
 ### M5. Le capital qui court après le territoire
-<!-- Lines 154-165 -->
+<!-- Lines 155-166 -->
 
 Terrain : les titres des accapareurs eux-mêmes. Le capital accapare les accapareurs.
 
@@ -164,7 +165,7 @@ Terrain : les titres des accapareurs eux-mêmes. Le capital accapare les accapar
 ---
 
 ## Échecs, reprises et contre-mouvements
-<!-- Lines 168-191 -->
+<!-- Lines 169-192 -->
 
 **Accaparements défaits.**
 - La fibre surconstruite : F.INT.A1.009, F.INT.B1.010, F.INT.A3.004.
@@ -190,7 +191,7 @@ reste aux trois fournisseurs (F.CLD.C5.001).
 ---
 
 ## Lectures transversales
-<!-- Lines 194-218 -->
+<!-- Lines 195-219 -->
 
 Inférences de l'agent, à trancher en phase 5.
 
@@ -217,7 +218,7 @@ Inférences de l'agent, à trancher en phase 5.
 ---
 
 ## Certitude et lacunes
-<!-- Lines 221-241 -->
+<!-- Lines 222-242 -->
 
 **Certitude.** Les dates d'ouverture sont souvent `V` (F.CLD.A1.003, F.CLD.A3.002,
 F.INT.G1.001, F.INT.G2.002). Les détenteurs finaux et la concentration sont surtout `K`
@@ -240,7 +241,7 @@ indiquée, pas ici.
 ---
 
 ## Questions ouvertes
-<!-- Lines 244-251 -->
+<!-- Lines 245-252 -->
 
 1. **M3 et M5 sont-ils des accaparements, ou le contexte de M1 et M2 ?** M3 déplace un terrain
    déjà occupé plutôt qu'il n'en ouvre un neuf ; M5 est l'accaparement des accapareurs.
