@@ -6,20 +6,21 @@ ce qui compte comme preuve, et quelles hypothèses de travail on se donne à tes
 
 ## Table of Contents
 
-1. [But et usage](#but-et-usage) _(Lines 23-41)_
-1. [Hypothèse de départ](#hypoth-se-de-d-part) _(Lines 44-77)_
-1. [Le choc comme traitement](#le-choc-comme-traitement) _(Lines 80-112)_
-1. [Fenêtres temporelles et position actuelle](#fen-tres-temporelles-et-position-actuelle) _(Lines 115-143)_
-1. [Ce qu'on produit](#ce-qu-on-produit) _(Lines 146-163)_
-1. [Standard de preuve](#standard-de-preuve) _(Lines 166-189)_
-1. [Hypothèses de travail à tester](#hypoth-ses-de-travail-tester) _(Lines 192-240)_
-1. [Décisions](#d-cisions) _(Lines 243-266)_
+1. [But et usage](#but-et-usage) _(Lines 24-42)_
+1. [Hypothèse de départ](#hypothèse-de-départ) _(Lines 45-78)_
+1. [Le choc comme traitement](#le-choc-comme-traitement) _(Lines 81-113)_
+1. [Fenêtres temporelles et position actuelle](#fenêtres-temporelles-et-position-actuelle) _(Lines 116-144)_
+1. [Ce qu'on produit](#ce-quon-produit) _(Lines 147-164)_
+1. [Standard de preuve](#standard-de-preuve) _(Lines 167-195)_
+1. [Hypothèses de travail à tester](#hypothèses-de-travail-à-tester) _(Lines 198-246)_
+1. [Décisions](#décisions) _(Lines 249-274)_
+
 
 
 ---
 
 ## But et usage
-<!-- Lines 23-41 -->
+<!-- Lines 24-42 -->
 
 **Question du dossier :** quand une technologie d'ampleur civilisationnelle se généralise, qu'est-ce
 qui change dans la société pendant les dix années qui suivent, dans quel ordre, à quel rythme,
@@ -40,7 +41,7 @@ remonter au fait précis derrière chaque affirmation.
 ---
 
 ## Hypothèse de départ
-<!-- Lines 44-77 -->
+<!-- Lines 45-78 -->
 
 L'arrivée des LLM et des agents est un **choc** : un changement majeur introduit dans le système
 social, dont on peut observer les conséquences. Deux analogies historiques sont posées, chacune
@@ -76,7 +77,7 @@ facteur démographique, sont hors du périmètre de ce dossier (décision D14).
 ---
 
 ## Le choc comme traitement
-<!-- Lines 80-112 -->
+<!-- Lines 81-113 -->
 
 On emprunte à l'évaluation d'impact l'idée d'un **traitement** : le choc est introduit, on
 observe les conséquences en essayant de tenir compte des autres variables. C'est tout ce qu'on
@@ -111,7 +112,7 @@ Une trajectoire peut sauter des phases ou en répéter.
 ---
 
 ## Fenêtres temporelles et position actuelle
-<!-- Lines 115-143 -->
+<!-- Lines 116-144 -->
 
 | Choc | t0 retenu | Fenêtre | Justification du t0 |
 | --- | --- | --- | --- |
@@ -142,7 +143,7 @@ dossier doit tester (voir H1 et H3). Elles servent de repère, pas de conclusion
 ---
 
 ## Ce qu'on produit
-<!-- Lines 146-163 -->
+<!-- Lines 147-164 -->
 
 Deux axes orthogonaux classent chaque fait, trois vues en dérivent.
 
@@ -162,7 +163,7 @@ Le format exact des enregistrements est dans [03_modele_de_donnees.md](03_modele
 ---
 
 ## Standard de preuve
-<!-- Lines 166-189 -->
+<!-- Lines 167-195 -->
 
 **Sources admissibles**, par ordre de préférence :
 
@@ -173,7 +174,8 @@ Le format exact des enregistrements est dans [03_modele_de_donnees.md](03_modele
 3. Rapports officiels, textes de loi, décisions de justice, dépôts réglementaires (SEC),
    rapports annuels d'entreprises.
 4. Ouvrages de référence historiques ou économiques sur la période.
-5. Presse contemporaine **de l'événement**, pour dater un jalon uniquement.
+5. Presse de qualité : contemporaine **de l'événement** pour dater un jalon ; rétrospective
+   admise pour le statut `A`.
 
 **Exclus :** tribunes, prévisions d'analystes, billets d'opinion, synthèses de vulgarisation
 sans source, contenu généré ou agrégé sans provenance.
@@ -182,13 +184,17 @@ sans source, contenu généré ou agrégé sans provenance.
 2009) sont admissibles comme **artefacts historiques** dans une annexe « prédictions contre
 résultats », séparée des faits. Cette annexe est optionnelle et décidée en phase 5.
 
-**Statuts :** `V` vérifié à la source citée ; `K` connaissance de l'agent, à vérifier ; `D` disputé.
-Un narratif ne peut s'appuyer sur un fait `K` que si celui-ci est qualitatif et non controversé.
+**Statuts :** `V` source première ouverte et valeur lue ; `A` admis : une source sérieuse et
+nommée, ouverte et lue, énonce le fait, et aucune source sérieuse ne le conteste ; `K` mémoire
+de l'agent, sans source ouverte ; `D` disputé.
+
+**Seuil (décision D21) :** `A` suffit, `K` ne suffit jamais. Aucun arbre des effets, narratif ou
+synthèse ne s'appuie sur un fait `K`. On ne cherche ni preuve absolue ni essai par fait.
 
 ---
 
 ## Hypothèses de travail à tester
-<!-- Lines 192-240 -->
+<!-- Lines 198-246 -->
 
 Elles guident ce qu'on regarde. Elles ne sont pas supposées vraies ; les chronologies et
 trajectoires servent à les confirmer, nuancer ou rejeter en phase 5.
@@ -239,7 +245,7 @@ de l'auteur.
 ---
 
 ## Décisions
-<!-- Lines 243-266 -->
+<!-- Lines 249-274 -->
 
 Journal des choix structurants, dans l'ordre où ils ont été pris. Git porte les dates.
 
@@ -264,3 +270,5 @@ Journal des choix structurants, dans l'ordre où ils ont été pris. Git porte l
 | D17 | La productivité (C1) ne se lit pas sur la seule série américaine. Deux motifs : la place à part des États-Unis dans l'économie mondiale, et le biais d'une productivité mesurée comme variation de la richesse produite (valeur ajoutée déflatée), qui confond efficacité, prix et marges. La lecture de C1 s'appuie sur les panels multi-pays qui croisent intensité d'adoption des TIC et productivité, et sur la littérature de mesure (productivité en valeur contre productivité physique). La série américaine reste un fait, pas une conclusion | Choix de l'auteur. Le résultat acquis n° 1 du README porte cette réserve. |
 | D18 | Refonte de la taxonomie après relecture de la fenêtre Internet, sans renumérotation : **A** en deux blocs, bâtisseurs A1-A4 et utilisatrices A5-A8 (A6 canaux de vente, A7 adoption et usage interne, A8 services rendus possibles) ; **B** par composante du capital, B1 privé domestique, B4 étranger, B5 public et régulation, B2 et B3 transversales ; **D3** renommée « organisation du travail et outils en réseau » ; **F5** concentration et diversité des consommations (test de H7) ; **G1-G3 gelées**, géopolitique en G4 souveraineté et sécurité, G5 domination d'infrastructure, G6 fracture entre pays ; X.INT.03 requalifié « partiellement endogène ». Les faits existants gardent leur identifiant et leur sous-dimension ; les nouvelles sous-dimensions les citent. Pour le cloud, les nouvelles sous-dimensions sont à collecter | Relecture de l'auteur : le dossier confondait bâtisseurs et industries utilisatrices ; la finance appelait une lecture par origine du capital ; le travail était réduit au secteur informatique ; la politique intérieure intéresse moins que la géopolitique. Six recherches ciblées du 2026-09-23 ont fondé le découpage. |
 | D19 | Ajout d'un **axe transversal « accaparement »** (ruée sur un territoire neuf : terrain, accapareur, mécanisme, temporalité), dans `par_dimension/transversal/accaparement.md`. Le fichier cite les faits par identifiant et n'en crée aucun (R7) ; les épisodes absents deviennent des cibles de collecte dans leur sous-dimension de rattachement. Taxonomies inchangées (R9) | Question de l'auteur, posée pour les deux chocs. Précédent : le dossier transversal de D16. |
+| D20 | Le dossier se construit de bas en haut, en deux temps : explorer les faits des deux chocs passés, puis les organiser en arbres des effets ([arbre_des_effets/quatre_ordres/](arbre_des_effets/quatre_ordres/README.md)). Le but n'est pas les faits eux-mêmes mais **la forme des arbres et ce qu'ils couvrent**. La seconde partie, l'extrapolation, traduit chaque partie des deux arbres en ce qu'elle pourrait signifier pour le choc en cours | Formulation de l'auteur. Les arbres avaient été ouverts comme vue expérimentale hors des phases 1 à 5 ; ce sont eux que le dossier vise. |
+| D21 | Seuil de preuve : **une vérité raisonnablement admise suffit, la mémoire de l'agent ne suffit jamais**. Statut `A` (admis) ajouté entre `K` et `V` : au moins une source sérieuse et nommée, ouverte et lue, énonce le fait (presse de qualité, article de recherche, ouvrage ou page de référence, document institutionnel) et aucune source sérieuse ne le conteste. Aucun fait cité par un arbre ne reste `K` ; `V` (source première lue) reste possible, sans être exigé | Choix de l'auteur : tout repose sur des faits corrects, mais le dossier n'a besoin ni de preuve absolue ni d'un essai par fait. Un essai sur les dix-sept faits `K` portés par les leviers des deux arbres a trouvé une source pour chacun, mais six seulement tenaient tels qu'écrits. |

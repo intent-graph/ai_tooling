@@ -8,25 +8,26 @@ et `par_annee/`.
 
 ## Table of Contents
 
-1. [Vue d'ensemble](#vue-d-ensemble) _(Lines 30-61)_
-1. [Codes et vocabulaires](#codes-et-vocabulaires) _(Lines 64-83)_
-1. [Enregistrements](#enregistrements) _(Lines 86-86)_
-   1. [Fait](#fait) _(Lines 89-109)_
-   1. [Jalon](#jalon) _(Lines 112-127)_
-   1. [Trajectoire](#trajectoire) _(Lines 130-141)_
-   1. [Narratif](#narratif) _(Lines 144-148)_
-   1. [Portrait](#portrait) _(Lines 151-154)_
-   1. [Source](#source) _(Lines 157-166)_
-   1. [Confondant](#confondant) _(Lines 169-173)_
-1. [Identifiants](#identifiants) _(Lines 176-191)_
-1. [Où vit chaque enregistrement](#o-vit-chaque-enregistrement) _(Lines 194-210)_
-1. [Règles d'intégrité](#r-gles-d-int-grit) _(Lines 213-224)_
+1. [Vue d'ensemble](#vue-densemble) _(Lines 31-62)_
+1. [Codes et vocabulaires](#codes-et-vocabulaires) _(Lines 65-84)_
+1. [Enregistrements](#enregistrements) _(Lines 87-87)_
+   1. [Fait](#fait) _(Lines 90-110)_
+   1. [Jalon](#jalon) _(Lines 113-128)_
+   1. [Trajectoire](#trajectoire) _(Lines 131-142)_
+   1. [Narratif](#narratif) _(Lines 145-149)_
+   1. [Portrait](#portrait) _(Lines 152-155)_
+   1. [Source](#source) _(Lines 158-167)_
+   1. [Confondant](#confondant) _(Lines 170-174)_
+1. [Identifiants](#identifiants) _(Lines 177-192)_
+1. [Où vit chaque enregistrement](#où-vit-chaque-enregistrement) _(Lines 195-211)_
+1. [Règles d'intégrité](#règles-dintégrité) _(Lines 214-227)_
+
 
 
 ---
 
 ## Vue d'ensemble
-<!-- Lines 30-61 -->
+<!-- Lines 31-62 -->
 
 ```mermaid
 erDiagram
@@ -60,7 +61,7 @@ portraits ne contiennent pas de faits : ils les citent.
 ---
 
 ## Codes et vocabulaires
-<!-- Lines 64-83 -->
+<!-- Lines 65-84 -->
 
 | Vocabulaire | Valeurs | Usage |
 | --- | --- | --- |
@@ -69,11 +70,11 @@ portraits ne contiennent pas de faits : ils les citent.
 | Sous-dimension | `A1`…`A8`, `B1`…`B5`, `C1`…`C6`, `D1`…`D4`, `E1`…`E5`, `F1`…`F5`, `G1`…`G6`, `H1`…`H4` | Classement primaire d'un fait. |
 | Acteur | `P1`…`P8`, `M1`…`M10`, `O1`…`O8`, `T1`…`T5` | Voir [02_acteurs.md](02_acteurs.md). Zéro ou plusieurs par fait. |
 | Bloc | `US` · `EU` · `ASIE-E` · `CN` · `EMERG` · `MONDE` | Portée géographique du fait. `MONDE` si agrégat ou sans frontière. |
-| Statut | `V` vérifié à la source · `K` connaissance à vérifier · `D` disputé | Voir standard de preuve. |
+| Statut | `V` vérifié à la source première · `A` admis sur une source sérieuse ouverte · `K` mémoire de l'agent, à sourcer · `D` disputé | Voir standard de preuve. `A` suffit, `K` jamais (décision D21). |
 | Attribution | `choc` · `co:<ID confondant>` · `exo` | Voir [04_confondants.md](04_confondants.md). |
 | Phase | `latent` · `émergence` · `accélération` · `crise` · `consolidation` · `banalisation` | Lecture partagée, pas un modèle. |
 | Intensité | `0` rien de notable · `1` faible · `2` marqué · `3` rupture | Jugement dérivé, cité sur des faits. |
-| Type de source | `stat` série statistique · `acad` académique · `off` officiel, loi, dépôt · `livre` ouvrage de référence · `presse` presse contemporaine de l'événement | Ordre de préférence décroissant. |
+| Type de source | `stat` série statistique · `acad` académique · `off` officiel, loi, dépôt · `livre` ouvrage de référence · `presse` presse de qualité, contemporaine de l'événement ou rétrospective | Ordre de préférence décroissant. |
 
 L'**intensité** est le seul champ de jugement du modèle. Elle permet une carte de chaleur
 sous-dimension × année pour lire le rythme. Elle n'est jamais un fait ; chaque valeur non nulle
@@ -82,10 +83,10 @@ doit pouvoir pointer au moins un fait ou un jalon.
 ---
 
 ## Enregistrements
-<!-- Lines 86-86 -->
+<!-- Lines 87-87 -->
 
 ### Fait
-<!-- Lines 89-109 -->
+<!-- Lines 90-110 -->
 
 Un énoncé daté, sourcé, classé. Un tableau par sous-dimension dans le fichier de domaine.
 
@@ -99,7 +100,7 @@ Un énoncé daté, sourcé, classé. Un tableau par sous-dimension dans le fichi
 | `acteurs` | Codes acteurs, séparés par des virgules | non |
 | `attribution` | `choc`, `co:<ID>`, `exo` | oui |
 | `source` | Clé locale `[S<n>]` renvoyant à la section Sources du fichier | oui |
-| `statut` | `V`, `K`, `D` | oui |
+| `statut` | `V`, `A`, `K`, `D` | oui |
 
 Exemple de ligne, fictive dans sa valeur :
 
@@ -108,7 +109,7 @@ Exemple de ligne, fictive dans sa valeur :
 ```
 
 ### Jalon
-<!-- Lines 112-127 -->
+<!-- Lines 113-128 -->
 
 Un événement daté qui marque une bascule, visible depuis plusieurs dimensions.
 
@@ -123,10 +124,10 @@ Un événement daté qui marque une bascule, visible depuis plusieurs dimensions
 | `attribution` | `choc`, `co:<ID>`, `exo` ; les produits dérivés (téléphone intelligent, réseaux sociaux) suivent [04_confondants.md](04_confondants.md) | oui |
 | `pourquoi` | En quoi c'est une bascule, une phrase | oui |
 | `source` | Clé locale | oui |
-| `statut` | `V`, `K`, `D` | oui |
+| `statut` | `V`, `A`, `K`, `D` | oui |
 
 ### Trajectoire
-<!-- Lines 130-141 -->
+<!-- Lines 131-142 -->
 
 Une par sous-dimension et par choc. Un tableau à une ligne « avant t0 » et une ligne par année,
 suivi du narratif.
@@ -140,20 +141,20 @@ suivi du narratif.
 | `faits et jalons` | Identifiants cités |
 
 ### Narratif
-<!-- Lines 144-148 -->
+<!-- Lines 145-149 -->
 
 Trois à six phrases sous la trajectoire. Chaque phrase porte au moins un identifiant entre
 crochets. Pas d'identifiant, pas de phrase. Aucune référence à l'autre choc ni au choc IA : la
 comparaison vit dans le `README.md` du domaine, le transfert dans `synthese/`.
 
 ### Portrait
-<!-- Lines 151-154 -->
+<!-- Lines 152-155 -->
 
 Un par acteur retenu, les deux chocs dans le même fichier. Structure fixée dans
 [02_acteurs.md](02_acteurs.md) § Ce qu'un portrait doit contenir. Cite, n'énonce pas.
 
 ### Source
-<!-- Lines 157-166 -->
+<!-- Lines 158-167 -->
 
 Section « Sources » en fin de chaque fichier de contenu. Clés locales `[S1]`, `[S2]`…
 
@@ -162,17 +163,17 @@ Section « Sources » en fin de chaque fichier de contenu. Clés locales `[S1]`,
 | `clé` | `[S<n>]` |
 | `type` | `stat`, `acad`, `off`, `livre`, `presse` |
 | `référence` | Auteur ou institution, titre, année, série ou identifiant, URL stable si disponible |
-| `note` | Ce qu'on en a tiré, précaution éventuelle |
+| `note` | Ce qu'on en a tiré, précaution éventuelle. Pour un fait `V` ou `A` : ce qui a été ouvert et lu |
 
 ### Confondant
-<!-- Lines 169-173 -->
+<!-- Lines 170-174 -->
 
 Défini et numéroté dans [04_confondants.md](04_confondants.md), pas dans les fichiers de contenu.
 
 ---
 
 ## Identifiants
-<!-- Lines 176-191 -->
+<!-- Lines 177-192 -->
 
 | Objet | Format | Exemple | Règle |
 | --- | --- | --- | --- |
@@ -190,7 +191,7 @@ Les fichiers qui citent un identifiant n'ont pas à être modifiés quand le fai
 ---
 
 ## Où vit chaque enregistrement
-<!-- Lines 194-210 -->
+<!-- Lines 195-211 -->
 
 | Enregistrement | Emplacement unique | Cité depuis |
 | --- | --- | --- |
@@ -209,12 +210,13 @@ autre fichier.
 ---
 
 ## Règles d'intégrité
-<!-- Lines 213-224 -->
+<!-- Lines 214-227 -->
 
 Invariants à vérifier avant de clore une cellule. Une passe `grep` suffit pour la plupart.
 
 1. Tout identifiant cité existe dans son fichier d'origine.
-2. Tout fait `V` a une clé de source qui existe dans la section Sources du fichier.
+2. Tout fait `V` ou `A` a une clé de source qui existe dans la section Sources du fichier, et la
+   note de cette source dit ce qui a été ouvert et lu.
 3. Toute attribution `co:<ID>` renvoie à un confondant défini dans le registre.
 4. Toute intensité non nulle cite au moins un fait ou un jalon.
 5. Toute phrase de narratif porte au moins un identifiant.
@@ -222,3 +224,4 @@ Invariants à vérifier avant de clore une cellule. Une passe `grep` suffit pour
    « LLM », « agent » au sens IA, « IA générative », « ChatGPT ».
 7. Les séquences d'identifiants sont sans trou non expliqué.
 8. Un énoncé de fait n'apparaît qu'une fois dans le dossier.
+9. Aucun fait cité par une feuille d'un arbre des effets n'est `K` (décision D21).

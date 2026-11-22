@@ -7,17 +7,18 @@ séparée (session 2, `synthese/`).
 
 ## Table of Contents
 
-1. [Ordre de lecture](#ordre-de-lecture) _(Lines 21-33)_
-1. [Règles non négociables](#r-gles-non-n-gociables) _(Lines 36-98)_
-1. [Flux de travail par phase](#flux-de-travail-par-phase) _(Lines 101-137)_
-1. [Bornes de volume](#bornes-de-volume) _(Lines 140-156)_
-1. [Outillage et conventions de fichiers](#outillage-et-conventions-de-fichiers) _(Lines 159-170)_
+1. [Ordre de lecture](#ordre-de-lecture) _(Lines 22-36)_
+1. [Règles non négociables](#règles-non-négociables) _(Lines 39-113)_
+1. [Flux de travail par phase](#flux-de-travail-par-phase) _(Lines 116-152)_
+1. [Bornes de volume](#bornes-de-volume) _(Lines 155-171)_
+1. [Outillage et conventions de fichiers](#outillage-et-conventions-de-fichiers) _(Lines 174-185)_
+
 
 
 ---
 
 ## Ordre de lecture
-<!-- Lines 21-33 -->
+<!-- Lines 22-36 -->
 
 1. [README.md](README.md) : but, les trois chocs, structure, statut.
 2. [00_these_et_methode.md](00_these_et_methode.md) : la méthode « choc = traitement », les fenêtres, le standard de preuve.
@@ -25,6 +26,8 @@ séparée (session 2, `synthese/`).
 4. [03_modele_de_donnees.md](03_modele_de_donnees.md) : le format exact de chaque enregistrement.
 5. [04_confondants.md](04_confondants.md) : avant d'attribuer un changement au choc.
 6. Le gabarit correspondant dans [gabarits/](gabarits/) avant d'écrire un fichier de contenu.
+7. [arbre_des_effets/quatre_ordres/README.md](arbre_des_effets/quatre_ordres/README.md) : les
+   arbres des effets, ce vers quoi les faits sont organisés (décision D20).
 
 Ne lis les fichiers de contenu (`par_dimension/`, `par_acteur/`, `par_annee/`) que pour la
 cellule sur laquelle tu travailles. Vérifie la taille (`wc -l`) avant d'ouvrir un fichier long.
@@ -32,7 +35,7 @@ cellule sur laquelle tu travailles. Vérifie la taille (`wc -l`) avant d'ouvrir 
 ---
 
 ## Règles non négociables
-<!-- Lines 36-98 -->
+<!-- Lines 39-113 -->
 
 **R1. Historique, pas spéculatif.** Aucune mention de LLM, d'agents ou d'IA générative dans
 `par_dimension/`, `par_acteur/`, `par_annee/`. Si un parallèle te vient, note-le en une ligne
@@ -48,22 +51,34 @@ la **source trouvée** qui doit être admissible, pas la manière de la trouver.
 **Sources admissibles** : série statistique (BLS, BEA, Census, OCDE, UIT, Banque mondiale, Pew,
 Eurostat, INSEE), article académique ou document de travail de référence, rapport officiel,
 texte de loi, décision de justice, dépôt réglementaire, rapport annuel d'entreprise, ouvrage de
-référence, presse contemporaine **de l'événement lui-même** (pour dater un jalon).
+référence, presse contemporaine **de l'événement lui-même** (pour dater un jalon). Pour le statut
+`A` s'y ajoutent la presse de qualité rétrospective et les pages de référence d'institutions ou
+d'organismes de normalisation.
 
 **Proscrit** : tribunes, billets d'opinion, prévisions d'analystes, listes de tendances,
-synthèses sans provenance, « ce qu'on dit généralement ». Deux exceptions encadrées, toujours
+synthèses sans provenance, « ce qu'on dit généralement » sans source nommée. Deux exceptions
+encadrées, toujours
 étiquetées comme telles : un chiffre de cabinet d'analystes quand aucune source officielle
 n'existe (statut `K`, mention « artefact »), et une prévision d'époque comme **objet d'étude**
 dans l'annexe « prédictions ».
 
-**Statut.** Un fait n'est `V` que si la source elle-même a été ouverte et la valeur lue. Un fait
-appris par une synthèse convergente mais dont la source n'a pas été ouverte reste `K`. La
-recherche aide à trouver ; seule la lecture de la source vérifie.
+**Statut.** Trois niveaux d'appui, du plus fort au plus faible. `V` : la source première a été
+ouverte et la valeur lue. `A` (admis) : le fait est une vérité raisonnablement admise ; au moins
+une source sérieuse et nommée l'énonce (presse de qualité, article de recherche, ouvrage ou page
+de référence, document institutionnel), cette source a été ouverte et le passage lu, et aucune
+source sérieuse ne le conteste. `K` : mémoire de l'agent, sans source ouverte. Un extrait de
+résultat de recherche n'est pas une source ouverte. Un chiffre n'est `A` que si la source citée
+le porte ; sinon l'énoncé donne un ordre de grandeur et le dit.
 
-**R3. Un fait, une source, un statut.** Chaque fait porte un statut : `V` vérifié à la source,
-`K` issu des connaissances de l'agent et à vérifier, `D` disputé entre sources. Un fait sans
-source est un fait `K`, jamais un fait `V`. Ne fabrique pas de chiffre : si tu ne l'as pas,
-écris l'énoncé qualitatif et marque `K`.
+**Seuil (décision D21) : `A` suffit, `K` ne suffit jamais.** Rien de ce qu'un arbre des effets,
+un narratif ou une synthèse utilise ne repose sur un fait `K`. On ne cherche ni preuve absolue
+ni essai par fait : dès qu'une source sérieuse énonce le fait, on s'arrête.
+
+**R3. Un fait, une source, un statut.** Chaque fait porte un statut : `V` vérifié à la source
+première, `A` admis sur une source sérieuse ouverte, `K` issu de la mémoire de l'agent et à
+sourcer, `D` disputé entre sources. Un fait sans source ouverte est un fait `K`, jamais `A` ni
+`V`. Ne fabrique pas de chiffre : si tu ne l'as pas, écris l'énoncé qualitatif et marque `K`.
+Quand la source dit moins que l'énoncé, c'est l'énoncé qu'on resserre.
 
 **R4. Variation dans le temps, pas binaire.** Chaque sous-dimension reçoit une trajectoire
 année par année sur la fenêtre, avec une ligne de base « avant t0 ». Un avant/après sans années
@@ -97,7 +112,7 @@ et titres de sources tels quels.
 ---
 
 ## Flux de travail par phase
-<!-- Lines 101-137 -->
+<!-- Lines 116-152 -->
 
 Le statut courant est dans le [README.md](README.md) § Statut et phases.
 
@@ -136,7 +151,7 @@ diffère, à quel rythme. Test des hypothèses H1-H4 de
 ---
 
 ## Bornes de volume
-<!-- Lines 140-156 -->
+<!-- Lines 155-171 -->
 
 Le dossier est **haut niveau**. Ces bornes évitent de se perdre dans le détail.
 
@@ -155,7 +170,7 @@ retenu, n'a pas sa place. Préférer une série de trois chiffres datés à un c
 ---
 
 ## Outillage et conventions de fichiers
-<!-- Lines 159-170 -->
+<!-- Lines 174-185 -->
 
 - **Standard de documentation :** [../documentation_tools/DOCUMENTATION_STANDARD.md](../documentation_tools/DOCUMENTATION_STANDARD.md).
   Fichiers de 200-300 lignes, table des matières avec plages de lignes, séparateur `---`.
