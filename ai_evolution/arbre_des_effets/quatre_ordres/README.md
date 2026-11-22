@@ -6,16 +6,17 @@ expérimentale, à côté des arbres précédents ([../internet/](../internet/RE
 
 ## Table of Contents
 
-1. [Racine](#racine)
-1. [Les quatre ordres](#les-quatre-ordres)
-1. [Règles de construction](#r-gles-de-construction)
-1. [Pratique du niveau de détail](#pratique-du-niveau-de-d-tail)
-1. [Fichiers](#fichiers)
+1. [Racine](#racine) _(Lines 20-28)_
+1. [Les quatre ordres](#les-quatre-ordres) _(Lines 31-47)_
+1. [Règles de construction](#règles-de-construction) _(Lines 50-74)_
+1. [Pratique du niveau de détail](#pratique-du-niveau-de-détail) _(Lines 77-87)_
+1. [Fichiers](#fichiers) _(Lines 90-98)_
+
 
 ---
 
 ## Racine
-<!-- Lines 19-27 -->
+<!-- Lines 20-28 -->
 
 Posée par l'auteur : **les deux sont des chocs nets, qui agissent sur l'information,
 l'industrie, les affaires et la gouvernance.**
@@ -26,7 +27,7 @@ dernier, comme ce que ses quatre branches additionnent.
 ---
 
 ## Les quatre ordres
-<!-- Lines 30-46 -->
+<!-- Lines 31-47 -->
 
 Le niveau 1 de chaque arbre compte exactement quatre boîtes. Chacune répond à une question sur
 **ce qui change**.
@@ -45,7 +46,7 @@ niveau 2 et les flèches entre ordres.
 ---
 
 ## Règles de construction
-<!-- Lines 49-73 -->
+<!-- Lines 50-74 -->
 
 1. **Partition par ce qui change.** Un changement va dans l'ordre qui répond à sa question, pas
    dans celui de sa cause.
@@ -72,7 +73,7 @@ niveau 2 et les flèches entre ordres.
 ---
 
 ## Pratique du niveau de détail
-<!-- Lines 76-86 -->
+<!-- Lines 77-87 -->
 
 L'arbre est un exercice de niveau de détail
 ([../../../level_of_detail/LOD_CORE.md](../../../level_of_detail/LOD_CORE.md)) :
@@ -85,12 +86,13 @@ L'arbre est un exercice de niveau de détail
 ---
 
 ## Fichiers
-<!-- Lines 89-96 -->
+<!-- Lines 90-98 -->
 
 | dossier | contenu |
 | --- | --- |
 | [internet/](internet/README.md) | Internet 1995-2005 : racine et vue d'ensemble, puis un fichier par ordre |
 | [cloud/](cloud/README.md) | Cloud 2005-2015 : même structure |
+| [reprise_apres_sourcage/](reprise_apres_sourcage/README.md) | Liste de reprise des deux arbres : boîtes à revoir depuis que leurs faits ont été confrontés à une source lue (décision D21) |
 
 Vérification : `python3 verifier_arbre.py quatre_ordres/internet --check` (et `cloud`), lancé
 depuis `arbre_des_effets/`.
