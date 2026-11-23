@@ -1,6 +1,6 @@
 # Reprise après sourcage — ce qu'il faut revoir dans les deux arbres des effets
 
-Statut : liste de travail pour réviser les deux arbres en quatre ordres, [Internet](../internet/README.md) et [cloud](../cloud/README.md). Les arbres eux-mêmes n'ont pas été modifiés.
+Statut : liste de travail qui a servi à réviser les deux arbres en quatre ordres, [Internet](../internet/README.md) et [cloud](../cloud/README.md). La révision est faite : les fichiers par branche décrivent l'état des arbres avant elle et ne sont plus à jour. Les deux fichiers transversaux (doublons, sources faibles, intensités, dates de jalons) restent à traiter dans les fichiers de faits.
 
 ## Table of Contents
 

@@ -1,22 +1,23 @@
 # Arbre des effets en quatre ordres — construction descendante
 
-Statut : cadre posé par l'auteur ; arbres Internet et cloud en première génération. Vue
+Statut : cadre posé par l'auteur ; arbres Internet et cloud en deuxième génération, révisés
+après la confrontation de leurs faits à des sources ouvertes et lues (décision D21). Vue
 expérimentale, à côté des arbres précédents ([../internet/](../internet/README.md),
 [../cloud.md](../cloud.md)), qu'elle ne modifie pas.
 
 ## Table of Contents
 
-1. [Racine](#racine) _(Lines 20-28)_
-1. [Les quatre ordres](#les-quatre-ordres) _(Lines 31-47)_
-1. [Règles de construction](#règles-de-construction) _(Lines 50-74)_
-1. [Pratique du niveau de détail](#pratique-du-niveau-de-détail) _(Lines 77-87)_
-1. [Fichiers](#fichiers) _(Lines 90-98)_
+1. [Racine](#racine) _(Lines 21-29)_
+1. [Les quatre ordres](#les-quatre-ordres) _(Lines 32-48)_
+1. [Règles de construction](#règles-de-construction) _(Lines 51-75)_
+1. [Pratique du niveau de détail](#pratique-du-niveau-de-détail) _(Lines 78-88)_
+1. [Fichiers](#fichiers) _(Lines 91-99)_
 
 
 ---
 
 ## Racine
-<!-- Lines 20-28 -->
+<!-- Lines 21-29 -->
 
 Posée par l'auteur : **les deux sont des chocs nets, qui agissent sur l'information,
 l'industrie, les affaires et la gouvernance.**
@@ -27,7 +28,7 @@ dernier, comme ce que ses quatre branches additionnent.
 ---
 
 ## Les quatre ordres
-<!-- Lines 31-47 -->
+<!-- Lines 32-48 -->
 
 Le niveau 1 de chaque arbre compte exactement quatre boîtes. Chacune répond à une question sur
 **ce qui change**.
@@ -46,7 +47,7 @@ niveau 2 et les flèches entre ordres.
 ---
 
 ## Règles de construction
-<!-- Lines 50-74 -->
+<!-- Lines 51-75 -->
 
 1. **Partition par ce qui change.** Un changement va dans l'ordre qui répond à sa question, pas
    dans celui de sa cause.
@@ -73,7 +74,7 @@ niveau 2 et les flèches entre ordres.
 ---
 
 ## Pratique du niveau de détail
-<!-- Lines 77-87 -->
+<!-- Lines 78-88 -->
 
 L'arbre est un exercice de niveau de détail
 ([../../../level_of_detail/LOD_CORE.md](../../../level_of_detail/LOD_CORE.md)) :
@@ -86,13 +87,13 @@ L'arbre est un exercice de niveau de détail
 ---
 
 ## Fichiers
-<!-- Lines 90-98 -->
+<!-- Lines 91-99 -->
 
 | dossier | contenu |
 | --- | --- |
 | [internet/](internet/README.md) | Internet 1995-2005 : racine et vue d'ensemble, puis un fichier par ordre |
 | [cloud/](cloud/README.md) | Cloud 2005-2015 : même structure |
-| [reprise_apres_sourcage/](reprise_apres_sourcage/README.md) | Liste de reprise des deux arbres : boîtes à revoir depuis que leurs faits ont été confrontés à une source lue (décision D21) |
+| [reprise_apres_sourcage/](reprise_apres_sourcage/README.md) | Liste de reprise qui a servi à la révision des deux arbres : ce que la confrontation aux sources avait changé, fait par fait (décision D21). Les listes transversales (doublons, sources faibles, intensités, dates de jalons) restent à traiter |
 
 Vérification : `python3 verifier_arbre.py quatre_ordres/internet --check` (et `cloud`), lancé
 depuis `arbre_des_effets/`.

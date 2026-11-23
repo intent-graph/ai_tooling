@@ -1,34 +1,40 @@
 # Arbre des effets en quatre ordres — Internet 1995-2005
 
-Statut : première génération. Changements appuyés sur les faits cités ; causes et poids :
-jugements de l'agent, à relire par un modèle distinct. Cadre : [../README.md](../README.md).
+Statut : deuxième génération, révisée après la confrontation des faits à des sources ouvertes et
+lues (décision D21). Changements appuyés sur les faits cités ; causes et poids : jugements de
+l'agent, relus une fois par un modèle distinct ; les questions laissées à l'auteur sont dans
+« Ouvert ». Cadre : [../README.md](../README.md).
 
 ## Table of Contents
 
-1. [Comment lire](#comment-lire) _(Lines 21-37)_
-1. [INT.0 · Ce qui a changé](#int0--ce-qui-a-changé) _(Lines 40-113)_
-1. [Branches](#branches) _(Lines 116-125)_
-1. [Profil](#profil) _(Lines 128-186)_
-1. [Élagués](#élagués) _(Lines 189-207)_
-1. [Ouvert](#ouvert) _(Lines 210-241)_
-1. [Journal](#journal) _(Lines 244-306)_
+1. [Comment lire](#comment-lire) _(Lines 23-43)_
+1. [INT.0 · Ce qui a changé](#int0--ce-qui-a-changé) _(Lines 46-122)_
+1. [Branches](#branches) _(Lines 125-134)_
+1. [Profil](#profil) _(Lines 137-203)_
+1. [Élagués](#élagués) _(Lines 206-226)_
+1. [Ouvert](#ouvert) _(Lines 229-296)_
+1. [Journal](#journal) _(Lines 299-383)_
 
 
 ---
 
 ## Comment lire
-<!-- Lines 21-37 -->
+<!-- Lines 23-43 -->
 
 - **Cadre** : racine de l'auteur, quatre ordres et leurs questions, règles 1 à 9 :
   [../README.md](../README.md). Syntaxe, poids et vérificateur : [../../README.md](../../README.md).
-- **Une boîte énonce ce que ses enfants additionnent**, avec sa propre certitude : `V` au moins
-  un appui vérifié à la source, `K` appuis à vérifier, `D` disputé. La certitude porte sur le
-  changement ; toute cause est une inférence de l'agent.
+- **Une boîte énonce ce que ses enfants additionnent**, avec sa propre certitude, dérivée
+  des faits qui portent le cœur de son énoncé : `V` ces faits sont vérifiés à la source
+  première ; `A` au moins l'un d'eux est admis sur une source sérieuse lue, aucun n'est sans
+  source ; `D` les sources se contredisent sur ce cœur ; `K` aucun fait sourcé ne le porte, la
+  boîte est alors à sortir de l'arbre (décision D21). La certitude porte sur le changement ;
+  toute cause est une inférence de l'agent.
 - **Causes** : une seule `principale` par boîte ; poids `fort` (sans cette cause, plus de la
   moitié du changement disparaît), `moyen`, `faible` ; `boucle` marque une flèche de retour ;
   `amont` une cause antérieure à la fenêtre ou absente du registre.
 - **Les deux leviers** du choc sont des boîtes comme les autres : INT.2.1 (transmettre ne coûte
-  presque plus rien) en Industrie, INT.4.1 (personne ne filtre l'entrée) en Gouvernance.
+  presque plus rien à l'usager) en Industrie, INT.4.1 (personne ne filtre l'entrée) en
+  Gouvernance.
 - **Entre ordres, au niveau 1**, les flèches vont des leviers vers les usages puis vers la valeur
   (INT.4 → INT.2 → INT.1 → INT.3) ; les flèches de retour y sont marquées `boucle`. Plus bas, une
   flèche de retour n'est marquée `boucle` que si elle ferme un cycle.
@@ -36,29 +42,32 @@ jugements de l'agent, à relire par un modèle distinct. Cadre : [../README.md](
 ---
 
 ## INT.0 · Ce qui a changé
-<!-- Lines 40-113 -->
+<!-- Lines 46-122 -->
 
-De 1995 à 2005, transmettre ne coûte presque plus rien sur un réseau où personne ne filtre l'entrée : les connectés s'écrivent, trouvent et publient presque sans coût, le capital parie puis s'effondre, la valeur quitte les rentes d'accès pour quelques plateformes payées par la publicité, et le droit rattrape les usages sous tutelle américaine ; les grands agrégats économiques de la fenêtre ont leur cause principale ailleurs. Qui : le monde, d'abord les connectés des pays riches · certitude : V
+De 1995 à 2005, transmettre ne coûte presque plus rien à l'usager sur un réseau où personne ne filtre l'entrée : les connectés s'écrivent, trouvent et publient presque sans coût, le capital parie puis s'effondre, les rentes d'accès tombent et la valeur se concentre sur quelques plateformes payées par la publicité, et le droit rattrape les usages, les États-Unis gardant la main sur les ressources critiques ; les grands agrégats économiques de la fenêtre, la productivité et le commerce entre entreprises, ont leur cause principale ailleurs. Qui : le monde, d'abord les connectés des pays riches · certitude : A
 
-Causes : amont (arrêt de l'épine dorsale publique américaine en 1995 ; Web placé dans le domaine public et gouvernance technique par consensus hérités du réseau de recherche ; réseaux privés d'échange de données entre entreprises antérieurs à 1995 ; tendances culturelles antérieures) ; X.INT.01 (fort) ; X.INT.02 (moyen) ; X.INT.03 (moyen) ; X.INT.04 (fort) ; X.INT.05 (moyen) ; X.INT.06 (moyen) ; X.INT.07 (moyen) ; X.INT.08 (moyen) ; X.INT.09 (moyen) ; X.INT.10 (faible) ; X.CLD.02 (faible)
+Causes : amont (arrêt de l'épine dorsale publique américaine en 1995 ; Web placé dans le domaine public et gouvernance technique par consensus hérités du réseau de recherche ; échange de données informatisé entre entreprises, antérieur au Web : premières normes américaines en 1975 ; tendances culturelles antérieures) ; X.INT.01 (fort) ; X.INT.02 (moyen) ; X.INT.03 (moyen) ; X.INT.04 (fort) ; X.INT.05 (moyen) ; X.INT.06 (moyen) ; X.INT.07 (moyen) ; X.INT.08 (moyen) ; X.INT.09 (moyen) ; X.INT.10 (faible) ; X.CLD.02 (faible)
 
-Deux leviers font le choc : transmettre ne coûte presque plus rien, ni selon la distance ni selon
-la durée (INT.2.1), et personne ne possède les protocoles ni ne filtre l'entrée (INT.4.1) ; 73
-feuilles sur 100 y remontent par leurs causes principales. En Information, qui est connecté peut
-s'écrire, trouver, publier et copier presque sans coût, mais l'accès reste inégal et l'attention
-se concentre dès 1997 (INT.1). En Industrie, l'infrastructure devient une industrie privée, les
-organisations se coordonnent par écrit en réseau sans se reconfigurer, et l'emploi informatique
-suit le capital (INT.2). En Affaires, le capital parie puis s'effondre, les rentes fondées sur
-l'accès tombent là où les usagers migrent, et la valeur se reforme sur quelques plateformes
-payées par la publicité (INT.3). En Gouvernance, le droit protège d'abord l'intermédiaire puis
-rattrape les usages avec deux à six ans de retard ; les États-Unis gardent la tutelle des
-ressources critiques, la Chine cloisonne, la sécurité revient après 2001 (INT.4). Vingt feuilles
-ont leur cause principale dans un confondant, dont treize en Industrie : l'accélération de la
-productivité revient surtout à l'ordinateur, la délocalisation des services à la mondialisation
-et au passage à l'an 2000, et le plus gros changement mesuré en dollars, le commerce entre
-entreprises, passe surtout par des réseaux antérieurs au Web (INT.3.6). Le choc est net en
-Information, en Affaires et en Gouvernance ; en Industrie, il l'est pour l'infrastructure et le
-travail de bureau, pas pour les agrégats.
+Deux leviers font le choc : transmettre ne coûte presque plus rien à l'usager (INT.2.1), et
+personne ne possède les protocoles ni ne filtre l'entrée (INT.4.1) ; 73 feuilles sur 99 y
+remontent par leurs causes principales (57 jusqu'à INT.2.1, 4 jusqu'à INT.2.1.1, sa première
+boîte, 12 jusqu'à INT.4.1). En Information, qui est connecté peut s'écrire, trouver, publier et
+copier presque sans coût, mais l'accès s'étend inégalement, l'attention se concentre dès 1997 et
+la traîne s'allonge en variété sans gagner en volume (INT.1). En Industrie, l'infrastructure
+devient une industrie privée, les organisations se coordonnent par écrit en réseau, et l'emploi
+informatique suit le cycle du capital (INT.2). En Affaires, le capital parie puis s'effondre, les
+rentes fondées sur l'accès tombent là où les usagers migrent, et la valeur se concentre sur
+quelques plateformes payées par la publicité (INT.3). En Gouvernance, le droit protège d'abord
+l'intermédiaire puis rattrape les usages avec deux à six ans de retard ; les États-Unis gardent la
+main sur les ressources critiques et les autres la contestent sans l'obtenir, la Chine filtre son
+réseau, les États légifèrent pour la sécurité après 2001 (INT.4). Dix-neuf feuilles ont leur cause
+principale dans un confondant, dont douze en Industrie : l'accélération de la productivité
+revient surtout à l'ordinateur, la délocalisation à la mondialisation et au passage à l'an 2000
+(INT.2.5, INT.2.4.4). Sept s'arrêtent sur une cause antérieure à la fenêtre ou absente du
+registre, dont le plus gros changement mesuré en dollars, le commerce entre entreprises, qui passe
+surtout par l'échange de données informatisé, antérieur au Web (INT.3.6). Le choc est net en
+Information, en Affaires et en Gouvernance ; en Industrie, il l'est pour l'infrastructure et la
+coordination par écrit des organisations, pas pour la productivité.
 
 <!-- GENERE:INT.0:debut -->
 ```mermaid
@@ -112,53 +121,61 @@ flowchart LR
 ---
 
 ## Branches
-<!-- Lines 116-125 -->
+<!-- Lines 125-134 -->
 
 | fichier | ce que dit la branche |
 | --- | --- |
-| [INT.1 · Information](int1_information.md) | Les connectés s'écrivent, trouvent, publient et copient presque sans coût ; l'accès s'étend vite mais inégalement ; tête concentrée et traîne épaisse. |
-| [INT.2 · Industrie](int2_industrie.md) | Transmettre ne coûte presque plus rien ; les bureaux se coordonnent par écrit en réseau ; l'emploi informatique suit le capital ; productivité et délocalisation ont leur cause principale hors du réseau. |
-| [INT.3 · Affaires](int3_affaires.md) | Le capital parie puis s'effondre ; les rentes d'accès tombent ; la valeur se reconcentre sur des plateformes payées par la publicité ; le commerce interentreprises passe par des réseaux antérieurs. |
-| [INT.4 · Gouvernance](int4_gouvernance.md) | Entrée libre ; le droit protège l'intermédiaire puis rattrape les usages ; tutelle américaine contestée ; cloisonnement chinois ; retour de la sécurité. |
+| [INT.1 · Information](int1_information.md) | Les connectés s'écrivent, trouvent, publient et copient presque sans coût ; l'accès s'étend vite mais inégalement ; l'attention se concentre dès 1997 et la traîne s'allonge en variété sans gagner en volume. |
+| [INT.2 · Industrie](int2_industrie.md) | Transmettre ne coûte presque plus rien à l'usager ; les organisations se coordonnent par écrit en réseau ; l'emploi informatique suit le cycle du capital ; productivité et délocalisation ont leur cause principale hors du réseau. |
+| [INT.3 · Affaires](int3_affaires.md) | Le capital parie puis s'effondre ; les rentes d'accès tombent ; la valeur se concentre sur quelques plateformes payées par la publicité ; le commerce interentreprises passe surtout par l'échange de données informatisé, antérieur au Web. |
+| [INT.4 · Gouvernance](int4_gouvernance.md) | Entrée libre ; le droit protège l'intermédiaire puis rattrape les usages ; les États-Unis gardent la main sur les ressources critiques, contestés sans résultat ; la Chine filtre son réseau et limite les capitaux étrangers ; les États légifèrent pour la sécurité après 2001. |
 
 ---
 
 ## Profil
-<!-- Lines 128-186 -->
+<!-- Lines 137-203 -->
 
 Lu sur la sortie du vérificateur (chaînes de causes principales). « Levier » : la chaîne aboutit
-à INT.2.1 ou INT.4.1 ; « hors registre » : à une boîte dont la cause est `amont`.
+à INT.2.1, à INT.4.1 ou à INT.2.1.1 (première boîte du premier levier, dont la cause est `amont`) ;
+« hors registre » : à une autre boîte dont la cause est `amont`. Les quatre feuilles qui s'arrêtent
+à INT.2.1.1 (INT.2.1.1, INT.2.1.2, INT.4.5.1, INT.4.5.3) sont comptées en levier, comme dans la
+première génération ; lues strictement, le levier compte 69 feuilles et le hors-registre 11.
 
 | boîte | boîtes | feuilles | faits cités (F + J) | levier | confondant | hors registre |
 | --- | --- | --- | --- | --- | --- | --- |
-| INT.1 Information | 28 | 21 | 69 + 0 | 17 | 3 (X.INT.02 ×2, X.CLD.02) | 1 |
-| INT.2 Industrie | 48 | 36 | 134 + 5 | 23 | 13 (X.INT.01 ×4, X.INT.03 ×3, X.INT.05 ×2, X.INT.10 ×2, X.INT.06, X.INT.08) | 0 |
-| INT.3 Affaires | 29 | 21 | 87 + 7 | 19 | 1 (X.INT.04) | 1 |
-| INT.4 Gouvernance | 28 | 22 | 58 + 10 | 14 | 3 (X.INT.06, X.INT.07, X.INT.09) | 5 |
-| **total** | 134 avec INT.0 | 100 | 348 / 410 faits, 22 / 93 jalons | 73 | 20 | 7 |
+| INT.1 Information | 28 | 21 | 71 + 0 | 17 | 3 (X.INT.02 ×2, X.CLD.02) | 1 |
+| INT.2 Industrie | 48 | 36 | 142 + 5 | 24 | 12 (X.INT.01 ×4, X.INT.03 ×3, X.INT.10 ×2, X.INT.04, X.INT.05, X.INT.06) | 0 |
+| INT.3 Affaires | 28 | 20 | 88 + 6 | 18 | 1 (X.INT.04) | 1 |
+| INT.4 Gouvernance | 28 | 22 | 61 + 10 | 14 | 3 (X.INT.06, X.INT.07, X.INT.09) | 5 |
+| **total** | 133 avec INT.0 | 99 | 362 / 430 faits, 21 / 93 jalons | 73 | 19 | 7 |
 
-**Mesure.** En personnes touchées, Information domine (un milliard d'internautes) ; en dollars,
-Affaires (capital-risque de 105 milliards par an, commerce interentreprises à plus de 90 % du
-commerce électronique) ; en productivité, le changement d'Industrie est réel mais surtout causé
-par l'ordinateur. L'importance d'un ordre dépend donc de la mesure : aucune n'est retenue seule.
+**Mesure.** En personnes touchées, Information domine (de l'ordre d'un milliard d'internautes en
+2005) ; en dollars, Affaires (capital-risque de 104 milliards en 2000, commerce interentreprises à
+plus de 90 % du commerce électronique) ; en productivité, le changement d'Industrie est réel mais
+surtout causé par l'ordinateur. L'importance d'un ordre dépend donc de la mesure : aucune n'est
+retenue seule.
 
 **Événements découpés entre ordres** (règle 2) :
 
 - Partage de musique : copier gratuitement INT.1.5.1 → maisons de disques INT.3.2.3 → procès
   INT.4.2.4 → disquaires INT.2.4.3.3 → supports physiques INT.2.6.5.
 - Réservation de voyages en ligne : commissions INT.3.2.1 → emploi des agences INT.2.4.3.2.
-- Commerce de détail en ligne : canal INT.3.5.1 → logistique INT.2.4.3.4 → traîne de la vidéo
-  INT.1.6.2 → surplus des usagers INT.3.5.2 ; moratoire fiscal INT.4.2.2 en amont.
+- Commerce de détail en ligne : canal INT.3.5.1 → entreposage et vente à distance INT.2.4.3.4
+  (catégorie combinée, dont le commerce en ligne fait environ un cinquième en 2002) → traîne de
+  la vidéo INT.1.6.2 → surplus des usagers INT.3.5.2 ; moratoire fiscal INT.4.2.2 en amont.
 - Moteur de recherche de 1998 : trouver INT.1.3.1, INT.1.3.2 → mots-clés INT.3.3.2 →
   concentration INT.3.4.2.
-- Haut débit : déploiement INT.2.1.5 → connexion permanente INT.1.1.5 → appareils sous tension
-  INT.2.6.2 ; plan coréen INT.4.4.3.
-- Cycle du capital : pari INT.3.1 → fibre INT.2.1.4.1 → transit bon marché INT.2.1.4.2 ; emploi
+- Haut débit : déploiement INT.2.1.5 → connexion permanente INT.1.1.5 → appareils allumés ou en
+  veille INT.2.6.2 (ce dernier lien, de poids moyen, n'est porté par aucun fait lu) ; plan coréen
+  INT.4.4.3.
+- Cycle du capital : pari INT.3.1 → fibre INT.2.1.4.1 → prix de la capacité et du transit
+  INT.2.1.4.2 (la baisse accompagne la surcapacité, sans qu'elle en soit dite l'effet) ; emploi
   informatique INT.2.4.1 → pénurie INT.2.4.2 → visas INT.4.3.5 ; règles financières INT.4.3.3 →
   travail de contrôle INT.2.4.5.
 - Fracture d'accès : écart INT.1.1.2, INT.1.1.3 → politique INT.4.4.1, G8 INT.4.4.2, sommets
   INT.4.5.3.
-- Navigateur intégré : brique INT.2.2.1 → guerre des navigateurs INT.3.4.1 → procès INT.4.3.2.
+- Navigateur intégré : brique INT.2.2.1 → parts du navigateur intégré INT.3.4.1 → procès
+  INT.4.3.2.
 - Courriel gratuit de 1996 : s'écrire INT.1.2.1 ; gratuit contre attention INT.3.3.1 ; logiciel
   distant INT.2.2.3.
 - Minitel : usagers INT.1.1.6 ; services publics INT.2.3.4.2.
@@ -185,9 +202,9 @@ par l'ordinateur. L'importance d'un ordre dépend donc de la mesure : aucune n'e
 ---
 
 ## Élagués
-<!-- Lines 189-207 -->
+<!-- Lines 206-226 -->
 
-62 faits et 71 jalons ne sont cités par aucune feuille. `doublon` : même énoncé qu'un appui cité
+68 faits et 72 jalons ne sont cités par aucune feuille. `doublon` : même énoncé qu'un appui cité
 (entre crochets).
 
 | raison | identifiants |
@@ -196,7 +213,9 @@ par l'ordinateur. L'importance d'un ordre dépend donc de la mesure : aucune n'e
 | doublon (jalons) | 1994.01 [G2.007, C4.001], 1995.02 [C4.002], 1995.05 [D3.001], 1995.06 [G1.006], 1996.02 [G1.001], 1996.06 [G3.004], 1996.08 [G4.009], 1997.02 [G1.002], 1997.03 [C3.001], 1997.04 [D3.002], 1997.05 [E2.005], 1998.01 [C5.002], 1998.02 [G2.001-002], 1998.03 [E4.001], 1998.04 [G1.003], 1998.05 [G1.004-005], 1998.07 [H3.002], 1998.08 [B5.002], 1999.01 [E4.004], 1999.05 [E3.011], 2000.01 [B3.004], 2000.02 [B2.003], 2000.03 [G1.007], 2000.04 [C5.003], 2000.05 [B1.009], 2000.06 [G1.009], 2000.07 [H1.003], 2000.08 [C4.003], 2000.09 [G3.001], 2000.10 [B4.007], 2000.11 [G6.002], 2000.12 [G4.010], 2001.01 [F2.002], 2001.04 [G4.003, F3.007], 2001.06 [G1.008], 2001.07 [H2.001], 2001.08 [E1.004], 2001.09 [G4.011], 2002.01 [B3.006], 2002.02 [B5.006], 2002.03 [A1.008], 2002.04 [E4.006], 2002.05 [F1.005], 2002.08 [B2.004], 2002.11 [F2.004], 2003.01 [C4.010], 2003.03 [G2.005], 2003.04 [C4.007], 2003.05 [G1.012], 2004.01 [C6.004], 2004.02 [A4.007], 2004.03 [F1.008], 2004.04 [E5.005], 2004.05 [E2.010], 2004.06 [G4.007], 2005.01 [E4.008], 2005.03 [G2.006], 2005.04 [C4.008], 2005.05 [E1.011], 2005.06 [C3.003], 2005.07 [H3.005] |
 | ligne de base | C1.001, C2.001, C3.008, D1.001, F3.010, G5.001 ; jalons 1993.01, 1993.02, 1994.02 |
 | discours | B5.001, C3.013, F1.009, F2.010, F3.001, F3.003, F3.004, F3.006, F4.001, F4.011, F5.009, H1.001, H1.002, H4.001, H4.002, H4.007 ; jalons 1996.07, 1996.09, 1999.06, 1999.07, 2002.07, 2004.07 |
-| contexte exogène | C3.005 (décrit le confondant X.INT.03, chiffré par C3.009-010), D1.012, D4.005, D4.006, E5.003, F4.012, F4.013, H3.009 ; jalon 2003.07 |
+| contexte exogène | C3.005 (décrit le confondant X.INT.03, chiffré par C3.009-010), D1.012, D4.005, D4.006, E5.003, F4.012, F4.013, H3.009, B4.008 (retournement des flux de capitaux de cinq économies asiatiques en 1997 ; le lien avec le déficit courant américain n'est pas dans la ligne, la ligne est sortie de INT.3.1.4) ; jalon 2003.07 |
+| statut `K`, aucune source trouvée (D21) | B3.001, C6.005, D2.010, D4.008 ; jalon 1997.06 |
+| chiffre d'un cabinet d'analystes seul, en attente de la décision de l'auteur | C5.008 (part des navigateurs, statut `K`) |
 | hors fenêtre | F4.015 (2022) |
 | retiré dans le dossier | E3.007 |
 
@@ -206,7 +225,7 @@ Préfixes omis : `F.INT.` pour les faits, `J.INT.` pour les jalons. H4.001-002 e
 ---
 
 ## Ouvert
-<!-- Lines 210-241 -->
+<!-- Lines 229-296 -->
 
 **Changements suggérés, sans fait qui les appuie** (hors de l'arbre) :
 
@@ -223,14 +242,50 @@ Préfixes omis : `F.INT.` pour les faits, `J.INT.` pour les jalons. H4.001-002 e
 5. La part de l'usage du réseau dans la productivité : aucun fait ne la sépare de l'ordinateur
    (F.INT.C1.007, décision D17).
 6. Un transfert de valeur dans le temps, du propriétaire du réseau à l'usager puis au fournisseur
-   de service : une seule mesure du surplus des usagers (2000, INT.3.5.2).
-7. Le prix du transit : baisse certaine, aucune série (F.INT.A1.011, K).
+   de service : deux mesures du surplus des usagers, l'une pour les libraires en ligne en 2000,
+   l'autre pour les services à prix nul en 2002-2011 (INT.3.5.2), sans séquence entre elles.
+7. Le prix du transit sur 1995-2005 : la baisse de long terme est sourcée (F.INT.A1.013, de 1994 à
+   2012), aucune série annuelle ne couvre la fenêtre.
+
+**Cherché et non trouvé** (les boîtes ont été resserrées à ce que les sources portent) :
+
+1. « Ni selon la distance » pour le premier levier (INT.2.1) : cherché deux fois, aucune source
+   ne l'énonce ; le forfait établit un prix qui ne varie pas avec l'usage, non avec la distance
+   (F.INT.A1.014).
+2. Une cause de la baisse du prix de la capacité par la surcapacité de fibre (INT.2.1.4,
+   INT.2.1.4.2) : les sources disent que l'une accompagne l'autre.
+3. « Réseau fermé » pour le service en ligne antérieur au Web (INT.1.1.6) : non porté, et les
+   auteurs cités le contestent ; sont portés la facturation à la minute et l'approbation de chaque
+   serveur par l'État.
+4. Des « réseaux privés » d'échange de données entre entreprises (INT.3.6) : les lignes disent
+   des normes de 1968-1975, non des réseaux privés. Le lien entre l'échange de données déjà
+   installé et le reflux des places de marché (INT.3.6.2) n'a pas été trouvé ; la boîte dit les
+   relations établies entre clients et fournisseurs que la source donne.
+5. Des fermetures de places de marché (INT.3.6.2) : les lignes donnent un compte (1 520 en 2001)
+   et une projection (180 en 2003).
+6. Des modems et des routeurs de ménage restés sous tension (INT.2.6.2) : aucun fait lu ; le lien
+   avec la connexion permanente (INT.1.1.5) reste porté par la seule cause.
+7. Un commerce en ligne seul, séparé de la vente par correspondance avant 2002 (INT.2.4.3.4) :
+   les séries ne le séparent qu'en 2002 ; la cause INT.3.5.1 de cette boîte (principale, fort)
+   n'a pas de source.
+8. Une gratuité des jeux en réseau (INT.1.5) : établie pour la musique seulement.
+
+**En attente de la décision de l'auteur** :
+
+1. Les causes habilitantes de la délocalisation (INT.2.4.4, INT.2.4.4.2, INT.2.4.4.3) : la
+   relecture proposait INT.2.1 en cause principale de INT.2.4.4 et INT.2.4.4.3, forte pour
+   INT.2.4.4.2 ; les `Causes :` restent telles quelles, le réseau la rendant praticable (poids
+   moyen).
+2. Les chiffres de cabinets d'analystes : la part des navigateurs (F.INT.C5.008, statut `K`) reste
+   hors de l'arbre, et INT.3.4.1 garde le titre que ses faits sourcés portent ; F.INT.F5.005,
+   F.INT.D3.002 et F.INT.E5.001 restent cités tels quels.
 
 **Registre** : causes hors registre qui portent des feuilles. Proposition, comme l'arbre
-précédent : X.INT.11 réseaux privés d'échange de données entre entreprises (INT.3.6) ; X.INT.12
-pile de protocoles et gouvernance technique d'origine publique (INT.4.1, INT.2.1). À discuter :
-déréglementation financière (INT.4.3.4), fin du régime de guerre froide (INT.4.6.3), crise
-asiatique (F.INT.B4.008, attribué `co:X.INT.09` dans le dossier, qui désigne la Chine).
+précédent : X.INT.11 échange de données informatisé entre entreprises, antérieur au Web (INT.3.6) ;
+X.INT.12 pile de protocoles et gouvernance technique d'origine publique (INT.4.1, INT.2). À
+discuter : déréglementation financière (INT.4.3.4), fin du régime de contrôle des exportations de
+la guerre froide (INT.4.6.3), réseau né aux États-Unis (INT.4.5.1, INT.4.5.2), crise asiatique
+(F.INT.B4.008, élagué, attribué `co:X.INT.09` dans le dossier, qui désigne la Chine).
 
 **À corriger dans le dossier** : F.INT.A3.003 dit que la fibre « double quasiment » alors que ses
 valeurs donnent +12,5 % ; F.INT.B5.004 attribué `choc`, son jalon J.INT.1999.02 `exo` ;
@@ -240,7 +295,29 @@ valeur de 2000.
 ---
 
 ## Journal
-<!-- Lines 244-306 -->
+<!-- Lines 299-383 -->
+
+**Révision après lecture des sources.** Les faits de l'arbre ont été confrontés à des sources
+ouvertes et lues ; chaque boîte dit désormais ce que ses faits portent, et aucune ne repose sur un
+fait de statut `K`. Les affirmations qui avaient perdu leur fait ont été sourcées de nouveau ou
+resserrées. Le premier levier devient « transmettre ne coûte presque plus rien à l'usager »
+(forfait sans redevance à l'usage contre téléphone interurbain à la minute, chute du prix de la
+capacité en 2000-2002, baisse de long terme du transit), « ni selon la distance » n'ayant trouvé
+aucune source ; le second, « personne ne filtre l'entrée », est sourcé (INT.4.1). La connexion permanente est rétablie
+(INT.1.1.5), le service en ligne antérieur au Web perd « réseau fermé » (INT.1.1.6), l'échange de
+données entre entreprises est dit antérieur au Web et non « réseau privé » (INT.3.6), la baisse du
+prix de la capacité accompagne la surcapacité sans qu'elle en soit dite l'effet (INT.2.1.4), et
+l'énergie des équipements comme la crise californienne reposent sur des mesures lues (INT.2.6.2,
+INT.2.6.4). Des causes ont bougé : le Minitel remonte à INT.2.1 au lieu d'INT.4.1 (INT.1.1.6),
+l'investissement informatique de 2001 a pour cause principale le cycle plutôt que le passage à
+l'an 2000 (INT.2.5.5), la baisse des livraisons de musique sur supports a pour cause principale
+la copie gratuite plutôt que la numérisation des contenus (INT.2.6.5), la dette des opérateurs
+remonte à l'accès plutôt qu'au capital-risque (INT.3.1.3), la concentration du capital-risque dans
+une aire remonte à sa montée plutôt qu'à la concentration des plateformes (INT.3.4.3), et le
+micro-ordinateur est retiré des causes de la fibre et abaissé pour le premier levier (INT.2.1.4,
+INT.2.1.4.2, INT.2.1). Une boîte est fondue : celle du nouvel entrant de la fusion rejoint le Nasdaq
+(INT.3.1.2.1). Six faits et un jalon sortent de l'arbre : quatre faits et le jalon sans
+source (statut `K`), un chiffre de cabinet d'analystes, un fait de contexte exogène.
 
 **Coupe par branche.** Information par activité (accéder, s'écrire, s'informer, publier, copier,
 substrat) : les mêmes personnes vivent tout, la coupe par qui ne partitionnait pas. Industrie par
@@ -262,8 +339,8 @@ pour « session puis permanence » (une seule feuille de faits : INT.1.1.5). Un 
 du fait qu'il répète : le fait est cité, le jalon élagué, sauf s'il ajoute un événement.
 
 **Repris de l'arbre précédent, après relecture des faits** : addition avant substitution ;
-concentration de l'attention avant le classement par liens ; commerce interentreprises par les
-réseaux antérieurs. **Changé** : le cycle du capital est en Affaires, le travail en Industrie,
+concentration de l'attention avant le classement par liens ; commerce interentreprises par
+l'échange de données antérieur au Web. **Changé** : le cycle du capital est en Affaires, le travail en Industrie,
 les leviers sont des boîtes d'ordre et non une branche « racine ».
 
 **Intuition de l'auteur, testée**
@@ -273,11 +350,11 @@ les leviers sont des boîtes d'ordre et non une branche « racine ».
 | Information | facilité d'accéder et de partager | appuyé | INT.1.2, INT.1.3, INT.1.4 |
 | Information | substrat partagé, concentration et longue traîne | appuyé, nuancé | INT.1.6.1 (loi de puissance dès 1997, avant la recherche), INT.1.6.2 (traîne en variété, pas en volume) |
 | Industrie | productivité | en partie | INT.2.5 : accélération réelle, cause principale l'ordinateur (INT.2.5.1, INT.2.5.2) |
-| Industrie | organisation de la production : externalisation, services | en partie | coordination écrite sans reconfiguration (INT.2.3) appuyée ; externalisation et délocalisation (INT.2.4.4) causées surtout par X.INT.03 et X.INT.05 ; glissement vers les services non appuyé (Ouvert 3) |
+| Industrie | organisation de la production : externalisation, services | en partie | coordination écrite en réseau (INT.2.3) appuyée ; externalisation et délocalisation (INT.2.4.4) causées surtout par X.INT.03 et X.INT.05 ; glissement vers les services non appuyé (Ouvert 3) |
 | Industrie | une industrie entière nouvelle | appuyé | accès INT.2.1.1, INT.2.1.3 ; briques INT.2.2 ; emploi INT.2.4.1, qui suit le capital |
 | Affaires | finance | appuyé | INT.3.1, dont la dette des opérateurs INT.3.1.3 |
-| Affaires | ruée sur un territoire | appuyé, transversal | porte d'entrée INT.3.4, fibre INT.2.1.4, détail INT.3.5.1, noms INT.4.5.1 ; la ruée échoue là où le terrain est occupé (INT.3.6.2) |
-| Affaires | valeur du propriétaire du réseau à l'usager puis au fournisseur de service | en partie | bâtisseurs en faillite (INT.3.1.3), plateformes gagnantes (INT.3.4.2), surplus des usagers mesuré une fois (INT.3.5.2) ; la séquence n'est pas établie (Ouvert 6) |
+| Affaires | ruée sur un territoire | appuyé, transversal | porte d'entrée INT.3.4, fibre INT.2.1.4, détail INT.3.5.1, noms INT.4.5.1 ; la ruée reflue là où le terrain est occupé (INT.3.6.2) |
+| Affaires | valeur du propriétaire du réseau à l'usager puis au fournisseur de service | en partie | bâtisseurs en faillite (INT.3.1.3), plateformes en tête de segment (INT.3.4.2), surplus des usagers mesuré deux fois, en 2000 puis en 2002-2011 (INT.3.5.2) ; la séquence n'est pas établie (Ouvert 6) |
 | Gouvernance | impact culturel des États-Unis | non appuyé | seuls faits : cinéma et télévision antérieurs (élagués) ; la domination américaine appuyée est d'infrastructure (INT.4.5) |
 | Gouvernance | régulation dans et entre les États | appuyé | INT.4.2, INT.4.3, INT.4.5, INT.4.6 |
 | Gouvernance | écart de croissance entre adoptants et non adoptants | en partie | écart d'adoption (INT.1.1.3) et de productivité (INT.2.5.4, cause principale X.INT.06) ; pas de fait de croissance (Ouvert 2) |
@@ -291,7 +368,7 @@ mondialisation (INT.2.4.4) confirmée, le réseau la rendant praticable (poids m
 
 - *Tiré, pas poussé* : appuyé. On va chercher : recherche quotidienne (INT.1.3.2), actualité en
   ligne (INT.1.3.3).
-- *Sessions au bureau* : appuyé jusqu'en 2004. Ordinateur domestique (INT.1.1.1), usage au
+- *Sessions au bureau* : appuyé jusqu'en 2004 aux États-Unis. Ordinateur domestique (INT.1.1.1), usage au
   travail selon le métier de bureau (INT.2.3.2) ; la connexion ne devient permanente qu'en fin
   de fenêtre (INT.1.1.5).
 - *Texte et pages* : appuyé. Courriel, messagerie, carnets, encyclopédie (INT.1.2, INT.1.4.1,
