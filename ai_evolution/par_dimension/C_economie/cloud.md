@@ -30,16 +30,16 @@ domaine, pas ici.
    1. [Trajectoire `T.CLD.C4`](#trajectoire-tcldc4) _(Lines 281-296)_
    1. [Narratif](#narratif-3) _(Lines 299-316)_
 1. [C5 Concurrence, concentration et pouvoir de marché](#c5-concurrence-concentration-et-pouvoir-de-marché) _(Lines 319-321)_
-   1. [Faits](#faits-4) _(Lines 324-335)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 338-343)_
-   1. [Trajectoire `T.CLD.C5`](#trajectoire-tcldc5) _(Lines 346-361)_
-   1. [Narratif](#narratif-4) _(Lines 364-378)_
-1. [C6 Répartition des gains et inégalités](#c6-répartition-des-gains-et-inégalités) _(Lines 381-383)_
-   1. [Faits](#faits-5) _(Lines 386-395)_
-   1. [Jalons cités](#jalons-cités-5) _(Lines 398-403)_
-   1. [Trajectoire `T.CLD.C6`](#trajectoire-tcldc6) _(Lines 406-421)_
-   1. [Narratif](#narratif-5) _(Lines 424-440)_
-1. [Sources](#sources) _(Lines 443-488)_
+   1. [Faits](#faits-4) _(Lines 324-337)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 340-345)_
+   1. [Trajectoire `T.CLD.C5`](#trajectoire-tcldc5) _(Lines 348-363)_
+   1. [Narratif](#narratif-4) _(Lines 366-380)_
+1. [C6 Répartition des gains et inégalités](#c6-répartition-des-gains-et-inégalités) _(Lines 383-385)_
+   1. [Faits](#faits-5) _(Lines 388-397)_
+   1. [Jalons cités](#jalons-cités-5) _(Lines 400-405)_
+   1. [Trajectoire `T.CLD.C6`](#trajectoire-tcldc6) _(Lines 408-423)_
+   1. [Narratif](#narratif-5) _(Lines 426-442)_
+1. [Sources](#sources) _(Lines 445-492)_
 
 
 
@@ -264,7 +264,7 @@ le détail politique et géopolitique de cet épisode relève de G4, non dévelo
 | F.CLD.C4.003 | 2013-2015 | US | Chez un grand éditeur de logiciels, la part de l'abonnement dans le chiffre d'affaires passe de 28 % à 50 % puis 67 % entre les exercices 2013, 2014 et 2015, tandis que celle de la vente de produits passe de 61 % à 39 % puis 24 %. | abonnement : 28 % (2013), 50 % (2014), 67 % (2015) du chiffre d'affaires | O2, O4 | choc | [S39] | V |
 | F.CLD.C4.004 | 2012 | US, MONDE | Un réseau social de plus de 900 millions d'usagers actifs mensuels tire 85 % de son chiffre d'affaires 2011 de la publicité et sert ses produits depuis des centres de données possédés ou loués, selon le dossier d'introduction en bourse déposé en mai 2012. | 901 millions d'usagers actifs mensuels (31 mars 2012) ; publicité : 85 % du chiffre d'affaires 2011 | O1, O2, P1, P2, P3 | choc | [S40] | V |
 | F.CLD.C4.005 | 2008-2015 | US | Des plateformes d'hébergement et de transport mettent en relation des offreurs indépendants et des clients depuis une application mobile ; l'une d'elles, lancée en 2008, migre environ un an plus tard son calcul, son stockage et sa base de données vers un fournisseur de capacité louée. | migration environ un an après le lancement (2008) ; environ 200 instances de calcul | O1, M9 | co:X.CLD.08 | [S21] | A |
-| F.CLD.C4.006 | 2013 | US | En 2013, un réseau social tire 89 % de son chiffre d'affaires de la publicité, que les annonceurs ciblent selon des critères démographiques tels que l'âge, le lieu et le sexe. | publicité : 89 % du chiffre d'affaires 2013 (84 % en 2012, 85 % en 2011) | O2, O1 | co:X.CLD.02 | [S22] | V |
+| F.CLD.C4.006 | 2013 | US | En 2013, un réseau social, dont le service est décrit dans son rapport annuel comme « free and available throughout the world », tire 89 % de son chiffre d'affaires de la publicité, que les annonceurs ciblent selon des critères démographiques tels que l'âge, le lieu et le sexe. | publicité : 89 % du chiffre d'affaires 2013 (84 % en 2012, 85 % en 2011) | O2, O1 | co:X.CLD.02 | [S22] | V |
 | F.CLD.C4.007 | 2015-04 | US | Le chiffre d'affaires de l'activité de services en nuage d'un grand fournisseur, publié séparément pour la première fois, révèle un modèle d'affaires à la fois de taille industrielle et fortement rentable, avec une marge d'exploitation nettement supérieure à celle du commerce de détail du même groupe. | 1 566 M$ de chiffre d'affaires, 265 M$ de résultat d'exploitation (T1 2015) | O2 | choc | [S23] | V |
 | F.CLD.C4.008 | 2005 | US | En 2005, des constructeurs historiques proposent du calcul facturé à l'usage : l'un à 1 dollar par heure et par processeur sans engagement préalable, l'autre sur adhésion de 5 000 dollars avec un prix fixé au départ d'après l'usage prévu. | 1 $ par heure et par processeur, sans engagement ; adhésion de 5 000 $ | O2, O4, M9 | exo | [S24] | A |
 
@@ -320,7 +320,7 @@ fois de taille industrielle et fortement rentable [F.CLD.C4.007].
 **Question :** Les marchés se concentrent-ils, et comment la concurrence réagit-elle ?
 
 ### Faits
-<!-- Lines 324-335 -->
+<!-- Lines 324-337 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -332,9 +332,11 @@ fois de taille industrielle et fortement rentable [F.CLD.C4.007].
 | F.CLD.C5.006 | 2012 | US | Un réseau social fixe le 17 mai 2012 le prix de son introduction en bourse à 38 $ l'action, les échanges débutant le 18 mai, alors qu'il déclare 901 millions d'usagers actifs mensuels au 31 mars 2012 ; à la fin de 2012, environ deux tiers des internautes adultes américains disent l'utiliser, contre 16 % pour un service de micromessages et 15 % pour un service de partage d'images. | 901 M d'usagers actifs mensuels (31 mars 2012) ; 38 $ l'action ; environ deux tiers, 16 % et 15 % des internautes américains (fin 2012) | O2, M9 | co:X.CLD.02 | [S20] | V |
 | F.CLD.C5.007 | 2015 | US | Un cabinet d'analystes estime en 2016 que les ventes en ligne aux États-Unis d'une grande plateforme de commerce en ligne passent d'environ 77 Md$ en 2014 à environ 100 Md$ en 2015, soit environ 60 % de la croissance des ventes de détail en ligne du pays cette année-là. | estimation de cabinet d'analystes (artefact) : 77 puis 100 Md$ ; environ 60 % de la croissance (2015) | O2, O1 | co:X.CLD.01 | [S29] | K |
 | F.CLD.C5.008 | 2008 | US | Le 27 octobre 2008, un éditeur de logiciels d'entreprise annonce sa plateforme de calcul et de stockage en nuage, ouverte en préversion aux seuls participants à sa conférence de développeurs, environ deux ans après l'ouverture en bêta, le 24 août 2006, du service de machines virtuelles loué à l'heure d'un détaillant en ligne. | annonce du 27 octobre 2008 ; bêta du service concurrent le 24 août 2006 (environ 26 mois d'écart) | O2, O4 | choc | [S30] | V |
+| F.CLD.C5.009 | 2020 | EU | Dans une étude de marché de 2022, l'autorité néerlandaise des consommateurs et des marchés (ACM) désigne Amazon Web Services, Microsoft Azure et Google Cloud Platform comme les trois grands opérateurs (« hyperscalers ») des services en nuage et, d'après ses estimations de 2020 fondées sur les chiffres d'affaires d'environ neuf opérateurs, attribue 35 à 40 % chacun du marché européen à Amazon Web Services et à Microsoft Azure et 5 à 10 % à Google Cloud Platform, soit 75 à 90 % pour les trois par addition des fourchettes ; elle conclut à un haut degré de concentration de ce marché. | AWS : 35-40 % ; Azure : 35-40 % ; Google : 5-10 % (Europe, 2020) ; somme calculée : 75-90 % | O2, O3, O4 | choc | [S44] | V |
+| F.CLD.C5.010 | 2013-2015 | US | Les ventes nettes du segment Amérique du Nord d'un grand détaillant en ligne passent de 41 410 M$ (2013) à 50 834 M$ (2014) puis 63 708 M$ (2015), alors que le Census Bureau estime les ventes américaines du commerce de détail en ligne à 304,9 Md$ en 2014 (+15,4 %) puis 341,7 Md$ en 2015 (+14,6 %) ; le rapport des premières aux secondes, calculé en ordre de grandeur entre deux séries de périmètres différents, passe d'environ 16 % (2013) à 17 % (2014) puis 19 % (2015). | segment : 41 410 / 50 834 / 63 708 M$ (2013 / 2014 / 2015) ; commerce de détail en ligne américain : environ 264 (calculé) / 304,9 / 341,7 Md$ ; rapport calculé : 15,7 % / 16,7 % / 18,6 % | O2, O1 | co:X.CLD.01 | [S45] | V |
 
 ### Jalons cités
-<!-- Lines 338-343 -->
+<!-- Lines 340-345 -->
 
 `J.CLD.2014.01` (bascule principale : baisses de prix annoncées en quelques jours par trois
 fournisseurs), `J.CLD.2011.02` (panne de plusieurs jours chez un grand fournisseur), `J.CLD.2011.05`
@@ -342,7 +344,7 @@ fournisseurs), `J.CLD.2011.02` (panne de plusieurs jours chez un grand fournisse
 social), `J.CLD.2008.03` (annonce d'une plateforme en nuage par un éditeur de logiciels d'entreprise).
 
 ### Trajectoire `T.CLD.C5`
-<!-- Lines 346-361 -->
+<!-- Lines 348-363 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -360,7 +362,7 @@ social), `J.CLD.2008.03` (annonce d'une plateforme en nuage par un éditeur de l
 | 2015 | banalisation | 1 | Un cabinet d'analystes estime qu'une grande plateforme de commerce en ligne capte environ 60 % de la croissance des ventes en ligne américaines (estimation non confirmée par une source officielle). | F.CLD.C5.007 |
 
 ### Narratif
-<!-- Lines 364-378 -->
+<!-- Lines 366-380 -->
 
 Un éditeur de logiciels d'entreprise annonce en octobre 2008 une plateforme de calcul et de stockage en
 nuage, environ deux ans après l'ouverture du service de machines virtuelles d'un détaillant en ligne, et une
@@ -377,12 +379,12 @@ capte environ 60 % de la croissance des ventes en ligne américaines de 2015 [F.
 ---
 
 ## C6 Répartition des gains et inégalités
-<!-- Lines 381-383 -->
+<!-- Lines 383-385 -->
 
 **Question :** Qui capte les gains : quelles firmes, quels territoires, quels ménages ?
 
 ### Faits
-<!-- Lines 386-395 -->
+<!-- Lines 388-397 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -394,7 +396,7 @@ capte environ 60 % de la croissance des ventes en ligne américaines de 2015 [F.
 | F.CLD.C6.006 | 1987-2015 | US | Selon les statistiques industrielles du service statistique du ministère américain du Travail, la part du travail dans la production recule de 1987 à 2015 dans les industries de l'information les plus récentes, de 23 points de pourcentage pour l'édition de logiciels et de 16 points pour les opérateurs de télécommunications sans fil, et l'information figure parmi les secteurs aux baisses de cette part les plus fortes ; le détail salarial relève de D4, pas de cette sous-dimension. | édition de logiciels : -23 points ; télécommunications sans fil : -16 points (1987-2015) | O2, M9 | choc | [S42] | V |
 
 ### Jalons cités
-<!-- Lines 398-403 -->
+<!-- Lines 400-405 -->
 
 `J.CLD.2015.05` (bascule principale : la dépense en capital des plus grands opérateurs dépasse
 celle du reste de l'industrie informatique réunie), `J.CLD.2015.01` (première publication séparée
@@ -402,7 +404,7 @@ du chiffre d'affaires et de la marge cloud), `J.CLD.2012.02` (entrée en bourse 
 de plus de 900 millions d'usagers actifs mensuels).
 
 ### Trajectoire `T.CLD.C6`
-<!-- Lines 406-421 -->
+<!-- Lines 408-423 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -420,7 +422,7 @@ de plus de 900 millions d'usagers actifs mensuels).
 | 2015 | banalisation | 3 | La dépense en capital des plus grands opérateurs dépasse celle du reste de l'industrie informatique réunie ; la marge du segment cloud d'un grand fournisseur dépasse nettement celle de son segment Amérique du Nord ; cinq grandes entreprises technologiques figurent parmi les dix plus fortes contributions à la performance de l'indice boursier large. | F.CLD.C6.001, F.CLD.C6.002, F.CLD.C6.005, J.CLD.2015.05, J.CLD.2015.01 |
 
 ### Narratif
-<!-- Lines 424-440 -->
+<!-- Lines 426-442 -->
 
 Les gains du choc cloud se concentrent sur un très petit nombre de firmes : à t0+10, la dépense en
 capital des quelques plus grands opérateurs mondiaux dépasse celle du reste de l'industrie informatique
@@ -439,7 +441,7 @@ contrepartie salariale relève de D4, non développée ici [F.CLD.C6.006].
 ---
 
 ## Sources
-<!-- Lines 443-488 -->
+<!-- Lines 445-492 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -464,7 +466,7 @@ contrepartie salariale relève de D4, non développée ici [F.CLD.C6.006].
 | [S19] | off | salesforce.com inc., communiqué du 25 février 2009 (Form 8-K, SEC, https://www.sec.gov/Archives/edgar/data/0001108524/000119312509037445/dex991.htm) ; salesforce.com inc., rapport annuel (Form 10-K) de l'exercice clos le 31 janvier 2005, SEC, https://www.sec.gov/Archives/edgar/data/0001108524/000119312505061027/d10k.htm | Ouverts et lus. Communiqué : sous-titre « First Enterprise Cloud Computing Company to Achieve Fiscal Year Revenue of One Billion Dollars » ; l'éditeur « reported revenue of approximately $1.077 billion, an increase of 44% from the prior year » ; le caractère de « premier » est l'affirmation de l'éditeur. 10-K de l'exercice 2005 (WebFetch, octets 100 000 à 200 000) : « Total revenues were $176.4 million for fiscal 2005, compared to $96.0 million during fiscal 2004 » ; tableau par zone, en k$ : 176 375 (2005), 96 023 (2004), 50 991 (2003). Non lu : exercices 2005 à 2008 pris un à un ; l'ancienne clause « démontré dès 2003 » est remplacée par les chiffres de 2003 et 2004. |
 | [S20] | off | Facebook Inc., communiqué « Facebook Announces Pricing of Initial Public Offering », 17 mai 2012, https://about.fb.com/news/2012/05/facebook-announces-pricing-of-initial-public-offering/ ; Facebook Inc., Form S-1/A, 3 mai 2012 (même document que [S40]) ; Pew Research Center, Duggan, M. et Brenner, J., « The Demographics of Social Media Users — 2012 », 14 février 2013, https://www.pewresearch.org/internet/2013/02/14/social-networking-site-users | Ouverts et lus (WebFetch). Communiqué : « MENLO PARK, Calif., May 17, 2012 » ; « a price to the public of $38 per share » ; 421 233 615 actions ; symbole « FB » au « NASDAQ Global Select Market » ; échanges prévus le 18 mai 2012. Chiffre de 901 millions d'usagers actifs mensuels au 31 mars 2012 : lu dans le S-1/A par un passage antérieur, voir [S40] ; non rouvert ici. Pew, enquête nationale du 14 novembre au 9 décembre 2012, 1 802 internautes : « two-thirds of online adults say that they are Facebook users » ; Twitter « currently standing at 16% » ; Pinterest « has attracted 15% of internet users ». Le texte ne chiffre pas deux tiers au point près (le chiffre de 67 % vient d'un résultat de recherche, non lu). Les clauses « illustre la concentration de l'audience » et « concomitant avec la concentration du marché de la capacité louée » sont retirées : aucune source lue ne les énonce. |
 | [S21] | stat | Pew Research Center, Smith, A., « Shared, Collaborative and On Demand: The New Digital Economy » (introduction), 19 mai 2016, https://www.pewresearch.org/internet/2016/05/19/the-new-digital-economy-introduction/ ; Amazon Web Services, étude de cas Airbnb, https://aws.amazon.com/solutions/case-studies/airbnb-case-study | Ouverts et lus (WebFetch). Pew : ces services « function as a platform for connecting excess goods or capacity », les personnes au contact des clients sont des « so-called 1099 workers (a reference to the tax form that independent contractors receive each year) » « who are not employed by the service itself », et l'usager les sollicite « from a smartphone app » ; la page ne date pas ces services et ne parle pas du nuage. Étude de cas du fournisseur (page d'un fournisseur sur son client, retenue pour ce que ce client a fait) : migration « a year after Airbnb launched », l'entreprise ayant commencé en 2008 ; environ 200 instances EC2, sauvegardes et environ 10 To de photos sur S3, base MySQL sur RDS ; la page ne donne pas de date de migration. Source faible : la plage 2008-2015 est celle de l'ancien énoncé, le rapport de Pew date de 2016. Non retrouvé : toute source sur la livraison par plateforme et sur le paiement porté par des services en nuage (clauses retirées). |
-| [S22] | off | Facebook Inc., rapport annuel (Form 10-K) de l'exercice clos le 31 décembre 2013, SEC, https://www.sec.gov/Archives/edgar/data/0001326801/000132680114000007/fb-12312013x10k.htm | Ouvert (WebFetch, octets 0 à 100 000 du document) et lu : « For 2013, 2012, and 2011, advertising accounted for 89%, 84% and 85%, respectively, of our revenue » ; « Marketers can target their ads to people on Facebook based on demographic factors such as age, location, gender, » (la phrase est tronquée par l'outil). Non trouvé : toute source ouverte disant que la monétisation par la donnée est devenue un second modèle de revenu distinct de la publicité simple, ou qu'elle concerne de nombreux services gratuits ; le document de l'OCDE sur l'économie des données personnelles (Digital Economy Papers n° 220, 2013) n'a pu être ouvert (403) et seul son résumé a été lu : ces clauses sont retirées. |
+| [S22] | off | Facebook Inc., rapport annuel (Form 10-K) de l'exercice clos le 31 décembre 2013, SEC, https://www.sec.gov/Archives/edgar/data/0001326801/000132680114000007/fb-12312013x10k.htm | Ouvert (WebFetch, octets 0 à 100 000 du document) et lu : « For 2013, 2012, and 2011, advertising accounted for 89%, 84% and 85%, respectively, of our revenue » ; « Marketers can target their ads to people on Facebook based on demographic factors such as age, location, gender, » (la phrase est tronquée par l'outil). Passage relu en session 06_cld_c_b (Item 1, « Our Products », Facebook) : « Facebook is free and available throughout the world » ; « We generate the substantial majority of our revenue from selling advertising placements to marketers ». Non trouvé : toute source ouverte disant que la monétisation par la donnée est devenue un second modèle de revenu distinct de la publicité simple, ou qu'elle concerne de nombreux services gratuits ; le document de l'OCDE sur l'économie des données personnelles (Digital Economy Papers n° 220, 2013) n'a pu être ouvert (403) et seul son résumé a été lu : ces clauses sont retirées. |
 | [S23] | off | Amazon.com Inc., rapport trimestriel (Form 10-Q, SEC), premier trimestre 2015, première publication séparée du segment Amazon Web Services ; accession 0001018724-15-000038 | Reprise de [S48] de `par_annee/cloud_2005_2015.md` et `A_industrie/cloud.md`, déjà vérifiée sur EDGAR : chiffre d'affaires AWS 1 566 M$ (T1 2015) contre 1 050 M$ (T1 2014), résultat d'exploitation 265 M$ (T1 2015). |
 | [S24] | presse | Government Computer News, repris par Route Fifty, « IBM, Sun unveil utility computing services », 15 mars 2005, https://route-fifty.com/digital-government/2005/03/ibm-sun-unveil-utility-computing-services/306104 | Ouvert et lu (WebFetch). Sun, service ouvert « last month » : paiement à l'usage sur un portail web, « $1 for per hour for every processor » et 1 $ par gigaoctet et par mois, service qui « requires no upfront commitment from the customer ». IBM (Deep Computing Capacity on Demand) : « initial membership » de 5 000 $, prix fixé au début du contrat d'après l'usage prévu, par exemple environ 10 000 $ pour 512 processeurs pendant une semaine ; aucune durée de contrat n'est donnée. L'ancienne clause sur un « montage contractuel pluriannuel » (HP, IBM, Sun) n'est pas étayée, et contredite pour Sun ; l'usage du vocabulaire « à la demande » et « utilitaire » par IBM, HP et Sun n'a pas été lu à la source. HP n'a pas été trouvé. |
 | [S25] | acad | Armbrust, M. et al., « A View of Cloud Computing », Communications of the ACM, vol. 53, n° 4, avril 2010 (même référence que [S8]) ; Autoriteit Consument & Markt (Pays-Bas), Market Study Cloud services, ACM/INT/440323, 2022, https://acm.nl/system/files/documents/public-market-study-cloud-services.pdf | Deux PDF ouverts (WebFetch) et lus en local. Armbrust : « the construction and operation of extremely large-scale, commodity-computer data centers at low-cost locations was the key necessary enabler of cloud computing, for they uncovered the factors of 5 to 7 decrease in cost of electricity, network bandwidth, operations, software, and hardware available at these very large economies of scale » ; « Except for extremely large data centers of hundreds of thousands of machines, such as those that might be operated by Google or Microsoft, most data centers enjoy only a subset of the potential advantages of public clouds ». ACM (2022) : « ACM expects the consolidation of the market for cloud services to continue as a result of, among other reasons, economies of scale and network effects. It is difficult for smaller players to compete effectively with large integrated providers » ; au § 5.4, « Due to the major economies of scale, large cloud providers might be expected to make entry difficult. However, [...] lock-in [...] provides space for other providers in this relatively small niche market ». L'étude de 2022 décrit un état postérieur à la fenêtre ; aucune source de 2005-2015 ne chiffre une barrière à l'entrée ; l'ancienne clause « indépendamment de la qualité du service offert » est retirée. |
@@ -486,3 +488,5 @@ contrepartie salariale relève de D4, non développée ici [F.CLD.C6.006].
 | [S41] | off | Amazon.com Inc., rapport trimestriel (Form 10-Q, SEC), trimestre clos le 31 mars 2015, https://www.sec.gov/Archives/edgar/data/1018724/000101872415000038/amzn-20150331x10q.htm | Ouvert et lu (WebFetch, octets 0 à 100 000 sur 160 531), note sur l'information sectorielle, trois mois clos le 31 mars, en M$ : chiffre d'affaires et résultat d'exploitation 2015 (2014) : Amérique du Nord 13 406 et 517 (10 808 et 290) ; International 7 745 et -76 (7 883 et -33) ; AWS 1 566 et 265 (1 050 et 245). « Beginning in the first quarter of 2015, we changed our reportable segments to North America, International, and AWS. » Marges calculées : 16,9 % (AWS), 3,9 % (Amérique du Nord). Les 60 531 derniers caractères du document n'ont pas été lus. L'ancienne clause sur l'écart de rentabilité entre firmes de tête et reste de l'économie sur 2007-2015 est retirée : aucune source lue ne la porte. |
 | [S42] | stat | U.S. Bureau of Labor Statistics, Brill, M., Holman, C., Morris, C., Raichoudhary, R. et Yosif, N., « Understanding the labor productivity and compensation gap », Beyond the Numbers, vol. 6, n° 6, juin 2017, https://www.bls.gov/opub/btn/volume-6/pdf/understanding-the-labor-productivity-and-compensation-gap.pdf | PDF ouvert (WebFetch) et lu en local. 183 industries, 1987-2015. « The largest declines in labor share were in newer, information technology-related industries such as software publishing and wireless telecommunications carriers, where labor share declined by 23 and 16 percentage points respectively » ; « Sectors with the strongest declines in labor share included manufacturing, information, retail trade, and transportation and warehousing ». La part est celle du travail dans la production de l'industrie (hors transactions intra-industrie), non dans la valeur ajoutée ; la source dit que les causes de la baisse restent incertaines : la clause « hausse de la part du capital dans la valeur ajoutée » est retirée. La période est 1987-2015, non 2005-2015. |
 | [S43] | acad | Brookings Institution, Muro, M. et Liu, S., « Tech in metros: The strong are getting stronger », 8 mars 2017 (d'abord paru dans TechCrunch), https://www.brookings.edu/articles/tech-in-metros-the-strong-are-getting-stronger | Ouvert et lu (WebFetch ; l'outil renvoie un résumé de la page). « a whopping 46 percent of all U.S. digital services jobs cluster in just 10 of nation's largest metropolitan areas » ; « 86 of the nation's largest 100 metros have either seen their share of the national sector go sideways [...] » depuis 2010 ; « digital services » = édition de logiciels, traitement et hébergement de données, conception de systèmes informatiques, édition et recherche sur le web ; San Francisco +67 000 et San Jose plus de 51 000 emplois de 2010 à 2015. Le texte ne donne pas d'année pour le chiffre de 46 % (légendes des graphiques : 2010-2015). Étude d'un centre de recherche sur l'emploi, non sur les gains ni sur les sièges des exploitants de capacité louée : ces clauses sont retirées. |
+| [S44] | off | Autoriteit Consument & Markt (Pays-Bas), Market Study Cloud services, ACM/INT/440323, 2022, https://acm.nl/system/files/documents/public-market-study-cloud-services.pdf (même document que [S25]) | PDF ouvert (WebFetch) et lu en local (pdftotext), résumé et section sur les parts de marché (p. 33-34 sur 78). Résumé : « the two largest competitors, Microsoft Azure and Amazon Web Services (AWS), both in the Netherlands and in Europe, have very large market shares on the IaaS and PaaS layers (both of them have market shares of 35 to 40 percent). Google is the third competitor in the market, but a very strong one. There is a high degree of concentration in the market for cloud services. » Section 4.2.1 : « There are three large operators that provide cloud services, namely Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform (GCP). These three operators are also known as the hyperscalers. » Estimations de l'ACM pour 2020 (demande de chiffres d'affaires 2019 et 2020 à « some nine operators in the Dutch market », marché des services en nuage hors logiciels de bureautique) : Europe, « AWS and Azure both have market shares of between 35% and 40%. GCP and Oracle follow AWS and Azure [...] with a market share of between 5% and 10% » ; Pays-Bas, Azure 40-45 %, AWS 30-35 %, GCP et Oracle 5-10 %. Les parts sont des parts de chiffre d'affaires, non de capacité installée ; la somme 75-90 % est calculée ici par addition des fourchettes. Précautions : étude postérieure à la fenêtre 2005-2015 (données de 2020) ; l'ACM note que sa propre fourchette est partielle (la part d'Azure peut être sous-estimée) ; elle cite aussi des parts mondiales de Canalys (AWS 32 %, Microsoft 19 %, Google 7 % au premier semestre 2021) et de Gartner, non reprises ici (chiffres de cabinets d'analystes). Aucune source ouverte ne chiffre ces parts en 2015 : une recherche n'a donné que le résumé de la décision finale de la Competition and Markets Authority du Royaume-Uni (31 juillet 2025, PDF lu : Microsoft et AWS chacun [30-40] % de l'offre d'infrastructure du Royaume-Uni et de l'Espace économique européen en 2024, Google [5-10] %, « The IaaS market is highly concentrated »), qui va dans le même sens. |
+| [S45] | off | Amazon.com Inc., rapport annuel (Form 10-K, SEC) de l'exercice clos le 31 décembre 2015, https://www.sec.gov/Archives/edgar/data/1018724/000101872416000172/amzn-20151231x10k.htm ; U.S. Census Bureau, « Quarterly Retail E-Commerce Sales, 4th Quarter 2015 », communiqué du 17 février 2016, https://www2.census.gov/retail/releases/historical/ecomm/15q4.pdf ; U.S. Census Bureau, « Quarterly Retail E-Commerce Sales, 4th Quarter 2014 », communiqué du 17 février 2015, https://www2.census.gov/retail/releases/historical/ecomm/14q4.pdf | Ouverts et lus (10-K par WebFetch, section des résultats d'exploitation, octets 100 000 à 152 629 ; deux communiqués PDF lus en local avec pdftotext). 10-K : ventes nettes par segment, en M$, 2013 / 2014 / 2015 : Amérique du Nord 41 410 / 50 834 / 63 708 ; International 29 934 / 33 510 / 35 418 ; AWS 3 108 / 4 644 / 7 880 ; total 74 452 / 88 988 / 107 006. Census 2015 : « Total e-commerce sales for 2015 were estimated at $341.7 billion, an increase of 14.6 percent (±0.9%) from 2014 » ; Census 2014 : « Total e-commerce sales for 2014 were estimated at $304.9 billion, an increase of 15.4 percent (±2.3%) from 2013 » ; le chiffre de 2013 (environ 264 Md$) est calculé ici à partir de ce taux. Rapports calculés : 41,410 / 264,2 = 15,7 % ; 50,834 / 304,9 = 16,7 % ; 63,708 / 341,7 = 18,6 %. Précautions : deux estimations préliminaires de millésimes différents (le Census a annoncé leur révision) ; le segment Amérique du Nord du détaillant est un agrégat géographique dont le périmètre exact (pays inclus, traitement des ventes de vendeurs tiers) n'a pas été lu : le rapport est un ordre de grandeur, non une part de marché mesurée. La note sur l'information sectorielle (ventes par pays) du 10-K n'était pas dans la partie lue. Cet énoncé remplace pour le sens, sans le modifier, F.CLD.C5.007 (estimation de cabinet d'analystes, `K`). |

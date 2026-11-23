@@ -10,26 +10,26 @@ de l'hypothèse H5 (00_these_et_methode.md). La comparaison avec l'autre choc es
 ## Table of Contents
 
 1. [H1 Consommation et efficacité de l'appareil numérique](#h1-consommation-et-efficacité-de-lappareil-numérique) _(Lines 40-43)_
-   1. [Faits](#faits) _(Lines 46-58)_
-   1. [Jalons cités](#jalons-cités) _(Lines 61-64)_
-   1. [Trajectoire `T.INT.H1`](#trajectoire-tinth1) _(Lines 67-82)_
-   1. [Narratif](#narratif) _(Lines 85-99)_
-1. [H2 Énergie comme contrainte et facteur de localisation](#h2-énergie-comme-contrainte-et-facteur-de-localisation) _(Lines 102-105)_
-   1. [Faits](#faits-1) _(Lines 108-117)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 120-123)_
-   1. [Trajectoire `T.INT.H2`](#trajectoire-tinth2) _(Lines 126-141)_
-   1. [Narratif](#narratif-1) _(Lines 144-157)_
-1. [H3 Contexte énergétique macro : prix, mix, abondance](#h3-contexte-énergétique-macro--prix-mix-abondance) _(Lines 160-163)_
-   1. [Faits](#faits-2) _(Lines 166-178)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 181-184)_
-   1. [Trajectoire `T.INT.H3`](#trajectoire-tinth3) _(Lines 187-202)_
-   1. [Narratif](#narratif-2) _(Lines 205-222)_
-1. [H4 Effets du choc sur l'énergie du reste de l'économie](#h4-effets-du-choc-sur-lénergie-du-reste-de-léconomie) _(Lines 225-227)_
-   1. [Faits](#faits-3) _(Lines 230-240)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 243-246)_
-   1. [Trajectoire `T.INT.H4`](#trajectoire-tinth4) _(Lines 249-264)_
-   1. [Narratif](#narratif-3) _(Lines 267-282)_
-1. [Sources](#sources) _(Lines 285-308)_
+   1. [Faits](#faits) _(Lines 46-61)_
+   1. [Jalons cités](#jalons-cités) _(Lines 64-67)_
+   1. [Trajectoire `T.INT.H1`](#trajectoire-tinth1) _(Lines 70-85)_
+   1. [Narratif](#narratif) _(Lines 88-102)_
+1. [H2 Énergie comme contrainte et facteur de localisation](#h2-énergie-comme-contrainte-et-facteur-de-localisation) _(Lines 105-108)_
+   1. [Faits](#faits-1) _(Lines 111-122)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 125-128)_
+   1. [Trajectoire `T.INT.H2`](#trajectoire-tinth2) _(Lines 131-146)_
+   1. [Narratif](#narratif-1) _(Lines 149-162)_
+1. [H3 Contexte énergétique macro : prix, mix, abondance](#h3-contexte-énergétique-macro--prix-mix-abondance) _(Lines 165-168)_
+   1. [Faits](#faits-2) _(Lines 171-183)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 186-189)_
+   1. [Trajectoire `T.INT.H3`](#trajectoire-tinth3) _(Lines 192-207)_
+   1. [Narratif](#narratif-2) _(Lines 210-227)_
+1. [H4 Effets du choc sur l'énergie du reste de l'économie](#h4-effets-du-choc-sur-lénergie-du-reste-de-léconomie) _(Lines 230-232)_
+   1. [Faits](#faits-3) _(Lines 235-245)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 248-251)_
+   1. [Trajectoire `T.INT.H4`](#trajectoire-tinth4) _(Lines 254-269)_
+   1. [Narratif](#narratif-3) _(Lines 272-287)_
+1. [Sources](#sources) _(Lines 290-316)_
 
 
 
@@ -42,7 +42,7 @@ de l'hypothèse H5 (00_these_et_methode.md). La comparaison avec l'autre choc es
 rythme l'efficacité par unité de service progresse-t-elle ?
 
 ### Faits
-<!-- Lines 46-58 -->
+<!-- Lines 46-61 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -55,15 +55,18 @@ rythme l'efficacité par unité de service progresse-t-elle ?
 | F.INT.H1.007 | 2000-2006 | US | Selon le rapport de l'EPA remis au Congrès en 2007, l'électricité consommée en 2006 par les serveurs et les centres de données américains, infrastructure d'alimentation et de refroidissement comprise, est estimée à plus du double de celle de 2000. | environ 61 milliards de kWh en 2006, soit 1,5 % de l'électricité américaine ; plus du double de 2000 (estimation) | O3, O6 | choc | [S4] | V |
 | F.INT.H1.008 | 1992-2000 | US | L'EPA lance en juin 1992 le programme Energy Star pour les ordinateurs et les moniteurs, avec huit fabricants partenaires et un seuil de 30 watts ou moins en mode de basse consommation ; les exigences relatives aux écrans sont révisées en 1995, 1998 et 1999, celles relatives aux ordinateurs en 1999 et 2000. | ≤ 30 W en basse consommation (1992) | P3, M4, O2 | co:X.INT.01 | [S19] | V |
 | F.INT.H1.009 | 2002-2005 | US | La part des utilisateurs d'Internet à domicile américains qui disposent d'un haut débit chez eux passe de 24 % en 2002 à 42 % en mai 2004, puis à 50 % en décembre 2004 et à 53 % en mai 2005. | 24 % (2002) → 42 % (mai 2004) → 50 % (déc. 2004) → 53 % (mai 2005) des utilisateurs d'Internet à domicile | P3, P5, O3 | choc | [S20] | V |
+| F.INT.H1.010 | 1999 | US | Fin 1999, selon les mesures et enquêtes du Lawrence Berkeley National Laboratory, 35 % des ordinateurs de bureau des entreprises et de l'industrie sont allumés la nuit et le week-end (65 % sont éteints, d'après Nordman et al. 2000) et 73 % des imprimantes laser sont allumées la nuit ; ces équipements sont laissés allumés la nuit plus souvent que le laboratoire ne l'avait prévu en 1995, et l'arrêt complet de nuit des équipements qui n'ont pas à fonctionner la nuit économiserait 7 TWh par an. | 35 % des ordinateurs de bureau allumés la nuit ; 73 % des imprimantes laser ; 7 TWh/an d'économie potentielle | M4, O4 | co:X.INT.01 | [S15] | V |
+| F.INT.H1.011 | 1999 | US | Fin 1999, 4 % (3 TWh par an) de l'énergie consommée par les équipements de bureau et de réseau américains l'est en mode éteint, 86 % (64 TWh par an) en mode actif, sur un total d'environ 74 TWh par an. | 4 % (3 TWh/an) en mode éteint ; 86 % (64 TWh/an) en mode actif | M4, O4, P3 | co:X.INT.01 | [S15] | V |
+| F.INT.H1.012 | 2000 | US | Dans dix logements du nord de la Californie mesurés par le Lawrence Berkeley National Laboratory et l'université de Californie à Berkeley, la consommation totale en veille va de 14 à 169 W, avec une moyenne de 67 W, soit 5 à 26 % de l'électricité annuelle du logement ; les téléviseurs, les décodeurs et les imprimantes ont les plus fortes pertes en veille ; les auteurs rappellent que des études allemandes, japonaises, néerlandaises et américaines situent la veille jusqu'à 10 % de l'électricité résidentielle nationale. | 14-169 W (moyenne 67 W), 5-26 % de l'électricité annuelle, dans dix logements | P3, O6 | co:X.INT.01 | [S22] | V |
 
 ### Jalons cités
-<!-- Lines 61-64 -->
+<!-- Lines 64-67 -->
 
 `J.INT.1999.07` (affirmation de 1999), `J.INT.2000.07` (mesure de 2000, bascule principale),
 `J.INT.2004.04` (haut débit à 50 % des utilisateurs d'Internet à domicile américains).
 
 ### Trajectoire `T.INT.H1`
-<!-- Lines 67-82 -->
+<!-- Lines 70-85 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -81,7 +84,7 @@ rythme l'efficacité par unité de service progresse-t-elle ?
 | 2005 | banalisation | 1 | Fin de fenêtre : la consommation des centres de données a doublé depuis 2000, sans alarme publique comparable à celle de 1999. | F.INT.H1.006 |
 
 ### Narratif
-<!-- Lines 85-99 -->
+<!-- Lines 88-102 -->
 
 Le sujet énergétique de l'appareil numérique s'ouvre par une affirmation non mesurée en 1999
 [F.INT.H1.001], reprise jusqu'au Congrès [F.INT.H1.002], avant qu'une mesure de laboratoire ne la
@@ -98,13 +101,13 @@ croissance réelle mais discrète de la consommation jusqu'en 2005 [F.INT.H1.004
 ---
 
 ## H2 Énergie comme contrainte et facteur de localisation
-<!-- Lines 102-105 -->
+<!-- Lines 105-108 -->
 
 **Question :** Où et pourquoi les usines s'installent-elles ; l'accès à l'électricité borne-t-il
 la croissance ?
 
 ### Faits
-<!-- Lines 108-117 -->
+<!-- Lines 111-122 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -114,15 +117,17 @@ la croissance ?
 | F.INT.H2.004 | 2001 | US | Une synthèse d'une institution monétaire internationale (septembre 2001) attribue la crise californienne au décalage entre offre et demande, aux défauts de conception du marché de gros et à la contrainte réglementaire sur les prix de détail, et ne cite ni l'informatique, ni Internet, ni les centres d'hébergement. | qualitatif | O6 | exo | [S8] | V |
 | F.INT.H2.005 | 2001 | US | Selon un article d'août 2001 sur la Silicon Valley, un fournisseur d'électricité et ses grands clients, dont un fabricant de microprocesseurs, forment un groupe de réduction de charge : les clients réduisent volontairement au moins 10 % de leur charge, en échange de la protection de leurs circuits critiques contre les coupures tournantes. | au moins 10 % de la charge (réduction volontaire) | M9, O4 | co:X.INT.10 | [S6] | A |
 | F.INT.H2.006 | 1992 | US | L'histoire des centres de données de la Virginie du Nord commence au début des années 1990 avec l'établissement dans la région du point d'échange Internet MAE-East, créé en 1992. | qualitatif | O1, O3 | choc | [S21] | A |
+| F.INT.H2.007 | 2001-2003 | US | Des mesures publiées par le Lawrence Berkeley National Laboratory sur un centre de données de la Baie de San Francisco établissent que les estimations courantes de puissance des centres de données sont très exagérées : multiplier la densité de 1 100 W/m² couramment citée par la surface du bâtiment donne 12,5 MW, environ 14 fois les 0,9 MW que l'installation consomme pour le centre de données, et la densité de conception (646 W/m²) donne 7,5 MW, plus de 8 fois ; les auteurs écrivent que ces chiffres entretiennent « the urban legend that "the Internet" is a huge consumer of electricity ». | 12,5 MW estimés contre 0,9 MW mesurés (environ 14 fois) ; 7,5 MW avec la densité de conception (plus de 8 fois) | O3, O7 | co:X.INT.10 | [S24] | V |
+| F.INT.H2.008 | 2002 | US | En juillet 2002, le Lawrence Berkeley National Laboratory écrit que l'un des plus grands malentendus sur la crise électrique de 2001 est le rôle prêté à l'énergie consommée par les ordinateurs, et que les centres de données de type hébergement consomment en 2000 moins de 500 MW, soit 0,12 % de l'électricité des États-Unis. | moins de 500 MW ; 0,12 % de l'électricité américaine (2000) | O3, O7 | co:X.INT.10 | [S25] | A |
 
 ### Jalons cités
-<!-- Lines 120-123 -->
+<!-- Lines 125-128 -->
 
 `J.INT.2001.07` (crise électrique californienne, bascule principale), `J.INT.1998.07`
 (pétrole bon marché, contexte).
 
 ### Trajectoire `T.INT.H2`
-<!-- Lines 126-141 -->
+<!-- Lines 131-146 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -140,7 +145,7 @@ la croissance ?
 | 2005 | banalisation | 0 | Fin de fenêtre : aucune autre contrainte énergétique de localisation documentée que l'épisode californien. | |
 
 ### Narratif
-<!-- Lines 144-157 -->
+<!-- Lines 149-162 -->
 
 La crise électrique californienne de 2000-2001 est l'unique épisode de contrainte énergétique
 documenté sur la fenêtre pour l'appareil du réseau [F.INT.H2.001, J.INT.2001.07]. Le lien avec les
@@ -156,20 +161,20 @@ de la Virginie du Nord commence avec le point d'échange MAE-East, créé en 199
 ---
 
 ## H3 Contexte énergétique macro : prix, mix, abondance
-<!-- Lines 160-163 -->
+<!-- Lines 165-168 -->
 
 **Question :** Dans quel environnement énergétique le choc se déploie-t-il, et cet environnement
 change-t-il pendant la fenêtre ?
 
 ### Faits
-<!-- Lines 166-178 -->
+<!-- Lines 171-183 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | F.INT.H3.001 | 1993-1997 | US | Le prix moyen annuel du brut américain (WTI) reste dans une fourchette basse et stable avant de refluer. | 18,43 (1993) · 17,20 (1994) · 20,61 (1997) $/baril nominal | O4, O3 | exo | [S9] | V |
 | F.INT.H3.002 | 1998 | US | Le prix moyen annuel du brut américain touche son point bas nominal de la fenêtre. | 14,42 $/baril nominal | O4, O3 | exo | [S9] | V |
 | F.INT.H3.003 | 1998 | US | Déflaté par l'indice des prix à la consommation américain (1998 = 163,0 contre 2005 = 195,3, base 1982-84=100), le point bas nominal de 1998 vaut environ 17,3 dollars en pouvoir d'achat de 2005, soit un point bas réel proche du point bas nominal lui-même car l'inflation cumulée sur la période reste modérée. | ≈17,3 $/baril en dollars de 2005 (calcul) | O4 | exo | [S9], [S10] | V |
-| F.INT.H3.004 | 1999-2002 | US | Le prix moyen annuel du brut américain remonte puis oscille sans dépasser le niveau d'avant 1998 pendant trois ans. | 19,34 (1999) · 30,38 (2000) · 25,98 (2001) · 26,18 (2002) $/baril nominal | O4, O3 | exo | [S9] | V |
+| F.INT.H3.004 | 1999-2002 | US | Le prix moyen annuel du brut américain remonte de 19,34 dollars le baril en 1999 à 30,38 en 2000, puis se maintient autour de 26 dollars en 2001 et 2002. | 19,34 (1999) · 30,38 (2000) · 25,98 (2001) · 26,18 (2002) $/baril nominal | O4, O3 | exo | [S9] | V |
 | F.INT.H3.005 | 2003-2005 | US | Le prix moyen annuel du brut américain enchaîne trois hausses consécutives jusqu'à la fin de la fenêtre, atteignant près de quatre fois le point bas de 1998. | 31,08 (2003) · 41,51 (2004) · 56,64 (2005) $/baril nominal | O4, O3 | exo | [S9] | V |
 | F.INT.H3.006 | 1993-1999 | US | Le prix du gaz naturel livré au secteur électrique reste bas et étroitement borné sur toute la première moitié de la fenêtre, sans tendance nette. | 2,54 (1993) · 2,22 (1994) · 1,97 (1995) · 2,62 (1996) · 2,71 (1997) · 2,32 (1998) · 2,55 (1999) $/million de Btu | O3, O4 | exo | [S16] | V |
 | F.INT.H3.007 | 2000-2005 | US | Le prix du gaz naturel livré au secteur électrique bascule en 2000, double par rapport à la moyenne des années 1990, marque un creux relatif en 2002 puis grimpe jusqu'à un sommet de fenêtre en 2005, à plus de trois fois son niveau de 1999. | 4,27 (2000) · 4,48 (2001) · 3,59 (2002) · 5,41 (2003) · 5,96 (2004) · 8,24 (2005) $/million de Btu | O3, O4 | exo | [S16] | V |
@@ -177,13 +182,13 @@ change-t-il pendant la fenêtre ?
 | F.INT.H3.009 | 1995-2005 | US | Le mix de production électrique américain reste dominé par le charbon et le nucléaire, avec une montée continue mais encore minoritaire du gaz naturel, sans rupture documentée sur la fenêtre. | qualitatif | O3, O6 | exo | [S12] | K |
 
 ### Jalons cités
-<!-- Lines 181-184 -->
+<!-- Lines 186-189 -->
 
 `J.INT.1998.07` (point bas nominal du pétrole, bascule principale), `J.INT.2005.07`
 (remontée du pétrole en fin de fenêtre).
 
 ### Trajectoire `T.INT.H3`
-<!-- Lines 187-202 -->
+<!-- Lines 192-207 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -201,7 +206,7 @@ change-t-il pendant la fenêtre ?
 | 2005 | rupture | 3 | Prix du brut à près de quatre fois le point bas de 1998 ; sommet de fenêtre aussi pour le gaz naturel ; fin de la fenêtre sur un contexte énergétique inversé par rapport au début. | F.INT.H3.005, F.INT.H3.007, J.INT.2005.07 |
 
 ### Narratif
-<!-- Lines 205-222 -->
+<!-- Lines 210-227 -->
 
 Le choc Internet démarre dans une énergie exceptionnellement bon marché, le prix du pétrole
 touchant son point bas nominal de la fenêtre en 1998 [F.INT.H3.002, J.INT.1998.07], un point bas
@@ -221,12 +226,12 @@ période (C1) sans qu'on tranche ici le sens de causalité.
 ---
 
 ## H4 Effets du choc sur l'énergie du reste de l'économie
-<!-- Lines 225-227 -->
+<!-- Lines 230-232 -->
 
 **Question :** Le choc réduit-il ou déplace-t-il la consommation d'énergie des autres activités ?
 
 ### Faits
-<!-- Lines 230-240 -->
+<!-- Lines 235-245 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -239,13 +244,13 @@ période (C1) sans qu'on tranche ici le sens de causalité.
 | F.INT.H4.007 | 1995-2005 | US | Le débat contemporain sur l'effet rebond, une consommation induite par le gain d'efficacité compensant tout ou partie de l'économie visée, reste ouvert dans les publications techniques de la période sans qu'une mesure agrégée américaine ne le tranche pour l'économie numérique. | qualitatif | O7 | choc | [S13] | D |
 
 ### Jalons cités
-<!-- Lines 243-246 -->
+<!-- Lines 248-251 -->
 
 `J.INT.2002.07` (dématérialisation, bascule principale, jalon générique à requalifier), `J.INT.2004.04`
 (haut débit à 50 % des utilisateurs d'Internet à domicile américains, contexte du télétravail et du commerce en ligne).
 
 ### Trajectoire `T.INT.H4`
-<!-- Lines 249-264 -->
+<!-- Lines 254-269 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -263,7 +268,7 @@ période (C1) sans qu'on tranche ici le sens de causalité.
 | 2005 | banalisation | 1 | Fin de fenêtre : substitution partielle documentée par le télétravail, bilan net du commerce en ligne toujours disputé. | F.INT.H4.007 |
 
 ### Narratif
-<!-- Lines 267-282 -->
+<!-- Lines 272-287 -->
 
 Le télétravail est le signal le plus solide de cette sous-dimension : au sens large, il progresse
 fortement jusqu'en 2001 puis reflue, tout en couvrant encore près d'un cinquième des actifs occupés
@@ -281,7 +286,7 @@ le commerce [F.INT.H4.001, F.INT.H4.002, F.INT.H4.007].
 ---
 
 ## Sources
-<!-- Lines 285-308 -->
+<!-- Lines 290-316 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -299,10 +304,13 @@ le commerce [F.INT.H4.001, F.INT.H4.002, F.INT.H4.007].
 | [S12] | acad | U.S. Energy Information Administration, indicateurs d'intensité énergétique du PIB américain (quadrillions de Btu par milliard de dollars chaînés de PIB) ; valeurs approximatives 1995 ≈ 8,6 et 2005 ≈ 6,7 retrouvées par recherche web sans ouverture du tableau primaire | Historique : ordre de grandeur seulement, non revérifié sur table primaire. Voir [S17] pour la lecture directe faite le 2026-09-22, qui confirme exactement ces deux valeurs et remplace ce statut pour F.INT.H3.008. Le mix électrique (charbon, nucléaire, gaz) de F.INT.H3.009 reste un énoncé qualitatif de connaissance générale, non revérifié sur série eia.gov pendant cette collecte. |
 | [S13] | acad | Travaux d'évaluation du cycle de vie du commerce en ligne et de la dématérialisation, début des années 2000 (laboratoires nationaux américains, EPA, équipes universitaires européennes), repris de [S74] de la chronologie ; débat contemporain sur l'effet rebond dans la littérature d'efficacité énergétique de la période | Jalon et littérature volontairement génériques : aucune publication unique ne fait bascule, conformément à la note déjà portée sur J.INT.2002.07. Non revérifié le 2026-09-22 (hors priorité de cette passe, faits qualitatifs sans chiffre à vérifier) ; F.INT.H4.001, F.INT.H4.002, F.INT.H4.006, F.INT.H4.007 restent `K`/`D`. |
 | [S14] | stat | International Telework Association and Council puis Telework Coalition, séries de dénombrement des télétravailleurs américains, 1999-2004 ; chiffre de 2004 (24,1 millions, 18,3 % des actifs occupés) | Ouvert et lu le 2026-09-22 : https://www.telcoa.org/resources/references/telework-tools/telework-facts-stats/ ; confirme exactement 19,6 M (1999, ITAC), 23,6 M (2000, ITAC), 28,8 M (2001, ITAC) et 24,1 M (2004, Dieringer Research Group/ITAC). Source professionnelle du secteur du télétravail, à traiter avec la prudence méthodologique déjà notée ; voir [S16] pour la mesure officielle BLS de définition différente. |
-| [S15] | acad | J. G. Koomey, « Worldwide electricity used in data centers », *Environmental Research Letters* 3, 034008, 2008 ; Kawamoto, Koomey et al., *Electricity Used by Office Equipment and Network Equipment in the U.S.: Detailed Report and Appendices*, LBNL-45917, février 2001 ; J. G. Koomey, *Rebuttal to Testimony on 'Kyoto and the Internet: The Energy Implications of the Digital Economy'*, LBNL-46509, août 2000 (inclut le texte intégral de la déposition de Mark Mills du 2 février 2000 devant la Chambre des représentants, et l'article Forbes original de mai 1999) | Ouverts et lus le 2026-09-22 : (1) datacenters.lbl.gov/sites/default/files/Koomey_2008.pdf — monde : 70,8 milliards kWh/an (2000) → 152,5 milliards kWh/an (2005), ×2,15 ; 0,5 % (2000) puis 1 % (2005, infrastructure incluse) de l'électricité mondiale ; États-Unis 2005 = 56,0 milliards kWh/an, soit 37 % du total mondial des centres de données et ≈0,4 % de l'électricité mondiale totale ; trois quarts de la croissance imputables aux serveurs volume. (2) escholarship.org/content/qt3c93475q/qt3c93475q.pdf (LBNL-45917) — abstract : 74 TWh/an, 2 % de l'électricité américaine pour les équipements directs, 3 % en ajoutant télécoms et fabrication électronique, données arrêtées fin 1999. (3) eta-publications.lbl.gov/sites/default/files/lbnl-46509.pdf (LBNL-46509) — cite la déposition Mills du 2 février 2000 : « something like 8% of the nation's electric supply... the total probably reaches 13% » ; réfutation Koomey : « electricity used for all office, telecommunications, and network equipment... is about 3%... a factor of four lower than the 13% claimed by Mills ». |
+| [S15] | acad | J. G. Koomey, « Worldwide electricity used in data centers », *Environmental Research Letters* 3, 034008, 2008 ; Kawamoto, Koomey et al., *Electricity Used by Office Equipment and Network Equipment in the U.S.: Detailed Report and Appendices*, LBNL-45917, février 2001 ; J. G. Koomey, *Rebuttal to Testimony on 'Kyoto and the Internet: The Energy Implications of the Digital Economy'*, LBNL-46509, août 2000 (inclut le texte intégral de la déposition de Mark Mills du 2 février 2000 devant la Chambre des représentants, et l'article Forbes original de mai 1999) | Ouverts et lus le 2026-09-22 : (1) datacenters.lbl.gov/sites/default/files/Koomey_2008.pdf — monde : 70,8 milliards kWh/an (2000) → 152,5 milliards kWh/an (2005), ×2,15 ; 0,5 % (2000) puis 1 % (2005, infrastructure incluse) de l'électricité mondiale ; États-Unis 2005 = 56,0 milliards kWh/an, soit 37 % du total mondial des centres de données et ≈0,4 % de l'électricité mondiale totale ; trois quarts de la croissance imputables aux serveurs volume. (2) escholarship.org/content/qt3c93475q/qt3c93475q.pdf (LBNL-45917) — abstract : 74 TWh/an, 2 % de l'électricité américaine pour les équipements directs, 3 % en ajoutant télécoms et fabrication électronique, données arrêtées fin 1999. (3) eta-publications.lbl.gov/sites/default/files/lbnl-46509.pdf (LBNL-46509) — cite la déposition Mills du 2 février 2000 : « something like 8% of the nation's electric supply... the total probably reaches 13% » ; réfutation Koomey : « electricity used for all office, telecommunications, and network equipment... is about 3%... a factor of four lower than the 13% claimed by Mills ». Rouvert et relu le 2026-11-23 pour F.INT.H1.010 et F.INT.H1.011 (LBNL-45917, texte complet converti avec pdftotext) : « complete saturation of night shutdown for equipment not required to operate at night would reduce power use by an additional 7 TWh/year » ; « laser printers are frequently left on at night (according to our survey, 73% of laser printers are on at night) » ; « desktop computers and laser printers are left on at night more frequently than we expected » ; annexe, tableau A-13, ordinateurs de bureau commerciaux et industriels : état de nuit (nuits et week-ends) allumé 35 %, éteint 65 %, « According to Nordman et al. (2000), 65% of desktop computers are off at night » ; « 86% of all energy (64 TWh/year) is consumed in active mode, and 4% of all energy (3 TWh/year) is consumed in off mode » sur 74 TWh/an pour les équipements de bureau et de réseau. Le tableau A-16 donne 70 % de nuit allumé pour les imprimantes laser, la note qui le suit 27 % éteintes (donc 73 % allumées) : le texte principal et la note, 73 %, sont retenus. Le rapport ne traite ni des modems ni des routeurs domestiques. |
 | [S16] | stat | U.S. Energy Information Administration, *Annual Energy Outlook Retrospective*, Table 8a, « Natural gas price, electric power sector, actual versus projected », ligne « Actual in nominal dollars » (série open data API TOTAL.NGEIUUS.A) ; U.S. Bureau of Labor Statistics, *Work at Home*, communiqués CPS de mars 2002 (homey_03012002) et septembre 2005 (homey_09222005) | Ouverts et lus le 2026-09-22 : (1) eia.gov/outlooks/aeo/retrospective/pdf/table_8a.pdf — prix du gaz naturel secteur électrique en $/million de Btu (unité différente de la série [S11] invalidée, en $/millier de pieds cubes) : 2,54 (1993) · 2,22 (1994) · 1,97 (1995) · 2,62 (1996) · 2,71 (1997) · 2,32 (1998) · 2,55 (1999) · 4,27 (2000) · 4,48 (2001) · 3,59 (2002) · 5,41 (2003) · 5,96 (2004) · 8,24 (2005). (2) bls.gov/news.release/history/homey_03012002.txt — mai 2001 : 19,8 millions de personnes ont travaillé à domicile au moins une fois par semaine, 15 % de l'emploi total. bls.gov/news.release/history/homey_09222005.txt — mai 2004 : 20,7 millions, 15 % de l'emploi non agricole. Ces deux communiqués établissent qu'une mesure officielle du travail à domicile existe pour deux points de la fenêtre, avec une définition plus étroite que celle d'ITAC/Telework Coalition ([S14]). |
 | [S17] | off | U.S. Energy Information Administration, *Annual Energy Outlook Retrospective*, Table 29, « Energy intensity, projected versus actual », ligne « Actual », données BEA, quadrillion Btu par milliard de dollars chaînés 2012 de PIB | Ouvert et lu le 2026-09-22 : eia.gov/outlooks/aeo/retrospective/pdf/Table_29.pdf ; ligne Actual, source de données déclarée « U.S. Energy Information Administration open data API, série TOTAL.TETCBUS.A » et BEA (dollars chaînés 2012) : 1995 = 8,6, 2005 = 6,7, confirme exactement l'ordre de grandeur déjà retenu ([S12]). |
 | [S18] | stat | Recording Industry Association of America, *2005 Year-End Statistics*, « Manufacturers' Unit Shipments and Retail Dollar Value » (en millions, nettes des retours), tableau daté du 31 mars 2006 ; copie : https://www.musicaememoria.com/docs/RIAA-2005yrEndStats.pdf | Ouvert et lu le 2026-11-22 (PDF converti avec pdftotext) : total supports physiques 1 079,2 millions d'unités (2000) → 748,7 (2005) ; CD 942,5 (2000) → 767,0 (2004) → 705,4 (2005) ; ventes numériques (téléchargements, kiosques, mobile, abonnements) : 143,9 millions d'unités en 2004 et 383,1 en 2005, aucune valeur avant 2004. Le tableau ne donne aucune cause de ces évolutions. |
 | [S19] | off | U.S. Environmental Protection Agency, communiqué « EPA, Computer Manufacturers Launch Program to Introduce Energy-Efficient Personal Computers », 17 juin 1992, https://www.epa.gov/archive/epa/aboutepa/epa-computer-manufacturers-launch-program-introduce-energy-efficient-personal-computers.html ; ENERGY STAR, « History and milestones », https://www.energystar.gov/about/how-energy-star-works/history | Ouverts et lus le 2026-11-22. Communiqué : programme « Energy Star Computers Program », accords avec huit fabricants, produits qualifiés à « 30 watts or less in their low-power state », ordinateurs et moniteurs. Page d'histoire : lancement en 1992 pour les ordinateurs et les écrans ; mises à jour des exigences pour les écrans en 1995, 1998, 1999 et pour les ordinateurs en 1999 et 2000. La tentative d'ouvrir le document ENERGY STAR sur les ordinateurs et moniteurs (copie d'archive) a renvoyé une page vide. |
 | [S20] | stat | Pew Internet & American Life Project, John B. Horrigan, « Broadband Adoption in the United States: Growing but Slowing », 21 septembre 2005, https://www.pewresearch.org/internet/2005/09/21/findings/ ; Pew Internet, « Broadband Adoption at Home Grows Strongly in Winter Months of 2003 & 2004 », avril 2004, https://www.pewresearch.org/internet/2004/04/18/broadband-adoption-at-home-grows-strongly-in-winter-months-of-2003-2004/ | Ouverts et lus le 2026-11-22. Part des utilisateurs d'Internet à domicile ayant un haut débit chez eux : 24 % (2002), 35 % (novembre 2003), 42 % (mai 2004), 50 % (décembre 2004, janvier et mars 2005), 53 % (mai 2005) ; 33 % de tous les adultes américains en mai 2005. Le rapport de 2004 donne 39 % des internautes américains (base différente) en février 2004. Aucun des deux documents ne traite de connexion permanente ni de consommation électrique. |
 | [S21] | presse | Yevgeniy Sverdlik, « Ashburn's Fiber-Fueled Data Center Boom », Data Center Knowledge, 14 mars 2018, https://www.datacenterknowledge.com/networking/ashburn-s-fiber-fueled-data-center-boom ; Wikipédia (en), « MAE-East », https://en.wikipedia.org/wiki/MAE-East | Ouverts et lus le 2026-11-22. Data Center Knowledge : l'histoire des centres de données de la région « began in the early 90s, when MAE-East, one of the first internet exchanges, was established in the area » ; la fibre est le moteur principal de la demande, la disponibilité d'électricité un facteur secondaire cité pour l'expansion actuelle de Google (article de 2018, hors fenêtre). Wikipédia : MAE créé en 1992 par MFS et UUNET avec quatre sites à Washington, puis Vienna, Reston et Ashburn (Virginie). Aucune des deux pages ne date l'ouverture du premier centre de données Equinix ni ne traite de New York ou de la côte Ouest. |
+| [S22] | acad | Ross, J. P. et Meier, A., « Whole-House Measurements of Standby Power Consumption », *Proceedings of the Second International Conference on Energy Efficiency in Household Appliances*, Naples, septembre 2000, LBNL-45967, https://www.osti.gov/servlets/purl/793739 | Ouvert et lu le 2026-11-23 (PDF converti avec pdftotext) : résumé, « Total standby power in the homes ranged from 14–169 W, with an average of 67 W. This corresponded to 5%–26% of the homes' annual electricity use. The appliances with the largest standby losses were televisions, set-top boxes and printers » ; introduction : des études allemande, japonaise, néerlandaise et américaines « have found that standby power accounts for as much as 10% of national residential electricity use ». Échantillon de dix logements, que les auteurs jugent trop petit pour représenter les logements californiens. Le texte lu ne parle ni de modems ni de routeurs. |
+| [S24] | acad | Mitchell-Jackson, J., Koomey, J. G., Nordman, B. et Blazek, M., « Data center power requirements: measurements from Silicon Valley », *Energy* 28 (2003) 837-850 (reçu le 26 juillet 2001), https://datacenters.lbl.gov/sites/default/files/Data%20Center%20Power%20Requirements_2001.pdf | Ouvert et lu le 2026-11-23 (PDF converti avec pdftotext) : résumé « Current estimates of data center power requirements are greatly overstated » ; section 4 : 1 100 W/m² × 11 600 m² = 12,5 MW, « roughly 14 times what this facility actually uses to support the data center (0.9 MW) » ; avec la densité de conception de 646 W/m², 7,5 MW, « an overestimate of more than a factor of eight » ; introduction : ces affirmations « perpetuate the urban legend that 'the Internet' is a huge consumer of electricity ». Le texte ne traite pas de la crise californienne en tant que telle ; il porte sur un seul centre de données de la Baie de San Francisco, plus les factures de quatre autres. |
+| [S25] | presse | Lawrence Berkeley National Laboratory, *Science Beat*, « Data center energy use: truth versus myth », 16 juillet 2002, https://www2.lbl.gov/Science-Articles/Archive/data-center-energy-myth.html | Ouvert et lu le 2026-11-23 (outil de lecture de pages, qui limite les citations à 125 caractères) : « One of the biggest misconceptions about the crisis was the role played by the energy use of computers » (phrase relevée à la première lecture, non reproduite mot pour mot à la seconde, qui en donne une paraphrase concordante : les gros titres de 2001 accusaient les ordinateurs, le LBNL avait chiffré le matériel informatique et de réseau à environ 3 % de l'électricité américaine contre les 13 % annoncés) ; hosting-type data centers « less than 500 megawatts of power, or 0.12 percent of the total electricity use in the United States in 2000 ». L'article traite les centres de données comme la question suivante, ouverte par le laboratoire ; il ne dit pas en toutes lettres que les centres de données n'ont pas causé la crise. Page d'institution, statut A. |

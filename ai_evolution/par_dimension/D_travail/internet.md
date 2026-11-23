@@ -14,26 +14,26 @@ dans le `README.md` du domaine, pas ici.
 ## Table of Contents
 
 1. [D1 Volume et structure de l'emploi](#d1-volume-et-structure-de-lemploi) _(Lines 44-46)_
-   1. [Faits](#faits) _(Lines 49-67)_
-   1. [Jalons cités](#jalons-cités) _(Lines 70-72)_
-   1. [Trajectoire `T.INT.D1`](#trajectoire-tintd1) _(Lines 75-90)_
-   1. [Narratif](#narratif) _(Lines 93-97)_
-1. [D2 Métiers, compétences et formation](#d2-métiers-compétences-et-formation) _(Lines 100-102)_
-   1. [Faits](#faits-1) _(Lines 105-122)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 125-127)_
-   1. [Trajectoire `T.INT.D2`](#trajectoire-tintd2) _(Lines 130-145)_
-   1. [Narratif](#narratif-1) _(Lines 148-152)_
-1. [D3 Organisation du travail et outils en réseau](#d3-organisation-du-travail-et-outils-en-réseau) _(Lines 155-158)_
-   1. [Faits](#faits-2) _(Lines 161-179)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 182-184)_
-   1. [Trajectoire `T.INT.D3`](#trajectoire-tintd3) _(Lines 187-202)_
-   1. [Narratif](#narratif-2) _(Lines 205-209)_
-1. [D4 Salaires, polarisation et rapport de force](#d4-salaires-polarisation-et-rapport-de-force) _(Lines 212-214)_
-   1. [Faits](#faits-3) _(Lines 217-231)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 234-236)_
-   1. [Trajectoire `T.INT.D4`](#trajectoire-tintd4) _(Lines 239-254)_
-   1. [Narratif](#narratif-3) _(Lines 257-261)_
-1. [Sources](#sources) _(Lines 264-303)_
+   1. [Faits](#faits) _(Lines 49-68)_
+   1. [Jalons cités](#jalons-cités) _(Lines 71-73)_
+   1. [Trajectoire `T.INT.D1`](#trajectoire-tintd1) _(Lines 76-91)_
+   1. [Narratif](#narratif) _(Lines 94-98)_
+1. [D2 Métiers, compétences et formation](#d2-métiers-compétences-et-formation) _(Lines 101-103)_
+   1. [Faits](#faits-1) _(Lines 106-123)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 126-128)_
+   1. [Trajectoire `T.INT.D2`](#trajectoire-tintd2) _(Lines 131-146)_
+   1. [Narratif](#narratif-1) _(Lines 149-153)_
+1. [D3 Organisation du travail et outils en réseau](#d3-organisation-du-travail-et-outils-en-réseau) _(Lines 156-159)_
+   1. [Faits](#faits-2) _(Lines 162-181)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 184-186)_
+   1. [Trajectoire `T.INT.D3`](#trajectoire-tintd3) _(Lines 189-204)_
+   1. [Narratif](#narratif-2) _(Lines 207-211)_
+1. [D4 Salaires, polarisation et rapport de force](#d4-salaires-polarisation-et-rapport-de-force) _(Lines 214-216)_
+   1. [Faits](#faits-3) _(Lines 219-233)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 236-238)_
+   1. [Trajectoire `T.INT.D4`](#trajectoire-tintd4) _(Lines 241-256)_
+   1. [Narratif](#narratif-3) _(Lines 259-263)_
+1. [Sources](#sources) _(Lines 266-307)_
 
 
 
@@ -45,7 +45,7 @@ dans le `README.md` du domaine, pas ici.
 **Question :** Combien d'emplois créés, détruits, déplacés, dans quels secteurs, à quel rythme ?
 
 ### Faits
-<!-- Lines 49-67 -->
+<!-- Lines 49-68 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -62,16 +62,17 @@ dans le `README.md` du domaine, pas ici.
 | F.INT.D1.011 | 1999-2006 | EMERG | Selon NASSCOM, tel que cité dans des travaux de recherche, l'emploi direct de l'industrie indienne du logiciel et des services informatiques, y compris les services externalisés, passe de 284 000 personnes en 1999-2000 à environ 1,29 million en 2005-06 (1 287 000, projection de l'exercice en cours dans le texte lu). | 284 000 (1999-2000) → ≈ 1 287 000 (2005-06, projection) | T5, M1 | co:X.INT.03 | [S1b] | A |
 | F.INT.D1.012 | 1995-2005 | EU | Le taux de chômage européen suit sur la fenêtre une trajectoire distincte de celle des États-Unis, sans corrélation nette avec le rythme de diffusion d'Internet dans les entreprises et les ménages du continent. | trajectoire distincte, valeurs à vérifier | O6, P3 | exo | [S6] | K |
 | F.INT.D1.013 | 1993-2000 | US | L'emploi équivalent temps plein du secteur américain de la téléphonie et du télégraphe progresse de façon continue de 831 000 en 1993 à 1 079 000 en 2000, sans recul visible sur cette sous-période antérieure au retournement du secteur de l'information au sens large documenté en F.INT.D1.003-004. | 831 000 (1993) → 1 079 000 (2000) | O3, M1 | co:X.INT.01 | [S25] | V |
+| F.INT.D1.014 | 2002 | US | Selon le recensement économique américain de 2002, les établissements du commerce de détail en ligne (NAICS 454111, « Electronic shopping ») emploient 51 049 salariés, dans 5 498 établissements ayant une masse salariale, sur 266 353 salariés pour l'ensemble de la vente par correspondance et du commerce en ligne (NAICS 454110), soit environ un cinquième ; la nomenclature de 1997 ne connaît que le code combiné 454110, scindé dans la nomenclature de 2002 en commerce en ligne (454111) et vente par correspondance (454113, 215 304 salariés) : le seul point de mesure du commerce en ligne distinct trouvé sur la fenêtre est celui de 2002. | 454111 : 51 049 salariés, 5 498 établissements (2002) ; 454113 : 215 304 ; 454110 : 266 353 | M7, O1 | choc | [S35] | V |
 
 **Blocs absents.** Aucun fait distinct de création ou de destruction d'emploi n'a été identifié pour l'Asie de l'Est développée ou pour la Chine sur cette sous-dimension : leur trajectoire d'emploi liée au réseau suit un calendrier propre (équipement et écosystèmes nationaux, voir domaine A) plutôt qu'une dynamique de volume d'emploi comparable à la désintermédiation occidentale ou à la sous-traitance indienne. Absence notée, pas documentée comme un résultat.
 
 ### Jalons cités
-<!-- Lines 70-72 -->
+<!-- Lines 71-73 -->
 
 `J.INT.1997.03` (bascule de la sous-traitance indienne vers l'exportation de services), `J.INT.2001.03` (entrée en récession américaine et chute de l'investissement informatique), `J.INT.2001.05` (vague de faillites et de licenciements dans les entreprises du Web et les opérateurs alternatifs).
 
 ### Trajectoire `T.INT.D1`
-<!-- Lines 75-90 -->
+<!-- Lines 76-91 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -89,19 +90,19 @@ dans le `README.md` du domaine, pas ici.
 | 2005 | banalisation | 2 | Secteur de l'information à 3 071 000 (janvier), sans reprise nette depuis le pic de 2001 ; conception de systèmes informatiques à 1 368 600, en reprise partielle sans retrouver son pic ; agences de voyage à 125 100, moins des deux tiers du pic de 1997 ; vente à distance et commerce en ligne à 283 600 et entreposage à 614 500 ; emploi de l'industrie indienne du logiciel et des services à environ 1,29 million en 2005-06. | F.INT.D1.004, F.INT.D1.006, F.INT.D1.007, F.INT.D1.010, F.INT.D1.011, J.INT.2005.06 |
 
 ### Narratif
-<!-- Lines 93-97 -->
+<!-- Lines 94-98 -->
 
 L'emploi du secteur américain de l'information passe de 2 785 000 postes en janvier 1995 à un sommet de 3 718 000 en mars 2001, porté en fin de période par les dépenses de mise en conformité du passage à l'an 2000, avant de se retourner nettement et de reculer de façon quasi continue jusqu'à 3 071 000 en janvier 2005, sans reprise nette avant la fin de la fenêtre [F.INT.D1.001][F.INT.D1.002][F.INT.D1.003][F.INT.D1.004]. Cette inflexion coïncide avec l'entrée en récession de l'économie américaine et un recul rapide de l'emploi des télécommunications, accompagné de 77 faillites d'entreprises du secteur en 2001, ce qui interdit d'imputer le recul au seul choc Internet : la récession de 2001 est un confondant actif sur l'ensemble de cette trajectoire [F.INT.D1.005][J.INT.2001.03][J.INT.2001.05]. Le sous-secteur plus étroit de la conception de systèmes informatiques suit un profil distinct, avec un pic en 2001 (1 461 500 postes), un creux en 2003 (1 291 800) et une reprise partielle à 1 368 600 en 2005, sans retrouver son sommet [F.INT.D1.006]. L'emploi des agences de voyage américaines illustre le cas d'école de l'intermédiaire court-circuité : il culmine en 1997 (191 600), avant même le sommet du secteur informatique, puis recule de façon continue et prononcée pour atteindre 125 100 en 2005, soit un recul de plus du tiers entamé avant la récession de 2001 et qui se poursuit après elle — signe d'un effet structurel plutôt que purement cyclique [F.INT.D1.007]. L'emploi des magasins de disques préenregistrés recule d'environ 14 % entre 1997 et 2005 après un maximum en 2000, celui des opérateurs téléphoniques et des opérateurs de saisie de données recule entre 1996 et 2002 alors que celui des standardistes reste stable, tandis que l'emploi de la vente à distance et du commerce en ligne, avec un recul en 2001-2002, et celui de l'entreposage progressent sur l'ensemble de la fenêtre [F.INT.D1.008][F.INT.D1.009][F.INT.D1.010]. À l'échelle mondiale, l'emploi direct de l'industrie indienne du logiciel et des services passe, selon NASSCOM, de 284 000 personnes en 1999-2000 à environ 1,29 million en 2005-06, tandis que le chômage européen suit sur la période une trajectoire propre, sans corrélation nette établie avec le rythme de diffusion d'Internet sur le continent [F.INT.D1.011][F.INT.D1.012][J.INT.2005.06].
 
 ---
 
 ## D2 Métiers, compétences et formation
-<!-- Lines 100-102 -->
+<!-- Lines 101-103 -->
 
 **Question :** Quels métiers apparaissent, disparaissent, se transforment ; quelles compétences sont demandées ; comment on se forme ?
 
 ### Faits
-<!-- Lines 105-122 -->
+<!-- Lines 106-123 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -121,12 +122,12 @@ L'emploi du secteur américain de l'information passe de 2 785 000 postes en jan
 **Blocs absents.** Aucun fait distinct sur les métiers, la formation ou les visas de travail qualifié n'a été identifié pour l'Asie de l'Est développée ou pour la Chine : ces blocs disposent de leurs propres viviers de compétences et de leurs propres politiques de formation, sans dépendre du canal migratoire américain documenté ici. Absence notée, à combler si une source précise devient disponible.
 
 ### Jalons cités
-<!-- Lines 125-127 -->
+<!-- Lines 126-128 -->
 
 Aucun jalon propre à cette sous-dimension n'est présent dans `par_annee/internet_1995_2005.md` sur la fenêtre ; l'absence est notable et cohérente avec le constat du cadrage (le travail est le domaine le moins daté des chronologies).
 
 ### Trajectoire `T.INT.D2`
-<!-- Lines 130-145 -->
+<!-- Lines 131-146 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -144,20 +145,20 @@ Aucun jalon propre à cette sous-dimension n'est présent dans `par_annee/intern
 | 2005 | banalisation | 2 | Recul confirmé des diplômes à 47 702 (2005-06) ; formation indienne à 250 000 diplômés potentiels en 2002 (dernier point lu). | F.INT.D2.002, F.INT.D2.009 |
 
 ### Narratif
-<!-- Lines 148-152 -->
+<!-- Lines 149-153 -->
 
 Les diplômes de premier cycle en informatique et sciences de l'information décernés aux États-Unis stagnent autour de 24 500-24 700 par an de 1993-94 à 1995-96, puis progressent sans interruption jusqu'à un pic de 59 488 en 2003-04, avant de reculer nettement à 54 111 en 2004-05 puis 47 702 en 2005-06 : le pic des diplômes suit de deux à trois ans le pic de l'emploi du secteur documenté en D1 (mars 2001), ce qui illustre le délai propre à la formation par rapport au marché du travail [F.INT.D2.001][F.INT.D2.002]. Ce cycle se lit aussi dans la politique migratoire : des déclarations d'employeurs et d'associations alléguant une pénurie de personnel qualifié, citées par le Sénat en 2000, et un plafond H-1B atteint pour la première fois en 1997 puis en mai 1998 accompagnent le relèvement par le Congrès de ce plafond de 65 000 à 115 000 en 1998 puis à 195 000 en 2000, avant un retour au plafond de base de 65 000 à partir de l'exercice 2004, dans un mouvement clairement co-attribuable à la récession de 2001 et à la fin du chantier de l'an 2000 [F.INT.D2.003][F.INT.D2.004][F.INT.D2.005][J.INT.2001.03]. En parallèle du système universitaire, plus de 300 certifications informatiques distinctes sont créées de 1989 à 2000 par des éditeurs et des associations et environ 2,4 millions de certifications sont obtenues dans le monde début 2000, la plupart depuis 1997, tandis qu'environ une annonce d'emploi informatique sur huit les mentionne comme un atout [F.INT.D2.006]. Des travaux publiés entre 1991 et 1996 estiment à environ 10 à 15 % la prime de salaire des utilisateurs d'ordinateur au travail aux États-Unis sur les données de 1984 et 1989, et d'autres travaux contestent que ce différentiel reflète un effet de productivité de l'ordinateur [F.INT.D2.007]. Aucun jalon daté propre à cette sous-dimension n'a été retenu dans la chronologie annuelle : le changement s'y lit en tendance de plusieurs années plutôt qu'en bascule ponctuelle [F.INT.D2.001][F.INT.D2.002]. La classification professionnelle américaine de 1998 comprend une profession détaillée d'analystes de réseaux et de communications de données, dont les intitulés associés incluent webmestre et développeur Internet [F.INT.D2.008]. Le niveau d'études discrimine l'usage professionnel du réseau au moins autant que la profession et se maintient stable sur la période, avec un écart d'environ 70 points entre diplômés de troisième cycle et personnes sans diplôme du secondaire, tandis qu'un écart plus modeste mais persistant favorise les femmes par rapport aux hommes [F.INT.D2.011][F.INT.D2.012]. À l'échelle mondiale, l'industrie indienne du logiciel suscite une expansion de la formation informatique locale, de 135 000 diplômés potentiels en 1997 à 250 000 en 2002, tandis que l'Europe progresse à un rythme jugé inférieur, cohérent avec son retard de diffusion documenté ailleurs dans le dossier [F.INT.D2.009][F.INT.D2.010].
 
 ---
 
 ## D3 Organisation du travail et outils en réseau
-<!-- Lines 155-158 -->
+<!-- Lines 156-159 -->
 
 **Question :** Où, quand, avec quels outils en réseau et sous quel statut travaille-t-on, dans
 tous les métiers et toutes les tailles d'entreprise ?
 
 ### Faits
-<!-- Lines 161-179 -->
+<!-- Lines 162-181 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -176,14 +177,15 @@ tous les métiers et toutes les tailles d'entreprise ?
 | F.INT.D3.013 | 2002 | US | Selon le Pew Internet & American Life Project (décembre 2002), environ 62 % des actifs occupés américains ont accès à Internet et 98 % d'entre eux utilisent le courriel dans leur travail, soit plus de 57 millions d'adultes. | 62 % avec accès ; 98 % de ceux-ci utilisateurs de courriel ; > 57 millions | M1, M3, M4, M5, M9 | choc | [S27] | V |
 | F.INT.D3.014 | 1995-2005 | US | Le volume du courrier de première classe américain progresse continûment de 96,3 milliards de plis en 1995 à un pic de 103,7 milliards en 2001, avant de reculer à 98,6 milliards en 2005 ; ce recul post-2001 est concomitant avec la récession américaine et la baisse du nombre de chèques émis, ce qui interdit d'y lire une substitution immédiate du courrier professionnel par le courriel dans les années 1995-2000 (voir la révision de F.INT.D3.001). | 96,3 Md (1995) → 103,7 Md (2001, pic) → 98,6 Md (2005) | O3, O6 | co:X.INT.04 | [S28] | V |
 | F.INT.D3.015 | 2002 | US | Selon une enquête de la Small Business Administration (Office of Advocacy, octobre 2002), 57 % des petites entreprises américaines utilisent Internet, 83 % utilisent le courriel, 80 % s'en servent pour rechercher de l'information, 61 % achètent des biens ou services en ligne, et 35 % vendent via un site web ; parmi celles disposant d'un site (61 % des entreprises en ligne), 67 % déclarent avoir gagné de nouveaux clients. | 57 % en ligne ; 83 % courriel ; 61 % site web parmi les entreprises en ligne ; 35 % vente en ligne | O5, M6, M9 | choc | [S29] | V |
+| F.INT.D3.016 | 1998 | ASIE-E | Selon l'enquête sur l'usage des communications auprès des entreprises du ministère japonais des Postes et Télécommunications (20-30 novembre 1998, 2 108 réponses valides d'entreprises de 100 salariés et plus), 36,3 % des entreprises de 300 salariés et plus ont installé un intranet, soit 14,9 points de plus que lors de l'enquête précédente, et 58,3 % de celles de 2 000 salariés et plus ; le taux d'installation croît avec la taille de l'entreprise. | 36,3 % (300 salariés et plus) ; 58,3 % (2 000 salariés et plus) ; +14,9 points sur l'enquête précédente | O4, M1, M4 | choc | [S36] | V |
 
 ### Jalons cités
-<!-- Lines 182-184 -->
+<!-- Lines 184-186 -->
 
 `J.INT.1995.05` (entrée du courriel dans l'usage courant des grandes entreprises), `J.INT.1997.04` (diffusion des intranets d'entreprise), `J.INT.2002.02` (promulgation de la loi Sarbanes-Oxley).
 
 ### Trajectoire `T.INT.D3`
-<!-- Lines 187-202 -->
+<!-- Lines 189-204 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -201,19 +203,19 @@ tous les métiers et toutes les tailles d'entreprise ?
 | 2005 | banalisation | 1 | Les travailleurs indépendants sont 10,3 millions, soit 7,4 % des actifs occupés américains (février) ; volume du courrier de première classe à 98,6 milliards de plis, en repli net depuis le pic de 2001. | F.INT.D3.005, F.INT.D3.014 |
 
 ### Narratif
-<!-- Lines 205-209 -->
+<!-- Lines 207-211 -->
 
 En 1995, 89 % des directeurs informatiques de grandes entreprises américaines interrogés disposent du courrier électronique dans leur entreprise, mais moins de la moitié des entreprises ont une liaison à Internet, et le volume du courrier physique continue de croître jusqu'en 2001, sans recul concomitant ; le retournement de 2001 est co-attribuable à la récession [F.INT.D3.001][F.INT.D3.014][J.INT.1995.05][J.INT.2001.03]. Les intranets, réseaux internes d'entreprise sur protocoles du Web, sont utilisés par 51 % des grandes entreprises contre 6,1 % des petites selon IDC, et 4 % des salariés dans le monde y avaient accès en 1998 [F.INT.D3.002][J.INT.1997.04]. Cette diffusion touche, dès le début des années 2000, une majorité d'actifs occupés toutes professions confondues et pas seulement le secteur informatique : 26,1 % en 2000, 38,4 % en 2001, 41,7 % en 2003 pour l'usage d'Internet ou du courriel au travail, avec un gradient de profession stable et marqué — cadres et professions intellectuelles très en tête, employés de bureau et de vente en position intermédiaire, ouvriers et métiers de service très en retrait — que recoupe un gradient sectoriel comparable, du sommet en finance-assurance-immobilier au creux dans la construction et l'agriculture [F.INT.D3.009][F.INT.D3.010][F.INT.D3.011][F.INT.D3.012]. Le tissu des petites entreprises est atteint dans les mêmes années : 57 % en sont utilisatrices d'Internet et 83 % du courriel dès 2002 selon la Small Business Administration, tandis que, selon Pew, 62 % des actifs occupés américains ont accès à Internet et 98 % d'entre eux utilisent le courriel dans leur travail en 2002, un chiffre supérieur à celui de la CPS du Bureau of Labor Statistics pour 2001-2003, sans que les deux mesures aient été comparées [F.INT.D3.013][F.INT.D3.015]. En mai 2004, 15,1 % des actifs occupés américains travaillent habituellement chez eux au moins une fois par semaine, contre 14,9 % en mai 2001, et la part des salariés à temps plein aux horaires flexibles reste voisine de 28 % de 1997 à 2004 ; en 2002, 26 % des utilisateurs du courriel au travail le consultent après le travail et 31 % le week-end ; la frontière domicile-travail elle-même relève de E5, ici seulement citée [F.INT.D3.003][F.INT.D3.006]. La délocalisation des services logiciels vers l'étranger commence dans les années 1990 selon le Government Accountability Office, accélérée par la préparation au passage à l'an 2000, en cohérence avec la montée de la sous-traitance internationale documentée en C3 et en D1 ; une étude de couples actifs associe l'usage continu du téléphone portable et du bipeur à une détresse psychologique plus élevée, phénomène à distinguer du choc Internet lui-même puisqu'il passe par le réseau mobile [F.INT.D3.004][F.INT.D3.007]. Les travailleurs indépendants représentent 7,4 % des actifs occupés américains en février 2005, contre 6,4 % en février 2001 [F.INT.D3.005]. La loi Sarbanes-Oxley de 2002, adoptée en réponse à de graves défaillances d'information financière et de gouvernance, impose aux sociétés cotées une évaluation et une attestation de leur contrôle interne, et de nombreuses entreprises accroissent la documentation de leurs contrôles après la norme d'audit de 2004 [F.INT.D3.008][J.INT.2002.02].
 
 ---
 
 ## D4 Salaires, polarisation et rapport de force
-<!-- Lines 212-214 -->
+<!-- Lines 214-216 -->
 
 **Question :** Qui gagne plus, qui gagne moins, et comment le rapport de force évolue-t-il ?
 
 ### Faits
-<!-- Lines 217-231 -->
+<!-- Lines 219-233 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -230,12 +232,12 @@ En 1995, 89 % des directeurs informatiques de grandes entreprises américaines i
 | F.INT.D4.011 | 1987-1993 | US | Black et Lynch (2001, Review of Economics and Statistics, vol. 83 n°3), à partir de l'enquête Educational Quality of the Workforce National Employers Survey appariée à des données d'établissements du Census Bureau sur 1987-1993, trouvent que la manière dont une pratique de travail est mise en œuvre importe plus pour la productivité de l'établissement que le seul fait de l'adopter. | association positive, sans coefficient chiffré lu | O1, O4 | choc | [S31] | A |
 
 ### Jalons cités
-<!-- Lines 234-236 -->
+<!-- Lines 236-238 -->
 
 `J.INT.2001.03` (entrée en récession américaine, chute de l'investissement informatique). Aucun autre jalon de la chronologie annuelle ne porte spécifiquement sur les salaires ou la négociation collective : cette sous-dimension reste, comme l'ensemble du domaine, documentée surtout par des tendances mesurées.
 
 ### Trajectoire `T.INT.D4`
-<!-- Lines 239-254 -->
+<!-- Lines 241-256 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -253,14 +255,14 @@ En 1995, 89 % des directeurs informatiques de grandes entreprises américaines i
 | 2005 | banalisation | 1 | Pas de série de salaires informatiques lue pour 2005 ; la part du travail dans la valeur ajoutée ne montre pas de rupture univoque sur l'ensemble de la fenêtre. | F.INT.D4.005 |
 
 ### Narratif
-<!-- Lines 257-261 -->
+<!-- Lines 259-263 -->
 
 Le salaire des salariés des industries américaines productrices de technologies de l'information passe de 1,65 fois celui de l'ensemble des salariés en 1992 à 2,11 fois en 2000 [F.INT.D4.001]. À partir de 1999, le salaire de la plupart des professions informatiques continue d'augmenter à un rythme plus lent ; en 2002, le salaire moyen de ces industries recule de 1,3 % alors que celui du secteur privé progresse de 1 %, l'écart restant de 85 % [F.INT.D4.002][J.INT.2001.03]. Le chômage des professions liées à l'informatique, nettement sous la moyenne nationale de 1993 à 2000, atteint 3,7 % en 2001 puis 5,2 % en 2002, et le département du Commerce relie la faiblesse de la demande de ces postes à la récession, à l'externalisation à l'étranger et aux gains de productivité [F.INT.D4.009]. Des travaux de référence documentent le déplacement des tâches par l'informatisation (Autor, Levy et Murnane, 2003) et la polarisation de l'emploi par profession dans les années 1990 (Autor, Katz et Kearney, 2006), avec un recul de l'intensité en tâches routinières du travail américain à rapprocher du recul direct de ces métiers constaté en D1 [F.INT.D4.003][F.INT.D4.004]. Des travaux sur données d'entreprises établissent, pour Bresnahan, Brynjolfsson et Hitt (2002), une complémentarité entre technologies de l'information, réorganisation du travail et main-d'œuvre qualifiée et, pour Black et Lynch (2001), que la mise en œuvre effective d'une pratique de travail importe plus pour la productivité que le seul fait de l'adopter [F.INT.D4.010][F.INT.D4.011]. La part du travail dans la valeur ajoutée ne montre pas de rupture nette et univoque sur la fenêtre, question qui reste débattue selon la période et le secteur retenus [F.INT.D4.005]. La syndicalisation du secteur privé américain poursuit son recul de longue tendance, sans rupture spécifiquement attribuable au choc, tandis qu'en 1999 les entreprises de la nouvelle économie sont surreprésentées parmi les établissements qui attribuent des options d'achat d'actions à des salariés non propriétaires [F.INT.D4.006][F.INT.D4.007]. En Europe, l'écart de salaire lié aux compétences informatiques progresse à un rythme jugé inférieur à celui des États-Unis, cohérent avec le retard de diffusion documenté ailleurs dans le dossier [F.INT.D4.008].
 
 ---
 
 ## Sources
-<!-- Lines 264-303 -->
+<!-- Lines 266-307 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -301,3 +303,5 @@ Le salaire des salariés des industries américaines productrices de technologie
 | [S33] | acad | Desai, Ashok, *The Dynamics of the Indian Information Technology Industry*, DRC Working Paper n°20, Centre for New and Emerging Markets, London Business School ; https://assets.publishing.service.gov.uk/media/57a08d1640f0b64974001634/drc20.pdf | Lu (2026-11-22) : PDF récupéré en binaire puis lu avec pdftotext, section 9 « Education ». « According to NASSCOM (2002a:69-70), engineering colleges offered 73,000 seats in 1992 [...] But there were 98,000 seats in MCA and diploma courses. By 1996, the number of seats in engineering courses had risen to 104,000, and in MCA and diploma courses to 122,000 » ; « In 1997, however, the first students of MCA and diploma courses graduated, and added 76,000 to the 59,000 graduating engineers; the total number of potential programmers more than doubled within a year to 135,000. It nearly doubled again to 250,000 by 2002; and the number of seats had increased to 498,000 ». L'auteur précise que les chiffres de NASSCOM ne sont pas tout à fait exacts. Les instituts privés et publics de l'ancien énoncé ne sont pas distingués dans ce texte ; aucun chiffre n'a été lu après 2002. |
 
 | [S34] | acad | Freeman, Richard B., « The Labour Market in the New Information Economy », NBER Working Paper 9254, octobre 2002 ; https://www.nber.org/papers/w9254 | Lu (2026-11-22) : PDF récupéré en binaire puis lu avec pdftotext (tableau 1 et texte). « the earnings of workers in IT-producing sectors rose from 1.65 times the earnings of workers throughout the economy in 1992 to 2.11 times the earnings of all workers in 2000 (US Department of Commerce Digital Economy 2002, Appendix, table A-5.2) » ; l'emploi des industries productrices de technologies de l'information passe de 3,3 % à 4,3 % de l'emploi total sur la même période. Source de seconde main : l'annexe de Digital Economy 2002 n'a pas pu être ouverte (pages commerce.gov en HTTP 403) ; elle est cohérente avec la note 5 de Digital Economy 2003 ([S11]) selon laquelle l'écart avec le secteur privé s'est creusé. Le chiffre porte sur les industries productrices de technologies de l'information, non sur les professions informatiques : l'ancien énoncé sur les métiers informatiques, sur une prime « croissante » année par année sur 1995-2000 et sur la pénurie déclarée est resserré à ces deux points. |
+| [S35] | stat | U.S. Census Bureau, *Bridge Between 2002 NAICS and 1997 NAICS: 2002*, 2002 Economic Census, Core Business Statistics Series, EC02-00C-BDG, juillet 2006 ; https://www2.census.gov/library/publications/economic-census/2002/core-business-statistics-series/ec0200cbdg.pdf | Lu (2026-11-23) : PDF récupéré en binaire puis lu avec pdftotext. Tableau 1 (« Industry Statistics on 2002 NAICS Basis Distributed Among 1997 NAICS Based Industries for the United States: 2002 », établissements de firmes avec masse salariale) : 454111 « Electronic shopping » = 5 498 établissements, 24 057 284 milliers de dollars de ventes, 1 672 540 milliers de masse salariale, 51 049 salariés (« Paid employees ») ; 454113 « Mail order houses » = 10 317 établissements, 215 304 salariés. Même tableau, base 1997 : 454110 « Electronic shopping and mail order houses » = 15 815 établissements, 266 353 salariés (51 049 + 215 304). Annexe B : 454111 « retailing all types of merchandise using the Internet ». Les séries à six chiffres de 1997 à 2001 ne sont pas publiées sous ce code ; la série BLS en 4541 de [S5] reste la seule série annuelle sur la fenêtre. |
+| [S36] | stat | Ministry of Posts and Telecommunications (Japon), *Communications Usage Trend Survey (Enterprise)*, enquête menée par New Information Center, Inc., 20-30 novembre 1998 ; https://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/Statistics/CommunicationsUsage/trend_survey1998_3-1.html et https://www.soumu.go.jp/main_sosiki/joho_tsusin/eng/Statistics/CommunicationsUsage/00388_00000.html | Lu (2026-11-23) : deux pages ouvertes. Page de présentation : enquête « Nationwide », entreprises de 100 salariés et plus, échantillon aléatoire de 3 000, 2 108 réponses valides (70,3 %). Page des résultats : « The ratio of enterprises installing an Intranet was 36.3% for enterprises with 300 or more employees », « a 14.9 percentage-point increase since the previous survey » ; « the larger the enterprise the higher the rate of installation » ; « In enterprises with 2,000 or more employees the installation rate was 58.3% ». La page des résultats ne nomme pas elle-même l'enquête ni l'année (déduites de la page de présentation et du nom du fichier). Source japonaise, non américaine : elle appuie seulement la diffusion des intranets dans les grandes entreprises à la fin des années 1990, sans mesure américaine ; [S16] donne 51 % pour les grandes entreprises dans le monde (IDC). |

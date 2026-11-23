@@ -12,26 +12,26 @@ comparaison avec l'autre choc est dans le `README.md` du domaine, pas ici.
 ## Table of Contents
 
 1. [A1 Infrastructure physique et capacité](#a1-infrastructure-physique-et-capacité) _(Lines 42-44)_
-   1. [Faits](#faits) _(Lines 47-61)_
-   1. [Jalons cités](#jalons-cités) _(Lines 64-69)_
-   1. [Trajectoire `T.INT.A1`](#trajectoire-tinta1) _(Lines 72-87)_
-   1. [Narratif](#narratif) _(Lines 90-94)_
-1. [A2 Pile technique, standards et plateformes](#a2-pile-technique-standards-et-plateformes) _(Lines 97-100)_
-   1. [Faits](#faits-1) _(Lines 103-114)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 117-121)_
-   1. [Trajectoire `T.INT.A2`](#trajectoire-tinta2) _(Lines 124-139)_
-   1. [Narratif](#narratif-1) _(Lines 142-146)_
-1. [A3 Structure du secteur technologique](#a3-structure-du-secteur-technologique) _(Lines 149-151)_
-   1. [Faits](#faits-2) _(Lines 154-166)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 169-173)_
-   1. [Trajectoire `T.INT.A3`](#trajectoire-tinta3) _(Lines 176-191)_
-   1. [Narratif](#narratif-2) _(Lines 194-198)_
-1. [A4 Mode de production du logiciel et des services](#a4-mode-de-production-du-logiciel-et-des-services) _(Lines 201-204)_
-   1. [Faits](#faits-3) _(Lines 207-218)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 221-225)_
-   1. [Trajectoire `T.INT.A4`](#trajectoire-tinta4) _(Lines 228-243)_
-   1. [Narratif](#narratif-3) _(Lines 246-250)_
-1. [Sources](#sources) _(Lines 253-287)_
+   1. [Faits](#faits) _(Lines 47-64)_
+   1. [Jalons cités](#jalons-cités) _(Lines 67-72)_
+   1. [Trajectoire `T.INT.A1`](#trajectoire-tinta1) _(Lines 75-90)_
+   1. [Narratif](#narratif) _(Lines 93-97)_
+1. [A2 Pile technique, standards et plateformes](#a2-pile-technique-standards-et-plateformes) _(Lines 100-103)_
+   1. [Faits](#faits-1) _(Lines 106-117)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 120-124)_
+   1. [Trajectoire `T.INT.A2`](#trajectoire-tinta2) _(Lines 127-142)_
+   1. [Narratif](#narratif-1) _(Lines 145-149)_
+1. [A3 Structure du secteur technologique](#a3-structure-du-secteur-technologique) _(Lines 152-154)_
+   1. [Faits](#faits-2) _(Lines 157-169)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 172-176)_
+   1. [Trajectoire `T.INT.A3`](#trajectoire-tinta3) _(Lines 179-194)_
+   1. [Narratif](#narratif-2) _(Lines 197-201)_
+1. [A4 Mode de production du logiciel et des services](#a4-mode-de-production-du-logiciel-et-des-services) _(Lines 204-207)_
+   1. [Faits](#faits-3) _(Lines 210-221)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 224-228)_
+   1. [Trajectoire `T.INT.A4`](#trajectoire-tinta4) _(Lines 231-246)_
+   1. [Narratif](#narratif-3) _(Lines 249-253)_
+1. [Sources](#sources) _(Lines 256-293)_
 
 
 
@@ -43,7 +43,7 @@ comparaison avec l'autre choc est dans le `README.md` du domaine, pas ici.
 **Question :** Qu'est-ce qui a été construit, à quel rythme, avec quelles surcapacités ?
 
 ### Faits
-<!-- Lines 47-61 -->
+<!-- Lines 47-64 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -58,9 +58,12 @@ comparaison avec l'autre choc est dans le `README.md` du domaine, pas ici.
 | F.INT.A1.009 | 2000-2002 | US | La surcapacité de fibre devient visible après le retournement boursier : seule une fraction de la fibre posée est effectivement éclairée. | fraction non éclairée majoritaire (ordre de grandeur non chiffré à la source) | O3, O1 | co:X.INT.04 | [S26] | V |
 | F.INT.A1.010 | 2005 | US | Le haut débit devient majoritaire parmi les utilisateurs d'Internet à domicile aux États-Unis en 2005 (42 % en mai 2004, 50 % en décembre 2004, 53 % en mai 2005, Pew) ; la situation européenne en 2004 n'est pas établie. | 53 % des utilisateurs d'Internet à domicile (mai 2005) | P3, P5, O3 | choc | [S6] | V |
 | F.INT.A1.011 | 1999-2001 | US | Le prix de la capacité de transmission longue distance américaine est nettement plus bas en 2001 qu'en 1999 (Odlyzko) ; la série du transit de gros sur 1995-2005 reste à sourcer. | | O3 | co:X.INT.01 | [S26] | A |
+| F.INT.A1.012 | 2000-2002 | US | La surcapacité de fibre longue distance, que la presse ne signale largement qu'au début de 2001 et qui tient d'abord à une demande de capacité qui croît moins vite que l'offre construite, s'accompagne d'une chute du prix de la capacité longue distance : la Réserve fédérale de Richmond décrit un marché favorable aux acheteurs de capacité longue distance, où une liaison en fibre à haut débit entre Los Angeles et New York, facturée 1,8 million de dollars par an en 2000, se vend 590 000 dollars en 2001 et 194 000 dollars en 2002 (TeleGeography). | 1,8 M$/an (2000) → 590 000 $/an (2001) → 194 000 $/an (2002), liaison Los Angeles–New York | O3, O1 | co:X.INT.04 | [S33] | A |
+| F.INT.A1.013 | 1994-2012 | MONDE | Le prix du transit IP baisse chaque année : en 2012, le transit s'achète dans les grands marchés environ 2 dollars par mégabit et par mois, avec des prix descendant à 0,50 dollar ; d'après un document de discussion de l'UIT, le trafic de 2010 facturé aux tarifs de gros d'interconnexion de 1994 coûterait 16 000 milliards de dollars, soit un peu plus que le PIB des États-Unis ; le même document note qu'après l'éclatement de la bulle des télécoms en 1999-2000, certains observateurs craignaient que la baisse des prix du transit ne soit un phénomène temporaire dû à la surcapacité accumulée pendant le boom, et que cette baisse s'est révélée durable. La série annuelle du transit sur 1995-2005 n'est pas établie. | environ 2 $/Mbit/s/mois (grands marchés, 2012), jusqu'à 0,50 $ ; trafic de 2010 aux tarifs de 1994 : 16 000 Md$ | O3 | co:X.INT.01 | [S34] | A |
+| F.INT.A1.014 | 1996-1997 | US | En 1997, l'accès commuté à Internet est en général facturé aux États-Unis par un forfait mensuel, sans redevance à l'usage : l'usager paie un abonnement téléphonique local mensuel, un abonnement mensuel au fournisseur d'accès et une redevance à l'usage nulle, alors que le téléphone interurbain est facturé à la minute ; les fournisseurs d'accès à Internet se raccordent au réseau téléphonique par des points de présence situés dans la zone d'appel local, et les opérateurs de dorsale facturent entre eux et aux fournisseurs d'accès des tarifs non sensibles à la durée. Le document ne traite pas explicitement de la distance parcourue par les données : il établit un prix qui ne varie pas avec l'usage, non un prix indépendant de la distance. | forfait de 19,95 $/mois pour un accès illimité (AT&T, début 1996 ; America Online, 1997) ; redevance à l'usage : zéro | P3, O3 | choc | [S35] | V |
 
 ### Jalons cités
-<!-- Lines 64-69 -->
+<!-- Lines 67-72 -->
 
 `J.INT.1995.01` (fin de l'épine dorsale publique NSFNET, bascule principale), `J.INT.1996.03`
 (forfait illimité et saturation du réseau commuté), `J.INT.1999.04` (plan national coréen de
@@ -68,7 +71,7 @@ haut débit), `J.INT.2001.05` (surcapacité de fibre, vague de faillites), `J.IN
 (haut débit majoritaire).
 
 ### Trajectoire `T.INT.A1`
-<!-- Lines 72-87 -->
+<!-- Lines 75-90 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -86,20 +89,20 @@ haut débit), `J.INT.2001.05` (surcapacité de fibre, vague de faillites), `J.IN
 | 2005 | banalisation | 1 | État final : infrastructure d'accès permanent installée dans les pays riches, le haut débit devenant majoritaire parmi les utilisateurs d'Internet à domicile américains (53 % en mai 2005) ; écart persistant avec l'Asie de l'Est en avance et avec les blocs moins équipés. | F.INT.A1.010, F.INT.A1.011 |
 
 ### Narratif
-<!-- Lines 90-94 -->
+<!-- Lines 93-97 -->
 
 La construction du réseau bascule vers le secteur privé dès 1995, avec la fin de l'épine dorsale fédérale américaine [J.INT.1995.01], et le parc d'abonnés d'un grand fournisseur d'accès double en un an dès la première année de la fenêtre puis encore en 1998 et en 2000 [F.INT.A1.003][F.INT.A1.004][F.INT.A1.005]. La construction physique de fibre progresse fortement à la fin des années 1990, documentée à la source primaire chez un grand opérateur longue distance qui passe de 797 550 à 896 998 miles entre 1998 et 1999 [F.INT.A1.001]. Cette construction dépasse l'usage immédiat : la surcapacité devient visible après le retournement boursier de 2000, une fraction seulement de la fibre posée étant éclairée [F.INT.A1.009][J.INT.2001.05], et le prix de la capacité de transmission longue distance américaine est nettement plus bas en 2001 qu'en 1999 [F.INT.A1.011]. L'équipement des ménages suit un rythme distinct de celui de la connexion, l'accès en ligne progressant plus vite que la possession d'un micro-ordinateur entre 1994 et 1997 [F.INT.A1.006][F.INT.A1.007]. La Corée du Sud lance en 1999 le plan Cyber Korea 21 et des prêts aux opérateurs pour le haut débit, puis atteint 21,3 abonnés pour 100 habitants en 2002, contre 6,5 aux États-Unis [F.INT.A1.008][J.INT.1999.04], pendant que le haut débit ne devient majoritaire parmi les utilisateurs américains d'Internet à domicile qu'en 2005, en toute fin de fenêtre (53 % en mai 2005), la situation européenne en 2004 n'étant pas établie [F.INT.A1.010][J.INT.2004.04].
 
 ---
 
 ## A2 Pile technique, standards et plateformes
-<!-- Lines 97-100 -->
+<!-- Lines 100-103 -->
 
 **Question :** Quelles briques logicielles et quels standards se sont imposés, ouverts ou
 propriétaires, et qui les a fixés ?
 
 ### Faits
-<!-- Lines 103-114 -->
+<!-- Lines 106-117 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -113,14 +116,14 @@ propriétaires, et qui les a fixés ?
 | F.INT.A2.008 | 1998-2000 | US | La procédure antitrust engagée contre l'éditeur du système d'exploitation dominant porte précisément sur l'intégration du navigateur, ce qui montre que le contrôle d'une brique technique de la pile est devenu un enjeu de politique de la concurrence (fait rattaché en C5 comme résultat de marché ; cité ici pour son objet technique). | | O2, O6 | choc | [S12] | K |
 
 ### Jalons cités
-<!-- Lines 117-121 -->
+<!-- Lines 120-124 -->
 
 `J.INT.1993.01` (mise dans le domaine public des technologies du Web), `J.INT.1995.04`
 (Windows 95 et navigateur intégré, bascule principale), `J.INT.1998.01` (procès antitrust sur
 l'intégration du navigateur), `J.INT.1998.03` (fondation de Google).
 
 ### Trajectoire `T.INT.A2`
-<!-- Lines 124-139 -->
+<!-- Lines 127-142 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -138,19 +141,19 @@ l'intégration du navigateur), `J.INT.1998.03` (fondation de Google).
 | 2005 | banalisation | 1 | État final : pile technique fixée sur des standards ouverts, marché des navigateurs et des systèmes d'exploitation stabilisé après la première guerre des navigateurs. | F.INT.A2.005 |
 
 ### Narratif
-<!-- Lines 142-146 -->
+<!-- Lines 145-149 -->
 
 Les standards de l'Internet restent ouverts, les protocoles de base étant mis dans le domaine public dès 1993 et gouvernés par des instances techniques multi-acteurs plutôt que par un État ou une entreprise unique sur toute la fenêtre [F.INT.A2.005][J.INT.1993.01]. La brique la plus visible de la pile, le navigateur, est livré avec le système d'exploitation dominant dès juillet 1995 [J.INT.1995.04] ; la part d'usage du navigateur pionnier tombe de plus de 80 % en janvier 1996 à 55 % en novembre 1997, alors qu'il revendiquait encore plus de 68 millions d'utilisateurs installés en 1997 [F.INT.A2.001][F.INT.A2.003]. Chez ce pionnier, la part du chiffre d'affaires tirée du navigateur autonome s'effondre de 45 % à 13 % entre le quatrième trimestre 1996 et le même trimestre 1997, signe d'un basculement de modèle économique vers le logiciel serveur et l'entreprise [F.INT.A2.002]. Cette intégration technique déclenche en 1998 la plus grande procédure antitrust de la fenêtre, dont l'enjeu est précisément le contrôle de cette brique [F.INT.A2.008][J.INT.1998.01]. Pendant la même période, un serveur web libre devient en avril 1996 le serveur le plus utilisé et fait fonctionner 69 % des sites actifs en janvier 2004, et un courriel gratuit hébergé, lancé en juillet 1996, compte plus de 9 millions de membres fin 1997 [F.INT.A2.004][F.INT.A2.007].
 
 ---
 
 ## A3 Structure du secteur technologique
-<!-- Lines 149-151 -->
+<!-- Lines 152-154 -->
 
 **Question :** Qui produit la technologie : anciens, nouveaux, intégrés, concentrés ?
 
 ### Faits
-<!-- Lines 154-166 -->
+<!-- Lines 157-169 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -165,14 +168,14 @@ Les standards de l'Internet restent ouverts, les protocoles de base étant mis d
 | F.INT.A3.009 | 2005 | US | Dans le classement Fortune 500 établi sur les chiffres d'affaires de 2005 (publié en avril 2006), trois entreprises d'Internet figurent pour la première fois : Google (n° 353), Yahoo (n° 412) et eBay (n° 458). | Google n° 353 ; Yahoo n° 412 ; eBay n° 458 (Fortune 500, revenus 2005) | O1, O2, O3 | choc | [S31] | A |
 
 ### Jalons cités
-<!-- Lines 169-173 -->
+<!-- Lines 172-176 -->
 
 `J.INT.1996.01` (Telecommunications Act, ouverture du marché), `J.INT.1998.03` (fondation de
 Google), `J.INT.2001.05` (vague de faillites, surcapacité), `J.INT.2002.01` (faillite WorldCom,
 bascule principale), `J.INT.2004.06` (introductions en bourse des géants chinois du Web).
 
 ### Trajectoire `T.INT.A3`
-<!-- Lines 176-191 -->
+<!-- Lines 179-194 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -190,20 +193,20 @@ bascule principale), `J.INT.2004.06` (introductions en bourse des géants chinoi
 | 2005 | banalisation | 1 | État final : Google, Yahoo et eBay figurent pour la première fois au classement Fortune 500 établi sur les revenus de 2005 ; les opérateurs locaux historiques contrôlent encore environ 95 % des lignes locales américaines. | F.INT.A3.009, F.INT.A3.005 |
 
 ### Narratif
-<!-- Lines 194-198 -->
+<!-- Lines 197-201 -->
 
 Le secteur naît de la fin de l'épine dorsale fédérale et de l'ouverture réglementaire du marché télécoms américain, qui font entrer rapidement de nouveaux fournisseurs d'accès et opérateurs alternatifs [F.INT.A3.001][J.INT.1995.01][J.INT.1996.01]. Cette entrée massive est documentée à la source primaire chez un grand opérateur longue distance, dont la fibre déployée passe de 797 550 à 896 998 miles entre 1998 et 1999 [F.INT.A3.003]. L'éditeur du système d'exploitation dominant livre son navigateur avec Windows dès 1995 et dote son service en ligne d'une icône sur le bureau, tandis qu'un moteur de recherche fondé en 1998 sur un principe de classement par liens atteint 962 millions de dollars de chiffre d'affaires en 2003 [F.INT.A3.006][F.INT.A3.007][J.INT.1998.03]. La structure se resserre après le retournement de 2000 : une vague de faillites touche les opérateurs alternatifs, fin 2002 la plus grande partie des opérateurs locaux concurrents américains est en faillite ou proche de l'être et les opérateurs locaux historiques contrôlent encore environ 95 % des lignes locales, et la faillite d'un grand opérateur longue distance en 2002 est l'une des plus importantes de l'histoire des dépôts de bilan américains [F.INT.A3.004][F.INT.A3.005][J.INT.2001.05][J.INT.2002.01]. En 2005, Google, Yahoo et eBay figurent pour la première fois au classement Fortune 500 établi sur les revenus de 2005, tandis qu'un écosystème chinois distinct atteint sa propre taille critique [F.INT.A3.008][F.INT.A3.009][J.INT.2004.06].
 
 ---
 
 ## A4 Mode de production du logiciel et des services
-<!-- Lines 201-204 -->
+<!-- Lines 204-207 -->
 
 **Question :** Comment fabrique-t-on et exploite-t-on un service numérique, à quel coût, avec
 quelle organisation ?
 
 ### Faits
-<!-- Lines 207-218 -->
+<!-- Lines 210-221 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -217,14 +220,14 @@ quelle organisation ?
 | F.INT.A4.008 | 1993-2004 | US, EU | L'externalisation informatique reste minoritaire dans les dépenses : une enquête de 1993 auprès de grandes entreprises européennes trouve qu'un peu moins de la moitié ont des contrats d'externalisation, qui pèsent en moyenne 24 % de leur budget informatique ; en 2004, elle représente 19,4 % des dépenses informatiques totales des entreprises interrogées par un magazine, et sert surtout à doter en personnel des projets techniques et des fonctions informatiques de support. | 24 % du budget informatique des entreprises européennes ayant des contrats (1993) ; 19,4 % des dépenses informatiques totales (2004) | O4, M1 | choc | [S32] | A |
 
 ### Jalons cités
-<!-- Lines 221-225 -->
+<!-- Lines 224-228 -->
 
 `J.INT.1997.04` (généralisation des intranets d'entreprise), `J.INT.1997.03` (bascule de la
 sous-traitance indienne), `J.INT.2001.03` (récession, chute de l'investissement informatique),
 `J.INT.2004.02` (service de courriel avec stockage étendu, bascule principale).
 
 ### Trajectoire `T.INT.A4`
-<!-- Lines 228-243 -->
+<!-- Lines 231-246 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -242,14 +245,14 @@ sous-traitance indienne), `J.INT.2001.03` (récession, chute de l'investissement
 | 2005 | banalisation | 1 | État final : l'externalisation informatique reste minoritaire dans les dépenses (19,4 % des dépenses informatiques totales des entreprises interrogées en 2004) ; un service de courriel web de 1 gigaoctet est lancé en 2004. | F.INT.A4.008, F.INT.A4.007 |
 
 ### Narratif
-<!-- Lines 246-250 -->
+<!-- Lines 249-253 -->
 
 Le site d'Amazon, ouvert en juillet 1995, est écrit par deux programmeurs sur des outils du commerce et libres [F.INT.A4.001], et en 1998 22 % des fournisseurs d'accès américains étudiés proposent un service d'hébergement de sites, destiné surtout aux entreprises [F.INT.A4.005]. Les entreprises adoptent la pile technique du Web pour leurs réseaux internes dès 1997, avant même de l'adopter pour vendre à l'extérieur [F.INT.A4.002][J.INT.1997.04]. La part des exportations indiennes de logiciels réalisée sur site recule de 90 % en 1990 à 58 % en 1998, et les solutions pour l'an 2000 représentent 20 % de ces exportations en 1998-1999 [F.INT.A4.003][J.INT.1997.03]. Les dépenses de correction de l'an 2000, environ 100 milliards de dollars aux États-Unis sur 1995-2001, culminent en 1998 mais pèsent peu sur le profil annuel de l'investissement informatique agrégé, qui croît encore en 2000, se contracte en 2001 puis se redresse [F.INT.A4.004][F.INT.A4.006][J.INT.2001.03]. En 2004, l'externalisation représente 19,4 % des dépenses informatiques totales des entreprises interrogées, et un service de courriel web gratuit de 1 gigaoctet est lancé en version de test [F.INT.A4.008][F.INT.A4.007][J.INT.2004.02].
 
 ---
 
 ## Sources
-<!-- Lines 253-287 -->
+<!-- Lines 256-293 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -285,3 +288,6 @@ Le site d'Amazon, ouvert en juillet 1995, est écrit par deux programmeurs sur d
 | [S30] | presse | Microsoft, communiqué « Microsoft acquires Hotmail », 31 décembre 1997, https://news.microsoft.com/source/1997/12/31/microsoft-acquires-hotmail/ ; Wikipedia, « Outlook.com », https://en.wikipedia.org/wiki/Outlook.com ; Mears, J., « What went wrong with ASPs? », Network World, 29 octobre 2001, repris par Computerworld, https://www.computerworld.com/article/1346927/what-went-wrong-with-asps.html | Ouverts et lus (WebFetch) : communiqué : « Hotmail, the award-winning free Web-based e-mail service », « more than 9 million members worldwide », « Advertising banners similar to those seen on other Web sites support Hotmail » (aucune date de lancement) ; Wikipedia : « commercially launched on July 4, 1996 », citant The Atlanta Constitution du 3 juillet 1996 (non ouvert) ; Network World : « jumped into the market in droves », « ASP frenzy of 1999 », « Dozens of ASPs are struggling or going out of business » avec fermetures datées de 2000-2001. Aucun nombre d'ASP ni montant de capital-risque lu dans le texte ouvert ; « outils de collaboration » de l'énoncé initial non retrouvé : supprimé. |
 | [S31] | presse | Associated Press, « Exxon dethrones Wal-Mart atop Fortune 500 », 3 avril 2006, repris par NBC News, https://www.nbcnews.com/news/amp/wbna12131795 | Ouvert et lu (WebFetch) : « Fortune compiled its list based on companies' 2005 revenues » ; « Google Inc. debuting at No. 353, Yahoo! Inc. at No. 412 and eBay Inc. at No. 458 » ; création d'une catégorie « Internet services and retailing ». Les pages de la liste elle-même (money.cnn.com) ont renvoyé 503 : liste complète non lue. Non lu : la présence d'opérateurs historiques ou d'éditeurs préexistants dans un classement du secteur informatique et télécoms, supprimée de l'énoncé. |
 | [S32] | presse | Alter, A., « Job Loss Is Real, So Don't Dodge the Issue », CIO Insight, 25 mars 2005, https://www.cioinsight.com/it-strategy/job-loss-is-real-so-dont-dodge-the-issue ; Lacity, M. C., Willcocks, L. P., Feeny, D. F., « The Value of Selective IT Sourcing », MIT Sloan Management Review, printemps 1996, https://sloanreview.mit.edu/article/the-value-of-selective-it-sourcing | Ouverts et lus (WebFetch) : CIO Insight (quatrième enquête sur l'externalisation, 388 dirigeants informatiques interrogés) : « Outsourcing represents a larger segment of total IT spending in 2004—19.4 percent—than it did in 2003 » ; « Outsourcing has become a common way to staff technical projects and back-office IT functions » ; « few companies use outsourcers to run applications or IT activities where leadership or security is involved » ; pays de l'échantillon non précisé (bloc US supposé d'après le titre américain, non vérifié). Sloan Management Review : enquête de 1993 auprès de 162 grandes entreprises européennes, « slightly fewer than half had IT outsourcing contracts » représentant en moyenne « 24 percent of their IT budgets » ; étude de 62 décisions de 40 entreprises américaines et européennes (1991-1994) ; l'externalisation sélective garde 20 à 80 % du budget en interne. Non lu : les chiffres de 2005 de Willcocks, Lacity et Cullen (2007) ; aucune source ouverte ne porte sur les centres de calcul ni sur le personnel informatique interne des grandes entreprises : cette clause, et « sur toute la fenêtre », sont retirées. Les deux bases diffèrent (part du budget des entreprises ayant des contrats en 1993 ; part des dépenses informatiques totales en 2004). |
+| [S33] | acad | Couper, E. A., Hejkal, J. P., Wolman, A. L., « Boom and Bust in Telecommunications », Federal Reserve Bank of Richmond, Economic Quarterly, vol. 89, n° 4, automne 2003, https://www.richmondfed.org/-/media/RichmondFedOrg/publications/research/economic_quarterly/2003/fall/pdf/wolman.pdf ; Gerena, C., « Beyond the Turmoil: The Telecommunications Industry in the Fifth District », Federal Reserve Bank of Richmond, Econ Focus (Region Focus), hiver 2003, https://www.richmondfed.org/publications/research/econ_focus/2003/winter/cover | Ouverts et lus (PDF converti en texte avec pdftotext ; WebFetch). Economic Quarterly : « It soon became apparent, though, that there was massive overcapacity in long-haul fiber. Media reports of the glut in long-haul fiber became widespread early in 2001 » ; citation d'America's Network, 1er février 2001 : « Nearly 600,000 miles of new inter-city fiber is on the way. Capacity prices are dropping and major dot.com and CLEC customers are failing » ; trois sources de la surcapacité, dont, « perhaps most importantly, demand for long-haul fiber capacity had not grown as fast as many had forecast ». Econ Focus : « It is a buyer's market for long haul capacity » ; « But voice and data traffic didn't grow as fast as the amount of new supply entering the telecom market » ; liaison à haut débit en fibre Los Angeles–New York, 1,8 million de dollars par an en 2000, 590 000 en 2001, 194 000 en 2002, chiffres attribués par l'article à TeleGeography (série de TeleGeography non ouverte elle-même). L'article de l'Economic Quarterly ne chiffre aucun prix : le lien surcapacité et baisse du prix de la capacité y est une citation de presse professionnelle de 2001, les chiffres viennent de l'article d'Econ Focus ; le prix cité est celui d'une seule liaison, pas une série de marché. |
+| [S34] | off | Weller, D. (Navigant Economics), « Blurring Boundaries: Global and Regional IP Interconnection », document de discussion GSR 2012, Union internationale des télécommunications, 2012, https://www.itu.int/ITU-D/treg/Events/Seminars/GSR/GSR12/documents/GSR12_Weller_IPinterconnection_4.pdf | Ouvert et lu (WebFetch ; PDF converti en texte avec pdftotext), § 2.2 : « Prices for transit service have declined every year. Transit can now be purchased in larger markets for about two USD per megabit per month, [...] with some prices as low as USD 0.50 » ; « If the connectivity necessary to carry the volume of traffic the Internet handled in 2010 were priced at the wholesale interconnection rates in effect in 1994, the global bill would be USD 16 Trillion, or slightly more than the GDP of the United States » ; « For a time after the telecom bubble burst in 1999-2000, some observers feared that the decline in transit prices was a temporary phenomenon driven by the excess capacity built up during the previous boom. It's now clear that these low prices are a long-term, sustainable trend ». Le même texte précise que les prix du transit varient selon la localisation, le volume et « the weighted average distance the traffic must travel » : il ne soutient donc pas une tarification du transit indépendante de la distance. Document de discussion « pour commentaires », publié sous la responsabilité de son auteur ; aucune série annuelle 1995-2005 n'y figure ; les chiffres de 2012 et le contrefactuel 1994 sont hors fenêtre. |
+| [S35] | off | Werbach, K., « Digital Tornado: The Internet and Telecommunications Policy », Federal Communications Commission, Office of Plans and Policy, OPP Working Paper Series n° 29, mars 1997, https://transition.fcc.gov/Bureaus/OPP/working_papers/oppwp29.pdf (copie d'archive : https://webharvest.gov/peth04/20041119210242/http://www.fcc.gov/Bureaus/OPP/working_papers/oppwp29.pdf) | Ouvert et lu (WebFetch ; PDF enregistré puis converti avec pdftotext), section sur la tarification de l'accès : « Most ISPs charge a flat, monthly fee, although some assess a per-hour charge above a certain monthly threshold » ; « an Internet user "sees" a monthly telephone connection charge, a monthly charge from the ISP, and a usage charge of zero. By contrast, a subscriber making a long-distance telephone call today sees a monthly local connection charge from a LEC, plus a usage charge from an interexchange carrier (IXC) for each minute of long-distance calling » ; « There are three fundamental reasons why most Internet users do not pay usage charges: (1) residential local service tends to be flat-rated, and ISPs have located their POPs to maximize the number of subscribers who can reach them with a local call; (2) Internet backbone providers tend to charge non time-sensitive rates to each other and to ISPs; and (3) ISPs typically connect to LECs through business lines that have no usage charges for receiving calls » ; « Dial-up Internet access today tends to be priced on a flat-rated basis, for both the PSTN portion of the connection and the transmission of packets through Internet backbones. By contrast, interexchange telephone service tends to be charged on a per-minute basis » ; note de bas de page : accès illimité à 19,95 $ par mois chez AT&T depuis début 1996, même formule chez America Online. Document de travail d'un membre du personnel de la FCC, dont les conclusions n'engagent pas la Commission. Limite : le texte oppose un tarif au forfait à un tarif à la minute ; il ne dit nulle part que le prix de l'accès à Internet est indépendant de la distance entre l'usager et le site atteint (le mot « distance » n'y apparaît que pour la téléphonie interurbaine et les opérateurs interurbains) ; l'appel local vers le fournisseur d'accès suppose lui-même un point de présence proche. |

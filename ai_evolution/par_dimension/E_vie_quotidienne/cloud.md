@@ -22,21 +22,21 @@ comparaison avec l'autre choc est dans le `README.md` du domaine, pas ici.
    1. [Trajectoire `T.CLD.E2`](#trajectoire-tclde2) _(Lines 133-148)_
    1. [Narratif](#narratif-1) _(Lines 151-165)_
 1. [E3 Consommation et démarches](#e3-consommation-et-démarches) _(Lines 168-170)_
-   1. [Faits](#faits-2) _(Lines 173-185)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 188-191)_
-   1. [Trajectoire `T.CLD.E3`](#trajectoire-tclde3) _(Lines 194-209)_
-   1. [Narratif](#narratif-2) _(Lines 212-226)_
-1. [E4 Information, loisirs et divertissement](#e4-information-loisirs-et-divertissement) _(Lines 229-231)_
-   1. [Faits](#faits-3) _(Lines 234-245)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 248-251)_
-   1. [Trajectoire `T.CLD.E4`](#trajectoire-tclde4) _(Lines 254-269)_
-   1. [Narratif](#narratif-3) _(Lines 272-291)_
-1. [E5 Temps, espace et attention](#e5-temps-espace-et-attention) _(Lines 294-297)_
-   1. [Faits](#faits-4) _(Lines 300-308)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 311-314)_
-   1. [Trajectoire `T.CLD.E5`](#trajectoire-tclde5) _(Lines 317-332)_
-   1. [Narratif](#narratif-4) _(Lines 335-350)_
-1. [Sources](#sources) _(Lines 353-375)_
+   1. [Faits](#faits-2) _(Lines 173-186)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 189-192)_
+   1. [Trajectoire `T.CLD.E3`](#trajectoire-tclde3) _(Lines 195-210)_
+   1. [Narratif](#narratif-2) _(Lines 213-227)_
+1. [E4 Information, loisirs et divertissement](#e4-information-loisirs-et-divertissement) _(Lines 230-232)_
+   1. [Faits](#faits-3) _(Lines 235-247)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 250-253)_
+   1. [Trajectoire `T.CLD.E4`](#trajectoire-tclde4) _(Lines 256-271)_
+   1. [Narratif](#narratif-3) _(Lines 274-293)_
+1. [E5 Temps, espace et attention](#e5-temps-espace-et-attention) _(Lines 296-299)_
+   1. [Faits](#faits-4) _(Lines 302-310)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 313-316)_
+   1. [Trajectoire `T.CLD.E5`](#trajectoire-tclde5) _(Lines 319-334)_
+   1. [Narratif](#narratif-4) _(Lines 337-352)_
+1. [Sources](#sources) _(Lines 355-379)_
 
 
 
@@ -169,7 +169,7 @@ déclarent utiliser une application de messagerie hébergée, un usage nettement
 **Question :** Comment achète-t-on, se déplace-t-on, se soigne-t-on, fait-on ses démarches ?
 
 ### Faits
-<!-- Lines 173-185 -->
+<!-- Lines 173-186 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -182,15 +182,16 @@ déclarent utiliser une application de messagerie hébergée, un usage nettement
 | F.CLD.E3.007 | 2015 | US | Parmi les possesseurs de smartphone, 57 % déclarent avoir utilisé leur téléphone pour la banque en ligne au cours de l'année écoulée ; le service bancaire hébergé est l'usage, le smartphone le canal. | 57 % des possesseurs de smartphone | P1 à P8 | choc | [S3] | V |
 | F.CLD.E3.008 | 2015 | US | Parmi les possesseurs de smartphone, 62 % déclarent avoir consulté une information de santé sur leur téléphone au cours de l'année écoulée. | 62 % des possesseurs de smartphone | P1 à P8 | choc | [S3] | V |
 | F.CLD.E3.009 | 2012, 2013 | MONDE | Un service de stockage de fichiers synchronisé annonce avoir passé 100 millions d'usagers le 13 novembre 2012, puis atteint 200 millions le 13 novembre 2013. | 100 M (nov. 2012) ; 200 M (nov. 2013) | P1 à P8 | choc | [S11] | A |
+| F.CLD.E3.010 | 2015 | MONDE | Dans un billet de mars 2016, l'entreprise du service de stockage de fichiers synchronisé indique avoir toujours eu une architecture hybride, avec ses métadonnées et ses serveurs web dans ses propres centres de données et le contenu des fichiers chez Amazon, dont elle a été l'une des premières utilisatrices du service S3 ; elle s'était fixé pour 2015 l'objectif de servir 90 % de ses données depuis sa propre infrastructure d'ici le 30 octobre. | objectif de 90 % des données servies en interne (30 octobre 2015) | P1 à P8 | choc | [S22] | A |
 
 ### Jalons cités
-<!-- Lines 188-191 -->
+<!-- Lines 189-192 -->
 
 `J.CLD.2008.05` (transfert d'argent par téléphone mobile au Kenya), `J.CLD.2012.04` (stockage
 synchronisé, 100 millions d'usagers en novembre 2012).
 
 ### Trajectoire `T.CLD.E3`
-<!-- Lines 194-209 -->
+<!-- Lines 195-210 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -208,7 +209,7 @@ synchronisé, 100 millions d'usagers en novembre 2012).
 | 2015 | banalisation | 2 | La part atteint 7,0 % au premier trimestre ; 57 % et 62 % des possesseurs de smartphone utilisent leur terminal pour la banque et la santé. | F.CLD.E3.005, F.CLD.E3.007, F.CLD.E3.008 |
 
 ### Narratif
-<!-- Lines 212-226 -->
+<!-- Lines 213-227 -->
 
 La part du commerce en ligne dans les ventes au détail américaines progresse sans interruption
 pendant toute la fenêtre, de 2,8 % au premier trimestre 2006 à 7,0 % au premier trimestre 2015,
@@ -225,12 +226,12 @@ novembre 2012 puis 200 millions en novembre 2013 [F.CLD.E3.009].
 ---
 
 ## E4 Information, loisirs et divertissement
-<!-- Lines 229-231 -->
+<!-- Lines 230-232 -->
 
 **Question :** Comment s'informe-t-on et se divertit-on ?
 
 ### Faits
-<!-- Lines 234-245 -->
+<!-- Lines 235-247 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -242,15 +243,16 @@ novembre 2012 puis 200 millions en novembre 2013 [F.CLD.E3.009].
 | F.CLD.E4.006 | 2009, 2012 | MONDE | En novembre 2009, une dépêche d'agence décrit les téléphones équipés de GPS, dont une application gratuite de guidage pas à pas, comme un défi pour les fabricants d'appareils de navigation autonomes ; le rapport annuel 2012 de l'un d'eux donne à la gamme nüvi 54 % de son chiffre d'affaires consolidé en 2010, 48 % en 2011 et 43 % en 2012, et indique que l'extension de la navigation sur les téléphones mobiles et dans les automobiles neuves pourrait réduire encore ses ventes. | 54 % (2010) ; 48 % (2011) ; 43 % (2012) du chiffre d'affaires consolidé | P1 à P8 | choc | [S15] | A |
 | F.CLD.E4.007 | 2006 | MONDE | Un service en ligne de traduction automatique statistique, décrit comme gratuit d'usage, est lancé le 28 avril 2006, d'abord pour l'arabe et l'anglais. | lancement le 28 avril 2006 | P1 à P8 | choc | [S16] | A |
 | F.CLD.E4.008 | 2015-01 | MONDE | Un service de musique en flux par abonnement annonce le 12 janvier 2015 60 millions d'utilisateurs actifs et 15 millions d'abonnés payants, contre 50 millions d'utilisateurs et 12,5 millions d'abonnés payants deux mois plus tôt. | 60 M utilisateurs actifs, 15 M abonnés payants (12 janv. 2015) ; 50 M et 12,5 M (nov. 2014) | P1, P2, P3 | choc | [S19] | A |
+| F.CLD.E4.009 | 2007 | MONDE | Des chercheurs de Google, dont l'auteur du billet de lancement du service de traduction de 2006, décrivent un système de traduction automatique statistique dont les modèles de langue sont entraînés avec MapReduce sur une infrastructure distribuée de l'entreprise (jusqu'à 1 500 machines, jusqu'à 2 000 milliards de mots) et consultés par le décodeur auprès de serveurs ; l'article ne dit pas que ce système est le service en ligne. | jusqu'à 1 500 machines ; 2 000 milliards de mots d'entraînement | P1 à P8 | choc | [S23] | V |
 
 ### Jalons cités
-<!-- Lines 248-251 -->
+<!-- Lines 250-253 -->
 
 `J.CLD.2012.04` (stockage synchronisé grand public, photo et document), `J.CLD.2005.05` (partage
 vidéo à équipe minimale, contexte de la bascule du support vers le flux).
 
 ### Trajectoire `T.CLD.E4`
-<!-- Lines 254-269 -->
+<!-- Lines 256-271 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -268,7 +270,7 @@ vidéo à équipe minimale, contexte de la bascule du support vers le flux).
 | 2015 | banalisation | 3 | Le service de vidéo en flux atteint 44,7 millions d'abonnés américains et 30 millions à l'international, contre 4,2 millions tous supports en 2005 ; un service de musique en flux annonce 60 millions d'utilisateurs actifs et 15 millions d'abonnés payants. | F.CLD.E4.004, F.CLD.E4.008 |
 
 ### Narratif
-<!-- Lines 272-291 -->
+<!-- Lines 274-293 -->
 
 Le loisir numérique passe du support possédé à l'accès hébergé, de la vidéo à la photo puis à la
 musique [F.CLD.E4.001][F.CLD.E4.005][F.CLD.E4.008]. La vidéo d'abord : un service de location de
@@ -290,13 +292,13 @@ d'abonnés payants [F.CLD.E4.008].
 ---
 
 ## E5 Temps, espace et attention
-<!-- Lines 294-297 -->
+<!-- Lines 296-299 -->
 
 **Question :** Comment le budget-temps, la frontière domicile-travail et la disponibilité
 changent-ils ?
 
 ### Faits
-<!-- Lines 300-308 -->
+<!-- Lines 302-310 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -307,13 +309,13 @@ changent-ils ?
 | F.CLD.E5.005 | 2011 | MONDE | Un service hébergé annoncé le 6 juin 2011 sauvegarde automatiquement chaque jour les appareils de l'usager sur Wi-Fi, avec 5 Go gratuits pour le courrier, les documents et la sauvegarde. | 5 Go gratuits ; sauvegarde quotidienne automatique | P1 à P8 | choc | [S7] | V |
 
 ### Jalons cités
-<!-- Lines 311-314 -->
+<!-- Lines 313-316 -->
 
 `J.CLD.2011.02` (panne prolongée d'une région d'un grand fournisseur, dépendance à la
 disponibilité du service).
 
 ### Trajectoire `T.CLD.E5`
-<!-- Lines 317-332 -->
+<!-- Lines 319-334 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -331,7 +333,7 @@ disponibilité du service).
 | 2015 | banalisation | 1 | Une majorité de possesseurs de smartphone déclarent avoir utilisé leur téléphone pour des démarches à distance (banque, logement, emploi, administration) qui exigeaient auparavant un déplacement. | F.CLD.E5.004 |
 
 ### Narratif
-<!-- Lines 335-350 -->
+<!-- Lines 337-352 -->
 
 La frontière entre lieux et appareils de connexion s'efface progressivement : en 2011, plus d'un
 quart des individus connectés accèdent à Internet depuis plusieurs lieux et plusieurs appareils à
@@ -349,7 +351,7 @@ l'emploi, 40 % pour un service administratif [F.CLD.E5.004].
 ---
 
 ## Sources
-<!-- Lines 353-375 -->
+<!-- Lines 355-379 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -373,3 +375,5 @@ l'emploi, 40 % pour un service administratif [F.CLD.E5.004].
 | [S19] | presse | TechCrunch, « Spotify Now Has 15M Paying Users, 60M Overall Active Subscribers », 12 janvier 2015 (techcrunch.com/2015/01/12/spotify-now-has-15m-paying-users-60m-overall) ; Engadget, « Despite artist tension, Spotify subscriptions are growing quickly », 12 janvier 2015 (engadget.com/2015/01/12/spotify-15-million-paid-users/) | Ouvert et lu le 2026-11-22. TechCrunch : « 15 million paying users » et « 60 million subscribers overall » annoncés par l'entreprise dans « a short blog post » ; « two months ago, the company said it had 12.5 million paying users out of 50 million subscribers ». Engadget : 2,5 millions d'abonnés payants ajoutés depuis novembre, 15 millions au total ; le total passe à 60 millions. Presse contemporaine reprenant l'annonce de l'entreprise ; le billet de l'entreprise n'a pas été trouvé, et la période couverte par les chiffres (fin 2014 ou date de l'annonce) n'est établie par aucune source lue : le fait date l'annonce, pas la mesure. Source faible pour le chiffre (presse, pas de dépôt réglementaire : entreprise non cotée). |
 | [S20] | presse | NBC News, « New Skype version has video calling », 1er décembre 2005 (nbcnews.com/news/amp/wbna10280416) ; ABC News / PCWorld, « Google Launches Free Video Chat Service », 11 novembre 2008 (abcnews.com/Technology/PCWorld/story?id=6232412) | Ouvert et lu le 2026-11-22. NBC News : la version 2.0 de Skype pour Windows est une bêta qui ajoute la vidéo ; « The video feature will not cost extra », les appels d'ordinateur à ordinateur restent gratuits, les appels vers téléphones restent payants. ABC News : « The service is available free of charge » ; module de navigateur d'environ 2 Mo, webcam requise pour la vidéo. Les billets de Google (gmail.googleblog.com, cloud.googleblog.com) ne sont lisibles que par leur titre et leur date (11 novembre 2008). Ce qui précédait (service payant ou réservé aux entreprises avant ces dates) n'a trouvé aucune source lue. |
 | [S21] | presse | TechCrunch, « Yahoo Mail Announces Unlimited Storage », 27 mars 2007 (techcrunch.com/2007/03/27/yahoo-mail-announces-unlimited-storage/) ; Computerworld, « Yahoo Mail goes all-you-can-eat », 28 mars 2007 (computerworld.com/article/1650371/yahoo-mail-goes-all-you-can-eat.html) | Ouvert et lu le 2026-11-22. TechCrunch : tous les usagers de Yahoo Mail auront un stockage illimité gratuit à partir de mai 2007 (jusque-là 1 Go, 2 Go en formule payante) ; Gmail est à 2,8 Go « and growing ». Computerworld : « an unlimited amount of storage space starting in May », déploiement mondial attendu en un mois ; Gmail « will increase a user's storage capacity as that user loads up his account ». Annonce de l'entreprise relayée par la presse ; aucune source lue sur une généralisation à d'autres fournisseurs ni sur la fin de la suppression périodique des messages. |
+| [S22] | off | Gupta, A., Dropbox, billet d'ingénierie sur Magic Pocket (page « magic-pocket-infrastructure »), 14 mars 2016, https://dropbox.tech/infrastructure/magic-pocket-infrastructure | Ouvert et lu le 2026-11-23. Billet de l'entreprise elle-même, valable pour ce qu'elle a fait : « We were an early adopter of Amazon S3 » ; « We've always had a hybrid cloud architecture, hosting metadata and our web servers in data centers we manage, and storing file content on Amazon. » ; « February 27, 2015 was D-day » ; « Our goal was to serve 90% of our data from in-house infrastructure by October 30, 2015. » Le billet ne dit pas que le stockage chez Amazon était loué à la capacité ni quel volume y était conservé en 2012-2013 ; « sur la capacité louée d'un grand fournisseur » est la lecture courante de « storing file content on Amazon ». |
+| [S23] | acad | Brants, T., Popat, A. C., Xu, P., Och, F. J., Dean, J. (Google Inc.), *Large Language Models in Machine Translation*, Proceedings of EMNLP-CoNLL 2007, pp. 858-867, Prague, juin 2007, https://aclanthology.org/D07-1090.pdf | Ouvert et lu le 2026-11-23 (PDF complet, texte extrait). Résumé : « A distributed infrastructure is proposed which we use to train on up to 2 trillion tokens, resulting in language models having up to 300 billion n-grams » ; tableau 2 : 100, 400 puis 1 500 machines pour les trois modèles ; section 6 : le décodeur met en file les n-grammes requis, transmis par lots, et attend les serveurs. Les données de test sont postérieures au 1er février 2006. Le texte parle de « a state-of-the-art machine translation system » sans le nommer ni dire qu'il sert le service en ligne lancé en 2006 ; il ne dit pas non plus que les machines forment des grappes de calcul de l'entreprise (MapReduce, Dean et Ghemawat 2004, y est cité : « large clusters »). Le billet de lancement du 28 avril 2006 ([S16]) et l'article de The Register du 15 mai 2007 (« loads of computational horsepower for learning and testing », sans infrastructure nommée) ne donnent pas non plus l'infrastructure. |

@@ -24,31 +24,31 @@ aujourd'hui de G5 ou G6 ; G5 et G6 les citent par identifiant plutôt que de les
    1. [Trajectoire `T.INT.G1`](#trajectoire-tintg1) _(Lines 101-116)_
    1. [Narratif](#narratif) _(Lines 119-123)_
 1. [G2 Gouvernance de la technologie](#g2-gouvernance-de-la-technologie) _(Lines 126-134)_
-   1. [Faits](#faits-1) _(Lines 137-147)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 150-154)_
-   1. [Trajectoire `T.INT.G2`](#trajectoire-tintg2) _(Lines 157-172)_
-   1. [Narratif](#narratif-1) _(Lines 175-179)_
-1. [G3 État, services publics et vie démocratique](#g3-état-services-publics-et-vie-démocratique) _(Lines 182-189)_
-   1. [Faits](#faits-2) _(Lines 192-200)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 203-208)_
-   1. [Trajectoire `T.INT.G3`](#trajectoire-tintg3) _(Lines 211-226)_
-   1. [Narratif](#narratif-2) _(Lines 229-233)_
-1. [G4 Géopolitique, souveraineté et sécurité](#g4-géopolitique-souveraineté-et-sécurité) _(Lines 236-239)_
-   1. [Faits](#faits-3) _(Lines 242-257)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 260-268)_
-   1. [Trajectoire `T.INT.G4`](#trajectoire-tintg4) _(Lines 271-286)_
-   1. [Narratif](#narratif-3) _(Lines 289-293)_
-1. [G5 Domination d'infrastructure et ressources critiques](#g5-domination-dinfrastructure-et-ressources-critiques) _(Lines 296-304)_
-   1. [Faits](#faits-4) _(Lines 307-314)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 317-321)_
-   1. [Trajectoire `T.INT.G5`](#trajectoire-tintg5) _(Lines 324-339)_
-   1. [Narratif](#narratif-4) _(Lines 342-346)_
-1. [G6 Fracture entre pays et diplomatie du développement](#g6-fracture-entre-pays-et-diplomatie-du-développement) _(Lines 349-355)_
-   1. [Faits](#faits-5) _(Lines 358-364)_
-   1. [Jalons cités](#jalons-cités-5) _(Lines 367-371)_
-   1. [Trajectoire `T.INT.G6`](#trajectoire-tintg6) _(Lines 374-389)_
-   1. [Narratif](#narratif-5) _(Lines 392-396)_
-1. [Sources](#sources) _(Lines 399-440)_
+   1. [Faits](#faits-1) _(Lines 137-148)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 151-155)_
+   1. [Trajectoire `T.INT.G2`](#trajectoire-tintg2) _(Lines 158-173)_
+   1. [Narratif](#narratif-1) _(Lines 176-180)_
+1. [G3 État, services publics et vie démocratique](#g3-état-services-publics-et-vie-démocratique) _(Lines 183-190)_
+   1. [Faits](#faits-2) _(Lines 193-201)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 204-209)_
+   1. [Trajectoire `T.INT.G3`](#trajectoire-tintg3) _(Lines 212-227)_
+   1. [Narratif](#narratif-2) _(Lines 230-234)_
+1. [G4 Géopolitique, souveraineté et sécurité](#g4-géopolitique-souveraineté-et-sécurité) _(Lines 237-240)_
+   1. [Faits](#faits-3) _(Lines 243-260)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 263-271)_
+   1. [Trajectoire `T.INT.G4`](#trajectoire-tintg4) _(Lines 274-289)_
+   1. [Narratif](#narratif-3) _(Lines 292-296)_
+1. [G5 Domination d'infrastructure et ressources critiques](#g5-domination-dinfrastructure-et-ressources-critiques) _(Lines 299-307)_
+   1. [Faits](#faits-4) _(Lines 310-317)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 320-324)_
+   1. [Trajectoire `T.INT.G5`](#trajectoire-tintg5) _(Lines 327-342)_
+   1. [Narratif](#narratif-4) _(Lines 345-349)_
+1. [G6 Fracture entre pays et diplomatie du développement](#g6-fracture-entre-pays-et-diplomatie-du-développement) _(Lines 352-358)_
+   1. [Faits](#faits-5) _(Lines 361-367)_
+   1. [Jalons cités](#jalons-cités-5) _(Lines 370-374)_
+   1. [Trajectoire `T.INT.G6`](#trajectoire-tintg6) _(Lines 377-392)_
+   1. [Narratif](#narratif-5) _(Lines 395-399)_
+1. [Sources](#sources) _(Lines 402-446)_
 
 
 ---
@@ -133,7 +133,7 @@ multi-acteurs, entreprises ? Frontière avec A2 : A2 documente quels standards s
 G2 documente qui décide et par quel processus.
 
 ### Faits
-<!-- Lines 137-147 -->
+<!-- Lines 137-148 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -144,16 +144,17 @@ G2 documente qui décide et par quel processus.
 | F.INT.G2.005 | 2003 | MONDE | La première phase du Sommet mondial sur la société de l'information aboutit à une déclaration de principes dont le paragraphe 48 demande une gestion internationale de l'Internet « multilatérale, transparente et démocratique », avec la pleine participation des gouvernements, du secteur privé, de la société civile et des organisations internationales, et dont le paragraphe 50 demande au secrétaire général des Nations unies de constituer un groupe de travail sur la gouvernance de l'Internet. | Déclaration de principes de Genève, document WSIS-03/GENEVA/DOC/4-E, datée du 12 décembre 2003, § 48 et 50 | O6, T4, T5 | choc | [S35] | V |
 | F.INT.G2.006 | 2005 | MONDE | La seconde phase du sommet, à Tunis, aboutit à un Agenda qui juge que les arrangements existants de gouvernance de l'Internet ont fonctionné efficacement (§ 55), demande un processus de coopération renforcée pour que les gouvernements exercent leurs rôles et responsabilités sur un pied d'égalité (§ 68-71) et crée un forum de dialogue multi-acteurs sur les politiques publiques, non contraignant et sans fonction de supervision, à convoquer d'ici le deuxième trimestre 2006 (§ 72 et 77). | Agenda de Tunis pour la société de l'information, document WSIS-05/TUNIS/DOC/6(Rev.1)-E, 18 novembre 2005 ; Forum sur la gouvernance de l'Internet (IGF), première réunion convoquée pour 2006 | O6, T4, T5 | choc | [S18] | V |
 | F.INT.G2.007 | 1994 | US, MONDE | Un consortium industriel fixe les standards techniques du Web (langage de balisage, protocoles) par un processus de recommandations ouvertes plutôt que par un traité international ou une loi nationale. | World Wide Web Consortium (W3C), fondé en octobre 1994 | O2, O7 | choc | [S19] | A |
+| F.INT.G2.008 | 1996-1999 | MONDE, US | Personne ne possède le réseau ni son protocole, n'en licencie l'usage ni n'en restreint l'accès, et de nouveaux services s'y superposent sans l'intervention des fournisseurs de réseau ni approbation réglementaire : pour l'Internet Architecture Board en 1996, « nobody owns the Internet, there is no centralized control, and nobody can turn it off » ; pour un document de travail du personnel de la Federal Communications Commission en mars 1997, de nouveaux types de services se superposent aux protocoles existants, souvent sans l'intervention ni même la connaissance des fournisseurs de réseau, et les entreprises de l'industrie n'ont jamais dû obtenir d'approbation réglementaire pour leurs actions ; pour un second document de travail du même service en juillet 1999, « no one owns the Internet protocol, no one licenses its use, and no one restricts access to it », ce qui permet à tout utilisateur de développer de nouvelles applications. | RFC 1958, juin 1996, § 2.4 ; OPP Working Paper n° 29, mars 1997 ; OPP Working Paper n° 31, juillet 1999 | O6, O1, O3 | choc | [S40] | A |
 
 ### Jalons cités
-<!-- Lines 150-154 -->
+<!-- Lines 151-155 -->
 
 `J.INT.1994.01` (fondation du W3C), `J.INT.1998.02` (politique NTIA et création de l'ICANN,
 bascule principale), `J.INT.2003.03` (premier sommet mondial sur la société de l'information),
 `J.INT.2005.03` (second sommet mondial et création du Forum sur la gouvernance d'Internet).
 
 ### Trajectoire `T.INT.G2`
-<!-- Lines 157-172 -->
+<!-- Lines 158-173 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -171,14 +172,14 @@ bascule principale), `J.INT.2003.03` (premier sommet mondial sur la société de
 | 2005 | banalisation | 2 | État final : l'Agenda de Tunis demande un processus de coopération renforcée et crée un forum de dialogue non contraignant et sans fonction de supervision. | F.INT.G2.006, J.INT.2005.03 |
 
 ### Narratif
-<!-- Lines 175-179 -->
+<!-- Lines 176-180 -->
 
 La gouvernance technique du réseau se fixe tôt sur un mode multi-acteurs et non étatique [F.INT.G2.004][F.INT.G2.007], la gouvernance des ressources critiques bascule sous tutelle américaine en 1998 avec la création de l'ICANN [F.INT.G2.001][F.INT.G2.002][F.INT.G2.003], et la gouvernance de l'Internet est portée à l'agenda des deux phases du sommet mondial, qui demandent un groupe de travail à Genève en 2003 puis créent à Tunis en 2005 un forum de dialogue non contraignant [F.INT.G2.005][F.INT.G2.006].
 
 ---
 
 ## G3 État, services publics et vie démocratique
-<!-- Lines 182-189 -->
+<!-- Lines 183-190 -->
 
 **Sous-dimension gelée (D18).**
 
@@ -188,7 +189,7 @@ La gouvernance technique du réseau se fixe tôt sur un mode multi-acteurs et no
 est-elle changée ?
 
 ### Faits
-<!-- Lines 192-200 -->
+<!-- Lines 193-201 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -199,7 +200,7 @@ est-elle changée ?
 | F.INT.G3.005 | 1998 | EU | En France, le programme d'action gouvernemental pour la société de l'information (PAGSI) met en place en 1998 l'administration en ligne ; le Minitel, réseau national antérieur au Web, avait servi à l'État pour des démarches administratives, certaines rendues obligatoires sur ce canal (inscription à l'université). | PAGSI, 1998 | O6, T2 | choc | [S24] | A |
 
 ### Jalons cités
-<!-- Lines 203-208 -->
+<!-- Lines 204-209 -->
 
 `J.INT.1996.06` (premières statistiques officielles sur la fracture numérique), `J.INT.1999.04`
 (plan national coréen de haut débit), `J.INT.1999.05` (recul du Minitel au profit du Web,
@@ -207,7 +208,7 @@ services publics), `J.INT.2000.09` (portail fédéral unique d'administration en
 `J.INT.2004.03` (blogs et débat public, bascule principale).
 
 ### Trajectoire `T.INT.G3`
-<!-- Lines 211-226 -->
+<!-- Lines 212-227 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -225,20 +226,20 @@ services publics), `J.INT.2000.09` (portail fédéral unique d'administration en
 | 2005 | banalisation | 1 | État final : portail fédéral américain installé, administration en ligne française engagée depuis 1998, sphère publique élargie aux producteurs individuels de contenu. | F.INT.G3.001, F.INT.G3.005 |
 
 ### Narratif
-<!-- Lines 229-233 -->
+<!-- Lines 230-234 -->
 
 L'État identifie la fracture numérique comme catégorie de politique publique dès 1996 [F.INT.G3.004], engage l'administration en ligne et son infrastructure par étapes nationales dispersées entre 1998 et 2000 (France, Corée du Sud, portail fédéral américain) [F.INT.G3.001][F.INT.G3.002][F.INT.G3.005], et ne voit la vie démocratique elle-même changée par la publication individuelle qu'en 2004, neuf ans après t0 [F.INT.G3.003].
 
 ---
 
 ## G4 Géopolitique, souveraineté et sécurité
-<!-- Lines 236-239 -->
+<!-- Lines 237-240 -->
 
 **Question :** Comment les rapports entre puissances, la souveraineté et la sécurité sont-ils
 modifiés ?
 
 ### Faits
-<!-- Lines 242-257 -->
+<!-- Lines 243-260 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -254,9 +255,11 @@ modifiés ?
 | F.INT.G4.010 | 2000-09 | EMERG | La Doctrine de sécurité de l'information de la Fédération de Russie, approuvée par le président le 9 septembre 2000, désigne comme menace l'éviction des médias russes du marché intérieur de l'information et la dépendance croissante aux entités d'information étrangères, ainsi que l'interception de données sur les réseaux de transmission et l'implantation de dispositifs d'écoute électronique. | | O6 | choc | [S30] | V |
 | F.INT.G4.011 | 2001-09 | EU, US | Le Parlement européen adopte, le 5 septembre 2001, le rapport de sa commission temporaire sur le système Echelon, concluant à l'existence avérée d'un système mondial d'interception des communications privées et commerciales opéré par les États-Unis, le Royaume-Uni, le Canada, l'Australie et la Nouvelle-Zélande sous l'accord UKUSA, et signalant un risque d'usage à des fins d'espionnage économique de sociétés européennes. | 367 voix pour, 159 contre | O6, T2, T1 | choc | [S31] | V |
 | F.INT.G4.012 | 2000-01 | US | Le Bureau of Export Administration du département du Commerce américain publie le 14 janvier 2000 une règle intérimaire qui autorise l'exportation et la réexportation de tout produit de chiffrement, matériel ou logiciel, vers les particuliers, entreprises et autres utilisateurs non gouvernementaux de toutes destinations, et des produits de chiffrement de détail vers tous les utilisateurs de toutes destinations, sans modifier les restrictions visant les sept États désignés comme soutiens du terrorisme (Cuba, Iran, Irak, Libye, Corée du Nord, Soudan, Syrie) ; la règle met en œuvre la politique annoncée par la Maison-Blanche le 16 septembre 1999. | Federal Register, 14 janvier 2000 (document 00-983) | O6, M9 | choc | [S37] | V |
+| F.INT.G4.013 | 2001 | US | Selon le Congressional Research Service, le Congrès américain adopte le USA PATRIOT Act en réponse aux attentats du 11 septembre 2001 (« in response to the terrorists' attacks of September 11, 2001 ») ; le président signe le texte le 26 octobre 2001 (voir `F.INT.G4.003`). | USA PATRIOT Act, Public Law 107-56 ; CRS Report RS21203, 18 avril 2002 | O6, M10 | co:X.INT.07 | [S41] | A |
+| F.INT.G4.014 | 2001 | MONDE | Selon le Congressional Research Service, les attentats du 11 septembre 2001 ont donné un élan supplémentaire à la convention du Conseil de l'Europe sur la cybercriminalité, négociée depuis 1997, en faisant craindre des cyberattaques contre les infrastructures critiques, les institutions financières ou les systèmes gouvernementaux et en montrant l'usage d'Internet par les terroristes pour communiquer, lever des fonds, recruter et diffuser de la propagande ; la convention est ouverte à signature le 23 novembre 2001 (voir `F.INT.G4.004`). | CRS Report RS21208, 26 avril 2002 | O6, T1, T2 | co:X.INT.07 | [S42] | A |
 
 ### Jalons cités
-<!-- Lines 260-268 -->
+<!-- Lines 263-271 -->
 
 `J.INT.1996.08` (entrée en vigueur de l'arrangement de Wassenaar), `J.INT.1998.02` (politique
 NTIA et création de l'ICANN, tutelle américaine), `J.INT.1998.06` (projet chinois Golden
@@ -267,7 +270,7 @@ européen), `J.INT.2003.03` (premier sommet mondial, contestation de la tutelle)
 compromis diplomatique), `J.INT.2005.05` (le milliard d'internautes, fracture entre blocs).
 
 ### Trajectoire `T.INT.G4`
-<!-- Lines 271-286 -->
+<!-- Lines 274-289 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -285,14 +288,14 @@ compromis diplomatique), `J.INT.2005.05` (le milliard d'internautes, fracture en
 | 2005 | banalisation | 3 | État final : Agenda de Tunis, qui crée un forum de dialogue non contraignant ; le milliard d'internautes est atteint avec une fracture persistante entre blocs. | F.INT.G4.006, J.INT.2005.03, J.INT.2005.05 |
 
 ### Narratif
-<!-- Lines 289-293 -->
+<!-- Lines 292-296 -->
 
 L'ouverture des télécommunications à la concurrence entre 1996 et 1998, par la loi américaine, la directive européenne et les engagements pris à l'OMC, précède l'effet géopolitique direct, la bascule majeure survenant en 1998 quand la tutelle américaine sur les ressources de nommage s'institue au même moment que la Chine engage le projet Golden Shield de surveillance et de filtrage [F.INT.G4.001][F.INT.G4.002][F.INT.G4.008][J.INT.1998.02][J.INT.1998.06]. Un premier régime multilatéral de contrôle des technologies de sécurité de l'information, dont la cryptographie, se met en place dès 1996 avec l'arrangement de Wassenaar, avant que les États-Unis n'assouplissent leurs propres contrôles à l'exportation en 2000, la même année où la Russie formalise sa propre doctrine de sécurité de l'information désignant la dépendance à l'étranger comme une menace [F.INT.G4.009][F.INT.G4.010][F.INT.G4.012]. Après les attentats du 11 septembre 2001, les États-Unis adoptent en octobre une loi élargissant l'accès des autorités aux communications électroniques et le Conseil de l'Europe ouvre à signature en novembre la convention sur la cybercriminalité, cependant que le Parlement européen reconnaissait quelques jours avant les attentats l'existence d'un système mondial d'interception opéré par le bloc anglophone [F.INT.G4.003][F.INT.G4.004][F.INT.G4.011][J.INT.2001.04]. La contestation de la tutelle américaine devient un dossier du premier sommet mondial sur la société de l'information en 2003, portée par des gouvernements menés par la Chine et des pays du groupe G20 [F.INT.G4.005][J.INT.2003.03]. Des entreprises chinoises du Web entrent en bourse hors de Chine continentale en 2004 alors que la réglementation limite la participation étrangère dans les contenus Internet, pendant que l'état final de 2005 associe l'Agenda de Tunis créant un forum de dialogue non contraignant et un seuil mondial d'un milliard d'internautes marqué par une fracture persistante entre blocs [F.INT.G4.006][F.INT.G4.007][J.INT.2005.03][J.INT.2005.05].
 
 ---
 
 ## G5 Domination d'infrastructure et ressources critiques
-<!-- Lines 296-304 -->
+<!-- Lines 299-307 -->
 
 **Question :** Quelle puissance contrôle l'infrastructure et les ressources critiques du réseau,
 et quelles dépendances en résultent ? Frontière avec G2 : G2 documente le processus de décision
@@ -303,7 +306,7 @@ La tutelle du nommage est déjà établie ailleurs dans cette cellule ; elle n'e
 seulement citée : `F.INT.G2.001`, `F.INT.G2.002`, `F.INT.G2.003`, `F.INT.G4.001`.
 
 ### Faits
-<!-- Lines 307-314 -->
+<!-- Lines 310-317 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -313,14 +316,14 @@ seulement citée : `F.INT.G2.001`, `F.INT.G2.002`, `F.INT.G2.003`, `F.INT.G4.001
 | F.INT.G5.004 | 2001 | US, EU | Le câble transatlantique TAT-14, qui relie les États-Unis, le Royaume-Uni, la France, les Pays-Bas, l'Allemagne et le Danemark, est mis en service en 2001 par un consortium d'opérateurs de plusieurs pays dont Deutsche Telekom, France Telecom et Sprint ; les sources lues ne s'accordent pas sur le nombre de membres : 11 selon Submarine Networks, 48 selon Lightwave (août 2001). | 11 opérateurs (Submarine Networks) ; 48 fournisseurs (Lightwave, 9 août 2001) | O3 | co:X.INT.03 | [S39] | D |
 
 ### Jalons cités
-<!-- Lines 317-321 -->
+<!-- Lines 320-324 -->
 
 Aucun jalon dédié à l'expansion des serveurs racine : candidat écarté à la passe finale
 (décision du coordinateur, 2026-09-23). Cette sous-dimension cite par ailleurs
 `J.INT.1998.02` (politique NTIA et création de l'ICANN, tutelle sur le nommage, primaire en G2).
 
 ### Trajectoire `T.INT.G5`
-<!-- Lines 324-339 -->
+<!-- Lines 327-342 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -338,14 +341,14 @@ Aucun jalon dédié à l'expansion des serveurs racine : candidat écarté à la
 | 2005 | banalisation | 1 | État final : dépendance persistante des autres blocs à des ressources de nommage sous tutelle américaine et à une capacité Internet internationale centrée sur les États-Unis en 2003, nuancée par un câble transatlantique mis en service par un consortium multinational. | F.INT.G2.001, F.INT.G5.002, F.INT.G5.003 |
 
 ### Narratif
-<!-- Lines 342-346 -->
+<!-- Lines 345-349 -->
 
 La domination américaine sur l'infrastructure critique du réseau n'est jamais tout à fait exclusive : dès 1995 un premier serveur racine s'installe hors des États-Unis, et l'extension à treize lettres en 1997 n'en ajoute que deux autres, laissant dix serveurs sur treize en territoire américain [F.INT.G5.001][F.INT.G5.002]. Cette domination physique se double en 1998 d'une domination juridique quand la tutelle du nommage, jusque-là contrat de recherche fédéral, devient une supervision contractuelle explicite sur l'entité chargée de gérer la ressource [F.INT.G2.001][F.INT.G4.001]. La capacité Internet interrégionale reste, au seul point de mesure trouvé pour la fenêtre, presque entièrement connectée aux États-Unis en 2003 [F.INT.G5.003]. Le câble transatlantique TAT-14, mis en service en 2001 par un consortium d'opérateurs de plusieurs pays, nuance cependant la lecture d'une domination unilatérale [F.INT.G5.004].
 
 ---
 
 ## G6 Fracture entre pays et diplomatie du développement
-<!-- Lines 349-355 -->
+<!-- Lines 352-358 -->
 
 **Question :** Comment l'écart d'accès entre pays évolue-t-il, et quelles initiatives
 multilatérales y répondent ? Frontière avec G4 : G4 garde la revendication politique de
@@ -354,7 +357,7 @@ gouvernance multilatérale portée par les pays émergents et le seuil mondial d
 intermédiaire datée et les textes diplomatiques eux-mêmes.
 
 ### Faits
-<!-- Lines 358-364 -->
+<!-- Lines 361-367 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -363,14 +366,14 @@ intermédiaire datée et les textes diplomatiques eux-mêmes.
 | F.INT.G6.003 | 2003 | MONDE, EMERG | La Déclaration de principes de Genève du Sommet mondial sur la société de l'information affirme que la gestion internationale de l'Internet devrait être multilatérale, transparente et démocratique, tout en reconnaissant l'autorité souveraine des États sur les politiques publiques du réseau, tension renvoyée à un groupe de travail (voir `F.INT.G2.005`, `F.INT.G2.006`, `F.INT.G4.005` pour la tutelle et la revendication politique elles-mêmes, non recopiées ici). | §48-50 de la déclaration de Genève | O6, T5 | choc | [S34] | V |
 
 ### Jalons cités
-<!-- Lines 367-371 -->
+<!-- Lines 370-374 -->
 
 `J.INT.2000.11` (Charte d'Okinawa, bascule principale). Cette sous-dimension cite par ailleurs
 `J.INT.2003.03` (premier sommet mondial) et `J.INT.2005.03` (second sommet mondial), déjà
 présents dans `par_annee/` avec G4 et G2 comme domaines primaires.
 
 ### Trajectoire `T.INT.G6`
-<!-- Lines 374-389 -->
+<!-- Lines 377-392 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -388,14 +391,14 @@ présents dans `par_annee/` avec G4 et G2 comme domaines primaires.
 | 2005 | banalisation | 2 | État final : second sommet mondial : Agenda de Tunis et création du Forum sur la gouvernance de l'Internet (voir F.INT.G2.006) ; le milliard d'internautes est atteint avec une fracture persistante entre blocs. | F.INT.G4.006, J.INT.2005.03 |
 
 ### Narratif
-<!-- Lines 392-396 -->
+<!-- Lines 395-399 -->
 
 La fracture d'accès se mesure pour la première fois de façon fiable en 2000, avec environ 315 millions d'internautes dans le monde et un écart d'un facteur quinze entre pays développés et en développement, la même année où le G8 en fait pour la première fois un objet de politique collective avec la Charte d'Okinawa [F.INT.G6.001][F.INT.G6.002]. Cette diplomatie du développement se heurte en 2003 à une tension non résolue entre gouvernance multilatérale souhaitée et souveraineté des États sur les politiques publiques du réseau, formulée dans la déclaration de Genève sans être tranchée avant le second sommet de 2005 [F.INT.G6.003]. Sur toute la fenêtre, l'écart entre blocs se documente mais ne se résorbe pas : le seuil mondial du milliard d'internautes atteint en fin de fenêtre reste marqué par la même fracture que celle mesurée en 2000, à une échelle plus grande [F.INT.G4.006].
 
 ---
 
 ## Sources
-<!-- Lines 399-440 -->
+<!-- Lines 402-446 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -438,3 +441,6 @@ La fracture d'accès se mesure pour la première fois de façon fiable en 2000, 
 | [S37] | off | Bureau of Export Administration, département du Commerce des États-Unis, règle intérimaire « Revisions to Encryption Items », Federal Register, 14 janvier 2000, document 00-983, https://www.govinfo.gov/content/pkg/FR-2000-01-14/html/00-983.htm | Document ouvert sur govinfo.gov : « interim final rule; request for comments », effet au 14 janvier 2000, commentaires jusqu'au 15 mai 2000 ; résumé : « This rule amends the Export Administration Regulations (EAR) to allow the export and reexport of any encryption commodity or software to individuals, commercial firms, and other non-government end-users in all destinations. It also allows exports and reexports of retail encryption commodities and software to all end-users in all destinations. » ; « Restrictions on terrorist supporting states (Cuba, Iran, Iraq, Libya, North Korea, Sudan or Syria) » inchangées ; « On September 16, 1999, the U.S. announced a new approach to its encryption export control policy » et la règle « implements the encryption policy announced by the White House on September 16 ». Le numéro de page du Federal Register n'a pas été lu sur le document. |
 | [S38] | stat | TeleGeography, Mauldin, A., « The Decline of a U.S.-Centric Global Network », 16 février 2023, https://resources.telegeography.com/the-decline-of-a-us-centric-global-network | Page lue : « In 2003, 98% of all interregional internet capacity and 42% of all international internet bandwidth was connected to the U.S ». La page ne nomme pas la série de données ; analyse rétrospective de 2023 publiée par le cabinet qui produit lui-même la mesure ; aucune source officielle (UIT, OCDE) trouvée en une recherche. Source faible, mais aucune source lue ne la contredit. Retiré de l'énoncé initial : « routage », le chiffre porte sur la capacité et la bande passante. |
 | [S39] | presse | Lightwave, « TAT-14 undersea cable system completes final phase », 9 août 2001, https://lightwaveonline.com/home/article/16659094/tat-14-undersea-cable-system-completes-final-phase ; Submarine Networks, fiche TAT-14, https://www.submarinenetworks.com/en/systems/trans-atlantic/tat-14 | Lightwave (presse spécialisée contemporaine) lu : l'anneau a été construit par « a consortium of 48 telecommunications providers including Concert, Deutsche Telekom, France Telecom », ainsi que KPNQwest, MFN, Sprint, Swisscom, Telenor, Telia et WorldCom ; il est « directly connecting the US, UK, France, the Netherlands, Germany and Denmark » et « went online as a fully protected system on July 5, 2001 ». Submarine Networks (site spécialisé) lu : « The TAT-14 consortium comprises 11 carriers » (AT&T, BT, C&W, Deutsche Telekom, France Telecom, KPN, MCII, PGE, Sprint, Swisscom, Telia), prêt au service le 21 mars 2001. Les deux sources s'accordent sur la composition internationale du consortium et sur l'année 2001, pas sur le nombre de membres (11 contre 48, écart non expliqué par les textes lus) : statut D. Retirés de l'énoncé initial faute de source lue : tout ce qui généralisait à « les grands câbles transatlantiques de la fenêtre », « opérateurs historiques », « propriété partagée entre blocs à la différence de la gouvernance des ressources de nommage ». |
+| [S40] | off | Carpenter, B. (éd., Internet Architecture Board), RFC 1958, « Architectural Principles of the Internet », juin 1996, https://www.rfc-editor.org/rfc/rfc1958.txt ; Werbach, K., *Digital Tornado: The Internet and Telecommunications Policy*, FCC Office of Plans and Policy, OPP Working Paper Series 29, mars 1997, https://transition.fcc.gov/Bureaus/OPP/working_papers/29nofigs.pdf ; Oxman, J., *The FCC and the Unregulation of the Internet*, FCC Office of Plans and Policy, OPP Working Paper n° 31, juillet 1999, https://transition.fcc.gov/Bureaus/OPP/working_papers/oppwp31.pdf | Ouverts et lus le 2026-11-23 (les deux PDF convertis avec pdftotext). RFC 1958, § 2.4 : « Fortunately, nobody owns the Internet, there is no centralized control, and nobody can turn it off. » ; le texte n'emploie pas le mot « permission ». Werbach : « The technology of the Internet allows new types of services to be layered on top of existing protocols, often without the involvement or even the knowledge of network providers that transmit those services » ; « Internet service providers, and other companies in the Internet industry, have never been required to gain regulatory approval for their actions » ; « no one entity can control or speak for the entire system ». Oxman : « The most important technical feature of the Internet is its openness, which allows any user to develop new applications and to communicate with virtually any other user [...] No one owns the Internet protocol, no one licenses its use, and no one restricts access to it. » Aucun des trois textes ne dit en ces termes qu'héberger un site ne demande l'autorisation de personne : l'énoncé reprend ce qu'ils disent (ni propriété, ni licence, ni restriction d'accès, ni approbation réglementaire, ni intervention du fournisseur de réseau). Les deux documents de la FCC sont des analyses de personnel dont les conclusions « ne représentent pas nécessairement » celles de la Commission ; statut A pour cette raison. Fiche du second document : une copie sur webarchive.library.unt.edu n'a pas pu être lue, la copie transition.fcc.gov a été utilisée. |
+| [S41] | off | Congressional Research Service, *The USA PATRIOT Act: A Sketch*, CRS Report RS21203, 18 avril 2002, https://www.everycrsreport.com/reports/RS21203.html | Ouvert et lu le 2026-11-23 (outil de lecture de pages) : « Congress passed the USA PATRIOT Act (the Act) in response to the terrorists' attacks of September 11, 2001 » ; le président signe le texte (H.R. 3162) le 26 octobre 2001 ; la loi « gives federal officials greater authority to track and intercept communications ». Complète [S26], qui est le texte de loi et ne dit pas ce rapport de cause à effet (voir sa note). |
+| [S42] | off | Archick, K., Congressional Research Service, *Cybercrime: The Council of Europe Convention*, CRS Report RS21208, 26 avril 2002, https://www.everycrsreport.com/files/20020426_RS21208_786613120daa50c6573ee19828d9f73932035f23.html | Ouvert et lu le 2026-11-23 (outil de lecture de pages) : « The September 11 terrorist attacks provided further momentum by raising the specter of cyber attacks on critical infrastructure facilities, financial institutions, or government systems, and by highlighting the way terrorists use computers and the Internet to communicate, raise money, recruit, and spread propaganda » ; « Negotiations on the Convention began in 1997, following a determination by the Council [...] that the transnational character of cybercrime could only be tackled at the global level » ; convention « opened for signature on November 23, 2001 ». Le rapport du Sénat de 2005 cité en [S11] ne mentionne pas le 11 septembre ; ce rapport du CRS de 2002 est le seul des documents lus qui relie les attentats à la convention, et seulement comme élan supplémentaire (« further momentum »), non comme cause de l'ouverture à signature. |

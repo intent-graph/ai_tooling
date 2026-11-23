@@ -22,16 +22,16 @@ situées ailleurs et soumises à un droit étranger. Ligne de base : état des d
    1. [Trajectoire `T.CLD.G2`](#trajectoire-tcldg2) _(Lines 138-153)_
    1. [Narratif](#narratif-1) _(Lines 156-170)_
 1. [G3 État, services publics et vie démocratique](#g3-état-services-publics-et-vie-démocratique) _(Lines 173-177)_
-   1. [Faits](#faits-2) _(Lines 180-194)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 197-199)_
-   1. [Trajectoire `T.CLD.G3`](#trajectoire-tcldg3) _(Lines 202-217)_
-   1. [Narratif](#narratif-2) _(Lines 220-235)_
-1. [G4 Géopolitique, souveraineté et sécurité](#g4-géopolitique-souveraineté-et-sécurité) _(Lines 238-242)_
-   1. [Faits](#faits-3) _(Lines 245-258)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 261-264)_
-   1. [Trajectoire `T.CLD.G4`](#trajectoire-tcldg4) _(Lines 267-282)_
-   1. [Narratif](#narratif-3) _(Lines 285-304)_
-1. [Sources](#sources) _(Lines 307-343)_
+   1. [Faits](#faits-2) _(Lines 180-195)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 198-200)_
+   1. [Trajectoire `T.CLD.G3`](#trajectoire-tcldg3) _(Lines 203-218)_
+   1. [Narratif](#narratif-2) _(Lines 221-236)_
+1. [G4 Géopolitique, souveraineté et sécurité](#g4-géopolitique-souveraineté-et-sécurité) _(Lines 239-243)_
+   1. [Faits](#faits-3) _(Lines 246-260)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 263-266)_
+   1. [Trajectoire `T.CLD.G4`](#trajectoire-tcldg4) _(Lines 269-284)_
+   1. [Narratif](#narratif-3) _(Lines 287-306)_
+1. [Sources](#sources) _(Lines 309-347)_
 
 
 
@@ -49,7 +49,7 @@ situées ailleurs et soumises à un droit étranger. Ligne de base : état des d
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | F.CLD.G1.001 | 2003-2004 | US, EU | Avant t0 : le cadre juridique en place repose sur une loi antiterroriste américaine de 2001 élargissant l'accès des autorités aux données détenues par des tiers, et sur une directive européenne de 1995 encadrant le transfert des données personnelles hors de l'Union, deux textes antérieurs au choc et non conçus pour des données hébergées à l'étranger. | Public Law 107-56 (2001-10-26) ; directive 95/46/CE | O6, T1, T2 | exo | [S1] | V |
 | F.CLD.G1.002 | 2008-07-10 | US | Les États-Unis adoptent une loi élargissant les pouvoirs de surveillance des communications électroniques, autorisant le renseignement à cibler des personnes situées hors du territoire américain sans mandat individualisé, avec effet sur les données hébergées par des fournisseurs américains où qu'elles se trouvent. | Public Law 110-261, FISA Amendments Act of 2008, 10 juillet 2008 | O6, M10 | exo | [S2] | V |
-| F.CLD.G1.003 | 2011-12-08 | US | Un mémorandum de l'Office of Management and Budget crée un programme fédéral unique d'homologation de sécurité des services en nuage, applicable à toutes les agences ; une homologation vaut pour l'ensemble du gouvernement fédéral. | Mémorandum « Security Authorization of Information Systems in Cloud Computing Environments », signé Steven VanRoekel, 8 décembre 2011 | O6, M10 | choc | [S3] | V |
+| F.CLD.G1.003 | 2011-12-08 | US | Un mémorandum de l'Office of Management and Budget crée un programme fédéral unique d'homologation de sécurité des services en nuage, applicable à toutes les agences, en cohérence avec la politique fédérale « Cloud First » ; une homologation vaut pour l'ensemble du gouvernement fédéral. | Mémorandum « Security Authorization of Information Systems in Cloud Computing Environments », signé Steven VanRoekel, 8 décembre 2011 | O6, M10 | choc | [S3] | V |
 | F.CLD.G1.004 | 2012-01-25 | EU | La Commission européenne propose une refonte du cadre de protection des données personnelles, qui prévoit l'application des règles de l'Union aux traitements opérés à l'étranger par des entreprises actives sur le marché de l'Union, et l'obligation de notifier les violations graves de données à l'autorité nationale, si possible sous 24 heures. | proposition de règlement, 25 janvier 2012 | T2, O6 | choc | [S4] | A |
 | F.CLD.G1.005 | 2012-07-01 | EU | Le groupe de travail réunissant les autorités nationales de protection des données de l'Union adopte un avis dédié à l'informatique en nuage, qui demande que le client connaisse les sous-traitants et les lieux de traitement des données, recommande un contrat couvrant notamment la liste de ces lieux et la notification des violations, et estime que la seule auto-certification « sphère de sécurité » du destinataire américain peut ne pas suffire. | avis WP196, adopté le 1er juillet 2012 | T2, O6 | choc | [S5] | V |
 | F.CLD.G1.006 | 2013 | EU | À la suite des révélations sur la surveillance de masse, les autorités allemandes de protection des données annoncent le 24 juillet 2013 qu'elles n'accorderont plus de nouvelle autorisation de transfert vers des pays tiers et examineront la suspension des transferts fondés sur la sphère de sécurité, et le groupe des autorités européennes écrit à la Commission le 13 août 2013 qu'il doute que la surveillance à grande échelle puisse relever de l'exception de sécurité nationale de la sphère de sécurité. | communiqué du 24 juillet 2013 ; lettre du 13 août 2013 | T2, O6, O4 | co:X.CLD.07 | [S28] | V |
@@ -176,7 +176,7 @@ est-elle changée : politiques d'achat public, stratégies nationales, migration
 administrations, marchés publics emblématiques ?
 
 ### Faits
-<!-- Lines 180-194 -->
+<!-- Lines 180-195 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -191,14 +191,15 @@ administrations, marchés publics emblématiques ?
 | F.CLD.G3.009 | 2013 | US | En janvier 2013, une agence de renseignement américaine attribue à un fournisseur américain de services en nuage un contrat d'une valeur pouvant atteindre 600 millions de dollars ; un concurrent saisit l'organe d'audit du Congrès, qui lui donne en partie raison, puis le fournisseur saisit la juridiction fédérale des réclamations, qui tranche en sa faveur en octobre 2013. | contrat jusqu'à 600 M$, attribué en janvier 2013 ; décision de la juridiction en octobre 2013 | O6, O2, O4 | choc | [S34] | A |
 | F.CLD.G3.010 | 2014-09 | US | En septembre 2014, l'organe d'audit du Congrès relève que les agences fédérales déclarent environ 1,1 milliard de dollars d'économies et d'évitements de coûts pour 2011-2013 et en prévoient environ 3,3 milliards au total jusqu'en 2015, soit environ 300 millions de plus que l'objectif initial de 3 milliards, et que 11 des 21 agences concernées sous-déclarent leurs prévisions à l'administration budgétaire, d'environ 2,2 milliards. | GAO-14-713, 25 septembre 2014 ; 1,1 Md$ déclarés (2011-2013), 3,3 Md$ prévus (jusqu'en 2015), sous-déclaration d'environ 2,2 Md$ | O6, M10 | choc | [S22] | V |
 | F.CLD.G3.011 | 2014-2015 | EU | En 2014 et 2015, plusieurs États membres de l'Union disposent de référentiels nationaux de sécurité des services en nuage à l'usage de leurs administrations : le Royaume-Uni a publié en 2014 les Cloud Security Principles, l'Espagne a diffusé en avril 2014 un projet de guide de sécurité en environnement cloud, et la France a créé en février 2015 le dispositif Secure Cloud. | Royaume-Uni 2014 ; Espagne avril 2014 (projet) ; France février 2015 | T2, O6 | choc | [S8], [S29] | A |
+| F.CLD.G3.012 | 2015-01 | EU | Début 2015, la presse spécialisée relève que les deux sociétés françaises de cloud dites « souveraines », créées avec un financement public, Cloudwatt et Numergy, restent loin de leurs objectifs : Cloudwatt, qui visait environ 500 millions d'euros de recettes en 2017, a tout juste dépassé le million d'euros de chiffre d'affaires sur son dernier exercice, et l'objectif de 400 millions d'euros de chiffre d'affaires à l'horizon 2017 de Numergy est encore loin d'être atteint. | Clubic, 12 janvier 2015 : Cloudwatt, environ 500 M€ visés pour 2017, un peu plus de 1 M€ de chiffre d'affaires au dernier exercice ; Numergy, 400 M€ visés pour 2017 | T2, O4, O6 | choc | [S35] | A |
 
 ### Jalons cités
-<!-- Lines 197-199 -->
+<!-- Lines 198-200 -->
 
 `J.CLD.2009.02`, `J.CLD.2010.02`, `J.CLD.2011.03`, `J.CLD.2012.03`, `J.CLD.2013.02`.
 
 ### Trajectoire `T.CLD.G3`
-<!-- Lines 202-217 -->
+<!-- Lines 203-218 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -216,7 +217,7 @@ administrations, marchés publics emblématiques ?
 | 2015 | consolidation | 2 | Rachat par Orange des parts de l'État dans l'une des deux sociétés ; création en France du dispositif Secure Cloud, après des référentiels nationaux de sécurité publiés en 2014 au Royaume-Uni et en Espagne. | F.CLD.G3.008, F.CLD.G3.011 |
 
 ### Narratif
-<!-- Lines 220-235 -->
+<!-- Lines 221-236 -->
 
 L'État américain ouvre la marche avec un portail d'achat dédié dès 2009 [F.CLD.G3.001], suivi
 en 2011 d'une politique d'achat par défaut qui fait du cloud la norme d'exemplarité fédérale
@@ -234,14 +235,14 @@ confirmé en octobre par la juridiction fédérale après une contestation [F.CL
 ---
 
 ## G4 Géopolitique, souveraineté et sécurité
-<!-- Lines 238-242 -->
+<!-- Lines 239-243 -->
 
 **Question :** Comment les rapports entre puissances, la souveraineté et la sécurité sont-ils
 modifiés : concentration des usines, écosystème chinois séparé, révélations sur la surveillance,
 localisation des données comme instrument ?
 
 ### Faits
-<!-- Lines 245-258 -->
+<!-- Lines 246-260 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -255,15 +256,16 @@ localisation des données comme instrument ?
 | F.CLD.G4.008 | 2015-06-02 | US | L'industrie américaine du cloud fait campagne publiquement en faveur d'une loi limitant la collecte en masse de métadonnées, afin de rassurer sa clientèle étrangère inquiète depuis 2013 ; la loi est promulguée le 2 juin 2015. | Public Law 114-23, 2 juin 2015 | O2, O6, M10 | co:X.CLD.07 | [S6] | V |
 | F.CLD.G4.009 | 2012-09 | EU | En septembre 2012, l'État français, par la Caisse des dépôts, investit dans deux sociétés de cloud, Cloudwatt et Numergy, issues d'un projet que le Premier ministre avait appelé en janvier 2010 à mener comme alternative française et européenne à la domination nord-américaine du marché. | 75 M€ de la Caisse des dépôts par société ; discours du 18 janvier 2010 | T2, O6, O2 | choc | [S20], [S32] | A |
 | F.CLD.G4.010 | 2015-03 | ASIE-E | La Corée du Sud promulgue la première loi au monde spécifiquement dédiée au cloud computing, qui organise le soutien public au secteur et la protection des utilisateurs plutôt qu'une politique de repli souverain, trajectoire distincte de la réponse sécuritaire américaine et européenne de la même période. | loi n° 13234, promulguée le 27 mars 2015, entrée en vigueur le 27 septembre 2015 | T3, O6 | choc | [S27] | V |
+| F.CLD.G4.011 | 2014-07 | EU | En juillet 2014, la presse spécialisée rapporte que, depuis les révélations de 2013 sur la collecte de données par le renseignement américain, la localisation des centres de données est devenue une préoccupation aiguë de nombreux clients, l'Allemagne étant au centre de l'affaire, et que la filiale de services informatiques d'un opérateur allemand ouvre un grand centre de données commercialisé auprès des clients qui veulent que leurs données restent dans le pays. | Data Center Knowledge, 7 juillet 2014 : « data center location has become an acute concern for many customers » | T2, O2, O6 | co:X.CLD.07 | [S36] | A |
 
 ### Jalons cités
-<!-- Lines 261-264 -->
+<!-- Lines 263-266 -->
 
 `J.CLD.2013.01`, `J.CLD.2013.02`, `J.CLD.2013.03`, `J.CLD.2014.04`, `J.CLD.2015.02`,
 `J.CLD.2015.03`.
 
 ### Trajectoire `T.CLD.G4`
-<!-- Lines 267-282 -->
+<!-- Lines 269-284 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -281,7 +283,7 @@ localisation des données comme instrument ?
 | 2015 | crise | 3 | Invalidation judiciaire du cadre de transfert transatlantique ; loi américaine mettant fin à la collecte en masse, portée par l'industrie elle-même ; la Corée du Sud promulgue la première loi au monde dédiée au cloud, trajectoire de développement plutôt que de repli. | F.CLD.G4.007, F.CLD.G4.008, F.CLD.G4.010, J.CLD.2015.02, J.CLD.2015.03 |
 
 ### Narratif
-<!-- Lines 285-304 -->
+<!-- Lines 287-306 -->
 
 La géopolitique du cloud se noue autour d'une asymétrie : un groupe chinois lance son propre
 service en 2009 [F.CLD.G4.002], et le Premier ministre français déclare en janvier 2010 que les
@@ -303,13 +305,13 @@ vers la sécurité ou la souveraineté défensive [F.CLD.G4.010].
 ---
 
 ## Sources
-<!-- Lines 307-343 -->
+<!-- Lines 309-347 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
 | [S1] | off | *USA PATRIOT Act*, Public Law 107-56, 26 octobre 2001, section 215 ; directive 95/46/CE du Parlement européen et du Conseil, 24 octobre 1995 | Public Law 107-56 vérifiée directement sur govinfo.gov (titre exact, numéro, date, texte de la section 215). La directive 95/46/CE est citée par sa référence exacte ; EUR-Lex étant inaccessible depuis cet environnement, son texte n'a pas été ouvert (statut `V` porté par la seule partie américaine du fait). |
 | [S2] | off | *FISA Amendments Act of 2008*, Public Law 110-261, 10 juillet 2008 | Vérifiée directement sur govinfo.gov : titre exact (« Foreign Intelligence Surveillance Act of 1978 Amendments Act of 2008 »), numéro de loi publique et date d'enactment confirmés ; texte de la section 702 lu. |
-| [S3] | off | Office of Management and Budget, mémorandum *Security Authorization of Information Systems in Cloud Computing Environments*, Steven VanRoekel, Federal Chief Information Officer, 8 décembre 2011 | Vérifié directement sur le PDF ouvert (archive whitehouse.gov) : date, auteur, objet et création du FedRAMP confirmés à la lecture du document. |
+| [S3] | off | Office of Management and Budget, mémorandum *Security Authorization of Information Systems in Cloud Computing Environments*, Steven VanRoekel, Federal Chief Information Officer, 8 décembre 2011 | Vérifié directement sur le PDF ouvert (archive whitehouse.gov) : date, auteur, objet et création du FedRAMP confirmés à la lecture du document. Document relu (PDF, `pdftotext`, https://obamawhitehouse.archives.gov/sites/default/files/omb/assets/egov_docs/fedrampmemo.pdf) pour le lien avec « Cloud First » : l'introduction dit « Consistent with the President's International Strategy for Cyberspace and Cloud First policy, the adoption and use of information systems operated by cloud service providers (cloud services) by the Federal Government depends on security, interoperability, portability, reliability, and resiliency » ; la liste des références cite « The Federal Cloud Computing Strategy ». Le mémorandum dit « consistent with » (en cohérence avec) et non « met en œuvre » : l'énoncé reprend le premier terme. |
 | [S4] | off | Commission européenne, communiqué de presse IP/12/46, « Commission proposes a comprehensive reform of data protection rules to increase users' control of their data and to cut costs for businesses », Bruxelles, 25 janvier 2012, https://dataskydd.net/files/utredningar-eu/IP_12_46_EN.pdf (copie du communiqué) | Communiqué ouvert et lu en PDF (le texte de la proposition COM(2012) 11 sur EUR-Lex est revenu vide à trois essais, il n'a pas été lu). Passages lus : « EU rules must apply if personal data is handled abroad by companies that are active in the EU market and offer their services to EU citizens » ; « companies and organisations must notify the national supervisory authority of serious data breaches as soon as possible (if feasible within 24 hours) ». |
 | [S5] | off | Groupe de travail « Article 29 », *Opinion 05/2012 on Cloud Computing*, WP196, 1er juillet 2012, https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2012/wp196_en.pdf | Document ouvert et lu en entier (PDF, `pdftotext`) : « Adopted July 1st 2012 ». § 3.4.1.1 : le client doit connaître « all subcontractors » et « the locations of all data centres personal data may be processed at » ; liste des clauses du contrat, dont « Obligation of the cloud provider to provide a list of locations in which the data may be processed » et la notification des violations ; § 3.5.1 : « sole self-certification with Safe Harbor may not be deemed sufficient » ; § 4.2 : la certification par un tiers « can be a credible means for cloud providers to demonstrate their compliance », un audit tiers choisi par le responsable « may be deemed to satisfy in lieu of an individual controller's right to audit ». |
 | [S6] | off | *USA FREEDOM Act of 2015*, Public Law 114-23, approuvée le 2 juin 2015 (H.R. 2048, 114e Congrès) | Reprise de [S50] de `par_annee/cloud_2005_2015.md`, déjà vérifiée sur govinfo.gov : titre, numéro de loi publique et date d'approbation confirmés. |
@@ -341,3 +343,5 @@ vers la sécurité ou la souveraineté défensive [F.CLD.G4.010].
 | [S32] | presse | IDG News Service (PCWorld), « French sovereign wealth funds invests in two local cloud computing providers », 6 septembre 2012, https://www.pcworld.com/article/461135/french_sovereign_wealth_funds_invests_in_two_local_cloud_computing_providers.html ; OPECST, rapport n° 271 (2014-2015), tome II, audition d'un responsable de Cloudwatt du 26 février 2014, https://www.senat.fr/rap/r14-271-2/r14-271-27.html ; Noro, P., « Le cloud souverain est de retour : généalogie d'une ambition emblématique de la souveraineté numérique en France », Chaire Digital, Gouvernance et Souveraineté, Sciences Po, 20 juillet 2020, https://www.sciencespo.fr/public/chaire-numerique/2020/07/20/cloud-souverain-genealogie-ambition-emblematique-souverainete-numerique/ ; Rude Baguette, « Cloudwatt : vie et mort du premier cloud souverain de la France », août 2019, https://www.rudebaguette.com/2019/08/cloudwatt-orange-cloud-souverain-fin/ | Quatre pages ouvertes et lues. IDG : Numergy et Cloudwatt lancés la même semaine de septembre 2012, la Caisse détient 33,33 % d'un investissement total de 225 M€ dans Cloudwatt, Numergy avec « the same » total. OPECST : Cloudwatt « Créé le 6 septembre 2012 », capital de « 225 millions d'euros, dont 100 millions d'euros ont été apportés par Orange, 50 millions d'euros par Thales », 75 M€ de la Caisse des dépôts. Sciences Po : l'État prend 33 % de chacune des deux sociétés par « deux investissements de 75 millions d'euros », scission après un « désaccord entre Dassault Système et Orange ». Rude Baguette : les groupes « ne parviennent pas à s'entendre », Orange et SFR refusent de coopérer, 150 M€ d'aide en tout. Les sources divergent sur les industriels en désaccord : l'énoncé ne les nomme pas. Le montant de 75 M€ pour Numergy repose sur Sciences Po seul ; le total de 150 M€ est la somme des deux. |
 | [S33] | off | Direction générale des entreprises et Commissariat général à l'investissement, communiqué de presse « Cloud computing : L'Etat annonce l'acquisition par Orange de sa participation dans Cloudwatt et confirme son soutien à Numergy », Paris, 20 mars 2015, https://www.info.gouv.fr/upload/media/organization/0001/01/sites_default_files_contenu_piece-jointe_2015_03_cp_numergy.pdf | Communiqué ouvert et lu en PDF (`pdftotext`) : « Orange, qui détenait 44,4% de Cloudwatt, a racheté l'intégralité des participations de l'État (33,3%) et de Thalès (22,2%) » ; « l'Etat continue par ailleurs à investir dans Numergy ». Le mot « souverain » de l'énoncé d'origine n'y figure pas : retiré. |
 | [S34] | presse | Nextgov, « Amazon CIA contract protested », 31 mai 2013, https://www.nextgov.com/cybersecurity/2013/05/amazon-cia-contract-protested/211559/ ; IDG News Service (PCWorld), « Amazon wins CIA cloud deal in court battle with IBM », 8 octobre 2013, https://www.pcworld.com/article/448013/amazon-wins-cia-cloud-deal-in-court-battle-with-ibm.html | Deux articles ouverts et lus. Nextgov : contrat de la CIA « awarded to AWS in January », « 10-year, $600 million cloud computing contract », « IBM filed a bid protest on Feb. 26 » devant le GAO. IDG : contrat « worth up to $600 million », IBM s'est plaint au GAO, le GAO a donné en partie raison à IBM et recommandé de rouvrir la mise en concurrence, AWS a saisi la Court of Federal Claims, qui a tranché pour Amazon, IBM prévoyant de faire appel. La durée du contrat n'est pas reprise (dix ans selon Nextgov, non indiquée par IDG) ; la décision de la juridiction elle-même n'a pas été ouverte, sa date (octobre 2013) vient de l'article du 8 octobre. |
+| [S35] | presse | Thomas Pontiroli, Clubic, « Au fait, où en sont les deux "champions" du cloud à la française ? », 12 janvier 2015, https://www.clubic.com/pro/it-business/cloud-computing/actualite-749215-cloudwatt.html ; Jeanne Dussueil, FrenchWeb, « L'État et SFR sortent de Numergy, nouvel échec du cloud à la française », 16 septembre 2015, https://www.frenchweb.fr/letat-et-sfr-sortent-de-numergy-nouvel-echec-du-cloud-a-la-francaise/206400 ; OPECST, rapport n° 271 (2014-2015), tome II, audition du 26 février 2014, https://www.senat.fr/rap/r14-271-2/r14-271-27.html | Trois pages ouvertes et lues. Clubic : « Lors de sa création, l'opérateur de cloud annonçait viser les 500 millions d'euros de recettes en 2017 » ; « Sur le dernier exercice, Cloudwatt a tout juste franchi la barre du million d'euros de chiffre d'affaires » ; « Mais les deux clouds souverains restent loin des objectifs » ; Numergy : « l'objectif de 400 millions d'euros de chiffre d'affaires à horizon 2017 est encore loin d'être atteint ». FrenchWeb : « Le cloud souverain, piloté par la puissance publique, est donc en train de vivre un nouvel échec » ; Numergy ne pourra sans doute pas recruter plus de 300 personnes d'ici 2017. Le chiffre d'affaires 2014 de Numergy diverge entre les deux articles (6 M€ pour Clubic, « seulement 2 millions d'euros » pour FrenchWeb) : il n'est pas repris. OPECST (audition d'un responsable de Cloudwatt, 26 février 2014) : Cloudwatt « réalise près d'un million d'euros de chiffre d'affaires » et « plusieurs centaines de millions d'euros sont espérés en 2017 » ; le témoin juge que ce montant sera « vraisemblablement légèrement inférieur » (prévision de 2014, non reprise). Source de grade moyen (presse spécialisée en ligne, sans rapport d'audit ni document de la Cour des comptes trouvé). |
+| [S36] | presse | Yevgeniy Sverdlik, Data Center Knowledge, « Deutsche Telekom Touts New Data Center as "Fort Knox" for German Data », 7 juillet 2014, https://www.datacenterknowledge.com/archives/2014/07/07/deutsche-telekom-touts-new-data-center-location-as-fort-knox ; voir aussi [S26] | Article ouvert et lu (deux passes) : à la suite des révélations de Snowden sur la collecte de données par la NSA, « data center location has become an acute concern for many customers » ; l'Allemagne est au cœur de l'affaire, des documents ayant montré que « the NSA had been tapping German Chancellor Angela Merkel's cellphone » ; section « Eroding trust in U.S.-based service providers » ; T-Systems, filiale de services informatiques de Deutsche Telekom, ouvre un grand centre de données en Allemagne commercialisé auprès de clients qui veulent que leurs données restent dans le pays ; son PDG déclare que « German data protection standards are highly valued ». L'article ne parle pas d'une demande allemande qui « s'accroît » : l'énoncé est resserré à la préoccupation de localisation devenue aiguë après 2013. Les articles de [S26] (Data Center Knowledge et TechCrunch du 23 octobre 2014), relus pour cette clause, ne mentionnent ni Snowden ni la NSA : « high demand for a German-dedicated AWS data center … in big part due to data sovereignty concerns ». |

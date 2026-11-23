@@ -21,21 +21,21 @@ domaine, pas ici.
    1. [Trajectoire `T.INT.E2`](#trajectoire-tinte2) _(Lines 125-140)_
    1. [Narratif](#narratif-1) _(Lines 143-147)_
 1. [E3 Consommation et démarches](#e3-consommation-et-démarches) _(Lines 150-152)_
-   1. [Faits](#faits-2) _(Lines 155-169)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 172-174)_
-   1. [Trajectoire `T.INT.E3`](#trajectoire-tinte3) _(Lines 177-192)_
-   1. [Narratif](#narratif-2) _(Lines 195-199)_
-1. [E4 Information, loisirs et divertissement](#e4-information-loisirs-et-divertissement) _(Lines 202-204)_
-   1. [Faits](#faits-3) _(Lines 207-223)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 226-228)_
-   1. [Trajectoire `T.INT.E4`](#trajectoire-tinte4) _(Lines 231-246)_
-   1. [Narratif](#narratif-3) _(Lines 249-253)_
-1. [E5 Temps, espace et attention](#e5-temps-espace-et-attention) _(Lines 256-258)_
-   1. [Faits](#faits-4) _(Lines 261-272)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 275-277)_
-   1. [Trajectoire `T.INT.E5`](#trajectoire-tinte5) _(Lines 280-295)_
-   1. [Narratif](#narratif-4) _(Lines 298-302)_
-1. [Sources](#sources) _(Lines 305-354)_
+   1. [Faits](#faits-2) _(Lines 155-170)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 173-175)_
+   1. [Trajectoire `T.INT.E3`](#trajectoire-tinte3) _(Lines 178-193)_
+   1. [Narratif](#narratif-2) _(Lines 196-200)_
+1. [E4 Information, loisirs et divertissement](#e4-information-loisirs-et-divertissement) _(Lines 203-205)_
+   1. [Faits](#faits-3) _(Lines 208-224)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 227-229)_
+   1. [Trajectoire `T.INT.E4`](#trajectoire-tinte4) _(Lines 232-247)_
+   1. [Narratif](#narratif-3) _(Lines 250-254)_
+1. [E5 Temps, espace et attention](#e5-temps-espace-et-attention) _(Lines 257-259)_
+   1. [Faits](#faits-4) _(Lines 262-274)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 277-279)_
+   1. [Trajectoire `T.INT.E5`](#trajectoire-tinte5) _(Lines 282-297)_
+   1. [Narratif](#narratif-4) _(Lines 300-304)_
+1. [Sources](#sources) _(Lines 307-358)_
 
 
 ---
@@ -151,7 +151,7 @@ Le courriel s'impose d'abord comme usage professionnel dès 1995, avant tout usa
 **Question :** Comment achète-t-on, se déplace-t-on, se soigne-t-on, fait-on ses démarches ?
 
 ### Faits
-<!-- Lines 155-169 -->
+<!-- Lines 155-170 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -159,21 +159,22 @@ Le courriel s'impose d'abord comme usage professionnel dès 1995, avant tout usa
 | F.INT.E3.002 | 2000 | US | Selon une première enquête déclarative, une majorité d'internautes américains dit avoir déjà acheté un produit en ligne, une minorité de tous les Américains. | 46 % des internautes (juin 2000) → 52 % (novembre-décembre 2000), soit ~22 % de tous les adultes américains à la même date par recoupement avec le taux d'internautes | P2, P3, P5 | choc | [S20] | V |
 | F.INT.E3.003 | 2000 | US | Une minorité d'internautes américains déclare avoir déjà fait des opérations bancaires en ligne, à la première mesure de l'enquête Pew sur le sujet. | 17 % des internautes ont déjà fait de la banque en ligne (mars 2000) | P3, P5 | choc | [S41] | V |
 | F.INT.E3.004 | 2002 | US | La part des internautes américains ayant déjà fait de la banque en ligne progresse nettement en deux ans. | 32 % des internautes (septembre 2002), soit ~37 millions d'Américains | P3, P5 | choc | [S41] | V |
-| F.INT.E3.005 | 2000-2002 | US | Une majorité d'internautes américains déclare avoir déjà effectué un achat de voyage en ligne, une proportion stable entre le début et la fin de la fenêtre de mesure. | 36 % des internautes (mars 2000) → 50 % (septembre 2002) | P2, P3 | choc | [S22] | V |
+| F.INT.E3.005 | 2000-2002 | US | La part des internautes américains déclarant avoir déjà effectué un achat de voyage en ligne passe de 36 % en mars 2000 à 50 % en septembre 2002. | 36 % des internautes (mars 2000) → 50 % (septembre 2002) | P2, P3 | choc | [S22] | V |
 | F.INT.E3.006 | 2004 | US | La banque en ligne devient un usage courant pour une part substantielle des ménages américains connectés, avec 53 millions de personnes concernées. | 53 millions de personnes, 44 % des internautes, un quart de tous les adultes (fin 2004) | P3, P5, P8 | choc | [S23] | V |
 | F.INT.E3.007 | 2005 | US | retiré : la source [S23] (rapport publié le 9 février 2005) ne mesure pas février 2005 mais reprend l'enquête de fin novembre 2004 déjà citée en F.INT.E3.006 (44 %, 53 millions) ; aucune mesure distincte de février 2005 trouvée dans le rapport ouvert à la source. | | | | [S23] | K |
 | F.INT.E3.008 | 1999-2005 | US | Le commerce de détail en ligne américain, mesuré officiellement pour la première fois fin 1999, progresse chaque année en part des ventes au détail totales (fait déjà documenté en C4 comme résultat de marché ; ici, cité pour son versant pratique d'achat des ménages). | 1999 T4 : 0,64 % · 2000 : 0,9 % · 2001 : 1,0 % · 2004 : 2,0 % · 2005 : 2,3 % des ventes au détail | P3, P5, P8 | choc | [S24] | K |
 | F.INT.E3.009 | 2003 | US | Un rapport Pew de 2003 indique que 80 % des internautes adultes américains, soit environ 93 millions de personnes, ont recherché en ligne au moins un sujet de santé parmi seize proposés ; la question générale posée dans les enquêtes antérieures donnait 62 %. | 80 % des internautes adultes (~93 millions) ; 62 % à la question générale antérieure | P2, P3, P4 | choc | [S25] | V |
 | F.INT.E3.010 | 2002 | US | Dans une enquête Pew publiée en janvier 2003, 83 % des internautes américains disent avoir déjà recherché un produit en ligne, contre 73 % à la mi-2000. | 83 % des internautes (fin 2002) ; 73 % (mi-2000) | P2, P3 | choc | [S46] | V |
 | F.INT.E3.011 | 1993-2000 | EU | En France, le trafic du Minitel, système de services en ligne antérieur au Web, culmine en 1993 à 90 millions d'heures puis baisse jusqu'à 65 millions d'heures en 2000 pendant que les accès par micro-ordinateur progressent ; IEEE Spectrum rapporte ce recul à la diffusion de l'informatique domestique et de l'accès commuté à Internet. | 90 M d'heures (1993) → 65 M d'heures (2000, −11,4 % sur 1999) · 8,3 millions d'accès dont 3,2 millions par micro-ordinateur (mi-2001) | T2, P3, O6 | choc | [S26] | A |
+| F.INT.E3.012 | 1980-2002 | EU | En France, l'usage du Minitel est facturé à la minute de connexion, les terminaux étant loués aux usagers, au départ gratuitement ; le kiosque regroupe les consommations de la période en un seul poste de la facture téléphonique, et chaque serveur doit être approuvé par l'État. | | T2, P3, O6 | choc | [S49] | A |
 
 ### Jalons cités
-<!-- Lines 172-174 -->
+<!-- Lines 173-175 -->
 
 `J.INT.1995.02` (librairie en ligne et site d'enchères), `J.INT.1999.05` (recul du Minitel), `J.INT.2000.08` (première mesure officielle du commerce de détail en ligne).
 
 ### Trajectoire `T.INT.E3`
-<!-- Lines 177-192 -->
+<!-- Lines 178-193 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -191,26 +192,26 @@ Le courriel s'impose d'abord comme usage professionnel dès 1995, avant tout usa
 | 2005 | banalisation | 1 | Le commerce de détail en ligne atteint 2,3 % des ventes au détail en fin de fenêtre ; aucune mesure distincte de la banque en ligne trouvée pour 2005 (F.INT.E3.007 retiré). | F.INT.E3.008 |
 
 ### Narratif
-<!-- Lines 195-199 -->
+<!-- Lines 196-200 -->
 
 Les premiers actes de consommation en ligne apparaissent dès 1995 avec l'ouverture d'une librairie en ligne et d'un site d'enchères entre particuliers [F.INT.E3.001][J.INT.1995.02]. En 2000, 46 % des internautes américains déclarent avoir déjà acheté un produit en ligne et 17 % avoir déjà fait de la banque en ligne, année où le commerce de détail en ligne est mesuré officiellement pour la première fois à 0,64 % des ventes au détail [F.INT.E3.002][F.INT.E3.003][F.INT.E3.008]. La banque en ligne progresse ensuite fortement, passant à 32 % des internautes en septembre 2002 puis 44 % fin 2004, tandis que la réservation de voyage en ligne dépasse déjà le tiers des internautes en 2000 et atteint la moitié en 2002 [F.INT.E3.004][F.INT.E3.005][F.INT.E3.006]. Cette croissance des pratiques ne suit pas le cycle boursier : le commerce de détail en ligne continue de progresser pendant la récession de 2001 pour atteindre 2,3 % des ventes au détail en 2005 [F.INT.E3.008]. Fin 2002, 83 % des internautes américains disent avoir déjà recherché un produit en ligne, et en 2003, 80 % des internautes adultes ont recherché de l'information de santé en ligne [F.INT.E3.010][F.INT.E3.009]. En France, le trafic du Minitel, au plus haut en 1993, tombe à 65 millions d'heures en 2000 pendant que les accès par micro-ordinateur progressent [F.INT.E3.011][J.INT.1999.05].
 
 ---
 
 ## E4 Information, loisirs et divertissement
-<!-- Lines 202-204 -->
+<!-- Lines 203-205 -->
 
 **Question :** Comment s'informe-t-on et se divertit-on ?
 
 ### Faits
-<!-- Lines 207-223 -->
+<!-- Lines 208-224 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | F.INT.E4.001 | 1998 | US | Constitution de Google en Californie en septembre 1998 ; son moteur de recherche classe la pertinence d'une page en partie selon l'importance des sites qui pointent vers elle (le modèle publicitaire qui en découle est traité en C4). | constituée en septembre 1998 | O1, P3 | choc | [S27] | V |
 | F.INT.E4.002 | 2000 | US | Dès la première enquête d'usage, une minorité mesurable d'Américains va en ligne pour l'actualité un jour donné, à une époque où l'accès se fait presque exclusivement par bas débit. | 12 % des Américains vont en ligne pour l'actualité un jour donné (2000) | P2, P3, P4 | choc | [S28] | V |
 | F.INT.E4.003 | 2000-2004 | US | La proportion d'Américains qui vont régulièrement en ligne pour l'actualité progresse sur la période. | 23 % (2000) → 25 % (2002) → 29 % (2004) des Américains, régulièrement | P2, P3, P4 | choc | [S28] | V |
-| F.INT.E4.004 | 1999 | US, MONDE | Ouverture de Napster le 1er juin 1999 : logiciel de partage de fichiers musicaux entre particuliers, de poste à poste, utilisé à l'échelle de millions d'internautes sans paiement aux détenteurs de droits (le versant industrie de la musique et le conflit de droit d'auteur sont traités en A5 et F1). | ouverture le 1er juin 1999 | P2, M2, O4 | choc | [S29] | A |
+| F.INT.E4.004 | 1999 | US, MONDE | Ouverture de Napster le 1er juin 1999 : logiciel de partage de fichiers musicaux entre particuliers, de poste à poste, utilisé à l'échelle de millions d'internautes, qui échangent les fichiers sans payer ni aux autres utilisateurs, ni à l'exploitant, ni aux détenteurs de droits, c'est-à-dire gratuitement pour l'usager (le versant industrie de la musique et le conflit de droit d'auteur sont traités en A5 et F1). | ouverture le 1er juin 1999 | P2, M2, O4 | choc | [S29] | A |
 | F.INT.E4.005 | 2003 | US | Le 28 avril 2003, ouverture aux États-Unis d'une boutique de musique en ligne qui vend les titres à 99 cents l'unité, sans abonnement, avec plus de 200 000 titres issus notamment de cinq maisons de disques. | 99 cents par titre, plus de 200 000 titres (28 avril 2003) | O4, M2, P2 | choc | [S30] | V |
 | F.INT.E4.006 | 1998-2000 | ASIE-E | En Corée du Sud, les salles de jeux en réseau à l'heure (PC bang) passent d'une centaine début 1998 à environ 21 400 en 2000, et les jeunes y jouent à StarCraft puis aux jeux en ligne : le réseau devient un lieu de loisir collectif. | environ 100 PC bang début 1998 ; plus de 2 500 fin 1998 ; plus de 15 000 en 1999 ; 21 400 en 2000 | T3, P1, P2 | choc | [S31] | A |
 | F.INT.E4.007 | 2004 | US | Les blogs et la publication personnelle atteignent une échelle mesurable comme pratique de lecture quotidienne d'une partie des internautes américains, en plus de la presse en ligne établie (l'effet sur le débat public et les campagnes est traité en F1 et G3). | 27 % des internautes lisent des blogs fin 2004 (~32 millions), contre 17 % en février 2004 | P2, M2, O8 | choc | [S32] | V |
@@ -222,12 +223,12 @@ Les premiers actes de consommation en ligne apparaissent dès 1995 avec l'ouvert
 | F.INT.E4.013 | 2002-01 | US | En janvier 2002, plus de huit internautes américains sur dix ont déjà utilisé un moteur de recherche et plus d'un sur quatre, soit environ 33 millions d'adultes, en utilise un un jour donné. | 85 % ont déjà utilisé un moteur ; 29 % un jour donné, environ 33 millions d'adultes (janvier 2002) | P2, P3 | choc | [S44] | V |
 
 ### Jalons cités
-<!-- Lines 226-228 -->
+<!-- Lines 227-229 -->
 
 `J.INT.1998.03` (fondation de Google), `J.INT.1999.01` (ouverture de Napster), `J.INT.2002.04` (jeux en ligne et cybercafés en Asie de l'Est), `J.INT.2003.01` (boutique de musique à l'unité), `J.INT.2004.03` (échelle mesurable des blogs), `J.INT.2005.01` (création de YouTube).
 
 ### Trajectoire `T.INT.E4`
-<!-- Lines 231-246 -->
+<!-- Lines 232-247 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -245,19 +246,19 @@ Les premiers actes de consommation en ligne apparaissent dès 1995 avec l'ouvert
 | 2005 | banalisation | 2 | Création de YouTube en février, service où chacun peut téléverser et partager des vidéos ; 68 % des adultes américains utilisent Internet ou le courriel, condition de la pratique de masse ; la confiance dans la recherche en ligne est élevée mais la compréhension de son mécanisme (distinction payant/organique) reste faible. | F.INT.E4.008, F.INT.E4.010, F.INT.E4.012, J.INT.2005.01 |
 
 ### Narratif
-<!-- Lines 249-253 -->
+<!-- Lines 250-254 -->
 
 Google est constitué en 1998 avec un moteur qui classe les pages en partie selon les sites qui pointent vers elles ; la recherche devient ensuite une pratique de masse (voir plus bas) [F.INT.E4.001][J.INT.1998.03]. La lecture d'actualité en ligne progresse de façon continue, de 12 % des Américains un jour donné en 2000 à 29 % en pratique régulière en 2004, tandis que les informations télévisées locales (59 % de téléspectateurs réguliers) dominent encore en 2004 et que la lecture d'un journal la veille recule de 47 % à 42 % entre 2000 et 2004 [F.INT.E4.002][F.INT.E4.003][F.INT.E4.009]. Napster ouvre en juin 1999 et permet à des millions d'internautes d'échanger des fichiers musicaux sans paiement aux détenteurs de droits ; en avril 2003, une boutique en ligne vend le titre à 99 cents [F.INT.E4.004][F.INT.E4.005][J.INT.1999.01][J.INT.2003.01]. En Corée du Sud, les salles de jeux en réseau passent d'une centaine début 1998 à environ 21 400 en 2000, et les jeunes y jouent à StarCraft puis aux jeux en ligne [F.INT.E4.006][J.INT.2002.04]. Les blogs atteignent 27 % de lectorat chez les internautes fin 2004, et YouTube, créé en février 2005, permet à chacun de téléverser et partager des vidéos [F.INT.E4.007][F.INT.E4.008][J.INT.2004.03][J.INT.2005.01]. Ce déplacement entre médias ne devient une pratique de masse qu'à mesure que la majorité des adultes utilise Internet, seuil atteint en 2005 avec 68 % des adultes américains [F.INT.E4.010]. La recherche d'information en ligne elle-même devient une pratique de masse à faible coût entre 2002 et 2005 : déjà large chez plus de huit internautes sur dix début 2002 (85 % ont déjà utilisé un moteur, 29 % un jour donné), elle atteint 84 % des internautes et 3,9 milliards de requêtes mensuelles mi-2004, avec une confiance déclarée élevée dans le résultat obtenu mais une compréhension limitée du mécanisme qui le produit [F.INT.E4.011][F.INT.E4.012][F.INT.E4.013].
 
 ---
 
 ## E5 Temps, espace et attention
-<!-- Lines 256-258 -->
+<!-- Lines 257-259 -->
 
 **Question :** Comment le budget-temps, la frontière domicile-travail et la disponibilité changent-ils ?
 
 ### Faits
-<!-- Lines 261-272 -->
+<!-- Lines 262-274 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -269,14 +270,15 @@ Google est constitué en 1998 avec un moteur qui classe les pages en partie selo
 | F.INT.E5.006 | 1990-2002 | EU, ASIE-E | Le nombre d'abonnés au téléphone mobile dans le monde passe de 11 millions en 1990 à 945 millions fin 2001, dont 37 % en Europe et 35 % en Asie, et 24 milliards de messages courts (SMS) sont envoyés sur les réseaux GSM en mai 2002 contre 15 milliards un an plus tôt ; ce développement est à attribuer au co-choc de la téléphonie mobile plutôt qu'au choc étudié. | 11 millions d'abonnés (1990) → 945 millions (fin 2001), monde ; Europe 37 %, Asie 35 % des abonnés (2001) ; SMS sur réseaux GSM : 15 milliards (mai 2001) → 24 milliards (mai 2002), estimation de l'association GSM relayée par l'UIT | P1, P2, P3 | co:X.INT.02 | [S17] | V |
 | F.INT.E5.007 | 2002 | US | En 2002, parmi les salariés américains qui utilisent le courriel au travail (plus de 57 millions), une minorité le consulte hors du temps de travail et un quart s'en sert pour parler de sa vie personnelle (le côté organisation du travail est traité en D3). | 26 % consultent leur courriel après le travail, 31 % le week-end, 15 % en vacances ; 25 % l'utilisent pour parler de leur vie personnelle ; environ un tiers disent que le courriel les rend trop accessibles (2002) | P3, M1, M4 | choc | [S39] | V |
 | F.INT.E5.008 | 2000-2005 | US | La proportion d'adultes américains en ligne, condition du temps disponible pouvant être consacré à Internet, passe de 52 % à 68 % sur la fenêtre. | 2000 : 52 % · 2001 : 55 % · 2002 : 59 % · 2003 : 61 % · 2004 : 63 % · 2005 : 68 % des adultes | P2, P3, P4 | choc | [S40] | V |
+| F.INT.E5.009 | 2002 | US | Selon une enquête Pew de 2002, la connexion haut débit à domicile, décrite par les auteurs comme « always on », s'accompagne d'un usage plus fréquent et plus long : les internautes à haut débit passent plus de temps en ligne, font plus de choses et plus souvent que les internautes à bas débit ; 82 % d'entre eux sont en ligne un jour donné, contre 58 % des internautes à bas débit. | 82 % (haut débit) contre 58 % (bas débit) en ligne un jour donné (2002) | P2, P3, P5 | co:X.INT.01 | [S48] | V |
 
 ### Jalons cités
-<!-- Lines 275-277 -->
+<!-- Lines 277-279 -->
 
 `J.INT.1996.03` (forfait illimité, fin de la facturation à la durée), `J.INT.2004.04` (haut débit chez la moitié des internautes à domicile fin 2004), `J.INT.2004.05` (texto de masse, co-choc mobile).
 
 ### Trajectoire `T.INT.E5`
-<!-- Lines 280-295 -->
+<!-- Lines 282-297 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -294,14 +296,14 @@ Google est constitué en 1998 avec un moteur qui classe les pages en partie selo
 | 2005 | banalisation | 2 | 68 % des adultes en ligne ; le haut débit devient majoritaire chez les internautes à domicile (53 % en mai) ; en décembre, 43 % des internautes à haut débit disent passer plus de deux heures en ligne un jour donné, contre 33 % des internautes à bas débit. | F.INT.E5.004, F.INT.E5.005, F.INT.E5.008 |
 
 ### Narratif
-<!-- Lines 298-302 -->
+<!-- Lines 300-304 -->
 
 La contrainte de facturation à la durée disparaît dès 1996 avec le passage au forfait illimité chez un grand fournisseur d'accès, le temps passé en ligne s'allongeant ensuite [F.INT.E5.002][J.INT.1996.03]. La proportion d'adultes américains en ligne progresse ensuite régulièrement, de 52 % en 2000 à 68 % en 2005, portant mécaniquement le nombre de personnes concernées par un budget-temps en ligne [F.INT.E5.008]. Le haut débit gagne les internautes à domicile : 35 % en novembre 2003, 50 % en décembre 2004, 53 % en mai 2005 ; fin 2005, 43 % des internautes à haut débit déclarent passer plus de deux heures en ligne un jour donné, contre 33 % des internautes à bas débit [F.INT.E5.004][F.INT.E5.005][J.INT.2004.04]. La mesure officielle et continue du budget-temps américain ne commence qu'en 2003, ce qui limite la série disponible pour situer précisément Internet dans l'emploi du temps global sur le reste de la fenêtre [F.INT.E5.003]. En 2002, parmi les salariés américains qui utilisent le courriel au travail, 26 % le consultent après le travail et 31 % le week-end, et un quart s'en sert pour parler de sa vie personnelle ; aucune mesure antérieure n'est lue pour cette cellule [F.INT.E5.007]. Le nombre d'abonnés au mobile passe de 11 millions en 1990 à 945 millions fin 2001 et 24 milliards de SMS sont envoyés en mai 2002 sur les réseaux GSM, développement à attribuer au co-choc de la téléphonie mobile plutôt qu'au choc Internet [F.INT.E5.006].
 
 ---
 
 ## Sources
-<!-- Lines 305-354 -->
+<!-- Lines 307-358 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -333,7 +335,7 @@ La contrainte de facturation à la durée disparaît dès 1996 avec le passage a
 | [S26] | off | Assemblée nationale, 11e législature, question écrite n° 63889 (M. Louis Mexandeau) et réponse du ministère de l'industrie publiée le 4 février 2002, page 589 (questions.assemblee-nationale.fr/dyn/11/questions/QANR5L11QE63889.pdf) ; Julien Mailland et Kevin Driscoll, « Minitel: The Online World France Built Before the Web », IEEE Spectrum, 20 juin 2017 (spectrum.ieee.org/tech-history/cyberspace/minitel-the-online-world-france-built-before-the-web) | Ouverts et lus : la réponse ministérielle dit « Le trafic baisse régulièrement depuis 1993 (90 millions d'heures) pour atteindre 65 millions d'heures en 2000 (- 11,4 % par rapport à 1999) », 8,3 millions d'accès dont 3,2 millions par micro-ordinateur mi-2001, 5,1 millions de terminaux dédiés ; l'article : « Minitel use peaked in 1993, when users logged more than 90 million hours », « usage declined as home computing and dial-up Internet access spread ». Corrections : le recul date de 1993 et non de 1999 ; aucune source ouverte n'établit un transfert vers le Web pour les démarches auprès des services publics : clause supprimée. |
 | [S27] | off | Google Inc., *Form S-1 Registration Statement*, Securities and Exchange Commission, 2004 (sec.gov/Archives/edgar/data/1288776/000119312504073639/ds1.htm) | Ouvert et lu le 2026-11-22 (les 100 000 premiers caractères sur 339 917) : « We were incorporated in California in September 1998. » ; section des facteurs de risque : « our web search technology ranks a web page's relevance based in part on the importance of the web sites that link to it ». Le résumé du prospectus ne décrit pas PageRank (mentionné seulement dans la liste des marques). L'article de Brin et Page (1998) n'a pas pu être ouvert (connexion refusée, 403 sur une copie). Clauses supprimées : « service à part entière » et « pratique quotidienne d'information », que le document ne formule pas. |
 | [S28] | stat | Pew Research Center, *I. Where Americans Go for News*, 8 juin 2004 (pewresearch.org/politics/2004/06/08/i-where-americans-go-for-news/) | Ouvert et lu le 2026-09-22 : « the percentage who go online for news on a typical day has increased by half over the past four years (from 12% to 18%) » (2000→2004) ; « 23% » puis « 25% » puis « 29% » vont en ligne régulièrement pour l'actualité en 2000, 2002, 2004. Ancienne valeur de 22 % (jour donné, 2000) non retrouvée à la source, corrigée en 12 %. |
-| [S29] | acad | EBSCO, *Research Starters : Napster released*, notice de référence (ebsco.com/research-starters/computer-science/napster-released) ; article rétrospectif « It's been 25 years since Napster launched and changed the music industry forever » (ca.news.yahoo.com/25-years-since-napster-launched-100154339.html, éditeur d'origine et date non lus) ; *A&M Records, Inc. v. Napster, Inc.*, 114 F.Supp.2d 896 (N.D. Cal., 10 août 2000, ordonnance d'injonction préliminaire, eff.org) ; 239 F.3d 1004 (9th Cir., 12 février 2001) | Ouverts et lus le 2026-11-22 : la notice EBSCO dit « Released on June 1, 1999 » et « allowed users to share music files with each other » ; l'article rétrospectif : « Napster launched on June 1, 1999 », les utilisateurs cherchent « millions of MP3 song files on other people's PCs ». L'ordonnance de 2000 (PDF extrait avec pdftotext) : « It is uncontradicted that Napster users currently upload or download MP3 files without payment to each other, defendant, or copyright owners » et recherche sur les disques durs « of millions of other anonymous users ». L'arrêt de 2001 : « Napster facilitates the transmission of MP3 files between and among its users », « peer-to-peer ». Aucun des deux documents judiciaires ne date l'ouverture : la date repose sur deux sources secondaires (source faible pour la date). Clause supprimée : « première pratique de masse de consommation musicale hors support physique et hors achat à l'unité », non énoncée. |
+| [S29] | acad | EBSCO, *Research Starters : Napster released*, notice de référence (ebsco.com/research-starters/computer-science/napster-released) ; article rétrospectif « It's been 25 years since Napster launched and changed the music industry forever » (ca.news.yahoo.com/25-years-since-napster-launched-100154339.html, éditeur d'origine et date non lus) ; *A&M Records, Inc. v. Napster, Inc.*, 114 F.Supp.2d 896 (N.D. Cal., 10 août 2000, ordonnance d'injonction préliminaire, eff.org) ; 239 F.3d 1004 (9th Cir., 12 février 2001) | Ouverts et lus le 2026-11-22 : la notice EBSCO dit « Released on June 1, 1999 » et « allowed users to share music files with each other » ; l'article rétrospectif : « Napster launched on June 1, 1999 », les utilisateurs cherchent « millions of MP3 song files on other people's PCs ». L'ordonnance de 2000 (PDF extrait avec pdftotext) : « It is uncontradicted that Napster users currently upload or download MP3 files without payment to each other, defendant, or copyright owners » et recherche sur les disques durs « of millions of other anonymous users ». L'arrêt de 2001 : « Napster facilitates the transmission of MP3 files between and among its users », « peer-to-peer ». Aucun des deux documents judiciaires ne date l'ouverture : la date repose sur deux sources secondaires (source faible pour la date). Clause supprimée : « première pratique de masse de consommation musicale hors support physique et hors achat à l'unité », non énoncée. Clause « gratuitement pour l'usager » rétablie dans F.INT.E4.004 : l'ordonnance de 2000 déjà lue dit « users currently upload or download MP3 files without payment to each other, defendant, or copyright owners » ; le résumé de l'arrêt de 2001 par le U.S. Copyright Office (copyright.gov/fair-use/summaries/a&mrecords-napster-9thcir2001.pdf, ouvert et lu le 2026-11-23, PDF extrait avec pdftotext) retient que la copie répétée est commerciale lorsqu'elle est faite « to avoid the expense of buying an authorized copy » ; le texte même de l'arrêt n'a pu être ouvert (403 sur justia et openjurist). |
 | [S30] | off | Apple, communiqué *Apple Launches the iTunes Music Store for US Customers*, 28 avril 2003 (apple.com/uk/newsroom/2003/04/28Apple-Launches-the-iTunes-Music-Store/) | Ouvert et lu le 2026-11-22 : « The iTunes Music Store features over 200,000 songs from music companies including BMG, EMI, Sony Music Entertainment, Universal and Warner » ; « download the music they want for just 99 cents per song, without subscription fees » ; lancement pour les clients américains. Document de l'entreprise, retenu pour ce qu'elle a fait et vendu. Clauses supprimées : « se légalise », « se déplace vers le titre plutôt que l'album », non énoncées (le communiqué ne donne pas de prix d'album). |
 | [S31] | acad | Wei Jinghyun et Shintaku Junjiro, *Kankoku onrain gēmu sangyō no keisei purosesu bunseki* (Analyse du processus de formation de l'industrie coréenne du jeu en ligne), document de discussion CIRJE-J-81, Université de Tokyo, août 2002 (cirje.e.u-tokyo.ac.jp/research/dp/2000/2002/2002cj81.pdf, en japonais, PDF extrait avec pdftotext) ; Dal Yong Jin, « Historiography of Korean Esports: Perspectives on Spectatorship », International Journal of Communication 14, 2020, p. 3727-3745 (ijoc.org/index.php/ijoc/article/download/13795/3149) | Ouverts et lus le 2026-11-22. Document CIRJE (projet de recherche, chiffres tirés du *Livre blanc du jeu coréen* 2002 et du *Livre blanc de l'Internet coréen* 2001) : les PC bang (passages traduits du japonais) naissent au nombre d'une centaine autour des universités début 1998 et dépassent 2 500 au niveau national fin 1998, dépassent 15 000 en 1999 (multipliés par cinq) et atteignent 21 400 en 2000 ; 72 % du chiffre d'affaires de NC Soft en 2000 vient des PC bang. Article de Jin : « the sudden growth of PC bang », « teens and people in their early 20s ... created so-called PC bang culture », « in the late 1990s, they started to go to PC bang to play StarCraft ». Clauses supprimées : bloc CN (aucune source ouverte sur la Chine), « avant de l'être en Occident » (aucune comparaison lue), généralisation à l'Asie de l'Est. Document de travail non publié en revue : source de force moyenne. |
 | [S32] | stat | Pew Research Center, *The State of Blogging*, 2 janvier 2005 (pewresearch.org/internet/2005/01/02/the-state-of-blogging/) | Ouvert et lu le 2026-09-22 : « 27% of internet users say they read blogs, a 58% jump from the 17% who told us they were blog readers in February [2004]... by the end of 2004 32 million American adults... read blogs ». |
@@ -352,3 +354,5 @@ La contrainte de facturation à la durée disparaît dès 1996 avec le passage a
 | [S45] | off | Union internationale des télécommunications, *ITU Internet Reports: Internet for a Mobile Generation*, septembre 2002, figure 3.5 (GSM Association) (itu.int/net/wsis/tunis/newsroom/stats/Mobile_Internet_2002.pdf, PDF extrait avec pdftotext) | Ouvert et lu : « In May 2002 alone, SMS users worldwide sent a total of 24 billion messages » ; « the GSM Association estimates that 24 billion SMS messages were sent over GSM networks in May 2002 alone, compared with 15 billion a year earlier, and it estimates that 360 billion messages will be sent in 2002 » ; la demande est « particularly strong among younger people ». Chiffres de l'association GSM relayés par l'UIT, pas lus à la source de l'association. Le rapport ne donne pas de volumes séparés pour l'Europe et l'Asie : bloc ramené à MONDE. Pas de comparaison avec le courriel dans la source : clause supprimée. |
 | [S46] | stat | Pew Internet & American Life Project, *Holidays Online 2002*, partie 2 « E-shopping grows », 7 janvier 2003 (pewresearch.org/internet/2003/01/07/part-2-e-shopping-grows/) | Ouvert et lu : « Fully 83% of U.S. Internet users have gone online to research a product at one time or another », contre 73 % à la mi-2000 ; la page ne chiffre pas la comparaison de prix en tant que telle, et ne donne pas la date exacte de l'enquête (hiver 2002). L'énoncé « comparaison de prix » est remplacé par « recherche d'un produit ». |
 | [S47] | stat | Pew Research Center, *I. Where Americans Go for News*, 8 juin 2004 (pewresearch.org/politics/2004/06/08/i-where-americans-go-for-news/) | Même page que [S28], relue le 2026-11-22 pour d'autres passages : « Fully 59% of Americans say they regularly watch the local news in their area » ; « The percentage of Americans reporting that they read a newspaper "yesterday" fell from 58% in 1994 to 47% in 2000 and 41% in 2002. It now stands at 42% » ; en ligne régulièrement : 23 % (2000), 25 % (2002), 29 % (2004) ; « local television news continues to dominate the American media landscape » ; « More time is spent watching television news than reading a newspaper or listening to the radio ». Les mesures ne sont pas de même nature (« regularly » pour la télévision et l'en ligne, « yesterday » pour le journal). Ancien énoncé « source dominante inchangée jusqu'en 2000, part relative en recul progressif ensuite » et bloc MONDE : aucun passage lu, supprimés. |
+| [S48] | stat | John B. Horrigan et Lee Rainie, *The Broadband Difference: How online behavior changes with high-speed Internet connections*, Pew Internet & American Life Project, 23 juin 2002 (pewresearch.org/internet/2002/06/23/the-broadband-difference-how-online-behavior-changes-with-high-speed-internet-connections/) | Ouvert et lu le 2026-11-23 (version markdown de la page) : « the "always on" nature of a home broadband connection allows users to turn to the Internet » ; « broadband users spend more time online, do more things, and do them more often than dial-up Internet users » ; « Fully 82% of broadband Internet surfers are online on any given day, compared to 58% of dial-up users ». Enquête déclarative ; le passage exact sur la durée moyenne par jour (95 minutes contre 83 minutes) a été lu en extrait tronqué et n'est pas repris. Le rapport décrit la corrélation ; l'énoncé n'affirme pas de causalité. |
+| [S49] | presse | Davide Castelvecchi, « France Telecom to Shut Down a Beloved Precursor of the Web », *Scientific American*, 21 juillet 2011 (scientificamerican.com/blog/degrees-of-freedom/httpblogsscientificamericancomdegrees-of-freedom20110721france-telecom-to-shut-down-a-beloved-precursor-of-the-web/) ; Julien Mailland et Kevin Driscoll, « Minitel: The Online World France Built Before the Web », IEEE Spectrum, 20 juin 2017 (déjà cité en [S26], relu le 2026-11-23) ; J. A. Hart, « The Teletel/Minitel System in France », *Telematics and Informatics*, 5(1), 1988, pp. 21-28 (lu via la page fermatslibrary.com/s/the-teletel-minitel-system-in-france) | Ouverts et lus le 2026-11-23 : Scientific American, « Usage however was billed by the minute » et terminaux « leased to the users, initially for free » ; IEEE Spectrum : le kiosque « handled the accounting », le Minitel est décrit comme « a closed, centralized system » dans la vision courante que les auteurs contestent, chaque hôte devant être « individually approved by the state », la compagnie de téléphone regroupant « all activity for the billing period into a single charge » ; Hart : « Total connect time for the Minitel network (Teletel 1, 2, and 3) was 13 million hours in the first 6 months of 1986 » (temps de connexion mesuré). Le qualificatif « réseau fermé » est contesté par les auteurs de l'article IEEE (système « hybride », fournisseurs libres de gérer leurs serveurs) : il n'est pas repris dans l'énoncé ; seule la facturation à la minute et l'agrément des serveurs par l'État sont énoncés. Le tarif par minute n'a pas été lu. Période 1980-2002 : bornes non lues dans ces sources (début du service non ouvert) ; l'énoncé se limite à la facturation décrite, sans borne de fin lue. |

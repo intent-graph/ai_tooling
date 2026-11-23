@@ -14,31 +14,31 @@ ici.
 ## Table of Contents
 
 1. [B1 Capital privé domestique](#b1-capital-privé-domestique) _(Lines 49-52)_
-   1. [Faits](#faits) _(Lines 55-72)_
-   1. [Jalons cités](#jalons-cités) _(Lines 75-89)_
-   1. [Trajectoire `T.INT.B1`](#trajectoire-tintb1) _(Lines 92-107)_
-   1. [Narratif](#narratif) _(Lines 110-114)_
-1. [B2 Cycle spéculatif et valorisations](#b2-cycle-spéculatif-et-valorisations) _(Lines 117-120)_
-   1. [Faits](#faits-1) _(Lines 123-136)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 139-151)_
-   1. [Trajectoire `T.INT.B2`](#trajectoire-tintb2) _(Lines 154-169)_
-   1. [Narratif](#narratif-1) _(Lines 172-176)_
-1. [B3 Redistribution de la valeur](#b3-redistribution-de-la-valeur) _(Lines 179-182)_
-   1. [Faits](#faits-2) _(Lines 185-198)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 201-212)_
-   1. [Trajectoire `T.INT.B3`](#trajectoire-tintb3) _(Lines 215-230)_
-   1. [Narratif](#narratif-2) _(Lines 233-237)_
-1. [B4 Capital étranger](#b4-capital-étranger) _(Lines 240-243)_
-   1. [Faits](#faits-3) _(Lines 246-257)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 260-270)_
-   1. [Trajectoire `T.INT.B4`](#trajectoire-tintb4) _(Lines 273-288)_
-   1. [Narratif](#narratif-3) _(Lines 291-295)_
-1. [B5 Capital public et régulation financière](#b5-capital-public-et-régulation-financière) _(Lines 298-300)_
-   1. [Faits](#faits-4) _(Lines 303-316)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 319-328)_
-   1. [Trajectoire `T.INT.B5`](#trajectoire-tintb5) _(Lines 331-346)_
-   1. [Narratif](#narratif-4) _(Lines 349-353)_
-1. [Sources](#sources) _(Lines 356-390)_
+   1. [Faits](#faits) _(Lines 55-73)_
+   1. [Jalons cités](#jalons-cités) _(Lines 76-90)_
+   1. [Trajectoire `T.INT.B1`](#trajectoire-tintb1) _(Lines 93-108)_
+   1. [Narratif](#narratif) _(Lines 111-115)_
+1. [B2 Cycle spéculatif et valorisations](#b2-cycle-spéculatif-et-valorisations) _(Lines 118-121)_
+   1. [Faits](#faits-1) _(Lines 124-137)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 140-152)_
+   1. [Trajectoire `T.INT.B2`](#trajectoire-tintb2) _(Lines 155-170)_
+   1. [Narratif](#narratif-1) _(Lines 173-177)_
+1. [B3 Redistribution de la valeur](#b3-redistribution-de-la-valeur) _(Lines 180-183)_
+   1. [Faits](#faits-2) _(Lines 186-199)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 202-213)_
+   1. [Trajectoire `T.INT.B3`](#trajectoire-tintb3) _(Lines 216-231)_
+   1. [Narratif](#narratif-2) _(Lines 234-238)_
+1. [B4 Capital étranger](#b4-capital-étranger) _(Lines 241-244)_
+   1. [Faits](#faits-3) _(Lines 247-258)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 261-271)_
+   1. [Trajectoire `T.INT.B4`](#trajectoire-tintb4) _(Lines 274-289)_
+   1. [Narratif](#narratif-3) _(Lines 292-296)_
+1. [B5 Capital public et régulation financière](#b5-capital-public-et-régulation-financière) _(Lines 299-301)_
+   1. [Faits](#faits-4) _(Lines 304-317)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 320-329)_
+   1. [Trajectoire `T.INT.B5`](#trajectoire-tintb5) _(Lines 332-347)_
+   1. [Narratif](#narratif-4) _(Lines 350-354)_
+1. [Sources](#sources) _(Lines 357-392)_
 
 
 
@@ -51,7 +51,7 @@ ici.
 l'infrastructure, en fonds propres et en dette ?
 
 ### Faits
-<!-- Lines 55-72 -->
+<!-- Lines 55-73 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -59,7 +59,7 @@ l'infrastructure, en fonds propres et en dette ?
 | F.INT.B1.002 | 1998 | US | Le capital-risque investi aux États-Unis atteint environ 21,5 milliards de dollars pour l'année, plus du double du niveau de 1995. | ~21,5 Md$ | M9, O1 | choc | [S1] | A |
 | F.INT.B1.003 | 1999-2000 | US | Le capital-risque investi aux États-Unis passe d'environ 55 milliards de dollars en 1999 à environ 104 milliards en 2000, soit près de cinq fois le niveau de 1998. | 1999 : ~55 Md$ ; 2000 : ~104 Md$ | M9, O1 | choc | [S1] | A |
 | F.INT.B1.004 | 2002-2003 | US | Le capital-risque investi aux États-Unis retombe à environ 22 milliards de dollars en 2002, proche du niveau de 1998, puis à environ 20 milliards en 2003, après le pic de 2000. | ~22 Md$ (2002), ~20 Md$ (2003) | M9, O1 | co:X.INT.04 | [S1] | A |
-| F.INT.B1.005 | 1995-2000 | US | Le nombre d'introductions en bourse technologiques américaines passe de 205 en 1995 à un pic de 370 en 1999 puis 261 en 2000, avec des montants levés qui décuplent presque sur la période : 9 786 millions de dollars de produit brut technologique en 1995 contre 33 512 millions en 1999 et 42 537 millions en 2000. | 1995 : 205 IPO, 9 786 M$ ; 1999 : 370 IPO, 33 512 M$ ; 2000 : 261 IPO, 42 537 M$ | O1, M9 | choc | [S2] | V |
+| F.INT.B1.005 | 1995-2000 | US | Le nombre d'introductions en bourse technologiques américaines passe de 205 en 1995 à un pic de 370 en 1999 puis 261 en 2000, avec des montants levés multipliés par plus de quatre sur la période : 9 786 millions de dollars de produit brut technologique en 1995 contre 33 512 millions en 1999 et 42 537 millions en 2000. | 1995 : 205 IPO, 9 786 M$ ; 1999 : 370 IPO, 33 512 M$ ; 2000 : 261 IPO, 42 537 M$ | O1, M9 | choc | [S2] | V |
 | F.INT.B1.006 | 2001-2003 | US | Le nombre d'introductions en bourse technologiques américaines s'effondre à 24 en 2001, 20 en 2002 et 18 en 2003, avec un produit brut technologique de 5 833, 2 587 et 2 242 millions de dollars respectivement, très en deçà des niveaux de 1996-2000. | 2001 : 24 IPO, 5 833 M$ ; 2002 : 20 IPO, 2 587 M$ ; 2003 : 18 IPO, 2 242 M$ | O1, M9 | co:X.INT.04 | [S2] | V |
 | F.INT.B1.007 | 2004-2005 | US | Le nombre d'introductions en bourse technologiques américaines remonte modestement à 61 en 2004 (9 064 M$ de produit brut technologique) puis se stabilise à 45 en 2005 (6 993 M$), loin du pic de 1999-2000. | 2004 : 61 IPO, 9 064 M$ ; 2005 : 45 IPO, 6 993 M$ | O1, M9 | choc | [S2] | V |
 | F.INT.B1.008 | 1996-1999 | US | La part des introductions en bourse américaines financées par du capital-risque en amont progresse sur la fenêtre, passant de 39 % de l'ensemble des IPO en 1996 à 59 % en 1999 puis 64 % en 2000, signe d'une dépendance croissante au capital-risque comme filière de financement avant la mise en bourse. | 1996 : 39 % ; 1999 : 59 % ; 2000 : 64 % (part des IPO adossées au capital-risque) | O1, M9 | choc | [S2] | V |
@@ -69,9 +69,10 @@ l'infrastructure, en fonds propres et en dette ?
 | F.INT.B1.012 | 1992-2001 | US | La part des ménages américains détenant des actions, directement ou indirectement (via fonds communs, comptes de retraite ou gestion), progresse de 36,7 % en 1992 à 40,4 % en 1995, 48,9 % en 1998 puis 51,9 % en 2001, franchissant pour la première fois le seuil de 50 % pendant le choc ; la valeur médiane des avoirs boursiers de ces ménages passe de 27 200 à 34 300 dollars entre 1998 et 2001. | 1992 : 36,7 % ; 1995 : 40,4 % ; 1998 : 48,9 % ; 2001 : 51,9 % | P3 | choc | [S11] | V |
 | F.INT.B1.013 | 1995-2000 | MONDE | Les entreprises de télécommunications représentent 20 % du total des emprunts syndiqués en 2000, contre environ 6 % en moyenne sur 1995-1999 ; environ 250 milliards de dollars de prêts télécoms arrivent à échéance en 2001. | 20 % (2000) contre ~6 % (moyenne 1995-1999) ; ~250 Md$ à échéance en 2001 | O3, M9 | co:X.INT.02 | [S12] | V |
 | F.INT.B1.014 | 1996-2000 | EU | Deux marchés de croissance boursière dédiés aux jeunes entreprises technologiques ouvrent en Europe en parallèle du cycle américain : le Nouveau Marché français, en activité depuis le 14 février 1996, et le Neuer Markt allemand, créé le 10 mars 1997, qui compte 11 introductions en bourse en 1997 et 143 en 2000 selon une étude de ses introductions, chacun avec une trajectoire de boom-krach propre (poursuivie en B2, [F.INT.B2.009]). | 1997 : 11 IPO ; 2000 : 143 (Neuer Markt) | O1, T2 | choc | [S13] | A |
+| F.INT.B1.015 | 2005 | EU | En 2005, le Nouveau Marché français est regroupé avec le Premier Marché et le Second Marché dans un marché réglementé unique d'Euronext Paris, Eurolist. | | O1, T2 | choc | [S33] | V |
 
 ### Jalons cités
-<!-- Lines 75-89 -->
+<!-- Lines 76-90 -->
 
 `J.INT.1995.03` (introduction en bourse de Netscape), `J.INT.1997.01` (dépôt S-1 d'Amazon),
 `J.INT.1999.03` (année record du capital-risque et des IPO), `J.INT.2000.05` (enchères
@@ -88,7 +89,7 @@ identifié pour cette sous-dimension sur la fenêtre ; absence notée, pas combl
 approximatif.
 
 ### Trajectoire `T.INT.B1`
-<!-- Lines 92-107 -->
+<!-- Lines 93-108 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -106,20 +107,20 @@ approximatif.
 | 2005 | banalisation | 1 | Stabilisation à 45 IPO technologiques pour 7,0 milliards de dollars, loin du pic de 1999-2000 : le financement du choc redevient un marché ordinaire. | F.INT.B1.007 |
 
 ### Narratif
-<!-- Lines 110-114 -->
+<!-- Lines 111-115 -->
 
 Le capital-risque américain passe d'environ 7,7 milliards de dollars en 1995 à environ 21,5 milliards en 1998, puis à environ 55 milliards en 1999 et environ 104 milliards en 2000, avant de retomber à environ 22 puis 20 milliards en 2002-2003, proche du niveau de 1998 [F.INT.B1.001][F.INT.B1.002][F.INT.B1.003][F.INT.B1.004]. Le marché des introductions en bourse technologiques suit un rythme comparable, documenté à la source primaire : 205 IPO pour 9 786 millions de dollars en 1995, un pic de 370 IPO pour 33 512 millions en 1999, puis un effondrement à 18 IPO pour 2 242 millions en 2003, tandis que la part des ménages américains actionnaires franchit le seuil de 50 % en 2001, contre 36,7 % en 1992 [F.INT.B1.005][F.INT.B1.006][F.INT.B1.012]. La part des introductions en bourse adossées au capital-risque en amont progresse sur la même période, de 39 % en 1996 à 64 % en 2000, signe d'une filière de financement de plus en plus intégrée entre capital-risque et marché public [F.INT.B1.008]. Les grands opérateurs télécoms, dont l'endettement était stable rapporté au capital jusqu'en 1999, empruntent en 2000 de façon très lourde pour certains d'entre eux, surtout par le crédit syndiqué, dont les télécoms représentent 20 % du total contre environ 6 % en moyenne sur 1995-1999 ; ces emprunts financent fusions-acquisitions, investissement et les licences européennes de troisième génération, qui coûtent environ 105 milliards d'euros [F.INT.B1.009][F.INT.B1.011][F.INT.B1.013][J.INT.2000.05]. Deux marchés de croissance boursière nationaux ouvrent en Europe pendant la même fenêtre, chacun avec sa propre trajectoire de boom-krach [F.INT.B1.014]. Les dépôts de bilan de sociétés télécoms américaines se multiplient ensuite, 26 en 2001 et 33 en 2002 selon un décompte de 2003, dont la plus grande faillite de l'histoire américaine à cette date [F.INT.B1.010][J.INT.2002.01].
 
 ---
 
 ## B2 Cycle spéculatif et valorisations
-<!-- Lines 117-120 -->
+<!-- Lines 118-121 -->
 
 **Question :** Y a-t-il eu emballement, pic, correction ; de quelle ampleur ; avec quels effets
 de richesse ?
 
 ### Faits
-<!-- Lines 123-136 -->
+<!-- Lines 124-137 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -135,7 +136,7 @@ de richesse ?
 | F.INT.B2.010 | 1997-2002 | US | Le cycle spéculatif documenté ici dure environ cinq ans depuis l'introduction en bourse fondatrice de 1995, atteint son pic en mars 2000 cinq ans après le début de la fenêtre, et se corrige sur trente mois jusqu'en octobre 2002, avant onze trimestres de reconstruction jusqu'à la fin de la fenêtre en 2005 sans retour au niveau du pic. | pic à t0+5 ; correction sur ~30 mois | O1, O2, M9 | choc | [S5] | V |
 
 ### Jalons cités
-<!-- Lines 139-151 -->
+<!-- Lines 140-152 -->
 
 `J.INT.1995.03` (introduction en bourse de Netscape, ouverture du cycle), `J.INT.2000.02`
 (sommet du Nasdaq puis retournement, bascule principale), `J.INT.2001.03` (récession américaine),
@@ -150,7 +151,7 @@ croissance dédié aux entreprises du réseau ; absence notée, à documenter en
 pertinent est identifié.
 
 ### Trajectoire `T.INT.B2`
-<!-- Lines 154-169 -->
+<!-- Lines 155-170 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -168,20 +169,20 @@ pertinent est identifié.
 | 2005 | banalisation | 1 | Le Nasdaq clôture l'année autour de 2 205-2 267 points, moins de la moitié du sommet de mars 2000 et proche du niveau de fin 1998 : dix ans après t0, le cycle ne revient pas à son pic. | F.INT.B2.005 |
 
 ### Narratif
-<!-- Lines 172-176 -->
+<!-- Lines 173-177 -->
 
 Le cycle spéculatif se lit directement dans le niveau de l'indice technologique américain : 743,58 points début 1995, 2 192,69 fin 1998, un sommet de 5 048,62 points le 10 mars 2000, un creux de 1 114-1 119 points début octobre 2002, puis 2 205-2 267 points fin 2005 [F.INT.B2.001][F.INT.B2.002][F.INT.B2.003][F.INT.B2.004][F.INT.B2.005]. La chute entre le sommet et le creux représente une perte d'environ 78 % de l'indice sur trente mois ; son équivalent en perte de capitalisation boursière circule sous des estimations de plusieurs milliers de milliards de dollars, mais ces chiffres agrégés ne sont pas cohérents entre les sources et sont retenus ici comme disputés, non comme une valeur unique [F.INT.B2.004][F.INT.B2.006]. L'emballement se lit aussi dans la nature des entreprises introduites en bourse : la part des sociétés déficitaires passe de 36 % en 1994 à 81 % en 2000, et le ratio prix d'offre sur ventes des IPO technologiques passe de 4,6 à 31,7 fois sur la même période avant de retomber à 2,9 fois dès 2002 [F.INT.B2.007][F.INT.B2.008]. Le cycle n'est pas propre aux États-Unis : l'indice du marché de croissance allemand perd environ 95 % entre son sommet de mars 2000 et mars 2003, la capitalisation de ses valeurs passant d'environ 210 à environ 10,5 milliards d'euros [F.INT.B2.009]. Le cycle dure au total une dizaine d'années depuis l'introduction en bourse fondatrice de 1995 jusqu'à la fin de la fenêtre, sans retour au niveau du pic de mars 2000 [F.INT.B2.010][J.INT.1995.03][J.INT.2000.02].
 
 ---
 
 ## B3 Redistribution de la valeur
-<!-- Lines 179-182 -->
+<!-- Lines 180-183 -->
 
 **Question :** Où la valeur boursière et les rendements ont-ils atterri : anciens, nouveaux,
 investisseurs, fondateurs ?
 
 ### Faits
-<!-- Lines 185-198 -->
+<!-- Lines 186-199 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -197,7 +198,7 @@ investisseurs, fondateurs ?
 | F.INT.B3.010 | 2000-2002 | EU | Le marché de croissance allemand voit sa première société cotée déclarer faillite en septembre 2000 ; à la fin de 2002, 119 sociétés, plus d'un tiers des sociétés cotées, l'ont quitté. | 119 sociétés sorties (> 1/3 des cotées), fin 2002 | O1, T2 | choc | [S7] | A |
 
 ### Jalons cités
-<!-- Lines 201-212 -->
+<!-- Lines 202-213 -->
 
 `J.INT.1997.01` (dépôt S-1 d'un grand détaillant en ligne), `J.INT.2000.01` (annonce de la fusion
 AOL–Time Warner, bascule principale), `J.INT.2000.02` (sommet puis retournement du Nasdaq),
@@ -211,7 +212,7 @@ s'introduisent en bourse à l'étranger surtout après 2004 (voir A3, C5), trop 
 pour produire un cycle de redistribution propre documenté ici ; absence notée.
 
 ### Trajectoire `T.INT.B3`
-<!-- Lines 215-230 -->
+<!-- Lines 216-231 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -229,20 +230,20 @@ pour produire un cycle de redistribution propre documenté ici ; absence notée.
 | 2005 | banalisation | 1 | Le classement de 2005 des plus grandes capitalisations compte trois entreprises technologiques parmi les dix premières sociétés américaines. | F.INT.B3.003 |
 
 ### Narratif
-<!-- Lines 233-237 -->
+<!-- Lines 234-238 -->
 
 Le classement des plus grandes capitalisations boursières américaines compte deux entreprises informatiques sur dix en 1995 [F.INT.B3.001] ; en mars 2000, un équipementier réseau devient, selon sa propre communication, la première capitalisation boursière mondiale [F.INT.B3.002] ; en 2005, trois des dix plus grandes sociétés américaines relèvent de la technologie dans le classement du Financial Times [F.INT.B3.003]. Le point culminant symbolique du renversement de valeur est l'annonce en janvier 2000 de la fusion entre un fournisseur d'accès à Internet et un grand groupe de médias historique, valorisée entre 165 et 183 milliards de dollars selon la source, la société issue de cette fusion publie en janvier 2003 une perte annuelle d'environ 98,7 milliards de dollars au titre de 2002, la plus importante jamais enregistrée par une société américaine [F.INT.B3.004][F.INT.B3.005][J.INT.2000.01]. Le même retournement produit en 2002 la faillite d'un grand opérateur télécom endetté, dont les actifs déclarés dépassent ceux de la plus grande faillite énergétique de l'année précédente [F.INT.B3.006][J.INT.2002.01]. Les introductions en bourse américaines de 1999 et 2000 affichent des rendements moyens de -46,2 % et -64,7 % à fin septembre 2001 au plus tard, après des rendements de premier jour de 71,7 % et 56,1 % [F.INT.B3.008] ; l'introduction en bourse d'un moteur de recherche dominant en 2004 est valorisée au niveau des plus grandes sociétés [F.INT.B3.007][J.INT.2004.01]. Les actions Internet sont plus souvent détenues par des investisseurs individuels que les autres actions, et l'expiration des périodes de blocage libère à partir de fin 1999 les actionnaires entrés avant l'introduction en bourse, ce que des auteurs lient à l'éclatement de la bulle [F.INT.B3.009]. En Europe, 119 sociétés, plus d'un tiers des sociétés cotées du marché de croissance allemand, l'ont quitté à la fin de 2002 [F.INT.B3.010].
 
 ---
 
 ## B4 Capital étranger
-<!-- Lines 240-243 -->
+<!-- Lines 241-244 -->
 
 **Question :** Quelle part du financement vient de l'étranger, par quels canaux, et avec quel
 rôle dans le cycle ?
 
 ### Faits
-<!-- Lines 246-257 -->
+<!-- Lines 247-258 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -256,7 +257,7 @@ rôle dans le cycle ?
 | F.INT.B4.008 | 1996-1997 | ASIE-E | Les flux nets de capitaux privés vers les cinq économies les plus touchées par la crise asiatique (Indonésie, Corée du Sud, Malaisie, Philippines, Thaïlande) passent d'une entrée de 93,0 milliards de dollars en 1996 à une sortie d'environ 12,1 milliards en 1997 selon l'Institute of International Finance, soit un retournement d'environ 105 milliards, de l'ordre de 11 % de leur PIB d'avant la crise. | 1996 : +93,0 Md$ ; 1997 : -12,1 Md$ ; retournement ~105 Md$ (~11 % du PIB) | | co:X.INT.09 | [S18] | A |
 
 ### Jalons cités
-<!-- Lines 260-270 -->
+<!-- Lines 261-271 -->
 
 `J.INT.2000.10` (accord puis autorisation Vodafone-Mannesmann, février-avril 2000).
 
@@ -269,7 +270,7 @@ cette session ; seule la mention explicite des télécommunications dans les tab
 et l'opération Vodafone-Mannesmann permettent une attribution directe.
 
 ### Trajectoire `T.INT.B4`
-<!-- Lines 273-288 -->
+<!-- Lines 274-289 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -287,19 +288,19 @@ et l'opération Vodafone-Mannesmann permettent une attribution directe.
 | 2005 | banalisation | 0 | Aucune bascule distincte identifiée pour cette année dans les séries mobilisées ; les séries de déficit courant et d'investissement direct étranger n'ont pas été prolongées jusqu'à cette année dans les documents ouverts cette session. | |
 
 ### Narratif
-<!-- Lines 291-295 -->
+<!-- Lines 292-296 -->
 
 Le déficit courant américain passe de 123 milliards de dollars en 1996 (1,6 % du PIB) à 435 milliards en 2000 (4,4 % du PIB), financé cette dernière année par un achat net record de plus de 700 milliards de dollars de titres américains par le secteur privé étranger [F.INT.B4.001][F.INT.B4.002]. Les dépenses d'investissement direct étranger entrant aux États-Unis triplent de 69,7 milliards de dollars en 1997 à 215,3 milliards en 1998 puis atteignent 282,9 milliards en 1999, portées par les télécommunications et concentrées sur de très grandes opérations, les investisseurs européens en comptant pour plus de 70 % [F.INT.B4.003][F.INT.B4.004][F.INT.B4.005]. Les flux mondiaux d'investissement direct étranger atteignent un record de 1,3 billion de dollars en 2000 (+18 %), avec des fusions-acquisitions transfrontalières d'environ 1,1 billion, dont le rachat de Mannesmann par Vodafone Airtouch, la plus grande opération transfrontalière jamais réalisée à cette date [F.INT.B4.006][F.INT.B4.007]. Les flux nets de capitaux privés vers les cinq économies asiatiques les plus touchées par la crise passent d'une entrée de 93,0 milliards de dollars en 1996 à une sortie d'environ 12,1 milliards en 1997 [F.INT.B4.008]. Le capital étranger a été le complément indispensable au pic du cycle de 1999-2001 : l'ampleur du financement de cette période est difficile à expliquer par la seule épargne domestique, mais le lien causal direct entre ces flux agrégés et le secteur Internet spécifiquement reste **inféré**, faute de ventilation sectorielle des séries mobilisées [F.INT.B4.001][F.INT.B4.002][F.INT.B4.006][F.INT.B4.007].
 
 ---
 
 ## B5 Capital public et régulation financière
-<!-- Lines 298-300 -->
+<!-- Lines 299-301 -->
 
 **Question :** Comment la puissance publique finance, amplifie ou corrige le cycle ?
 
 ### Faits
-<!-- Lines 303-316 -->
+<!-- Lines 304-317 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -315,7 +316,7 @@ Le déficit courant américain passe de 123 milliards de dollars en 1996 (1,6 % 
 | F.INT.B5.010 | 2000 | EU | Le produit des enchères et attributions de licences de troisième génération, environ 105 milliards d'euros pour l'Union européenne ([F.INT.B1.009]), est une recette publique directe pour les États : le gouvernement allemand annonce affecter les redevances reçues, 50,8 milliards d'euros selon la Banque centrale européenne, au seul remboursement de dette. | ~105 Md€ (recette publique, UE) ; 50,8 Md€ (Allemagne) | O3, T2 | co:X.INT.02 | [S3] | V |
 
 ### Jalons cités
-<!-- Lines 319-328 -->
+<!-- Lines 320-329 -->
 
 `J.INT.1996.09` (discours de l'« exubérance irrationnelle »), `J.INT.1998.08` (trois baisses du
 taux directeur américain à l'automne 1998).
@@ -327,7 +328,7 @@ identifié pour l'Asie de l'Est, la Chine ou les pays émergents sur cette sous-
 la fenêtre ; absence notée.
 
 ### Trajectoire `T.INT.B5`
-<!-- Lines 331-346 -->
+<!-- Lines 332-347 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -345,14 +346,14 @@ la fenêtre ; absence notée.
 | 2005 | banalisation | 0 | Aucune bascule distincte identifiée pour cette année dans les faits mobilisés. | |
 
 ### Narratif
-<!-- Lines 349-353 -->
+<!-- Lines 350-354 -->
 
 Le président de la Réserve fédérale met en garde publiquement contre l'« exubérance irrationnelle » des valorisations dès décembre 1996, plus de trois ans avant le sommet du cycle [F.INT.B5.001]. La politique monétaire américaine encadre le cycle sans le financer directement : trois baisses d'assurance en 1998 après la crise russe, un resserrement jusqu'à 6,50 % au sommet de 2000, puis une série continue de baisses jusqu'à 1,00 % en 2003, accompagnant la sortie de crise [F.INT.B5.002][F.INT.B5.003]. La régulation financière du cycle est presque entièrement une réponse endogène postérieure au retournement : la loi de modernisation des services financiers de 1999, la Regulation FD de 2000, la loi de gouvernance d'entreprise de 2002 et le règlement sur la recherche des analystes de 2003 se succèdent après l'emballement plutôt qu'avant [F.INT.B5.004][F.INT.B5.005][F.INT.B5.006][F.INT.B5.007]. Deux grands opérateurs télécoms historiques ouvrent leur capital en bourse, l'allemand par une première introduction en bourse en 1996 (environ 10 milliards d'euros) et le français en deux tranches en 1997-1998 [F.INT.B5.008][F.INT.B5.009]. Le produit des enchères de licences mobiles de troisième génération est une recette publique directe pour les États européens, à distinguer de son financement par les opérateurs, en partie par le crédit syndiqué [F.INT.B5.010][F.INT.B1.009][F.INT.B1.011]. Le capital public a ainsi joué un rôle d'amplificateur et de correcteur plutôt que de financeur direct du cycle, hors les ouvertures de capital d'opérateurs et les enchères, qui ont directement mis des titres sur le marché ou encaissé des recettes publiques [F.INT.B5.002][F.INT.B5.003][F.INT.B5.010].
 
 ---
 
 ## Sources
-<!-- Lines 356-390 -->
+<!-- Lines 357-392 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -388,3 +389,4 @@ Le président de la Réserve fédérale met en garde publiquement contre l'« ex
 | [S30] | presse | Carbon Disclosure Project, communiqué du 18 septembre 2005 (« 90 % of largest companies concerned about climate change »), reproduit par Mongabay, news.mongabay.com/2005/09/90-of-largest-companies-concerned-about-climate-change/, tableau « Further information » : classement 2005 des sociétés du Financial Times Global 500 par capitalisation boursière | Ouvert et lu : tableau rang, société, pays, capitalisation (M$), secteur. Les dix premières sociétés américaines sont : General Electric (n° 1, industrie diversifiée), ExxonMobil (2, pétrole et gaz), Microsoft (3, logiciel et services informatiques), Citigroup (4, banques), Wal-Mart (6, distribution), Johnson & Johnson (8, pharmacie), Pfizer (9, pharmacie), Bank of America (10, banques), IBM (13, logiciel et services informatiques), Intel (15, matériel informatique) ; AIG est 16e. Trois sur dix sont technologiques. Source faible : reproduction du classement FT dans un communiqué d'une ONG, date de valorisation non précisée ; le classement du FT lui-même n'a pas été ouvert. L'ancien énoncé (deux sur dix) est corrigé en trois, et la comparaison avec 1995 est retirée (fait B3.001, hors de cette passe). |
 | [S31] | acad | Jay R. Ritter et Ivo Welch, « A Review of IPO Activity, Pricing, and Allocations », NBER Working Paper 8805, février 2002, tableau 1, nber.org/papers/w8805.pdf | Ouvert et lu (PDF, extraction locale). Tableau 1, rendement moyen égal-pondéré sur trois ans, de la première clôture à la plus proche des dates entre le troisième anniversaire, la radiation et le 30 septembre 2001 : cohorte 1999 (457 IPO) -46,2 % ; cohorte 2000 (346 IPO) -64,7 % ; 1999-2000 (803) -53,8 % ; rendement moyen du premier jour 71,7 % (1999) et 56,1 % (2000). Texte : les IPO de 1999 et 2000 « performed poorly by any measure during the well-known collapse of the internet bubble ». Le document ne dit pas que la majorité des sociétés disparaît ni que quelques survivantes captent la quasi-totalité des gains : ces clauses de l'ancien énoncé sont retirées faute de source. |
 | [S32] | acad | Eli Ofek et Matthew Richardson, « DotCom Mania: The Rise and Fall of Internet Stock Prices », document de travail NYU Stern FIN-01-037 (version du *Journal of Finance*, vol. 58, n° 3, 2003, p. 1113-1137), archive.nyu.edu/bitstream/2451/26591/2/FIN-01-037.pdf | Ouvert et lu (PDF, extraction locale). Tableau 4A : « in March 2000, the median holding of institutions for internet stocks was only 25.9% versus 40.2% for non-internet stocks » ; « a much greater fraction are retail investors relative to holders of non-internet stocks » ; au printemps 2000, « insiders, venture capitalists, institutions and sophisticated investors » sont libres de vendre à l'expiration des périodes de blocage, et l'éclatement est lié par les auteurs à ces expirations. Le document ne dit pas que les ménages ont subi les pertes ni qu'ils manquaient d'information : ces clauses de l'ancien énoncé sont retirées. |
+| [S33] | off | Autorité des marchés financiers, *Rapport annuel 2005*, Annexe 1 « L'évolution des marchés financiers en 2005 », https://www.amf-france.org/sites/institutionnel/files/contenu_simple/rapport_annuel/rapport_annuel_amf/Rapport%20annuel%20AMF%202005%20-%20Annexe%201%20-%20Les%20marches%20financiers.pdf | Ouvert et lu le 2026-11-23 (PDF converti avec pdftotext) : note des tableaux sur les sociétés cotées : « Eurolist, marché réglementé unique d'Euronext–Paris, regroupe depuis janvier 2005 toutes les entreprises des Premier, Second et Nouveau marchés » ; « Alternext a été créé en mai 2005 ». Concorde avec la presse de l'époque, Unquote, 10 juillet 2004 (ouvert et lu) : « From January 2005, this will replace the three regulated markets now operated by Euronext Paris » (Premier Marché, Second Marché, Nouveau Marché). Des résultats de recherche non ouverts donnent le 21 février 2005 pour la bascule effective : l'énoncé ne retient que l'année. |

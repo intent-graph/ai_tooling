@@ -27,16 +27,16 @@ précédant t0. La comparaison avec l'autre choc est dans le `README.md` du doma
    1. [Trajectoire `T.INT.C4`](#trajectoire-tintc4) _(Lines 234-249)_
    1. [Narratif](#narratif-3) _(Lines 252-256)_
 1. [C5 Concurrence, concentration et pouvoir de marché](#c5-concurrence-concentration-et-pouvoir-de-marché) _(Lines 259-261)_
-   1. [Faits](#faits-4) _(Lines 264-274)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 277-279)_
-   1. [Trajectoire `T.INT.C5`](#trajectoire-tintc5) _(Lines 282-297)_
-   1. [Narratif](#narratif-4) _(Lines 300-304)_
-1. [C6 Répartition des gains et inégalités](#c6-répartition-des-gains-et-inégalités) _(Lines 307-309)_
-   1. [Faits](#faits-5) _(Lines 312-322)_
-   1. [Jalons cités](#jalons-cités-5) _(Lines 325-327)_
-   1. [Trajectoire `T.INT.C6`](#trajectoire-tintc6) _(Lines 330-345)_
-   1. [Narratif](#narratif-5) _(Lines 348-352)_
-1. [Sources](#sources) _(Lines 355-407)_
+   1. [Faits](#faits-4) _(Lines 264-275)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 278-280)_
+   1. [Trajectoire `T.INT.C5`](#trajectoire-tintc5) _(Lines 283-298)_
+   1. [Narratif](#narratif-4) _(Lines 301-305)_
+1. [C6 Répartition des gains et inégalités](#c6-répartition-des-gains-et-inégalités) _(Lines 308-310)_
+   1. [Faits](#faits-5) _(Lines 313-323)_
+   1. [Jalons cités](#jalons-cités-5) _(Lines 326-328)_
+   1. [Trajectoire `T.INT.C6`](#trajectoire-tintc6) _(Lines 331-346)_
+   1. [Narratif](#narratif-5) _(Lines 349-353)_
+1. [Sources](#sources) _(Lines 356-409)_
 
 
 
@@ -219,7 +219,7 @@ Le problème de l'an 2000 crée une demande de codage et de programmation routin
 | F.INT.C4.004 | 2000-2001 | US | La part du commerce électronique dans les ventes au détail totales américaines passe de 0,9 % pour l'année 2000 à 1,0 % pour l'année 2001 ; le volume annuel de ventes en ligne atteint 32,6 milliards de dollars en 2001, en hausse de 19,3 % sur un an. | 2000 : 0,9 % ; 2001 : 1,0 %, 32,6 Md$ | O1, P3 | choc | [S18] | V |
 | F.INT.C4.005 | 2005 | US | Les ventes au détail en ligne américaines atteignent 86,3 milliards de dollars sur l'année, soit 2,3 % des ventes au détail totales, contre 2,0 % en 2004 ; le commerce électronique de détail progresse de 24,6 % sur un an quand le détail total progresse de 7,2 %. | 86,3 Md$ ; 2,3 % du détail total | O1, P3 | choc | [S19] | V |
 | F.INT.C4.006 | 1998 | US | Google est constitué en société en septembre 1998 ; son moteur classe les pages en partie selon l'importance des sites qui pointent vers elles. | septembre 1998 | O1, P3 | choc | [S20] | V |
-| F.INT.C4.007 | 2003 | US | En 2003, la publicité fournit environ 97 % des revenus de Google, dont environ 43 % proviennent des annonces diffusées sur les sites des membres de son réseau. | ~97 % (publicité) ; ~43 % (sites du réseau), 2003 | O2, O1, M9 | choc | [S20] | V |
+| F.INT.C4.007 | 2003 | US | En 2003, la publicité fournit environ 97 % des revenus de Google, dont environ 43 % proviennent des annonces diffusées sur les sites des membres de son réseau ; les annonceurs de son programme AdWords enchérissent sur les mots-clés qui déclenchent l'affichage de leurs annonces, ciblées sur les résultats de recherche ou le contenu des pages. | ~97 % (publicité) ; ~43 % (sites du réseau), 2003 | O2, O1, M9 | choc | [S20] | V |
 | F.INT.C4.008 | 2005 | US | Les recettes publicitaires en ligne américaines dépassent 12,5 milliards de dollars en 2005, en hausse de 30 % sur 2004 (9,6 milliards), dont 41 % pour la recherche, soit environ 5 % de l'ensemble des recettes publicitaires américaines. | > 12,5 Md$ (+30 %) ; recherche 41 % ; ~5 % du total publicitaire | O2, O4, M2 | choc | [S46] | A |
 | F.INT.C4.009 | 2005 | US | En 2005, les consommateurs américains dépensent un peu plus de 2 milliards de dollars en contenu en ligne payant, l'abonnement restant le mode de paiement dominant, contre plus de 12,5 milliards de dollars de recettes publicitaires en ligne la même année. | > 2 Md$ (contenu payant) ; > 12,5 Md$ (publicité), 2005 | O1, O2 | choc | [S47] | A |
 | F.INT.C4.010 | 2003 | US | Le 28 avril 2003, Apple ouvre l'iTunes Music Store, qui propose plus de 200 000 titres de BMG, EMI, Sony Music Entertainment, Universal et Warner à 99 cents le titre, sans abonnement. | 99 cents le titre ; > 200 000 titres | O4, M2, P2 | choc | [S23] | V |
@@ -260,7 +260,7 @@ La publicité en ligne et le commerce en ligne apparaissent dès l'origine : des
 **Question :** Les marchés se concentrent-ils, et comment la concurrence réagit-elle ?
 
 ### Faits
-<!-- Lines 264-274 -->
+<!-- Lines 264-275 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -271,14 +271,15 @@ La publicité en ligne et le commerce en ligne apparaissent dès l'origine : des
 | F.INT.C5.005 | 1995-1999 | MONDE | La part de Microsoft sur le marché mondial des systèmes d'exploitation pour micro-ordinateurs compatibles Intel dépasse 90 % chaque année de la décennie précédant 1999, et atteint au moins 95 % depuis environ deux ans, selon les conclusions de fait du tribunal. | > 90 % (décennie jusqu'à 1999) ; ≥ 95 % (dernières années) | O2 | choc | [S24] | V |
 | F.INT.C5.006 | 1999-2002 | MONDE | Dans une synthèse sur les industries de haute technologie publiée en 2002, Hal Varian relève que les effets de réseau, les rendements d'échelle côté offre et le verrouillage tendent à pousser ces industries vers des ratios de concentration plus élevés, et qu'une entreprise installée en position dominante dans un logiciel est très difficile à déloger ; le tribunal de district décrit en 1999, pour les systèmes d'exploitation, une boucle de rétroaction positive d'effets de réseau qui entretient la position dominante de l'éditeur. | | O1, O2 | choc | [S49] | A |
 | F.INT.C5.007 | 2003-2005 | US | Les dix premiers vendeurs de publicité en ligne aux États-Unis réalisent 71 % des revenus au quatrième trimestre 2003 comme au quatrième trimestre 2004, puis 72 % au deuxième trimestre 2005 (74 % au deuxième trimestre 2004), et la recherche représente 40 % des revenus aux quatrièmes trimestres 2003 et 2004 et au deuxième trimestre 2005. | dix premiers : 71 % (T4 2003), 71 % (T4 2004), 74 % (T2 2004), 72 % (T2 2005) ; recherche : 40 % | O2, O1 | co:X.INT.04 | [S22] | V |
+| F.INT.C5.008 | 2002 | MONDE | Selon un cabinet d'analystes de mesure d'audience (WebSideStory), Internet Explorer représente 91 % de l'usage des navigateurs et Netscape 8 % en janvier 2002 ; selon un autre cabinet (OneStat.com), la part d'Internet Explorer est de 95,0 % en décembre 2002 ; une rétrospective de PCWorld situe cette part autour de 90 % fin 2003. | IE 91 % / Netscape 8 % (janvier 2002) ; IE 95,0 % (décembre 2002) ; IE ≈ 90 % (fin 2003) | O2, P3 | choc | [S51] | K |
 
 ### Jalons cités
-<!-- Lines 277-279 -->
+<!-- Lines 278-280 -->
 
 `J.INT.1995.04` (Windows 95 et navigateur intégré), `J.INT.1998.01` (procès antitrust engagé), `J.INT.2000.04` (conclusions de droit et ordonnance de démantèlement), `J.INT.1998.03` (constitution de Google en société), `J.INT.2003.04` (part de la publicité dans les revenus de Google).
 
 ### Trajectoire `T.INT.C5`
-<!-- Lines 282-297 -->
+<!-- Lines 283-298 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -296,19 +297,19 @@ La publicité en ligne et le commerce en ligne apparaissent dès l'origine : des
 | 2005 | banalisation | 2 | En octobre, le moteur fondé en 1998 est le plus visité aux États-Unis ; les dix premiers vendeurs de publicité en ligne réalisent 72 % des revenus au deuxième trimestre. | F.INT.C5.004, F.INT.C5.006, F.INT.C5.007 |
 
 ### Narratif
-<!-- Lines 300-304 -->
+<!-- Lines 301-305 -->
 
 Le navigateur vient d'abord : livré avec Windows 95 dès juillet 1995 puis intégré au système à partir d'août 1996, Internet Explorer voit sa part de l'usage passer d'environ 5 % en janvier 1996 à 36 % en novembre 1997, celle de Navigator de plus de 80 % à 55 % [F.INT.C5.001][J.INT.1995.04]. Le 18 mai 1998, le ministère de la justice et vingt États déposent des plaintes antitrust dont l'une vise la vente liée du navigateur à Windows ; le jugement final de juin 2000 ordonne la scission de l'éditeur, la cour d'appel l'annule en juin 2001 et le remède de 2002 est un remède de comportement [F.INT.C5.002][F.INT.C5.003][J.INT.1998.01][J.INT.2000.04]. La part de Microsoft sur le marché mondial des systèmes d'exploitation pour micro-ordinateurs compatibles Intel dépasse 90 % chaque année de la décennie précédant 1999 [F.INT.C5.005]. La recherche en ligne, fondée sur un service créé en 1998, est en 2004 le premier choix de 47 % des internautes américains interrogés et le moteur le plus visité en octobre 2005 ; en 2003, la publicité fournit environ 97 % des revenus de Google [F.INT.C5.004][F.INT.C4.007][J.INT.2003.04]. Les dix premiers vendeurs de publicité en ligne réalisent de 71 % à 74 % des revenus selon les trimestres de 2003 à 2005 [F.INT.C5.007]. Les travaux d'économistes de l'époque et le jugement de 1999 décrivent le mécanisme par lequel les effets de réseau entretiennent une position dominante déjà acquise [F.INT.C5.006].
 
 ---
 
 ## C6 Répartition des gains et inégalités
-<!-- Lines 307-309 -->
+<!-- Lines 308-310 -->
 
 **Question :** Qui capte les gains : quelles firmes, quels territoires, quels ménages ?
 
 ### Faits
-<!-- Lines 312-322 -->
+<!-- Lines 313-323 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -321,12 +322,12 @@ Le navigateur vient d'abord : livré avec Windows 95 dès juillet 1995 puis int�
 | F.INT.C6.007 | 1995-2005 | US | La valeur des actions détenues par les ménages et les institutions sans but lucratif américains passe de 4 029 milliards de dollars fin 1995 à 8 193 milliards fin 2005 (environ +103 %), tandis que la masse des salaires et traitements passe de 3 418 à 5 692 milliards de dollars entre 1995 et 2005 (environ +67 %). | actions : 4 029 → 8 193 Md$ (1995 → 2005) ; salaires et traitements : 3 418 → 5 692 Md$ | M9, P3 | co:X.INT.04 | [S50] | V |
 
 ### Jalons cités
-<!-- Lines 325-327 -->
+<!-- Lines 326-328 -->
 
 `J.INT.1999.03` (année record du capital-risque), `J.INT.2000.02` (sommet puis retournement du Nasdaq), `J.INT.2004.01` (introduction en bourse du moteur de recherche), `J.INT.2005.05` (le milliard d'internautes).
 
 ### Trajectoire `T.INT.C6`
-<!-- Lines 330-345 -->
+<!-- Lines 331-346 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -344,14 +345,14 @@ Le navigateur vient d'abord : livré avec Windows 95 dès juillet 1995 puis int�
 | 2005 | banalisation | 2 | Le milliard d'internautes est atteint dans le monde, avec une fracture persistante entre blocs ; écart de valorisation entre firmes de tête et le reste du secteur durablement installé. | F.INT.C6.005, F.INT.C6.006, J.INT.2005.05 |
 
 ### Narratif
-<!-- Lines 348-352 -->
+<!-- Lines 349-353 -->
 
 La concentration des gains suit le rythme du cycle spéculatif documenté en B : l'année record de capital-risque et d'introductions en bourse de 1999 concentre déjà les gains sur un nombre restreint d'entreprises et d'investisseurs [F.INT.C6.001][J.INT.1999.03]. La correction de 2000-2002 relève du domaine B et du confondant du cycle macroéconomique ; elle fait reculer la valeur des actions détenues par les ménages américains d'environ 45 %, de 8 673 à 4 725 milliards de dollars entre mars 2000 et septembre 2002 [F.INT.C6.002][J.INT.2000.02]. L'introduction en bourse du moteur de recherche fondé en 1998, en 2004, le valorise à un peu moins de 25 milliards de dollars au prix d'introduction [F.INT.C6.004][J.INT.2004.01]. Sur 1995-2000, la Silicon Valley reçoit près du tiers du capital-risque américain [F.INT.C6.003], et sur l'ensemble de la fenêtre l'écart entre les firmes de tête du secteur et le reste s'élargit [F.INT.C6.005] ; la valeur des actions détenues par les ménages double de 1995 à 2005, quand la masse des salaires progresse d'environ deux tiers [F.INT.C6.007]. À l'échelle mondiale, le nombre d'internautes dépasse le milliard en 2005 mais sa répartition reste très inégale entre blocs, ce qui constitue l'un des états finaux les plus marqués de la fenêtre [F.INT.C6.006][J.INT.2005.05].
 
 ---
 
 ## Sources
-<!-- Lines 355-407 -->
+<!-- Lines 356-409 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -374,7 +375,7 @@ La concentration des gains suit le rythme du cycle spéculatif documenté en B :
 | [S17] | off | U.S. Census Bureau, communiqué CB00-40, « Retail E-Commerce Sales for the Fourth Quarter 1999 Reach $5.3 Billion », 2 mars 2000 | Vérifié directement sur le PDF officiel : première estimation officielle américaine du commerce de détail en ligne, 5,3 Md$ (±0,3 Md$), 0,64 % (±0,05 %) du détail total de 821,2 Md$ pour le T4 1999. |
 | [S18] | off | U.S. Census Bureau, communiqué CB02-24, « Retail E-Commerce Sales in Fourth Quarter 2001 Were $10.0 Billion, Up 13.1 Percent From Fourth Quarter 2000 », 20 février 2002 | Vérifié directement sur le PDF officiel : e-commerce annuel 2000 = 0,9 % du détail total, 2001 = 1,0 % (32,6 Md$, +19,3 % sur un an). |
 | [S19] | off | U.S. Census Bureau, communiqué CB06-19, « Quarterly Retail E-Commerce Sales, 4th Quarter 2005 », 17 février 2006 | Vérifié directement sur le PDF officiel : e-commerce annuel 2005 = 86,3 Md$, 2,3 % du détail total (2,0 % en 2004), +24,6 % sur un an contre +7,2 % pour le détail total. |
-| [S20] | off | Google Inc., formulaire S-1/A, 2004 (sec.gov/Archives/edgar/data/1288776/000119312504142742/ds1a.htm) | Ouvert (outil de lecture de page ; caractères 0 à 200 000 sur 338 444 ; le PDF n'a pas été lu en local). « incorporated in California in September 1998 » ; la technologie de recherche « ranks a web page's relevance based in part on the importance of the web sites that link to it » ; « Advertisers accounted for approximately 97% of our revenues in 2003 » ; « The revenues generated from the fees advertisers pay us when users click on ads that we have delivered to our Google Network members' web sites represented approximately 43% of our revenues in 2003 » ; « we derive nearly all of our revenues from online advertising ». Le document emploie « keyword-targeted Internet advertising » pour le marché concurrentiel et nomme AdWords et AdSense, mais la partie lue ne définit pas AdWords comme ciblé par mots-clés ni ne date AdSense : les clauses « liée aux mots-clés », « source de revenu dominante de la recherche en ligne » et « préparant le modèle publicitaire » ont été supprimées faute de passage. |
+| [S20] | off | Google Inc., formulaire S-1/A, 2004 (sec.gov/Archives/edgar/data/1288776/000119312504142742/ds1a.htm) | Ouvert (outil de lecture de page ; caractères 0 à 200 000 sur 338 444 ; le PDF n'a pas été lu en local). « incorporated in California in September 1998 » ; la technologie de recherche « ranks a web page's relevance based in part on the importance of the web sites that link to it » ; « Advertisers accounted for approximately 97% of our revenues in 2003 » ; « The revenues generated from the fees advertisers pay us when users click on ads that we have delivered to our Google Network members' web sites represented approximately 43% of our revenues in 2003 » ; « we derive nearly all of our revenues from online advertising ». Le document emploie « keyword-targeted Internet advertising » pour le marché concurrentiel et nomme AdWords et AdSense, mais la partie lue ne définit pas AdWords comme ciblé par mots-clés ni ne date AdSense : les clauses « source de revenu dominante de la recherche en ligne » et « préparant le modèle publicitaire » ont été supprimées faute de passage. Relecture ultérieure (même URL, texte lu par tranches de 100 000 caractères, de 0 à 338 444) : la clause « liée aux mots-clés » est rétablie, car le document décrit le mécanisme. « Businesses can deliver targeted ads based on specific search terms (keywords) entered by users » ; les annonceurs « bid on the keywords that will trigger the display of their ads » ; AdWords est « an auction-based advertising program that enables them to deliver relevant ads targeted to search results or web content » ; les annonces sont classées « based on a combination of the maximum cost per click (CPC) set by the advertiser » ; et la société aide les annonceurs à « maximize their return on investment through the selection of appropriate keywords ». |
 | [S21] | stat | Interactive Advertising Bureau / PricewaterhouseCoopers, *Internet Advertising Revenue Report* ; dépôts SEC de Google (2004) | Clé plus citée par aucun fait depuis la réécriture de F.INT.C4.007, qui s'appuie désormais sur [S20]. Entrée conservée telle quelle : énoncé qualitatif, parts non avancées, repris de `par_annee/internet_1995_2005.md` [S55]. |
 | [S22] | stat | Interactive Advertising Bureau / PricewaterhouseCoopers, *IAB Internet Advertising Revenue Report*, exercice 2004 (iab.com/wp-content/uploads/2015/05/resources_adrevenue_pdf_IAB_PwC_2004full.pdf) ; rapport du deuxième trimestre 2005 (iab.com/wp-content/uploads/2015/05/IAB_PwC_2005_Q2.pdf) | Ouverts et lus en local (pdftotext). Rapport 2004 : « the ten leading ad-selling companies, which accounted for 71 percent of total revenues in the fourth quarter of 2004, consistent with the 71 percent reported for the fourth quarter of 2003 » ; rangs 11 à 25 : 14 %, rangs 26 à 50 : 9 % ; la recherche pèse 40 % des revenus du quatrième trimestre 2004, comme au quatrième trimestre 2003. Rapport T2 2005 : dix premiers vendeurs à 72 % des revenus, « down from 74 percent reported for the second quarter of 2004 » ; recherche à 40 % des revenus du deuxième trimestre 2005, comme un an plus tôt. Enquête de PwC parrainée par l'IAB, sur déclaration des vendeurs. Les clauses « acteurs qui contrôlent la recherche et les grands portails » et « modèle publicitaire lié aux mots-clés devient dominant » de l'ancien énoncé ne figurent pas dans ces rapports et ont été supprimées. |
 | [S23] | off | Apple Inc., communiqué « Apple Launches the iTunes Music Store », 28 avril 2003 (apple.com/newsroom/2003/04/28Apple-Launches-the-iTunes-Music-Store/) | Ouvert et lu (outil de lecture de page) : lancement le 28 avril 2003 d'une boutique pour trouver, acheter et télécharger de la musique, intégrée à iTunes 4 ; « just 99 cents per song », sans frais d'abonnement ; « over 200,000 songs from music companies including BMG, EMI, Sony Music Entertainment, Universal and Warner ». Source de l'éditeur pour ce qu'il a lancé et facturé. Les clauses « paiement à l'usage » et « bien auparavant vendu par lot (l'album) » ne figurent pas dans ce communiqué et ont été supprimées. |
@@ -405,3 +406,4 @@ La concentration des gains suit le rythme du cycle spéculatif documenté en B :
 | [S48] | stat | Pew Internet & American Life Project, « Data Memo on Search Engines », 12 août 2004 (pewresearch.org/internet/2004/08/12/data-memo-on-search-engines/) ; Pew Internet et comScore, « Search engine use shoots up in the past year and edges towards email as the primary internet application », Data Memo, novembre 2005 (PIP_SearchData_1105.pdf, copie : bac-lac.wayback.archive-it.org/web/20060126155940/http://www.pewinternet.org/pdfs/PIP_SearchData_1105.pdf) | Ouverts et lus (page lue avec l'outil de lecture ; mémo de 2005 lu en local avec pdftotext). Mémo de 2004 : enquête téléphonique auprès de 1 399 internautes du 14 mai au 17 juin ; « In this survey 47% say that Google is their top choice of search engine », suivi de « Yahoo, the search engine of choice for 26% of users ». Mémo de 2005 (données comScore Media Metrix) : « Google was the most heavily used search engine in October 2005 », devant Yahoo! Search, MSN Search, Ask Jeeves et AOL Search ; le texte donne 89,8 millions de visiteurs uniques pour Google, le tableau du même mémo 75 281 milliers : la source est incohérente sur le chiffre, cohérente sur le rang, et seul le rang est retenu. Aucune série de parts de recherches de 2001 à 2003 n'a été ouverte (les pages comScore de relations investisseurs renvoient 403) : les clauses « parts de marché croissantes » et « position dominante en fin de période » ont été supprimées. |
 | [S49] | acad | Hal R. Varian, « High-Technology Industries and Market Structure », in Federal Reserve Bank of Kansas City, *Economic Policy for the Information Economy*, symposium de Jackson Hole, 2002 (kansascityfed.org/documents/3482/papers-S02VARI.pdf) ; *United States v. Microsoft Corp.*, Findings of Fact, § 39-40, 1999 (copie : voir [S24]) | Ouverts et lus en local (pdftotext). Varian, résumé : « Most of these forces tend to point toward higher industry concentration rations for technology-intensive industries » ; sur les effets de réseau et les rendements d'échelle côté offre dans les logiciels : « Once a firm has established market dominance with a particular product, it can be extremely hard to unseat it » ; « many of the other factors we discussed tend to lead toward high industry concentration ratios and monopoly power ». Findings of Fact § 39 : « Consumer demand for Windows enjoys positive network effects », cycle auto-entretenu « often referred to as a "positive feedback loop" ». Le document de Varian est générique et ne nomme ni le navigateur, ni la recherche, ni les enchères, ni la librairie en ligne : la clause « gagnant-rafle-tout dans plusieurs segments successifs [...] chaque segment tendant vers un acteur unique » a été supprimée faute de source qui la mesure. |
 | [S50] | stat | Board of Governors of the Federal Reserve System, *Financial Accounts of the United States* (Z.1), série « Households and Nonprofit Organizations; Corporate Equities; Asset, Level » (HNOCEAQ027S), via FRED (fred.stlouisfed.org/data/HNOCEAQ027S.txt) ; U.S. Bureau of Economic Analysis, « Compensation of employees: Wages and salaries » (série annuelle A576RC1A027NBEA, marquée DISCONTINUED), via FRED (fred.stlouisfed.org/data/A576RC1A027NBEA.txt) | Ouverts et lus (tableaux de données FRED). Actions des ménages et institutions sans but lucratif, en millions de dollars : T4 1995 4 029 075 ; T4 1999 8 349 785 ; T1 2000 8 672 926 ; T2 2000 8 252 195 ; T4 2000 7 170 982 ; T4 2001 6 417 991 ; T3 2002 4 724 917 ; T4 2002 5 012 539 ; T4 2003 6 627 087 ; T4 2005 8 193 033. Salaires et traitements, en milliards de dollars : 1995 3 418,0 ; 1999 4 458,0 ; 2000 4 825,9 ; 2002 4 996,4 ; 2005 5 692,0. Précautions : valeur de marché de toutes les actions, tous secteurs, gains de valorisation compris ; FRED date le niveau au premier jour du trimestre, lu ici comme niveau de fin de trimestre (convention des niveaux Z.1) ; séries révisées à chaque publication ; la comparaison avec la masse salariale rapproche un stock et un flux et ne mesure pas le revenu du capital. Les clauses sur les investisseurs et salariés d'entreprises non rentables (C6.002) et sur les revenus du capital des détenteurs d'actions technologiques (C6.007) n'ont trouvé aucun passage et ont été supprimées. |
+| [S51] | presse | Fordahl, Matthew, « Netscape lost browser battle with Microsoft in the Web's infancy », Associated Press, 23 janvier 2002 (copie : berkeleydailyplanet.com/issue/2002-01-23/article/9713) ; Bekker, Scott, « IE's Market Share Falls Below 90 Percent », *Redmond Channel Partner*, 30 novembre 2004 (rcpmag.com/articles/2004/11/30/ies-market-share-falls-below-90-percent.aspx) ; Brandrick, Chris, « As Internet Explorer Turns 15, We Take A Look Back », *PCWorld*, 17 août 2010 (pcworld.com/article/508611/as_internet_explorer_turns_15_we_take_a_look_back.html) | Trois pages ouvertes et lues. Dépêche AP : Netscape « has only 8 percent of the total browser market compared to Internet Explorer's 91 percent », « according to research firm WebSideStory Inc. ». Article de *Redmond Channel Partner* : « For December 2002, Microsoft's IE market share was 95.0 percent, according to OneStat.com » (société néerlandaise d'analyse d'audience web). PCWorld : « By late 2003 Internet Explorer accounted for around 90% of the browser market » (sans attribuer la mesure). Artefact : les deux chiffres mesurés viennent de cabinets de mesure d'audience, pas d'une source institutionnelle ni d'un document de justice ; aucun document institutionnel sur l'usage réel des navigateurs au début des années 2000 n'a été trouvé. Les deux mesures lues (91 % en janvier, 95,0 % en décembre 2002) diffèrent par l'outil et le mois. Statut `K` selon la règle sur les chiffres de cabinets d'analystes, en attente de la décision de l'auteur. |

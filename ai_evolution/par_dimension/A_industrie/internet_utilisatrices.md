@@ -11,26 +11,26 @@ agrégés de marché (C), pas le capital (B). La comparaison avec l'autre choc e
 ## Table of Contents
 
 1. [A5 Reconfiguration des chaînes de valeur des autres secteurs](#a5-reconfiguration-des-chaînes-de-valeur-des-autres-secteurs) _(Lines 40-43)_
-   1. [Faits](#faits) _(Lines 46-59)_
-   1. [Jalons cités](#jalons-cités) _(Lines 62-66)_
-   1. [Trajectoire `T.INT.A5`](#trajectoire-tinta5) _(Lines 69-84)_
-   1. [Narratif](#narratif) _(Lines 87-91)_
-1. [A6 Canaux de vente électroniques, entre entreprises et par secteur](#a6-canaux-de-vente-électroniques-entre-entreprises-et-par-secteur) _(Lines 94-98)_
-   1. [Faits](#faits-1) _(Lines 101-114)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 117-119)_
-   1. [Trajectoire `T.INT.A6`](#trajectoire-tinta6) _(Lines 122-137)_
-   1. [Narratif](#narratif-1) _(Lines 140-144)_
-1. [A7 Adoption et usage interne dans les entreprises utilisatrices](#a7-adoption-et-usage-interne-dans-les-entreprises-utilisatrices) _(Lines 147-150)_
-   1. [Faits](#faits-2) _(Lines 153-159)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 162-165)_
-   1. [Trajectoire `T.INT.A7`](#trajectoire-tinta7) _(Lines 168-183)_
-   1. [Narratif](#narratif-2) _(Lines 186-190)_
-1. [A8 Services rendus possibles](#a8-services-rendus-possibles) _(Lines 193-196)_
-   1. [Faits](#faits-3) _(Lines 199-204)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 207-210)_
-   1. [Trajectoire `T.INT.A8`](#trajectoire-tinta8) _(Lines 213-228)_
-   1. [Narratif](#narratif-3) _(Lines 231-235)_
-1. [Sources](#sources) _(Lines 238-260)_
+   1. [Faits](#faits) _(Lines 46-60)_
+   1. [Jalons cités](#jalons-cités) _(Lines 63-67)_
+   1. [Trajectoire `T.INT.A5`](#trajectoire-tinta5) _(Lines 70-85)_
+   1. [Narratif](#narratif) _(Lines 88-92)_
+1. [A6 Canaux de vente électroniques, entre entreprises et par secteur](#a6-canaux-de-vente-électroniques-entre-entreprises-et-par-secteur) _(Lines 95-99)_
+   1. [Faits](#faits-1) _(Lines 102-117)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 120-122)_
+   1. [Trajectoire `T.INT.A6`](#trajectoire-tinta6) _(Lines 125-140)_
+   1. [Narratif](#narratif-1) _(Lines 143-147)_
+1. [A7 Adoption et usage interne dans les entreprises utilisatrices](#a7-adoption-et-usage-interne-dans-les-entreprises-utilisatrices) _(Lines 150-153)_
+   1. [Faits](#faits-2) _(Lines 156-162)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 165-168)_
+   1. [Trajectoire `T.INT.A7`](#trajectoire-tinta7) _(Lines 171-186)_
+   1. [Narratif](#narratif-2) _(Lines 189-193)_
+1. [A8 Services rendus possibles](#a8-services-rendus-possibles) _(Lines 196-199)_
+   1. [Faits](#faits-3) _(Lines 202-207)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 210-213)_
+   1. [Trajectoire `T.INT.A8`](#trajectoire-tinta8) _(Lines 216-231)_
+   1. [Narratif](#narratif-3) _(Lines 234-238)_
+1. [Sources](#sources) _(Lines 241-266)_
 
 
 ---
@@ -42,7 +42,7 @@ agrégés de marché (C), pas le capital (B). La comparaison avec l'autre choc e
 intermédiaires supprimés ou créés, secteurs en déclin mesurable ?
 
 ### Faits
-<!-- Lines 46-59 -->
+<!-- Lines 46-60 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -56,16 +56,17 @@ intermédiaires supprimés ou créés, secteurs en déclin mesurable ?
 | F.INT.A5.008 | 1999 | US | Au troisième trimestre 1999, 464 banques nationales américaines proposent des opérations bancaires en ligne, et 88,8 % d'entre elles offrent la consultation de compte et le virement de fonds ; côté producteur bancaire, voir aussi A8 (site transactionnel). | 464 banques ; 88,8 % (412) consultation de compte et virement | O4, M4 | choc | [S37] | A |
 | F.INT.A5.009 | 1997-2001 | US | En 1997-98, environ un tiers des établissements d'enseignement postsecondaire américains de deux et quatre ans proposent des cours à distance ; chez les établissements d'enseignement supérieur, cette part passe de 33 % (enquête de 1995) à 44 % (1997-98) et celle de l'enseignement asynchrone par Internet de 22 % à 60 %, puis 56 % des établissements de deux et quatre ans délivrant des diplômes proposent des cours à distance en 2000-01. | 33 % → 44 % des établissements d'enseignement supérieur (1995 → 1997-98) ; 56 % (2000-01) | O7, M5 | choc | [S25] | A |
 | F.INT.A5.010 | 2000-2001 | US | En 2000, 52 millions d'adultes américains, soit 55 % des internautes, ont cherché de l'information de santé sur le Web, mais peu s'en servent pour communiquer avec leur médecin ; en 2001, l'Institute of Medicine constate que les technologies de l'information touchent à peine les soins aux patients et que l'essentiel de l'information clinique reste sur papier (l'usage est traité en E3). | 52 M d'adultes ; 55 % des internautes ; 9 % des chercheurs d'information de santé ont communiqué en ligne avec un médecin | O7, M5 | exo | [S35][S36] | A |
+| F.INT.A5.011 | 1999-2005 | US | Aux États-Unis, la valeur au détail des livraisons de musique enregistrée, nette des retours, recule dès 2000 : pour les supports physiques, de 14 584,7 millions de dollars en 1999 (maximum de la série 1995-2005) à 14 323,7 en 2000, 13 740,9 en 2001, 12 614,2 en 2002 et 11 854,4 en 2003 ; avec les ventes numériques, que la série compte à partir de 2004, le total est de 12 338,1 en 2004 et 12 269,5 en 2005 (unités : [F.INT.H4.006]). | supports physiques : 14 584,7 (1999) → 14 323,7 (2000) → 11 854,4 M$ (2003) ; total supports physiques et numériques : 12 269,5 M$ (2005) | O4, M2, P2 | choc | [S40] | V |
 
 ### Jalons cités
-<!-- Lines 62-66 -->
+<!-- Lines 63-67 -->
 
 `J.INT.1995.02` (librairie en ligne et site d'enchères, bascule principale), `J.INT.1997.06`
 (vente d'un site d'information à un groupe de presse), `J.INT.1999.01` (ouverture de Napster),
 `J.INT.1999.05` (recul du Minitel), `J.INT.2003.01` (boutique de musique à l'unité).
 
 ### Trajectoire `T.INT.A5`
-<!-- Lines 69-84 -->
+<!-- Lines 70-85 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -83,21 +84,21 @@ intermédiaires supprimés ou créés, secteurs en déclin mesurable ?
 | 2005 | banalisation | 1 | État final : intermédiaires de détail, courtage et voyage réorganisés autour du canal en ligne ; presse et disque concurrencés en ligne sur les petites annonces et la musique ; en santé, l'information en ligne est largement consultée par les patients mais les soins sont à peine touchés par les technologies de l'information (2000-2001). | F.INT.A5.007, F.INT.A5.010 |
 
 ### Narratif
-<!-- Lines 87-91 -->
+<!-- Lines 88-92 -->
 
 Deux nouveaux intermédiaires de détail apparaissent dès 1995, le détaillant en ligne sans stock de proximité et la place de marché d'enchères, ouvrant la fenêtre sur un rythme de réorganisation rapide [F.INT.A5.001][J.INT.1995.02]. Un site de petites annonces gratuites s'implante dans les marchés locaux de la presse américaine à partir de 2000, et les quotidiens les plus exposés baissent leurs tarifs de petites annonces d'environ 20 % [F.INT.A5.002]. Le courtage de détail et la réservation de voyage se déplacent progressivement vers des plateformes directes : le nombre de comptes de courtage en ligne passe de 3,7 à près de 9,7 millions entre 1997 et 1999, et la part des billets d'avion réservés en ligne passe de 7 % à 30 % entre 1999 et 2002 [F.INT.A5.004][F.INT.A5.005]. Napster, service d'échange de fichiers musicaux, est jugé en 2001 par la cour d'appel fédérale, qui constate une baisse des ventes de disques compacts chez les étudiants ; en avril 2003, une boutique de musique en ligne vend des titres de cinq grandes maisons de disques à 99 cents [F.INT.A5.003][J.INT.1999.01][J.INT.2003.01]. En France, un système de services en ligne antérieur au Web, le Minitel, recule nettement à partir de 1999 au profit d'équivalents sur le Web, y compris pour les services publics [F.INT.A5.006][J.INT.1999.05]. Des opérateurs télécoms historiques figurent en janvier 2003 parmi les groupes de télécoms très endettés, sans que leur restructuration autour de la vente de gros soit documentée [F.INT.A5.007]. En santé, 52 millions d'adultes américains cherchent de l'information en ligne en 2000, mais les technologies de l'information touchent à peine les soins aux patients en 2001 [F.INT.A5.010]. Au troisième trimestre 1999, 464 banques nationales américaines proposent des opérations bancaires en ligne [F.INT.A5.008], et en 1997-98 environ un tiers des établissements d'enseignement postsecondaire américains proposent des cours à distance [F.INT.A5.009].
 
 ---
 
 ## A6 Canaux de vente électroniques, entre entreprises et par secteur
-<!-- Lines 94-98 -->
+<!-- Lines 95-99 -->
 
 **Question :** Quelle part des ventes des autres industries passe par un canal électronique, par
 quelle technologie (échange de données informatisé préexistant ou Internet), et dans quels
 secteurs le canal en ligne devient-il important ?
 
 ### Faits
-<!-- Lines 101-114 -->
+<!-- Lines 102-117 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -111,14 +112,16 @@ secteurs le canal en ligne devient-il important ?
 | F.INT.A6.008 | 1997-1999 | US | Le courtage de détail bascule rapidement vers le canal en ligne, un autre secteur où celui-ci devient important : le nombre de comptes de courtage en ligne passe de 3,7 millions en 1997 à près de 9,7 millions au deuxième trimestre 1999 ; au premier trimestre 1999, les transactions boursières en ligne représentent 15,9 % de l'ensemble des transactions sur actions (fait cité aussi en A5). | 3,7 M → 9,7 M comptes ; 15,9 % des transactions actions | O4, M3, P3 | choc | [S30] | V |
 | F.INT.A6.009 | 2001 | EU | Les ventes en ligne des entreprises européennes qui vendent en ligne sont majoritairement interentreprises plutôt que vers le consommateur final dans la plupart des pays (exception notable de l'Allemagne, à 51 % vers le consommateur final contre 18 à 20 % en moyenne dans l'Union européenne), et restent à 78 % domestiques en moyenne. | B2B majoritaire hors Allemagne ; 78 % de ventes domestiques (moyenne UE) | O4 | choc | [S31] | V |
 | F.INT.A6.010 | 2000-2004 | US | Une place de marché interentreprises commune aux trois grands constructeurs automobiles américains, annoncée en février 2000 et lancée en septembre 2000, peine à attirer des clients une fois l'enthousiasme pour les places de marché en ligne retombé ; son activité d'enchères, mal accueillie des fournisseurs, est vendue à la fin de 2003 et l'ensemble est cédé à un éditeur de logiciels, annonce de février 2004, ce qui met fin à l'engagement financier des trois constructeurs. | 200 M$ annoncés (février 2000) | O1, O4, M9 | choc | [S32] | A |
+| F.INT.A6.011 | 1968-1975 | US | L'échange de données informatisé entre entreprises est antérieur au Web : dès 1968, assez de compagnies ferroviaires, aériennes, routières et maritimes utilisent des manifestes électroniques pour former le Transportation Data Coordinating Committee, qui publie en 1975 les premières normes américaines d'échange de données informatisé pour le transport aérien, maritime, routier et ferroviaire ; avant 1974-1975, de nombreuses normes propriétaires d'ordinateur à ordinateur ou d'entreprise à entreprise étaient déjà en usage. | | O4, M1 | exo | [S38] | A |
+| F.INT.A6.012 | 2001-2003 | US | Une étude de la California Management Review (Day, Fein et Ruppersberger) sur le reflux des places de marché interentreprises compte 1 520 places de marché en 2001 et en projette 180 en 2003 ; elle attribue ce reflux à la réticence des entreprises clientes à perturber des systèmes qui fonctionnent, au refus des fournisseurs de concourir sur les seuls prix et aux enchères, qui fragilisent les relations durables avec les fournisseurs, et conclut que les gagnantes sont les entreprises qui renforcent, et non remplacent, les relations traditionnelles de leur industrie. | 1 520 (2001) → 180 projetées (2003) | O1, O4, M9 | choc | [S39] | A |
 
 ### Jalons cités
-<!-- Lines 117-119 -->
+<!-- Lines 120-122 -->
 
 Autres jalons candidats écartés à la passe finale (décision du coordinateur, 2026-09-23).
 
 ### Trajectoire `T.INT.A6`
-<!-- Lines 122-137 -->
+<!-- Lines 125-140 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -136,20 +139,20 @@ Autres jalons candidats écartés à la passe finale (décision du coordinateur,
 | 2005 | banalisation | 2 | État final : commerce électronique manufacturier à 26,7 % des expéditions, commerce de gros à 18,3 % des ventes, mais l'EDI reste à 83,5 % du commerce électronique de gros hors bureaux de vente des fabricants ; le canal Internet proprement dit reste minoritaire même dans le commerce interentreprises. | F.INT.A6.004, F.INT.A6.005, F.INT.A6.006 |
 
 ### Narratif
-<!-- Lines 140-144 -->
+<!-- Lines 143-147 -->
 
 L'affirmation « Internet n'était pas le moyen de vendre entre 1995 et 2005 » est vraie pour le détail grand public, dont la part en ligne reste marginale sur toute la fenêtre [F.INT.C4.003][F.INT.C4.005], mais fausse pour le commerce interentreprises : dès 1999, le commerce électronique manufacturier atteint 12,0 % des expéditions et le commerce de gros 5,3 % des ventes, un ordre de grandeur supérieur à celui du détail [F.INT.A6.001][F.INT.A6.002][F.INT.A6.006]. Cette part progresse continûment jusqu'à 26,7 % et 18,3 % respectivement en 2005 [F.INT.A6.005]. La nuance décisive tient à la technologie : le Census Bureau établit, dès sa première séparation méthodologique en 2000, que ce commerce interentreprises roule très majoritairement sur l'échange de données informatisé (EDI), une technologie antérieure au Web des années 1980, et non sur Internet proprement dit, qui ne représente que 5 % de la valeur manufacturière contre 59 % pour l'EDI [F.INT.A6.003], une domination de l'EDI qui persiste jusqu'en 2005 à 83,5 % du commerce électronique de gros [F.INT.A6.004]. Deux secteurs font exception et basculent nettement vers le canal en ligne au sens strict : le courtage de détail, où les comptes en ligne passent de 3,7 à 9,7 millions entre 1997 et 1999 [F.INT.A6.008], et le transport aérien, où la part des billets réservés en ligne passe de 7 % à 30 % entre 1999 et 2002 [F.INT.A6.007]. Une place de marché interentreprises commune aux trois grands constructeurs automobiles américains, annoncée en 2000, peine à attirer des clients et est cédée à un éditeur de logiciels en 2004, tandis que l'EDI reste dominant [F.INT.A6.010][F.INT.A6.004].
 
 ---
 
 ## A7 Adoption et usage interne dans les entreprises utilisatrices
-<!-- Lines 147-150 -->
+<!-- Lines 150-153 -->
 
 **Question :** À quel rythme les entreprises hors secteur numérique se connectent-elles et
 intègrent-elles le réseau à leurs opérations, selon leur taille ?
 
 ### Faits
-<!-- Lines 153-159 -->
+<!-- Lines 156-162 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -158,13 +161,13 @@ intègrent-elles le réseau à leurs opérations, selon leur taille ?
 | F.INT.A7.003 | 2001 | EU | Parmi les entreprises européennes utilisatrices d'Internet, le principal usage déclaré comme client est la banque et les services financiers (65 % en moyenne dans l'Union européenne, jusqu'à 78 % en Italie), suivi par la surveillance de marché puis la réception de produits numériques ; l'usage croît avec la taille de l'entreprise pour la surveillance de marché, mais reste plus stable pour la banque en ligne. | Banque et services financiers : 65 % (UE) | O4, O5 | choc | [S33] | V |
 
 ### Jalons cités
-<!-- Lines 162-165 -->
+<!-- Lines 165-168 -->
 
 Aucun jalon propre à cette sous-dimension n'est encore dans `par_annee/internet_1995_2005.md` ;
 elle s'appuie sur une enquête harmonisée (2001-2002) sans série longue 1995-2000 disponible.
 
 ### Trajectoire `T.INT.A7`
-<!-- Lines 168-183 -->
+<!-- Lines 171-186 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -182,20 +185,20 @@ elle s'appuie sur une enquête harmonisée (2001-2002) sans série longue 1995-2
 | 2005 | banalisation | 0 | État final non mesuré directement cette session ; absence de série longue pour conclure sur la fin de fenêtre, à rechercher. | |
 
 ### Narratif
-<!-- Lines 186-190 -->
+<!-- Lines 189-193 -->
 
 Aucune série longue ne couvre cette sous-dimension avant 2001 : la première collecte harmonisée européenne date de l'enquête 2001-2002, ce qui interdit de dater précisément le début de l'adoption d'entreprise [F.INT.A7.001][F.INT.A7.002]. Au premier point de mesure disponible, l'équipement de base est déjà quasi généralisé : 94 % des entreprises européennes de dix salariés ou plus utilisent un ordinateur et 81 % ont accès à Internet en 2002 [F.INT.A7.001]. L'usage transactionnel reste très en retrait de l'équipement : en 2001, seulement 13 % des entreprises utilisatrices d'Internet vendent en ligne contre 30 % qui achètent, et la vente en ligne dépasse rarement 10 % du chiffre d'affaires pour celles qui la pratiquent [F.INT.A7.002]. Un gradient net de taille traverse ces trois indicateurs, les grandes entreprises étant systématiquement en avance sur les petites [F.INT.A7.001][F.INT.A7.002]. Le principal usage déclaré comme client du réseau par les entreprises est la banque et les services financiers, à 65 % en moyenne dans l'Union européenne [F.INT.A7.003].
 
 ---
 
 ## A8 Services rendus possibles
-<!-- Lines 193-196 -->
+<!-- Lines 196-199 -->
 
 **Question :** Quels services nouveaux les secteurs non technologiques offrent-ils grâce au
 réseau ?
 
 ### Faits
-<!-- Lines 199-204 -->
+<!-- Lines 202-207 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -203,13 +206,13 @@ réseau ?
 | F.INT.A8.002 | 2000 | US | Bien que 32 % des banques nationales américaines proposent un site transactionnel en juillet 2000, la majorité d'entre elles comptent moins de 10 % de clients en ligne réguliers parmi leurs clients inscrits, signe que l'offre précède largement l'usage effectif du côté du client (voir E3 pour l'adoption côté ménages). | < 10 % de clients réguliers pour la majorité des banques | O4, P3 | choc | [S34] | V |
 
 ### Jalons cités
-<!-- Lines 207-210 -->
+<!-- Lines 210-213 -->
 
 Aucun jalon propre à cette sous-dimension n'est encore dans `par_annee/internet_1995_2005.md` ;
 le fait bancaire s'appuie sur deux communiqués successifs du régulateur (1999, 2000).
 
 ### Trajectoire `T.INT.A8`
-<!-- Lines 213-228 -->
+<!-- Lines 216-231 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -227,14 +230,14 @@ le fait bancaire s'appuie sur deux communiqués successifs du régulateur (1999,
 | 2005 | banalisation | 0 | État final non mesuré directement cette session pour le service bancaire ; suivi de colis et information client des transporteurs restent une lacune de recherche (voir Sources, [S34]). | |
 
 ### Narratif
-<!-- Lines 231-235 -->
+<!-- Lines 234-238 -->
 
 Le service nouveau le mieux documenté côté producteur est la banque en ligne : la part des banques nationales américaines proposant un site transactionnel passe de 21 % à 32 % entre septembre 1999 et juillet 2000, avec un rattrapage plus lent mais réel chez les petites banques, de 7 % à 17 % [F.INT.A8.001]. L'offre devance nettement l'usage sur cette fenêtre : la majorité des banques offrant un site transactionnel comptent moins de 10 % de clients en ligne réguliers parmi leurs clients inscrits en 2000 [F.INT.A8.002]. En dehors du service bancaire couvert par [F.INT.A8.001][F.INT.A8.002], les autres services attendus de cette sous-dimension — suivi de colis chez les transporteurs, information automatisée des clients, services en ligne des assureurs — restent une lacune de recherche non comblée cette session, faute de source officielle trouvée côté producteur.
 
 ---
 
 ## Sources
-<!-- Lines 238-260 -->
+<!-- Lines 241-266 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -258,3 +261,6 @@ Le service nouveau le mieux documenté côté producteur est la banque en ligne 
 | [S35] | off | Institute of Medicine, Committee on Quality of Health Care in America, *Crossing the Quality Chasm: A New Health System for the 21st Century*, National Academy Press, 2001, chapitre 7 « Using Information Technology », https://www.nationalacademies.org/read/10027/chapter/9 | Chapitre ouvert et lu (WebFetch). « The vast majority of clinical information is still stored in paper form. » ; « IT has barely touched patient care. » ; « Only a fraction of clinicians offer e-mail as a communication option to patients. » ; « 70 million of the 97 million American adults who were online had searched for health information in the last year » (chiffre non retenu : celui de Pew, S36, est daté et sourcé à l'enquête). Le chapitre ne compare pas la santé aux autres secteurs : cette clause n'est pas reprise. |
 | [S36] | stat | Rainie, L. et Fox, S., « The Online Health Care Revolution: How the Web Helps Americans Take Better Care of Themselves », Pew Internet & American Life Project, 26 novembre 2000, https://www.pewresearch.org/internet/2000/11/26/the-online-health-care-revolution/ | Page du rapport ouverte et lue (WebFetch). « Fifty-two million American adults, or 55% of those with Internet access, have used the Web » pour l'information de santé ; « 9% of health seekers have communicated with a doctor online » ; « Few use it to communicate with their caregivers or to buy medicine. » Enquête spéciale d'août 2000 auprès de 521 chercheurs d'information de santé. |
 | [S37] | off | Furst, K., Lang, W. W. et Nolle, D. E., « Internet Banking: Developments and Prospects », Office of the Comptroller of the Currency, Economic and Policy Analysis Working Paper 2000-9, septembre 2000, exemplaire de la présentation à la Federal Reserve Bank of New York (2001), https://www.newyorkfed.org/medialibrary/media/newsevents/events/research/2001/FurstLangNolle.pdf | Ouvert (PDF sauvegardé, lu avec pdftotext) : le fichier contient les diapositives et les tableaux de l'étude, pas son texte intégral, d'où le statut A. Tableau 5 (T3 1999) : 88,8 % des banques nationales à site transactionnel offrent « Balance inquiry and funds transfer » ; tableau 18 : « Number of transactional banks » 464 au T3 1999, dont 412 offrant consultation de compte et virement. « Transactional » signifie « moving money ». Non lu : toute donnée sur le déplacement du travail d'agence vers le client ou des centres d'appel, clause retirée. |
+| [S38] | off | X12 (organisme de normalisation de l'échange de données informatisé, accrédité par l'American National Standards Institute), section « Awards » du site, histoire des premières normes de l'échange de données informatisé, https://www.x12.org/about/awards | Ouvert et lu (WebFetch, 2026-11-23) : « By the mid-1960s Holland-America Steamship Line was sending trans-Atlantic shipping manifests as telex messages » ; « By 1968, so many railroads, airlines, truckers and ocean shipping companies were using electronic manifests that they formed the Transportation Data Coordinating Committee (TDCC) » ; « Prior to 1974-1975 there were many proprietary company-to-company and computer-to-computer standards in wide-spread use » ; premières normes américaines intégrées pour le transport aérien, maritime, routier et ferroviaire publiées en 1975. Page d'organisme de normalisation, sans auteur nommé (détails tirés du livre de Ralph Notto, 2005) : statut A. La page ne mentionne pas le Web : « antérieur au Web » est une lecture des dates (1968-1975, le Web date de 1991-1995). Non lu : la date de 1979 (charte de l'ASC X12) et l'usage de réseaux privés propres à l'échange de données informatisé. |
+| [S39] | acad | Knowledge at Wharton, « Surviving the Shakeout: Where B2B Exchanges Went Wrong », 4 décembre 2002, https://knowledge.wharton.upenn.edu/article/surviving-the-shakeout-where-b2b-exchanges-went-wrong/ (résume Day, G., Fein, A. et Ruppersberger, G., « Shakeouts in Digital Markets: Lessons from B2B Exchanges », California Management Review, 2003) | Page ouverte et lue (WebFetch, 2026-11-23) ; l'étude elle-même n'a pas été ouverte, d'où le statut A. « the number of exchanges [was cut] from 1520 in 2001 to a projected 180 in 2003 » ; « Business customers are very reluctant to disrupt systems that work, particularly when the stakes are high » (Fein) ; « Auctions have a rather unhappy characteristic of undermining long-standing [supplier] relationships » (Day) ; « The winners will be the companies enhancing, not replacing, traditional industry relationships ». La page ne dit pas que les places de marché ont été fermées ou rachetées, ni leur périmètre géographique (exemples américains) : bloc US par défaut. |
+| [S40] | stat | Recording Industry Association of America, *2005 Year-End Statistics*, « Manufacturers' Unit Shipments and Retail Dollar Value » (en millions, nettes des retours), tableau daté du 31 mars 2006 ; copie hébergée par un tiers : https://www.musicaememoria.com/docs/RIAA-2005yrEndStats.pdf | Ouvert et lu le 2026-11-23 (PDF converti avec pdftotext) : même tableau que [S18] de `H_energie/internet.md`. Ligne « Total Value » des supports physiques (millions de dollars) : 14 584,7 (1999), 14 323,7 (2000), 13 740,9 (2001), 12 614,2 (2002), 11 854,4 (2003) ; maximum de la série 1995-2005 en 1999 (1995 : 12 320,3 ; 1996 : 12 533,8 ; 1997 : 12 236,8 ; 1998 : 13 711,2). Ligne « Total Digital & Physical » : 12 338,1 (2004) et 12 269,5 (2005). La note du tableau précise que la valeur au détail est « value of shipments at recommended or estimated list price ». Copie d'un document de l'association hébergée par un tiers ; l'original sur riaa.com n'a pas été rouvert. Le tableau ne donne aucune cause de ces évolutions. |

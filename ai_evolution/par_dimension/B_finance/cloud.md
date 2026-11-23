@@ -12,21 +12,21 @@ l'autre choc est dans le `README.md` du domaine, pas ici.
 ## Table of Contents
 
 1. [B1 Financement du choc](#b1-financement-du-choc) _(Lines 37-39)_
-   1. [Faits](#faits) _(Lines 42-58)_
-   1. [Jalons cités](#jalons-cités) _(Lines 61-64)_
-   1. [Trajectoire `T.CLD.B1`](#trajectoire-tcldb1) _(Lines 67-82)_
-   1. [Narratif](#narratif) _(Lines 85-106)_
-1. [B2 Cycle spéculatif et valorisations](#b2-cycle-spéculatif-et-valorisations) _(Lines 109-112)_
-   1. [Faits](#faits-1) _(Lines 115-129)_
-   1. [Jalons cités](#jalons-cités-1) _(Lines 132-134)_
-   1. [Trajectoire `T.CLD.B2`](#trajectoire-tcldb2) _(Lines 137-152)_
-   1. [Narratif](#narratif-1) _(Lines 155-175)_
-1. [B3 Redistribution de la valeur](#b3-redistribution-de-la-valeur) _(Lines 178-181)_
-   1. [Faits](#faits-2) _(Lines 184-198)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 201-203)_
-   1. [Trajectoire `T.CLD.B3`](#trajectoire-tcldb3) _(Lines 206-221)_
-   1. [Narratif](#narratif-2) _(Lines 224-244)_
-1. [Sources](#sources) _(Lines 247-290)_
+   1. [Faits](#faits) _(Lines 42-59)_
+   1. [Jalons cités](#jalons-cités) _(Lines 62-65)_
+   1. [Trajectoire `T.CLD.B1`](#trajectoire-tcldb1) _(Lines 68-83)_
+   1. [Narratif](#narratif) _(Lines 86-107)_
+1. [B2 Cycle spéculatif et valorisations](#b2-cycle-spéculatif-et-valorisations) _(Lines 110-113)_
+   1. [Faits](#faits-1) _(Lines 116-130)_
+   1. [Jalons cités](#jalons-cités-1) _(Lines 133-135)_
+   1. [Trajectoire `T.CLD.B2`](#trajectoire-tcldb2) _(Lines 138-153)_
+   1. [Narratif](#narratif-1) _(Lines 156-176)_
+1. [B3 Redistribution de la valeur](#b3-redistribution-de-la-valeur) _(Lines 179-182)_
+   1. [Faits](#faits-2) _(Lines 185-199)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 202-204)_
+   1. [Trajectoire `T.CLD.B3`](#trajectoire-tcldb3) _(Lines 207-222)_
+   1. [Narratif](#narratif-2) _(Lines 225-245)_
+1. [Sources](#sources) _(Lines 248-292)_
 
 
 
@@ -38,11 +38,11 @@ l'autre choc est dans le `README.md` du domaine, pas ici.
 **Question :** Qui a payé l'infrastructure et les entreprises, avec quel argent ?
 
 ### Faits
-<!-- Lines 42-58 -->
+<!-- Lines 42-59 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| F.CLD.B1.001 | 2007, 2009, 2012, 2013, 2014, 2015 | US | Les dépenses en immobilisations corporelles (« purchases of property and equipment ») d'un grand détaillant en ligne exploitant sa propre usine cloud sont multipliées par plus de vingt sur la fenêtre, sans année de recul depuis 2009. | 224 M$ (2007) ; 373 M$ (2009) ; 3 785 M$ (2012) ; 3 444 M$ (2013) ; 4 893 M$ (2014) ; 4 589 M$ (2015) | O2 | choc | [S1] | V |
+| F.CLD.B1.001 | 2007, 2009, 2012, 2013, 2014, 2015 | US | Les dépenses en immobilisations corporelles (« purchases of property and equipment ») d'un grand détaillant en ligne exploitant sa propre usine cloud sont multipliées par plus de vingt sur la fenêtre, en hausse chaque année de 2007 à 2012 puis en repli en 2013 et en 2015. | 224 M$ (2007) ; 373 M$ (2009) ; 3 785 M$ (2012) ; 3 444 M$ (2013) ; 4 893 M$ (2014) ; 4 589 M$ (2015) | O2 | choc | [S1] | V |
 | F.CLD.B1.002 | 2008, 2010, 2011, 2013, 2014, 2015 | US | Les dépenses en immobilisations corporelles de l'éditeur historique de systèmes d'exploitation, en forte hausse à partir de son exercice 2013, doublent presque entre 2012 et 2015 sur fond de construction d'usines de calcul loué. | 3 182 M$ (FY2008) ; 1 977 M$ (FY2010) ; 2 305 M$ (FY2012) ; 4 257 M$ (FY2013) ; 5 944 M$ (FY2015) | O2 | choc | [S2] | V |
 | F.CLD.B1.003 | 2007, 2009, 2013, 2014 | US | Les dépenses en immobilisations corporelles du moteur de recherche devenu conglomérat cotent une trajectoire en dents de scie avant de dépasser les dix milliards de dollars annuels à partir de l'exercice 2014, portées par la construction de centres de données. | 2 403 M$ (2007) ; 810 M$ (2009) ; 7 358 M$ (2013) ; 10 959 M$ (2014) | O2 | choc | [S3] | V |
 | F.CLD.B1.004 | 2004-11 | US | Une société immobilière cotée spécialisée dans les centres de données est constituée en mars 2004 à partir de centres rachetés à prix décoté à la faveur de faillites, puis introduite en bourse le même mois : premier véhicule de financement dédié à l'usine cloud avant même que le terme n'existe. | constitution 9 mars 2004, introduction en bourse 3 novembre 2004, 24 propriétés et 5,7 millions de pieds carrés au 31 décembre 2004 | O2, O3 | exo | [S31] | V |
@@ -55,15 +55,16 @@ l'autre choc est dans le `README.md` du domaine, pas ici.
 | F.CLD.B1.011 | 2012, 2013, 2014 | US | Le nombre d'introductions en bourse de sociétés classées logiciel par la statistique MoneyTree se maintient entre onze et vingt par an sur trois années consécutives, signe d'un marché ouvert en continu plutôt que d'une vague concentrée sur une seule année. | 11 (2012) ; 13 (2013) ; 20 (2014) | O1, M9 | choc | [S36] | V |
 | F.CLD.B1.012 | 2003-2004 | US | Avant t0, le financement de l'informatique d'entreprise passe presque intégralement par l'achat de matériel amorti sur plusieurs années ; le capital-risque logiciel finance des éditeurs vendant des licences perpétuelles, pas encore des exploitants d'usines louées. | — | O4, M9 | exo | [S11] | K |
 | F.CLD.B1.013 | 2008-2015 | US | Le taux directeur américain s'effondre de 3,94 % en janvier 2008 à 0,16 % en décembre 2008 et reste dans une fourchette de 0,07 % à 0,24 % jusqu'en décembre 2015 (premier relèvement) ; cette politique de taux proches de zéro rend l'autofinancement par les bénéfices d'exploitation et l'emprunt à faible coût plus attractifs que l'appel aux marchés actions pour les grands exploitants d'usines déjà rentables sur d'autres activités, sans qu'aucune levée d'actions dédiée à la seule activité cloud ne soit documentée dans ce dossier sur la fenêtre. | taux effectif des fonds fédéraux : 3,94 % (janv. 2008) ; 0,16 % (déc. 2008) ; 0,07-0,24 % (2009-2015) ; pas de levée dédiée identifiée | O2 | co:X.CLD.03 | [S37] | V |
+| F.CLD.B1.014 | 2013-2015 | US | Les flux de trésorerie d'exploitation d'un grand détaillant en ligne exploitant sa propre usine cloud dépassent chaque année de 2013 à 2015 ses dépenses en immobilisations corporelles, et ceux d'un moteur de recherche dépassent en 2013 les siennes de plus de dix milliards de dollars : les dépenses d'équipement de ces deux exploitants sont couvertes par leurs flux d'exploitation. | Amazon : flux d'exploitation 5 475 / 6 842 / 11 920 M$ contre dépenses 3 444 / 4 893 / 4 589 M$ (2013 / 2014 / 2015) ; Google : flux d'exploitation 18 659 M$ contre dépenses 7 358 M$ (2013) | O2 | choc | [S42], [S3] | V |
 
 ### Jalons cités
-<!-- Lines 61-64 -->
+<!-- Lines 62-65 -->
 
 `J.CLD.2007.02`, `J.CLD.2004.02`, `J.CLD.2008.01`, `J.CLD.2009.01`, `J.CLD.2012.02`,
 `J.CLD.2015.05`.
 
 ### Trajectoire `T.CLD.B1`
-<!-- Lines 67-82 -->
+<!-- Lines 68-83 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -81,7 +82,7 @@ l'autre choc est dans le `README.md` du domaine, pas ici.
 | 2015 | banalisation | 3 | Le capital-risque logiciel atteint environ vingt-trois milliards et demi de dollars annuels ; la dépense en capital cumulée des plus grands exploitants dépasse celle du reste de l'industrie informatique réunie, financée sur trésorerie d'exploitation plutôt que par appel aux marchés. | F.CLD.B1.001, F.CLD.B1.002, F.CLD.B1.003, F.CLD.B1.008, J.CLD.2015.05 |
 
 ### Narratif
-<!-- Lines 85-106 -->
+<!-- Lines 86-107 -->
 
 Le financement du choc cloud ne passe pas principalement par les marchés actions mais par la
 dépense en capital des exploitants, multipliée par plus de vingt en dix ans pour le plus rapide
@@ -105,13 +106,13 @@ contexte de taux proches de zéro qui rend l'emprunt bon marché quand il est ut
 ---
 
 ## B2 Cycle spéculatif et valorisations
-<!-- Lines 109-112 -->
+<!-- Lines 110-113 -->
 
 **Question :** Y a-t-il eu emballement, pic, correction ; de quelle ampleur ; avec quels effets
 de richesse ?
 
 ### Faits
-<!-- Lines 115-129 -->
+<!-- Lines 116-130 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -128,12 +129,12 @@ de richesse ?
 | F.CLD.B2.011 | 2007-2009 | US | La récession américaine dure de décembre 2007 à juin 2009, et l'indice boursier S&P 500 recule de 57 % entre son sommet d'octobre 2007 et son creux de mars 2009. | récession : décembre 2007 - juin 2009 ; S&P 500 : -57 % (octobre 2007 - mars 2009) | O2, O4 | exo | [S21] | A |
 
 ### Jalons cités
-<!-- Lines 132-134 -->
+<!-- Lines 133-135 -->
 
 `J.CLD.2015.01`, `J.CLD.2012.02`, `J.CLD.2008.01`, `J.CLD.2009.05`.
 
 ### Trajectoire `T.CLD.B2`
-<!-- Lines 137-152 -->
+<!-- Lines 138-153 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -151,7 +152,7 @@ de richesse ?
 | 2015 | crise | 3 | Correction sévère : recul médian d'environ 40 % des valorisations cotées, multiple médian retombé autour de cinq fois le chiffre d'affaires. | F.CLD.B2.006, F.CLD.B2.007, F.CLD.B2.009 |
 
 ### Narratif
-<!-- Lines 155-175 -->
+<!-- Lines 156-176 -->
 
 Sur l'ensemble de la fenêtre 2005-2015, les chiffres ne montrent pas de cycle spéculatif propre
 au cloud comparable au cycle de l'autre choc : le débat public sur une bulle technologique en
@@ -174,13 +175,13 @@ l'ensemble du choc industriel [F.CLD.B2.004, F.CLD.B2.006, F.CLD.B2.007].
 ---
 
 ## B3 Redistribution de la valeur
-<!-- Lines 178-181 -->
+<!-- Lines 179-182 -->
 
 **Question :** Où la valeur boursière et les rendements ont-ils atterri : anciens, nouveaux,
 investisseurs, fondateurs ?
 
 ### Faits
-<!-- Lines 184-198 -->
+<!-- Lines 185-199 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -197,12 +198,12 @@ investisseurs, fondateurs ?
 | F.CLD.B3.011 | 2003-2004 | US, MONDE | Avant t0, les dix premières capitalisations boursières mondiales et américaines sont dominées par l'énergie, la banque et l'industrie ; le secteur informatique y figure par des éditeurs de licences perpétuelles et des constructeurs de matériel, pas par des exploitants d'usines louées, qui n'existent pas encore sous cette forme. | ligne de base qualitative | O2, O4 | exo | [S22] | K |
 
 ### Jalons cités
-<!-- Lines 201-203 -->
+<!-- Lines 202-204 -->
 
 `J.CLD.2015.01`, `J.CLD.2011.04`, `J.CLD.2010.05`, `J.CLD.2009.04`, `J.CLD.2012.03`.
 
 ### Trajectoire `T.CLD.B3`
-<!-- Lines 206-221 -->
+<!-- Lines 207-222 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -220,7 +221,7 @@ investisseurs, fondateurs ?
 | 2015 | banalisation | 3 | La scission du constructeur historique devient effective ; la première publication séparée du chiffre d'affaires cloud d'un grand exploitant redistribue la valorisation boursière du groupe vers cette activité, et trois valeurs technologiques dominent la hausse boursière depuis 2009. | F.CLD.B3.003, F.CLD.B3.006, F.CLD.B3.009, F.CLD.B3.010, J.CLD.2015.01 |
 
 ### Narratif
-<!-- Lines 224-244 -->
+<!-- Lines 225-245 -->
 
 En 2005, huit des dix premières capitalisations boursières mondiales sont américaines, avec un
 seul éditeur de logiciel parmi les douze premières et aucun exploitant d'usines cloud
@@ -243,7 +244,7 @@ finance sur fonds publics deux projets d'infrastructure souveraine [F.CLD.B3.008
 ---
 
 ## Sources
-<!-- Lines 247-290 -->
+<!-- Lines 248-292 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -288,3 +289,4 @@ finance sur fonds publics deux projets d'infrastructure souveraine [F.CLD.B3.008
 | [S39] | off | Cloudera, Inc., Form 424B4 (prospectus définitif, SEC, 27 avril 2017, CIK 0001535379, accession 0001628280-17-004450, document cloudera424b4.htm) | Ouvert et lu le 2026-09-22 : https://www.sec.gov/Archives/edgar/data/1535379/000162828017004450/cloudera424b4.htm ; prix d'offre 15,00 $/action, 15 000 000 actions offertes, 128 064 103 actions en circulation après l'offre, soit une capitalisation implicite d'environ 1,92 Md$ (calcul propre, non énoncée telle quelle). La date d'introduction en bourse lue à la source (27 avril 2017) contredit l'ancien énoncé de F.CLD.B2.008 qui la situait en juin 2015 ; l'ancienne source [S17] (presse d'octobre-novembre 2015) avait vraisemblablement confondu la date d'un débat sur la valorisation privée de Cloudera avec sa date d'introduction en bourse effective, survenue près de deux ans plus tard et hors fenêtre. Fait retiré en conséquence (règle 1). |
 | [S40] | off | Oracle Corporation, Form 10-K exercice 2013 (SEC, CIK 0001341439, accession 0001193125-13-272832, document d531515d10k.htm) ; API XBRL companyconcept de la SEC, concept us-gaap:Revenues | Ouvert et lu le 2026-09-22 : https://www.sec.gov/Archives/edgar/data/1341439/000119312513272832/d531515d10k.htm — texte lu directement : « hardware systems business represented 14% and 17% and 19% of our total revenues, respectively, in fiscal 2013, fiscal 2012 and fiscal 2011 ». Chiffre d'affaires total annuel lu directement sur https://data.sec.gov/api/xbrl/companyconcept/CIK0001341439/us-gaap/Revenues.json : 35 622 M$ (FY2011), 37 121 M$ (FY2012), 37 180 M$ (FY2013). Le 10-K ne donne pas la ligne en dollars du segment matériel dans les sections consultées (tronquées par l'outil de récupération avant les tableaux du MD&A) ; le montant en dollars est donc calculé à partir des deux valeurs lues, non recopié tel quel d'un tableau unique. |
 | [S41] | presse | Carbon Disclosure Project, communiqué daté du 18 septembre 2005 reprenant le tableau « The Global 500 from the Financial Times » (classement 2005), republié par Mongabay sous le titre « 90 of largest companies concerned about climate change », https://news.mongabay.com/2005/09/90-of-largest-companies-concerned-about-climate-change/ | Ouvert et lu le 2026-11-22 : tableau attribué au Financial Times, « 2005 Rank », valeur de marché en M$ : 1 General Electric 382 233 ; 2 ExxonMobil 380 567 ; 3 Microsoft 262 975 ; 4 Citigroup 234 437 ; 5 BP 221 365 ; 6 Wal-Mart 212 209 ; 7 Royal Dutch/Shell 210 630 ; 8 Johnson & Johnson 199 711 ; 9 Pfizer 195 945 ; 10 Bank of America 178 765 ; 11 HSBC ; 12 Vodafone. Huit des dix premières sont américaines. Le classement est mondial : le classement des dix premières capitalisations américaines n'a pas été lu, et la date de cotation n'est pas indiquée sur la page. Copie secondaire du tableau du FT par un communiqué d'organisation ; le tableau du FT lui-même n'a pas été ouvert. Aucun exploitant de capacité louée n'apparaît dans les douze lignes lues. Remplace [S22] pour F.CLD.B3.001 ; [S22] reste la clé de F.CLD.B3.011, non sourcé (statut `K`). |
+| [S42] | off | Amazon.com Inc., rapport annuel (Form 10-K, SEC) de l'exercice clos le 31 décembre 2015, https://www.sec.gov/Archives/edgar/data/1018724/000101872416000172/amzn-20151231x10k.htm ; Google Inc., rapport annuel (Form 10-K) de l'exercice clos le 31 décembre 2013, SEC, https://www.sec.gov/Archives/edgar/data/1288776/000128877614000020/goog2013123110-k.htm | Ouverts et lus (WebFetch ; Amazon : états des flux de trésorerie et rapprochement du flux de trésorerie disponible, octets 100 000 à 152 629 ; Google : section sur les flux de trésorerie, octets 100 000 à 200 000). Amazon, M$, 2013 / 2014 / 2015 : « net cash provided by operating activities » 5 475 / 6 842 / 11 920 ; « purchases of property and equipment, net » 3 444 / 4 893 / 4 589 ; « Free cash flow is cash flow from operations reduced by » les achats d'immobilisations ; « We believe that cash flows generated from operations » suffiront aux besoins d'exploitation des douze mois suivants. Google, M$, 2011 / 2012 / 2013 : flux nets d'exploitation 14 565 / 16 619 / 18 659 ; les dépenses d'immobilisations de 2013 (7 358 M$) sont lues dans [S3], non dans la partie du 10-K ouverte ici, où le texte dit seulement que les flux d'investissement « increased from 2012 to 2013, primarily attributable to a net increase in purchases of marketable securities and an increase in capital expenditures ». Aucune des deux sources ne dit en ces termes que les dépenses sont « couvertes » : c'est la comparaison des deux montants qui porte l'énoncé. Non lu : le rapport annuel de Microsoft (pas de flux d'exploitation lu pour le troisième exploitant), toute information sur le financement par dette ou par actions. |

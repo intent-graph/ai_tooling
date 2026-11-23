@@ -21,21 +21,21 @@ comparaison avec l'autre choc est dans le `README.md` du domaine, pas ici.
    1. [Trajectoire `T.CLD.A2`](#trajectoire-tclda2) _(Lines 134-149)_
    1. [Narratif](#narratif-1) _(Lines 152-166)_
 1. [A3 Structure du secteur technologique](#a3-structure-du-secteur-technologique) _(Lines 169-171)_
-   1. [Faits](#faits-2) _(Lines 174-185)_
-   1. [Jalons cités](#jalons-cités-2) _(Lines 188-191)_
-   1. [Trajectoire `T.CLD.A3`](#trajectoire-tclda3) _(Lines 194-209)_
-   1. [Narratif](#narratif-2) _(Lines 212-228)_
-1. [A4 Mode de production du logiciel et des services](#a4-mode-de-production-du-logiciel-et-des-services) _(Lines 231-234)_
-   1. [Faits](#faits-3) _(Lines 237-250)_
-   1. [Jalons cités](#jalons-cités-3) _(Lines 253-256)_
-   1. [Trajectoire `T.CLD.A4`](#trajectoire-tclda4) _(Lines 259-274)_
-   1. [Narratif](#narratif-3) _(Lines 277-295)_
-1. [A5 Reconfiguration des autres secteurs](#a5-reconfiguration-des-autres-secteurs) _(Lines 298-301)_
-   1. [Faits](#faits-4) _(Lines 304-315)_
-   1. [Jalons cités](#jalons-cités-4) _(Lines 318-321)_
-   1. [Trajectoire `T.CLD.A5`](#trajectoire-tclda5) _(Lines 324-339)_
-   1. [Narratif](#narratif-4) _(Lines 342-357)_
-1. [Sources](#sources) _(Lines 360-401)_
+   1. [Faits](#faits-2) _(Lines 174-186)_
+   1. [Jalons cités](#jalons-cités-2) _(Lines 189-192)_
+   1. [Trajectoire `T.CLD.A3`](#trajectoire-tclda3) _(Lines 195-210)_
+   1. [Narratif](#narratif-2) _(Lines 213-229)_
+1. [A4 Mode de production du logiciel et des services](#a4-mode-de-production-du-logiciel-et-des-services) _(Lines 232-235)_
+   1. [Faits](#faits-3) _(Lines 238-252)_
+   1. [Jalons cités](#jalons-cités-3) _(Lines 255-258)_
+   1. [Trajectoire `T.CLD.A4`](#trajectoire-tclda4) _(Lines 261-276)_
+   1. [Narratif](#narratif-3) _(Lines 279-297)_
+1. [A5 Reconfiguration des autres secteurs](#a5-reconfiguration-des-autres-secteurs) _(Lines 300-303)_
+   1. [Faits](#faits-4) _(Lines 306-317)_
+   1. [Jalons cités](#jalons-cités-4) _(Lines 320-323)_
+   1. [Trajectoire `T.CLD.A5`](#trajectoire-tclda5) _(Lines 326-341)_
+   1. [Narratif](#narratif-4) _(Lines 344-359)_
+1. [Sources](#sources) _(Lines 362-405)_
 
 
 
@@ -170,7 +170,7 @@ en logiciel libre offrent un premier contrepoids technique à la dépendance à 
 **Question :** Qui produit la technologie : anciens, nouveaux, intégrés, concentrés ?
 
 ### Faits
-<!-- Lines 174-185 -->
+<!-- Lines 174-186 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -182,15 +182,16 @@ en logiciel libre offrent un premier contrepoids technique à la dépendance à 
 | F.CLD.A3.006 | 2009 | EU | Les groupes européens du numérique et les pouvoirs publics constatent qu'aucun fournisseur d'usines à l'échelle mondiale n'est européen. | absence constatée | T2, O6, O2 | choc | [S27] | K |
 | F.CLD.A3.007 | 2012 | EU | En 2012, deux projets français de « cloud souverain » sont lancés ; le gouvernement les finance par l'intermédiaire de la Caisse des dépôts, qui détient 33,33 % du capital de l'un d'eux. | Caisse des dépôts : 33,33 % de Cloudwatt ; investissement total de 225 M€ pour chacun des deux projets (Cloudwatt, Numergy) | T2, O6, O2 | choc | [S61] | A |
 | F.CLD.A3.008 | 2013 | MONDE | En 2013, un cabinet d'analystes publie une prévision de dépense mondiale en services de nuage public, qu'il suit comme un marché distinct découpé en six segments (publicité, processus métier, logiciel, infrastructure, plateforme, gestion et sécurité) ; chiffres d'analystes non repris, artefact de mesure. | marché suivi séparément, six segments | O2, O4 | choc | [S62] | A |
+| F.CLD.A3.009 | 2017 | CN | En 2017, selon un cabinet d'analystes cité par la presse, le marché chinois du nuage est dominé par la filiale de nuage du grand groupe chinois de commerce en ligne, loin devant l'opérateur China Telecom ; part d'environ 40 % de ce marché. | environ 40 % du marché chinois (selon un cabinet d'analystes) | T4, O2, O6 | choc | [S65] | K |
 
 ### Jalons cités
-<!-- Lines 188-191 -->
+<!-- Lines 189-192 -->
 
 `J.CLD.2015.01`, `J.CLD.2007.05`, `J.CLD.2008.03`, `J.CLD.2010.05`, `J.CLD.2011.04`,
 `J.CLD.2012.03`, `J.CLD.2013.06`, `J.CLD.2014.01`.
 
 ### Trajectoire `T.CLD.A3`
-<!-- Lines 194-209 -->
+<!-- Lines 195-210 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -208,7 +209,7 @@ en logiciel libre offrent un premier contrepoids technique à la dépendance à 
 | 2015 | banalisation | 3 | Première publication séparée du chiffre d'affaires cloud d'un grand exploitant, révélant une activité de plusieurs milliards très rentable. | F.CLD.A3.001, J.CLD.2015.01 |
 
 ### Narratif
-<!-- Lines 212-228 -->
+<!-- Lines 213-229 -->
 
 Le secteur s'ouvre avec un nouvel entrant qui loue sa propre usine interne, pendant que les
 constructeurs et éditeurs historiques répondent d'abord par un vocabulaire commercial adossé à
@@ -227,13 +228,13 @@ et le résultat de son activité de services en nuage [F.CLD.A3.001].
 ---
 
 ## A4 Mode de production du logiciel et des services
-<!-- Lines 231-234 -->
+<!-- Lines 232-235 -->
 
 **Question :** Comment fabrique-t-on et exploite-t-on un service numérique, à quel coût, avec
 quelle organisation ?
 
 ### Faits
-<!-- Lines 237-250 -->
+<!-- Lines 238-252 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -247,15 +248,16 @@ quelle organisation ?
 | F.CLD.A4.008 | 2015 | US | En octobre 2015, lors de la conférence d'un fournisseur de nuage, deux grandes entreprises américaines, Capital One et GE, annoncent réduire leurs centres de données : Capital One de huit en 2014 à trois fin 2018, GE de 34 à quatre en trois ans avec le transfert de ses 9 000 charges de travail chez ce fournisseur. | Capital One : 8 (2014) → 3 (fin 2018) ; GE : 34 → 4 | O4, M1, M9 | choc | [S45] | A |
 | F.CLD.A4.009 | 2014-11 | US | Un service d'exécution de code facturé à l'appel est ouvert, sans machine ni serveur à déclarer : l'unité facturée descend de la machine-heure à la fonction exécutée. | lancement AWS Lambda le 13 novembre 2014, facturation par tranche de 100 ms | M1, O1 | choc | [S47] | V |
 | F.CLD.A4.010 | 2015 | US | Dans une enquête publiée en août 2015 auprès de directeurs informatiques de l'enseignement supérieur (230 répondants), ceux-ci anticipent à cinq puis dix ans un déplacement de leur gestion, de l'infrastructure et des ressources techniques vers la gestion de fournisseurs, de services et de contrats d'externalisation ; les postes en croissance sont les spécialistes d'intégration de données, de sécurité et de vie privée, les juristes, les négociateurs de contrats et les gestionnaires de fournisseurs. | 230 répondants | M1, M9, O4 | choc | [S63] | A |
+| F.CLD.A4.011 | 2010-2016 | US | En mai 2010, un grand fournisseur de capacité louée annonce que le service de location de vidéo Netflix a choisi ses services pour exécuter des applications destinées aux clients et d'arrière-plan, dont le traitement et le stockage de sa bibliothèque de films ; en février 2016, le service indique avoir achevé en janvier 2016 sa migration vers ce fournisseur, entamée en août 2008, et fermé les derniers éléments de centre de données utilisés par son service de flux. | annonce du 7 mai 2010 ; migration d'août 2008 à janvier 2016 | O2, O1, M1 | choc | [S66] | A |
 
 ### Jalons cités
-<!-- Lines 253-256 -->
+<!-- Lines 255-258 -->
 
 `J.CLD.2005.05`, `J.CLD.2008.02`, `J.CLD.2008.04`, `J.CLD.2009.01`, `J.CLD.2010.06`,
 `J.CLD.2011.06`, `J.CLD.2014.02`, `J.CLD.2014.05`, `J.CLD.2015.06`.
 
 ### Trajectoire `T.CLD.A4`
-<!-- Lines 259-274 -->
+<!-- Lines 261-276 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -273,7 +275,7 @@ quelle organisation ?
 | 2015 | banalisation | 2 | Deux grandes entreprises américaines annoncent réduire leurs centres de données ; des directeurs informatiques de l'enseignement supérieur anticipent une gestion centrée sur les fournisseurs et les contrats. | F.CLD.A4.008, F.CLD.A4.010, J.CLD.2015.06 |
 
 ### Narratif
-<!-- Lines 277-295 -->
+<!-- Lines 279-297 -->
 
 Le mode de production change d'échelle humaine avant de changer de coût : un service de partage
 vidéo fondé par trois personnes en 2005 dépasse 100 millions de vidéos vues par jour en 2006
@@ -294,33 +296,33 @@ les contrats plutôt que sur l'infrastructure [F.CLD.A4.010].
 ---
 
 ## A5 Reconfiguration des autres secteurs
-<!-- Lines 298-301 -->
+<!-- Lines 300-303 -->
 
 **Question :** Comment les chaînes de valeur des autres industries se réorganisent-elles :
 intermédiaires supprimés ou créés ?
 
 ### Faits
-<!-- Lines 304-315 -->
+<!-- Lines 306-317 -->
 
 | id | année | bloc | énoncé | valeur | acteurs | attribution | source | statut |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | F.CLD.A5.001 | 2003 | US | Un éditeur de gestion de la relation client démontre que le logiciel d'entreprise peut se vendre en abonnement hébergé sans installation, prérequis du basculement du secteur logiciel. | fondé 1999, service on-demand depuis février 2000, modèle "fully outsourced service accessible over the Internet" | O1, O4, M9 | exo | [S2] | V |
 | F.CLD.A5.002 | 2009 | US | L'éditeur de gestion de la relation client hébergé dépasse le milliard de dollars de chiffre d'affaires annuel sans installer de logiciel chez ses clients, preuve de taille industrielle du modèle. | 1 077 M$ (exercice clos janvier 2009), contre 749 M$ (exercice clos janvier 2008) | O2, O4 | choc | [S2] | V |
 | F.CLD.A5.003 | 2006 | US | Une suite bureautique en ligne gratuite est proposée aux organisations comme substitut à des logiciels installés poste par poste, faisant sortir le courriel et les documents des murs de l'organisation. | lancement 28 août 2006, Google Apps for Your Domain, gratuit en bêta | O4, O7, M4 | choc | [S13] | V |
-| F.CLD.A5.004 | 2008 | EMERG | Un service de paiement par téléphone mobile simple, adossé à une plateforme centralisée d'opérateur, atteint plusieurs millions d'usagers en Afrique de l'Est sans réseau d'agences bancaires. | lancé mars 2007 ; environ 2 à 3 millions d'usagers courant 2008, 9 millions en janvier 2010 | T5, P8, O3 | choc | [S22] | V |
+| F.CLD.A5.004 | 2008 | EMERG | Un service de paiement par téléphone mobile simple, adossé à une plateforme centralisée d'opérateur, atteint plusieurs millions d'usagers en Afrique de l'Est sans réseau d'agences bancaires ; l'opérateur émet et gère lui-même les comptes, dont la valeur est adossée à des dépôts dans deux banques réglementées, et compte en janvier 2010 9 millions d'usagers, soit 40 % des adultes kényans, dont 19 % seulement ont accès à un compte bancaire formel. | lancé mars 2007 ; environ 2 à 3 millions d'usagers courant 2008, 9 millions en janvier 2010 (40 % des adultes kényans) ; 19 % des adultes avec accès à un compte bancaire formel (enquête FinAccess, début 2009) | T5, P8, O3 | choc | [S22] | V |
 | F.CLD.A5.005 | 2012-2013 | EMERG | En 2012-2013, des analystes relèvent que les services d'infrastructure externalisés sont exposés à la perturbation par des systèmes automatisés et que des prestataires indiens orientent leur recherche vers l'intégration des activités qu'exige le passage au nuage, l'un d'eux notant que le potentiel du nuage ne s'est pas encore concrétisé. | — | T5, M1, O4 | choc | [S40] | A |
 | F.CLD.A5.006 | 2012-2014 | MONDE | Trois offres de stockage grand public synchronisé annoncent des centaines de millions d'usagers : Dropbox passe de 100 millions en novembre 2012 à 300 millions en mai 2014, Google Drive compte 240 millions d'usagers actifs en septembre 2014, OneDrive plus de 250 millions selon Microsoft. | Dropbox : 100 M (nov. 2012), 200 M (nov. 2013), 300 M (mai 2014) ; Google Drive : 240 M actifs (sept. 2014) ; OneDrive : plus de 250 M | P2, P3, P4, O2 | choc | [S39] | A |
 | F.CLD.A5.007 | 2014-2016 | EU | Des organismes publics de plusieurs pays européens publient des référentiels de sécurité des services en nuage : en avril 2014 un recueil de guides du CESG britannique pour les organisations publiques, en 2016 le catalogue C5 de l'office fédéral allemand de la sécurité de l'information et, le 12 décembre 2016, la première partie du référentiel de l'ANSSI française, expérimenté avec neuf prestataires depuis mars 2015. | CESG : 23 avril 2014 ; ANSSI : expérimentation dès mars 2015, publication le 12 décembre 2016 ; BSI C5 : 2016 | T2, O6, O2 | choc | [S36] | A |
 | F.CLD.A5.008 | — | — | retiré : énoncé méta sur l'absence de série officielle unifiée, pas un fait daté et sourçable ; aucune source admissible ne peut l'étayer par construction (elle documenterait l'absence de source, pas un fait) ; seules des séries d'analystes existent ([S44]), insuffisantes pour fonder un fait daté. | — | — | — | — | — |
 
 ### Jalons cités
-<!-- Lines 318-321 -->
+<!-- Lines 320-323 -->
 
 `J.CLD.2015.01`, `J.CLD.2006.04`, `J.CLD.2008.05`, `J.CLD.2009.05`, `J.CLD.2012.04`,
 `J.CLD.2012.05`, `J.CLD.2015.04`.
 
 ### Trajectoire `T.CLD.A5`
-<!-- Lines 324-339 -->
+<!-- Lines 326-341 -->
 
 | année | phase | intensité | ce qui change | faits et jalons |
 | --- | --- | --- | --- | --- |
@@ -338,7 +340,7 @@ intermédiaires supprimés ou créés ?
 | 2015 | banalisation | 2 | Des organismes publics européens publient ou expérimentent des référentiels de sécurité des services en nuage (expérimentation française dès mars 2015). | F.CLD.A5.007, J.CLD.2015.04 |
 
 ### Narratif
-<!-- Lines 342-357 -->
+<!-- Lines 344-359 -->
 
 Le secteur logiciel bascule le premier : un modèle d'abonnement hébergé démontré dès 2003 dépasse
 le milliard de dollars de chiffre d'affaires annuel en 2009 [F.CLD.A5.001, F.CLD.A5.002]. La
@@ -356,7 +358,7 @@ européens publient des référentiels de sécurité des services en nuage [F.CL
 ---
 
 ## Sources
-<!-- Lines 360-401 -->
+<!-- Lines 362-405 -->
 
 | clé | type | référence | note |
 | --- | --- | --- | --- |
@@ -373,7 +375,7 @@ européens publient des référentiels de sécurité des services en nuage [F.CL
 | [S19] | off | Google, « Introducing Google App Engine + our new blog », cloudplatform.googleblog.com, 7 avril 2008 | Ouvert et lu le 2026-09-22 : billet officiel Google Cloud Platform Blog daté du lundi 7 avril 2008, annonçant la préversion de Google App Engine. |
 | [S20] | off | Microsoft, « Microsoft Unveils Windows Azure at Professional Developers Conference », news.microsoft.com/source, 27 octobre 2008 | Ouvert et lu le 2026-09-22 : communiqué officiel Microsoft daté du 27 octobre 2008, keynote de Ray Ozzie au PDC 2008 (Los Angeles), Windows Azure présenté comme socle d'hébergement, de stockage et de calcul en nuage. |
 | [S21] | presse | Miller, R., « CapEx, OpEx and Cloudy Accounting », Data Center Knowledge, 12 janvier 2009, https://datacenterknowledge.com/cloud/capex-opex-and-cloudy-accounting ; Armbrust, M. et al., « Above the Clouds: A Berkeley View of Cloud Computing », UC Berkeley, rapport technique UCB/EECS-2009-28, 10 février 2009, https://www2.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-28.pdf | Ouverts et lus le 2026-11-22. Data Center Knowledge : « Many companies simply don't have access to the borrowing that could support large up-front investments in infrastructure » ; « Others suggest that cloud computing and its pay-as-you-go billing will be a major beneficiary of the economic crisis » ; le technologue Geva Perry est rapporté : « There is nothing inherently financially beneficial in moving an expense from CapEx to OpEx ». Rapport de Berkeley (PDF converti en texte) : « the economic appeal of Cloud Computing is often described as “converting capital expenses to operating expenses” (CapEx to OpEx) », les auteurs préférant la formule « pay as you go ». Channel Insider (Davis, J., 8 décembre 2009) lu aussi : le nuage « add[s] operational expense while eliminating capital expense » (propos attribué à un dirigeant d'Accenture) ; il ne porte aucune clause de l'énoncé. L'ancienne clause (les directions informatiques des grandes entreprises séparent explicitement capital et fonctionnement dès 2008) n'est étayée par aucun document lu ; les documents lus datent de 2009, d'où l'année 2009 ; « grandes entreprises » et le bloc EU retirés. |
-| [S22] | stat | Mas, I. et Radcliffe, D., « Mobile Payments Go Viral: M-PESA in Kenya », Bill & Melinda Gates Foundation, document de travail hébergé par la Banque mondiale, mars 2010 (documents1.worldbank.org/curated/en/638851468048259219) | Ouvert et lu le 2026-09-22 : lancement commercial par Safaricom (filiale Vodafone) en mars 2007 ; courbe officielle du nombre d'utilisateurs (Exhibit 2) franchissant environ 2 à 3 millions d'usagers courant 2008 et atteignant 9,0 millions en janvier 2010. |
+| [S22] | stat | Mas, I. et Radcliffe, D., « Mobile Payments Go Viral: M-PESA in Kenya », Bill & Melinda Gates Foundation, document de travail hébergé par la Banque mondiale, mars 2010 (documents1.worldbank.org/curated/en/638851468048259219) | Ouvert et lu le 2026-09-22 : lancement commercial par Safaricom (filiale Vodafone) en mars 2007 ; courbe officielle du nombre d'utilisateurs (Exhibit 2) franchissant environ 2 à 3 millions d'usagers courant 2008 et atteignant 9,0 millions en janvier 2010. Rouvert et relu le 2026-11-23 (PDF converti en texte) : « Safaricom issues and manages the M‐PESA accounts, but the value in the accounts is fully backed by highly liquid deposits at commercial banks » (comptes regroupés dans deux banques réglementées) ; chiffres de Safaricom de janvier 2010 : « 9.0 million registered customers [...] 23% of the entire population, and 40% Kenyan adults » ; note 5 : « 19% of adults have access to a formal bank account », d'après l'enquête FinAccess (FSDT 2009, 6 600 ménages, début 2009). Précaution : le document ne dit pas que les usagers n'ont pas de compte bancaire ; une enquête de l'automne 2008 auprès de 3 000 usagers et non-usagers trouve qu'un usager de M-PESA a deux fois plus souvent un compte bancaire qu'un non-usager (72 % contre 36 %). L'énoncé s'en tient donc au rapprochement entre la part des adultes inscrits et la part des adultes bancarisés. |
 | [S24] | acad | Ewens, M., Nanda, R. et Rhodes-Kropf, M., « Cost of Experimentation and the Evolution of Venture Capital », NBER Working Paper 24523, avril 2018 (publié au Journal of Financial Economics, 2018), https://www.nber.org/system/files/working_papers/w24523/w24523.pdf ; Blanding, M., « Amazon Web Services Changed the Way VCs Fund Startups », Harvard Business School Working Knowledge, 10 mai 2017, https://www.library.hbs.edu/working-knowledge/amazon-web-services-changed-the-way-vcs-fund-startups | Ouverts et lus le 2026-11-22 (PDF NBER converti en texte). Données VentureSource sur les startups américaines, premiers financements de 2002 à 2010 (période postérieure à 2005 comparée à 2002-2005). « initial funding size fell 20% » pour les secteurs bénéficiaires ; « investment into firms in treated sectors rose from about 375 firms per year to over 700 firms per year », contre environ 350 à 450 dans les secteurs témoins ; secteurs bénéficiaires : « software-as-a-service, social networks, or retail e-commerce websites » ; « Cloud computing allowed startups to ‘rent’ hardware space in small increments and scale up as demand grew, instead of making large fixed upfront investments in hardware ». Les auteurs précisent que l'effet porte sur le coût des premières expériences, non sur le coût total à l'échelle. La page HBS reprend les chiffres 375 et 700. L'ancien énoncé (norme d'amorçage dans les incubateurs, capital initial « effondré ») n'est étayé par aucun passage lu ; retiré. |
 | [S26] | acad | DeCandia, G. et al., « Dynamo: Amazon's Highly Available Key-value Store », SOSP, 2007, https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf ; Lakshman, A., Malik, P., « Cassandra - A Decentralized Structured Storage System », LADIS, 2009, https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf | Ouverts et lus (PDF convertis en texte) : Dynamo : « implemented on top of an infrastructure of tens of thousands of servers and network components located in many datacenters around the world. At this scale, small and large components fail continuously », « The system needs to function on a commodity hardware infrastructure » ; Cassandra : « designed to run on cheap commodity hardware », « treats failures as the norm rather than the exception », « designed to fulfill the storage needs of the Inbox Search problem ». Soutenu : la contrainte (machines nombreuses, faillibles, banales) qui commande la conception. Non vérifiable avec les sources ouvertes : « brique courante », « adoption large » et 2009 comme moment où ces bases deviennent courantes ; aucun chiffre d'adoption trouvé. |
 | [S27] | off | Commission européenne, communication *Unleashing the Potential of Cloud Computing in Europe*, COM(2012) 529 ; documents nationaux sur les projets de nuage souverain français, 2011-2013 | Reprise de [S27] de la chronologie. Le constat de 2009 reste à sourcer plus précisément : lecture de COM(2012) 529 tentée le 2026-11-22 (miroir du parlement bulgare : page de redirection sans contenu ; EUR-Lex : contenu vide), aucun passage lu ; deux recherches sur l'absence d'un fournisseur européen à l'échelle mondiale n'ont trouvé aucun énoncé daté de 2009 ; F.CLD.A3.006 reste `K`. |
@@ -399,3 +401,5 @@ européens publient des référentiels de sécurité des services en nuage [F.CL
 | [S62] | presse | Gartner, prévision « Forecast Overview: Public Cloud Services, Worldwide, 2011-2016, 4Q12 Update », communiqué de février-mars 2013, reproduit par StorageNewsletter, « WW Public Cloud Services Market at $131 Billion in 2013 – Gartner », 6 mars 2013, https://www.storagenewsletter.com/2013/03/06/ww-public-cloud-services-gartner | Ouvert et lu le 2026-11-22 : Gartner présente « the public cloud services market » comme un marché distinct, 131 Md$ prévus en 2013 contre 111 Md$ en 2012 (+18,5 %), découpé en publicité en nuage (48 % en 2012), BPaaS (28 %), SaaS (14,7 %), IaaS (5,5 %), gestion et sécurité (2,8 %), PaaS (1 %). Chiffres de cabinet : non repris comme valeur, artefact de mesure. Page originale Gartner non ouverte ; la reproduction est une édition du communiqué par un site de presse spécialisée. L'ancienne clause « atteint une taille où » est une interprétation non portée par la source ; retirée. |
 | [S63] | acad | Brooks, D. C., The Changing Face of IT Service Delivery in Higher Education, EDUCAUSE Center for Analysis and Research (ECAR), Louisville (Colorado), août 2015, https://library.educause.edu/~/media/files/library/2015/5/ers1501b.pdf | Ouvert et lu le 2026-11-22 (PDF converti en texte). Enquête auprès de directeurs informatiques, 230 répondants ; échelle de 0 (« managing infrastructure and technical resources ») à 100 (« managing vendors, services, and outsourced contracts ») : aujourd'hui centrée sur l'infrastructure, « in the next five years, CIOs expect a significant shift toward the vendor, services, and outsourcing management end of the spectrum », décalage plus fort à dix ans. Postes en croissance liés aux projets en nuage : spécialistes d'intégration de données, de sécurité et de vie privée, juristes, négociateurs de contrats, gestionnaires de fournisseurs. Limites : enseignement supérieur seulement ; pays des répondants non indiqué (rapport publié par une association basée aux États-Unis). Rien lu sur les coûts variables : clause retirée. L'ancienne référence [S31] (BLS) n'a pas été ouverte. |
 | [S64] | presse | Merkel, D., « Docker: Lightweight Linux Containers for Consistent Development and Deployment », Linux Journal, 19 mai 2014, https://www.linuxjournal.com/content/docker-lightweight-linux-containers-consistent-development-and-deployment | Ouvert et lu le 2026-11-22. Docker « started life as an open-source project at dotCloud » début 2013 ; objectif : empaqueter une application avec ses dépendances pour qu'elle fonctionne dans des environnements de développement, de test et de production distincts ; « If both systems run Docker, the same container will execute without issues » ; au moment de l'article, version 0.7.x, Docker « still not officially production-ready ». Ne dit rien de la livraison continue ni du rythme de mise en production : la clause « du trimestre à la journée » n'a aucun appui lu et est retirée ; l'année passe de 2011 à 2013. |
+| [S65] | presse | Miller, R. et Russell, J., « Ambitious Alibaba takes aim at the kings of cloud computing », TechCrunch, 27 février 2017, https://techcrunch.com/?p=1455451 ; Fortune (Reuters), « Now Alibaba is moving in on cloud hosting in Silicon Valley », 4 mars 2015, https://fortune.com/2015/03/04/now-alibaba-is-moving-in-on-cloud-hosting-in-silicon-valley/ | Ouverts et lus le 2026-11-23. Artefact : chiffre de cabinet d'analystes. TechCrunch rapporte les propos de John Dinsdale, analyste en chef de Synergy Research Group : « the market is led by Alibaba (a long way out in front) followed by China Telecom » ; « Alibaba market share is running at 40 percent [in China] and has been increasing with time » (le crochet « in China » est de l'article). Fortune (reprise Reuters, 2015), sans source nommée pour le chiffre : « Aliyun, also known as Alibaba Cloud Computing, holds about a 23% market share in its home market » ; elle ne le classe pas. Le prospectus d'introduction en bourse (Form F-1, 6 mai 2014) a été ouvert (caractères 0-100 000 et 200 000-300 000 sur 369 495 ; la partie 100 000-200 000 et la fin n'ont pas été lues) : les passages lus ne donnent aucune position de marché, seulement « In 2009, we established Alibaba Cloud Computing » ; l'auto-description « premier fournisseur de cloud en Chine » reste celle de [S23] (billet de l'entreprise, 2019). Aucun document institutionnel ni dépôt réglementaire n'énonce le rang ; la mesure date de 2016-2017, hors de la fenêtre 2005-2015. |
+| [S66] | off | Amazon, communiqué « Netflix Selects Amazon Web Services to Power Mission-Critical Technology Infrastructure », 7 mai 2010, https://press.aboutamazon.com/2010/5/netflix-selects-amazon-web-services-to-power-mission-critical-technology-infrastructure ; Netflix, « Completing the Netflix Cloud Migration », 12 février 2016, https://about.netflix.com/en/news/completing-the-netflix-cloud-migration | Ouverts et lus le 2026-11-23 (pages d'entreprise : ce que chaque entreprise a fait ou annoncé ; lecture par l'outil de lecture de pages, extraits de 125 caractères au plus). Communiqué Amazon : « Netflix, Inc., has chosen AWS to run a variety of mission-critical, customer-facing and backend applications » ; usage d'EC2 et de S3 « to transcode and store the movie subscription service's growing movie content library » ; « AWS pay-as-you-go pricing ensures that Netflix pays only for resources used ». Page Netflix : « Our journey to the cloud at Netflix began in August of 2008, when we experienced a major database corruption » ; « We chose Amazon Web Services (AWS) as our cloud provider because it provided us with the greatest scale » ; « we have finally completed our cloud migration and shut down the last remaining data center bits used by our streaming service! » (début janvier 2016). Le communiqué est une annonce du fournisseur, non vérifiée indépendamment. |
